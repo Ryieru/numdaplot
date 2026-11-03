@@ -48,7 +48,8 @@ build-backend = "hatchling.build"
 packages = ["src/numdaplot"]
 
 [tool.pytest.ini_options]
-testpaths = ["tests", "src"]
+testpaths = ["tests", "src", "docs"]
+pythonpath = ["docs"]
 addopts = ["--doctest-modules", "--import-mode=importlib"]
 doctest_optionflags = ["NORMALIZE_WHITESPACE"]
 
@@ -68,6 +69,7 @@ ignore = ["W191", "D206"]
 convention = "numpy"
 
 [tool.pyright]
-include = ["src", "tests", "run_tests.py"]
+include = ["src", "tests", "docs", "run_tests.py"]
+extraPaths = ["docs"]
 pythonVersion = "3.13"
 typeCheckingMode = "strict"

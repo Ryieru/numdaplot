@@ -2,6 +2,9 @@ site_name: numdaplot
 site_description: A simpler, explicit API over numpy, pandas and matplotlib.
 repo_url: https://github.com/Ryieru/Numdaplot
 
+exclude_docs: |
+  *.py
+
 theme:
   name: material
 
@@ -15,6 +18,8 @@ plugins:
             docstring_style: numpy
             show_source: false
             members_order: source
+            extensions:
+              - docs/version_directives.py
 
 nav:
   - Home: index.md
@@ -30,5 +35,6 @@ nav:
   - Changelog: changelog.md
 
 markdown_extensions:
+  - admonition
   - pymdownx.snippets:
       check_paths: true

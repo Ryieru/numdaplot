@@ -85,7 +85,7 @@ src/numdaplot/
 tests/
 	unit/           one test file per source file, mirroring src/numdaplot
 	functional/     one test file per notion, using the library as ndp
-docs/               pages of the documentation site
+docs/               pages of the documentation site, and the griffe extension showing version directives
 run_tests.py        test entry point
 ```
 
