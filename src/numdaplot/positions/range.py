@@ -42,8 +42,11 @@ class Range:
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> ndp.Range(start=0, stop=10, step=2)
-	Range(start=0, stop=10, step=2, bounds=<Bounds.INCLUDED: 1>)
+	>>> ndp.Array.from_range(ndp.Range(start=0, stop=10, step=2))
+	Array([ 0,  2,  4,  6,  8, 10], dtype=INT64)
+	>>> scores = ndp.Array.from_list([10, 20, 30, 40])
+	>>> scores.take(ndp.Region(rows=ndp.Range(start=1, stop=2)))
+	Array([20, 30], dtype=INT64)
 	"""
 
 	start: int | float

@@ -21,6 +21,7 @@ class Max(Statistic):
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> ndp.Max()
-	Max()
+	>>> prices = ndp.Array.from_list([12.0, None, 30.0])
+	>>> prices.compute(ndp.Max()).to_value()
+	30.0
 	"""

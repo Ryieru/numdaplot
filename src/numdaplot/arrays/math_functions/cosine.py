@@ -21,6 +21,8 @@ class Cosine(MathFunction):
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> ndp.Cosine()
-	Cosine()
+	>>> import math
+	>>> angles = ndp.Array.from_list([0.0, math.pi])
+	>>> angles.apply(ndp.Cosine())
+	Array([ 1., -1.], dtype=FLOAT64)
 	"""

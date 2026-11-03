@@ -36,8 +36,9 @@ class Normal(Distribution):
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> ndp.Normal(mean=170, deviation=10)
-	Normal(mean=170, deviation=10)
+	>>> heights = ndp.Array.random(ndp.Normal(mean=170, deviation=10), shape=ndp.Shape((3,)), seed=0)
+	>>> heights.apply(ndp.Round())
+	Array([171., 169., 176.], dtype=FLOAT64)
 	"""
 
 	mean: float

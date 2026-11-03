@@ -28,10 +28,11 @@ class InvalidStepError(NumdaplotError):
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> ndp.Range(start=0, stop=10, step=0)
-	Traceback (most recent call last):
-	...
-	numdaplot.errors.invalid_step_error.InvalidStepError: Expected a non-zero step, got 0.
+	>>> try:
+	... 	ndp.Range(start=0, stop=10, step=0)
+	... except ndp.InvalidStepError as error:
+	... 	print(error)
+	Expected a non-zero step, got 0.
 	"""
 
 	def __init__(self, step: float) -> None:

@@ -19,6 +19,7 @@ class IsMissing(Rule):
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> ndp.IsMissing()
-	IsMissing()
+	>>> temperatures = ndp.Array.from_list([12.5, None, 18.0])
+	>>> temperatures.check(ndp.IsMissing())
+	Array([False,  True, False], dtype=BOOL)
 	"""

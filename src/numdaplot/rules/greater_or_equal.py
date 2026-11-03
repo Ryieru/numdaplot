@@ -22,6 +22,7 @@ class GreaterOrEqual(ValueRule[OrderedValue]):
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> ndp.GreaterOrEqual(100)
-	GreaterOrEqual(value=100)
+	>>> prices = ndp.Array.from_list([80, 100, 120])
+	>>> prices.select(ndp.GreaterOrEqual(100))
+	Array([100, 120], dtype=INT64)
 	"""

@@ -29,8 +29,12 @@ class Conversion:
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> ndp.Conversion(column="zip_code", dtype=ndp.Type.TEXT)
-	Conversion(column='zip_code', dtype=<Type.TEXT: 12>)
+	>>> codes = ndp.Table.from_arrays({"zip_code": ndp.Array.from_list(["06000", "75001"])})
+	>>> codes.convert(ndp.Conversion(column="zip_code", dtype=ndp.Type.INT32))
+	zip_code
+	INT32
+	0     6000
+	1    75001
 	"""
 
 	column: str

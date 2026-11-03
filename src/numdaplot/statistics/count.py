@@ -21,6 +21,7 @@ class Count(Statistic):
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> ndp.Count()
-	Count()
+	>>> answers = ndp.Array.from_list([4.0, None, 2.0])
+	>>> answers.compute(ndp.Count()).to_value()
+	2
 	"""

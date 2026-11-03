@@ -8,7 +8,7 @@ from enum import Enum
 
 
 class Encoding(Enum):
-	"""
+	r"""
 	Text encoding of a file, used by ``CsvOptions``, ``SasOptions`` and ``XptOptions``.
 
 	The value of each member is the name Python gives to the encoding.
@@ -17,9 +17,15 @@ class Encoding(Enum):
 
 	Examples
 	--------
+	>>> import tempfile
+	>>> from pathlib import Path
 	>>> import numdaplot as ndp
-	>>> ndp.Encoding.LATIN_1
-	<Encoding.LATIN_1: 'latin-1'>
+	>>> folder = Path(tempfile.mkdtemp())
+	>>> path = folder / "cities.csv"
+	>>> _ = path.write_text("city\nB\u00e9ziers\n", encoding="latin-1")
+	>>> cities = ndp.Table.from_csv(path, ndp.CsvOptions(encoding=ndp.Encoding.LATIN_1))
+	>>> cities.column("city").to_list() == ["B\u00e9ziers"]
+	True
 	"""
 
 	UTF_8 = "utf-8"

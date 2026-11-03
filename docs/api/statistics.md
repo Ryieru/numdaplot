@@ -1,25 +1,25 @@
 # Statistics
 
-::: numdaplot.statistics.statistic
+::: numdaplot.statistics.statistic.Statistic
 
-::: numdaplot.statistics.sum
+::: numdaplot.statistics.sum.Sum
 
-::: numdaplot.statistics.mean
+::: numdaplot.statistics.mean.Mean
 
-::: numdaplot.statistics.median
+::: numdaplot.statistics.median.Median
 
-::: numdaplot.statistics.minimum
+::: numdaplot.statistics.minimum.Min
 
-::: numdaplot.statistics.maximum
+::: numdaplot.statistics.maximum.Max
 
-::: numdaplot.statistics.count
+::: numdaplot.statistics.count.Count
 
-::: numdaplot.statistics.count_distinct
+::: numdaplot.statistics.count_distinct.CountDistinct
 
-::: numdaplot.statistics.standard_deviation
+::: numdaplot.statistics.standard_deviation.StandardDeviation
 
-::: numdaplot.statistics.quantile
+::: numdaplot.statistics.quantile.Quantile
 
-::: numdaplot.statistics.most_frequent
+::: numdaplot.statistics.most_frequent.MostFrequent
 
-::: numdaplot.statistics.most_frequent_count
+::: numdaplot.statistics.most_frequent_count.MostFrequentCount

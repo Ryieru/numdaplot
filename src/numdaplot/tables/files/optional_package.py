@@ -29,8 +29,13 @@ def require_package(package_name: str, extra_name: str) -> None:
 
 	Examples
 	--------
+	>>> import numdaplot as ndp
 	>>> from numdaplot.tables.files.optional_package import require_package
-	>>> require_package("pandas", "unused")
+	>>> try:
+	... 	require_package("package_that_is_not_installed", "excel")
+	... except ndp.MissingDependencyError as error:
+	... 	print(error)
+	This file format needs the package_that_is_not_installed package, install it with: pip install numdaplot[excel]
 	"""
 	package_spec = find_spec(package_name)
 	if package_spec is None:

@@ -22,6 +22,7 @@ class Greater(ValueRule[OrderedValue]):
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> ndp.Greater(100)
-	Greater(value=100)
+	>>> prices = ndp.Array.from_list([80, 100, 120])
+	>>> prices.select(ndp.Greater(100))
+	Array([120], dtype=INT64)
 	"""

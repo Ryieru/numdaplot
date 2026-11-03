@@ -35,9 +35,10 @@ class Replacement:
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> first_value = ndp.Region(rows=ndp.Index(0))
-	>>> ndp.Replacement(region=first_value, value=0)
-	Replacement(region=Region(rows=Index(position=0), columns=None), value=0)
+	>>> scores = ndp.Array.from_list([10, 20, 30])
+	>>> first_score = ndp.Region(rows=ndp.Index(0))
+	>>> scores.replace(ndp.Replacement(region=first_score, value=0))
+	Array([ 0, 20, 30], dtype=INT64)
 	"""
 
 	region: Region

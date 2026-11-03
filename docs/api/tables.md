@@ -6,35 +6,35 @@
 
 ## File settings
 
-::: numdaplot.tables.files.csv_options
+::: numdaplot.tables.files.csv_options.CsvOptions
 
-::: numdaplot.tables.files.json_options
+::: numdaplot.tables.files.json_options.JsonOptions
 
-::: numdaplot.tables.files.json_layout
+::: numdaplot.tables.files.json_layout.JsonLayout
 
-::: numdaplot.tables.files.excel_options
+::: numdaplot.tables.files.excel_options.ExcelOptions
 
-::: numdaplot.tables.files.sas_options
+::: numdaplot.tables.files.sas_options.SasOptions
 
-::: numdaplot.tables.files.xpt_options
+::: numdaplot.tables.files.xpt_options.XptOptions
 
-::: numdaplot.tables.files.encoding
+::: numdaplot.tables.files.encoding.Encoding
 
-::: numdaplot.tables.conflict
+::: numdaplot.tables.conflict.Conflict
 
 ## Filter settings
 
-::: numdaplot.tables.filtering.filter
+::: numdaplot.tables.filtering.filter.Filter
 
-::: numdaplot.tables.filtering.filter_mode
+::: numdaplot.tables.filtering.filter_mode.FilterMode
 
-::: numdaplot.tables.filtering.condition
+::: numdaplot.tables.filtering.condition.Condition
 
-::: numdaplot.tables.filtering.column_match
+::: numdaplot.tables.filtering.column_match.ColumnMatch
 
 ## Aggregation and description settings
 
-::: numdaplot.tables.aggregation.aggregation
+::: numdaplot.tables.aggregation.aggregation.Aggregation
 
 ::: numdaplot.tables.aggregation.calculation.Calculation
 
@@ -42,26 +42,26 @@
 
 ## Column settings
 
-::: numdaplot.tables.columns.column_choice
+::: numdaplot.tables.columns.column_choice.ColumnChoice
 
-::: numdaplot.tables.columns.column_mode
+::: numdaplot.tables.columns.column_mode.ColumnMode
 
-::: numdaplot.tables.columns.renaming
+::: numdaplot.tables.columns.renaming.Renaming
 
-::: numdaplot.tables.columns.conversion
+::: numdaplot.tables.columns.conversion.Conversion
 
-::: numdaplot.tables.columns.new_column
+::: numdaplot.tables.columns.new_column.NewColumn
 
 ## Sort, duplicate and preview settings
 
-::: numdaplot.tables.sorting.sorting
+::: numdaplot.tables.sorting.sorting.Sorting
 
-::: numdaplot.tables.sorting.sort_key
+::: numdaplot.tables.sorting.sort_key.SortKey
 
-::: numdaplot.tables.duplicates.deduplication
+::: numdaplot.tables.duplicates.deduplication.Deduplication
 
-::: numdaplot.tables.duplicates.keep
+::: numdaplot.tables.duplicates.keep.Keep
 
-::: numdaplot.tables.preview.preview
+::: numdaplot.tables.preview.preview.Preview
 
-::: numdaplot.tables.preview.side
+::: numdaplot.tables.preview.side.Side

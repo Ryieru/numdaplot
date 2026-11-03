@@ -118,8 +118,13 @@ def require_domain(values: NDArray[Any], is_outside: numpy.ufunc, function_name:
 	Examples
 	--------
 	>>> import numpy
+	>>> import numdaplot as ndp
 	>>> from numdaplot.arrays.calculation.math_function_values import require_domain
-	>>> require_domain(numpy.array([0, 4]), numpy.less, "SquareRoot")
+	>>> try:
+	... 	require_domain(numpy.array([4, -9]), numpy.less, "SquareRoot")
+	... except ndp.OutOfDomainError as error:
+	... 	print(error)
+	SquareRoot is not defined for -9.
 	"""
 	outside = is_outside(values, DOMAIN_LIMIT)
 	has_outside_value = outside.any()

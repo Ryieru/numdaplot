@@ -26,8 +26,11 @@ class SasOptions:
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> ndp.SasOptions(encoding=ndp.Encoding.LATIN_1)
-	SasOptions(encoding=<Encoding.LATIN_1: 'latin-1'>)
+	>>> try:
+	... 	ndp.Table.from_sas("missing.sas7bdat", ndp.SasOptions(encoding=ndp.Encoding.LATIN_1))
+	... except ndp.FileNotFoundError as error:
+	... 	print(error)
+	No file found at missing.sas7bdat.
 	"""
 
 	encoding: Encoding = Encoding.UTF_8

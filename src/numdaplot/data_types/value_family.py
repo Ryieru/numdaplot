@@ -21,8 +21,10 @@ class ValueFamily(Enum):
 	--------
 	>>> import numdaplot as ndp
 	>>> from numdaplot.data_types.value_family import find_family
-	>>> find_family(ndp.Type.UINT8)
-	<ValueFamily.NUMBER: 1>
+	>>> find_family(ndp.Type.UINT8) == find_family(ndp.Type.FLOAT64)
+	True
+	>>> find_family(ndp.Type.CATEGORY)
+	<ValueFamily.TEXT: 3>
 	"""
 
 	NUMBER = auto()

@@ -150,8 +150,13 @@ def require_valid_positions(positions: NDArray[Any], size: int) -> None:
 	Examples
 	--------
 	>>> import numpy
+	>>> import numdaplot as ndp
 	>>> from numdaplot.arrays.selection.region_index import require_valid_positions
-	>>> require_valid_positions(numpy.array([0, -3]), 3)
+	>>> try:
+	... 	require_valid_positions(numpy.array([0, 3]), 3)
+	... except ndp.InvalidPositionError as error:
+	... 	print(error)
+	Expected a whole position between -3 and 2, got 3.
 	"""
 	if positions.size == 0:
 		return

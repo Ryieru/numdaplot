@@ -21,6 +21,7 @@ class Exponential(MathFunction):
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> ndp.Exponential()
-	Exponential()
+	>>> rates = ndp.Array.from_list([0.0, 1.0])
+	>>> rates.apply(ndp.Exponential())
+	Array([1.        , 2.71828183], dtype=FLOAT64)
 	"""

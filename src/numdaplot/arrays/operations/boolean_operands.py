@@ -33,8 +33,13 @@ def require_booleans(operands: list[Operand], symbol: str) -> None:
 	Examples
 	--------
 	>>> import numpy
+	>>> import numdaplot as ndp
 	>>> from numdaplot.arrays.operations.boolean_operands import require_booleans
-	>>> require_booleans([numpy.array([True]), False], "|")
+	>>> try:
+	... 	require_booleans([numpy.array([True]), 2], "|")
+	... except ndp.IncompatibleTypesError as error:
+	... 	print(error)
+	Cannot apply | to BOOL and INT64.
 	"""
 	for operand in operands:
 		operand_type = find_operand_type(operand)

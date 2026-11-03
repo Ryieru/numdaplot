@@ -18,8 +18,16 @@ class BroadcastWarning(UserWarning):
 
 	Examples
 	--------
-	>>> import warnings
 	>>> import numdaplot as ndp
-	>>> with warnings.catch_warnings():
-	... 	warnings.simplefilter("ignore", category=ndp.BroadcastWarning)
+	>>> import warnings
+	>>> grid = ndp.Array.from_list([[1, 2], [3, 4]])
+	>>> row = ndp.Array.from_list([10, 20])
+	>>> with warnings.catch_warnings(record=True) as caught_warnings:
+	... 	warnings.simplefilter("always")
+	... 	sums = grid + row
+	>>> sums
+	Array([[11, 22],
+	[13, 24]], dtype=INT64)
+	>>> print(caught_warnings[0].message)
+	Shapes (2, 2) and (2,) differ, values are repeated to match.
 	"""

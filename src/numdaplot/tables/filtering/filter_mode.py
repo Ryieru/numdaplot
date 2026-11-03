@@ -16,8 +16,16 @@ class FilterMode(Enum):
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> ndp.FilterMode.ANY
-	<FilterMode.ANY: 2>
+	>>> cities = ndp.Array.from_list(["Paris", "Lyon", "Paris"])
+	>>> prices = ndp.Array.from_list([120.0, 80.0, 150.0])
+	>>> sales = ndp.Table.from_arrays({"city": cities, "price": prices})
+	>>> expensive = ndp.Condition(rule=ndp.Greater(130), columns=["price"])
+	>>> in_lyon = ndp.Condition(rule=ndp.Equal("Lyon"), columns=["city"])
+	>>> sales.filter(ndp.Filter(conditions=[expensive, in_lyon], mode=ndp.FilterMode.ANY))
+	city   price
+	TEXT FLOAT64
+	0   Lyon    80.0
+	1  Paris   150.0
 	"""
 
 	ALL = auto()

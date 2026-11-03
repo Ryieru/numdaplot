@@ -24,6 +24,7 @@ class NotEqual(ValueRule[ScalarValue]):
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> ndp.NotEqual("FR")
-	NotEqual(value='FR')
+	>>> countries = ndp.Array.from_list(["FR", "DE", "FR"])
+	>>> countries.select(ndp.NotEqual("FR"))
+	Array(['DE'], dtype=TEXT)
 	"""

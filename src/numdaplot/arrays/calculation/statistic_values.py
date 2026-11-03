@@ -178,8 +178,13 @@ def require_present_values(values: NDArray[Any], axis: int | None, statistic_nam
 	Examples
 	--------
 	>>> import numpy
+	>>> import numdaplot as ndp
 	>>> from numdaplot.arrays.calculation.statistic_values import require_present_values
-	>>> require_present_values(numpy.array([1.0, numpy.nan]), None, "Mean")
+	>>> try:
+	... 	require_present_values(numpy.array([numpy.nan]), None, "Mean")
+	... except ndp.EmptyArrayError as error:
+	... 	print(error)
+	Cannot compute Mean without any present value.
 	"""
 	missing = find_missing(values)
 	present = ~missing

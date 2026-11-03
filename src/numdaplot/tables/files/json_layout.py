@@ -15,9 +15,16 @@ class JsonLayout(Enum):
 
 	Examples
 	--------
+	>>> import tempfile
+	>>> from pathlib import Path
 	>>> import numdaplot as ndp
-	>>> ndp.JsonLayout.LINES
-	<JsonLayout.LINES: 2>
+	>>> folder = Path(tempfile.mkdtemp())
+	>>> path = folder / "sales.jsonl"
+	>>> prices = ndp.Table.from_arrays({"price": ndp.Array.from_list([1.5, 8.0])})
+	>>> prices.to_json(path, ndp.JsonOptions(layout=ndp.JsonLayout.LINES))
+	>>> print(path.read_text())
+	{"price":1.5}
+	{"price":8.0}
 	"""
 
 	RECORDS = auto()

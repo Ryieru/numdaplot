@@ -97,8 +97,13 @@ def require_storable(new_values: Operand, values: NDArray[Any]) -> None:
 	Examples
 	--------
 	>>> import numpy
+	>>> import numdaplot as ndp
 	>>> from numdaplot.arrays.selection.replaced_values import require_storable
-	>>> require_storable(2, numpy.array([1.5]))
+	>>> try:
+	... 	require_storable(0.5, numpy.array([1, 2]))
+	... except ndp.ValueConversionError as error:
+	... 	print(error)
+	Cannot store FLOAT64 values as INT64 without losing information.
 	"""
 	new_type = find_operand_type(new_values)
 	values_type = from_numpy_dtype(values.dtype)

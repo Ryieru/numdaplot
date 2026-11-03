@@ -30,6 +30,12 @@ class MissingDependencyError(NumdaplotError):
 		Name of the missing package, such as ``openpyxl``.
 	extra_name
 		Name of the numdaplot extra that installs it, such as ``excel``.
+
+	Examples
+	--------
+	>>> import numdaplot as ndp
+	>>> print(ndp.MissingDependencyError("openpyxl", "excel"))
+	This file format needs the openpyxl package, install it with: pip install numdaplot[excel]
 	"""
 
 	def __init__(self, package_name: str, extra_name: str) -> None:

@@ -21,6 +21,7 @@ class Mean(Statistic):
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> ndp.Mean()
-	Mean()
+	>>> prices = ndp.Array.from_list([10.0, None, 30.0])
+	>>> prices.compute(ndp.Mean()).to_value()
+	20.0
 	"""

@@ -38,10 +38,17 @@ class Sorting:
 	Examples
 	--------
 	>>> import numdaplot as ndp
+	>>> cities = ndp.Array.from_list(["Paris", "Lyon", "Paris"])
+	>>> prices = ndp.Array.from_list([120.0, 80.0, 150.0])
+	>>> sales = ndp.Table.from_arrays({"city": cities, "price": prices})
 	>>> by_city = ndp.SortKey(column="city")
 	>>> by_price = ndp.SortKey(column="price", order=ndp.Order.DESCENDING)
-	>>> len(ndp.Sorting(keys=[by_city, by_price]).keys)
-	2
+	>>> sales.sort(ndp.Sorting(keys=[by_city, by_price]))
+	city   price
+	TEXT FLOAT64
+	0   Lyon    80.0
+	1  Paris   150.0
+	2  Paris   120.0
 	"""
 
 	keys: list[SortKey]

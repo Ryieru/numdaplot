@@ -19,6 +19,7 @@ class IsPresent(Rule):
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> ndp.IsPresent()
-	IsPresent()
+	>>> temperatures = ndp.Array.from_list([12.5, None, 18.0])
+	>>> temperatures.select(ndp.IsPresent())
+	Array([12.5, 18. ], dtype=FLOAT64)
 	"""

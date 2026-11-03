@@ -22,6 +22,7 @@ class Equal(ValueRule[ScalarValue]):
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> ndp.Equal("FR")
-	Equal(value='FR')
+	>>> countries = ndp.Array.from_list(["FR", "DE", "FR"])
+	>>> countries.check(ndp.Equal("FR"))
+	Array([ True, False,  True], dtype=BOOL)
 	"""

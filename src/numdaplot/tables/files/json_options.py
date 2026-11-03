@@ -25,9 +25,16 @@ class JsonOptions:
 
 	Examples
 	--------
+	>>> import tempfile
+	>>> from pathlib import Path
 	>>> import numdaplot as ndp
-	>>> ndp.JsonOptions(layout=ndp.JsonLayout.LINES)
-	JsonOptions(layout=<JsonLayout.LINES: 2>)
+	>>> folder = Path(tempfile.mkdtemp())
+	>>> path = folder / "sales.json"
+	>>> _ = path.write_text('[{"city": "Paris", "count": 2}]')
+	>>> ndp.Table.from_json(path, ndp.JsonOptions())
+	city count
+	TEXT INT64
+	0  Paris     2
 	"""
 
 	layout: JsonLayout = JsonLayout.RECORDS

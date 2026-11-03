@@ -16,6 +16,9 @@ class Rule:
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> isinstance(ndp.Greater(100), ndp.Rule)
-	True
+	>>> prices = ndp.Array.from_list([80, 120])
+	>>> for rule in [ndp.Greater(100), ndp.Less(100)]:
+	... 	print(prices.select(rule))
+	Array([120], dtype=INT64)
+	Array([80], dtype=INT64)
 	"""

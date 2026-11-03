@@ -32,8 +32,10 @@ class ArraySorting:
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> ndp.ArraySorting(order=ndp.Order.DESCENDING)
-	ArraySorting(order=<Order.DESCENDING: 2>, axis=None, missing=<MissingPosition.LAST: 2>)
+	>>> grid = ndp.Array.from_list([[3, 1], [2, 4]])
+	>>> grid.sort(ndp.ArraySorting(order=ndp.Order.DESCENDING, axis=ndp.Axis.EACH_COLUMN))
+	Array([[3, 4],
+	[2, 1]], dtype=INT64)
 	"""
 
 	order: Order = Order.ASCENDING

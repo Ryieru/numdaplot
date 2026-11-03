@@ -22,6 +22,7 @@ class LessOrEqual(ValueRule[OrderedValue]):
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> ndp.LessOrEqual(100)
-	LessOrEqual(value=100)
+	>>> prices = ndp.Array.from_list([80, 100, 120])
+	>>> prices.select(ndp.LessOrEqual(100))
+	Array([ 80, 100], dtype=INT64)
 	"""

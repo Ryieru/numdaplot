@@ -21,6 +21,7 @@ class Median(Statistic):
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> ndp.Median()
-	Median()
+	>>> salaries = ndp.Array.from_list([1800, 2000, 9000])
+	>>> salaries.compute(ndp.Median()).to_value()
+	2000.0
 	"""

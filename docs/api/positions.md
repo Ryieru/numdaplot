@@ -1,9 +1,9 @@
 # Positions
 
-::: numdaplot.positions.region
+::: numdaplot.positions.region.Region
 
-::: numdaplot.positions.index
+::: numdaplot.positions.index.Index
 
-::: numdaplot.positions.range
+::: numdaplot.positions.range.Range
 
-::: numdaplot.positions.axis
+::: numdaplot.positions.axis.Axis

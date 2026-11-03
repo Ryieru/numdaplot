@@ -31,12 +31,18 @@ class FileExistsError(NumdaplotError, builtins.FileExistsError):
 
 	Examples
 	--------
+	>>> import tempfile
+	>>> from pathlib import Path
 	>>> import numdaplot as ndp
+	>>> path = Path(tempfile.mkdtemp()) / "prices.csv"
+	>>> prices = ndp.Table.from_arrays({"price": ndp.Array.from_list([1.5])})
+	>>> prices.to_csv(path)
 	>>> try:
-	... 	raise ndp.FileExistsError("sales.csv")
+	... 	prices.to_csv(path)
 	... except ndp.FileExistsError as error:
-	... 	print(error)
-	A file already exists at sales.csv, pass on_conflict=ndp.Conflict.REPLACE to overwrite it.
+	... 	print(error)  # doctest: +ELLIPSIS
+	A file already exists at .../prices.csv, pass on_conflict=ndp.Conflict.REPLACE to overwrite it.
+	>>> prices.to_csv(path, on_conflict=ndp.Conflict.REPLACE)
 	"""
 
 	def __init__(self, path: str) -> None:

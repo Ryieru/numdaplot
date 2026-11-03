@@ -21,6 +21,7 @@ class Sum(Statistic):
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> ndp.Sum()
-	Sum()
+	>>> amounts = ndp.Array.from_list([10.5, None, 4.5])
+	>>> amounts.compute(ndp.Sum()).to_value()
+	15.0
 	"""

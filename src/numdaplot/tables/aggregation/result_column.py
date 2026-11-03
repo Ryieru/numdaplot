@@ -46,8 +46,10 @@ def compute_cell(present_values: NDArray[Any], statistic: Statistic) -> NDArray[
 	>>> import numpy
 	>>> import numdaplot as ndp
 	>>> from numdaplot.tables.aggregation.result_column import compute_cell
-	>>> compute_cell(numpy.array([], dtype=float), ndp.Mean()) is None
-	True
+	>>> compute_cell(numpy.array([10.0, 30.0]), ndp.Mean())
+	array([20.])
+	>>> print(compute_cell(numpy.array([], dtype=float), ndp.Mean()))
+	None
 	"""
 	try:
 		result = compute_statistic(present_values, statistic, None)

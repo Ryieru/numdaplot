@@ -16,6 +16,10 @@ class Statistic:
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> isinstance(ndp.Mean(), ndp.Statistic)
-	True
+	>>> prices = ndp.Array.from_list([10.0, 30.0])
+	>>> for statistic in [ndp.Min(), ndp.Mean(), ndp.Max()]:
+	... 	print(prices.compute(statistic).to_value())
+	10.0
+	20.0
+	30.0
 	"""

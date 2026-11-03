@@ -27,8 +27,11 @@ class ValueRule[ReferenceValue](Rule):
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> ndp.Greater(100).value
+	>>> limit = ndp.Greater(100)
+	>>> limit.value
 	100
+	>>> ndp.Array.from_list([80, 120]).select(limit)
+	Array([120], dtype=INT64)
 	"""
 
 	value: ReferenceValue

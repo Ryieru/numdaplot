@@ -28,10 +28,11 @@ class Round(MathFunction):
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> ndp.Round()
-	Round(decimals=0)
-	>>> ndp.Round(decimals=2)
-	Round(decimals=2)
+	>>> prices = ndp.Array.from_list([12.346, 2.5, 3.5])
+	>>> prices.apply(ndp.Round(decimals=2))
+	Array([12.35,  2.5 ,  3.5 ], dtype=FLOAT64)
+	>>> prices.apply(ndp.Round())
+	Array([12.,  2.,  4.], dtype=FLOAT64)
 	"""
 
 	decimals: int = 0

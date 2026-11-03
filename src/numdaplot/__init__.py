@@ -8,8 +8,11 @@ Import it as ``ndp``; every public name is available directly under it.
 Examples
 --------
 >>> import numdaplot as ndp
->>> ndp.Between(low=10, high=20)
-Between(low=10, high=20, bounds=<Bounds.INCLUDED: 1>)
+>>> prices = ndp.Array.from_list([12.5, None, 30.0])
+>>> prices.select(ndp.Greater(20))
+Array([30.], dtype=FLOAT64)
+>>> prices.compute(ndp.Mean()).to_value()
+21.25
 """
 
 from numdaplot.arrays.array import Array

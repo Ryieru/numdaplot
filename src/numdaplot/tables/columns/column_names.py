@@ -29,8 +29,13 @@ def require_column_name(column_name: object) -> None:
 
 	Examples
 	--------
+	>>> import numdaplot as ndp
 	>>> from numdaplot.tables.columns.column_names import require_column_name
-	>>> require_column_name("price")
+	>>> try:
+	... 	require_column_name(2024)
+	... except ndp.InvalidColumnNameError as error:
+	... 	print(error)
+	Expected a column name as a non-empty text, got 2024.
 	"""
 	is_text = isinstance(column_name, str)
 	if not is_text:
@@ -58,8 +63,13 @@ def require_unique_names(column_names: Sequence[str]) -> None:
 
 	Examples
 	--------
+	>>> import numdaplot as ndp
 	>>> from numdaplot.tables.columns.column_names import require_unique_names
-	>>> require_unique_names(["city", "price"])
+	>>> try:
+	... 	require_unique_names(["city", "price", "city"])
+	... except ndp.DuplicateColumnError as error:
+	... 	print(error)
+	The column name 'city' appears more than once.
 	"""
 	seen_names = set[str]()
 
@@ -90,8 +100,13 @@ def require_column_names(column_names: Sequence[object]) -> None:
 
 	Examples
 	--------
+	>>> import numdaplot as ndp
 	>>> from numdaplot.tables.columns.column_names import require_column_names
-	>>> require_column_names(["city", "price"])
+	>>> try:
+	... 	require_column_names(["city", ""])
+	... except ndp.InvalidColumnNameError as error:
+	... 	print(error)
+	Expected a column name as a non-empty text, got ''.
 	"""
 	text_names = list[str]()
 
@@ -123,8 +138,13 @@ def require_known_columns(requested_names: Sequence[str], column_names: Sequence
 
 	Examples
 	--------
+	>>> import numdaplot as ndp
 	>>> from numdaplot.tables.columns.column_names import require_known_columns
-	>>> require_known_columns(["price"], ["city", "price"])
+	>>> try:
+	... 	require_known_columns(["prise"], ["city", "price"])
+	... except ndp.ColumnNotFoundError as error:
+	... 	print(error)
+	No column is named 'prise'.
 	"""
 	known_names = set(column_names)
 

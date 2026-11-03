@@ -21,9 +21,17 @@ class ExcelOptions:
 
 	Examples
 	--------
+	>>> import tempfile
+	>>> from pathlib import Path
 	>>> import numdaplot as ndp
-	>>> ndp.ExcelOptions(sheet="Sales")
-	ExcelOptions(sheet='Sales')
+	>>> folder = Path(tempfile.mkdtemp())
+	>>> path = folder / "sales.xlsx"
+	>>> prices = ndp.Table.from_arrays({"price": ndp.Array.from_list([1.5])})
+	>>> prices.to_excel(path, ndp.ExcelOptions(sheet="Sales"))
+	>>> ndp.Table.from_excel(path, ndp.ExcelOptions(sheet="Sales"))
+	price
+	FLOAT64
+	0     1.5
 	"""
 
 	sheet: str | None = None

@@ -86,8 +86,8 @@ def find_type_width(data_type: Type) -> int:
 	--------
 	>>> import numdaplot as ndp
 	>>> from numdaplot.data_types.value_type import find_type_width
-	>>> find_type_width(ndp.Type.INT64)
-	0
+	>>> find_type_width(ndp.Type.INT64) < find_type_width(ndp.Type.FLOAT64)
+	True
 	"""
 	width = TYPE_WIDTHS.get(data_type, NARROWEST_WIDTH)
 

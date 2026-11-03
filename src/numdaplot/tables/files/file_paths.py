@@ -35,11 +35,14 @@ def require_existing_file(path: Path) -> None:
 
 	Examples
 	--------
-	>>> import tempfile
+	>>> import numdaplot as ndp
 	>>> from pathlib import Path
 	>>> from numdaplot.tables.files.file_paths import require_existing_file
-	>>> with tempfile.NamedTemporaryFile() as file:
-	... 	require_existing_file(Path(file.name))
+	>>> try:
+	... 	require_existing_file(Path("missing.csv"))
+	... except ndp.FileNotFoundError as error:
+	... 	print(error)
+	No file found at missing.csv.
 	"""
 	is_file = path.is_file()
 	if not is_file:
@@ -67,10 +70,18 @@ def require_free_path(path: Path, on_conflict: Conflict) -> None:
 
 	Examples
 	--------
+	>>> import tempfile
 	>>> from pathlib import Path
 	>>> import numdaplot as ndp
 	>>> from numdaplot.tables.files.file_paths import require_free_path
-	>>> require_free_path(Path("not-written-yet.csv"), ndp.Conflict.ERROR)
+	>>> with tempfile.NamedTemporaryFile(suffix=".csv") as file:
+	... 	path = Path(file.name)
+	... 	require_free_path(path, ndp.Conflict.REPLACE)
+	... 	try:
+	... 		require_free_path(path, ndp.Conflict.ERROR)
+	... 	except ndp.FileExistsError:
+	... 		print("refused")
+	refused
 	"""
 	file_exists = path.exists()
 	refuses_existing_file = file_exists and on_conflict == Conflict.ERROR

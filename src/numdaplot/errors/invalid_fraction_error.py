@@ -28,10 +28,11 @@ class InvalidFractionError(NumdaplotError):
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> ndp.Quantile(1.5)
-	Traceback (most recent call last):
-	...
-	numdaplot.errors.invalid_fraction_error.InvalidFractionError: Expected a fraction between 0 and 1, got 1.5.
+	>>> try:
+	... 	ndp.Quantile(1.5)
+	... except ndp.InvalidFractionError as error:
+	... 	print(error)
+	Expected a fraction between 0 and 1, got 1.5.
 	"""
 
 	def __init__(self, value: float) -> None:

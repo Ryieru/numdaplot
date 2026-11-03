@@ -39,9 +39,15 @@ class Aggregation:
 	Examples
 	--------
 	>>> import numdaplot as ndp
+	>>> cities = ndp.Array.from_list(["Paris", "Lyon", "Paris"])
+	>>> prices = ndp.Array.from_list([120.0, 80.0, 150.0])
+	>>> sales = ndp.Table.from_arrays({"city": cities, "price": prices})
 	>>> average_price = ndp.Calculation(column="price", function=ndp.Mean())
-	>>> ndp.Aggregation(calculations=[average_price], group_by=["city"]).group_by
-	['city']
+	>>> sales.aggregate(ndp.Aggregation(calculations=[average_price], group_by=["city"]))
+	city price_mean
+	TEXT    FLOAT64
+	0   Lyon       80.0
+	1  Paris      135.0
 	"""
 
 	calculations: list[Calculation]

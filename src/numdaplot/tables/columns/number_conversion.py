@@ -221,7 +221,11 @@ def require_no_lost_value(
 	>>> import numpy
 	>>> import numdaplot as ndp
 	>>> from numdaplot.tables.columns.number_conversion import require_no_lost_value
-	>>> require_no_lost_value(numpy.array([2.0]), numpy.array([2]), ndp.Type.FLOAT64, ndp.Type.INT64)
+	>>> try:
+	... 	require_no_lost_value(numpy.array([2.0, 2.5]), numpy.array([2, 2]), ndp.Type.FLOAT64, ndp.Type.INT64)
+	... except ndp.ValueConversionError as error:
+	... 	print(error)
+	Cannot store the FLOAT64 value 2.5 as INT64 without losing information.
 	"""
 	lost = find_lost_values(values, stored_values)
 	require_no_failed_value(values, lost, source_type, target_type)

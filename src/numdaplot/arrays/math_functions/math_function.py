@@ -16,6 +16,9 @@ class MathFunction:
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> isinstance(ndp.SquareRoot(), ndp.MathFunction)
-	True
+	>>> values = ndp.Array.from_list([1.0, 4.0])
+	>>> for function in [ndp.SquareRoot(), ndp.Logarithm(base=2)]:
+	... 	print(values.apply(function))
+	Array([1., 2.], dtype=FLOAT64)
+	Array([0., 2.], dtype=FLOAT64)
 	"""

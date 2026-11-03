@@ -34,8 +34,11 @@ class Shape:
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> ndp.Shape((3, 4))
-	Shape(dimensions=(3, 4))
+	>>> ndp.Array.filled(shape=ndp.Shape((2, 3)), value=0)
+	Array([[0, 0, 0],
+	[0, 0, 0]], dtype=INT64)
+	>>> ndp.Array.from_list([[1, 2, 3], [4, 5, 6]]).shape
+	Shape(dimensions=(2, 3))
 	"""
 
 	dimensions: tuple[int, ...]

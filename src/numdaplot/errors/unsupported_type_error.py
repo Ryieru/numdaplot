@@ -31,6 +31,16 @@ class UnsupportedTypeError(NumdaplotError):
 		Name of the type that cannot be converted.
 	library
 		Library on the other side of the conversion.
+
+	Examples
+	--------
+	>>> import numdaplot as ndp
+	>>> import numpy
+	>>> try:
+	... 	ndp.Array.from_numpy(numpy.array([1 + 2j]))
+	... except ndp.UnsupportedTypeError as error:
+	... 	print(error)
+	The type complex128 has no equivalent between numdaplot and numpy.
 	"""
 
 	def __init__(self, type_name: str, library: Library) -> None:

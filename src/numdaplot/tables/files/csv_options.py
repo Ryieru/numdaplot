@@ -15,7 +15,7 @@ SEPARATOR_LENGTH = 1
 
 @dataclass(frozen=True)
 class CsvOptions:
-	"""
+	r"""
 	Settings of a CSV file, used by ``Table.from_csv`` and ``Table.to_csv``.
 
 	.. versionadded:: 0.1.0
@@ -34,9 +34,17 @@ class CsvOptions:
 
 	Examples
 	--------
+	>>> import tempfile
+	>>> from pathlib import Path
 	>>> import numdaplot as ndp
-	>>> ndp.CsvOptions(separator=";", encoding=ndp.Encoding.LATIN_1)
-	CsvOptions(separator=';', encoding=<Encoding.LATIN_1: 'latin-1'>)
+	>>> folder = Path(tempfile.mkdtemp())
+	>>> path = folder / "sales.csv"
+	>>> _ = path.write_text("city;price\nParis;1.5\nLyon;8.0\n")
+	>>> ndp.Table.from_csv(path, ndp.CsvOptions(separator=";"))
+	city   price
+	TEXT FLOAT64
+	0  Paris     1.5
+	1   Lyon     8.0
 	"""
 
 	separator: str = DEFAULT_SEPARATOR

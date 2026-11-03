@@ -38,8 +38,9 @@ class RandomIntegers(Distribution):
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> ndp.RandomIntegers(low=1, high=6)
-	RandomIntegers(low=1, high=6, bounds=<Bounds.INCLUDED: 1>)
+	>>> dice = ndp.RandomIntegers(low=1, high=6)
+	>>> ndp.Array.random(dice, shape=ndp.Shape((5,)), seed=0)
+	Array([6, 4, 4, 2, 2], dtype=INT64)
 	"""
 
 	low: int

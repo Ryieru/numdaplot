@@ -40,8 +40,14 @@ class Preview:
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> ndp.Preview(count=3, side=ndp.Side.RANDOM, seed=42)
-	Preview(count=3, side=<Side.RANDOM: 3>, seed=42)
+	>>> cities = ndp.Array.from_list(["Paris", "Lyon", "Paris"])
+	>>> prices = ndp.Array.from_list([120.0, 80.0, 150.0])
+	>>> sales = ndp.Table.from_arrays({"city": cities, "price": prices})
+	>>> sales.preview(ndp.Preview(count=2))
+	city   price
+	TEXT FLOAT64
+	0  Paris   120.0
+	1   Lyon    80.0
 	"""
 
 	count: int = DEFAULT_PREVIEW_COUNT

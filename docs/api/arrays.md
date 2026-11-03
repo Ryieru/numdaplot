@@ -6,44 +6,44 @@
 
 ## Shape
 
-::: numdaplot.arrays.shape
+::: numdaplot.arrays.shape.Shape
 
 ## Creation settings
 
-::: numdaplot.arrays.creation.spacing
+::: numdaplot.arrays.creation.spacing.Spacing
 
-::: numdaplot.arrays.creation.distribution
+::: numdaplot.arrays.creation.distribution.Distribution
 
-::: numdaplot.arrays.creation.uniform
+::: numdaplot.arrays.creation.uniform.Uniform
 
-::: numdaplot.arrays.creation.normal
+::: numdaplot.arrays.creation.normal.Normal
 
 ::: numdaplot.arrays.creation.random_integers.RandomIntegers
 
 ## Math functions
 
-::: numdaplot.arrays.math_functions.math_function
+::: numdaplot.arrays.math_functions.math_function.MathFunction
 
-::: numdaplot.arrays.math_functions.square_root
+::: numdaplot.arrays.math_functions.square_root.SquareRoot
 
-::: numdaplot.arrays.math_functions.exponential
+::: numdaplot.arrays.math_functions.exponential.Exponential
 
-::: numdaplot.arrays.math_functions.logarithm
+::: numdaplot.arrays.math_functions.logarithm.Logarithm
 
-::: numdaplot.arrays.math_functions.absolute
+::: numdaplot.arrays.math_functions.absolute.Absolute
 
-::: numdaplot.arrays.math_functions.round
+::: numdaplot.arrays.math_functions.round.Round
 
-::: numdaplot.arrays.math_functions.sine
+::: numdaplot.arrays.math_functions.sine.Sine
 
-::: numdaplot.arrays.math_functions.cosine
+::: numdaplot.arrays.math_functions.cosine.Cosine
 
 ## Sorting, replacement and comparison
 
-::: numdaplot.arrays.array_sorting
+::: numdaplot.arrays.array_sorting.ArraySorting
 
-::: numdaplot.arrays.replacement
+::: numdaplot.arrays.replacement.Replacement
 
-::: numdaplot.arrays.equality
+::: numdaplot.arrays.equality.Equality
 
-::: numdaplot.arrays.type_match
+::: numdaplot.arrays.type_match.TypeMatch

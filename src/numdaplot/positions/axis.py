@@ -19,8 +19,11 @@ class Axis(Enum):
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> ndp.Axis.EACH_ROW
-	<Axis.EACH_ROW: 1>
+	>>> sales = ndp.Array.from_list([[1, 2], [3, 4]])
+	>>> sales.compute(ndp.Sum(), axis=ndp.Axis.EACH_ROW)
+	Array([3, 7], dtype=INT64)
+	>>> sales.compute(ndp.Sum(), axis=ndp.Axis.EACH_COLUMN)
+	Array([4, 6], dtype=INT64)
 	"""
 
 	EACH_ROW = auto()

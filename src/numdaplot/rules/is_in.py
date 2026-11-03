@@ -32,8 +32,9 @@ class IsIn[AcceptedValue: (bool, int, float, str, date, datetime, timedelta)](Ru
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> ndp.IsIn(["FR", "DE"])
-	IsIn(values=['FR', 'DE'])
+	>>> countries = ndp.Array.from_list(["FR", "US", "DE"])
+	>>> countries.select(ndp.IsIn(["FR", "DE"]))
+	Array(['FR', 'DE'], dtype=TEXT)
 	"""
 
 	values: list[AcceptedValue]

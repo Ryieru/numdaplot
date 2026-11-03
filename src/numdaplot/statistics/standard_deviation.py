@@ -23,6 +23,7 @@ class StandardDeviation(Statistic):
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> ndp.StandardDeviation()
-	StandardDeviation()
+	>>> grades = ndp.Array.from_list([8, 12])
+	>>> grades.compute(ndp.StandardDeviation()).to_value()
+	2.0
 	"""

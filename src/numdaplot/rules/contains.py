@@ -33,8 +33,9 @@ class Contains(Rule):
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> ndp.Contains("paris")
-	Contains(text='paris', case=<Case.SENSITIVE: 1>)
+	>>> emails = ndp.Array.from_list(["ana@shop.fr", "bob@mail.com"])
+	>>> emails.select(ndp.Contains(".fr"))
+	Array(['ana@shop.fr'], dtype=TEXT)
 	"""
 
 	text: str

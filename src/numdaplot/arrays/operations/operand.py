@@ -44,8 +44,14 @@ def require_single_value(value: object) -> None:
 
 	Examples
 	--------
+	>>> import numpy
+	>>> import numdaplot as ndp
 	>>> from numdaplot.arrays.operations.operand import require_single_value
-	>>> require_single_value(2.5)
+	>>> try:
+	... 	require_single_value([1, 2])
+	... except ndp.UnsupportedOperandError as error:
+	... 	print(error)
+	Expected an Array or a single value, got list.
 	"""
 	is_single_value = isinstance(value, SINGLE_VALUE_TYPES)
 	if not is_single_value:

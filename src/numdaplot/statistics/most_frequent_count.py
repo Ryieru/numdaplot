@@ -21,6 +21,7 @@ class MostFrequentCount(Statistic):
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> ndp.MostFrequentCount()
-	MostFrequentCount()
+	>>> sizes = ndp.Array.from_list(["M", "L", "M"])
+	>>> sizes.compute(ndp.MostFrequentCount()).to_value()
+	2
 	"""

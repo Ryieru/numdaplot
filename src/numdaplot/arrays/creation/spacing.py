@@ -47,8 +47,10 @@ class Spacing:
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> ndp.Spacing(start=0, stop=1, count=5)
-	Spacing(start=0, stop=1, count=5, bounds=<Bounds.INCLUDED: 1>)
+	>>> ndp.Array.from_spacing(ndp.Spacing(start=0, stop=1, count=5))
+	Array([0.  , 0.25, 0.5 , 0.75, 1.  ], dtype=FLOAT64)
+	>>> ndp.Array.from_spacing(ndp.Spacing(start=0, stop=1, count=4, bounds=ndp.Bounds.EXCLUDED))
+	Array([0.2, 0.4, 0.6, 0.8], dtype=FLOAT64)
 	"""
 
 	start: float

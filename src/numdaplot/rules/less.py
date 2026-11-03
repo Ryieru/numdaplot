@@ -22,6 +22,7 @@ class Less(ValueRule[OrderedValue]):
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> ndp.Less(100)
-	Less(value=100)
+	>>> prices = ndp.Array.from_list([80, 100, 120])
+	>>> prices.select(ndp.Less(100))
+	Array([80], dtype=INT64)
 	"""

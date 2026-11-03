@@ -40,8 +40,15 @@ class Calculation:
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> ndp.Calculation(column="price", function=ndp.Mean(), result_name="average_price")
-	Calculation(column='price', function=Mean(), result_name='average_price')
+	>>> cities = ndp.Array.from_list(["Paris", "Lyon", "Paris"])
+	>>> prices = ndp.Array.from_list([120.0, 80.0, 150.0])
+	>>> sales = ndp.Table.from_arrays({"city": cities, "price": prices})
+	>>> total = ndp.Calculation(column="price", function=ndp.Sum())
+	>>> highest = ndp.Calculation(column="price", function=ndp.Max(), result_name="highest_price")
+	>>> sales.aggregate(ndp.Aggregation(calculations=[total, highest]))
+	price_sum highest_price
+	FLOAT64       FLOAT64
+	0     350.0         150.0
 	"""
 
 	column: str

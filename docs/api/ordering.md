@@ -1,5 +1,5 @@
 # Sort settings
 
-::: numdaplot.ordering.order
+::: numdaplot.ordering.order.Order
 
-::: numdaplot.ordering.missing_position
+::: numdaplot.ordering.missing_position.MissingPosition

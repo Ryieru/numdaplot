@@ -16,8 +16,9 @@ class Bounds(Enum):
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> ndp.Between(low=10, high=20, bounds=ndp.Bounds.LOW_ONLY).bounds
-	<Bounds.LOW_ONLY: 3>
+	>>> scores = ndp.Array.from_list([0, 5, 10])
+	>>> scores.select(ndp.Between(low=0, high=10, bounds=ndp.Bounds.LOW_ONLY))
+	Array([0, 5], dtype=INT64)
 	"""
 
 	INCLUDED = auto()

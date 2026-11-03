@@ -21,6 +21,7 @@ class CountDistinct(Statistic):
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> ndp.CountDistinct()
-	CountDistinct()
+	>>> cities = ndp.Array.from_list(["Paris", "Lyon", "Paris"])
+	>>> cities.compute(ndp.CountDistinct()).to_value()
+	2
 	"""

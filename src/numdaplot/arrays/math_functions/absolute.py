@@ -21,6 +21,7 @@ class Absolute(MathFunction):
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> ndp.Absolute()
-	Absolute()
+	>>> gaps = ndp.Array.from_list([-3, 0, 2])
+	>>> gaps.apply(ndp.Absolute())
+	Array([3, 0, 2], dtype=INT64)
 	"""

@@ -16,8 +16,9 @@ class MissingPosition(Enum):
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> ndp.MissingPosition.LAST
-	<MissingPosition.LAST: 2>
+	>>> prices = ndp.Array.from_list([20.0, None, 10.0])
+	>>> prices.sort(ndp.ArraySorting(missing=ndp.MissingPosition.FIRST))
+	Array([nan, 10., 20.], dtype=FLOAT64)
 	"""
 
 	FIRST = auto()

@@ -18,8 +18,16 @@ class Conflict(Enum):
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> ndp.Conflict.REPLACE
-	<Conflict.REPLACE: 2>
+	>>> cities = ndp.Array.from_list(["Paris", "Lyon", "Paris"])
+	>>> prices = ndp.Array.from_list([120.0, 80.0, 150.0])
+	>>> sales = ndp.Table.from_arrays({"city": cities, "price": prices})
+	>>> taxed_prices = sales.column("price") * 1.2
+	>>> sales.add_column(ndp.NewColumn(name="price", values=taxed_prices, on_conflict=ndp.Conflict.REPLACE))
+	city   price
+	TEXT FLOAT64
+	0  Paris   144.0
+	1   Lyon    96.0
+	2  Paris   180.0
 	"""
 
 	ERROR = auto()

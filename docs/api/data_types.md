@@ -1,3 +1,3 @@
 # Types
 
-::: numdaplot.data_types.type
+::: numdaplot.data_types.type.Type

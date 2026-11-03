@@ -16,8 +16,15 @@ class ColumnMode(Enum):
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> ndp.ColumnMode.DROP
-	<ColumnMode.DROP: 2>
+	>>> cities = ndp.Array.from_list(["Paris", "Lyon", "Paris"])
+	>>> prices = ndp.Array.from_list([120.0, 80.0, 150.0])
+	>>> sales = ndp.Table.from_arrays({"city": cities, "price": prices})
+	>>> sales.choose_columns(ndp.ColumnChoice(columns=["price"], mode=ndp.ColumnMode.DROP))
+	city
+	TEXT
+	0  Paris
+	1   Lyon
+	2  Paris
 	"""
 
 	KEEP = auto()

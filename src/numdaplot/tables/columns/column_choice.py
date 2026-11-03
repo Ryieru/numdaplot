@@ -38,8 +38,15 @@ class ColumnChoice:
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> ndp.ColumnChoice(columns=["comment"], mode=ndp.ColumnMode.DROP)
-	ColumnChoice(columns=['comment'], mode=<ColumnMode.DROP: 2>)
+	>>> cities = ndp.Array.from_list(["Paris", "Lyon", "Paris"])
+	>>> prices = ndp.Array.from_list([120.0, 80.0, 150.0])
+	>>> sales = ndp.Table.from_arrays({"city": cities, "price": prices})
+	>>> sales.choose_columns(ndp.ColumnChoice(columns=["price"]))
+	price
+	FLOAT64
+	0   120.0
+	1    80.0
+	2   150.0
 	"""
 
 	columns: list[str]

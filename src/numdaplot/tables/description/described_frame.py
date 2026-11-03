@@ -235,8 +235,11 @@ def compute_description_cell(present_values: NDArray[Any], statistic: Statistic)
 	>>> import numpy
 	>>> import numdaplot as ndp
 	>>> from numdaplot.tables.description.described_frame import compute_description_cell
-	>>> compute_description_cell(numpy.array(["a"], dtype="T"), ndp.Mean()) is None
-	True
+	>>> texts = numpy.array(["b", "a"], dtype="T")
+	>>> compute_description_cell(texts, ndp.Min())
+	array(['a'], dtype=StringDType())
+	>>> print(compute_description_cell(texts, ndp.Mean()))
+	None
 	"""
 	try:
 		result = compute_cell(present_values, statistic)

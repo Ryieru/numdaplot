@@ -40,8 +40,14 @@ class Deduplication:
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> ndp.Deduplication(columns=["email"], keep=ndp.Keep.LAST)
-	Deduplication(columns=['email'], keep=<Keep.LAST: 2>)
+	>>> cities = ndp.Array.from_list(["Paris", "Lyon", "Paris"])
+	>>> prices = ndp.Array.from_list([120.0, 80.0, 150.0])
+	>>> sales = ndp.Table.from_arrays({"city": cities, "price": prices})
+	>>> sales.drop_duplicates(ndp.Deduplication(columns=["city"]))
+	city   price
+	TEXT FLOAT64
+	0  Paris   120.0
+	1   Lyon    80.0
 	"""
 
 	columns: list[str] | None = None

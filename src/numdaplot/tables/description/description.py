@@ -58,8 +58,15 @@ class Description:
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> ndp.Description(functions=[ndp.Min(), ndp.Max()], columns=["price"])
-	Description(functions=[Min(), Max()], columns=['price'])
+	>>> cities = ndp.Array.from_list(["Paris", "Lyon", "Paris"])
+	>>> prices = ndp.Array.from_list([120.0, 80.0, 150.0])
+	>>> sales = ndp.Table.from_arrays({"city": cities, "price": prices})
+	>>> sales.describe(ndp.Description(functions=[ndp.Min(), ndp.Mean(), ndp.Max()]))
+	statistic       price
+	TEXT     FLOAT64
+	0       min   80.000000
+	1      mean  116.666667
+	2       max  150.000000
 	"""
 
 	functions: list[Statistic] | None = None

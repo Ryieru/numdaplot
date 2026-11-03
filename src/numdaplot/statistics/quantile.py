@@ -33,8 +33,9 @@ class Quantile(Statistic):
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> ndp.Quantile(0.9)
-	Quantile(fraction=0.9)
+	>>> salaries = ndp.Array.from_list([1000, 2000, 3000, 4000, 5000])
+	>>> salaries.compute(ndp.Quantile(0.9)).to_value()
+	4600.0
 	"""
 
 	fraction: float

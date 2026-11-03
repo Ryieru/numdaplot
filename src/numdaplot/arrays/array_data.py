@@ -98,8 +98,10 @@ class ArrayData:
 		Examples
 		--------
 		>>> import numdaplot as ndp
-		>>> ndp.Array.from_list([1, 2]).to_numpy()
-		array([1, 2])
+		>>> values = ndp.Array.from_list([1, 2]).to_numpy()
+		>>> values[0] = 99
+		>>> values
+		array([99,  2])
 		"""
 		copied_values = self._values.copy()
 

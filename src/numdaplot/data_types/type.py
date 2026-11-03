@@ -19,7 +19,9 @@ class Type(Enum):
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> ndp.Type.FLOAT64
+	>>> ndp.Array.from_list([1, 2], dtype=ndp.Type.FLOAT32)
+	Array([1., 2.], dtype=FLOAT32)
+	>>> ndp.Array.from_list([1.5, 2.0]).dtype
 	<Type.FLOAT64: 10>
 	"""
 

@@ -16,8 +16,12 @@ class TypeMatch(Enum):
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> ndp.TypeMatch.STRICT
-	<TypeMatch.STRICT: 1>
+	>>> integers = ndp.Array.from_list([1, 2])
+	>>> decimals = ndp.Array.from_list([1.0, 2.0])
+	>>> integers.is_equal(ndp.Equality(other=decimals, types=ndp.TypeMatch.IGNORED))
+	True
+	>>> integers.is_equal(ndp.Equality(other=decimals, types=ndp.TypeMatch.STRICT))
+	False
 	"""
 
 	STRICT = auto()

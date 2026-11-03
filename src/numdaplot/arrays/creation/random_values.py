@@ -85,8 +85,13 @@ def require_valid_seed(seed: int) -> None:
 
 	Examples
 	--------
+	>>> import numdaplot as ndp
 	>>> from numdaplot.arrays.creation.random_values import require_valid_seed
-	>>> require_valid_seed(42)
+	>>> try:
+	... 	require_valid_seed(-1)
+	... except ndp.InvalidSeedError as error:
+	... 	print(error)
+	Expected a seed of at least 0, got -1.
 	"""
 	if seed < LOWEST_SEED:
 		raise InvalidSeedError(seed)

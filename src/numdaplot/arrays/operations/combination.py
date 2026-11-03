@@ -103,8 +103,13 @@ def check_shapes(left: Operand, right: Operand) -> None:
 	Examples
 	--------
 	>>> import numpy
+	>>> import numdaplot as ndp
 	>>> from numdaplot.arrays.operations.combination import check_shapes
-	>>> check_shapes(numpy.array([1, 2]), numpy.array([3, 4]))
+	>>> try:
+	... 	check_shapes(numpy.array([1, 2]), numpy.array([1, 2, 3]))
+	... except ndp.ShapeMismatchError as error:
+	... 	print(error)
+	Expected matching shapes, got (2,) and (3,).
 	"""
 	if not isinstance(left, numpy.ndarray):
 		return

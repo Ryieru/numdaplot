@@ -37,8 +37,11 @@ class Between[BoundValue: (int, float, str, date, datetime, timedelta)](Rule):
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> ndp.Between(low=10, high=20)
-	Between(low=10, high=20, bounds=<Bounds.INCLUDED: 1>)
+	>>> ages = ndp.Array.from_list([8, 10, 15, 20, 31])
+	>>> ages.select(ndp.Between(low=10, high=20))
+	Array([10, 15, 20], dtype=INT64)
+	>>> ages.select(ndp.Between(low=10, high=20, bounds=ndp.Bounds.EXCLUDED))
+	Array([15], dtype=INT64)
 	"""
 
 	low: BoundValue

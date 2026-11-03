@@ -35,10 +35,15 @@ class Filter:
 	Examples
 	--------
 	>>> import numdaplot as ndp
+	>>> cities = ndp.Array.from_list(["Paris", "Lyon", "Paris"])
+	>>> prices = ndp.Array.from_list([120.0, 80.0, 150.0])
+	>>> sales = ndp.Table.from_arrays({"city": cities, "price": prices})
 	>>> expensive = ndp.Condition(rule=ndp.Greater(100), columns=["price"])
-	>>> in_paris = ndp.Condition(rule=ndp.Equal("Paris"), columns=["city"])
-	>>> ndp.Filter(conditions=[expensive, in_paris], mode=ndp.FilterMode.ANY).mode
-	<FilterMode.ANY: 2>
+	>>> in_lyon = ndp.Condition(rule=ndp.Equal("Lyon"), columns=["city"])
+	>>> sales.filter(ndp.Filter(conditions=[expensive, in_lyon]))
+	Empty DataFrame
+	Columns: [(city, TEXT), (price, FLOAT64)]
+	Index: []
 	"""
 
 	conditions: list[Condition]

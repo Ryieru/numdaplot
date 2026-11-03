@@ -23,8 +23,9 @@ class Index:
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> ndp.Index(-1)
-	Index(position=-1)
+	>>> scores = ndp.Array.from_list([10, 20, 30])
+	>>> scores.take(ndp.Region(rows=ndp.Index(-1)))
+	Array([30], dtype=INT64)
 	"""
 
 	position: int

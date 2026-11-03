@@ -34,8 +34,8 @@ class Uniform(Distribution):
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> ndp.Uniform(low=0, high=1)
-	Uniform(low=0, high=1)
+	>>> ndp.Array.random(ndp.Uniform(low=0, high=1), shape=ndp.Shape((3,)), seed=0)
+	Array([0.63696169, 0.26978671, 0.04097352], dtype=FLOAT64)
 	"""
 
 	low: float

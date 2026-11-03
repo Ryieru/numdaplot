@@ -38,9 +38,14 @@ def require_family(values: NDArray[Any], accepted_families: frozenset[ValueFamil
 	Examples
 	--------
 	>>> import numpy
+	>>> import numdaplot as ndp
 	>>> from numdaplot.arrays.operations.type_requirements import require_family
 	>>> from numdaplot.data_types.value_family import ValueFamily
-	>>> require_family(numpy.array([1.5]), frozenset({ValueFamily.NUMBER}), "Mean")
+	>>> try:
+	... 	require_family(numpy.array(["a"]), frozenset({ValueFamily.NUMBER}), "Mean")
+	... except ndp.IncompatibleTypesError as error:
+	... 	print(error)
+	Cannot apply Mean to TEXT.
 	"""
 	array_type = from_numpy_dtype(values.dtype)
 	array_family = find_family(array_type)
@@ -73,8 +78,13 @@ def require_comparable(values: NDArray[Any], reference: ScalarValue, operation: 
 	Examples
 	--------
 	>>> import numpy
+	>>> import numdaplot as ndp
 	>>> from numdaplot.arrays.operations.type_requirements import require_comparable
-	>>> require_comparable(numpy.array([1, 2]), 1.5, "Greater")
+	>>> try:
+	... 	require_comparable(numpy.array([1, 2]), "10", "Greater")
+	... except ndp.IncompatibleTypesError as error:
+	... 	print(error)
+	Cannot apply Greater to INT64 and TEXT.
 	"""
 	array_type = from_numpy_dtype(values.dtype)
 	reference_type = find_value_type(reference)

@@ -28,8 +28,9 @@ class Region:
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> ndp.Region(rows=ndp.Index(0), columns=["total"])
-	Region(rows=Index(position=0), columns=['total'])
+	>>> grid = ndp.Array.from_list([[1, 2, 3], [4, 5, 6]])
+	>>> grid.take(ndp.Region(rows=ndp.Index(0), columns=ndp.Range(start=1, stop=2)))
+	Array([[2, 3]], dtype=INT64)
 	"""
 
 	rows: Index | Range | None = None

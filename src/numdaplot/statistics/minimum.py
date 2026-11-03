@@ -21,6 +21,7 @@ class Min(Statistic):
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> ndp.Min()
-	Min()
+	>>> cities = ndp.Array.from_list(["Pau", "Lyon", "Paris"])
+	>>> cities.compute(ndp.Min()).to_value()
+	'Lyon'
 	"""

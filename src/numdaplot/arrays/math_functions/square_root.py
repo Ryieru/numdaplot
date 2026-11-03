@@ -21,6 +21,7 @@ class SquareRoot(MathFunction):
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> ndp.SquareRoot()
-	SquareRoot()
+	>>> areas = ndp.Array.from_list([4, 9, 16])
+	>>> areas.apply(ndp.SquareRoot())
+	Array([2., 3., 4.], dtype=FLOAT64)
 	"""

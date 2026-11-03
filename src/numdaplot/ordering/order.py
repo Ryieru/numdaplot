@@ -16,8 +16,9 @@ class Order(Enum):
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> ndp.Order.DESCENDING
-	<Order.DESCENDING: 2>
+	>>> prices = ndp.Array.from_list([20, 30, 10])
+	>>> prices.sort(ndp.ArraySorting(order=ndp.Order.DESCENDING))
+	Array([30, 20, 10], dtype=INT64)
 	"""
 
 	ASCENDING = auto()
