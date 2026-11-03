@@ -114,7 +114,7 @@ def require_plain_index(index: pandas.Index) -> None:
 	... 	require_plain_index(pandas.Index(["Paris", "Lyon"]))
 	... except ndp.UnsupportedIndexError as error:
 	... 	print(error)
-	A Table has no index, call reset_index() on the DataFrame first to keep its index as a column.
+	A Table has no index, call reset_index() on the pandas DataFrame first to keep its index as a column.
 	"""
 	row_count = len(index)
 	row_numbers = pandas.RangeIndex(row_count)

@@ -17,6 +17,8 @@ GRID = [[1.5, None], [3.0, 4.0]]
 GRID_SHAPE = ndp.Shape((2, 2))
 DATES = [date(2026, 1, 31), None]
 MIXED_VALUES = [1, "a"]
+AGES = [8, 30, 255]
+NEGATIVE_AGES = [8, -1]
 SEED = 7
 DIE_SHAPE = ndp.Shape((100,))
 DIE_FACES = {1, 2, 3, 4, 5, 6}
@@ -62,6 +64,21 @@ def test_dates_with_a_missing_date_give_a_date_array() -> None:
 	day_list = days.to_list()
 	assert days.dtype == ndp.Type.DATE
 	assert day_list == DATES
+
+
+def test_a_list_of_integers_gives_an_unsigned_array_when_asked() -> None:
+	"""
+	Check that integers from 0 to 255 are stored as UINT8, and a negative one is refused.
+
+	.. versionadded:: 0.1.0
+	"""
+	ages = ndp.Array.from_list(AGES, dtype=ndp.Type.UINT8)
+
+	age_list = ages.to_list()
+	assert ages.dtype == ndp.Type.UINT8
+	assert age_list == AGES
+	with pytest.raises(ndp.ValueConversionError):
+		ndp.Array.from_list(NEGATIVE_AGES, dtype=ndp.Type.UINT8)
 
 
 def test_mixed_numbers_and_texts_are_rejected() -> None:

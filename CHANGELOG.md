@@ -9,16 +9,19 @@ and numdaplot follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
 ### Added
 
-- `Array`: values of one type in one or several dimensions, created with `from_list`, `from_numpy`,
-  `filled`, `from_range`, `from_spacing` and `random`; combined with `+`, `-`, `*`, `/`, `//`, `%`, `**`
-  and, for booleans, `&`, `|`, `~`; read with `select`, `check`, `take`, `replace`, `compute`, `apply`,
-  `reshape`, `transpose`, `flatten`, `sort`, `unique`, `to_list`, `to_value`, `to_numpy` and `is_equal`.
+- `Array`: values of one type in one or several dimensions, created with `Array.from_list`, `Array.from_numpy`,
+  `Array.filled`, `Array.from_range`, `Array.from_spacing` and `Array.random`; combined with `+`, `-`, `*`, `/`,
+  `//`, `%`, `**` and, for booleans, `&`, `|`, `~`; read with `Array.select`, `Array.check`, `Array.take`,
+  `Array.replace`, `Array.compute`, `Array.apply`, `Array.reshape`, `Array.transpose`, `Array.flatten`,
+  `Array.sort`, `Array.unique`, `Array.to_list`, `Array.to_value`, `Array.to_numpy` and `Array.is_equal`.
 - Array settings: `Shape`, `Spacing`, `ArraySorting`, `Replacement`, `Equality` and the `TypeMatch` enum.
-- `Table`: named columns of one type each, read with `from_csv`, `from_json`, `from_excel`, `from_parquet`,
-  `from_stata`, `from_sas`, `from_xpt`, `from_pandas` and `from_arrays`; written with `to_csv`, `to_json`,
-  `to_excel`, `to_parquet` and `to_stata`; changed with `filter`, `take`, `choose_columns`, `rename`, `convert`,
-  `add_column`, `aggregate`, `describe`, `sort` and `drop_duplicates`; read with `column`, `to_value`,
-  `to_pandas`, `is_equal`, `row_count`, `column_names`, `column_types`, `preview` and `print`.
+- `Table`: named columns of one type each, read with `Table.from_csv`, `Table.from_json`, `Table.from_excel`,
+  `Table.from_parquet`, `Table.from_stata`, `Table.from_sas`, `Table.from_xpt`, `Table.from_pandas` and
+  `Table.from_arrays`; written with `Table.to_csv`, `Table.to_json`, `Table.to_excel`, `Table.to_parquet` and
+  `Table.to_stata`; changed with `Table.filter`, `Table.take`, `Table.choose_columns`, `Table.rename`,
+  `Table.convert`, `Table.add_column`, `Table.aggregate`, `Table.describe`, `Table.sort` and
+  `Table.drop_duplicates`; read with `Table.column`, `Table.to_value`, `Table.to_pandas`, `Table.is_equal`,
+  `Table.row_count`, `Table.column_names`, `Table.column_types`, `Table.preview` and `print`.
 - Table settings: `CsvOptions`, `JsonOptions`, `ExcelOptions`, `SasOptions`, `XptOptions`, `Filter`, `Condition`,
   `Aggregation`, `Calculation`, `Description`, `ColumnChoice`, `Renaming`, `Conversion`, `NewColumn`, `Sorting`,
   `SortKey`, `Deduplication`, `Preview`, and the `Encoding`, `JsonLayout`, `Conflict`, `FilterMode`,

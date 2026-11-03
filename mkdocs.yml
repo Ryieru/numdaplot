@@ -2,11 +2,38 @@ site_name: numdaplot
 site_description: A simpler, explicit API over numpy, pandas and matplotlib.
 repo_url: https://github.com/Ryieru/Numdaplot
 
+watch:
+  - src
+
 exclude_docs: |
   *.py
 
 theme:
   name: material
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: deep purple
+      accent: deep purple
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: deep purple
+      accent: deep purple
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+  features:
+    - navigation.sections
+    - navigation.top
+    - toc.follow
+    - content.code.copy
+
+hooks:
+  - docs/section_separators.py
+  - docs/page_references.py
 
 plugins:
   - search
@@ -16,25 +43,179 @@ plugins:
           paths: [src]
           options:
             docstring_style: numpy
-            show_source: false
+            docstring_section_style: list
+            show_source: true
             members_order: source
+            group_by_category: true
+            show_category_heading: true
+            show_root_heading: true
+            show_root_full_path: false
+            show_symbol_type_heading: true
+            show_symbol_type_toc: true
+            separate_signature: false
+            show_signature_annotations: false
+            annotations_path: source
+            show_labels: false
+            signature_crossrefs: true
+            merge_init_into_class: true
+            docstring_options:
+              ignore_init_summary: true
+            filters:
+              - "!^_[^_]"
+              - "!^__init__$"
+              - "!^__post_init__$"
             extensions:
               - docs/version_directives.py
+              - docs/tab_indentation.py
+              - docs/default_values.py
+              - docs/cross_references.py
 
 nav:
   - Home: index.md
   - API:
-      - Arrays: api/arrays.md
-      - Tables: api/tables.md
-      - Types: api/data_types.md
-      - Rules: api/rules.md
-      - Statistics: api/statistics.md
-      - Positions: api/positions.md
-      - Sort settings: api/ordering.md
-      - Errors: api/errors.md
+      - Arrays:
+          - Array: api/arrays/array.md
+          - Shape: api/arrays/shape.md
+          - Creation settings:
+              - Spacing: api/arrays/spacing.md
+              - Distribution: api/arrays/distribution.md
+              - Uniform: api/arrays/uniform.md
+              - Normal: api/arrays/normal.md
+              - RandomIntegers: api/arrays/random_integers.md
+          - Math functions:
+              - MathFunction: api/arrays/math_function.md
+              - SquareRoot: api/arrays/square_root.md
+              - Exponential: api/arrays/exponential.md
+              - Logarithm: api/arrays/logarithm.md
+              - Absolute: api/arrays/absolute.md
+              - Round: api/arrays/round.md
+              - Sine: api/arrays/sine.md
+              - Cosine: api/arrays/cosine.md
+          - Sorting, replacement and comparison:
+              - ArraySorting: api/arrays/array_sorting.md
+              - Replacement: api/arrays/replacement.md
+              - Equality: api/arrays/equality.md
+              - TypeMatch: api/arrays/type_match.md
+      - Tables:
+          - Table: api/tables/table.md
+          - File settings:
+              - CsvOptions: api/tables/csv_options.md
+              - JsonOptions: api/tables/json_options.md
+              - JsonLayout: api/tables/json_layout.md
+              - ExcelOptions: api/tables/excel_options.md
+              - SasOptions: api/tables/sas_options.md
+              - XptOptions: api/tables/xpt_options.md
+              - Encoding: api/tables/encoding.md
+              - Conflict: api/tables/conflict.md
+          - Filter settings:
+              - Filter: api/tables/filter.md
+              - FilterMode: api/tables/filter_mode.md
+              - Condition: api/tables/condition.md
+              - ColumnMatch: api/tables/column_match.md
+          - Aggregation and description settings:
+              - Aggregation: api/tables/aggregation.md
+              - Calculation: api/tables/calculation.md
+              - Description: api/tables/description.md
+          - Column settings:
+              - ColumnChoice: api/tables/column_choice.md
+              - ColumnMode: api/tables/column_mode.md
+              - Renaming: api/tables/renaming.md
+              - Conversion: api/tables/conversion.md
+              - NewColumn: api/tables/new_column.md
+          - Sort, duplicate and preview settings:
+              - Sorting: api/tables/sorting.md
+              - SortKey: api/tables/sort_key.md
+              - Deduplication: api/tables/deduplication.md
+              - Keep: api/tables/keep.md
+              - Preview: api/tables/preview.md
+              - Side: api/tables/side.md
+      - Types:
+          - Type: api/types/type.md
+      - Rules:
+          - Rule: api/rules/rule.md
+          - Equal: api/rules/equal.md
+          - NotEqual: api/rules/not_equal.md
+          - Greater: api/rules/greater.md
+          - GreaterOrEqual: api/rules/greater_or_equal.md
+          - Less: api/rules/less.md
+          - LessOrEqual: api/rules/less_or_equal.md
+          - Between: api/rules/between.md
+          - Bounds: api/rules/bounds.md
+          - IsIn: api/rules/is_in.md
+          - Contains: api/rules/contains.md
+          - Case: api/rules/case.md
+          - IsMissing: api/rules/is_missing.md
+          - IsPresent: api/rules/is_present.md
+      - Statistics:
+          - Statistic: api/statistics/statistic.md
+          - Sum: api/statistics/sum.md
+          - Mean: api/statistics/mean.md
+          - Median: api/statistics/median.md
+          - Min: api/statistics/minimum.md
+          - Max: api/statistics/maximum.md
+          - Count: api/statistics/count.md
+          - CountDistinct: api/statistics/count_distinct.md
+          - StandardDeviation: api/statistics/standard_deviation.md
+          - Quantile: api/statistics/quantile.md
+          - MostFrequent: api/statistics/most_frequent.md
+          - MostFrequentCount: api/statistics/most_frequent_count.md
+      - Positions:
+          - Region: api/positions/region.md
+          - Index: api/positions/index.md
+          - Range: api/positions/range.md
+          - Axis: api/positions/axis.md
+      - Sort settings:
+          - Order: api/ordering/order.md
+          - MissingPosition: api/ordering/missing_position.md
+      - Errors:
+          - NumdaplotError: api/errors/numdaplot_error.md
+          - ColumnNotFoundError: api/errors/column_not_found_error.md
+          - DimensionError: api/errors/dimension_error.md
+          - DuplicateColumnError: api/errors/duplicate_column_error.md
+          - EmptyArrayError: api/errors/empty_array_error.md
+          - EmptyListError: api/errors/empty_list_error.md
+          - EmptyTextError: api/errors/empty_text_error.md
+          - EmptyValuesError: api/errors/empty_values_error.md
+          - FileExistsError: api/errors/file_exists_error.md
+          - FileNotFoundError: api/errors/file_not_found_error.md
+          - IncompatibleTypesError: api/errors/incompatible_types_error.md
+          - InvalidBaseError: api/errors/invalid_base_error.md
+          - InvalidBoundsError: api/errors/invalid_bounds_error.md
+          - InvalidColumnNameError: api/errors/invalid_column_name_error.md
+          - InvalidCountError: api/errors/invalid_count_error.md
+          - InvalidDeviationError: api/errors/invalid_deviation_error.md
+          - InvalidFractionError: api/errors/invalid_fraction_error.md
+          - InvalidPositionError: api/errors/invalid_position_error.md
+          - InvalidSeedError: api/errors/invalid_seed_error.md
+          - InvalidSeparatorError: api/errors/invalid_separator_error.md
+          - InvalidShapeError: api/errors/invalid_shape_error.md
+          - InvalidStepError: api/errors/invalid_step_error.md
+          - IrregularListError: api/errors/irregular_list_error.md
+          - MissingDependencyError: api/errors/missing_dependency_error.md
+          - MissingTypeError: api/errors/missing_type_error.md
+          - NotSingleValueError: api/errors/not_single_value_error.md
+          - OutOfDomainError: api/errors/out_of_domain_error.md
+          - RefusedOperationError: api/errors/refused_operation_error.md
+          - ShapeMismatchError: api/errors/shape_mismatch_error.md
+          - UnsupportedIndexError: api/errors/unsupported_index_error.md
+          - UnsupportedMissingError: api/errors/unsupported_missing_error.md
+          - UnsupportedOperandError: api/errors/unsupported_operand_error.md
+          - UnsupportedTypeError: api/errors/unsupported_type_error.md
+          - ValueConversionError: api/errors/value_conversion_error.md
+          - BroadcastWarning: api/errors/broadcast_warning.md
   - Changelog: changelog.md
+
+extra_css:
+  - stylesheets/symbols.css
 
 markdown_extensions:
   - admonition
+  - attr_list
+  - toc:
+      permalink: true
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.superfences
   - pymdownx.snippets:
       check_paths: true

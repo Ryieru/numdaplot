@@ -7,7 +7,7 @@ Values stored by an Array, shared by every group of Array methods.
 from typing import Any, Self, cast
 
 import numpy
-from numpy.typing import NDArray
+import numpy.typing
 
 from numdaplot.arrays.operations.combination import combine_values
 from numdaplot.arrays.operations.operand import Operand, require_single_value
@@ -34,7 +34,7 @@ class ArrayData:
 	# numpy then hands every operation between an ndarray and an Array to the Array, which refuses it.
 	__array_ufunc__ = None
 
-	def __init__(self, values: NDArray[Any]) -> None:
+	def __init__(self, values: numpy.typing.NDArray[Any]) -> None:
 		"""
 		Store numpy values without copy and make them read-only.
 
@@ -84,7 +84,7 @@ class ArrayData:
 
 		return array_type
 
-	def to_numpy(self) -> NDArray[Any]:
+	def to_numpy(self) -> numpy.typing.NDArray[Any]:
 		"""
 		Return a numpy copy of the values; changing it never changes the Array.
 
@@ -92,7 +92,7 @@ class ArrayData:
 
 		Returns
 		-------
-		NDArray
+		numpy.typing.NDArray
 			A writable copy of the values.
 
 		Examples
@@ -107,7 +107,7 @@ class ArrayData:
 
 		return copied_values
 
-	def _wrap(self, values: NDArray[Any]) -> Self:
+	def _wrap(self, values: numpy.typing.NDArray[Any]) -> Self:
 		"""
 		Return a new Array of the same class holding other values.
 

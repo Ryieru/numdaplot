@@ -19,6 +19,7 @@ from numdaplot.errors.value_conversion_error import ValueConversionError
 
 FROM_LIST_OPERATION = "from_list"
 SAFE_CASTING = "same_kind"
+WHOLE_NUMBER_KINDS = frozenset({"i", "u"})
 NOT_A_TIME = "NaT"
 NANOSECOND_UNIT = "ns"
 MISSING_MARKERS = {
@@ -224,7 +225,7 @@ def store_values(marked_values: list[object], guessed_type: Type | None, stored_
 		When the stored type has no numpy equivalent, which is the case of ``CATEGORY``.
 	ValueConversionError
 		When the guessed type cannot be stored as the stored type without losing information,
-		or when a value exceeds the range of the stored type.
+		or when a value exceeds the range of the stored type, such as -1 stored as ``UINT8``.
 
 	Examples
 	--------
@@ -232,6 +233,8 @@ def store_values(marked_values: list[object], guessed_type: Type | None, stored_
 	>>> from numdaplot.arrays.creation.list_conversion import store_values
 	>>> store_values([1, 2], ndp.Type.INT64, ndp.Type.FLOAT64)
 	array([1., 2.])
+	>>> store_values([1, 2], ndp.Type.INT64, ndp.Type.UINT8)
+	array([1, 2], dtype=uint8)
 	"""
 	stored_dtype = to_numpy_dtype(stored_type)
 	if guessed_type is None:
@@ -240,7 +243,10 @@ def store_values(marked_values: list[object], guessed_type: Type | None, stored_
 
 	guessed_dtype = to_numpy_dtype(guessed_type)
 	is_safe = numpy.can_cast(guessed_dtype, stored_dtype, casting=SAFE_CASTING)
-	if not is_safe:
+	# Integers may be stored as unsigned integers: numpy then rejects each value out of range.
+	is_whole_number_storage = guessed_dtype.kind in WHOLE_NUMBER_KINDS and stored_dtype.kind in WHOLE_NUMBER_KINDS
+	is_storable = is_safe or is_whole_number_storage
+	if not is_storable:
 		raise ValueConversionError(guessed_type.name, stored_type.name)
 
 	try:

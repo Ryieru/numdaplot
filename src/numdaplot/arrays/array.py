@@ -43,6 +43,12 @@ class Array(
 
 	.. versionadded:: 0.1.0
 
+	Parameters
+	----------
+	values
+		The numpy values, stored without copy. Reserved to numdaplot: create an Array with
+		``from_list``, ``from_numpy``, ``filled``, ``from_range``, ``from_spacing`` or ``random``.
+
 	Examples
 	--------
 	>>> import numdaplot as ndp

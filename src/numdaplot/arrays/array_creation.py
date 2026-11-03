@@ -7,7 +7,7 @@ Ways to create an Array.
 from collections.abc import Sequence
 from typing import Any, Self
 
-from numpy.typing import NDArray
+import numpy.typing
 
 from numdaplot.arrays.array_data import ArrayData
 from numdaplot.arrays.creation.filled_values import build_filled_values
@@ -99,7 +99,7 @@ class ArrayCreation(ArrayData):
 		return created_array
 
 	@classmethod
-	def from_numpy(cls, values: NDArray[Any]) -> Self:
+	def from_numpy(cls, values: numpy.typing.NDArray[Any]) -> Self:
 		"""
 		Create an Array from a copy of a numpy array; changing the numpy array never changes the Array.
 

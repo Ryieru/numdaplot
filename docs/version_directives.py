@@ -3,7 +3,8 @@ Griffe extension showing the version directives of the docstrings as boxes of th
 
 Docstrings use the Sphinx directives ``.. versionadded::``, ``.. versionchanged::`` and ``.. deprecated::``,
 which editors show as they are. The Markdown of the documentation site does not know them, so this
-extension turns each one into an admonition when ``mkdocs`` reads the docstrings.
+extension turns each one into an admonition when ``mkdocs`` reads the docstrings. The added and changed
+versions use their own admonition types, styled as a discreet line by ``stylesheets/symbols.css``.
 
 .. versionadded:: 0.1.0
 """
@@ -18,8 +19,8 @@ VERSION_DIRECTIVE = re.compile(
 	re.MULTILINE,
 )
 ADMONITIONS = {
-	"versionadded": '!!! info "Added in version {version}"',
-	"versionchanged": '!!! note "Changed in version {version}"',
+	"versionadded": '!!! version-added "Added in version {version}"',
+	"versionchanged": '!!! version-changed "Changed in version {version}"',
 	"deprecated": '!!! warning "Deprecated since version {version}"',
 }
 
@@ -44,7 +45,7 @@ def convert_version_directives(docstring_text: str) -> str:
 	--------
 	>>> from version_directives import convert_version_directives
 	>>> convert_version_directives("Mean of the values.\n\n.. versionadded:: 0.1.0")
-	'Mean of the values.\n\n!!! info "Added in version 0.1.0"'
+	'Mean of the values.\n\n!!! version-added "Added in version 0.1.0"'
 	"""
 	converted_text = VERSION_DIRECTIVE.sub(write_admonition, docstring_text)
 

@@ -35,6 +35,8 @@ DATES_WITH_MISSING = list[object]([date(2026, 1, 31), None])
 PRESENT_INTEGERS = list[object]([1, 2])
 DECIMALS = list[object]([1.5, 2.5])
 TOO_LARGE_INT8 = list[object]([300])
+NEGATIVE_INTEGERS = list[object]([-1, 2])
+UNSIGNED_DTYPE = numpy.dtype(numpy.uint8)
 EMPTY_VALUES = list[object]()
 MISSING_POSITION = 1
 FIND_LIST_SHAPE_NAME = "find_list_shape"
@@ -193,6 +195,29 @@ def test_store_values_rejects_a_value_out_of_range() -> None:
 	"""
 	with pytest.raises(ValueConversionError):
 		store_values(TOO_LARGE_INT8, Type.INT64, Type.INT8)
+
+
+def test_store_values_stores_integers_as_unsigned_integers() -> None:
+	"""
+	Check that positive integers can be stored as UINT8.
+
+	.. versionadded:: 0.1.0
+	"""
+	values = store_values(PRESENT_INTEGERS, Type.INT64, Type.UINT8)
+
+	value_list = values.tolist()
+	assert values.dtype == UNSIGNED_DTYPE
+	assert value_list == PRESENT_INTEGERS
+
+
+def test_store_values_rejects_a_negative_unsigned_integer() -> None:
+	"""
+	Check that -1 cannot be stored as UINT8.
+
+	.. versionadded:: 0.1.0
+	"""
+	with pytest.raises(ValueConversionError):
+		store_values(NEGATIVE_INTEGERS, Type.INT64, Type.UINT8)
 
 
 def test_store_values_stores_an_empty_list_in_the_given_type() -> None:

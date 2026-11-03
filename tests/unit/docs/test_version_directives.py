@@ -9,9 +9,9 @@ import pytest
 from version_directives import VERSION_DIRECTIVE, VersionDirectives, convert_version_directives, write_admonition
 
 ADDED_TEXT = "Mean of the values.\n\n.. versionadded:: 0.1.0\n\nParameters"
-EXPECTED_ADDED_TEXT = 'Mean of the values.\n\n!!! info "Added in version 0.1.0"\n\nParameters'
+EXPECTED_ADDED_TEXT = 'Mean of the values.\n\n!!! version-added "Added in version 0.1.0"\n\nParameters'
 INDENTED_DIRECTIVE = "\t.. versionchanged:: 0.2.0"
-EXPECTED_INDENTED_ADMONITION = '\t!!! note "Changed in version 0.2.0"'
+EXPECTED_INDENTED_ADMONITION = '\t!!! version-changed "Changed in version 0.2.0"'
 DEPRECATED_DIRECTIVE = ".. deprecated:: 0.3.0"
 EXPECTED_DEPRECATED_ADMONITION = '!!! warning "Deprecated since version 0.3.0"'
 TEXT_WITHOUT_DIRECTIVE = "Mean of the values, written ``.. versionadded::`` in the source."
@@ -20,7 +20,7 @@ MODULE_NAME = "sales"
 
 def test_convert_version_directives_turns_a_directive_into_an_admonition() -> None:
 	"""
-	Check that versionadded becomes an info admonition, the rest of the text unchanged.
+	Check that versionadded becomes a version-added admonition, the rest of the text unchanged.
 
 	.. versionadded:: 0.1.0
 	"""

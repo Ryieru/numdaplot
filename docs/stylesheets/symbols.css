@@ -1,0 +1,209 @@
+:root {
+	--api-object-top-margin: 2.2em;
+	--api-object-top-padding: 0.8em;
+	--api-object-rule-width: 1px;
+	--api-badge-font-size: 0.85rem;
+	--api-title-badge-font-size: 1.1rem;
+	--api-member-heading-font-size: 0.95rem;
+	--api-badge-padding: 0.15em 0.5em;
+	--api-badge-gap: 0.5em;
+	--api-section-top-margin: 2.4em;
+	--version-note-font-size: 0.7rem;
+	--version-note-margin: 0.6em 0;
+	--section-item-gap: 0.8em;
+	--section-description-indent: 1.6em;
+	--section-description-top-margin: 0.2em;
+	--api-title-bottom-margin: 0.6em;
+	--api-first-object-top-margin: 1.2em;
+	--api-section-bottom-padding: 0.2em;
+	--api-section-border-width: 1px;
+}
+
+.md-typeset .doc-heading {
+	margin-top: var(--api-object-top-margin);
+	padding-top: var(--api-object-top-padding);
+	border-top: var(--api-object-rule-width) solid var(--md-default-fg-color--lightest);
+	font-family: var(--md-code-font-family);
+}
+
+.md-typeset h1.doc-heading code.doc-symbol-heading {
+	font-size: var(--api-title-badge-font-size);
+}
+
+.md-typeset h2.doc-heading,
+.md-typeset h3.doc-heading,
+.md-typeset h4.doc-heading,
+.md-typeset h5.doc-heading,
+.md-typeset h6.doc-heading {
+	font-size: var(--api-member-heading-font-size);
+	text-transform: none;
+	letter-spacing: normal;
+}
+
+.md-typeset h1.doc-heading {
+	margin-top: 0;
+	margin-bottom: var(--api-title-bottom-margin);
+	padding-top: 0;
+	border-top: none;
+}
+
+.md-typeset .api-section + .doc-object > .doc-heading,
+.md-typeset :is(h2, h3, h4)[id$="-attributes"] + .doc-object > .doc-heading,
+.md-typeset :is(h2, h3, h4)[id$="-functions"] + .doc-object > .doc-heading,
+.md-typeset :is(h2, h3, h4)[id$="-classes"] + .doc-object > .doc-heading {
+	margin-top: var(--api-first-object-top-margin);
+	padding-top: 0;
+	border-top: none;
+}
+
+.md-typeset .doc-heading code.doc-symbol-heading {
+	margin-right: var(--api-badge-gap);
+	padding: var(--api-badge-padding);
+	font-size: var(--api-badge-font-size);
+	vertical-align: middle;
+}
+
+.md-typeset .doc-heading code.highlight {
+	padding: 0;
+	background-color: transparent;
+	font-size: inherit;
+}
+
+.md-typeset .doc-heading code.highlight span {
+	color: var(--md-default-fg-color--light);
+}
+
+.md-typeset .doc-heading code.highlight > span:first-child,
+.md-typeset .doc-heading .doc-object-name {
+	color: var(--md-default-fg-color);
+	font-weight: bold;
+}
+
+.md-nav__link code.doc-symbol-class,
+.md-nav__link--active code.doc-symbol-class {
+	color: var(--doc-symbol-class-fg-color);
+}
+
+.md-nav__link code.doc-symbol-method,
+.md-nav__link--active code.doc-symbol-method {
+	color: var(--doc-symbol-method-fg-color);
+}
+
+.md-nav__link code.doc-symbol-attribute,
+.md-nav__link--active code.doc-symbol-attribute {
+	color: var(--doc-symbol-attribute-fg-color);
+}
+
+.md-typeset .api-section,
+.md-typeset :is(h2, h3, h4)[id$="-attributes"],
+.md-typeset :is(h2, h3, h4)[id$="-functions"],
+.md-typeset :is(h2, h3, h4)[id$="-classes"] {
+	margin-top: var(--api-section-top-margin);
+	padding-bottom: var(--api-section-bottom-padding);
+	border-bottom: var(--api-section-border-width) solid var(--md-default-fg-color--lighter);
+	color: var(--md-default-fg-color);
+	font-weight: bold;
+}
+
+.md-nav--secondary .md-nav__link--active {
+	color: var(--md-default-fg-color);
+	font-weight: bold;
+}
+
+.md-typeset .doc-heading code.doc-symbol-method::after {
+	content: "method";
+}
+
+.md-typeset .doc-heading code.doc-symbol-function::after {
+	content: "function";
+}
+
+.md-typeset .doc-heading code.doc-symbol-attribute::after {
+	content: "attribute";
+}
+
+.md-typeset .api-link-class a {
+	color: var(--doc-symbol-class-fg-color);
+}
+
+.md-typeset .api-link-function a {
+	color: var(--doc-symbol-method-fg-color);
+}
+
+.md-typeset .api-link-attribute a {
+	color: var(--doc-symbol-attribute-fg-color);
+}
+
+.md-typeset .doc-section-item > code a.autorefs {
+	color: var(--doc-symbol-class-fg-color);
+}
+
+[data-md-color-scheme="default"] {
+	--version-note-color: #4f7f5a;
+}
+
+[data-md-color-scheme="slate"] {
+	--version-note-color: #8fbf98;
+}
+
+.md-typeset .admonition.version-added,
+.md-typeset .admonition.version-changed {
+	margin: var(--version-note-margin);
+	padding: 0;
+	border: none;
+	box-shadow: none;
+	background-color: transparent;
+	font-size: var(--version-note-font-size);
+}
+
+.md-typeset .version-added > .admonition-title,
+.md-typeset .version-changed > .admonition-title {
+	margin: 0;
+	padding: 0;
+	background-color: transparent;
+	color: var(--version-note-color);
+	font-style: italic;
+	font-weight: normal;
+}
+
+.md-typeset .version-added > .admonition-title::before,
+.md-typeset .version-changed > .admonition-title::before {
+	display: none;
+}
+
+.md-typeset ul:has(> li.doc-section-item) {
+	margin-left: 0;
+	list-style: none;
+}
+
+.md-typeset li.doc-section-item {
+	margin-left: 0;
+	margin-bottom: var(--section-item-gap);
+}
+
+.md-typeset li.doc-section-item > .doc-md-description {
+	display: block;
+	margin-top: var(--section-description-top-margin);
+	margin-left: var(--section-description-indent);
+}
+
+.md-typeset li.doc-section-item > .doc-md-description > p {
+	margin: 0;
+}
+
+.md-typeset .doc-heading > code:not(.doc-symbol, .highlight) {
+	padding: 0;
+	background-color: transparent;
+	color: var(--md-default-fg-color);
+	font-size: inherit;
+	font-weight: bold;
+}
+
+.md-typeset li.doc-section-item > code {
+	padding: 0;
+	background-color: transparent;
+}
+
+.md-typeset .doc-section-item > code a.autorefs[title*=" = "] {
+	color: var(--doc-symbol-attribute-fg-color);
+}

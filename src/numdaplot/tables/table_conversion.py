@@ -44,7 +44,7 @@ class TableConversion(TableData):
 		Parameters
 		----------
 		frame
-			A DataFrame whose index is the row numbers 0, 1, 2... Python objects become integers, decimals
+			A pandas DataFrame whose index is the row numbers 0, 1, 2... Python objects become integers, decimals
 			or booleans when they all are, and texts otherwise.
 
 		Returns

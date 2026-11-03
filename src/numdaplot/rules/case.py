@@ -24,7 +24,25 @@ class Case(Enum):
 	"""
 
 	SENSITIVE = auto()
-	"""``"paris"`` does not match ``"Paris"``, as in Python and pandas. Default value."""
+	"""
+	``"paris"`` does not match ``"Paris"``, as in Python and pandas. Default value.
+
+	Examples
+	--------
+	>>> import numdaplot as ndp
+	>>> cities = ndp.Array.from_list(["Paris", "PARIS", "Lyon"])
+	>>> cities.select(ndp.Contains("Paris", case=ndp.Case.SENSITIVE))
+	Array(['Paris'], dtype=TEXT)
+	"""
 
 	IGNORED = auto()
-	"""``"paris"`` matches ``"Paris"``, ``"PARIS"`` and ``"paris"``."""
+	"""
+	``"paris"`` matches ``"Paris"``, ``"PARIS"`` and ``"paris"``.
+
+	Examples
+	--------
+	>>> import numdaplot as ndp
+	>>> cities = ndp.Array.from_list(["Paris", "PARIS", "Lyon"])
+	>>> cities.select(ndp.Contains("Paris", case=ndp.Case.IGNORED))
+	Array(['Paris', 'PARIS'], dtype=TEXT)
+	"""

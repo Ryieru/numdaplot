@@ -27,7 +27,25 @@ class Axis(Enum):
 	"""
 
 	EACH_ROW = auto()
-	"""Every row is handled on its own: one result per row."""
+	"""
+	Every row is handled on its own: one result per row.
+
+	Examples
+	--------
+	>>> import numdaplot as ndp
+	>>> sales = ndp.Array.from_list([[1, 2], [3, 4]])
+	>>> sales.compute(ndp.Sum(), axis=ndp.Axis.EACH_ROW)
+	Array([3, 7], dtype=INT64)
+	"""
 
 	EACH_COLUMN = auto()
-	"""Every column is handled on its own: one result per column."""
+	"""
+	Every column is handled on its own: one result per column.
+
+	Examples
+	--------
+	>>> import numdaplot as ndp
+	>>> sales = ndp.Array.from_list([[1, 2], [3, 4]])
+	>>> sales.compute(ndp.Sum(), axis=ndp.Axis.EACH_COLUMN)
+	Array([4, 6], dtype=INT64)
+	"""

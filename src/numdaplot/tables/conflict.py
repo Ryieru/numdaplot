@@ -31,7 +31,38 @@ class Conflict(Enum):
 	"""
 
 	ERROR = auto()
-	"""Raise an error and change nothing. Default value."""
+	"""
+	Raise an error and change nothing. Default value.
+
+	Examples
+	--------
+	>>> import numdaplot as ndp
+	>>> cities = ndp.Array.from_list(["Paris", "Lyon", "Paris"])
+	>>> prices = ndp.Array.from_list([120.0, 80.0, 150.0])
+	>>> sales = ndp.Table.from_arrays({"city": cities, "price": prices})
+	>>> taxed_prices = sales.column("price") * 1.2
+	>>> try:
+	... 	sales.add_column(ndp.NewColumn(name="price", values=taxed_prices, on_conflict=ndp.Conflict.ERROR))
+	... except ndp.DuplicateColumnError as error:
+	... 	print(error)
+	The column name 'price' appears more than once.
+	"""
 
 	REPLACE = auto()
-	"""Replace the existing file or column."""
+	"""
+	Replace the existing file or column.
+
+	Examples
+	--------
+	>>> import numdaplot as ndp
+	>>> cities = ndp.Array.from_list(["Paris", "Lyon", "Paris"])
+	>>> prices = ndp.Array.from_list([120.0, 80.0, 150.0])
+	>>> sales = ndp.Table.from_arrays({"city": cities, "price": prices})
+	>>> taxed_prices = sales.column("price") * 1.2
+	>>> sales.add_column(ndp.NewColumn(name="price", values=taxed_prices, on_conflict=ndp.Conflict.REPLACE))
+	city   price
+	TEXT FLOAT64
+	0  Paris   144.0
+	1   Lyon    96.0
+	2  Paris   180.0
+	"""

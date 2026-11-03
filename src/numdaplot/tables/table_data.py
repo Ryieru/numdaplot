@@ -105,14 +105,14 @@ class TableData:
 	@classmethod
 	def _from_frame(cls, frame: pandas.DataFrame) -> Self:
 		"""
-		Return a new Table holding the normalized copy of any DataFrame.
+		Return a new Table holding the normalized copy of any pandas DataFrame.
 
 		.. versionadded:: 0.1.0
 
 		Parameters
 		----------
 		frame
-			Any DataFrame, which is not changed.
+			Any pandas DataFrame, which is not changed.
 
 		Returns
 		-------
@@ -122,7 +122,7 @@ class TableData:
 		Raises
 		------
 		InvalidColumnNameError, DuplicateColumnError, UnsupportedIndexError, UnsupportedTypeError
-			When the DataFrame cannot become a Table, as in ``normalize_frame``.
+			When the pandas DataFrame cannot become a Table, as in ``normalize_frame``.
 		"""
 		normalized_frame = normalize_frame(frame)
 		table = cls(normalized_frame)

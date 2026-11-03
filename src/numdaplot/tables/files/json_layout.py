@@ -28,7 +28,36 @@ class JsonLayout(Enum):
 	"""
 
 	RECORDS = auto()
-	"""One list holding one object per row: ``[{"city": "Paris"}, {"city": "Lyon"}]``. Default value."""
+	"""
+	One list holding one object per row: ``[{"city": "Paris"}, {"city": "Lyon"}]``. Default value.
+
+	Examples
+	--------
+	>>> import tempfile
+	>>> from pathlib import Path
+	>>> import numdaplot as ndp
+	>>> folder = Path(tempfile.mkdtemp())
+	>>> path = folder / "prices.json"
+	>>> prices = ndp.Table.from_arrays({"price": ndp.Array.from_list([1.5, 8.0])})
+	>>> prices.to_json(path, ndp.JsonOptions(layout=ndp.JsonLayout.RECORDS))
+	>>> print(path.read_text())
+	[{"price":1.5},{"price":8.0}]
+	"""
 
 	LINES = auto()
-	"""One object per line, without enclosing list, also called JSON Lines."""
+	"""
+	One object per line, without enclosing list, also called JSON Lines.
+
+	Examples
+	--------
+	>>> import tempfile
+	>>> from pathlib import Path
+	>>> import numdaplot as ndp
+	>>> folder = Path(tempfile.mkdtemp())
+	>>> path = folder / "prices.json"
+	>>> prices = ndp.Table.from_arrays({"price": ndp.Array.from_list([1.5, 8.0])})
+	>>> prices.to_json(path, ndp.JsonOptions(layout=ndp.JsonLayout.LINES))
+	>>> print(path.read_text())
+	{"price":1.5}
+	{"price":8.0}
+	"""

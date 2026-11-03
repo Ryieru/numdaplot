@@ -47,6 +47,12 @@ class Table(
 
 	.. versionadded:: 0.1.0
 
+	Parameters
+	----------
+	frame
+		The columns, already stored the way a Table stores them. Reserved to numdaplot: create
+		a Table with ``from_csv``, ``from_pandas``, ``from_arrays`` or another ``from_*`` method.
+
 	Examples
 	--------
 	>>> import numdaplot as ndp

@@ -7,7 +7,9 @@ Unit tests of UnsupportedIndexError.
 from numdaplot.errors.numdaplot_error import NumdaplotError
 from numdaplot.errors.unsupported_index_error import UnsupportedIndexError
 
-EXPECTED_MESSAGE = "A Table has no index, call reset_index() on the DataFrame first to keep its index as a column."
+EXPECTED_MESSAGE = (
+	"A Table has no index, call reset_index() on the pandas DataFrame first to keep its index as a column."
+)
 
 
 def test_unsupported_index_error_is_a_numdaplot_error() -> None:
