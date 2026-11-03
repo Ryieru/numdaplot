@@ -1,0 +1,109 @@
+"""
+Unit tests of build_membership_mask and build_contains_mask.
+
+.. versionadded:: 0.1.0
+"""
+
+import numpy
+import pytest
+
+from numdaplot.arrays.selection.membership_masks import build_contains_mask, build_membership_mask
+from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
+from numdaplot.rules.case import Case
+from numdaplot.rules.contains import Contains
+from numdaplot.rules.is_in import IsIn
+
+TEXT_DTYPE = "T"
+COUNTRIES = ["FR", "DE", "IT"]
+ACCEPTED_COUNTRIES = IsIn(["FR", "IT"])
+EXPECTED_COUNTRY_MASK = [True, False, True]
+DECIMALS = [1.0, numpy.nan]
+ACCEPTED_DECIMALS = IsIn([1.0])
+EXPECTED_DECIMAL_MASK = [True, False]
+NUMBER_RULE = IsIn([1])
+CITIES = ["Paris", "Lyon", "PARIS"]
+SENSITIVE_RULE = Contains("Par")
+IGNORED_CASE_RULE = Contains("par", case=Case.IGNORED)
+EXPECTED_SENSITIVE_MASK = [True, False, False]
+EXPECTED_IGNORED_CASE_MASK = [True, False, True]
+INTEGERS = [1, 2]
+
+
+def test_build_membership_mask_keeps_accepted_values() -> None:
+	"""
+	Check that the accepted texts are found.
+
+	.. versionadded:: 0.1.0
+	"""
+	countries = numpy.array(COUNTRIES, dtype=TEXT_DTYPE)
+
+	mask = build_membership_mask(countries, ACCEPTED_COUNTRIES)
+
+	mask_list = mask.tolist()
+	assert mask_list == EXPECTED_COUNTRY_MASK
+
+
+def test_build_membership_mask_never_accepts_a_missing_value() -> None:
+	"""
+	Check that NaN is not accepted.
+
+	.. versionadded:: 0.1.0
+	"""
+	decimals = numpy.array(DECIMALS)
+
+	mask = build_membership_mask(decimals, ACCEPTED_DECIMALS)
+
+	mask_list = mask.tolist()
+	assert mask_list == EXPECTED_DECIMAL_MASK
+
+
+def test_build_membership_mask_rejects_incomparable_values() -> None:
+	"""
+	Check that texts cannot be looked for among numbers.
+
+	.. versionadded:: 0.1.0
+	"""
+	countries = numpy.array(COUNTRIES, dtype=TEXT_DTYPE)
+
+	with pytest.raises(IncompatibleTypesError):
+		build_membership_mask(countries, NUMBER_RULE)
+
+
+def test_build_contains_mask_distinguishes_case_by_default() -> None:
+	"""
+	Check that a sensitive search does not match a different case.
+
+	.. versionadded:: 0.1.0
+	"""
+	cities = numpy.array(CITIES, dtype=TEXT_DTYPE)
+
+	mask = build_contains_mask(cities, SENSITIVE_RULE)
+
+	mask_list = mask.tolist()
+	assert mask_list == EXPECTED_SENSITIVE_MASK
+
+
+def test_build_contains_mask_can_ignore_case() -> None:
+	"""
+	Check that an insensitive search matches every case.
+
+	.. versionadded:: 0.1.0
+	"""
+	cities = numpy.array(CITIES, dtype=TEXT_DTYPE)
+
+	mask = build_contains_mask(cities, IGNORED_CASE_RULE)
+
+	mask_list = mask.tolist()
+	assert mask_list == EXPECTED_IGNORED_CASE_MASK
+
+
+def test_build_contains_mask_rejects_numbers() -> None:
+	"""
+	Check that Contains only applies to texts.
+
+	.. versionadded:: 0.1.0
+	"""
+	integers = numpy.array(INTEGERS)
+
+	with pytest.raises(IncompatibleTypesError):
+		build_contains_mask(integers, SENSITIVE_RULE)

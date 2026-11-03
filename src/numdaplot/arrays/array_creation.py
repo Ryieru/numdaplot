@@ -1,0 +1,268 @@
+"""
+Ways to create an Array.
+
+.. versionadded:: 0.1.0
+"""
+
+from collections.abc import Sequence
+from typing import Any, Self
+
+from numpy.typing import NDArray
+
+from numdaplot.arrays.array_data import ArrayData
+from numdaplot.arrays.creation.filled_values import build_filled_values
+from numdaplot.arrays.creation.list_conversion import convert_list
+from numdaplot.arrays.creation.normal import Normal
+from numdaplot.arrays.creation.numpy_conversion import copy_numpy_values
+from numdaplot.arrays.creation.random_integers import RandomIntegers
+from numdaplot.arrays.creation.random_values import draw_random_values
+from numdaplot.arrays.creation.range_values import compute_range_values
+from numdaplot.arrays.creation.spacing import Spacing
+from numdaplot.arrays.creation.spacing_values import compute_spacing_values
+from numdaplot.arrays.creation.uniform import Uniform
+from numdaplot.arrays.shape import Shape
+from numdaplot.data_types.type import Type
+from numdaplot.positions.range import Range
+from numdaplot.rules.rule_values import ScalarValue
+
+type ListValue = ScalarValue | None
+"""A single value of a list given to ``Array.from_list``, ``None`` being a missing value.
+
+.. versionadded:: 0.1.0
+"""
+
+type NestedValues = Sequence[ListValue] | Sequence[NestedValues]
+"""A list of single values, or a list of lists nested to any depth.
+
+.. versionadded:: 0.1.0
+"""
+
+
+class ArrayCreation(ArrayData):
+	"""
+	Ways to create an Array.
+
+	From a list, from numpy, filled with one value, from a range, from a spacing, or drawn at random.
+
+	.. versionadded:: 0.1.0
+	"""
+
+	@classmethod
+	def from_list(cls, values: NestedValues, dtype: Type | None = None) -> Self:
+		"""
+		Create an Array from a Python list, or from nested lists for several dimensions.
+
+		The type is guessed when omitted: integers give ``INT64``, decimals or a mix of integers and
+		decimals give ``FLOAT64``, then ``BOOL``, ``TEXT``, ``DATE``, ``DATETIME`` and ``DURATION``.
+		``None`` is a missing value, only accepted for decimals, dates, datetimes and durations.
+
+		.. versionadded:: 0.1.0
+
+		Parameters
+		----------
+		values
+			The values. Nested lists must form a regular block.
+		dtype
+			The type to store the values as. Required when no value is present.
+
+		Returns
+		-------
+		Self
+			A new Array.
+
+		Raises
+		------
+		IrregularListError
+			When nested lists do not form a regular block.
+		IncompatibleTypesError
+			When the values mix several kinds of types, such as numbers and texts.
+		MissingTypeError
+			When ``dtype`` is omitted and no value is present.
+		UnsupportedMissingError
+			When a value is missing and the type cannot hold missing values.
+		ValueConversionError
+			When the values cannot be stored as ``dtype`` without losing information.
+		UnsupportedTypeError
+			When a value has no numdaplot type, or ``dtype`` is ``CATEGORY``.
+
+		Examples
+		--------
+		>>> import numdaplot as ndp
+		>>> ndp.Array.from_list([[1, 2], [3, None]], dtype=ndp.Type.FLOAT64)
+		Array([[ 1.,  2.],
+		[ 3., nan]], dtype=FLOAT64)
+		"""
+		value_list = list[object](values)
+		converted_values = convert_list(value_list, dtype)
+		created_array = cls(converted_values)
+
+		return created_array
+
+	@classmethod
+	def from_numpy(cls, values: NDArray[Any]) -> Self:
+		"""
+		Create an Array from a copy of a numpy array; changing the numpy array never changes the Array.
+
+		.. versionadded:: 0.1.0
+
+		Parameters
+		----------
+		values
+			The numpy array.
+
+		Returns
+		-------
+		Self
+			A new Array.
+
+		Raises
+		------
+		UnsupportedTypeError
+			When numdaplot has no equivalent type, for example complex numbers or Python objects.
+
+		Examples
+		--------
+		>>> import numpy
+		>>> import numdaplot as ndp
+		>>> ndp.Array.from_numpy(numpy.array([1.5, 2.5]))
+		Array([1.5, 2.5], dtype=FLOAT64)
+		"""
+		copied_values = copy_numpy_values(values)
+		created_array = cls(copied_values)
+
+		return created_array
+
+	@classmethod
+	def filled(cls, shape: Shape, value: ScalarValue, dtype: Type | None = None) -> Self:
+		"""
+		Create an Array of a shape, with the same value everywhere.
+
+		.. versionadded:: 0.1.0
+
+		Parameters
+		----------
+		shape
+			The shape of the Array.
+		value
+			The repeated value.
+		dtype
+			The type to store the value as, guessed from the value when omitted.
+
+		Returns
+		-------
+		Self
+			A new Array.
+
+		Raises
+		------
+		ValueConversionError
+			When the value cannot be stored as ``dtype`` without losing information.
+
+		Examples
+		--------
+		>>> import numdaplot as ndp
+		>>> ndp.Array.filled(shape=ndp.Shape((2, 3)), value=0)
+		Array([[0, 0, 0],
+		[0, 0, 0]], dtype=INT64)
+		"""
+		filled_values = build_filled_values(shape, value, dtype)
+		created_array = cls(filled_values)
+
+		return created_array
+
+	@classmethod
+	def from_range(cls, sequence: Range) -> Self:
+		"""
+		Create a one-dimensional Array of the numbers of a regular sequence.
+
+		Unlike the Python ``range``, the stop is included by default.
+
+		.. versionadded:: 0.1.0
+
+		Parameters
+		----------
+		sequence
+			The start, the stop, the step and the bounds kept. ``LOW_ONLY`` keeps the start and drops
+			the stop, ``HIGH_ONLY`` the opposite.
+
+		Returns
+		-------
+		Self
+			A new Array of integers when the start and the step are integers, of decimals otherwise.
+
+		Examples
+		--------
+		>>> import numdaplot as ndp
+		>>> ndp.Array.from_range(ndp.Range(start=0, stop=1, step=0.25))
+		Array([0.  , 0.25, 0.5 , 0.75, 1.  ], dtype=FLOAT64)
+		"""
+		range_values = compute_range_values(sequence)
+		created_array = cls(range_values)
+
+		return created_array
+
+	@classmethod
+	def from_spacing(cls, spacing: Spacing) -> Self:
+		"""
+		Create a one-dimensional Array of evenly spaced decimals.
+
+		.. versionadded:: 0.1.0
+
+		Parameters
+		----------
+		spacing
+			The bounds, the count of values and whether each bound is among them.
+
+		Returns
+		-------
+		Self
+			A new ``FLOAT64`` Array of ``count`` values.
+
+		Examples
+		--------
+		>>> import numdaplot as ndp
+		>>> ndp.Array.from_spacing(ndp.Spacing(start=0, stop=1, count=5))
+		Array([0.  , 0.25, 0.5 , 0.75, 1.  ], dtype=FLOAT64)
+		"""
+		spacing_values = compute_spacing_values(spacing)
+		created_array = cls(spacing_values)
+
+		return created_array
+
+	@classmethod
+	def random(cls, distribution: Uniform | Normal | RandomIntegers, shape: Shape, seed: int | None = None) -> Self:
+		"""
+		Create an Array of values drawn at random from a distribution.
+
+		.. versionadded:: 0.1.0
+
+		Parameters
+		----------
+		distribution
+			The law followed by the values.
+		shape
+			The shape of the Array.
+		seed
+			A number, at least 0, giving the same values at each call. Different values at each call when omitted.
+
+		Returns
+		-------
+		Self
+			A new ``FLOAT64`` Array for ``Uniform`` and ``Normal``, ``INT64`` for ``RandomIntegers``.
+
+		Raises
+		------
+		InvalidSeedError
+			When ``seed`` is lower than 0.
+
+		Examples
+		--------
+		>>> import numdaplot as ndp
+		>>> dice = ndp.RandomIntegers(low=1, high=6)
+		>>> ndp.Array.random(dice, shape=ndp.Shape((5,)), seed=0)
+		Array([6, 4, 4, 2, 2], dtype=INT64)
+		"""
+		random_values = draw_random_values(distribution, shape, seed)
+		created_array = cls(random_values)
+
+		return created_array

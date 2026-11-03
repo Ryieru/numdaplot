@@ -19,6 +19,7 @@ plugins:
 nav:
   - Home: index.md
   - API:
+      - Arrays: api/arrays.md
       - Types: api/data_types.md
       - Rules: api/rules.md
       - Statistics: api/statistics.md

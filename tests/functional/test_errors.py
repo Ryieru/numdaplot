@@ -9,12 +9,30 @@ import pytest
 import numdaplot as ndp
 
 PRECISE_ERRORS = [
+	ndp.DimensionError,
+	ndp.EmptyArrayError,
 	ndp.EmptyTextError,
 	ndp.EmptyValuesError,
+	ndp.IncompatibleTypesError,
+	ndp.InvalidBaseError,
 	ndp.InvalidBoundsError,
+	ndp.InvalidCountError,
+	ndp.InvalidDeviationError,
 	ndp.InvalidFractionError,
+	ndp.InvalidPositionError,
+	ndp.InvalidSeedError,
+	ndp.InvalidShapeError,
 	ndp.InvalidStepError,
+	ndp.IrregularListError,
+	ndp.MissingTypeError,
+	ndp.NotSingleValueError,
+	ndp.OutOfDomainError,
+	ndp.RefusedOperationError,
+	ndp.ShapeMismatchError,
+	ndp.UnsupportedMissingError,
+	ndp.UnsupportedOperandError,
 	ndp.UnsupportedTypeError,
+	ndp.ValueConversionError,
 ]
 REJECTED_FRACTION = 2.0
 

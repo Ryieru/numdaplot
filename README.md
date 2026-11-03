@@ -8,15 +8,16 @@ when they are created, and every operation returns a new object.
 ```python
 import numdaplot as ndp
 
-period = ndp.Between(low=10, high=20)
-ninth_decile = ndp.Quantile(0.9)
-first_rows = ndp.Region(rows=ndp.Range(start=0, stop=4), columns=["total"])
+prices = ndp.Array.from_list([12.5, 8.0, None, 30.0])
+taxed_prices = prices * 1.2
+high_prices = taxed_prices.select(ndp.Greater(10))
+mean_price = prices.compute(ndp.Mean()).to_value()
 ```
 
 ## Status
 
-Version 0.1.0 is in development. The shared foundations are available: types, rules, statistics,
-positions, sort settings and errors. Array, Table and plots are not available yet.
+Version 0.1.0 is in development. The shared foundations (types, rules, statistics, positions,
+sort settings, errors) and `Array` are available. Table and plots are not available yet.
 
 ## Requirements
 
@@ -63,6 +64,7 @@ uv run mkdocs serve
 ```
 src/numdaplot/
 	__init__.py     every public name, available as ndp.*
+	arrays/         Array and its settings: Shape, Spacing, distributions, math functions...
 	errors/         NumdaplotError, the precise errors and BroadcastWarning
 	data_types/     the Type enum and its conversion to numpy and pandas dtypes
 	ratios/         validation of fractions between 0 and 1

@@ -1,0 +1,146 @@
+"""
+Conversion of an Array to Python values and text, and comparison of two Arrays.
+
+.. versionadded:: 0.1.0
+"""
+
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Any, cast
+
+from numdaplot.arrays.array_data import ArrayData
+from numdaplot.arrays.conversion.array_text import format_array
+from numdaplot.arrays.conversion.equality_check import are_equal
+from numdaplot.arrays.conversion.python_values import to_python_list
+from numdaplot.errors.not_single_value_error import NotSingleValueError
+from numdaplot.errors.unsupported_operand_error import UnsupportedOperandError
+
+if TYPE_CHECKING:
+	from numdaplot.arrays.equality import Equality
+
+SINGLE_VALUE_COUNT = 1
+FLAT_DIMENSIONS = (-1,)
+
+
+class ArrayConversion(ArrayData):
+	"""
+	Conversion of an Array with ``to_list`` and ``to_value``, comparison with ``is_equal``, and its text.
+
+	.. versionadded:: 0.1.0
+	"""
+
+	def to_list(self) -> list[Any]:
+		"""
+		Return the values as a Python list, with one nested list per row for several dimensions.
+
+		This is the way to loop over the values: ``for value in array.to_list()``.
+
+		.. versionadded:: 0.1.0
+
+		Returns
+		-------
+		list[Any]
+			Python values. A missing date, datetime or duration becomes ``None``, a missing decimal ``nan``.
+
+		Examples
+		--------
+		>>> import numdaplot as ndp
+		>>> ndp.Array.from_list([[1, 2], [3, 4]]).to_list()
+		[[1, 2], [3, 4]]
+		"""
+		python_values = to_python_list(self._values)
+
+		return python_values
+
+	def to_value(self) -> Any:
+		"""
+		Return the single value of an Array holding exactly one value, as a Python value.
+
+		.. versionadded:: 0.1.0
+
+		Returns
+		-------
+		Any
+			The value, ``None`` for a missing date, datetime or duration.
+
+		Raises
+		------
+		NotSingleValueError
+			When the Array does not hold exactly one value.
+
+		Examples
+		--------
+		>>> import numdaplot as ndp
+		>>> ndp.Array.from_list([3, 1, 2]).compute(ndp.Max()).to_value()
+		3
+		"""
+		if self._values.size != SINGLE_VALUE_COUNT:
+			raise NotSingleValueError(self._values.size)
+
+		flat_values = self._values.reshape(FLAT_DIMENSIONS)
+		python_values = to_python_list(flat_values)
+		single_value = python_values[0]
+
+		return single_value
+
+	def is_equal(self, equality: Equality) -> bool:
+		"""
+		Return whether this Array and another one have the same shape and the same values.
+
+		Two missing values at the same position are equal.
+
+		.. versionadded:: 0.1.0
+
+		Parameters
+		----------
+		equality
+			The other Array, and whether the types must also be the same.
+
+		Returns
+		-------
+		bool
+			True when both Arrays are equal.
+
+		Raises
+		------
+		UnsupportedOperandError
+			When the compared value is not an Array.
+
+		Examples
+		--------
+		>>> import numdaplot as ndp
+		>>> integers = ndp.Array.from_list([1, 2])
+		>>> decimals = ndp.Array.from_list([1.0, 2.0])
+		>>> integers.is_equal(ndp.Equality(other=decimals))
+		True
+		"""
+		other = cast(object, equality.other)
+		if not isinstance(other, ArrayData):
+			other_class = type(other)
+			raise UnsupportedOperandError(other_class.__name__)
+
+		other_values = other._values
+		is_equal = are_equal(self._values, other_values, equality.types)
+
+		return is_equal
+
+	def __repr__(self) -> str:
+		"""
+		Return the text of the Array: its values, then its type.
+
+		.. versionadded:: 0.1.0
+
+		Returns
+		-------
+		str
+			The text, such as ``Array([1, 2, 3], dtype=INT64)``.
+
+		Examples
+		--------
+		>>> import numdaplot as ndp
+		>>> ndp.Array.from_list(["a", "b"])
+		Array(['a', 'b'], dtype=TEXT)
+		"""
+		array_text = format_array(self._values)
+
+		return array_text

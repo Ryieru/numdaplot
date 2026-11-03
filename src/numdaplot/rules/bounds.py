@@ -31,3 +31,16 @@ class Bounds(Enum):
 
 	HIGH_ONLY = auto()
 	"""Only the high bound is included: low < x <= high."""
+
+
+LOW_INCLUDED_BOUNDS = frozenset({Bounds.INCLUDED, Bounds.LOW_ONLY})
+"""The bounds settings that include the low bound, or the start of a sequence.
+
+.. versionadded:: 0.1.0
+"""
+
+HIGH_INCLUDED_BOUNDS = frozenset({Bounds.INCLUDED, Bounds.HIGH_ONLY})
+"""The bounds settings that include the high bound, or the end of a sequence.
+
+.. versionadded:: 0.1.0
+"""
