@@ -1,5 +1,5 @@
 """
-Conversion from ``ndp.Type`` to pandas dtypes, used by Table.
+Conversion between ``ndp.Type`` and the pandas dtypes that store Table columns.
 
 .. versionadded:: 0.1.0
 """
@@ -10,7 +10,9 @@ import numpy
 from pandas.api.extensions import ExtensionDtype
 from pandas.api.types import pandas_dtype
 
+from numdaplot.data_types.library import Library
 from numdaplot.data_types.type import Type
+from numdaplot.errors.unsupported_type_error import UnsupportedTypeError
 
 PANDAS_DTYPE_CODES = {
 	Type.INT8: "Int8",
@@ -30,6 +32,7 @@ PANDAS_DTYPE_CODES = {
 	Type.DATETIME: "datetime64[ns]",
 	Type.DURATION: "timedelta64[ns]",
 }
+TYPES_BY_PANDAS_NAME = {dtype_code: data_type for data_type, dtype_code in PANDAS_DTYPE_CODES.items()}
 
 
 def to_pandas_dtype(data_type: Type) -> numpy.dtype[Any] | ExtensionDtype:
@@ -63,3 +66,40 @@ def to_pandas_dtype(data_type: Type) -> numpy.dtype[Any] | ExtensionDtype:
 	matching_dtype = pandas_dtype(dtype_code)
 
 	return matching_dtype
+
+
+def from_pandas_dtype(pandas_type: object) -> Type:
+	"""
+	Return the numdaplot type of a Table column stored with a pandas dtype.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	pandas_type
+		The dtype of a Table column, one of the dtypes given by ``to_pandas_dtype``.
+
+	Returns
+	-------
+	Type
+		The matching numdaplot type.
+
+	Raises
+	------
+	UnsupportedTypeError
+		When the dtype is not one that stores a Table column, such as ``object`` or ``complex128``.
+
+	Examples
+	--------
+	>>> import pandas
+	>>> from numdaplot.data_types.pandas_mapping import from_pandas_dtype
+	>>> from_pandas_dtype(pandas.Int64Dtype())
+	<Type.INT64: 4>
+	"""
+	dtype_name = str(pandas_type)
+	if dtype_name not in TYPES_BY_PANDAS_NAME:
+		raise UnsupportedTypeError(dtype_name, Library.PANDAS)
+
+	matching_type = TYPES_BY_PANDAS_NAME[dtype_name]
+
+	return matching_type

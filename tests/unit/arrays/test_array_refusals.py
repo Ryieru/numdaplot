@@ -16,7 +16,7 @@ VALUES = [1, 2]
 OTHER = 1
 LESS_SYMBOL = "<"
 ALTERNATIVE = "select"
-EXPECTED_COMPARISON_MESSAGE = "Comparing with < is not available on an Array, use select instead."
+EXPECTED_COMPARISON_MESSAGE = "Comparing an Array with < is not available, use select instead."
 type RefusedOperation = Callable[[ArrayRefusals], object]
 REFUSED_OPERATIONS = list[RefusedOperation](
 	[

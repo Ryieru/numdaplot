@@ -1,0 +1,125 @@
+"""
+Unit tests of ColumnChoice, Renaming, Conversion and NewColumn.
+
+.. versionadded:: 0.1.0
+"""
+
+import pytest
+
+from numdaplot.arrays.array import Array
+from numdaplot.data_types.type import Type
+from numdaplot.errors.duplicate_column_error import DuplicateColumnError
+from numdaplot.errors.empty_list_error import EmptyListError
+from numdaplot.errors.invalid_column_name_error import InvalidColumnNameError
+from numdaplot.tables.columns.column_choice import ColumnChoice
+from numdaplot.tables.columns.column_mode import ColumnMode
+from numdaplot.tables.columns.conversion import Conversion
+from numdaplot.tables.columns.new_column import NewColumn
+from numdaplot.tables.columns.renaming import Renaming
+from numdaplot.tables.conflict import Conflict
+
+COLUMN_NAMES = ["city", "price"]
+REPEATED_NAMES = ["city", "city"]
+EMPTY_NAMES = list[str]()
+EMPTY_NAME = ""
+COLUMN_NAME = "price"
+VALUES = Array.from_list([1.5])
+
+
+def test_column_choice_keeps_its_columns_by_default() -> None:
+	"""
+	Check the default mode.
+
+	.. versionadded:: 0.1.0
+	"""
+	choice = ColumnChoice(columns=COLUMN_NAMES)
+
+	assert choice.mode == ColumnMode.KEEP
+
+
+def test_column_choice_keeps_its_own_copy_of_the_columns() -> None:
+	"""
+	Check that changing the given list does not change the choice.
+
+	.. versionadded:: 0.1.0
+	"""
+	column_names = list(COLUMN_NAMES)
+	choice = ColumnChoice(columns=column_names)
+
+	column_names.clear()
+
+	assert choice.columns == COLUMN_NAMES
+
+
+def test_column_choice_rejects_keeping_no_column() -> None:
+	"""
+	Check that an empty list with KEEP raises EmptyListError.
+
+	.. versionadded:: 0.1.0
+	"""
+	with pytest.raises(EmptyListError):
+		ColumnChoice(columns=EMPTY_NAMES)
+
+
+def test_column_choice_accepts_dropping_no_column() -> None:
+	"""
+	Check that an empty list with DROP is accepted.
+
+	.. versionadded:: 0.1.0
+	"""
+	choice = ColumnChoice(columns=EMPTY_NAMES, mode=ColumnMode.DROP)
+
+	assert choice.columns == EMPTY_NAMES
+
+
+def test_column_choice_rejects_a_repeated_column() -> None:
+	"""
+	Check that a repeated name raises DuplicateColumnError.
+
+	.. versionadded:: 0.1.0
+	"""
+	with pytest.raises(DuplicateColumnError):
+		ColumnChoice(columns=REPEATED_NAMES)
+
+
+def test_renaming_rejects_an_empty_new_name() -> None:
+	"""
+	Check that an empty new name raises InvalidColumnNameError.
+
+	.. versionadded:: 0.1.0
+	"""
+	with pytest.raises(InvalidColumnNameError):
+		Renaming(old_name=COLUMN_NAME, new_name=EMPTY_NAME)
+
+
+def test_conversion_keeps_its_settings() -> None:
+	"""
+	Check that the column and the type are available as attributes.
+
+	.. versionadded:: 0.1.0
+	"""
+	conversion = Conversion(column=COLUMN_NAME, dtype=Type.TEXT)
+
+	assert conversion.column == COLUMN_NAME
+	assert conversion.dtype == Type.TEXT
+
+
+def test_new_column_refuses_an_existing_name_by_default() -> None:
+	"""
+	Check the default conflict setting.
+
+	.. versionadded:: 0.1.0
+	"""
+	new_column = NewColumn(name=COLUMN_NAME, values=VALUES)
+
+	assert new_column.on_conflict == Conflict.ERROR
+
+
+def test_new_column_rejects_an_empty_name() -> None:
+	"""
+	Check that an empty name raises InvalidColumnNameError.
+
+	.. versionadded:: 0.1.0
+	"""
+	with pytest.raises(InvalidColumnNameError):
+		NewColumn(name=EMPTY_NAME, values=VALUES)

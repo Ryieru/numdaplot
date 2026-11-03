@@ -7,13 +7,17 @@ Error raised when values cannot be stored in a type without losing information.
 from numdaplot.errors.numdaplot_error import NumdaplotError
 
 VALUE_CONVERSION_MESSAGE = "Cannot store {source_type_name} values as {target_type_name} without losing information."
+REJECTED_VALUE_MESSAGE = (
+	"Cannot store the {source_type_name} value {rejected_value!r} as {target_type_name} without losing information."
+)
 
 
 class ValueConversionError(NumdaplotError):
 	"""
 	Raised when values cannot be stored in a type without losing information.
 
-	For example, decimals stored as integers, or a text stored as a number.
+	For example, decimals stored as integers, or a text stored as a number. When the first rejected
+	value is known, the message shows it.
 
 	.. versionadded:: 0.1.0
 
@@ -23,6 +27,8 @@ class ValueConversionError(NumdaplotError):
 		Name of the ``ndp.Type`` member of the given values.
 	target_type_name
 		Name of the ``ndp.Type`` member they should be stored as.
+	rejected_value
+		The first value that cannot be stored, or ``None`` when it is not known.
 
 	Attributes
 	----------
@@ -30,6 +36,8 @@ class ValueConversionError(NumdaplotError):
 		Name of the ``ndp.Type`` member of the given values.
 	target_type_name
 		Name of the ``ndp.Type`` member they should be stored as.
+	rejected_value
+		The first value that cannot be stored, or ``None`` when it is not known.
 
 	Examples
 	--------
@@ -41,9 +49,9 @@ class ValueConversionError(NumdaplotError):
 	Cannot store FLOAT64 values as INT64 without losing information.
 	"""
 
-	def __init__(self, source_type_name: str, target_type_name: str) -> None:
+	def __init__(self, source_type_name: str, target_type_name: str, rejected_value: object = None) -> None:
 		"""
-		Build the error message from the source type name and the target type name.
+		Build the error message from the type names, and the rejected value when it is known.
 
 		.. versionadded:: 0.1.0
 
@@ -53,9 +61,19 @@ class ValueConversionError(NumdaplotError):
 			Name of the ``ndp.Type`` member of the given values.
 		target_type_name
 			Name of the ``ndp.Type`` member they should be stored as.
+		rejected_value
+			The first value that cannot be stored, or ``None`` when it is not known.
 		"""
 		message = VALUE_CONVERSION_MESSAGE.format(source_type_name=source_type_name, target_type_name=target_type_name)
+		if rejected_value is not None:
+			message = REJECTED_VALUE_MESSAGE.format(
+				source_type_name=source_type_name,
+				target_type_name=target_type_name,
+				rejected_value=rejected_value,
+			)
+
 		super().__init__(message)
 
 		self.source_type_name = source_type_name
 		self.target_type_name = target_type_name
+		self.rejected_value = rejected_value

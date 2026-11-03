@@ -12,12 +12,19 @@ prices = ndp.Array.from_list([12.5, 8.0, None, 30.0])
 taxed_prices = prices * 1.2
 high_prices = taxed_prices.select(ndp.Greater(10))
 mean_price = prices.compute(ndp.Mean()).to_value()
+
+sales = ndp.Table.from_csv("sales.csv")
+expensive = ndp.Condition(rule=ndp.Greater(100), columns=["price"])
+expensive_sales = sales.filter(ndp.Filter(conditions=[expensive]))
+average_price = ndp.Calculation(column="price", function=ndp.Mean())
+by_city = expensive_sales.aggregate(ndp.Aggregation(calculations=[average_price], group_by=["city"]))
 ```
 
 ## Status
 
 Version 0.1.0 is in development. The shared foundations (types, rules, statistics, positions,
-sort settings, errors) and `Array` are available. Table and plots are not available yet.
+sort settings, errors), `Array` and `Table` are available. Date conversions, the tools for missing values
+and plots are not available yet.
 
 ## Requirements
 
@@ -30,8 +37,10 @@ sort settings, errors) and `Array` are available. Table and plots are not availa
 From a clone of the repository, with [uv](https://docs.astral.sh/uv/):
 
 ```
-uv sync
+uv sync --all-extras
 ```
+
+The extras are needed to run every test, since the Excel and Parquet tests write real files.
 
 ## Run the tests
 
@@ -65,6 +74,7 @@ uv run mkdocs serve
 src/numdaplot/
 	__init__.py     every public name, available as ndp.*
 	arrays/         Array and its settings: Shape, Spacing, distributions, math functions...
+	tables/         Table and its settings: file options, Filter, Aggregation, Sorting, Preview...
 	errors/         NumdaplotError, the precise errors and BroadcastWarning
 	data_types/     the Type enum and its conversion to numpy and pandas dtypes
 	ratios/         validation of fractions between 0 and 1

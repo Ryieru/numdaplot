@@ -20,7 +20,7 @@ jobs:
       - name: Resolve dependencies
         run: uv lock --resolution ${{ matrix.resolution }} --upgrade
       - name: Install
-        run: uv sync --frozen
+        run: uv sync --frozen --all-extras
       - name: Lint
         run: uv run --frozen ruff check .
       - name: Format

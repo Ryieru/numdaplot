@@ -1,0 +1,68 @@
+"""
+Settings of the sort of the rows of a Table.
+
+.. versionadded:: 0.1.0
+"""
+
+from dataclasses import dataclass
+
+from numdaplot.errors.empty_list_error import EmptyListError
+from numdaplot.tables.columns.column_names import require_unique_names
+from numdaplot.tables.sorting.sort_key import SortKey
+
+SORT_KEY_ITEM_NAME = "sort key"
+
+
+@dataclass(frozen=True)
+class Sorting:
+	"""
+	Columns the rows of a Table are sorted by, used by ``Table.sort``.
+
+	Rows are sorted by the first key, then rows with the same value by the second key, and so on.
+	Rows equal on every key keep their order.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	keys
+		The sort keys, at least one, each on a different column. The sorting keeps its own copy of the list.
+
+	Raises
+	------
+	EmptyListError
+		When ``keys`` is empty.
+	DuplicateColumnError
+		When two keys sort the same column.
+
+	Examples
+	--------
+	>>> import numdaplot as ndp
+	>>> by_city = ndp.SortKey(column="city")
+	>>> by_price = ndp.SortKey(column="price", order=ndp.Order.DESCENDING)
+	>>> len(ndp.Sorting(keys=[by_city, by_price]).keys)
+	2
+	"""
+
+	keys: list[SortKey]
+
+	def __post_init__(self) -> None:
+		"""
+		Check the keys and replace them with a copy that only the sorting holds.
+
+		.. versionadded:: 0.1.0
+
+		Raises
+		------
+		EmptyListError
+			When ``keys`` is empty.
+		DuplicateColumnError
+			When two keys sort the same column.
+		"""
+		if self.keys == []:
+			raise EmptyListError(SORT_KEY_ITEM_NAME)
+
+		key_columns = [key.column for key in self.keys]
+		require_unique_names(key_columns)
+		keys_copy = list(self.keys)
+		object.__setattr__(self, "keys", keys_copy)

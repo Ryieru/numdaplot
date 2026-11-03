@@ -22,7 +22,7 @@ TWO_DIMENSIONS = 2
 WHOLE_NUMBER_KINDS = frozenset({"i", "u"})
 REGION_OPERATION = "A Region"
 COLUMNS_OPERATION = "A Region with columns"
-COLUMN_NAMES_OPERATION = "Column names in a Region"
+COLUMN_NAMES_OPERATION = "Column names in a Region for an Array"
 COLUMN_NAMES_ALTERNATIVE = "Index or Range positions"
 
 

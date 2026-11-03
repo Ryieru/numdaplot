@@ -14,20 +14,20 @@ from numdaplot.rules.greater_or_equal import GreaterOrEqual
 from numdaplot.rules.less import Less
 from numdaplot.rules.less_or_equal import LessOrEqual
 
-COMPARISON_OPERATION = "Comparing with {symbol}"
+COMPARISON_OPERATION = "Comparing an Array with {symbol}"
 EQUALITY_ALTERNATIVE = "is_equal with ndp.Equality, or check with ndp.Equal for each value"
 ORDER_ALTERNATIVE = "select or check with a rule such as ndp.{rule_name}"
-BRACKETS_OPERATION = "Brackets"
+BRACKETS_OPERATION = "Brackets on an Array"
 BRACKETS_ALTERNATIVE = "take, replace, select or check"
-ITERATION_OPERATION = "Iterating with for"
+ITERATION_OPERATION = "Iterating over an Array with for"
 ITERATION_ALTERNATIVE = "for value in array.to_list()"
-MEMBERSHIP_OPERATION = "Testing membership with in"
+MEMBERSHIP_OPERATION = "Testing membership in an Array with in"
 MEMBERSHIP_ALTERNATIVE = "check with ndp.Equal or ndp.IsIn"
-LENGTH_OPERATION = "len"
+LENGTH_OPERATION = "len of an Array"
 LENGTH_ALTERNATIVE = "the shape attribute"
-TRUTH_OPERATION = "Testing as a boolean"
+TRUTH_OPERATION = "Testing an Array as a boolean"
 TRUTH_ALTERNATIVE = "compute with ndp.Count, or is_equal"
-MATRIX_PRODUCT_OPERATION = "The matrix product @"
+MATRIX_PRODUCT_OPERATION = "The matrix product @ of an Array"
 MATRIX_PRODUCT_ALTERNATIVE = "to_numpy and numpy"
 EQUAL_SYMBOL = "=="
 NOT_EQUAL_SYMBOL = "!="
@@ -105,7 +105,7 @@ class ArrayRefusals(ArrayData):
 		... 	ndp.Array.from_list([1, 2]) < 2
 		... except ndp.RefusedOperationError as error:
 		... 	print(error)
-		Comparing with < is not available on an Array, use select or check with a rule such as ndp.Less instead.
+		Comparing an Array with < is not available, use select or check with a rule such as ndp.Less instead.
 		"""
 		alternative = ORDER_ALTERNATIVE.format(rule_name=Less.__name__)
 		refuse_comparison(LESS_SYMBOL, alternative)
@@ -333,7 +333,7 @@ def refuse_comparison(symbol: str, alternative: str) -> NoReturn:
 	... 	refuse_comparison("<", "select")
 	... except ndp.RefusedOperationError as error:
 	... 	print(error)
-	Comparing with < is not available on an Array, use select instead.
+	Comparing an Array with < is not available, use select instead.
 	"""
 	operation = COMPARISON_OPERATION.format(symbol=symbol)
 	raise RefusedOperationError(operation, alternative)

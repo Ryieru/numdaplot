@@ -7,9 +7,9 @@ Unit tests of RefusedOperationError.
 from numdaplot.errors.numdaplot_error import NumdaplotError
 from numdaplot.errors.refused_operation_error import RefusedOperationError
 
-OPERATION = "Brackets"
+OPERATION = "Brackets on an Array"
 ALTERNATIVE = "take"
-EXPECTED_MESSAGE = "Brackets is not available on an Array, use take instead."
+EXPECTED_MESSAGE = "Brackets on an Array is not available, use take instead."
 
 
 def test_refused_operation_error_is_a_numdaplot_error() -> None:

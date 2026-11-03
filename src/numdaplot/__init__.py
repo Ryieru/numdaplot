@@ -33,27 +33,36 @@ from numdaplot.arrays.shape import Shape
 from numdaplot.arrays.type_match import TypeMatch
 from numdaplot.data_types.type import Type
 from numdaplot.errors.broadcast_warning import BroadcastWarning
+from numdaplot.errors.column_not_found_error import ColumnNotFoundError
 from numdaplot.errors.dimension_error import DimensionError
+from numdaplot.errors.duplicate_column_error import DuplicateColumnError
 from numdaplot.errors.empty_array_error import EmptyArrayError
+from numdaplot.errors.empty_list_error import EmptyListError
 from numdaplot.errors.empty_text_error import EmptyTextError
 from numdaplot.errors.empty_values_error import EmptyValuesError
+from numdaplot.errors.file_exists_error import FileExistsError
+from numdaplot.errors.file_not_found_error import FileNotFoundError
 from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
 from numdaplot.errors.invalid_base_error import InvalidBaseError
 from numdaplot.errors.invalid_bounds_error import InvalidBoundsError
+from numdaplot.errors.invalid_column_name_error import InvalidColumnNameError
 from numdaplot.errors.invalid_count_error import InvalidCountError
 from numdaplot.errors.invalid_deviation_error import InvalidDeviationError
 from numdaplot.errors.invalid_fraction_error import InvalidFractionError
 from numdaplot.errors.invalid_position_error import InvalidPositionError
 from numdaplot.errors.invalid_seed_error import InvalidSeedError
+from numdaplot.errors.invalid_separator_error import InvalidSeparatorError
 from numdaplot.errors.invalid_shape_error import InvalidShapeError
 from numdaplot.errors.invalid_step_error import InvalidStepError
 from numdaplot.errors.irregular_list_error import IrregularListError
+from numdaplot.errors.missing_dependency_error import MissingDependencyError
 from numdaplot.errors.missing_type_error import MissingTypeError
 from numdaplot.errors.not_single_value_error import NotSingleValueError
 from numdaplot.errors.numdaplot_error import NumdaplotError
 from numdaplot.errors.out_of_domain_error import OutOfDomainError
 from numdaplot.errors.refused_operation_error import RefusedOperationError
 from numdaplot.errors.shape_mismatch_error import ShapeMismatchError
+from numdaplot.errors.unsupported_index_error import UnsupportedIndexError
 from numdaplot.errors.unsupported_missing_error import UnsupportedMissingError
 from numdaplot.errors.unsupported_operand_error import UnsupportedOperandError
 from numdaplot.errors.unsupported_type_error import UnsupportedTypeError
@@ -90,45 +99,97 @@ from numdaplot.statistics.quantile import Quantile
 from numdaplot.statistics.standard_deviation import StandardDeviation
 from numdaplot.statistics.statistic import Statistic
 from numdaplot.statistics.sum import Sum
+from numdaplot.tables.aggregation.aggregation import Aggregation
+from numdaplot.tables.aggregation.calculation import Calculation
+from numdaplot.tables.columns.column_choice import ColumnChoice
+from numdaplot.tables.columns.column_mode import ColumnMode
+from numdaplot.tables.columns.conversion import Conversion
+from numdaplot.tables.columns.new_column import NewColumn
+from numdaplot.tables.columns.renaming import Renaming
+from numdaplot.tables.conflict import Conflict
+from numdaplot.tables.description.description import Description
+from numdaplot.tables.duplicates.deduplication import Deduplication
+from numdaplot.tables.duplicates.keep import Keep
+from numdaplot.tables.files.csv_options import CsvOptions
+from numdaplot.tables.files.encoding import Encoding
+from numdaplot.tables.files.excel_options import ExcelOptions
+from numdaplot.tables.files.json_layout import JsonLayout
+from numdaplot.tables.files.json_options import JsonOptions
+from numdaplot.tables.files.sas_options import SasOptions
+from numdaplot.tables.files.xpt_options import XptOptions
+from numdaplot.tables.filtering.column_match import ColumnMatch
+from numdaplot.tables.filtering.condition import Condition
+from numdaplot.tables.filtering.filter import Filter
+from numdaplot.tables.filtering.filter_mode import FilterMode
+from numdaplot.tables.preview.preview import Preview
+from numdaplot.tables.preview.side import Side
+from numdaplot.tables.sorting.sort_key import SortKey
+from numdaplot.tables.sorting.sorting import Sorting
+from numdaplot.tables.table import Table
 
 __all__ = [
 	"Absolute",
+	"Aggregation",
 	"Array",
 	"ArraySorting",
 	"Axis",
 	"Between",
 	"Bounds",
 	"BroadcastWarning",
+	"Calculation",
 	"Case",
+	"ColumnChoice",
+	"ColumnMatch",
+	"ColumnMode",
+	"ColumnNotFoundError",
+	"Condition",
+	"Conflict",
 	"Contains",
+	"Conversion",
 	"Cosine",
 	"Count",
 	"CountDistinct",
+	"CsvOptions",
+	"Deduplication",
+	"Description",
 	"DimensionError",
 	"Distribution",
+	"DuplicateColumnError",
 	"EmptyArrayError",
+	"EmptyListError",
 	"EmptyTextError",
 	"EmptyValuesError",
+	"Encoding",
 	"Equal",
 	"Equality",
+	"ExcelOptions",
 	"Exponential",
+	"FileExistsError",
+	"FileNotFoundError",
+	"Filter",
+	"FilterMode",
 	"Greater",
 	"GreaterOrEqual",
 	"IncompatibleTypesError",
 	"Index",
 	"InvalidBaseError",
 	"InvalidBoundsError",
+	"InvalidColumnNameError",
 	"InvalidCountError",
 	"InvalidDeviationError",
 	"InvalidFractionError",
 	"InvalidPositionError",
 	"InvalidSeedError",
+	"InvalidSeparatorError",
 	"InvalidShapeError",
 	"InvalidStepError",
 	"IrregularListError",
 	"IsIn",
 	"IsMissing",
 	"IsPresent",
+	"JsonLayout",
+	"JsonOptions",
+	"Keep",
 	"Less",
 	"LessOrEqual",
 	"Logarithm",
@@ -137,37 +198,48 @@ __all__ = [
 	"Mean",
 	"Median",
 	"Min",
+	"MissingDependencyError",
 	"MissingPosition",
 	"MissingTypeError",
 	"MostFrequent",
 	"MostFrequentCount",
+	"NewColumn",
 	"Normal",
 	"NotEqual",
 	"NotSingleValueError",
 	"NumdaplotError",
 	"Order",
 	"OutOfDomainError",
+	"Preview",
 	"Quantile",
 	"RandomIntegers",
 	"Range",
 	"RefusedOperationError",
 	"Region",
+	"Renaming",
 	"Replacement",
 	"Round",
 	"Rule",
+	"SasOptions",
 	"Shape",
 	"ShapeMismatchError",
+	"Side",
 	"Sine",
+	"SortKey",
+	"Sorting",
 	"Spacing",
 	"SquareRoot",
 	"StandardDeviation",
 	"Statistic",
 	"Sum",
+	"Table",
 	"Type",
 	"TypeMatch",
 	"Uniform",
+	"UnsupportedIndexError",
 	"UnsupportedMissingError",
 	"UnsupportedOperandError",
 	"UnsupportedTypeError",
 	"ValueConversionError",
+	"XptOptions",
 ]

@@ -1,17 +1,17 @@
 """
-Error raised when an operation is not available on an Array.
+Error raised when an operation is not available on an Array or a Table.
 
 .. versionadded:: 0.1.0
 """
 
 from numdaplot.errors.numdaplot_error import NumdaplotError
 
-REFUSED_OPERATION_MESSAGE = "{operation} is not available on an Array, use {alternative} instead."
+REFUSED_OPERATION_MESSAGE = "{operation} is not available, use {alternative} instead."
 
 
 class RefusedOperationError(NumdaplotError):
 	"""
-	Raised when a Python operation is not available on an Array, such as ``<``, brackets or ``len``.
+	Raised when a Python operation is not available on an Array or a Table, such as ``<``, brackets or ``len``.
 
 	The message names the numdaplot method to use instead.
 
@@ -20,14 +20,14 @@ class RefusedOperationError(NumdaplotError):
 	Parameters
 	----------
 	operation
-		Description of the refused operation.
+		Description of the refused operation, naming what it applies to.
 	alternative
 		Description of what to use instead.
 
 	Attributes
 	----------
 	operation
-		Description of the refused operation.
+		Description of the refused operation, naming what it applies to.
 	alternative
 		Description of what to use instead.
 
@@ -39,7 +39,7 @@ class RefusedOperationError(NumdaplotError):
 	... 	array < 2
 	... except ndp.RefusedOperationError as error:
 	... 	print(error)
-	Comparing with < is not available on an Array, use select or check with a rule such as ndp.Less instead.
+	Comparing an Array with < is not available, use select or check with a rule such as ndp.Less instead.
 	"""
 
 	def __init__(self, operation: str, alternative: str) -> None:
@@ -51,7 +51,7 @@ class RefusedOperationError(NumdaplotError):
 		Parameters
 		----------
 		operation
-			Description of the refused operation.
+			Description of the refused operation, naming what it applies to.
 		alternative
 			Description of what to use instead.
 		"""

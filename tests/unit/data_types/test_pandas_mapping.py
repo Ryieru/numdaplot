@@ -1,5 +1,5 @@
 """
-Unit tests of the conversion from ndp.Type to pandas dtypes.
+Unit tests of the conversion between ndp.Type and pandas dtypes.
 
 .. versionadded:: 0.1.0
 """
@@ -8,9 +8,11 @@ import numpy
 import pandas
 import pytest
 
-from numdaplot.data_types.pandas_mapping import to_pandas_dtype
+from numdaplot.data_types.pandas_mapping import from_pandas_dtype, to_pandas_dtype
 from numdaplot.data_types.type import Type
+from numdaplot.errors.unsupported_type_error import UnsupportedTypeError
 
+OBJECT_DTYPE_CODE = "O"
 NULLABLE_TYPES = [
 	Type.INT8,
 	Type.INT16,
@@ -99,3 +101,34 @@ def test_to_pandas_dtype_converts_every_type(data_type: Type) -> None:
 	column = pandas.Series([], dtype=pandas_dtype)
 
 	assert column.dtype.name == pandas_dtype.name
+
+
+@pytest.mark.parametrize("data_type", list(Type))
+def test_from_pandas_dtype_reverses_to_pandas_dtype(data_type: Type) -> None:
+	"""
+	Check that the dtype storing each type gives that type back.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	data_type
+		Any numdaplot type.
+	"""
+	pandas_dtype = to_pandas_dtype(data_type)
+
+	found_type = from_pandas_dtype(pandas_dtype)
+
+	assert found_type == data_type
+
+
+def test_from_pandas_dtype_rejects_a_dtype_that_stores_no_column() -> None:
+	"""
+	Check that an object dtype raises UnsupportedTypeError.
+
+	.. versionadded:: 0.1.0
+	"""
+	object_dtype = numpy.dtype(OBJECT_DTYPE_CODE)
+
+	with pytest.raises(UnsupportedTypeError):
+		from_pandas_dtype(object_dtype)
