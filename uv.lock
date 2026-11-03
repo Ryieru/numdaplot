@@ -798,7 +798,7 @@ provides-extras = ["excel", "parquet"]
 [package.metadata.requires-dev]
 dev = [
     { name = "mkdocs-material", specifier = ">=9.8" },
-    { name = "mkdocstrings", extras = ["python"], specifier = ">=1.0" },
+    { name = "mkdocstrings", extras = ["python"], specifier = ">=1.0.7" },
     { name = "pandas-stubs", specifier = ">=2.3.3.251201" },
     { name = "pyright", specifier = ">=1.1.414" },
     { name = "pytest", specifier = ">=9.0" },
