@@ -14,7 +14,9 @@ from matplotlib.axes import Axes
 from numdaplot.plots.chart_layer import ChartLayer
 from numdaplot.plots.charts.line_chart import LineChart
 from numdaplot.plots.charts.line_type import LineType
+from numdaplot.plots.data.chart_values import ChartValues
 from numdaplot.plots.drawing.drawn_chart import DrawnChart
+from numdaplot.plots.drawing.grid_axes import GridAxes
 from numdaplot.plots.drawing.marker_codes import MARKER_CODES
 from numdaplot.plots.drawing.position_axis import place_positions
 from numdaplot.plots.drawing.series_colors import choose_series_colors
@@ -64,7 +66,7 @@ def draw_line_chart(axes: Axes, layer: ChartLayer) -> DrawnChart:
 	array([12. , 15.5])
 	"""
 	chart = cast(LineChart, layer.chart)
-	values = layer.values
+	values = cast(ChartValues, layer.values)
 	series_count = len(values.series)
 	color_codes = choose_series_colors(chart.colors, series_count)
 	coordinates = place_positions(axes, values.positions, False)
@@ -76,6 +78,6 @@ def draw_line_chart(axes: Axes, layer: ChartLayer) -> DrawnChart:
 			coordinates, series.values, color=color_code, linestyle=line_style, marker=marker_code, label=series.name
 		)
 
-	drawn_chart = DrawnChart(values.positions.name, values.value_name, False, True, None)
+	drawn_chart = DrawnChart(values.positions.name, values.value_name, False, GridAxes.BOTH, None)
 
 	return drawn_chart

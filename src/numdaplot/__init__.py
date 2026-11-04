@@ -53,14 +53,17 @@ from numdaplot.errors.column_not_found_error import ColumnNotFoundError
 from numdaplot.errors.conflicting_settings_error import ConflictingSettingsError
 from numdaplot.errors.dimension_error import DimensionError
 from numdaplot.errors.duplicate_column_error import DuplicateColumnError
+from numdaplot.errors.duplicate_label_error import DuplicateLabelError
 from numdaplot.errors.empty_array_error import EmptyArrayError
 from numdaplot.errors.empty_list_error import EmptyListError
 from numdaplot.errors.empty_text_error import EmptyTextError
+from numdaplot.errors.empty_total_error import EmptyTotalError
 from numdaplot.errors.empty_values_error import EmptyValuesError
 from numdaplot.errors.file_exists_error import FileExistsError
 from numdaplot.errors.file_not_found_error import FileNotFoundError
 from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
 from numdaplot.errors.invalid_base_error import InvalidBaseError
+from numdaplot.errors.invalid_bin_width_error import InvalidBinWidthError
 from numdaplot.errors.invalid_bounds_error import InvalidBoundsError
 from numdaplot.errors.invalid_chart_data_error import InvalidChartDataError
 from numdaplot.errors.invalid_color_count_error import InvalidColorCountError
@@ -82,14 +85,17 @@ from numdaplot.errors.invalid_time_zone_change_error import InvalidTimeZoneChang
 from numdaplot.errors.irregular_list_error import IrregularListError
 from numdaplot.errors.missing_dependency_error import MissingDependencyError
 from numdaplot.errors.missing_type_error import MissingTypeError
+from numdaplot.errors.missing_value_error import MissingValueError
 from numdaplot.errors.not_single_value_error import NotSingleValueError
 from numdaplot.errors.numdaplot_error import NumdaplotError
 from numdaplot.errors.out_of_domain_error import OutOfDomainError
+from numdaplot.errors.readability_warning import ReadabilityWarning
 from numdaplot.errors.refused_operation_error import RefusedOperationError
 from numdaplot.errors.refused_setting_error import RefusedSettingError
 from numdaplot.errors.shape_mismatch_error import ShapeMismatchError
 from numdaplot.errors.time_zone_mismatch_error import TimeZoneMismatchError
 from numdaplot.errors.unknown_time_zone_error import UnknownTimeZoneError
+from numdaplot.errors.unsupported_data_error import UnsupportedDataError
 from numdaplot.errors.unsupported_image_format_error import UnsupportedImageFormatError
 from numdaplot.errors.unsupported_index_error import UnsupportedIndexError
 from numdaplot.errors.unsupported_missing_error import UnsupportedMissingError
@@ -100,15 +106,32 @@ from numdaplot.ordering.missing_position import MissingPosition
 from numdaplot.ordering.order import Order
 from numdaplot.plots.charts.bar_chart import BarChart
 from numdaplot.plots.charts.bar_layout import BarLayout
+from numdaplot.plots.charts.bin_count import BinCount
+from numdaplot.plots.charts.bin_width import BinWidth
+from numdaplot.plots.charts.box_chart import BoxChart
+from numdaplot.plots.charts.cell_values import CellValues
 from numdaplot.plots.charts.chart import Chart
+from numdaplot.plots.charts.color_scale import ColorScale
+from numdaplot.plots.charts.heatmap_chart import HeatmapChart
+from numdaplot.plots.charts.histogram_chart import HistogramChart
 from numdaplot.plots.charts.line_chart import LineChart
 from numdaplot.plots.charts.line_type import LineType
 from numdaplot.plots.charts.marker_shape import MarkerShape
+from numdaplot.plots.charts.missing_chart import MissingChart
 from numdaplot.plots.charts.orientation import Orientation
+from numdaplot.plots.charts.outliers import Outliers
+from numdaplot.plots.charts.percentages import Percentages
+from numdaplot.plots.charts.pie_chart import PieChart
 from numdaplot.plots.charts.scatter_chart import ScatterChart
 from numdaplot.plots.plot import Plot
 from numdaplot.plots.plot_bar import plot_bar
+from numdaplot.plots.plot_box import plot_box
+from numdaplot.plots.plot_heatmap import plot_heatmap
+from numdaplot.plots.plot_histogram import plot_histogram
 from numdaplot.plots.plot_line import plot_line
+from numdaplot.plots.plot_missing_by_column import plot_missing_by_column
+from numdaplot.plots.plot_missing_map import plot_missing_map
+from numdaplot.plots.plot_pie import plot_pie
 from numdaplot.plots.plot_scatter import plot_scatter
 from numdaplot.plots.style.color import Color
 from numdaplot.plots.style.custom_color import CustomColor
@@ -191,12 +214,17 @@ __all__ = [
 	"BarChart",
 	"BarLayout",
 	"Between",
+	"BinCount",
+	"BinWidth",
 	"Bounds",
+	"BoxChart",
 	"BroadcastWarning",
 	"Calculation",
 	"Case",
+	"CellValues",
 	"Chart",
 	"Color",
+	"ColorScale",
 	"ColumnChoice",
 	"ColumnMatch",
 	"ColumnMode",
@@ -221,11 +249,13 @@ __all__ = [
 	"DimensionError",
 	"Distribution",
 	"DuplicateColumnError",
+	"DuplicateLabelError",
 	"DurationIn",
 	"DurationUnit",
 	"EmptyArrayError",
 	"EmptyListError",
 	"EmptyTextError",
+	"EmptyTotalError",
 	"EmptyValuesError",
 	"Encoding",
 	"Equal",
@@ -239,10 +269,13 @@ __all__ = [
 	"Greater",
 	"GreaterOrEqual",
 	"GridLines",
+	"HeatmapChart",
+	"HistogramChart",
 	"ImageOptions",
 	"IncompatibleTypesError",
 	"Index",
 	"InvalidBaseError",
+	"InvalidBinWidthError",
 	"InvalidBoundsError",
 	"InvalidChartDataError",
 	"InvalidColorCountError",
@@ -281,6 +314,7 @@ __all__ = [
 	"Measure",
 	"Median",
 	"Min",
+	"MissingChart",
 	"MissingCount",
 	"MissingDependencyError",
 	"MissingDrop",
@@ -288,6 +322,7 @@ __all__ = [
 	"MissingPosition",
 	"MissingRatio",
 	"MissingTypeError",
+	"MissingValueError",
 	"MostFrequent",
 	"MostFrequentCount",
 	"NewColumn",
@@ -298,13 +333,17 @@ __all__ = [
 	"Order",
 	"Orientation",
 	"OutOfDomainError",
+	"Outliers",
+	"Percentages",
 	"PeriodUnit",
+	"PieChart",
 	"Plot",
 	"Preview",
 	"Quantile",
 	"RandomIntegers",
 	"Range",
 	"RatioComparison",
+	"ReadabilityWarning",
 	"RefusedOperationError",
 	"RefusedSettingError",
 	"Region",
@@ -339,6 +378,7 @@ __all__ = [
 	"TypeMatch",
 	"Uniform",
 	"UnknownTimeZoneError",
+	"UnsupportedDataError",
 	"UnsupportedImageFormatError",
 	"UnsupportedIndexError",
 	"UnsupportedMissingError",
@@ -347,6 +387,12 @@ __all__ = [
 	"ValueConversionError",
 	"XptOptions",
 	"plot_bar",
+	"plot_box",
+	"plot_heatmap",
+	"plot_histogram",
 	"plot_line",
+	"plot_missing_by_column",
+	"plot_missing_map",
+	"plot_pie",
 	"plot_scatter",
 ]

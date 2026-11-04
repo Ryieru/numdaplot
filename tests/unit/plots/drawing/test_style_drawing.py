@@ -12,6 +12,7 @@ from matplotlib.figure import Figure
 
 import numdaplot as ndp
 from numdaplot.plots.drawing.drawn_chart import DrawnChart
+from numdaplot.plots.drawing.grid_axes import GridAxes
 from numdaplot.plots.drawing.style_drawing import (
 	LEGEND_POINT_AREA,
 	apply_style,
@@ -21,9 +22,10 @@ from numdaplot.plots.drawing.style_drawing import (
 	write_axis_labels,
 )
 
-LINE_CHART = DrawnChart("day", "price", False, True, None)
-HORIZONTAL_BARS = DrawnChart("city", None, True, False, None)
-GROUPS = DrawnChart("surface", "price", False, True, "city")
+LINE_CHART = DrawnChart("day", "price", False, GridAxes.BOTH, None)
+HORIZONTAL_BARS = DrawnChart("city", None, True, GridAxes.VALUES, None)
+GROUPS = DrawnChart("surface", "price", False, GridAxes.BOTH, "city")
+HEATMAP = DrawnChart(None, "city", False, GridAxes.NONE, None)
 
 
 def test_apply_style_writes_no_title_by_default() -> None:
@@ -93,6 +95,22 @@ def test_draw_grid_lines_crosses_the_values_of_horizontal_bars_only() -> None:
 	x_visible = axes.xaxis.get_gridlines()[0].get_visible()
 	y_visible = axes.yaxis.get_gridlines()[0].get_visible()
 	assert x_visible
+	assert not y_visible
+
+
+def test_draw_grid_lines_draws_none_for_a_heatmap() -> None:
+	"""
+	Check that a chart asking for no grid lines gets none across either axis.
+
+	.. versionadded:: 0.1.0
+	"""
+	axes = Figure().add_subplot()
+
+	draw_grid_lines(axes, HEATMAP)
+
+	x_visible = axes.xaxis.get_gridlines()[0].get_visible()
+	y_visible = axes.yaxis.get_gridlines()[0].get_visible()
+	assert not x_visible
 	assert not y_visible
 
 

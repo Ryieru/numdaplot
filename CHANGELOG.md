@@ -19,13 +19,17 @@ and numdaplot follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
   `Array.apply` (`TimeFunction`, `DatePart`, `DatePeriod`, `DurationIn`, `ToDuration`, with the `DatePartUnit`,
   `PeriodUnit` and `DurationUnit` enums), date formats and time zones for `Table.convert` (`DateFormat` enum,
   `CustomDateFormat`, `TimeZone`, `TimeZoneChange` and the `TimeZoneMode` enum), and `Table.column_time_zones`.
-- Plots: `plot_line`, `plot_bar` and `plot_scatter` return a `Plot`, shown with `Plot.show`, saved as a PNG, SVG
+- Plots: `plot_line`, `plot_bar`, `plot_scatter`, `plot_histogram`, `plot_box`, `plot_pie`, `plot_heatmap`,
+  `plot_missing_by_column` and `plot_missing_map` return a `Plot`, shown with `Plot.show`, saved as a PNG, SVG
   or PDF image with `Plot.save` and turned into a matplotlib figure with `Plot.to_matplotlib`.
-- Plot settings: `Chart`, `LineChart`, `BarChart`, `ScatterChart`, `Style`, `Size`, `CustomColor`, `ImageOptions`,
-  and the `Color`, `LineType`, `MarkerShape`, `Orientation`, `BarLayout`, `LegendPosition`, `GridLines` and
-  `SizeUnit` enums.
-- Plot errors: `ConflictingSettingsError`, `InvalidChartDataError`, `InvalidColorCountError`, `InvalidColorError`,
-  `InvalidResolutionError`, `InvalidSizeError`, `RefusedSettingError` and `UnsupportedImageFormatError`.
+- Plot settings: `Chart`, `LineChart`, `BarChart`, `ScatterChart`, `HistogramChart`, `BoxChart`, `PieChart`,
+  `HeatmapChart`, `MissingChart`, `BinCount`, `BinWidth`, `Style`, `Size`, `CustomColor`, `ImageOptions`, and the
+  `Color`, `LineType`, `MarkerShape`, `Orientation`, `BarLayout`, `Outliers`, `Percentages`, `ColorScale`,
+  `CellValues`, `LegendPosition`, `GridLines` and `SizeUnit` enums.
+- Plot errors and warning: `ConflictingSettingsError`, `DuplicateLabelError`, `EmptyTotalError`,
+  `InvalidBinWidthError`, `InvalidChartDataError`, `InvalidColorCountError`, `InvalidColorError`,
+  `InvalidResolutionError`, `InvalidSizeError`, `MissingValueError`, `RefusedSettingError`, `UnsupportedDataError`,
+  `UnsupportedImageFormatError` and `ReadabilityWarning`.
 - Date errors: `InvalidConversionError`, `InvalidDateFormatError`, `InvalidTimeZoneChangeError`,
   `TimeZoneMismatchError` and `UnknownTimeZoneError`.
 - `Table`: named columns of one type each, read with `Table.from_csv`, `Table.from_json`, `Table.from_excel`,

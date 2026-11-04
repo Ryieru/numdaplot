@@ -10,6 +10,7 @@ from numdaplot.plots.charts.bar_chart import BarChart
 from numdaplot.plots.data.chart_data import read_chart_values
 from numdaplot.plots.drawing.series_colors import require_color_count
 from numdaplot.plots.plot import Plot
+from numdaplot.plots.plot_creation import create_plot
 from numdaplot.plots.style.style import Style
 from numdaplot.tables.table import Table
 
@@ -68,10 +69,6 @@ def plot_bar(data: Table | Array, chart: BarChart, style: Style | None = None) -
 	series_count = len(values.series)
 	require_color_count(chart.colors, series_count)
 	layer = ChartLayer(chart, values)
-	chosen_style = style
-	if chosen_style is None:
-		chosen_style = Style()
-
-	plot = Plot([layer], chosen_style)
+	plot = create_plot(layer, style)
 
 	return plot

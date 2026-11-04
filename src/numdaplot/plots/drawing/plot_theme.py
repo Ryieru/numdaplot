@@ -12,6 +12,12 @@ BACKGROUND_COLOR = "#ffffff"
 .. versionadded:: 0.1.0
 """
 
+GRID_COLOR = "#e3e3e3"
+"""Light gray of the grid lines, also filling the cells without value of heatmaps and missing value maps.
+
+.. versionadded:: 0.1.0
+"""
+
 THEME = dict[str, Any](
 	{
 		"font.size": 11,
@@ -26,7 +32,7 @@ THEME = dict[str, Any](
 		"axes.axisbelow": True,
 		"xtick.color": "#555555",
 		"ytick.color": "#555555",
-		"grid.color": "#e3e3e3",
+		"grid.color": GRID_COLOR,
 		"grid.linewidth": 0.8,
 		"legend.frameon": False,
 		"lines.linewidth": 2.0,

@@ -9,6 +9,7 @@ from dataclasses import dataclass
 from numdaplot.plots.charts.chart import Chart
 from numdaplot.plots.data.chart_values import ChartValues
 from numdaplot.plots.data.point_values import PointValues
+from numdaplot.plots.data.sample_values import SampleValues
 
 
 @dataclass(frozen=True, eq=False)
@@ -23,7 +24,7 @@ class ChartLayer:
 	chart
 		The chart settings.
 	values
-		The positions and the series.
+		The positions and the series, or for a ``HistogramChart`` and a ``BoxChart`` the columns and their groups.
 	points
 		The values coloring and sizing the points of a ``ScatterChart``, None for other charts.
 
@@ -38,5 +39,5 @@ class ChartLayer:
 	"""
 
 	chart: Chart
-	values: ChartValues
+	values: ChartValues | SampleValues
 	points: PointValues | None = None

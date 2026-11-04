@@ -16,12 +16,23 @@ from matplotlib.figure import Figure
 
 from numdaplot.plots.chart_layer import ChartLayer
 from numdaplot.plots.charts.bar_chart import BarChart
+from numdaplot.plots.charts.box_chart import BoxChart
 from numdaplot.plots.charts.chart import Chart
+from numdaplot.plots.charts.heatmap_chart import HeatmapChart
+from numdaplot.plots.charts.histogram_chart import HistogramChart
 from numdaplot.plots.charts.line_chart import LineChart
+from numdaplot.plots.charts.missing_chart import MissingChart
+from numdaplot.plots.charts.missing_map_chart import MissingMapChart
+from numdaplot.plots.charts.pie_chart import PieChart
 from numdaplot.plots.charts.scatter_chart import ScatterChart
 from numdaplot.plots.drawing.bar_drawing import draw_bar_chart
+from numdaplot.plots.drawing.box_drawing import draw_box_chart
 from numdaplot.plots.drawing.drawn_chart import DrawnChart
+from numdaplot.plots.drawing.heatmap_drawing import draw_heatmap_chart
+from numdaplot.plots.drawing.histogram_drawing import draw_histogram_chart
 from numdaplot.plots.drawing.line_drawing import draw_line_chart
+from numdaplot.plots.drawing.missing_drawing import draw_missing_chart, draw_missing_map
+from numdaplot.plots.drawing.pie_drawing import draw_pie_chart
 from numdaplot.plots.drawing.plot_theme import BACKGROUND_COLOR, THEME
 from numdaplot.plots.drawing.scatter_drawing import draw_scatter_chart
 from numdaplot.plots.drawing.style_drawing import apply_style
@@ -39,6 +50,12 @@ CHART_DRAWERS = dict[type[Chart], ChartDrawer](
 		LineChart: draw_line_chart,
 		BarChart: draw_bar_chart,
 		ScatterChart: draw_scatter_chart,
+		HistogramChart: draw_histogram_chart,
+		BoxChart: draw_box_chart,
+		PieChart: draw_pie_chart,
+		HeatmapChart: draw_heatmap_chart,
+		MissingChart: draw_missing_chart,
+		MissingMapChart: draw_missing_map,
 	}
 )
 FIGURE_LAYOUT = "constrained"

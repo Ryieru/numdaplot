@@ -13,6 +13,7 @@ from matplotlib.axes import Axes
 from matplotlib.collections import PathCollection
 
 from numdaplot.plots.drawing.drawn_chart import DrawnChart
+from numdaplot.plots.drawing.grid_axes import GridAxes
 from numdaplot.plots.style.grid_lines import GridLines
 from numdaplot.plots.style.legend_position import LegendPosition
 from numdaplot.plots.style.style import Style
@@ -60,9 +61,10 @@ def apply_style(axes: Axes, drawn_chart: DrawnChart, style: Style) -> None:
 	>>> import numdaplot as ndp
 	>>> from matplotlib.figure import Figure
 	>>> from numdaplot.plots.drawing.drawn_chart import DrawnChart
+	>>> from numdaplot.plots.drawing.grid_axes import GridAxes
 	>>> from numdaplot.plots.drawing.style_drawing import apply_style
 	>>> axes = Figure().add_subplot()
-	>>> apply_style(axes, DrawnChart("day", "price", False, True, None), ndp.Style(title="Sales"))
+	>>> apply_style(axes, DrawnChart("day", "price", False, GridAxes.BOTH, None), ndp.Style(title="Sales"))
 	>>> axes.get_title(), axes.get_xlabel(), axes.get_ylabel()
 	('Sales', 'day', 'price')
 	"""
@@ -97,9 +99,10 @@ def write_axis_labels(axes: Axes, drawn_chart: DrawnChart, style: Style) -> None
 	>>> import numdaplot as ndp
 	>>> from matplotlib.figure import Figure
 	>>> from numdaplot.plots.drawing.drawn_chart import DrawnChart
+	>>> from numdaplot.plots.drawing.grid_axes import GridAxes
 	>>> from numdaplot.plots.drawing.style_drawing import write_axis_labels
 	>>> axes = Figure().add_subplot()
-	>>> write_axis_labels(axes, DrawnChart("city", "price", True, False, None), ndp.Style(y_label="Euros"))
+	>>> write_axis_labels(axes, DrawnChart("city", "price", True, GridAxes.VALUES, None), ndp.Style(y_label="Euros"))
 	>>> axes.get_xlabel(), axes.get_ylabel()
 	('Euros', 'city')
 	"""
@@ -149,7 +152,7 @@ def choose_label(style_label: str | None, default_label: str | None) -> str:
 
 def draw_grid_lines(axes: Axes, drawn_chart: DrawnChart) -> None:
 	"""
-	Draw light grid lines across both axes, or across the axis of the values only for bars.
+	Draw light grid lines across the axes the chart asks for: both, the axis of the values only, or none.
 
 	.. versionadded:: 0.1.0
 
@@ -158,19 +161,23 @@ def draw_grid_lines(axes: Axes, drawn_chart: DrawnChart) -> None:
 	axes
 		The matplotlib axes of the Plot.
 	drawn_chart
-		Whether the chart grids its ``x`` values, and where they are.
+		The axes crossed by the grid lines, and where the ``x`` values are.
 
 	Examples
 	--------
 	>>> from matplotlib.figure import Figure
 	>>> from numdaplot.plots.drawing.drawn_chart import DrawnChart
+	>>> from numdaplot.plots.drawing.grid_axes import GridAxes
 	>>> from numdaplot.plots.drawing.style_drawing import draw_grid_lines
 	>>> axes = Figure().add_subplot()
-	>>> draw_grid_lines(axes, DrawnChart(None, None, False, False, None))
+	>>> draw_grid_lines(axes, DrawnChart(None, None, False, GridAxes.VALUES, None))
 	>>> axes.yaxis.get_gridlines()[0].get_visible(), axes.xaxis.get_gridlines()[0].get_visible()
 	(True, False)
 	"""
-	if drawn_chart.grids_positions:
+	if drawn_chart.grid_axes == GridAxes.NONE:
+		return
+
+	if drawn_chart.grid_axes == GridAxes.BOTH:
 		axes.grid(True)
 		return
 
@@ -200,10 +207,11 @@ def place_legend(axes: Axes, drawn_chart: DrawnChart, legend_position: LegendPos
 	>>> import numdaplot as ndp
 	>>> from matplotlib.figure import Figure
 	>>> from numdaplot.plots.drawing.drawn_chart import DrawnChart
+	>>> from numdaplot.plots.drawing.grid_axes import GridAxes
 	>>> from numdaplot.plots.drawing.style_drawing import place_legend
 	>>> axes = Figure().add_subplot()
 	>>> lines = axes.plot([1, 2], label="price") + axes.plot([2, 1], label="cost")
-	>>> place_legend(axes, DrawnChart(None, None, False, True, None), ndp.LegendPosition.UPPER_LEFT)
+	>>> place_legend(axes, DrawnChart(None, None, False, GridAxes.BOTH, None), ndp.LegendPosition.UPPER_LEFT)
 	>>> [text.get_text() for text in axes.get_legend().get_texts()]
 	['price', 'cost']
 	"""

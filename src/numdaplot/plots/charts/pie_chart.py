@@ -1,0 +1,72 @@
+"""
+Chart sharing out a total as slices of a disc.
+
+.. versionadded:: 0.1.0
+"""
+
+from collections.abc import Sequence
+from dataclasses import dataclass
+
+from numdaplot.plots.charts.chart import Chart
+from numdaplot.plots.charts.chart_settings import copy_colors
+from numdaplot.plots.charts.percentages import Percentages
+from numdaplot.plots.style.color import Color
+from numdaplot.plots.style.custom_color import CustomColor
+
+
+@dataclass(frozen=True)
+class PieChart(Chart):
+	"""
+	Chart drawing each row of a Table as a slice of a disc, sized by its share of the total, used by ``plot_pie``.
+
+	The slices start at the top and follow each other clockwise, in the order of the rows, each labeled with
+	its text. Every value must be present and positive or 0, and every label must be different. Beyond 5 slices,
+	a ``ReadabilityWarning`` suggests a ``BarChart``.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	labels
+		The column of texts naming the slices. A Table needs it.
+	values
+		The column of numbers sizing the slices. A Table needs it.
+	percentages
+		Whether each slice shows its share, such as ``42.5%``, ``Percentages.SHOWN`` by default.
+	colors
+		One color per slice, the colors of the default cycle when omitted. The chart keeps its own list.
+
+	Raises
+	------
+	EmptyListError
+		When ``colors`` is an empty list.
+
+	Examples
+	--------
+	>>> import numdaplot as ndp
+	>>> cities = ndp.Array.from_list(["Paris", "Lyon", "Pau"])
+	>>> sales = ndp.Array.from_list([120.0, 80.0, 45.0])
+	>>> shares = ndp.Table.from_arrays({"city": cities, "sales": sales})
+	>>> chart = ndp.PieChart(labels="city", values="sales")
+	>>> plot = ndp.plot_pie(shares, chart)
+	>>> plot.show()
+	"""
+
+	labels: str | None = None
+	values: str | None = None
+	percentages: Percentages = Percentages.SHOWN
+	colors: Sequence[Color | CustomColor] | None = None
+
+	def __post_init__(self) -> None:
+		"""
+		Check the colors and replace them with a copy that only the chart holds.
+
+		.. versionadded:: 0.1.0
+
+		Raises
+		------
+		EmptyListError
+			When ``colors`` is an empty list.
+		"""
+		colors_copy = copy_colors(self.colors)
+		object.__setattr__(self, "colors", colors_copy)

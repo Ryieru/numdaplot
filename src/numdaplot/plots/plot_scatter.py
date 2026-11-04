@@ -13,6 +13,7 @@ from numdaplot.plots.data.point_values import hide_missing_points, read_point_va
 from numdaplot.plots.data.table_values import read_table_values
 from numdaplot.plots.drawing.series_colors import require_color_count
 from numdaplot.plots.plot import Plot
+from numdaplot.plots.plot_creation import create_plot
 from numdaplot.plots.style.style import Style
 from numdaplot.tables.table import Table
 
@@ -74,11 +75,7 @@ def plot_scatter(data: Table | Array, chart: ScatterChart, style: Style | None =
 	>>> plot.show()
 	"""
 	layer = read_scatter_layer(data, chart)
-	chosen_style = style
-	if chosen_style is None:
-		chosen_style = Style()
-
-	plot = Plot([layer], chosen_style)
+	plot = create_plot(layer, style)
 
 	return plot
 

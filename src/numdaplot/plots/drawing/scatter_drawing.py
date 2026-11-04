@@ -14,18 +14,18 @@ import numpy
 import pandas
 from matplotlib.axes import Axes
 from matplotlib.collections import PathCollection
-from matplotlib.figure import Figure
 from numpy.typing import NDArray
 
 from numdaplot.plots.chart_layer import ChartLayer
 from numdaplot.plots.charts.scatter_chart import ScatterChart
-from numdaplot.plots.data.chart_values import Series
+from numdaplot.plots.data.chart_values import ChartValues, Series
 from numdaplot.plots.data.point_values import PointValues
+from numdaplot.plots.drawing.color_bar import add_color_bar
 from numdaplot.plots.drawing.drawn_chart import DrawnChart
+from numdaplot.plots.drawing.grid_axes import GridAxes
 from numdaplot.plots.drawing.marker_codes import MARKER_CODES
 from numdaplot.plots.drawing.position_axis import place_positions
 from numdaplot.plots.drawing.series_colors import choose_series_colors
-from numdaplot.plots.drawing.whole_numbers import place_whole_ticks
 from numdaplot.plots.style.color import Color
 from numdaplot.plots.style.custom_color import CustomColor
 
@@ -104,7 +104,7 @@ def draw_scatter_chart(axes: Axes, layer: ChartLayer) -> DrawnChart:
 	[[0.0, 12.0], [1.0, 15.5]]
 	"""
 	chart = cast(ScatterChart, layer.chart)
-	values = layer.values
+	values = cast(ChartValues, layer.values)
 	points = NO_POINT_VALUES
 	if layer.points is not None:
 		points = layer.points
@@ -114,7 +114,7 @@ def draw_scatter_chart(axes: Axes, layer: ChartLayer) -> DrawnChart:
 	areas = choose_areas(points.sizes, row_count)
 	marker_code = MARKER_CODES[chart.marker]
 	point_look = PointLook(coordinates, areas, marker_code)
-	no_legend_chart = DrawnChart(values.positions.name, values.value_name, False, True, None)
+	no_legend_chart = DrawnChart(values.positions.name, values.value_name, False, GridAxes.BOTH, None)
 	if points.colors is None:
 		draw_colored_series(axes, chart.color, values.series, point_look)
 		return no_legend_chart
@@ -127,7 +127,7 @@ def draw_scatter_chart(axes: Axes, layer: ChartLayer) -> DrawnChart:
 		return no_legend_chart
 
 	draw_color_groups(axes, first_series, points.colors, point_look)
-	group_chart = DrawnChart(values.positions.name, values.value_name, False, True, color_name)
+	group_chart = DrawnChart(values.positions.name, values.value_name, False, GridAxes.BOTH, color_name)
 
 	return group_chart
 
@@ -285,43 +285,6 @@ def draw_color_scale(
 	)
 
 	return scaled_points
-
-
-def add_color_bar(
-	axes: Axes, scaled_points: PathCollection, color_name: str, color_numbers: NDArray[numpy.float64]
-) -> None:
-	"""
-	Draw the color scale of the points next to the axes, labeled with the ``color_by`` column.
-
-	Its ticks are on whole numbers only when every ``color_by`` number is whole.
-
-	.. versionadded:: 0.1.0
-
-	Parameters
-	----------
-	axes
-		The matplotlib axes drawn on.
-	scaled_points
-		The points colored along the scale.
-	color_name
-		The ``color_by`` column.
-	color_numbers
-		The ``color_by`` numbers.
-
-	Examples
-	--------
-	>>> import numpy
-	>>> from matplotlib.figure import Figure
-	>>> from numdaplot.plots.drawing.scatter_drawing import add_color_bar
-	>>> figure = Figure()
-	>>> axes = figure.add_subplot()
-	>>> add_color_bar(axes, axes.scatter([0.0], [1.0], c=[5.0]), "rooms", numpy.array([5.0]))
-	>>> figure.axes[1].get_ylabel()
-	'rooms'
-	"""
-	figure = cast(Figure, axes.figure)
-	color_bar = figure.colorbar(scaled_points, ax=axes, label=color_name)
-	place_whole_ticks(color_bar.ax.yaxis, color_numbers)
 
 
 def draw_color_groups(axes: Axes, series: Series, color_texts: NDArray[Any], point_look: PointLook) -> None:

@@ -17,7 +17,7 @@ COLOR_ITEM_NAME = "color"
 
 def copy_columns(columns: list[str] | None) -> list[str] | None:
 	"""
-	Check the names of the ``y`` columns of a chart and return a copy that only the chart holds.
+	Check the names of the columns a chart draws and return a copy that only the chart holds.
 
 	.. versionadded:: 0.1.0
 

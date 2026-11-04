@@ -29,8 +29,8 @@ plot.save("prices.png")
 
 Version 0.1.0 is in development. The shared foundations (types, rules, statistics, positions,
 sort settings, errors), `Array`, `Table`, the tools for missing values and dates (formats, time zones,
-parts, periods and durations), and line, bar and scatter plots are available. Histograms, box plots, pie
-charts, heatmaps, overlaid charts and grids of plots are not available yet.
+parts, periods and durations), and line, bar, scatter, histogram, box, pie, heatmap and missing value plots are
+available. Overlaid charts and grids of plots are not available yet.
 
 ## Requirements
 
@@ -82,8 +82,8 @@ src/numdaplot/
 	arrays/         Array and its settings: Shape, Spacing, distributions, math functions...
 	tables/         Table and its settings: file options, Filter, Aggregation, Sorting, Preview, MissingDrop...
 	dates/          DateFormat, TimeZone, TimeZoneChange, DatePart, DatePeriod, DurationIn, ToDuration...
-	plots/          plot_line, plot_bar, plot_scatter, Plot, the charts and the Style of a plot
-	errors/         NumdaplotError, the precise errors and BroadcastWarning
+	plots/          plot_line, plot_bar, plot_histogram, plot_pie..., Plot, the charts and the Style of a plot
+	errors/         NumdaplotError, the precise errors, BroadcastWarning and ReadabilityWarning
 	data_types/     the Type enum and its conversion to numpy and pandas dtypes
 	ratios/         validation of fractions between 0 and 1, and the Measure enum
 	rules/          tests applied to each value: Equal, Greater, Between, IsIn, Contains, IsMissing...

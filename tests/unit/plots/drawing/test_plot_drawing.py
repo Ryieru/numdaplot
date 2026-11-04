@@ -8,13 +8,16 @@ Unit tests of the drawing of a Plot on a matplotlib figure.
 # pyright: reportUnknownMemberType=false
 
 import matplotlib
+import pytest
 from matplotlib.colors import to_hex
 from matplotlib.figure import Figure
 
 import numdaplot as ndp
 from numdaplot.plots.chart_layer import ChartLayer
+from numdaplot.plots.charts.chart import Chart
+from numdaplot.plots.charts.missing_map_chart import MissingMapChart
 from numdaplot.plots.data.array_values import read_array_values
-from numdaplot.plots.drawing.plot_drawing import build_figure, draw_plot
+from numdaplot.plots.drawing.plot_drawing import CHART_DRAWERS, build_figure, draw_plot
 from numdaplot.plots.drawing.plot_theme import BACKGROUND_COLOR
 
 PRICES = ndp.Array.from_list([12.0, 15.5, 14.0])
@@ -22,6 +25,17 @@ LAYER = ChartLayer(ndp.LineChart(), read_array_values(PRICES, "LineChart"))
 PIXEL_STYLE = ndp.Style(size=ndp.Size(width=300, height=200, unit=ndp.SizeUnit.PIXEL))
 EXPECTED_PIXEL_INCHES = [3.0, 2.0]
 FONT_SIZE_SETTING = "font.size"
+CHART_CLASSES = [
+	ndp.LineChart,
+	ndp.BarChart,
+	ndp.ScatterChart,
+	ndp.HistogramChart,
+	ndp.BoxChart,
+	ndp.PieChart,
+	ndp.HeatmapChart,
+	ndp.MissingChart,
+	MissingMapChart,
+]
 
 
 def test_build_figure_has_the_size_of_the_style() -> None:
@@ -75,3 +89,18 @@ def test_draw_plot_leaves_the_global_matplotlib_settings_unchanged() -> None:
 	draw_plot(Figure(), [LAYER], ndp.Style())
 
 	assert matplotlib.rcParams[FONT_SIZE_SETTING] == font_size
+
+
+@pytest.mark.parametrize("chart_class", CHART_CLASSES)
+def test_every_chart_has_a_drawer(chart_class: type[Chart]) -> None:
+	"""
+	Check that each kind of chart is drawn by its own function.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	chart_class
+		A chart class.
+	"""
+	assert chart_class in CHART_DRAWERS

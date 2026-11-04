@@ -15,6 +15,7 @@ import numdaplot as ndp
 from numdaplot.plots.chart_layer import ChartLayer
 from numdaplot.plots.data.table_values import read_table_values
 from numdaplot.plots.drawing.bar_drawing import StackTops, draw_bar_chart, find_group_coordinates, stack_bars
+from numdaplot.plots.drawing.grid_axes import GridAxes
 
 CITIES = ndp.Array.from_list(["Paris", "Lyon"])
 SALES_2025 = ndp.Array.from_list([120.0, -10.0])
@@ -99,7 +100,7 @@ def test_draw_bar_chart_only_grids_the_values() -> None:
 
 	drawn_chart = draw_bar_chart(axes, GROUPED_LAYER)
 
-	assert not drawn_chart.grids_positions
+	assert drawn_chart.grid_axes == GridAxes.VALUES
 
 
 def test_find_group_coordinates_centers_the_group_on_the_position() -> None:

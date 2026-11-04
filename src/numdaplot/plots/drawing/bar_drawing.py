@@ -18,7 +18,9 @@ from numdaplot.plots.chart_layer import ChartLayer
 from numdaplot.plots.charts.bar_chart import BarChart
 from numdaplot.plots.charts.bar_layout import BarLayout
 from numdaplot.plots.charts.orientation import Orientation
+from numdaplot.plots.data.chart_values import ChartValues
 from numdaplot.plots.drawing.drawn_chart import DrawnChart
+from numdaplot.plots.drawing.grid_axes import GridAxes
 from numdaplot.plots.drawing.position_axis import place_categories
 from numdaplot.plots.drawing.series_colors import choose_series_colors
 
@@ -151,7 +153,7 @@ def draw_bar_chart(axes: Axes, layer: ChartLayer) -> DrawnChart:
 	[12.0, 15.5]
 	"""
 	chart = cast(BarChart, layer.chart)
-	values = layer.values
+	values = cast(ChartValues, layer.values)
 	series_count = len(values.series)
 	color_codes = choose_series_colors(chart.colors, series_count)
 	is_horizontal = chart.orientation == Orientation.HORIZONTAL
@@ -177,7 +179,7 @@ def draw_bar_chart(axes: Axes, layer: ChartLayer) -> DrawnChart:
 	if is_horizontal:
 		axes.invert_yaxis()
 
-	drawn_chart = DrawnChart(values.positions.name, values.value_name, is_horizontal, False, None)
+	drawn_chart = DrawnChart(values.positions.name, values.value_name, is_horizontal, GridAxes.VALUES, None)
 
 	return drawn_chart
 

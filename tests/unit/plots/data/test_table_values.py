@@ -12,7 +12,7 @@ import numdaplot as ndp
 from numdaplot.errors.column_not_found_error import ColumnNotFoundError
 from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
 from numdaplot.plots.data.position_kind import PositionKind
-from numdaplot.plots.data.table_values import read_table_values
+from numdaplot.plots.data.table_values import name_single_column, read_series, read_table_values
 
 CHART_NAME = "LineChart"
 SALES_FRAME = pandas.DataFrame(
@@ -28,6 +28,9 @@ SALES = ndp.Table.from_pandas(SALES_FRAME)
 EXPECTED_ROW_NUMBERS = [0.0, 1.0, 2.0]
 EXPECTED_CITIES = ["Paris", "Pau"]
 EXPECTED_KEPT_ROWS = [0, 2]
+SERIES_NAMES = ["price", "cost"]
+SALES_COLUMNS = SALES.to_pandas()
+SINGLE_NAME = ["price"]
 EXPECTED_CITY_PRICES = [12.0, 14.0]
 
 
@@ -126,3 +129,49 @@ def test_read_table_values_rejects_a_y_column_of_booleans() -> None:
 	"""
 	with pytest.raises(IncompatibleTypesError):
 		read_table_values(SALES, None, ["open"], CHART_NAME)
+
+
+def test_read_series_names_each_series_after_its_column() -> None:
+	"""
+	Check that each column gives one series, in order, with NaN where a value is missing.
+
+	.. versionadded:: 0.1.0
+	"""
+	series = read_series(SALES_COLUMNS, SERIES_NAMES, CHART_NAME)
+
+	names = [one_series.name for one_series in series]
+	cost_missing = numpy.isnan(series[1].values).tolist()
+	assert names == SERIES_NAMES
+	assert cost_missing == [False, False, True]
+
+
+def test_read_series_rejects_a_column_without_numbers() -> None:
+	"""
+	Check that a column of booleans raises IncompatibleTypesError.
+
+	.. versionadded:: 0.1.0
+	"""
+	with pytest.raises(IncompatibleTypesError):
+		read_series(SALES_COLUMNS, ["open"], CHART_NAME)
+
+
+def test_name_single_column_returns_the_only_column() -> None:
+	"""
+	Check that a single column names the axis of the values.
+
+	.. versionadded:: 0.1.0
+	"""
+	single_name = name_single_column(SINGLE_NAME)
+
+	assert single_name == "price"
+
+
+def test_name_single_column_returns_none_for_several_columns() -> None:
+	"""
+	Check that several columns leave the axis of the values without default label.
+
+	.. versionadded:: 0.1.0
+	"""
+	single_name = name_single_column(SERIES_NAMES)
+
+	assert single_name is None

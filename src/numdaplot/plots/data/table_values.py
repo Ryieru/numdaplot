@@ -69,20 +69,16 @@ def read_table_values(table: Table, x_name: str | None, y_names: list[str], char
 		rows = numpy.arange(len(frame))
 
 	kept_positions = Positions(positions.kind, positions.values[rows], positions.name)
+	column_series = read_series(frame, y_names, chart_name)
 	series = list[Series]()
 
-	for y_name in y_names:
-		numbers = read_numbers(frame[y_name], chart_name)
-		drawn_numbers = numpy.where(missing_positions, numpy.nan, numbers)
+	for one_series in column_series:
+		drawn_numbers = numpy.where(missing_positions, numpy.nan, one_series.values)
 		kept_numbers = drawn_numbers[rows]
-		column_series = Series(y_name, kept_numbers)
-		series.append(column_series)
+		kept_series = Series(one_series.name, kept_numbers)
+		series.append(kept_series)
 
-	value_name = None
-	y_count = len(y_names)
-	if y_count == 1:
-		value_name = y_names[0]
-
+	value_name = name_single_column(y_names)
 	chart_values = ChartValues(kept_positions, series, rows, value_name)
 
 	return chart_values
@@ -164,3 +160,77 @@ def find_missing_positions(positions: Positions) -> NDArray[numpy.bool_]:
 	missing_values = pandas.isna(positions.values)
 
 	return missing_values
+
+
+def read_series(frame: pandas.DataFrame, column_names: list[str], chart_name: str) -> list[Series]:
+	"""
+	Return each column of numbers of a Table as a series named after it.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	frame
+		The columns of the Table.
+	column_names
+		The columns read, known to exist.
+	chart_name
+		Name of the chart class, shown in the error message.
+
+	Returns
+	-------
+	list[Series]
+		One series per column, NaN where a value is missing.
+
+	Raises
+	------
+	IncompatibleTypesError
+		When a column does not hold numbers.
+
+	Examples
+	--------
+	>>> import pandas
+	>>> from numdaplot.plots.data.table_values import read_series
+	>>> frame = pandas.DataFrame({"price": [12.0, None]})
+	>>> read_series(frame, ["price"], "BoxChart")[0].values
+	array([12., nan])
+	"""
+	series = list[Series]()
+
+	for column_name in column_names:
+		numbers = read_numbers(frame[column_name], chart_name)
+		column_series = Series(column_name, numbers)
+		series.append(column_series)
+
+	return series
+
+
+def name_single_column(column_names: list[str]) -> str | None:
+	"""
+	Return the name of the only column a chart draws, the default label of the axis of its values.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	column_names
+		The columns drawn.
+
+	Returns
+	-------
+	str or None
+		The name of the column when there is one, None when there are several.
+
+	Examples
+	--------
+	>>> from numdaplot.plots.data.table_values import name_single_column
+	>>> name_single_column(["price"]), name_single_column(["price", "cost"])
+	('price', None)
+	"""
+	column_count = len(column_names)
+	if column_count != 1:
+		return None
+
+	single_name = column_names[0]
+
+	return single_name

@@ -13,6 +13,7 @@ from matplotlib.figure import Figure
 import numdaplot as ndp
 from numdaplot.plots.chart_layer import ChartLayer
 from numdaplot.plots.data.table_values import read_table_values
+from numdaplot.plots.drawing.grid_axes import GridAxes
 from numdaplot.plots.drawing.line_drawing import draw_line_chart
 
 DAYS = ndp.Array.from_list([1, 2, 3])
@@ -89,5 +90,5 @@ def test_draw_line_chart_gives_the_default_labels() -> None:
 
 	assert drawn_chart.x_label == "day"
 	assert drawn_chart.y_label is None
-	assert drawn_chart.grids_positions
+	assert drawn_chart.grid_axes == GridAxes.BOTH
 	assert not drawn_chart.x_on_vertical_axis
