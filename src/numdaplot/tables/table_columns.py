@@ -107,9 +107,10 @@ class TableColumns(TableData):
 		Parameters
 		----------
 		conversion
-			The column and its new type. Accepted: between number types, from numbers, booleans and categories
-			to texts, from texts and categories to numbers or booleans (``true`` or ``false`` in any case),
-			and from numbers, booleans and texts to categories.
+			The column, its new type, and the date format or the time zone change. Accepted: between number
+			types, from numbers, booleans, categories, dates, datetimes and durations to texts, from texts and
+			categories to numbers, booleans (``true`` or ``false`` in any case), dates or datetimes, from any
+			other type to categories, between dates and datetimes, and a time zone change of datetimes.
 
 		Returns
 		-------
@@ -122,9 +123,13 @@ class TableColumns(TableData):
 			When the column does not exist.
 		IncompatibleTypesError
 			When the conversion is not accepted.
+		InvalidConversionError
+			When the format or the time zone change does not apply to the conversion.
 		ValueConversionError
-			At the first value that cannot be stored in the new type, such as ``abc`` read as a number
-			or 2.5 stored as an integer.
+			At the first value that cannot be stored in the new type, such as ``abc`` read as a number,
+			2.5 stored as an integer, or ``31/02/2026`` read as a date.
+		TimeZoneMismatchError
+			When the time zone change does not apply to whether the datetimes have a zone.
 
 		Examples
 		--------
@@ -137,7 +142,7 @@ class TableColumns(TableData):
 		1    75001
 		"""
 		column = self._read_column(conversion.column)
-		converted_column = convert_column(column, conversion.dtype)
+		converted_column = convert_column(column, conversion)
 		converted_frame = self._frame.copy(deep=False)
 		converted_frame[conversion.column] = converted_column
 		converted_table = self._wrap(converted_frame)

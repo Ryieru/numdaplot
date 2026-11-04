@@ -30,7 +30,9 @@ MAIN_CLASS_OPTIONS = "      members: false\n      show_bases: false\n      show_
 ATTRIBUTE_OPTIONS = "      show_signature_annotations: true\n"
 SECTION_TITLE = "## {title} {{ .api-section }}\n"
 BLOCK_SEPARATOR = "\n"
-FIRST_CLASSES = frozenset({"Array", "Table", "Rule", "Statistic", "NumdaplotError", "MathFunction", "Distribution"})
+FIRST_CLASSES = frozenset(
+	{"Array", "Table", "Rule", "Statistic", "NumdaplotError", "MathFunction", "Distribution", "TimeFunction"}
+)
 
 
 @dataclass(frozen=True)
@@ -97,6 +99,7 @@ SECTIONS = (
 	Section("numdaplot.tables.missing", "Tables", "tables", "Missing value settings"),
 	Section("numdaplot.ratios", "Tables", "tables", "Missing value settings"),
 	Section("numdaplot.tables", "Tables", "tables"),
+	Section("numdaplot.dates", "Dates", "dates"),
 	Section("numdaplot.data_types", "Types", "types"),
 	Section("numdaplot.rules", "Rules", "rules"),
 	Section("numdaplot.statistics", "Statistics", "statistics"),
@@ -132,7 +135,7 @@ MEMBER_SECTIONS = {
 		),
 		("Writing files", ("to_csv", "to_json", "to_excel", "to_parquet", "to_stata")),
 		("Conversion and comparison", ("from_pandas", "from_arrays", "to_pandas", "column", "to_value", "is_equal")),
-		("Information", ("row_count", "column_names", "column_types")),
+		("Information", ("row_count", "column_names", "column_types", "column_time_zones")),
 		("Selection", ("filter", "take", "check")),
 		("Columns", ("choose_columns", "rename", "convert", "add_column")),
 		("Statistics", ("aggregate", "describe")),
@@ -239,7 +242,7 @@ def order_public_class(public_class: PublicClass) -> tuple[int, int, bool, str]:
 	>>> from api_pages import PublicClass, find_section, order_public_class
 	>>> rule_section = find_section("numdaplot.rules.rule")
 	>>> order_public_class(PublicClass("Rule", "numdaplot.rules.rule.Rule", rule_section))
-	(3, 0, False, 'Rule')
+	(4, 0, False, 'Rule')
 	"""
 	section_position = SECTION_TITLES.index(public_class.section.title)
 	group_position = GROUP_ORDER.index(public_class.section.group)

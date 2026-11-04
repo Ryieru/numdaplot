@@ -11,6 +11,7 @@ import numpy
 from numpy.typing import NDArray
 
 from numdaplot.arrays.operations.operand import Operand, find_operand_type_names
+from numdaplot.arrays.operations.time_arithmetic import combine_time_values, involves_time
 from numdaplot.errors.broadcast_warning import BroadcastWarning
 from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
 from numdaplot.errors.shape_mismatch_error import ShapeMismatchError
@@ -41,7 +42,8 @@ def combine_values(left: Operand, right: Operand, function: numpy.ufunc, symbol:
 	Returns
 	-------
 	NDArray
-		The combined values, following the numpy type rules.
+		The combined values, following the numpy type rules, and the rules of ``combine_time_values`` for
+		dates, datetimes and durations.
 
 	Warns
 	-----
@@ -54,6 +56,8 @@ def combine_values(left: Operand, right: Operand, function: numpy.ufunc, symbol:
 		When both sides are Array values whose shapes cannot be combined.
 	IncompatibleTypesError
 		When the function does not apply to the types of the operands.
+	RefusedOperationError, ValueConversionError
+		When a time operation is refused, as in ``combine_time_values``.
 
 	Examples
 	--------
@@ -63,6 +67,11 @@ def combine_values(left: Operand, right: Operand, function: numpy.ufunc, symbol:
 	array([10, 20])
 	"""
 	check_shapes(left, right)
+	has_time = involves_time(left, right)
+	if has_time:
+		time_values = combine_time_values(left, right, function, symbol)
+		return time_values
+
 	operands = list[Operand]([left, right])
 	try:
 		combined_values = function(left, right)

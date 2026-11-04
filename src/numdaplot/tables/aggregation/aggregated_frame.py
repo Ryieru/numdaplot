@@ -18,6 +18,7 @@ from numdaplot.tables.aggregation.row_groups import find_row_groups
 from numdaplot.tables.columns.column_names import require_known_columns
 from numdaplot.tables.frames.column import Column
 from numdaplot.tables.frames.column_values import find_column_missing, read_present_values
+from numdaplot.tables.frames.time_zones import attribute_source_time_zone
 
 FIRST_ROW = 0
 ROW_POSITION_DTYPE = numpy.int64
@@ -179,6 +180,7 @@ def compute_group_results(column: Column, statistic: Statistic, row_groups: list
 		result = compute_cell(group_values, statistic)
 		results.append(result)
 
-	result_column = build_result_column(results)
+	utc_results = build_result_column(results)
+	result_column = attribute_source_time_zone(utc_results, column)
 
 	return result_column

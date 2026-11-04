@@ -18,6 +18,7 @@ from numdaplot.tables.frames.array_frame import build_array_frame
 from numdaplot.tables.frames.column_values import convert_column_values, find_column_missing, read_array_values
 from numdaplot.tables.frames.frame_equality import are_frames_equal
 from numdaplot.tables.frames.table_text import format_table
+from numdaplot.tables.frames.time_zones import find_column_time_zone
 from numdaplot.tables.table_data import TableData
 
 if TYPE_CHECKING:
@@ -166,6 +167,9 @@ class TableConversion(TableData):
 		UnsupportedMissingError
 			When an integer, boolean, text or category column has missing values, which an Array cannot hold:
 			convert it to ``FLOAT64`` first, or drop its missing values.
+		TimeZoneMismatchError
+			When the column holds datetimes with a time zone, which an Array cannot hold: remove the zone first
+			with ``TimeZoneMode.REMOVE``.
 
 		Examples
 		--------
@@ -189,7 +193,7 @@ class TableConversion(TableData):
 		Returns
 		-------
 		Any
-			The value, ``None`` when it is missing.
+			The value, ``None`` when it is missing. A datetime with a time zone keeps its zone.
 
 		Raises
 		------
@@ -215,6 +219,12 @@ class TableConversion(TableData):
 		if is_missing:
 			return None
 
+		time_zone = find_column_time_zone(column)
+		if time_zone is not None:
+			moment = column.iloc[FIRST_POSITION]
+			zone_datetime = moment.to_pydatetime()
+			return zone_datetime
+
 		values = convert_column_values(column)
 		python_values = to_python_list(values)
 		single_value = python_values[FIRST_POSITION]
@@ -225,7 +235,8 @@ class TableConversion(TableData):
 		"""
 		Return whether this Table and another one have the same columns, in the same order, with the same values.
 
-		Two missing values at the same row are equal.
+		Two missing values at the same row are equal. Datetime columns in different time zones are different,
+		even for the same instants.
 
 		.. versionadded:: 0.1.0
 

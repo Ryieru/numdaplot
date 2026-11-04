@@ -4,7 +4,9 @@ Description of the columns of a Table.
 .. versionadded:: 0.1.0
 """
 
+from datetime import UTC, datetime
 from typing import Any
+from zoneinfo import ZoneInfo
 
 import numpy
 import pandas
@@ -14,6 +16,7 @@ from numdaplot.arrays.conversion.python_values import to_python_list
 from numdaplot.data_types.numpy_mapping import from_numpy_dtype, to_numpy_dtype
 from numdaplot.data_types.type import Type
 from numdaplot.data_types.value_family import ValueFamily, find_family
+from numdaplot.dates.time_zone import TimeZone
 from numdaplot.errors.duplicate_column_error import DuplicateColumnError
 from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
 from numdaplot.statistics.statistic import Statistic
@@ -23,6 +26,7 @@ from numdaplot.tables.columns.column_names import require_known_columns
 from numdaplot.tables.description.description import DEFAULT_FUNCTIONS, Description
 from numdaplot.tables.frames.column import Column
 from numdaplot.tables.frames.column_values import build_column, find_column_type, read_present_values
+from numdaplot.tables.frames.time_zones import attribute_source_time_zone, find_column_time_zone
 
 STATISTIC_COLUMN_NAME = "statistic"
 SINGLE_FAMILY_COUNT = 1
@@ -204,10 +208,12 @@ def describe_column(column: Column, functions: list[Statistic]) -> Column:
 	present_results = [result for result in results if result is not None]
 	result_families = {find_result_family(result) for result in present_results}
 	family_count = len(result_families)
+	time_zone = find_column_time_zone(column)
 	if family_count > SINGLE_FAMILY_COUNT:
-		results = [convert_result_to_text(result) for result in results]
+		results = [convert_result_to_text(result, time_zone) for result in results]
 
-	described_column = build_result_column(results)
+	utc_column = build_result_column(results)
+	described_column = attribute_source_time_zone(utc_column, column)
 
 	return described_column
 
@@ -278,7 +284,7 @@ def find_result_family(result: NDArray[Any]) -> ValueFamily:
 	return result_family
 
 
-def convert_result_to_text(result: NDArray[Any] | None) -> NDArray[Any] | None:
+def convert_result_to_text(result: NDArray[Any] | None, time_zone: TimeZone | None) -> NDArray[Any] | None:
 	"""
 	Return a result written as a text.
 
@@ -288,6 +294,9 @@ def convert_result_to_text(result: NDArray[Any] | None) -> NDArray[Any] | None:
 	----------
 	result
 		A one-value array, or ``None``.
+	time_zone
+		The time zone of the described column: a datetime result, computed as a UTC clock time, is written
+		in this zone with its offset. ``None`` when the column has no zone.
 
 	Returns
 	-------
@@ -298,7 +307,7 @@ def convert_result_to_text(result: NDArray[Any] | None) -> NDArray[Any] | None:
 	--------
 	>>> import numpy
 	>>> from numdaplot.tables.description.described_frame import convert_result_to_text
-	>>> convert_result_to_text(numpy.array([2]))
+	>>> convert_result_to_text(numpy.array([2]), None)
 	array(['2'], dtype=StringDType())
 	"""
 	if result is None:
@@ -306,7 +315,13 @@ def convert_result_to_text(result: NDArray[Any] | None) -> NDArray[Any] | None:
 
 	python_values = to_python_list(result)
 	single_value = python_values[0]
-	result_text = str(single_value)
+	shown_value = single_value
+	if time_zone is not None and isinstance(single_value, datetime):
+		utc_datetime = single_value.replace(tzinfo=UTC)
+		zone_info = ZoneInfo(time_zone.name)
+		shown_value = utc_datetime.astimezone(zone_info)
+
+	result_text = str(shown_value)
 	text_dtype = to_numpy_dtype(Type.TEXT)
 	text_result = numpy.array([result_text], dtype=text_dtype)
 

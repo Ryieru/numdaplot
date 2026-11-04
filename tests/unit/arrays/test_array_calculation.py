@@ -14,6 +14,9 @@ from numdaplot.arrays import array_calculation
 from numdaplot.arrays.array_calculation import ArrayCalculation
 from numdaplot.arrays.math_functions.math_function import MathFunction
 from numdaplot.arrays.math_functions.square_root import SquareRoot
+from numdaplot.dates.date_part import DatePart
+from numdaplot.dates.date_part_unit import DatePartUnit
+from numdaplot.dates.time_function import TimeFunction
 from numdaplot.positions.axis import Axis
 from numdaplot.statistics.mean import Mean
 from numdaplot.statistics.statistic import Statistic
@@ -23,6 +26,8 @@ APPLY_MATH_FUNCTION_NAME = "apply_math_function"
 GRID = [[1, 4], [9, 16]]
 FAKE_RESULT = numpy.array([42.0])
 EXPECTED_FAKE_RESULT = [42.0]
+APPLY_TIME_FUNCTION_NAME = "apply_time_function"
+DATES = numpy.array(["2026-12-31"], dtype="datetime64[D]")
 
 
 class StatisticRecorder:
@@ -150,3 +155,45 @@ def test_apply_returns_the_transformed_values(monkeypatch: pytest.MonkeyPatch) -
 	result_values = result_array.to_numpy()
 	result_list = result_values.tolist()
 	assert result_list == EXPECTED_FAKE_RESULT
+
+
+def apply_fake_time_function(values: NDArray[Any], function: TimeFunction) -> NDArray[Any]:
+	"""
+	Fake time function application returning a known result.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	values
+		The values, ignored.
+	function
+		The time function, ignored.
+
+	Returns
+	-------
+	NDArray
+		Always the fake result.
+	"""
+	return FAKE_RESULT
+
+
+def test_apply_hands_a_time_function_to_the_time_function_application(monkeypatch: pytest.MonkeyPatch) -> None:
+	"""
+	Check that apply sends a time function to apply_time_function.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	monkeypatch
+		Replaces the time function application with a fake.
+	"""
+	monkeypatch.setattr(array_calculation, APPLY_TIME_FUNCTION_NAME, apply_fake_time_function)
+	array = ArrayCalculation(DATES)
+
+	transformed_array = array.apply(DatePart(unit=DatePartUnit.MONTH))
+
+	transformed_values = transformed_array.to_numpy()
+	transformed_list = transformed_values.tolist()
+	assert transformed_list == EXPECTED_FAKE_RESULT

@@ -1,5 +1,5 @@
 """
-Statistics and math functions computed on an Array.
+Statistics, math functions and time functions computed on an Array.
 
 .. versionadded:: 0.1.0
 """
@@ -9,14 +9,16 @@ from typing import Self
 from numdaplot.arrays.array_data import ArrayData
 from numdaplot.arrays.calculation.math_function_values import apply_math_function
 from numdaplot.arrays.calculation.statistic_values import compute_statistic
+from numdaplot.arrays.calculation.time_function_values import apply_time_function
 from numdaplot.arrays.math_functions.math_function import MathFunction
+from numdaplot.dates.time_function import TimeFunction
 from numdaplot.positions.axis import Axis
 from numdaplot.statistics.statistic import Statistic
 
 
 class ArrayCalculation(ArrayData):
 	"""
-	Statistics with ``compute`` and math functions with ``apply``.
+	Statistics with ``compute``, math and time functions with ``apply``.
 
 	.. versionadded:: 0.1.0
 	"""
@@ -62,16 +64,18 @@ class ArrayCalculation(ArrayData):
 
 		return statistic_array
 
-	def apply(self, function: MathFunction) -> Self:
+	def apply(self, function: MathFunction | TimeFunction) -> Self:
 		"""
-		Return a math function applied to each value of a number Array.
+		Return a math function or a time function applied to each value.
 
 		.. versionadded:: 0.1.0
 
 		Parameters
 		----------
 		function
-			Any math function of numdaplot, such as ``ndp.SquareRoot()`` or ``ndp.Round(decimals=2)``.
+			Any math function of numdaplot, such as ``ndp.SquareRoot()``, applied to numbers, or any time function,
+			such as ``ndp.DatePart(unit=ndp.DatePartUnit.MONTH)``, applied to dates, datetimes, durations or
+			numbers as each one states.
 
 		Returns
 		-------
@@ -81,16 +85,24 @@ class ArrayCalculation(ArrayData):
 		Raises
 		------
 		IncompatibleTypesError
-			When the values are not numbers.
+			When the function does not apply to the type of the values.
 		OutOfDomainError
-			When a value is outside the domain of the function, such as the square root of -1.
+			When a value is outside the domain of a math function, such as the square root of -1.
 
 		Examples
 		--------
+		>>> from datetime import date
 		>>> import numdaplot as ndp
 		>>> ndp.Array.from_list([1, 4, 9]).apply(ndp.SquareRoot())
 		Array([1., 2., 3.], dtype=FLOAT64)
+		>>> ndp.Array.from_list([date(2026, 3, 14)]).apply(ndp.DatePart(unit=ndp.DatePartUnit.MONTH))
+		Array([3.], dtype=FLOAT64)
 		"""
+		if isinstance(function, TimeFunction):
+			time_values = apply_time_function(self._values, function)
+			time_array = self._wrap(time_values)
+			return time_array
+
 		transformed_values = apply_math_function(self._values, function)
 		transformed_array = self._wrap(transformed_values)
 

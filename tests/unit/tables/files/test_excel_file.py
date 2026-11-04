@@ -12,6 +12,7 @@ import pytest
 from numdaplot.errors.duplicate_column_error import DuplicateColumnError
 from numdaplot.errors.invalid_column_name_error import InvalidColumnNameError
 from numdaplot.errors.missing_dependency_error import MissingDependencyError
+from numdaplot.errors.time_zone_mismatch_error import TimeZoneMismatchError
 from numdaplot.tables.files import excel_file
 from numdaplot.tables.files.excel_file import find_read_sheet, read_excel_file, write_excel_file
 from numdaplot.tables.files.excel_options import ExcelOptions
@@ -28,6 +29,9 @@ NUMBER_HEADER = {1: [1.5]}
 EMPTY_FRAME = dict[str, list[float]]()
 FIRST_SHEET = 0
 REQUIRE_PACKAGE_NAME = "require_package"
+PARIS_TIMES = (
+	pandas.Series(pandas.to_datetime(["2026-07-01 10:30"])).astype("datetime64[ns]").dt.tz_localize("Europe/Paris")
+)
 
 
 def refuse_package(package_name: str, extra_name: str) -> None:
@@ -238,3 +242,21 @@ def test_write_excel_file_names_the_missing_extra(monkeypatch: pytest.MonkeyPatc
 
 	with pytest.raises(MissingDependencyError):
 		write_excel_file(frame, path, ExcelOptions())
+
+
+def test_write_excel_file_rejects_a_datetime_column_with_a_time_zone(tmp_path: Path) -> None:
+	"""
+	Check that Excel files refuse zone columns.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	tmp_path
+		A temporary folder.
+	"""
+	path = tmp_path / FILE_NAME
+	time_frame = pandas.DataFrame({"time": PARIS_TIMES})
+
+	with pytest.raises(TimeZoneMismatchError):
+		write_excel_file(time_frame, path, ExcelOptions())

@@ -13,12 +13,15 @@ from numpy.typing import NDArray
 from numdaplot.data_types.numpy_mapping import from_numpy_dtype, to_numpy_dtype
 from numdaplot.data_types.pandas_mapping import from_pandas_dtype, to_pandas_dtype
 from numdaplot.data_types.type import Type
+from numdaplot.errors.time_zone_mismatch_error import TimeZoneMismatchError
 from numdaplot.errors.unsupported_missing_error import UnsupportedMissingError
 from numdaplot.tables.frames.column import Column
+from numdaplot.tables.frames.time_zones import find_column_time_zone, remove_utc_zone
 
 MISSING_CAPABLE_TYPES = frozenset({Type.FLOAT32, Type.FLOAT64, Type.DATE, Type.DATETIME, Type.DURATION})
 TEXT_TYPES = frozenset({Type.TEXT, Type.CATEGORY})
 PYTHON_OBJECT_DTYPE = numpy.dtype(object)
+ARRAY_OPERATION = "An Array"
 
 
 def find_column_type(column: Column) -> Type:
@@ -92,7 +95,8 @@ def convert_column_values(column: Column) -> NDArray[Any]:
 	Returns
 	-------
 	NDArray
-		The values in the numpy dtype of an Array of the same type. Categories become texts.
+		The values in the numpy dtype of an Array of the same type. Categories become texts, and datetimes
+		with a time zone become their UTC clock time.
 
 	Examples
 	--------
@@ -102,6 +106,12 @@ def convert_column_values(column: Column) -> NDArray[Any]:
 	array([1, 2])
 	"""
 	column_type = find_column_type(column)
+	time_zone = find_column_time_zone(column)
+	if time_zone is not None:
+		utc_column = remove_utc_zone(column)
+		utc_values = convert_column_values(utc_column)
+		return utc_values
+
 	if column_type in TEXT_TYPES:
 		object_values = column.to_numpy(dtype=PYTHON_OBJECT_DTYPE)
 		text_dtype = to_numpy_dtype(Type.TEXT)
@@ -163,6 +173,8 @@ def read_array_values(column: Column) -> NDArray[Any]:
 	------
 	UnsupportedMissingError
 		When an integer, boolean, text or category column has a missing value, which an Array cannot hold.
+	TimeZoneMismatchError
+		When the column holds datetimes with a time zone, which an Array cannot hold.
 
 	Examples
 	--------
@@ -172,6 +184,10 @@ def read_array_values(column: Column) -> NDArray[Any]:
 	array([1.5, nan])
 	"""
 	column_type = find_column_type(column)
+	time_zone = find_column_time_zone(column)
+	if time_zone is not None:
+		raise TimeZoneMismatchError(ARRAY_OPERATION, False)
+
 	missing = find_column_missing(column)
 	has_missing = bool(missing.any())
 	rejects_missing = has_missing and column_type not in MISSING_CAPABLE_TYPES

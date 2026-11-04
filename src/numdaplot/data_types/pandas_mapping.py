@@ -7,6 +7,7 @@ Conversion between ``ndp.Type`` and the pandas dtypes that store Table columns.
 from typing import Any
 
 import numpy
+from pandas import DatetimeTZDtype
 from pandas.api.extensions import ExtensionDtype
 from pandas.api.types import pandas_dtype
 
@@ -32,6 +33,7 @@ PANDAS_DTYPE_CODES = {
 	Type.DATETIME: "datetime64[ns]",
 	Type.DURATION: "timedelta64[ns]",
 }
+NANOSECOND_UNIT = "ns"
 TYPES_BY_PANDAS_NAME = {dtype_code: data_type for data_type, dtype_code in PANDAS_DTYPE_CODES.items()}
 
 
@@ -82,7 +84,7 @@ def from_pandas_dtype(pandas_type: object) -> Type:
 	Returns
 	-------
 	Type
-		The matching numdaplot type.
+		The matching numdaplot type. Datetimes with a time zone, counted in nanoseconds, give ``DATETIME``.
 
 	Raises
 	------
@@ -95,7 +97,13 @@ def from_pandas_dtype(pandas_type: object) -> Type:
 	>>> from numdaplot.data_types.pandas_mapping import from_pandas_dtype
 	>>> from_pandas_dtype(pandas.Int64Dtype())
 	<Type.INT64: 4>
+	>>> from_pandas_dtype(pandas.DatetimeTZDtype("ns", "Europe/Paris"))
+	<Type.DATETIME: 15>
 	"""
+	is_nanosecond_zone = isinstance(pandas_type, DatetimeTZDtype) and pandas_type.unit == NANOSECOND_UNIT
+	if is_nanosecond_zone:
+		return Type.DATETIME
+
 	dtype_name = str(pandas_type)
 	if dtype_name not in TYPES_BY_PANDAS_NAME:
 		raise UnsupportedTypeError(dtype_name, Library.PANDAS)

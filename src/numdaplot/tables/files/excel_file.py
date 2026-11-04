@@ -13,12 +13,14 @@ from numdaplot.tables.columns.column_names import require_column_names
 from numdaplot.tables.files.excel_options import ExcelOptions
 from numdaplot.tables.files.optional_package import require_package
 from numdaplot.tables.files.pandas_backend import NULLABLE_DTYPE_BACKEND
+from numdaplot.tables.frames.time_zones import require_no_time_zone
 
 EXCEL_PACKAGE = "openpyxl"
 EXCEL_EXTRA = "excel"
 FIRST_SHEET = 0
 DEFAULT_SHEET_NAME = "Sheet1"
 HEADER_ROW_COUNT = 1
+EXCEL_OPERATION = "An Excel file"
 
 
 def read_excel_file(path: Path, options: ExcelOptions) -> pandas.DataFrame:
@@ -43,6 +45,8 @@ def read_excel_file(path: Path, options: ExcelOptions) -> pandas.DataFrame:
 	------
 	MissingDependencyError
 		When ``openpyxl`` is not installed.
+	TimeZoneMismatchError
+		When a column holds datetimes with a time zone, which Excel files cannot store.
 	InvalidColumnNameError
 		When a cell of the first row is empty or is not a text.
 	DuplicateColumnError
@@ -128,6 +132,8 @@ def write_excel_file(frame: pandas.DataFrame, path: Path, options: ExcelOptions)
 	------
 	MissingDependencyError
 		When ``openpyxl`` is not installed.
+	TimeZoneMismatchError
+		When a column holds datetimes with a time zone, which Excel files cannot store.
 
 	Examples
 	--------
@@ -141,6 +147,7 @@ def write_excel_file(frame: pandas.DataFrame, path: Path, options: ExcelOptions)
 	>>> pandas.ExcelFile(path).sheet_names
 	['Sales']
 	"""
+	require_no_time_zone(frame, EXCEL_OPERATION)
 	require_package(EXCEL_PACKAGE, EXCEL_EXTRA)
 	sheet_name = DEFAULT_SHEET_NAME
 	if options.sheet is not None:

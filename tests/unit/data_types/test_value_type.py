@@ -4,7 +4,7 @@ Unit tests of find_value_type, find_type_width and find_common_type.
 .. versionadded:: 0.1.0
 """
 
-from datetime import date, datetime, timedelta
+from datetime import UTC, date, datetime, timedelta
 
 import numpy
 import pytest
@@ -12,6 +12,7 @@ import pytest
 from numdaplot.data_types.type import Type
 from numdaplot.data_types.value_type import find_common_type, find_type_width, find_value_type
 from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
+from numdaplot.errors.time_zone_mismatch_error import TimeZoneMismatchError
 from numdaplot.errors.unsupported_type_error import UnsupportedTypeError
 
 OPERATION = "from_list"
@@ -29,6 +30,7 @@ COMPLEX_VALUE = 1j
 EXPECTED_COMPLEX_MESSAGE = "The type complex has no equivalent between numdaplot and numpy."
 WIDE_TYPE_WIDTH = 1
 NARROW_TYPE_WIDTH = 0
+UTC_DATETIME = datetime(2026, 1, 31, 8, 30, tzinfo=UTC)
 
 
 @pytest.mark.parametrize(("value", "expected_type"), PYTHON_VALUE_TYPES)
@@ -103,3 +105,13 @@ def test_find_common_type_rejects_two_families() -> None:
 	"""
 	with pytest.raises(IncompatibleTypesError):
 		find_common_type([Type.BOOL, Type.INT64], OPERATION)
+
+
+def test_find_value_type_rejects_a_datetime_with_a_time_zone() -> None:
+	"""
+	Check that a datetime with a time zone raises TimeZoneMismatchError, an Array holding none.
+
+	.. versionadded:: 0.1.0
+	"""
+	with pytest.raises(TimeZoneMismatchError):
+		find_value_type(UTC_DATETIME)

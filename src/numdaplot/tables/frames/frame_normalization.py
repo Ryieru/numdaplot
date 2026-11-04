@@ -10,14 +10,13 @@ import numpy
 import pandas
 from pandas.api.types import infer_dtype
 
-from numdaplot.data_types.library import Library
 from numdaplot.data_types.numpy_mapping import from_numpy_dtype
 from numdaplot.data_types.pandas_mapping import TYPES_BY_PANDAS_NAME, from_pandas_dtype, to_pandas_dtype
 from numdaplot.data_types.type import Type
 from numdaplot.errors.unsupported_index_error import UnsupportedIndexError
-from numdaplot.errors.unsupported_type_error import UnsupportedTypeError
 from numdaplot.tables.columns.column_names import require_column_names
 from numdaplot.tables.frames.column import Column
+from numdaplot.tables.frames.time_zones import normalize_time_zone_column
 
 INFERRED_TYPES = {
 	"integer": Type.INT64,
@@ -144,7 +143,7 @@ def normalize_column(column: Column) -> Column:
 	------
 	UnsupportedTypeError
 		When the column has a type numdaplot does not support, such as complex numbers or
-		datetimes with a time zone.
+		datetimes in a fixed offset instead of a time zone.
 
 	Examples
 	--------
@@ -184,7 +183,7 @@ def convert_column_dtype(column: Column) -> Column:
 	Raises
 	------
 	UnsupportedTypeError
-		When the column holds datetimes with a time zone.
+		When the column holds datetimes in a fixed offset instead of a time zone.
 
 	Examples
 	--------
@@ -197,8 +196,8 @@ def convert_column_dtype(column: Column) -> Column:
 	column_dtype = column.dtype
 	dtype_kind = column_dtype.kind
 	if isinstance(column_dtype, pandas.DatetimeTZDtype):
-		dtype_name = str(column_dtype)
-		raise UnsupportedTypeError(dtype_name, Library.PANDAS)
+		time_zone_column = normalize_time_zone_column(column)
+		return time_zone_column
 
 	if isinstance(column_dtype, pandas.StringDtype):
 		text_column = convert_to_type(column, Type.TEXT)

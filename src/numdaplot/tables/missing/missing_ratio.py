@@ -45,9 +45,9 @@ class MissingRatio:
 	2     NaN
 	3     2.0
 	>>> try:
-	...     ndp.MissingRatio(ratio=30)
+	... 	ndp.MissingRatio(ratio=30)
 	... except ndp.InvalidFractionError as error:
-	...     print(error)
+	... 	print(error)
 	Expected a fraction between 0 and 1, got 30.
 	"""
 

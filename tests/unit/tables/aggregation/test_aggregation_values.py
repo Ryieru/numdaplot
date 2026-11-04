@@ -14,6 +14,7 @@ from numpy.typing import NDArray
 from numdaplot.errors.column_not_found_error import ColumnNotFoundError
 from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
 from numdaplot.statistics.count import Count
+from numdaplot.statistics.maximum import Max
 from numdaplot.statistics.mean import Mean
 from numdaplot.statistics.sum import Sum
 from numdaplot.tables.aggregation.aggregated_frame import aggregate_frame, compute_group_results, take_group_keys
@@ -45,6 +46,13 @@ EXPECTED_COLUMN_NAMES = ["city", "price_sum"]
 EXPECTED_TOTALS = [0.0, 40.0, 20.0]
 EXPECTED_TOTAL = [60.0]
 TOTAL = Calculation(column="price", function=Sum())
+PARIS_TIMES = (
+	pandas.Series(pandas.to_datetime(["2026-07-01 10:30", "2026-07-01 12:30"]))
+	.astype("datetime64[ns]")
+	.dt.tz_localize("Europe/Paris")
+)
+EVERY_ROW = [numpy.array([0, 1])]
+EXPECTED_LATEST = [pandas.Timestamp("2026-07-01 12:30", tz="Europe/Paris")]
 
 
 def read_groups(groups: list[NDArray[Any]]) -> list[list[int]]:
@@ -284,3 +292,15 @@ def test_aggregate_frame_rejects_an_unknown_column(aggregation: Aggregation) -> 
 	"""
 	with pytest.raises(ColumnNotFoundError):
 		aggregate_frame(SALES, aggregation)
+
+
+def test_compute_group_results_keeps_the_zone_of_a_datetime_column() -> None:
+	"""
+	Check that the latest datetime of a Paris column is in Paris time.
+
+	.. versionadded:: 0.1.0
+	"""
+	result_column = compute_group_results(PARIS_TIMES, Max(), EVERY_ROW)
+
+	results = result_column.tolist()
+	assert results == EXPECTED_LATEST

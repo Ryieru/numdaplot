@@ -15,6 +15,12 @@ and numdaplot follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
   `Array.replace`, `Array.compute`, `Array.apply`, `Array.reshape`, `Array.transpose`, `Array.flatten`,
   `Array.sort`, `Array.unique`, `Array.to_list`, `Array.to_value`, `Array.to_numpy` and `Array.is_equal`.
 - Array settings: `Shape`, `Spacing`, `ArraySorting`, `Replacement`, `Equality` and the `TypeMatch` enum.
+- Dates: arithmetic between dates, datetimes, durations and numbers on `Array`, time functions applied by
+  `Array.apply` (`TimeFunction`, `DatePart`, `DatePeriod`, `DurationIn`, `ToDuration`, with the `DatePartUnit`,
+  `PeriodUnit` and `DurationUnit` enums), date formats and time zones for `Table.convert` (`DateFormat` enum,
+  `CustomDateFormat`, `TimeZone`, `TimeZoneChange` and the `TimeZoneMode` enum), and `Table.column_time_zones`.
+- Date errors: `InvalidConversionError`, `InvalidDateFormatError`, `InvalidTimeZoneChangeError`,
+  `TimeZoneMismatchError` and `UnknownTimeZoneError`.
 - `Table`: named columns of one type each, read with `Table.from_csv`, `Table.from_json`, `Table.from_excel`,
   `Table.from_parquet`, `Table.from_stata`, `Table.from_sas`, `Table.from_xpt`, `Table.from_pandas` and
   `Table.from_arrays`; written with `Table.to_csv`, `Table.to_json`, `Table.to_excel`, `Table.to_parquet` and

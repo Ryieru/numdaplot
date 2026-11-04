@@ -9,10 +9,12 @@ from typing import Self
 import pandas
 
 from numdaplot.data_types.type import Type
+from numdaplot.dates.time_zone import TimeZone
 from numdaplot.tables.columns.column_names import require_known_columns
 from numdaplot.tables.frames.column import Column
 from numdaplot.tables.frames.column_values import find_column_type
 from numdaplot.tables.frames.frame_normalization import normalize_frame
+from numdaplot.tables.frames.time_zones import find_column_time_zone
 
 
 class TableData:
@@ -101,6 +103,33 @@ class TableData:
 			column_types[column_name] = column_type
 
 		return column_types
+
+	@property
+	def column_time_zones(self) -> dict[str, TimeZone | None]:
+		"""
+		Time zone of each datetime column, by column name, ``None`` for a datetime column without zone.
+
+		Columns of other types are not listed.
+
+		.. versionadded:: 0.1.0
+
+		Examples
+		--------
+		>>> from datetime import datetime
+		>>> import numdaplot as ndp
+		>>> times = ndp.Table.from_arrays({"time": ndp.Array.from_list([datetime(2026, 7, 1, 10, 30)])})
+		>>> times.column_time_zones
+		{'time': None}
+		"""
+		column_time_zones = dict[str, TimeZone | None]()
+
+		for column_name in self.column_names:
+			column = self._frame[column_name]
+			column_type = find_column_type(column)
+			if column_type == Type.DATETIME:
+				column_time_zones[column_name] = find_column_time_zone(column)
+
+		return column_time_zones
 
 	@classmethod
 	def _from_frame(cls, frame: pandas.DataFrame) -> Self:

@@ -11,6 +11,7 @@ import pandas
 import pytest
 
 from numdaplot.data_types.type import Type
+from numdaplot.errors.time_zone_mismatch_error import TimeZoneMismatchError
 from numdaplot.errors.unsupported_missing_error import UnsupportedMissingError
 from numdaplot.tables.frames.column import Column
 from numdaplot.tables.frames.column_values import (
@@ -39,6 +40,9 @@ TEXT_DTYPE_NAME = "string"
 INTEGER_VALUES = numpy.array([1, 3])
 MISSING_POSITIONS = numpy.array([False, True, False])
 EXPECTED_REBUILT_INTEGERS = [1, pandas.NA, 3]
+NAIVE_TIMES = pandas.Series(pandas.to_datetime(["2026-07-01 10:30"])).astype("datetime64[ns]")
+PARIS_TIMES = NAIVE_TIMES.dt.tz_localize("Europe/Paris")
+EXPECTED_UTC_VALUES = numpy.array(["2026-07-01T08:30"], dtype="datetime64[ns]")
 
 
 def read_list(values: numpy.ndarray[Any, Any]) -> list[Any]:
@@ -173,3 +177,25 @@ def test_build_column_with_missing_places_the_missing_values() -> None:
 
 	values = column.tolist()
 	assert values == EXPECTED_REBUILT_INTEGERS
+
+
+def test_convert_column_values_gives_the_utc_clock_time_of_a_zone_column() -> None:
+	"""
+	Check that 10:30 in Paris in summer gives 08:30.
+
+	.. versionadded:: 0.1.0
+	"""
+	values = convert_column_values(PARIS_TIMES)
+
+	same_values = numpy.array_equal(values, EXPECTED_UTC_VALUES)
+	assert bool(same_values)
+
+
+def test_read_array_values_rejects_a_zone_column() -> None:
+	"""
+	Check that a zone column raises TimeZoneMismatchError, an Array holding no zone.
+
+	.. versionadded:: 0.1.0
+	"""
+	with pytest.raises(TimeZoneMismatchError):
+		read_array_values(PARIS_TIMES)

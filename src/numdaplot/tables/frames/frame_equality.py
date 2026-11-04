@@ -11,6 +11,7 @@ from numdaplot.arrays.type_match import TypeMatch
 from numdaplot.data_types.value_family import find_family
 from numdaplot.tables.frames.column import Column
 from numdaplot.tables.frames.column_values import find_column_missing, find_column_type, read_present_values
+from numdaplot.tables.frames.time_zones import find_column_time_zone
 
 
 def are_frames_equal(left: pandas.DataFrame, right: pandas.DataFrame, types: TypeMatch) -> bool:
@@ -84,7 +85,8 @@ def are_columns_equal(left: Column, right: Column, types: TypeMatch) -> bool:
 	Returns
 	-------
 	bool
-		True when the missing values are at the same rows and the present values are equal.
+		True when the missing values are at the same rows and the present values are equal. Datetime columns
+		in different time zones are never equal, even for the same instants.
 
 	Examples
 	--------
@@ -106,6 +108,11 @@ def are_columns_equal(left: Column, right: Column, types: TypeMatch) -> bool:
 	left_family = find_family(left_type)
 	right_family = find_family(right_type)
 	if left_family != right_family:
+		return False
+
+	left_time_zone = find_column_time_zone(left)
+	right_time_zone = find_column_time_zone(right)
+	if left_time_zone != right_time_zone:
 		return False
 
 	left_missing = find_column_missing(left)

@@ -12,6 +12,7 @@ from numdaplot.data_types.library import Library
 from numdaplot.data_types.type import Type
 from numdaplot.data_types.value_family import find_family
 from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
+from numdaplot.errors.time_zone_mismatch_error import TimeZoneMismatchError
 from numdaplot.errors.unsupported_type_error import UnsupportedTypeError
 
 # bool comes before int and datetime before date, since each one is a subclass of the next.
@@ -24,6 +25,7 @@ PYTHON_TYPES = (
 	((date,), Type.DATE),
 	((timedelta,), Type.DURATION),
 )
+ARRAY_OPERATION = "An Array"
 TYPE_WIDTHS = {
 	Type.FLOAT64: 1,
 	Type.DATETIME: 1,
@@ -51,6 +53,8 @@ def find_value_type(value: object) -> Type:
 	------
 	UnsupportedTypeError
 		When the value has no numdaplot type, such as a complex number or a tuple.
+	TimeZoneMismatchError
+		When the value is a datetime with a time zone, which an Array cannot hold.
 
 	Examples
 	--------
@@ -58,6 +62,10 @@ def find_value_type(value: object) -> Type:
 	>>> find_value_type(2.5)
 	<Type.FLOAT64: 10>
 	"""
+	has_time_zone = isinstance(value, datetime) and value.tzinfo is not None
+	if has_time_zone:
+		raise TimeZoneMismatchError(ARRAY_OPERATION, False)
+
 	for python_types, data_type in PYTHON_TYPES:
 		if isinstance(value, python_types):
 			return data_type

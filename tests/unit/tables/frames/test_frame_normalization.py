@@ -35,7 +35,7 @@ PRICES = {"price": [1.5, 8.0]}
 NUMBER_NAMES_FRAME = pandas.DataFrame([[1, 2]])
 REPEATED_NAMES_FRAME = pandas.DataFrame([[1, 2]], columns=["price", "price"])
 SHUFFLED_INDEX = [1, 0]
-TIME_ZONE_DATES = pandas.Series(pandas.to_datetime(["2026-01-31"]).tz_localize("UTC"))
+FIXED_OFFSET_DATES = pandas.Series(pandas.to_datetime(["2026-01-31 10:00+01:00"]))
 COMPLEX_NUMBERS = pandas.Series([1 + 2j])
 CANONICAL_DECIMALS = pandas.Series([1.5])
 NULLABLE_DECIMALS = pandas.Series([1.5, None], dtype="Float64")
@@ -150,10 +150,10 @@ def test_normalize_column_keeps_a_column_already_stored_for_a_table() -> None:
 	assert column is CANONICAL_DECIMALS
 
 
-@pytest.mark.parametrize("column", [TIME_ZONE_DATES, COMPLEX_NUMBERS])
+@pytest.mark.parametrize("column", [FIXED_OFFSET_DATES, COMPLEX_NUMBERS])
 def test_normalize_column_rejects_an_unsupported_type(column: Column) -> None:
 	"""
-	Check that datetimes with a time zone and complex numbers raise UnsupportedTypeError.
+	Check that datetimes in a fixed offset and complex numbers raise UnsupportedTypeError.
 
 	.. versionadded:: 0.1.0
 

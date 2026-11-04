@@ -8,6 +8,7 @@ import pandas
 import pytest
 
 from numdaplot.data_types.type import Type
+from numdaplot.dates.time_zone import TimeZone
 from numdaplot.errors.column_not_found_error import ColumnNotFoundError
 from numdaplot.tables.frames.column import Column
 from numdaplot.tables.table_data import TableData
@@ -20,6 +21,11 @@ RAW_FRAME = pandas.DataFrame({"count": [1, 2]})
 INTEGER_DTYPE_NAME = "Int64"
 OTHER_FRAME = pandas.DataFrame({"price": [3.0]})
 UNKNOWN_COLUMN = "prise"
+PARIS_TIMES = (
+	pandas.Series(pandas.to_datetime(["2026-07-01 10:30"])).astype("datetime64[ns]").dt.tz_localize("Europe/Paris")
+)
+TIME_FRAME = pandas.DataFrame({"time": PARIS_TIMES, "price": [1.5]})
+EXPECTED_TIME_ZONES = {"time": TimeZone("Europe/Paris")}
 
 
 class ExposedTableData(TableData):
@@ -190,3 +196,14 @@ def test_read_column_rejects_an_unknown_column() -> None:
 
 	with pytest.raises(ColumnNotFoundError):
 		table.read_column(UNKNOWN_COLUMN)
+
+
+def test_table_data_gives_the_time_zone_of_each_datetime_column() -> None:
+	"""
+	Check that only the datetime column is listed, with its zone.
+
+	.. versionadded:: 0.1.0
+	"""
+	table = TableData(TIME_FRAME)
+
+	assert table.column_time_zones == EXPECTED_TIME_ZONES

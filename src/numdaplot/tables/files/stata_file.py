@@ -8,6 +8,10 @@ from pathlib import Path
 
 import pandas
 
+from numdaplot.tables.frames.time_zones import require_no_time_zone
+
+STATA_OPERATION = "A Stata file"
+
 
 def read_stata_file(path: Path) -> pandas.DataFrame:
 	"""
@@ -59,6 +63,11 @@ def write_stata_file(frame: pandas.DataFrame, path: Path) -> None:
 	path
 		The path of the file, replaced when it exists.
 
+	Raises
+	------
+	TimeZoneMismatchError
+		When a column holds datetimes with a time zone, which Stata files cannot store.
+
 	Examples
 	--------
 	>>> import tempfile
@@ -70,4 +79,5 @@ def write_stata_file(frame: pandas.DataFrame, path: Path) -> None:
 	>>> path.exists()
 	True
 	"""
+	require_no_time_zone(frame, STATA_OPERATION)
 	frame.to_stata(path, write_index=False)

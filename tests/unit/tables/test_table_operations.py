@@ -129,7 +129,7 @@ def give_fake_mask(frame: pandas.DataFrame, row_filter: Filter) -> NDArray[Any]:
 	return FAKE_MASK
 
 
-def give_fake_column(column: Column, target_type: Type) -> Column:
+def give_fake_column(column: Column, conversion: Conversion) -> Column:
 	"""
 	Fake conversion returning known texts.
 
@@ -139,8 +139,8 @@ def give_fake_column(column: Column, target_type: Type) -> Column:
 	----------
 	column
 		The converted column, ignored.
-	target_type
-		The new type, ignored.
+	conversion
+		The conversion, ignored.
 
 	Returns
 	-------

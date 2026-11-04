@@ -8,6 +8,7 @@ import numpy
 import pandas
 
 from numdaplot.tables.frames.column_values import find_column_type
+from numdaplot.tables.frames.time_zones import name_column_type
 from numdaplot.tables.missing.missing_counts import COLUMN_SUM_AXIS, divide_counts, find_frame_missing
 
 COLUMN_NAMES_COLUMN = "column"
@@ -117,7 +118,8 @@ def list_summary_types(frame: pandas.DataFrame) -> list[str]:
 	Returns
 	-------
 	list[str]
-		The ``ndp.Type`` name of each column, in order, then an empty text for the total row.
+		The ``ndp.Type`` name of each column, with its time zone when it has one, in order, then an empty
+		text for the total row.
 
 	Examples
 	--------
@@ -131,7 +133,8 @@ def list_summary_types(frame: pandas.DataFrame) -> list[str]:
 	for column_name in frame.columns:
 		column = frame[column_name]
 		column_type = find_column_type(column)
-		type_names.append(column_type.name)
+		type_name = name_column_type(column, column_type)
+		type_names.append(type_name)
 
 	type_names.append(TOTAL_TYPE_NAME)
 

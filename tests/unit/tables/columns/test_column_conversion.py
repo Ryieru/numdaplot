@@ -11,9 +11,15 @@ import pandas
 import pytest
 
 from numdaplot.data_types.type import Type
+from numdaplot.dates.date_format import DateFormat
+from numdaplot.dates.time_zone import TimeZone
+from numdaplot.dates.time_zone_change import TimeZoneChange
+from numdaplot.dates.time_zone_mode import TimeZoneMode
 from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
+from numdaplot.errors.invalid_conversion_error import InvalidConversionError
 from numdaplot.errors.value_conversion_error import ValueConversionError
-from numdaplot.tables.columns.converted_column import convert_column
+from numdaplot.tables.columns.conversion import Conversion
+from numdaplot.tables.columns.converted_column import convert_column, require_conversion_settings
 from numdaplot.tables.columns.number_conversion import (
 	convert_numbers,
 	find_lost_values,
@@ -24,6 +30,8 @@ from numdaplot.tables.columns.number_conversion import (
 )
 from numdaplot.tables.columns.text_conversion import parse_booleans
 from numdaplot.tables.frames.column import Column
+from numdaplot.tables.frames.column_values import find_column_type
+from numdaplot.tables.frames.time_zones import find_column_time_zone
 
 INTEGERS = pandas.Series([1, None, 3], dtype="Int64")
 EXPECTED_DECIMALS = [1.0, None, 3.0]
@@ -43,6 +51,36 @@ FRACTIONAL_VALUE = 2.5
 LARGE_INTEGERS = pandas.Series([300], dtype="Int64")
 LARGE_VALUE = 300
 NUMBER_TEXTS = pandas.Series(["12", "abc"], dtype="string")
+CONVERTED_NAME = "value"
+UTC_ZONE = TimeZone("UTC")
+ATTRIBUTE_UTC = TimeZoneChange(mode=TimeZoneMode.ATTRIBUTE, zone=UTC_ZONE)
+DATE_TEXTS = pandas.Series(["2026-01-31"], dtype="string")
+DATETIMES = pandas.Series(numpy.array(["2026-01-31T10:30"], dtype="datetime64[ns]"))
+DURATIONS = pandas.Series(numpy.array([36], dtype="timedelta64[h]").astype("timedelta64[ns]"))
+REJECTED_SETTINGS = [
+	Conversion(column=CONVERTED_NAME, dtype=Type.INT64, format=DateFormat.DAY_MONTH_YEAR),
+	Conversion(column=CONVERTED_NAME, dtype=Type.DATE, format=DateFormat.DAY_MONTH_YEAR_TIME),
+	Conversion(column=CONVERTED_NAME, dtype=Type.DATETIME, timezone=ATTRIBUTE_UTC),
+]
+FORMAT_AND_ZONE = Conversion(
+	column=CONVERTED_NAME,
+	dtype=Type.DATETIME,
+	format=DateFormat.YEAR_MONTH_DAY_TIME,
+	timezone=ATTRIBUTE_UTC,
+)
+ACCEPTED_SETTINGS = [
+	Conversion(column=CONVERTED_NAME, dtype=Type.DATE, format=DateFormat.DAY_MONTH_YEAR),
+	Conversion(column=CONVERTED_NAME, dtype=Type.DATETIME, format=DateFormat.DAY_MONTH_YEAR),
+	Conversion(column=CONVERTED_NAME, dtype=Type.DATETIME, format=DateFormat.DAY_MONTH_YEAR_TIME),
+]
+TIME_CONVERSIONS = [
+	(DATES, Type.TEXT),
+	(DATES, Type.CATEGORY),
+	(DATES, Type.DATETIME),
+	(DATETIMES, Type.DATE),
+	(DURATIONS, Type.TEXT),
+	(DURATIONS, Type.CATEGORY),
+]
 REJECTED_TEXT = "abc"
 DECIMAL_TEXTS = pandas.Series(["2.5"], dtype="string")
 REJECTED_DECIMAL_TEXT = "2.5"
@@ -57,6 +95,30 @@ EXPECTED_OVERFLOW = [True]
 FAILED_VALUES = numpy.array(["12", "abc"])
 FAILED_MASK = numpy.array([False, True])
 NO_FAILURE = numpy.array([False, False])
+
+
+def convert_to(column: Column, target_type: Type) -> Column:
+	"""
+	Return a column converted to a type, without format nor time zone change.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	column
+		The column to convert.
+	target_type
+		Its new type.
+
+	Returns
+	-------
+	Column
+		The converted column.
+	"""
+	conversion = Conversion(column=CONVERTED_NAME, dtype=target_type)
+	converted_column = convert_column(column, conversion)
+
+	return converted_column
 
 
 def read_values(column: Column) -> list[Any]:
@@ -89,7 +151,7 @@ def test_convert_column_converts_integers_to_decimals() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	column = convert_column(INTEGERS, Type.FLOAT64)
+	column = convert_to(INTEGERS, Type.FLOAT64)
 
 	values = read_values(column)
 	assert values == EXPECTED_DECIMALS
@@ -115,7 +177,7 @@ def test_convert_column_writes_numbers_and_booleans_as_texts(column: Column, exp
 	expected_texts
 		Its texts.
 	"""
-	text_column = convert_column(column, Type.TEXT)
+	text_column = convert_to(column, Type.TEXT)
 
 	texts = text_column.tolist()
 	assert texts == expected_texts
@@ -127,7 +189,7 @@ def test_convert_column_makes_categories_of_numbers() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	category_column = convert_column(INTEGERS, Type.CATEGORY)
+	category_column = convert_to(INTEGERS, Type.CATEGORY)
 
 	dtype_name = str(category_column.dtype)
 	assert dtype_name == CATEGORY_DTYPE_NAME
@@ -139,7 +201,7 @@ def test_convert_column_reads_texts_as_integers() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	column = convert_column(TEXT_INTEGERS, Type.INT64)
+	column = convert_to(TEXT_INTEGERS, Type.INT64)
 
 	values = column.tolist()
 	assert values == EXPECTED_PARSED_INTEGERS
@@ -151,7 +213,7 @@ def test_convert_column_reads_texts_as_booleans() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	column = convert_column(TEXT_BOOLEANS, Type.BOOL)
+	column = convert_to(TEXT_BOOLEANS, Type.BOOL)
 
 	values = column.tolist()
 	assert values == EXPECTED_PARSED_BOOLEANS
@@ -163,7 +225,7 @@ def test_convert_column_copies_a_column_of_the_same_type() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	column = convert_column(INTEGERS, Type.INT64)
+	column = convert_to(INTEGERS, Type.INT64)
 
 	assert column is not INTEGERS
 
@@ -173,13 +235,13 @@ def test_convert_column_copies_a_column_of_the_same_type() -> None:
 	[
 		(BOOLEANS, Type.INT64),
 		(INTEGERS, Type.BOOL),
-		(DATES, Type.TEXT),
-		(TEXT_INTEGERS, Type.DATE),
+		(DATES, Type.BOOL),
+		(INTEGERS, Type.DATE),
 	],
 )
 def test_convert_column_rejects_a_conversion_that_is_not_accepted(column: Column, target_type: Type) -> None:
 	"""
-	Check that booleans to numbers, numbers to booleans and date conversions raise IncompatibleTypesError.
+	Check that conversions between booleans and numbers, of dates to booleans and of numbers to dates raise.
 
 	.. versionadded:: 0.1.0
 
@@ -191,7 +253,7 @@ def test_convert_column_rejects_a_conversion_that_is_not_accepted(column: Column
 		The refused type.
 	"""
 	with pytest.raises(IncompatibleTypesError):
-		convert_column(column, target_type)
+		convert_to(column, target_type)
 
 
 def test_convert_numbers_stores_whole_decimals_as_integers() -> None:
@@ -343,3 +405,90 @@ def test_require_no_failed_value_names_the_first_failure() -> None:
 
 	error = error_info.value
 	assert error.rejected_value == REJECTED_TEXT
+
+
+@pytest.mark.parametrize("conversion", REJECTED_SETTINGS)
+def test_require_conversion_settings_rejects_a_setting_that_does_not_apply(conversion: Conversion) -> None:
+	"""
+	Check formats and time zone changes given to conversions they do not apply to.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	conversion
+		A conversion with a setting that does not apply to its types, the column being TEXT.
+	"""
+	with pytest.raises(InvalidConversionError):
+		require_conversion_settings(Type.TEXT, conversion)
+
+
+def test_require_conversion_settings_rejects_a_format_on_datetimes_changing_zone() -> None:
+	"""
+	Check that a format next to a time zone change raises InvalidConversionError.
+
+	.. versionadded:: 0.1.0
+	"""
+	with pytest.raises(InvalidConversionError):
+		require_conversion_settings(Type.DATETIME, FORMAT_AND_ZONE)
+
+
+@pytest.mark.parametrize("conversion", ACCEPTED_SETTINGS)
+def test_require_conversion_settings_accepts_formats_reading_or_writing_dates(conversion: Conversion) -> None:
+	"""
+	Check formats reading texts as dates.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	conversion
+		A conversion of texts with a fitting format.
+	"""
+	require_conversion_settings(Type.TEXT, conversion)
+
+
+def test_convert_column_reads_texts_as_dates_by_default() -> None:
+	"""
+	Check that texts become dates read year, month, day without format.
+
+	.. versionadded:: 0.1.0
+	"""
+	dates = convert_to(DATE_TEXTS, Type.DATE)
+
+	date_type = find_column_type(dates)
+	assert date_type == Type.DATE
+
+
+@pytest.mark.parametrize(("column", "target_type"), TIME_CONVERSIONS)
+def test_convert_column_converts_dates_datetimes_and_durations(column: Column, target_type: Type) -> None:
+	"""
+	Check dates to texts, categories and datetimes, and durations to texts.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	column
+		The column to convert.
+	target_type
+		Its new type.
+	"""
+	converted_column = convert_to(column, target_type)
+
+	converted_type = find_column_type(converted_column)
+	assert converted_type == target_type
+
+
+def test_convert_column_changes_the_time_zone() -> None:
+	"""
+	Check that a time zone change gives a column in the zone.
+
+	.. versionadded:: 0.1.0
+	"""
+	conversion = Conversion(column=CONVERTED_NAME, dtype=Type.DATETIME, timezone=ATTRIBUTE_UTC)
+
+	zone_column = convert_column(DATETIMES, conversion)
+
+	time_zone = find_column_time_zone(zone_column)
+	assert time_zone == UTC_ZONE

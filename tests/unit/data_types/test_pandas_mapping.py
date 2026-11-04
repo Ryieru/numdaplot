@@ -26,6 +26,9 @@ NULLABLE_TYPES = [
 	Type.TEXT,
 ]
 SAMPLE_SIZE = 2
+PARIS_DTYPE = pandas.DatetimeTZDtype("ns", "Europe/Paris")
+SECOND_UTC_TIMES = pandas.Series(pandas.to_datetime(["2026-07-01 10:30"])).dt.tz_localize("UTC")
+SECOND_ZONE_DTYPE = SECOND_UTC_TIMES.dt.as_unit("s").dtype
 
 
 def test_to_pandas_dtype_converts_int64_to_nullable_integers() -> None:
@@ -132,3 +135,24 @@ def test_from_pandas_dtype_rejects_a_dtype_that_stores_no_column() -> None:
 
 	with pytest.raises(UnsupportedTypeError):
 		from_pandas_dtype(object_dtype)
+
+
+def test_from_pandas_dtype_reads_nanosecond_datetimes_with_a_zone_as_datetimes() -> None:
+	"""
+	Check that a stored datetime column with a time zone is a DATETIME column.
+
+	.. versionadded:: 0.1.0
+	"""
+	column_type = from_pandas_dtype(PARIS_DTYPE)
+
+	assert column_type == Type.DATETIME
+
+
+def test_from_pandas_dtype_rejects_datetimes_with_a_zone_in_another_unit() -> None:
+	"""
+	Check that a zone column not counted in nanoseconds is not a stored column.
+
+	.. versionadded:: 0.1.0
+	"""
+	with pytest.raises(UnsupportedTypeError):
+		from_pandas_dtype(SECOND_ZONE_DTYPE)

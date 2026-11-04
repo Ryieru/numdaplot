@@ -9,6 +9,7 @@ import pandas
 import pytest
 
 from numdaplot.data_types.value_family import ValueFamily
+from numdaplot.dates.time_zone import TimeZone
 from numdaplot.errors.column_not_found_error import ColumnNotFoundError
 from numdaplot.errors.duplicate_column_error import DuplicateColumnError
 from numdaplot.statistics.count import Count
@@ -42,6 +43,9 @@ EXPECTED_NUMBER_RESULTS = [2.0, 20.0]
 TEXTS = numpy.array(["a"], dtype="T")
 NUMBER = numpy.array([2])
 EXPECTED_TEXT = ["2"]
+UTC_RESULT = numpy.array(["2026-07-01T08:30"], dtype="datetime64[ns]")
+PARIS = TimeZone("Europe/Paris")
+EXPECTED_PARIS_TEXT = ["2026-07-01 10:30:00+02:00"]
 
 
 def test_describe_frame_describes_every_number_column_by_default() -> None:
@@ -150,8 +154,8 @@ def test_convert_result_to_text_writes_the_value() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	text_result = convert_result_to_text(NUMBER)
-	no_result = convert_result_to_text(None)
+	text_result = convert_result_to_text(NUMBER, None)
+	no_result = convert_result_to_text(None, None)
 
 	assert text_result is not None
 	text_list = text_result.tolist()
@@ -168,3 +172,16 @@ def test_find_result_family_reads_the_family_of_the_type() -> None:
 	result_family = find_result_family(NUMBER)
 
 	assert result_family == ValueFamily.NUMBER
+
+
+def test_convert_result_to_text_writes_a_datetime_in_the_zone_of_its_column() -> None:
+	"""
+	Check that a UTC result of a Paris column is written in Paris time with its offset.
+
+	.. versionadded:: 0.1.0
+	"""
+	text_result = convert_result_to_text(UTC_RESULT, PARIS)
+
+	assert text_result is not None
+	text_list = text_result.tolist()
+	assert text_list == EXPECTED_PARIS_TEXT

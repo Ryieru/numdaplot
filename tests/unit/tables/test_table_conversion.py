@@ -4,6 +4,9 @@ Unit tests of TableConversion.
 .. versionadded:: 0.1.0
 """
 
+from datetime import datetime
+from zoneinfo import ZoneInfo
+
 import pandas
 import pytest
 
@@ -12,6 +15,7 @@ from numdaplot.arrays.equality import Equality
 from numdaplot.arrays.type_match import TypeMatch
 from numdaplot.data_types.type import Type
 from numdaplot.errors.not_single_value_error import NotSingleValueError
+from numdaplot.errors.time_zone_mismatch_error import TimeZoneMismatchError
 from numdaplot.errors.unsupported_operand_error import UnsupportedOperandError
 from numdaplot.tables import table_conversion
 from numdaplot.tables.table import Table
@@ -30,6 +34,12 @@ EXPECTED_VALUE_COUNT = 2
 FAKE_TEXT = "fake table text"
 FORMAT_TABLE_NAME = "format_table"
 ARE_FRAMES_EQUAL_NAME = "are_frames_equal"
+PARIS_TIMES = (
+	pandas.Series(pandas.to_datetime(["2026-07-01 10:30"])).astype("datetime64[ns]").dt.tz_localize("Europe/Paris")
+)
+TIME_FRAME = pandas.DataFrame({"time": PARIS_TIMES})
+EXPECTED_PARIS_TIME = datetime(2026, 7, 1, 10, 30, tzinfo=ZoneInfo("Europe/Paris"))
+TIME_COLUMN = "time"
 
 
 class EqualityRecorder:
@@ -242,3 +252,29 @@ def test_repr_gives_the_text_of_the_table(monkeypatch: pytest.MonkeyPatch) -> No
 	table_text = repr(table)
 
 	assert table_text == FAKE_TEXT
+
+
+def test_to_value_keeps_the_time_zone_of_a_datetime() -> None:
+	"""
+	Check that the single datetime of a zone column keeps its zone.
+
+	.. versionadded:: 0.1.0
+	"""
+	table = TableConversion(TIME_FRAME)
+
+	single_value = table.to_value()
+
+	assert single_value == EXPECTED_PARIS_TIME
+	assert single_value.tzinfo is not None
+
+
+def test_column_rejects_a_datetime_column_with_a_time_zone() -> None:
+	"""
+	Check that a zone column cannot become an Array.
+
+	.. versionadded:: 0.1.0
+	"""
+	table = TableConversion(TIME_FRAME)
+
+	with pytest.raises(TimeZoneMismatchError):
+		table.column(TIME_COLUMN)

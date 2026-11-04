@@ -9,6 +9,7 @@ from typing import Any
 import numpy
 from numpy.typing import NDArray
 
+from numdaplot.arrays.operations.operand import convert_time_value
 from numdaplot.arrays.operations.type_requirements import require_comparable, require_family
 from numdaplot.arrays.selection.missing_mask import find_missing
 from numdaplot.data_types.value_family import ValueFamily
@@ -56,7 +57,8 @@ def build_membership_mask(values: NDArray[Any], rule: IsIn[Any]) -> NDArray[nump
 	first_accepted_value = rule.values[0]
 	require_comparable(values, first_accepted_value, IS_IN_NAME)
 
-	matches = numpy.isin(values, rule.values)
+	accepted_values = [convert_time_value(accepted_value) for accepted_value in rule.values]
+	matches = numpy.isin(values, accepted_values)
 	missing = find_missing(values)
 	present = ~missing
 	mask = matches & present

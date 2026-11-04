@@ -22,6 +22,10 @@ MOVED_MISSING = pandas.Series([None, 1.5])
 TEXTS = pandas.Series(["1.5", None], dtype="string")
 TEXT_CATEGORIES = pandas.Series(["a", "b"], dtype="category")
 TEXTS_OF_CATEGORIES = pandas.Series(["a", "b"], dtype="string")
+PARIS_TIMES = (
+	pandas.Series(pandas.to_datetime(["2026-07-01 10:30"])).astype("datetime64[ns]").dt.tz_localize("Europe/Paris")
+)
+UTC_TIMES = PARIS_TIMES.dt.tz_convert("UTC")
 
 
 def test_are_frames_equal_ignores_the_types_by_default() -> None:
@@ -132,3 +136,16 @@ def test_are_columns_equal_matches_categories_and_texts_of_the_same_values() -> 
 	is_equal = are_columns_equal(TEXT_CATEGORIES, TEXTS_OF_CATEGORIES, TypeMatch.IGNORED)
 
 	assert is_equal
+
+
+def test_are_columns_equal_tells_apart_two_zones_for_the_same_instants() -> None:
+	"""
+	Check that the same instants in two zones are different, and equal in the same zone.
+
+	.. versionadded:: 0.1.0
+	"""
+	different_zones = are_columns_equal(PARIS_TIMES, UTC_TIMES, TypeMatch.STRICT)
+	same_zone = are_columns_equal(PARIS_TIMES, PARIS_TIMES, TypeMatch.STRICT)
+
+	assert not different_zones
+	assert same_zone

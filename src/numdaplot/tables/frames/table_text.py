@@ -7,6 +7,7 @@ Text of a Table, with the type of each column under its name.
 import pandas
 
 from numdaplot.tables.frames.column_values import find_column_type
+from numdaplot.tables.frames.time_zones import name_column_type
 
 
 def build_typed_frame(frame: pandas.DataFrame) -> pandas.DataFrame:
@@ -23,7 +24,8 @@ def build_typed_frame(frame: pandas.DataFrame) -> pandas.DataFrame:
 	Returns
 	-------
 	pandas.DataFrame
-		A copy with a two-level header: the column names, then the names of their ``ndp.Type``.
+		A copy with a two-level header: the column names, then the names of their ``ndp.Type``, followed by
+		the time zone of a datetime column that has one.
 
 	Examples
 	--------
@@ -38,7 +40,8 @@ def build_typed_frame(frame: pandas.DataFrame) -> pandas.DataFrame:
 	for column_name in column_names:
 		column = frame[column_name]
 		column_type = find_column_type(column)
-		type_names.append(column_type.name)
+		type_name = name_column_type(column, column_type)
+		type_names.append(type_name)
 
 	header = pandas.MultiIndex.from_arrays([column_names, type_names])
 	typed_frame = frame.copy()

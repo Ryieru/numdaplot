@@ -4,6 +4,8 @@ Unit tests of build_membership_mask and build_contains_mask.
 .. versionadded:: 0.1.0
 """
 
+from datetime import date, datetime
+
 import numpy
 import pytest
 
@@ -27,6 +29,9 @@ IGNORED_CASE_RULE = Contains("par", case=Case.IGNORED)
 EXPECTED_SENSITIVE_MASK = [True, False, False]
 EXPECTED_IGNORED_CASE_MASK = [True, False, True]
 INTEGERS = [1, 2]
+DATETIMES = numpy.array(["2026-07-01T08:30", "NaT"], dtype="datetime64[ns]")
+ACCEPTED_MOMENTS = IsIn([datetime(2026, 7, 1, 8, 30), date(2026, 1, 1)])
+EXPECTED_MOMENT_MATCHES = [True, False]
 
 
 def test_build_membership_mask_keeps_accepted_values() -> None:
@@ -107,3 +112,15 @@ def test_build_contains_mask_rejects_numbers() -> None:
 
 	with pytest.raises(IncompatibleTypesError):
 		build_contains_mask(integers, SENSITIVE_RULE)
+
+
+def test_build_membership_mask_finds_datetimes() -> None:
+	"""
+	Check that a datetime of the list matches the same datetime, and a missing value matches nothing.
+
+	.. versionadded:: 0.1.0
+	"""
+	mask = build_membership_mask(DATETIMES, ACCEPTED_MOMENTS)
+
+	matches = mask.tolist()
+	assert matches == EXPECTED_MOMENT_MATCHES
