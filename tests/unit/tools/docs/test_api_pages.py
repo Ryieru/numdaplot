@@ -10,16 +10,16 @@ from typing import Any
 
 import pytest
 from api_pages import (
-	PublicClass,
+	PublicObject,
 	build_api_nav,
 	build_member_block,
 	build_page_content,
 	find_page_path,
-	find_public_classes,
+	find_public_objects,
 	find_section,
 	on_config,
 	on_files,
-	order_public_class,
+	order_public_object,
 )
 from mkdocs.structure.files import Files
 
@@ -27,16 +27,16 @@ import numdaplot
 
 RULES_MODULE = "numdaplot.rules.greater"
 FILES_MODULE = "numdaplot.tables.files.csv_options"
-UNKNOWN_MODULE = "numdaplot.plots.chart"
+UNKNOWN_MODULE = "numdaplot.reports.report"
 EXPECTED_FILE_GROUP = "File settings"
 TABLES_TITLE = "Tables"
 GREATER_SECTION = find_section(RULES_MODULE)
-GREATER = PublicClass("Greater", "numdaplot.rules.greater.Greater", GREATER_SECTION)
-RULE = PublicClass("Rule", "numdaplot.rules.rule.Rule", GREATER_SECTION)
+GREATER = PublicObject("Greater", "numdaplot.rules.greater.Greater", GREATER_SECTION)
+RULE = PublicObject("Rule", "numdaplot.rules.rule.Rule", GREATER_SECTION)
 TABLE_SECTION = find_section("numdaplot.tables.table")
-TABLE = PublicClass("Table", "numdaplot.tables.table.Table", TABLE_SECTION)
+TABLE = PublicObject("Table", "numdaplot.tables.table.Table", TABLE_SECTION)
 CSV_SECTION = find_section(FILES_MODULE)
-CSV_OPTIONS = PublicClass("CsvOptions", "numdaplot.tables.files.csv_options.CsvOptions", CSV_SECTION)
+CSV_OPTIONS = PublicObject("CsvOptions", "numdaplot.tables.files.csv_options.CsvOptions", CSV_SECTION)
 EXPECTED_GREATER_PATH = "api/rules/greater.md"
 EXPECTED_GREATER_PAGE = "::: numdaplot.rules.greater.Greater\n    options:\n      heading_level: 1\n"
 TABLE_SECTION_TITLE = "## Reading files { .api-section }"
@@ -80,29 +80,29 @@ def test_find_section_rejects_a_module_without_section() -> None:
 		find_section(UNKNOWN_MODULE)
 
 
-def test_find_public_classes_gives_every_public_name() -> None:
+def test_find_public_objects_gives_every_public_name() -> None:
 	"""
 	Check that every name of ndp.__all__ gets a page, Array first.
 
 	.. versionadded:: 0.1.0
 	"""
-	public_classes = find_public_classes()
+	public_objects = find_public_objects()
 
-	names = [public_class.name for public_class in public_classes]
+	names = [public_object.name for public_object in public_objects]
 	sorted_names = sorted(names)
 	sorted_public_names = sorted(numdaplot.__all__)
 	assert sorted_names == sorted_public_names
 	assert names[0] == FIRST_PUBLIC_NAME
 
 
-def test_order_public_class_puts_the_main_classes_first() -> None:
+def test_order_public_object_puts_the_main_classes_first() -> None:
 	"""
 	Check that Rule comes before Greater although it comes after it alphabetically.
 
 	.. versionadded:: 0.1.0
 	"""
-	rule_key = order_public_class(RULE)
-	greater_key = order_public_class(GREATER)
+	rule_key = order_public_object(RULE)
+	greater_key = order_public_object(GREATER)
 
 	assert rule_key < greater_key
 
@@ -188,7 +188,7 @@ def test_on_config_places_the_api_after_the_home_page() -> None:
 	assert navigation[2] == CHANGELOG_ENTRY
 
 
-def test_on_files_adds_one_page_per_public_class(tmp_path: Path) -> None:
+def test_on_files_adds_one_page_per_public_object(tmp_path: Path) -> None:
 	"""
 	Check that a generated page exists for Greater, with its content.
 

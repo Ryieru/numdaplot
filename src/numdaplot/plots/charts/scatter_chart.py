@@ -1,0 +1,94 @@
+"""
+Chart drawing each row as a point.
+
+.. versionadded:: 0.1.0
+"""
+
+from dataclasses import dataclass
+
+from numdaplot.errors.conflicting_settings_error import ConflictingSettingsError
+from numdaplot.errors.refused_setting_error import RefusedSettingError
+from numdaplot.plots.charts.chart import Chart
+from numdaplot.plots.charts.marker_shape import MarkerShape
+from numdaplot.plots.style.color import Color
+from numdaplot.plots.style.custom_color import CustomColor
+
+CHART_NAME = "ScatterChart"
+COLOR_SETTING = "color"
+COLOR_BY_SETTING = "color_by"
+NO_MARKER_NAME = "MarkerShape.NONE"
+
+
+@dataclass(frozen=True)
+class ScatterChart(Chart):
+	"""
+	Chart drawing each row as a point, used by ``plot_scatter``.
+
+	A row with a missing value in one of the columns used is not drawn.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	x
+		For a Table, the column of the horizontal positions: numbers, dates, datetimes or texts, the row
+		numbers when omitted. An Array takes none, its rows being numbered.
+	y
+		For a Table, the column of the vertical positions, holding numbers. A Table needs it. An Array takes
+		none, each of its columns being a series of points.
+	color
+		The color of every point, the first color of the default cycle when omitted. With an Array of
+		several columns, the series take the colors of the default cycle and ``color`` is refused.
+	color_by
+		For a Table, the column coloring each point: numbers give a color scale shown next to the axes,
+		texts give one color per value, named in the legend.
+	size_by
+		For a Table, the column of numbers sizing each point, from the smallest to the largest value.
+	marker
+		The shape of the points, ``MarkerShape.CIRCLE`` by default.
+
+	Raises
+	------
+	ConflictingSettingsError
+		When ``color`` and ``color_by`` are both given.
+	RefusedSettingError
+		When ``marker`` is ``MarkerShape.NONE``, which would draw nothing.
+
+	Examples
+	--------
+	>>> import numdaplot as ndp
+	>>> surfaces = ndp.Array.from_list([30.0, 45.0, 60.0, 80.0, 52.0])
+	>>> prices = ndp.Array.from_list([150.0, 210.0, 260.0, 330.0, 190.0])
+	>>> cities = ndp.Array.from_list(["Paris", "Paris", "Lyon", "Lyon", "Pau"])
+	>>> flats = ndp.Table.from_arrays({"surface": surfaces, "price": prices, "city": cities})
+	>>> chart = ndp.ScatterChart(x="surface", y="price", color_by="city", size_by="surface")
+	>>> plot = ndp.plot_scatter(flats, chart)
+	>>> plot.show()
+	"""
+
+	x: str | None = None
+	y: str | None = None
+	color: Color | CustomColor | None = None
+	color_by: str | None = None
+	size_by: str | None = None
+	marker: MarkerShape = MarkerShape.CIRCLE
+
+	def __post_init__(self) -> None:
+		"""
+		Check that the color settings exclude each other and that the points have a marker.
+
+		.. versionadded:: 0.1.0
+
+		Raises
+		------
+		ConflictingSettingsError
+			When ``color`` and ``color_by`` are both given.
+		RefusedSettingError
+			When ``marker`` is ``MarkerShape.NONE``.
+		"""
+		has_both_colors = self.color is not None and self.color_by is not None
+		if has_both_colors:
+			raise ConflictingSettingsError(COLOR_SETTING, COLOR_BY_SETTING)
+
+		if self.marker == MarkerShape.NONE:
+			raise RefusedSettingError(NO_MARKER_NAME, CHART_NAME)

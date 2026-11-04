@@ -17,6 +17,9 @@
 	--api-first-object-top-margin: 1.2em;
 	--api-section-bottom-padding: 0.2em;
 	--api-section-border-width: 1px;
+	--plot-image-radius: 6px;
+	--plot-image-width: 36rem;
+	--plot-image-margin: 0.8em 0 1.2em;
 }
 
 .md-typeset .doc-heading {
@@ -206,4 +209,13 @@
 
 .md-typeset .doc-section-item > code a.autorefs[title*=" = "] {
 	color: var(--doc-symbol-attribute-fg-color);
+}
+
+.md-typeset img.plot-image {
+	display: block;
+	width: 100%;
+	max-width: var(--plot-image-width);
+	margin: var(--plot-image-margin);
+	border: var(--api-object-rule-width) solid var(--md-default-fg-color--lightest);
+	border-radius: var(--plot-image-radius);
 }

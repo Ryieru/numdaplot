@@ -1,8 +1,8 @@
 """
-MkDocs hook generating one API page per public class of numdaplot, and the navigation between them.
+MkDocs hook generating one API page per public class or function of numdaplot, and the navigation between them.
 
 Every name of ``ndp.__all__`` gets a page made at build time, so no page is written by hand and a new
-public class appears in the documentation on its own. The pages of ``Array`` and ``Table`` list their
+public class or function appears in the documentation on its own. The pages of ``Array`` and ``Table`` list their
 methods in sections, such as "Creation". The navigation groups the pages by section, such as "Rules",
 then by settings family, such as "File settings", and is placed after the home page.
 
@@ -31,14 +31,25 @@ ATTRIBUTE_OPTIONS = "      show_signature_annotations: true\n"
 SECTION_TITLE = "## {title} {{ .api-section }}\n"
 BLOCK_SEPARATOR = "\n"
 FIRST_CLASSES = frozenset(
-	{"Array", "Table", "Rule", "Statistic", "NumdaplotError", "MathFunction", "Distribution", "TimeFunction"}
+	{
+		"Array",
+		"Table",
+		"Rule",
+		"Statistic",
+		"NumdaplotError",
+		"MathFunction",
+		"Distribution",
+		"TimeFunction",
+		"Plot",
+		"Chart",
+	}
 )
 
 
 @dataclass(frozen=True)
 class Section:
 	"""
-	Where the classes of a module family are placed in the navigation.
+	Where the classes and functions of a module family are placed in the navigation.
 
 	.. versionadded:: 0.1.0
 
@@ -61,9 +72,9 @@ class Section:
 
 
 @dataclass(frozen=True)
-class PublicClass:
+class PublicObject:
 	"""
-	A public class of numdaplot and the page documenting it.
+	A public class or function of numdaplot and the page documenting it.
 
 	.. versionadded:: 0.1.0
 
@@ -72,9 +83,9 @@ class PublicClass:
 	name
 		The public name, such as ``Greater``.
 	identifier
-		The path of the class, such as ``numdaplot.rules.greater.Greater``.
+		The path of the object, such as ``numdaplot.rules.greater.Greater``.
 	section
-		Where the class is placed in the navigation.
+		Where the object is placed in the navigation.
 	"""
 
 	name: str
@@ -105,6 +116,9 @@ SECTIONS = (
 	Section("numdaplot.statistics", "Statistics", "statistics"),
 	Section("numdaplot.positions", "Positions", "positions"),
 	Section("numdaplot.ordering", "Sort settings", "ordering"),
+	Section("numdaplot.plots.charts", "Plots", "plots", "Chart settings"),
+	Section("numdaplot.plots.style", "Plots", "plots", "Style settings"),
+	Section("numdaplot.plots", "Plots", "plots"),
 	Section("numdaplot.errors", "Errors", "errors"),
 )
 SECTION_TITLES = tuple(dict.fromkeys(section.title for section in SECTIONS))
@@ -149,14 +163,14 @@ MEMBER_SECTIONS = {
 
 def find_section(module_name: str) -> Section:
 	"""
-	Return the section of the navigation where the classes of a module are placed.
+	Return the section of the navigation where the classes and functions of a module are placed.
 
 	.. versionadded:: 0.1.0
 
 	Parameters
 	----------
 	module_name
-		The module defining a public class, such as ``numdaplot.rules.greater``.
+		The module defining a public class or function, such as ``numdaplot.rules.greater``.
 
 	Returns
 	-------
@@ -184,52 +198,53 @@ def find_section(module_name: str) -> Section:
 	raise KeyError(module_name)
 
 
-def find_public_classes() -> list[PublicClass]:
+def find_public_objects() -> list[PublicObject]:
 	"""
-	Return every public class of numdaplot, each with its section, in the order of the navigation.
+	Return every public class and function of numdaplot, each with its section, in the order of the navigation.
 
 	.. versionadded:: 0.1.0
 
 	Returns
 	-------
-	list[PublicClass]
-		The classes by section, then by group, the main and base classes such as ``Array`` or ``Rule``
+	list[PublicObject]
+		The objects by section, then by group, the main and base classes such as ``Array`` or ``Rule``
 		first, the others in alphabetical order.
 
 	Examples
 	--------
-	>>> from api_pages import find_public_classes
-	>>> find_public_classes()[0].name
+	>>> from api_pages import find_public_objects
+	>>> find_public_objects()[0].name
 	'Array'
 	"""
-	public_classes = list[PublicClass]()
+	public_objects = list[PublicObject]()
 
 	for name in numdaplot.__all__:
-		public_object = getattr(numdaplot, name)
-		if not inspect.isclass(public_object):
+		exported_object = getattr(numdaplot, name)
+		is_documented = inspect.isclass(exported_object) or inspect.isfunction(exported_object)
+		if not is_documented:
 			continue
 
-		module_name = public_object.__module__
+		module_name = exported_object.__module__
 		section = find_section(module_name)
 		identifier = module_name + PATH_SEPARATOR + name
-		public_class = PublicClass(name, identifier, section)
-		public_classes.append(public_class)
+		public_object = PublicObject(name, identifier, section)
+		public_objects.append(public_object)
 
-	public_classes.sort(key=order_public_class)
+	public_objects.sort(key=order_public_object)
 
-	return public_classes
+	return public_objects
 
 
-def order_public_class(public_class: PublicClass) -> tuple[int, int, bool, str]:
+def order_public_object(public_object: PublicObject) -> tuple[int, int, bool, str]:
 	"""
-	Return the sort key of a public class in the navigation.
+	Return the sort key of a public class or function in the navigation.
 
 	.. versionadded:: 0.1.0
 
 	Parameters
 	----------
-	public_class
-		A public class.
+	public_object
+		A public class or function.
 
 	Returns
 	-------
@@ -239,88 +254,90 @@ def order_public_class(public_class: PublicClass) -> tuple[int, int, bool, str]:
 
 	Examples
 	--------
-	>>> from api_pages import PublicClass, find_section, order_public_class
+	>>> from api_pages import PublicObject, find_section, order_public_object
 	>>> rule_section = find_section("numdaplot.rules.rule")
-	>>> order_public_class(PublicClass("Rule", "numdaplot.rules.rule.Rule", rule_section))
+	>>> order_public_object(PublicObject("Rule", "numdaplot.rules.rule.Rule", rule_section))
 	(4, 0, False, 'Rule')
 	"""
-	section_position = SECTION_TITLES.index(public_class.section.title)
-	group_position = GROUP_ORDER.index(public_class.section.group)
-	is_secondary = public_class.name not in FIRST_CLASSES
-	sort_key = (section_position, group_position, is_secondary, public_class.name)
+	section_position = SECTION_TITLES.index(public_object.section.title)
+	group_position = GROUP_ORDER.index(public_object.section.group)
+	is_secondary = public_object.name not in FIRST_CLASSES
+	sort_key = (section_position, group_position, is_secondary, public_object.name)
 
 	return sort_key
 
 
-def find_page_path(public_class: PublicClass) -> str:
+def find_page_path(public_object: PublicObject) -> str:
 	"""
-	Return the path of the generated page of a public class.
+	Return the path of the generated page of a public class or function.
 
 	.. versionadded:: 0.1.0
 
 	Parameters
 	----------
-	public_class
-		A public class.
+	public_object
+		A public class or function.
 
 	Returns
 	-------
 	str
-		The path inside the documentation folder, named after the module of the class.
+		The path inside the documentation folder, named after the module of the object.
 
 	Examples
 	--------
-	>>> from api_pages import PublicClass, find_page_path, find_section
+	>>> from api_pages import PublicObject, find_page_path, find_section
 	>>> greater_section = find_section("numdaplot.rules.greater")
-	>>> find_page_path(PublicClass("Greater", "numdaplot.rules.greater.Greater", greater_section))
+	>>> find_page_path(PublicObject("Greater", "numdaplot.rules.greater.Greater", greater_section))
 	'api/rules/greater.md'
 	"""
-	module_path, _, _ = public_class.identifier.rpartition(PATH_SEPARATOR)
+	module_path, _, _ = public_object.identifier.rpartition(PATH_SEPARATOR)
 	_, _, module_name = module_path.rpartition(PATH_SEPARATOR)
-	page_path = PAGE_PATH.format(folder=API_FOLDER, section_folder=public_class.section.folder, module_name=module_name)
+	page_path = PAGE_PATH.format(
+		folder=API_FOLDER, section_folder=public_object.section.folder, module_name=module_name
+	)
 
 	return page_path
 
 
-def build_page_content(public_class: PublicClass) -> str:
+def build_page_content(public_object: PublicObject) -> str:
 	"""
-	Return the Markdown of the page of a public class.
+	Return the Markdown of the page of a public class or function.
 
 	.. versionadded:: 0.1.0
 
 	Parameters
 	----------
-	public_class
-		A public class.
+	public_object
+		A public class or function.
 
 	Returns
 	-------
 	str
-		The class as the title of the page. ``Array`` and ``Table`` then list their members in sections,
+		The object as the title of the page. ``Array`` and ``Table`` then list their members in sections,
 		attributes with their type.
 
 	Examples
 	--------
-	>>> from api_pages import PublicClass, build_page_content, find_section
+	>>> from api_pages import PublicObject, build_page_content, find_section
 	>>> greater_section = find_section("numdaplot.rules.greater")
-	>>> print(build_page_content(PublicClass("Greater", "numdaplot.rules.greater.Greater", greater_section)))
+	>>> print(build_page_content(PublicObject("Greater", "numdaplot.rules.greater.Greater", greater_section)))
 	::: numdaplot.rules.greater.Greater
 	options:
 	heading_level: 1
 	<BLANKLINE>
 	"""
-	class_block = CLASS_BLOCK.format(identifier=public_class.identifier, heading_level=PAGE_HEADING_LEVEL)
-	if public_class.name not in MEMBER_SECTIONS:
+	class_block = CLASS_BLOCK.format(identifier=public_object.identifier, heading_level=PAGE_HEADING_LEVEL)
+	if public_object.name not in MEMBER_SECTIONS:
 		return class_block
 
 	blocks = [class_block + MAIN_CLASS_OPTIONS]
 
-	for section_title, member_names in MEMBER_SECTIONS[public_class.name]:
+	for section_title, member_names in MEMBER_SECTIONS[public_object.name]:
 		section_heading = SECTION_TITLE.format(title=section_title)
 		blocks.append(section_heading)
 
 		for member_name in member_names:
-			member_block = build_member_block(public_class, member_name)
+			member_block = build_member_block(public_object, member_name)
 			blocks.append(member_block)
 
 	page_content = BLOCK_SEPARATOR.join(blocks)
@@ -328,7 +345,7 @@ def build_page_content(public_class: PublicClass) -> str:
 	return page_content
 
 
-def build_member_block(public_class: PublicClass, member_name: str) -> str:
+def build_member_block(public_object: PublicObject, member_name: str) -> str:
 	"""
 	Return the Markdown documenting one member of a class with sections.
 
@@ -336,7 +353,7 @@ def build_member_block(public_class: PublicClass, member_name: str) -> str:
 
 	Parameters
 	----------
-	public_class
+	public_object
 		``Array`` or ``Table``.
 	member_name
 		The name of a method or an attribute.
@@ -348,17 +365,17 @@ def build_member_block(public_class: PublicClass, member_name: str) -> str:
 
 	Examples
 	--------
-	>>> from api_pages import PublicClass, build_member_block, find_section
+	>>> from api_pages import PublicObject, build_member_block, find_section
 	>>> table_section = find_section("numdaplot.tables.table")
-	>>> print(build_member_block(PublicClass("Table", "numdaplot.tables.table.Table", table_section), "filter"))
+	>>> print(build_member_block(PublicObject("Table", "numdaplot.tables.table.Table", table_section), "filter"))
 	::: numdaplot.tables.table.Table.filter
 	options:
 	heading_level: 3
 	<BLANKLINE>
 	"""
-	member_identifier = public_class.identifier + PATH_SEPARATOR + member_name
+	member_identifier = public_object.identifier + PATH_SEPARATOR + member_name
 	member_block = CLASS_BLOCK.format(identifier=member_identifier, heading_level=MEMBER_HEADING_LEVEL)
-	class_object = getattr(numdaplot, public_class.name)
+	class_object = getattr(numdaplot, public_object.name)
 	member_object = inspect.getattr_static(class_object, member_name)
 	is_attribute = isinstance(member_object, property)
 	if is_attribute:
@@ -367,7 +384,7 @@ def build_member_block(public_class: PublicClass, member_name: str) -> str:
 	return member_block
 
 
-def build_api_nav(public_classes: list[PublicClass]) -> list[Any]:
+def build_api_nav(public_objects: list[PublicObject]) -> list[Any]:
 	"""
 	Return the navigation of the API pages, by section, then by group.
 
@@ -375,33 +392,33 @@ def build_api_nav(public_classes: list[PublicClass]) -> list[Any]:
 
 	Parameters
 	----------
-	public_classes
-		The public classes, in the order of the navigation.
+	public_objects
+		The public classes and functions, in the order of the navigation.
 
 	Returns
 	-------
 	list[Any]
-		One ``{section title: entries}`` item per section, each entry being ``{class name: page path}``
+		One ``{section title: entries}`` item per section, each entry being ``{name: page path}``
 		or ``{group title: entries}``, as MkDocs reads its ``nav`` setting.
 
 	Examples
 	--------
-	>>> from api_pages import build_api_nav, find_public_classes
-	>>> build_api_nav(find_public_classes())[0]["Arrays"][0]
+	>>> from api_pages import build_api_nav, find_public_objects
+	>>> build_api_nav(find_public_objects())[0]["Arrays"][0]
 	{'Array': 'api/arrays/array.md'}
 	"""
 	sections = dict[str, list[Any]]()
 	groups = dict[tuple[str, str], list[Any]]()
 
-	for public_class in public_classes:
-		section_entries = sections.setdefault(public_class.section.title, [])
-		page_entry = {public_class.name: find_page_path(public_class)}
-		group = public_class.section.group
+	for public_object in public_objects:
+		section_entries = sections.setdefault(public_object.section.title, [])
+		page_entry = {public_object.name: find_page_path(public_object)}
+		group = public_object.section.group
 		if group is None:
 			section_entries.append(page_entry)
 			continue
 
-		group_key = (public_class.section.title, group)
+		group_key = (public_object.section.title, group)
 		if group_key not in groups:
 			groups[group_key] = []
 			section_entries.append({group: groups[group_key]})
@@ -431,8 +448,8 @@ def on_config(config: Any, **kwargs: Any) -> Any:
 	Any
 		The configuration with the API section in its navigation.
 	"""
-	public_classes = find_public_classes()
-	api_nav = build_api_nav(public_classes)
+	public_objects = find_public_objects()
+	api_nav = build_api_nav(public_objects)
 	config[NAV_KEY].insert(HOME_POSITION, {API_TITLE: api_nav})
 
 	return config
@@ -456,13 +473,13 @@ def on_files(files: Files, config: Any, **kwargs: Any) -> Files:
 	Returns
 	-------
 	Files
-		The files with one generated page per public class.
+		The files with one generated page per public class or function.
 	"""
-	public_classes = find_public_classes()
+	public_objects = find_public_objects()
 
-	for public_class in public_classes:
-		page_path = find_page_path(public_class)
-		page_content = build_page_content(public_class)
+	for public_object in public_objects:
+		page_path = find_page_path(public_object)
+		page_content = build_page_content(public_object)
 		page_file = File.generated(config, page_path, content=page_content)
 		files.append(page_file)
 

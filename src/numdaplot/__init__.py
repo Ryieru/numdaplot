@@ -50,6 +50,7 @@ from numdaplot.dates.time_zone_mode import TimeZoneMode
 from numdaplot.dates.to_duration import ToDuration
 from numdaplot.errors.broadcast_warning import BroadcastWarning
 from numdaplot.errors.column_not_found_error import ColumnNotFoundError
+from numdaplot.errors.conflicting_settings_error import ConflictingSettingsError
 from numdaplot.errors.dimension_error import DimensionError
 from numdaplot.errors.duplicate_column_error import DuplicateColumnError
 from numdaplot.errors.empty_array_error import EmptyArrayError
@@ -61,6 +62,9 @@ from numdaplot.errors.file_not_found_error import FileNotFoundError
 from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
 from numdaplot.errors.invalid_base_error import InvalidBaseError
 from numdaplot.errors.invalid_bounds_error import InvalidBoundsError
+from numdaplot.errors.invalid_chart_data_error import InvalidChartDataError
+from numdaplot.errors.invalid_color_count_error import InvalidColorCountError
+from numdaplot.errors.invalid_color_error import InvalidColorError
 from numdaplot.errors.invalid_column_name_error import InvalidColumnNameError
 from numdaplot.errors.invalid_conversion_error import InvalidConversionError
 from numdaplot.errors.invalid_count_error import InvalidCountError
@@ -68,9 +72,11 @@ from numdaplot.errors.invalid_date_format_error import InvalidDateFormatError
 from numdaplot.errors.invalid_deviation_error import InvalidDeviationError
 from numdaplot.errors.invalid_fraction_error import InvalidFractionError
 from numdaplot.errors.invalid_position_error import InvalidPositionError
+from numdaplot.errors.invalid_resolution_error import InvalidResolutionError
 from numdaplot.errors.invalid_seed_error import InvalidSeedError
 from numdaplot.errors.invalid_separator_error import InvalidSeparatorError
 from numdaplot.errors.invalid_shape_error import InvalidShapeError
+from numdaplot.errors.invalid_size_error import InvalidSizeError
 from numdaplot.errors.invalid_step_error import InvalidStepError
 from numdaplot.errors.invalid_time_zone_change_error import InvalidTimeZoneChangeError
 from numdaplot.errors.irregular_list_error import IrregularListError
@@ -80,9 +86,11 @@ from numdaplot.errors.not_single_value_error import NotSingleValueError
 from numdaplot.errors.numdaplot_error import NumdaplotError
 from numdaplot.errors.out_of_domain_error import OutOfDomainError
 from numdaplot.errors.refused_operation_error import RefusedOperationError
+from numdaplot.errors.refused_setting_error import RefusedSettingError
 from numdaplot.errors.shape_mismatch_error import ShapeMismatchError
 from numdaplot.errors.time_zone_mismatch_error import TimeZoneMismatchError
 from numdaplot.errors.unknown_time_zone_error import UnknownTimeZoneError
+from numdaplot.errors.unsupported_image_format_error import UnsupportedImageFormatError
 from numdaplot.errors.unsupported_index_error import UnsupportedIndexError
 from numdaplot.errors.unsupported_missing_error import UnsupportedMissingError
 from numdaplot.errors.unsupported_operand_error import UnsupportedOperandError
@@ -90,6 +98,26 @@ from numdaplot.errors.unsupported_type_error import UnsupportedTypeError
 from numdaplot.errors.value_conversion_error import ValueConversionError
 from numdaplot.ordering.missing_position import MissingPosition
 from numdaplot.ordering.order import Order
+from numdaplot.plots.charts.bar_chart import BarChart
+from numdaplot.plots.charts.bar_layout import BarLayout
+from numdaplot.plots.charts.chart import Chart
+from numdaplot.plots.charts.line_chart import LineChart
+from numdaplot.plots.charts.line_type import LineType
+from numdaplot.plots.charts.marker_shape import MarkerShape
+from numdaplot.plots.charts.orientation import Orientation
+from numdaplot.plots.charts.scatter_chart import ScatterChart
+from numdaplot.plots.plot import Plot
+from numdaplot.plots.plot_bar import plot_bar
+from numdaplot.plots.plot_line import plot_line
+from numdaplot.plots.plot_scatter import plot_scatter
+from numdaplot.plots.style.color import Color
+from numdaplot.plots.style.custom_color import CustomColor
+from numdaplot.plots.style.grid_lines import GridLines
+from numdaplot.plots.style.image_options import ImageOptions
+from numdaplot.plots.style.legend_position import LegendPosition
+from numdaplot.plots.style.size import Size
+from numdaplot.plots.style.size_unit import SizeUnit
+from numdaplot.plots.style.style import Style
 from numdaplot.positions.axis import Axis
 from numdaplot.positions.index import Index
 from numdaplot.positions.range import Range
@@ -160,23 +188,29 @@ __all__ = [
 	"Array",
 	"ArraySorting",
 	"Axis",
+	"BarChart",
+	"BarLayout",
 	"Between",
 	"Bounds",
 	"BroadcastWarning",
 	"Calculation",
 	"Case",
+	"Chart",
+	"Color",
 	"ColumnChoice",
 	"ColumnMatch",
 	"ColumnMode",
 	"ColumnNotFoundError",
 	"Condition",
 	"Conflict",
+	"ConflictingSettingsError",
 	"Contains",
 	"Conversion",
 	"Cosine",
 	"Count",
 	"CountDistinct",
 	"CsvOptions",
+	"CustomColor",
 	"CustomDateFormat",
 	"DateFormat",
 	"DatePart",
@@ -204,10 +238,15 @@ __all__ = [
 	"FilterMode",
 	"Greater",
 	"GreaterOrEqual",
+	"GridLines",
+	"ImageOptions",
 	"IncompatibleTypesError",
 	"Index",
 	"InvalidBaseError",
 	"InvalidBoundsError",
+	"InvalidChartDataError",
+	"InvalidColorCountError",
+	"InvalidColorError",
 	"InvalidColumnNameError",
 	"InvalidConversionError",
 	"InvalidCountError",
@@ -215,9 +254,11 @@ __all__ = [
 	"InvalidDeviationError",
 	"InvalidFractionError",
 	"InvalidPositionError",
+	"InvalidResolutionError",
 	"InvalidSeedError",
 	"InvalidSeparatorError",
 	"InvalidShapeError",
+	"InvalidSizeError",
 	"InvalidStepError",
 	"InvalidTimeZoneChangeError",
 	"IrregularListError",
@@ -227,9 +268,13 @@ __all__ = [
 	"JsonLayout",
 	"JsonOptions",
 	"Keep",
+	"LegendPosition",
 	"Less",
 	"LessOrEqual",
+	"LineChart",
+	"LineType",
 	"Logarithm",
+	"MarkerShape",
 	"MathFunction",
 	"Max",
 	"Mean",
@@ -251,30 +296,37 @@ __all__ = [
 	"NotSingleValueError",
 	"NumdaplotError",
 	"Order",
+	"Orientation",
 	"OutOfDomainError",
 	"PeriodUnit",
+	"Plot",
 	"Preview",
 	"Quantile",
 	"RandomIntegers",
 	"Range",
 	"RatioComparison",
 	"RefusedOperationError",
+	"RefusedSettingError",
 	"Region",
 	"Renaming",
 	"Replacement",
 	"Round",
 	"Rule",
 	"SasOptions",
+	"ScatterChart",
 	"Shape",
 	"ShapeMismatchError",
 	"Side",
 	"Sine",
+	"Size",
+	"SizeUnit",
 	"SortKey",
 	"Sorting",
 	"Spacing",
 	"SquareRoot",
 	"StandardDeviation",
 	"Statistic",
+	"Style",
 	"Sum",
 	"Table",
 	"TimeFunction",
@@ -287,10 +339,14 @@ __all__ = [
 	"TypeMatch",
 	"Uniform",
 	"UnknownTimeZoneError",
+	"UnsupportedImageFormatError",
 	"UnsupportedIndexError",
 	"UnsupportedMissingError",
 	"UnsupportedOperandError",
 	"UnsupportedTypeError",
 	"ValueConversionError",
 	"XptOptions",
+	"plot_bar",
+	"plot_line",
+	"plot_scatter",
 ]

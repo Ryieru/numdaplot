@@ -52,6 +52,7 @@ testpaths = ["tests", "src", "tools"]
 pythonpath = ["tools/docs"]
 addopts = ["--doctest-modules", "--import-mode=importlib"]
 doctest_optionflags = ["NORMALIZE_WHITESPACE"]
+filterwarnings = ["ignore:FigureCanvasAgg is non-interactive:UserWarning"]
 
 [tool.ruff]
 line-length = 120
@@ -69,7 +70,7 @@ ignore = ["W191", "D206"]
 convention = "numpy"
 
 [tool.pyright]
-include = ["src", "tests", "tools", "run_tests.py"]
+include = ["src", "tests", "tools", "run_tests.py", "conftest.py"]
 extraPaths = ["tools/docs"]
 pythonVersion = "3.13"
 typeCheckingMode = "strict"
