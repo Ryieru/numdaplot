@@ -101,4 +101,4 @@ conftest.py         pytest settings shared by the tests and the docstring exampl
 
 ## License
 
-BSD-3-Clause, see [LICENSE](LICENSE).
+BSD-3-Clause, see [LICENSE](https://github.com/Ryieru/Numdaplot/blob/main/LICENSE).
