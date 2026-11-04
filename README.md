@@ -35,7 +35,7 @@ charts overlaid on a plot, and figures placing plots on a grid are available.
 ## Requirements
 
 - Python 3.13 or later
-- numpy 2.2+, pandas 2.3+ and matplotlib 3.10+
+- numpy 2.2+, pandas 2.3+ and matplotlib 3.10.7+
 - Optional extras: `excel` (openpyxl) and `parquet` (pyarrow)
 
 ## Installation
