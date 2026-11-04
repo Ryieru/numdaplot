@@ -43,7 +43,8 @@ class Description:
 	Parameters
 	----------
 	functions
-		The statistics, one row each. When omitted: ``Count``, ``Mean``, ``StandardDeviation``, ``Min``,
+		The ``Statistic`` objects, one row each, such as ``[ndp.Min(), ndp.Quantile(0.9)]``: see ``Statistic``
+		for every statistic. When omitted: ``Count``, ``Mean``, ``StandardDeviation``, ``Min``,
 		``Quantile(0.25)``, ``Median``, ``Quantile(0.75)`` and ``Max``, as in pandas.
 	columns
 		The names of the columns to describe, one result column each. Every number column when omitted.

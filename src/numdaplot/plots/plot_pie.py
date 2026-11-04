@@ -23,7 +23,7 @@ def plot_pie(data: Table, chart: PieChart, style: Style | None = None) -> Plot:
 	"""
 	Return a Plot sharing out the values of a column of a Table as slices of a disc.
 
-	``chart.labels`` names the column of texts labeling the slices and ``chart.values`` the column of numbers
+	``PieChart.labels`` names the column of texts labeling the slices and ``PieChart.values`` the column of numbers
 	sizing them. A Plot of a pie has no axes, so its style takes no axis label.
 
 	.. versionadded:: 0.1.0

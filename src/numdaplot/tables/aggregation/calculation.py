@@ -25,7 +25,8 @@ class Calculation:
 	column
 		The name of the column.
 	function
-		Any statistic of numdaplot, such as ``ndp.Mean()``. Missing values are ignored.
+		A ``Statistic``, such as ``ndp.Mean()`` or ``ndp.Quantile(0.9)``: see ``Statistic`` for every statistic.
+		Missing values are ignored.
 	result_name
 		The name of the result column. When omitted, it is ``<column>_<function>``, such as ``price_mean``
 		or ``price_quantile_90``.

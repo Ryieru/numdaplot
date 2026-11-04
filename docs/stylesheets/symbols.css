@@ -219,3 +219,8 @@
 	border: var(--api-object-rule-width) solid var(--md-default-fg-color--lightest);
 	border-radius: var(--plot-image-radius);
 }
+
+/* Code in a table stays on one line: the text cells wrap around it. */
+.md-typeset table:not([class]) code {
+	white-space: nowrap;
+}

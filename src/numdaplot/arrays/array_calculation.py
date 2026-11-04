@@ -32,7 +32,7 @@ class ArrayCalculation(ArrayData):
 		Parameters
 		----------
 		statistic
-			Any statistic of numdaplot, such as ``ndp.Mean()`` or ``ndp.Quantile(0.9)``.
+			A ``Statistic``, such as ``ndp.Mean()`` or ``ndp.Quantile(0.9)``: see ``Statistic`` for every statistic.
 		axis
 			``EACH_ROW`` for one result per row, ``EACH_COLUMN`` for one per column, only for a
 			two-dimensional Array. A single result for the whole Array when omitted.
@@ -73,9 +73,9 @@ class ArrayCalculation(ArrayData):
 		Parameters
 		----------
 		function
-			Any math function of numdaplot, such as ``ndp.SquareRoot()``, applied to numbers, or any time function,
+			A ``MathFunction``, such as ``ndp.SquareRoot()``, applied to numbers, or a ``TimeFunction``,
 			such as ``ndp.DatePart(unit=ndp.DatePartUnit.MONTH)``, applied to dates, datetimes, durations or
-			numbers as each one states.
+			numbers as each one states: see ``MathFunction`` and ``TimeFunction`` for every function.
 
 		Returns
 		-------

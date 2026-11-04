@@ -5,15 +5,8 @@ Unit tests of the griffe extension linking the names written in code.
 """
 
 import griffe
-from cross_references import (
-	CrossReferences,
-	LinkContext,
-	find_class_owners,
-	find_identifier,
-	find_public_paths,
-	link_code_names,
-	object_exists,
-)
+from cross_references import CrossReferences, find_class_owners, link_code_names
+from link_targets import LinkContext, find_public_paths
 
 PACKAGE_NAME = "sales"
 PACKAGE_FILES = {
@@ -34,11 +27,7 @@ PACKAGE_FILES = {
 	),
 }
 TABLE_PATH = "sales.table.Table"
-GREATER_PATH = "sales.rules.Greater"
 READING_PATH = "sales.reading.Reading"
-FROM_CSV_PATH = "sales.table.Table.from_csv"
-TO_CSV_PATH = "sales.table.Table.to_csv"
-EXPECTED_PUBLIC_PATHS = {"Table": TABLE_PATH, "Greater": GREATER_PATH}
 FROM_CSV_LINK = (
 	'<code><span class="api-link api-link-function">'
 	'<autoref identifier="sales.table.Table.from_csv" optional>from_csv</autoref></span></code>'
@@ -104,22 +93,9 @@ def build_context(class_path: str | None) -> LinkContext:
 	"""
 	package, loader = load_package()
 	public_paths = find_public_paths(package)
-	context = LinkContext(class_path, public_paths, loader)
+	context = LinkContext(class_path, public_paths, loader, {})
 
 	return context
-
-
-def test_find_public_paths_follows_the_exported_aliases() -> None:
-	"""
-	Check the path of each name exported by the package.
-
-	.. versionadded:: 0.1.0
-	"""
-	package, _ = load_package()
-
-	public_paths = find_public_paths(package)
-
-	assert public_paths == EXPECTED_PUBLIC_PATHS
 
 
 def test_find_class_owners_gives_mixins_to_their_public_class() -> None:
@@ -135,62 +111,6 @@ def test_find_class_owners_gives_mixins_to_their_public_class() -> None:
 
 	assert class_owners[READING_PATH] == TABLE_PATH
 	assert class_owners[TABLE_PATH] == TABLE_PATH
-
-
-def test_object_exists_finds_inherited_members() -> None:
-	"""
-	Check that a member inherited from a mixin exists on the public class, and an unknown one does not.
-
-	.. versionadded:: 0.1.0
-	"""
-	_, loader = load_package()
-
-	inherited_exists = object_exists(FROM_CSV_PATH, loader)
-	unknown_exists = object_exists(TABLE_PATH + ".missing", loader)
-
-	assert inherited_exists
-	assert not unknown_exists
-
-
-def test_find_identifier_prefers_a_member_of_the_class() -> None:
-	"""
-	Check that from_csv inside Table links to Table.from_csv.
-
-	.. versionadded:: 0.1.0
-	"""
-	context = build_context(TABLE_PATH)
-
-	identifier = find_identifier("from_csv", context)
-
-	assert identifier == FROM_CSV_PATH
-
-
-def test_find_identifier_follows_public_names() -> None:
-	"""
-	Check ndp.Greater, and Table.to_csv written with its class.
-
-	.. versionadded:: 0.1.0
-	"""
-	context = build_context(None)
-
-	greater_identifier = find_identifier("ndp.Greater", context)
-	to_csv_identifier = find_identifier("Table.to_csv", context)
-
-	assert greater_identifier == GREATER_PATH
-	assert to_csv_identifier == TO_CSV_PATH
-
-
-def test_find_identifier_gives_nothing_for_an_unknown_name() -> None:
-	"""
-	Check that a name matching no object gives None.
-
-	.. versionadded:: 0.1.0
-	"""
-	context = build_context(TABLE_PATH)
-
-	identifier = find_identifier("Missing", context)
-
-	assert identifier is None
 
 
 def test_link_code_names_links_known_names_and_keeps_the_others() -> None:

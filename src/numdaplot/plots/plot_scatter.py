@@ -17,7 +17,7 @@ def plot_scatter(data: Table | Array, chart: ScatterChart, style: Style | None =
 	"""
 	Return a Plot drawing each row as a point.
 
-	For a Table, ``chart.y`` names the column of the vertical positions and ``chart.x`` the column of the
+	For a Table, ``ScatterChart.y`` names the column of the vertical positions and ``ScatterChart.x`` the column of the
 	horizontal ones, and the points can be colored and sized by other columns. For an Array of one or two
 	dimensions, each column is a series of points and each row is placed at its number.
 

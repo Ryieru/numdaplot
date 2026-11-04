@@ -11,6 +11,15 @@ class TimeFunction:
 
 	A time function is immutable. Missing values stay missing.
 
+	Every time function, passed to ``Array.apply``:
+
+	| Time function | What it gives for each value | Example |
+	| --- | --- | --- |
+	| ``DatePart`` | A part of a date or datetime, as a number | ``ndp.DatePart(unit=ndp.DatePartUnit.MONTH)`` |
+	| ``DatePeriod`` | The first day of the period holding it | ``ndp.DatePeriod(unit=ndp.PeriodUnit.MONTH)`` |
+	| ``ToDuration`` | A number read as a duration in a unit | ``ndp.ToDuration(unit=ndp.DurationUnit.DAY)`` |
+	| ``DurationIn`` | A duration counted in a unit, as a decimal | ``ndp.DurationIn(unit=ndp.DurationUnit.DAY)`` |
+
 	.. versionadded:: 0.1.0
 
 	Examples

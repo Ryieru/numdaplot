@@ -23,7 +23,7 @@ class DatePart(TimeFunction):
 	Parameters
 	----------
 	unit
-		The part to read. ``HOUR``, ``MINUTE`` and ``SECOND`` need datetimes.
+		The part to read. ``DatePartUnit.HOUR``, ``DatePartUnit.MINUTE`` and ``DatePartUnit.SECOND`` need datetimes.
 
 	Examples
 	--------

@@ -21,7 +21,7 @@ def plot_histogram(data: Table | Array, chart: HistogramChart, style: Style | No
 	"""
 	Return a Plot drawing how many values of columns of numbers fall in each bin.
 
-	For a Table, ``chart.columns`` names the columns drawn. For an Array of one or two dimensions, each column
+	For a Table, ``HistogramChart.columns`` names the columns drawn. For an Array of one or two dimensions, each column
 	is drawn. Several columns share the same bins.
 
 	.. versionadded:: 0.1.0

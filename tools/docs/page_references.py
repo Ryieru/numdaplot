@@ -14,15 +14,20 @@ from functools import cache
 from typing import Any
 
 import griffe
-from cross_references import LinkContext, build_links, find_identifier, find_public_paths
+from code_links import build_links
+from link_targets import (
+	LinkContext,
+	find_enum_member_paths,
+	find_identifier,
+	find_public_paths,
+	find_unique_member_paths,
+)
 
 PACKAGE_NAME = "numdaplot"
 SOURCE_FOLDER = "src"
 API_FOLDER = "api/"
 INLINE_CODE = re.compile(r"<code>(?P<name>[A-Za-z_][\w.]*)(?P<call>\(\))?</code>")
 CODE_TEMPLATE = "<code>{content}</code>"
-PATH_SEPARATOR = "."
-PRIVATE_PREFIX = "_"
 
 
 @dataclass(frozen=True)
@@ -64,48 +69,11 @@ def load_reference_index() -> ReferenceIndex:
 
 	public_paths = find_public_paths(package)
 	member_paths = find_unique_member_paths(public_paths, loader)
-	context = LinkContext(None, public_paths, loader)
+	enum_member_paths = find_enum_member_paths(member_paths)
+	context = LinkContext(None, public_paths, loader, enum_member_paths)
 	index = ReferenceIndex(context, member_paths)
 
 	return index
-
-
-def find_unique_member_paths(public_paths: dict[str, str], loader: griffe.GriffeLoader) -> dict[str, str]:
-	"""
-	Return the path of each public member name that only one public class has.
-
-	.. versionadded:: 0.1.0
-
-	Parameters
-	----------
-	public_paths
-		The path of each public name.
-	loader
-		The loader that holds every loaded module.
-
-	Returns
-	-------
-	dict[str, str]
-		The path of each member, by name. A name shared by several classes, such as ``to_value``, is left out.
-	"""
-	paths_by_name = dict[str, list[str]]()
-
-	for public_path in public_paths.values():
-		public_object = loader.modules_collection.get_member(public_path)
-		if not isinstance(public_object, griffe.Class):
-			continue
-
-		for member_name in public_object.all_members:
-			if member_name.startswith(PRIVATE_PREFIX):
-				continue
-
-			member_path = public_path + PATH_SEPARATOR + member_name
-			member_name_paths = paths_by_name.setdefault(member_name, [])
-			member_name_paths.append(member_path)
-
-	unique_paths = {name: paths[0] for name, paths in paths_by_name.items() if len(paths) == 1}
-
-	return unique_paths
 
 
 def link_inline_code(html: str, index: ReferenceIndex) -> str:

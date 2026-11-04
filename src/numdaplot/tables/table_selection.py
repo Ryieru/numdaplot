@@ -33,7 +33,8 @@ class TableSelection(TableData):
 		Parameters
 		----------
 		rule
-			Any rule of numdaplot. A missing value only satisfies ``IsMissing``.
+			A ``Rule``, such as ``ndp.Greater(10)`` or ``ndp.IsIn(["Paris"])``: see ``Rule`` for every rule.
+			A missing value only satisfies ``IsMissing``.
 
 		Returns
 		-------

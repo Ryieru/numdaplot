@@ -17,7 +17,7 @@ def plot_bar(data: Table | Array, chart: BarChart, style: Style | None = None) -
 	"""
 	Return a Plot drawing columns of numbers as bars.
 
-	For a Table, ``chart.y`` names the columns drawn and ``chart.x`` the column labeling the bars. For an Array
+	For a Table, ``BarChart.y`` names the columns drawn and ``BarChart.x`` the column labeling the bars. For an Array
 	of one or two dimensions, each column is a series of bars and each row is labeled with its number.
 
 	.. versionadded:: 0.1.0

@@ -239,7 +239,8 @@ class ArrayCreation(ArrayData):
 		Parameters
 		----------
 		distribution
-			The law followed by the values.
+			The ``Distribution`` followed by the values, such as ``ndp.Uniform(low=0, high=10)``:
+			see ``Distribution`` for every distribution.
 		shape
 			The shape of the Array.
 		seed

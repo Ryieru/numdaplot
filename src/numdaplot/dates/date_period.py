@@ -23,7 +23,7 @@ class DatePeriod(TimeFunction):
 	Parameters
 	----------
 	unit
-		The length of the periods. ``HOUR`` needs datetimes.
+		The length of the periods. ``PeriodUnit.HOUR`` needs datetimes.
 
 	Examples
 	--------

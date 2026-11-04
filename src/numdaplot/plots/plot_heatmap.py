@@ -25,7 +25,8 @@ def plot_heatmap(data: Table | Array, chart: HeatmapChart, style: Style | None =
 	"""
 	Return a Plot coloring each value of columns of numbers along a color scale.
 
-	For a Table, ``chart.columns`` names the columns drawn and ``chart.labels`` the column labeling the rows.
+	For a Table, ``HeatmapChart.columns`` names the columns drawn and ``HeatmapChart.labels`` the column labeling
+	the rows.
 	For an Array of one or two dimensions, each column is drawn and each row is labeled with its number.
 
 	.. versionadded:: 0.1.0

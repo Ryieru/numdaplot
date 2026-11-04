@@ -11,6 +11,14 @@ class Distribution:
 
 	A distribution is immutable and checks its settings when it is created.
 
+	Every distribution, passed to ``Array.random``:
+
+	| Distribution | What it draws | Example |
+	| --- | --- | --- |
+	| ``Uniform`` | Equally likely decimals from ``low`` to ``high`` | ``ndp.Uniform(low=0, high=10)`` |
+	| ``Normal`` | Decimals around a mean, following a bell curve | ``ndp.Normal(mean=0, deviation=1)`` |
+	| ``RandomIntegers`` | Equally likely integers from ``low`` to ``high`` | ``ndp.RandomIntegers(low=1, high=6)`` |
+
 	.. versionadded:: 0.1.0
 
 	Examples

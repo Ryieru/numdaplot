@@ -21,7 +21,7 @@ def plot_box(data: Table | Array, chart: BoxChart, style: Style | None = None) -
 	"""
 	Return a Plot summing up the spread of columns of numbers as boxes.
 
-	For a Table, ``chart.columns`` names the columns drawn, and ``chart.group_by`` may split their rows into
+	For a Table, ``BoxChart.columns`` names the columns drawn, and ``BoxChart.group_by`` may split their rows into
 	groups. For an Array of one or two dimensions, each column is a box.
 
 	.. versionadded:: 0.1.0

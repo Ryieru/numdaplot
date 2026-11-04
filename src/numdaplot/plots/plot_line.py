@@ -17,7 +17,7 @@ def plot_line(data: Table | Array, chart: LineChart, style: Style | None = None)
 	"""
 	Return a Plot drawing columns of numbers as lines.
 
-	For a Table, ``chart.y`` names the columns drawn and ``chart.x`` the column of the positions. For an Array
+	For a Table, ``LineChart.y`` names the columns drawn and ``LineChart.x`` the column of the positions. For an Array
 	of one or two dimensions, each column is a line and each row is placed at its number.
 
 	.. versionadded:: 0.1.0

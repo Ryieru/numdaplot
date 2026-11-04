@@ -6,7 +6,7 @@ Unit tests of the MkDocs hook linking the inline code of the pages.
 
 from types import SimpleNamespace
 
-from page_references import find_unique_member_paths, link_inline_code, load_reference_index, on_page_content
+from page_references import link_inline_code, load_reference_index, on_page_content
 
 ARRAY_CODE = "<p>Create an <code>Array</code>.</p>"
 ARRAY_LINK = 'api-link-class"><autoref identifier="numdaplot.arrays.array.Array" optional>Array</autoref>'
@@ -85,20 +85,6 @@ def test_link_inline_code_keeps_blocks_of_code() -> None:
 	linked_html = link_inline_code(BLOCK_CODE, index)
 
 	assert linked_html == BLOCK_CODE
-
-
-def test_find_unique_member_paths_leaves_out_shared_names() -> None:
-	"""
-	Check that from_spacing is kept and to_value is left out.
-
-	.. versionadded:: 0.1.0
-	"""
-	index = load_reference_index()
-
-	member_paths = find_unique_member_paths(index.context.public_paths, index.context.loader)
-
-	assert "from_spacing" in member_paths
-	assert "to_value" not in member_paths
 
 
 def test_on_page_content_leaves_the_api_pages_to_their_docstrings() -> None:

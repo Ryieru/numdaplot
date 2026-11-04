@@ -26,7 +26,7 @@ class Condition:
 	Parameters
 	----------
 	rule
-		Any rule of numdaplot, such as ``ndp.Greater(100)``.
+		A ``Rule``, such as ``ndp.Greater(100)`` or ``ndp.IsIn(["Paris"])``: see ``Rule`` for every rule.
 	columns
 		The names of the columns the rule applies to, every column when omitted.
 		The condition keeps its own copy of the list.

@@ -1,49 +1,25 @@
 """
 Griffe extension turning the names written in code in the docstrings into links to their documentation.
 
-Docstrings name objects in code, such as ``from_csv`` or ``ndp.Greater``, which editors show as they are.
-In the documentation site, each such name that matches a documented object becomes a link to it:
-a member of the class being documented, a public ``ndp.*`` name, or a member of a public class.
-The links are optional, so a name without documentation stays plain code.
+Docstrings name objects in code, such as ``from_csv`` or ``ndp.Greater(10)``, which editors show as they are.
+In the documentation site, each name of such code that matches a documented object becomes a link to it:
+a member of the class being documented, a public ``ndp.*`` name, a member of a public class, an enum member
+that only one public class has, or the argument of a call to a public class. Texts between quotes stay as they
+are. The links are optional, so a name without documentation stays plain code.
 
 .. versionadded:: 0.1.0
 """
 
 import re
-from dataclasses import dataclass
+from dataclasses import replace
 from typing import Any
 
 import griffe
+from code_links import link_code_tokens
+from link_targets import LinkContext, find_enum_member_paths, find_public_paths, find_unique_member_paths
 
-CODE_SPAN = re.compile(r"(?<!`)``(?P<name>[A-Za-z_][\w.]*)(?:\(\))?``(?!`)")
-PUBLIC_PREFIX = "ndp."
-LINK_TEMPLATE = (
-	'<span class="api-link api-link-{kind}"><autoref identifier="{identifier}" optional>{text}</autoref></span>'
-)
+CODE_SPAN = re.compile(r"(?<!`)``(?P<code>[^`\n]+)``(?!`)")
 CODE_TEMPLATE = "<code>{content}</code>"
-PATH_SEPARATOR = "."
-
-
-@dataclass(frozen=True)
-class LinkContext:
-	"""
-	What the names of one docstring can link to.
-
-	.. versionadded:: 0.1.0
-
-	Parameters
-	----------
-	class_path
-		The path of the documented class owning the docstring, or ``None`` outside any class.
-	public_paths
-		The path of each public ``ndp.*`` name, by name.
-	loader
-		The loader that holds every loaded module.
-	"""
-
-	class_path: str | None
-	public_paths: dict[str, str]
-	loader: griffe.GriffeLoader
 
 
 def link_code_names(docstring_text: str, context: LinkContext) -> str:
@@ -67,218 +43,34 @@ def link_code_names(docstring_text: str, context: LinkContext) -> str:
 		``Conflict.ERROR`` links its class and its member separately, each with its own kind.
 	"""
 
-	def replace_name(name_match: re.Match[str]) -> str:
+	def replace_code(code_match: re.Match[str]) -> str:
 		"""
-		Return the link replacing one name, or the name itself when it matches no object.
+		Return the code with its links, or the code itself when no name matches an object.
 
 		.. versionadded:: 0.1.0
 
 		Parameters
 		----------
-		name_match
-			The match of a name written in code.
+		code_match
+			The match of a text written in code.
 
 		Returns
 		-------
 		str
-			The link, or the original code.
+			The code holding links, or the original code.
 		"""
-		name = name_match.group("name")
-		identifier = find_identifier(name, context)
-		if identifier is None:
-			return name_match.group(0)
+		code_text = code_match.group("code")
+		links = link_code_tokens(code_text, context)
+		if links is None:
+			return code_match.group(0)
 
-		code_text = name_match.group(0).strip("`")
-		links = build_links(code_text, identifier, context.loader)
 		code = CODE_TEMPLATE.format(content=links)
 
 		return code
 
-	linked_text = CODE_SPAN.sub(replace_name, docstring_text)
+	linked_text = CODE_SPAN.sub(replace_code, docstring_text)
 
 	return linked_text
-
-
-def build_links(code_text: str, identifier: str, loader: griffe.GriffeLoader) -> str:
-	"""
-	Return the links of a name: one for the whole name, or one for its owner and one for its member.
-
-	.. versionadded:: 0.1.0
-
-	Parameters
-	----------
-	code_text
-		The name as written, such as ``Conflict.ERROR``, ``ndp.Greater`` or ``from_csv()``. The ``ndp.`` prefix
-		stays part of the first link.
-	identifier
-		The path of the object the whole name refers to.
-	loader
-		The loader that holds every loaded module.
-
-	Returns
-	-------
-	str
-		The links, joined by a dot when the name holds one.
-	"""
-	prefix = PUBLIC_PREFIX if code_text.startswith(PUBLIC_PREFIX) else ""
-	short_text = code_text.removeprefix(PUBLIC_PREFIX)
-	owner_text, separator, member_text = short_text.rpartition(PATH_SEPARATOR)
-	if separator == "":
-		whole_link = build_link(code_text, identifier, loader)
-		return whole_link
-
-	owner_identifier, _, _ = identifier.rpartition(PATH_SEPARATOR)
-	owner_link = build_link(prefix + owner_text, owner_identifier, loader)
-	member_link = build_link(member_text, identifier, loader)
-	links = owner_link + PATH_SEPARATOR + member_link
-
-	return links
-
-
-def build_link(text: str, identifier: str, loader: griffe.GriffeLoader) -> str:
-	"""
-	Return an optional link to an object, in a span whose class names the kind of the object.
-
-	.. versionadded:: 0.1.0
-
-	Parameters
-	----------
-	text
-		The text of the link.
-	identifier
-		The path of the object.
-	loader
-		The loader that holds every loaded module.
-
-	Returns
-	-------
-	str
-		The link, such as ``api-link-class`` for a class, ``api-link-object`` for an unknown object.
-	"""
-	target = find_object(identifier, loader)
-	kind = "object" if target is None else target.kind.value
-	link = LINK_TEMPLATE.format(kind=kind, identifier=identifier, text=text)
-
-	return link
-
-
-def find_identifier(name: str, context: LinkContext) -> str | None:
-	"""
-	Return the path of the documented object a name refers to.
-
-	.. versionadded:: 0.1.0
-
-	Parameters
-	----------
-	name
-		A name written in code, such as ``from_csv``, ``ndp.Greater`` or ``Table.from_csv``.
-	context
-		What the name can link to.
-
-	Returns
-	-------
-	str or None
-		The path of the object: first a member of the documented class, then a public name or a member
-		of a public class. ``None`` when nothing matches.
-	"""
-	short_name = name.removeprefix(PUBLIC_PREFIX)
-	candidates = list[str]()
-	if context.class_path is not None:
-		candidates.append(context.class_path + PATH_SEPARATOR + short_name)
-
-	head, _, rest = short_name.partition(PATH_SEPARATOR)
-	if head in context.public_paths:
-		public_path = context.public_paths[head]
-		candidate = public_path if rest == "" else public_path + PATH_SEPARATOR + rest
-		candidates.append(candidate)
-
-	for candidate in candidates:
-		exists = object_exists(candidate, context.loader)
-		if exists:
-			return candidate
-
-	return None
-
-
-def object_exists(path: str, loader: griffe.GriffeLoader) -> bool:
-	"""
-	Return whether griffe knows an object at a path, inherited members included.
-
-	.. versionadded:: 0.1.0
-
-	Parameters
-	----------
-	path
-		The path of an object, such as ``numdaplot.tables.table.Table.from_csv``.
-	loader
-		The loader that holds every loaded module.
-
-	Returns
-	-------
-	bool
-		True when the object exists.
-	"""
-	target = find_object(path, loader)
-	exists = target is not None
-
-	return exists
-
-
-def find_object(path: str, loader: griffe.GriffeLoader) -> griffe.Object | griffe.Alias | None:
-	"""
-	Return the object griffe knows at a path, inherited members included.
-
-	.. versionadded:: 0.1.0
-
-	Parameters
-	----------
-	path
-		The path of an object, such as ``numdaplot.tables.table.Table.from_csv``.
-	loader
-		The loader that holds every loaded module.
-
-	Returns
-	-------
-	griffe.Object, griffe.Alias or None
-		The object, or ``None`` when there is none at this path.
-	"""
-	owner_path, _, member_name = path.rpartition(PATH_SEPARATOR)
-	try:
-		owner = loader.modules_collection.get_member(owner_path)
-	except (KeyError, ValueError):
-		return None
-
-	if not isinstance(owner, griffe.Object):
-		return None
-
-	target = owner.all_members.get(member_name)
-
-	return target
-
-
-def find_public_paths(package: griffe.Module) -> dict[str, str]:
-	"""
-	Return the path of each public name of a package, by name.
-
-	.. versionadded:: 0.1.0
-
-	Parameters
-	----------
-	package
-		The package whose ``__init__`` exposes the public names.
-
-	Returns
-	-------
-	dict[str, str]
-		The path of the object each exported alias points to.
-	"""
-	public_paths = dict[str, str]()
-
-	for name, member in package.members.items():
-		if isinstance(member, griffe.Alias):
-			public_paths[name] = member.target_path
-
-	return public_paths
 
 
 def find_class_owners(package: griffe.Module, public_paths: dict[str, str]) -> dict[str, str]:
@@ -337,7 +129,7 @@ def link_object_docstrings(obj: griffe.Object, class_owners: dict[str, str], bas
 		class_path = class_owners.get(owning_class.path, owning_class.path)
 
 	if obj.docstring is not None:
-		context = LinkContext(class_path, base_context.public_paths, base_context.loader)
+		context = replace(base_context, class_path=class_path)
 		linked_text = link_code_names(obj.docstring.value, context)
 		obj.docstring.value = linked_text
 
@@ -374,5 +166,7 @@ class CrossReferences(griffe.Extension):
 		"""
 		public_paths = find_public_paths(pkg)
 		class_owners = find_class_owners(pkg, public_paths)
-		base_context = LinkContext(None, public_paths, loader)
+		unique_member_paths = find_unique_member_paths(public_paths, loader)
+		enum_member_paths = find_enum_member_paths(unique_member_paths)
+		base_context = LinkContext(None, public_paths, loader, enum_member_paths)
 		link_object_docstrings(pkg, class_owners, base_context)
