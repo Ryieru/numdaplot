@@ -23,7 +23,7 @@ by_city = expensive_sales.aggregate(ndp.Aggregation(calculations=[average_price]
 ## Status
 
 Version 0.1.0 is in development. The shared foundations (types, rules, statistics, positions,
-sort settings, errors), `Array` and `Table` are available. Date conversions, the tools for missing values
+sort settings, errors), `Array`, `Table` and the tools for missing values are available. Date conversions
 and plots are not available yet.
 
 ## Requirements
@@ -74,10 +74,10 @@ uv run mkdocs serve
 src/numdaplot/
 	__init__.py     every public name, available as ndp.*
 	arrays/         Array and its settings: Shape, Spacing, distributions, math functions...
-	tables/         Table and its settings: file options, Filter, Aggregation, Sorting, Preview...
+	tables/         Table and its settings: file options, Filter, Aggregation, Sorting, Preview, MissingDrop...
 	errors/         NumdaplotError, the precise errors and BroadcastWarning
 	data_types/     the Type enum and its conversion to numpy and pandas dtypes
-	ratios/         validation of fractions between 0 and 1
+	ratios/         validation of fractions between 0 and 1, and the Measure enum
 	rules/          tests applied to each value: Equal, Greater, Between, IsIn, Contains, IsMissing...
 	statistics/     Sum, Mean, Median, Quantile, StandardDeviation...
 	positions/      Region, Index, Range and Axis

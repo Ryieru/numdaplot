@@ -9,7 +9,7 @@ from importlib.util import find_spec
 
 import pandas
 
-from numdaplot.tables.frames.table_text import build_typed_frame, format_table
+from numdaplot.tables.frames.table_text import build_typed_frame
 
 IPYTHON_PACKAGE = "IPython"
 IPYTHON_DISPLAY_MODULE = "IPython.display"
@@ -38,16 +38,38 @@ def show_frame(frame: pandas.DataFrame) -> None:
 	FLOAT64
 	0     1.5
 	"""
+	typed_frame = build_typed_frame(frame)
+	show_pandas_frame(typed_frame)
+
+
+def show_pandas_frame(frame: pandas.DataFrame) -> None:
+	"""
+	Show a pandas DataFrame as it is: as an HTML table in a Jupyter notebook, as text anywhere else.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	frame
+		The rows to show, with their header.
+
+	Examples
+	--------
+	>>> import pandas
+	>>> from numdaplot.tables.preview.notebook_display import show_pandas_frame
+	>>> show_pandas_frame(pandas.DataFrame({"price": [1.5]}))
+	price
+	0    1.5
+	"""
 	runs_in_notebook = is_notebook()
 	if not runs_in_notebook:
-		table_text = format_table(frame)
-		print(table_text)
+		frame_text = repr(frame)
+		print(frame_text)
 		return
 
-	typed_frame = build_typed_frame(frame)
-	table_html = typed_frame.to_html()
+	frame_html = frame.to_html()
 	display_module = import_module(IPYTHON_DISPLAY_MODULE)
-	html_object = display_module.HTML(table_html)
+	html_object = display_module.HTML(frame_html)
 	display_module.display(html_object)
 
 

@@ -76,6 +76,7 @@ from numdaplot.positions.axis import Axis
 from numdaplot.positions.index import Index
 from numdaplot.positions.range import Range
 from numdaplot.positions.region import Region
+from numdaplot.ratios.measure import Measure
 from numdaplot.rules.between import Between
 from numdaplot.rules.bounds import Bounds
 from numdaplot.rules.case import Case
@@ -124,6 +125,11 @@ from numdaplot.tables.filtering.column_match import ColumnMatch
 from numdaplot.tables.filtering.condition import Condition
 from numdaplot.tables.filtering.filter import Filter
 from numdaplot.tables.filtering.filter_mode import FilterMode
+from numdaplot.tables.missing.missing_count import MissingCount
+from numdaplot.tables.missing.missing_drop import MissingDrop
+from numdaplot.tables.missing.missing_mode import MissingMode
+from numdaplot.tables.missing.missing_ratio import MissingRatio
+from numdaplot.tables.missing.ratio_comparison import RatioComparison
 from numdaplot.tables.preview.preview import Preview
 from numdaplot.tables.preview.side import Side
 from numdaplot.tables.sorting.sort_key import SortKey
@@ -199,10 +205,15 @@ __all__ = [
 	"MathFunction",
 	"Max",
 	"Mean",
+	"Measure",
 	"Median",
 	"Min",
+	"MissingCount",
 	"MissingDependencyError",
+	"MissingDrop",
+	"MissingMode",
 	"MissingPosition",
+	"MissingRatio",
 	"MissingTypeError",
 	"MostFrequent",
 	"MostFrequentCount",
@@ -217,6 +228,7 @@ __all__ = [
 	"Quantile",
 	"RandomIntegers",
 	"Range",
+	"RatioComparison",
 	"RefusedOperationError",
 	"Region",
 	"Renaming",

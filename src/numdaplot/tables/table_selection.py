@@ -1,5 +1,5 @@
 """
-Selection of the rows and columns of a Table, by conditions and by position.
+Selection of the rows and columns of a Table, by conditions and by position, and check of its values.
 
 .. versionadded:: 0.1.0
 """
@@ -7,6 +7,8 @@ Selection of the rows and columns of a Table, by conditions and by position.
 from typing import Self
 
 from numdaplot.positions.region import Region
+from numdaplot.rules.rule import Rule
+from numdaplot.tables.filtering.checked_frame import check_frame
 from numdaplot.tables.filtering.filter import Filter
 from numdaplot.tables.filtering.row_mask import build_filter_mask
 from numdaplot.tables.frames.region_positions import take_region
@@ -15,10 +17,52 @@ from numdaplot.tables.table_data import TableData
 
 class TableSelection(TableData):
 	"""
-	Selection of the rows of a Table with ``filter``, and of a region of rows and columns with ``take``.
+	Selection of rows with ``filter``, of a region with ``take``, and check of every value with ``check``.
 
 	.. versionadded:: 0.1.0
 	"""
+
+	def check(self, rule: Rule) -> Self:
+		"""
+		Return which values satisfy a rule, in every column.
+
+		To check some columns only, choose them first with ``choose_columns``.
+
+		.. versionadded:: 0.1.0
+
+		Parameters
+		----------
+		rule
+			Any rule of numdaplot. A missing value only satisfies ``IsMissing``.
+
+		Returns
+		-------
+		Self
+			A new Table with the same columns and rows, holding True where the value satisfies the rule.
+			Every column is of type ``BOOL``.
+
+		Raises
+		------
+		IncompatibleTypesError
+			When the rule does not apply to the type of one of the columns.
+
+		Examples
+		--------
+		>>> import numdaplot as ndp
+		>>> prices = ndp.Array.from_list([120.0, None, 150.0])
+		>>> stocks = ndp.Array.from_list([3.0, 5.0, None])
+		>>> table = ndp.Table.from_arrays({"price": prices, "stock": stocks})
+		>>> table.check(ndp.IsMissing())
+		price  stock
+		BOOL   BOOL
+		0  False  False
+		1   True  False
+		2  False   True
+		"""
+		checked_frame = check_frame(self._frame, rule)
+		checked_table = self._wrap(checked_frame)
+
+		return checked_table
 
 	def filter(self, row_filter: Filter) -> Self:
 		"""

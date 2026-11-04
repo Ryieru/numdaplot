@@ -1,5 +1,5 @@
 """
-Unit tests of TableSelection, TableColumns, TableCalculation and TableLayout.
+Unit tests of TableSelection, TableColumns, TableCalculation, TableLayout and TableMissing.
 
 Each method hands the columns to a helper, faked here, and wraps the result in a new Table.
 
@@ -17,11 +17,13 @@ from numpy.typing import NDArray
 
 from numdaplot.arrays.array import Array
 from numdaplot.data_types.type import Type
+from numdaplot.positions.axis import Axis
 from numdaplot.positions.index import Index
 from numdaplot.positions.region import Region
 from numdaplot.rules.greater import Greater
+from numdaplot.rules.is_missing import IsMissing
 from numdaplot.statistics.mean import Mean
-from numdaplot.tables import table_calculation, table_columns, table_layout, table_selection
+from numdaplot.tables import table_calculation, table_columns, table_layout, table_missing, table_selection
 from numdaplot.tables.aggregation.aggregation import Aggregation
 from numdaplot.tables.aggregation.calculation import Calculation
 from numdaplot.tables.columns.column_choice import ColumnChoice
@@ -33,6 +35,8 @@ from numdaplot.tables.duplicates.deduplication import Deduplication
 from numdaplot.tables.filtering.condition import Condition
 from numdaplot.tables.filtering.filter import Filter
 from numdaplot.tables.frames.column import Column
+from numdaplot.tables.missing.missing_count import MissingCount
+from numdaplot.tables.missing.missing_drop import MissingDrop
 from numdaplot.tables.sorting.sort_key import SortKey
 from numdaplot.tables.sorting.sorting import Sorting
 from numdaplot.tables.table import Table
@@ -53,6 +57,7 @@ type TableOperation = Callable[[Table], Table]
 FRAME_OPERATIONS = list[tuple[ModuleType, str, TableOperation]](
 	[
 		(table_selection, "take_region", lambda table: table.take(Region(rows=Index(0)))),
+		(table_selection, "check_frame", lambda table: table.check(IsMissing())),
 		(table_columns, "choose_frame_columns", lambda table: table.choose_columns(ColumnChoice(columns=["price"]))),
 		(
 			table_columns,
@@ -72,6 +77,12 @@ FRAME_OPERATIONS = list[tuple[ModuleType, str, TableOperation]](
 		(table_calculation, "describe_frame", lambda table: table.describe(Description())),
 		(table_layout, "sort_frame", lambda table: table.sort(Sorting(keys=[SortKey(column="price")]))),
 		(table_layout, "drop_duplicate_rows", lambda table: table.drop_duplicates(Deduplication())),
+		(
+			table_missing,
+			"count_frame_missing",
+			lambda table: table.count_missing(MissingCount(axis=Axis.EACH_COLUMN)),
+		),
+		(table_missing, "drop_frame_missing", lambda table: table.drop_missing(MissingDrop())),
 	]
 )
 

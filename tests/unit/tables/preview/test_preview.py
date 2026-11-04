@@ -12,7 +12,7 @@ import pytest
 from numdaplot.errors.invalid_count_error import InvalidCountError
 from numdaplot.errors.invalid_seed_error import InvalidSeedError
 from numdaplot.tables.preview import notebook_display
-from numdaplot.tables.preview.notebook_display import is_notebook, show_frame
+from numdaplot.tables.preview.notebook_display import is_notebook, show_frame, show_pandas_frame
 from numdaplot.tables.preview.preview import Preview
 from numdaplot.tables.preview.preview_rows import choose_preview_rows
 from numdaplot.tables.preview.side import Side
@@ -31,6 +31,8 @@ IS_NOTEBOOK_NAME = "is_notebook"
 IMPORT_MODULE_NAME = "import_module"
 FIND_SPEC_NAME = "find_spec"
 EXPECTED_TEXT_START = "price"
+EXPECTED_PLAIN_TEXT = "price\n0    1.0"
+PLAIN_FRAME = pandas.DataFrame({"price": [1.0]})
 EXPECTED_HTML_START = "<table"
 NOTEBOOK_CONFIG = dict[str, object]({"IPKernelApp": None})
 TERMINAL_CONFIG = dict[str, object]()
@@ -281,6 +283,46 @@ def test_show_frame_displays_html_in_a_notebook(monkeypatch: pytest.MonkeyPatch)
 	monkeypatch.setattr(notebook_display, IMPORT_MODULE_NAME, ModuleGiver(display_module))
 
 	show_frame(FRAME)
+
+	shown_html = shown_objects[0]
+	assert shown_html.startswith(EXPECTED_HTML_START)
+
+
+def test_show_pandas_frame_prints_the_frame_without_types(capsys: pytest.CaptureFixture[str]) -> None:
+	"""
+	Check that the text of a pandas DataFrame is printed as pandas writes it.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	capsys
+		Captures the printed text.
+	"""
+	show_pandas_frame(PLAIN_FRAME)
+
+	captured = capsys.readouterr()
+	printed_text = captured.out.strip()
+	assert printed_text == EXPECTED_PLAIN_TEXT
+
+
+def test_show_pandas_frame_displays_html_in_a_notebook(monkeypatch: pytest.MonkeyPatch) -> None:
+	"""
+	Check that a notebook receives an HTML table.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	monkeypatch
+		Replaces the notebook check and the IPython display module with fakes.
+	"""
+	shown_objects = list[str]()
+	display_module = SimpleNamespace(HTML=str, display=shown_objects.append)
+	monkeypatch.setattr(notebook_display, IS_NOTEBOOK_NAME, answer_true)
+	monkeypatch.setattr(notebook_display, IMPORT_MODULE_NAME, ModuleGiver(display_module))
+
+	show_pandas_frame(PLAIN_FRAME)
 
 	shown_html = shown_objects[0]
 	assert shown_html.startswith(EXPECTED_HTML_START)

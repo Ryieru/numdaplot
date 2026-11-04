@@ -15,6 +15,7 @@ from numdaplot.tables.table_columns import TableColumns
 from numdaplot.tables.table_conversion import TableConversion
 from numdaplot.tables.table_display import TableDisplay
 from numdaplot.tables.table_layout import TableLayout
+from numdaplot.tables.table_missing import TableMissing
 from numdaplot.tables.table_reading import TableReading
 from numdaplot.tables.table_refusals import TableRefusals
 from numdaplot.tables.table_selection import TableSelection
@@ -28,6 +29,7 @@ METHOD_GROUPS = [
 	TableColumns,
 	TableCalculation,
 	TableLayout,
+	TableMissing,
 	TableDisplay,
 	TableRefusals,
 ]

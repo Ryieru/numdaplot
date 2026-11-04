@@ -19,13 +19,15 @@ and numdaplot follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
   `Table.from_parquet`, `Table.from_stata`, `Table.from_sas`, `Table.from_xpt`, `Table.from_pandas` and
   `Table.from_arrays`; written with `Table.to_csv`, `Table.to_json`, `Table.to_excel`, `Table.to_parquet` and
   `Table.to_stata`; changed with `Table.filter`, `Table.take`, `Table.choose_columns`, `Table.rename`,
-  `Table.convert`, `Table.add_column`, `Table.aggregate`, `Table.describe`, `Table.sort` and
-  `Table.drop_duplicates`; read with `Table.column`, `Table.to_value`, `Table.to_pandas`, `Table.is_equal`,
-  `Table.row_count`, `Table.column_names`, `Table.column_types`, `Table.preview` and `print`.
+  `Table.convert`, `Table.add_column`, `Table.aggregate`, `Table.describe`, `Table.sort`,
+  `Table.drop_duplicates` and `Table.drop_missing`; read with `Table.column`, `Table.check`,
+  `Table.count_missing`, `Table.to_value`, `Table.to_pandas`, `Table.is_equal`, `Table.row_count`,
+  `Table.column_names`, `Table.column_types`, `Table.preview`, `Table.preview_missing` and `print`.
 - Table settings: `CsvOptions`, `JsonOptions`, `ExcelOptions`, `SasOptions`, `XptOptions`, `Filter`, `Condition`,
   `Aggregation`, `Calculation`, `Description`, `ColumnChoice`, `Renaming`, `Conversion`, `NewColumn`, `Sorting`,
-  `SortKey`, `Deduplication`, `Preview`, and the `Encoding`, `JsonLayout`, `Conflict`, `FilterMode`,
-  `ColumnMatch`, `ColumnMode`, `Keep` and `Side` enums. `Equality` compares two Tables as well as two Arrays.
+  `SortKey`, `Deduplication`, `Preview`, `MissingCount`, `MissingDrop`, `MissingRatio`, and the `Encoding`,
+  `JsonLayout`, `Conflict`, `FilterMode`, `ColumnMatch`, `ColumnMode`, `Keep`, `Side`, `MissingMode`,
+  `RatioComparison` and `Measure` enums. `Equality` compares two Tables as well as two Arrays.
 - Table errors: `ColumnNotFoundError`, `DuplicateColumnError`, `EmptyListError`, `FileExistsError`,
   `FileNotFoundError`, `InvalidColumnNameError`, `InvalidSeparatorError`, `MissingDependencyError` and
   `UnsupportedIndexError`. `FileNotFoundError` and `FileExistsError` are also the Python errors of the same name.
