@@ -5,16 +5,12 @@ Line plots of a Table or an Array.
 """
 
 from numdaplot.arrays.array import Array
-from numdaplot.plots.chart_layer import ChartLayer
 from numdaplot.plots.charts.line_chart import LineChart
-from numdaplot.plots.data.chart_data import read_chart_values
-from numdaplot.plots.drawing.series_colors import require_color_count
+from numdaplot.plots.layer_reading import read_line_layer
 from numdaplot.plots.plot import Plot
 from numdaplot.plots.plot_creation import create_plot
 from numdaplot.plots.style.style import Style
 from numdaplot.tables.table import Table
-
-CHART_NAME = "LineChart"
 
 
 def plot_line(data: Table | Array, chart: LineChart, style: Style | None = None) -> Plot:
@@ -65,10 +61,7 @@ def plot_line(data: Table | Array, chart: LineChart, style: Style | None = None)
 	>>> plot = ndp.plot_line(sales, chart, style)
 	>>> plot.show()
 	"""
-	values = read_chart_values(data, chart.x, chart.y, CHART_NAME)
-	series_count = len(values.series)
-	require_color_count(chart.colors, series_count)
-	layer = ChartLayer(chart, values)
+	layer = read_line_layer(data, chart)
 	plot = create_plot(layer, style)
 
 	return plot

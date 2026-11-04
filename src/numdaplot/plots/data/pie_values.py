@@ -12,7 +12,6 @@ import pandas
 from numpy.typing import NDArray
 
 from numdaplot.arrays.array import Array
-from numdaplot.errors.duplicate_label_error import DuplicateLabelError
 from numdaplot.errors.empty_total_error import EmptyTotalError
 from numdaplot.errors.missing_value_error import MissingValueError
 from numdaplot.errors.out_of_domain_error import OutOfDomainError
@@ -22,6 +21,7 @@ from numdaplot.plots.data.chart_data import require_column_setting, require_tabl
 from numdaplot.plots.data.chart_values import ChartValues, Positions, Series
 from numdaplot.plots.data.column_reading import read_numbers, read_texts
 from numdaplot.plots.data.position_kind import PositionKind
+from numdaplot.plots.data.unique_labels import require_unique_labels
 from numdaplot.tables.columns.column_names import require_known_columns
 from numdaplot.tables.table import Table
 
@@ -143,42 +143,6 @@ def require_present_values(values: NDArray[Any], column_name: str) -> None:
 	has_missing = bool(missing.any())
 	if has_missing:
 		raise MissingValueError(CHART_NAME, column_name)
-
-
-def require_unique_labels(labels: NDArray[Any]) -> None:
-	"""
-	Check that every slice of a PieChart has its own label.
-
-	.. versionadded:: 0.1.0
-
-	Parameters
-	----------
-	labels
-		The label of each slice.
-
-	Raises
-	------
-	DuplicateLabelError
-		At the first label already seen.
-
-	Examples
-	--------
-	>>> import numpy
-	>>> import numdaplot as ndp
-	>>> from numdaplot.plots.data.pie_values import require_unique_labels
-	>>> try:
-	... 	require_unique_labels(numpy.array(["Paris", "Lyon", "Paris"], dtype=object))
-	... except ndp.DuplicateLabelError as error:
-	... 	print(error)
-	The label 'Paris' appears more than once.
-	"""
-	seen_labels = set[str]()
-
-	for label in labels:
-		if label in seen_labels:
-			raise DuplicateLabelError(label)
-
-		seen_labels.add(label)
 
 
 def require_shares(numbers: NDArray[numpy.float64], column_name: str) -> None:

@@ -13,13 +13,17 @@ from matplotlib.figure import Figure
 import numdaplot as ndp
 from numdaplot.plots.drawing.drawn_chart import DrawnChart
 from numdaplot.plots.drawing.grid_axes import GridAxes
+from numdaplot.plots.drawing.plot_axes import PlotAxes
 from numdaplot.plots.drawing.style_drawing import (
 	LEGEND_POINT_AREA,
 	apply_style,
 	choose_label,
 	draw_grid_lines,
+	find_first_shape_id,
+	list_legend_entries,
 	place_legend,
 	write_axis_labels,
+	write_right_label,
 )
 
 LINE_CHART = DrawnChart("day", "price", False, GridAxes.BOTH, None)
@@ -36,7 +40,7 @@ def test_apply_style_writes_no_title_by_default() -> None:
 	"""
 	axes = Figure().add_subplot()
 
-	apply_style(axes, LINE_CHART, ndp.Style())
+	apply_style(PlotAxes(axes, None, None), LINE_CHART, ndp.Style())
 
 	assert axes.get_title() == ""
 
@@ -123,7 +127,7 @@ def test_place_legend_draws_no_legend_for_a_single_series() -> None:
 	axes = Figure().add_subplot()
 	axes.plot([1.0, 2.0], label="price")
 
-	place_legend(axes, LINE_CHART, ndp.LegendPosition.BEST)
+	place_legend(PlotAxes(axes, None, None), LINE_CHART, ndp.LegendPosition.BEST)
 
 	assert axes.get_legend() is None
 
@@ -138,7 +142,7 @@ def test_place_legend_draws_points_of_the_same_size_with_the_legend_title() -> N
 	axes.scatter([1.0], [2.0], s=[200.0], label="Paris")
 	axes.scatter([2.0], [3.0], s=[16.0], label="Lyon")
 
-	place_legend(axes, GROUPS, ndp.LegendPosition.OUTSIDE_RIGHT)
+	place_legend(PlotAxes(axes, None, None), GROUPS, ndp.LegendPosition.OUTSIDE_RIGHT)
 
 	legend = axes.get_legend()
 	assert legend is not None
@@ -147,3 +151,109 @@ def test_place_legend_draws_points_of_the_same_size_with_the_legend_title() -> N
 	]
 	assert legend.get_title().get_text() == "city"
 	assert handle_areas == [LEGEND_POINT_AREA, LEGEND_POINT_AREA]
+
+
+def test_write_right_label_names_the_right_axis_by_default() -> None:
+	"""
+	Check that the axis on the right gets the default label of its first chart.
+
+	.. versionadded:: 0.1.0
+	"""
+	axes = Figure().add_subplot()
+	right_axes = axes.twinx()
+
+	write_right_label(PlotAxes(axes, right_axes, "price"), ndp.Style())
+
+	assert right_axes.get_ylabel() == "price"
+
+
+def test_write_right_label_writes_the_label_of_the_style() -> None:
+	"""
+	Check that the right_label of the style wins over the default one.
+
+	.. versionadded:: 0.1.0
+	"""
+	axes = Figure().add_subplot()
+	right_axes = axes.twinx()
+
+	write_right_label(PlotAxes(axes, right_axes, "price"), ndp.Style(right_label="Euros"))
+
+	assert right_axes.get_ylabel() == "Euros"
+
+
+def test_write_right_label_does_nothing_without_right_axis() -> None:
+	"""
+	Check that a Plot without axis on the right gets no right label.
+
+	.. versionadded:: 0.1.0
+	"""
+	axes = Figure().add_subplot()
+
+	write_right_label(PlotAxes(axes, None, "price"), ndp.Style(right_label="Euros"))
+
+	axes_count = len(axes.figure.axes)
+	assert axes_count == 1
+
+
+def test_place_legend_names_the_series_of_both_axes_over_the_right_one() -> None:
+	"""
+	Check that the legend gathers the series of both axes and is drawn over the right axes.
+
+	.. versionadded:: 0.1.0
+	"""
+	axes = Figure().add_subplot()
+	axes.plot([1.0, 2.0], label="sales")
+	right_axes = axes.twinx()
+	right_axes.plot([3.0, 1.0], label="price")
+
+	place_legend(PlotAxes(axes, right_axes, None), LINE_CHART, ndp.LegendPosition.BEST)
+
+	legend = right_axes.get_legend()
+	assert legend is not None
+	legend_texts = [text.get_text() for text in legend.get_texts()]
+	assert legend_texts == ["sales", "price"]
+	assert axes.get_legend() is None
+
+
+def test_list_legend_entries_follows_the_drawing_order() -> None:
+	"""
+	Check that bars drawn before a line are named first, unlike matplotlib does.
+
+	.. versionadded:: 0.1.0
+	"""
+	axes = Figure().add_subplot()
+	axes.bar([0.0, 1.0], [3.0, 4.0], label="sales")
+	axes.plot([0.0, 1.0], [2.0, 5.0], label="target")
+
+	_, labels = list_legend_entries(axes)
+
+	assert labels == ["sales", "target"]
+
+
+def test_find_first_shape_id_gives_the_first_bar_of_a_container() -> None:
+	"""
+	Check that bars are placed at their first bar.
+
+	.. versionadded:: 0.1.0
+	"""
+	axes = Figure().add_subplot()
+	bars = axes.bar([0.0, 1.0], [3.0, 4.0])
+
+	shape_id = find_first_shape_id(bars)
+
+	first_bar = bars.patches[0]
+	assert shape_id == id(first_bar)
+
+
+def test_find_first_shape_id_gives_an_empty_container_itself() -> None:
+	"""
+	Check that a container without shape is identified by itself.
+
+	.. versionadded:: 0.1.0
+	"""
+	axes = Figure().add_subplot()
+	bars = axes.bar([], [])
+
+	shape_id = find_first_shape_id(bars)
+
+	assert shape_id == id(bars)

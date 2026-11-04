@@ -21,7 +21,11 @@ and numdaplot follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
   `CustomDateFormat`, `TimeZone`, `TimeZoneChange` and the `TimeZoneMode` enum), and `Table.column_time_zones`.
 - Plots: `plot_line`, `plot_bar`, `plot_scatter`, `plot_histogram`, `plot_box`, `plot_pie`, `plot_heatmap`,
   `plot_missing_by_column` and `plot_missing_map` return a `Plot`, shown with `Plot.show`, saved as a PNG, SVG
-  or PDF image with `Plot.save` and turned into a matplotlib figure with `Plot.to_matplotlib`.
+  or PDF image with `Plot.save` and turned into a matplotlib figure with `Plot.to_matplotlib`. `Plot.add_line`,
+  `Plot.add_bar` and `Plot.add_scatter` draw other charts over a Plot, on its axis or on a second axis on the
+  right with the `ValueAxis` enum.
+- Figures: `Figure` places Plots on the cells of a `Layout` with `Figure.place` and `Cell`, and has `show`,
+  `save` and `to_matplotlib` like a Plot.
 - Plot settings: `Chart`, `LineChart`, `BarChart`, `ScatterChart`, `HistogramChart`, `BoxChart`, `PieChart`,
   `HeatmapChart`, `MissingChart`, `BinCount`, `BinWidth`, `Style`, `Size`, `CustomColor`, `ImageOptions`, and the
   `Color`, `LineType`, `MarkerShape`, `Orientation`, `BarLayout`, `Outliers`, `Percentages`, `ColorScale`,
@@ -29,7 +33,8 @@ and numdaplot follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 - Plot errors and warning: `ConflictingSettingsError`, `DuplicateLabelError`, `EmptyTotalError`,
   `InvalidBinWidthError`, `InvalidChartDataError`, `InvalidColorCountError`, `InvalidColorError`,
   `InvalidResolutionError`, `InvalidSizeError`, `MissingValueError`, `RefusedSettingError`, `UnsupportedDataError`,
-  `UnsupportedImageFormatError` and `ReadabilityWarning`.
+  `UnsupportedImageFormatError`, `IncompatibleChartsError`, `OccupiedCellError`, `CellOutOfRangeError` and
+  `ReadabilityWarning`.
 - Date errors: `InvalidConversionError`, `InvalidDateFormatError`, `InvalidTimeZoneChangeError`,
   `TimeZoneMismatchError` and `UnknownTimeZoneError`.
 - `Table`: named columns of one type each, read with `Table.from_csv`, `Table.from_json`, `Table.from_excel`,

@@ -7,6 +7,7 @@ A chart and the values it draws.
 from dataclasses import dataclass
 
 from numdaplot.plots.charts.chart import Chart
+from numdaplot.plots.charts.value_axis import ValueAxis
 from numdaplot.plots.data.chart_values import ChartValues
 from numdaplot.plots.data.point_values import PointValues
 from numdaplot.plots.data.sample_values import SampleValues
@@ -27,6 +28,8 @@ class ChartLayer:
 		The positions and the series, or for a ``HistogramChart`` and a ``BoxChart`` the columns and their groups.
 	points
 		The values coloring and sizing the points of a ``ScatterChart``, None for other charts.
+	value_axis
+		The vertical axis the chart is measured on, ``ValueAxis.LEFT`` unless added on the right.
 
 	Examples
 	--------
@@ -41,3 +44,4 @@ class ChartLayer:
 	chart: Chart
 	values: ChartValues | SampleValues
 	points: PointValues | None = None
+	value_axis: ValueAxis = ValueAxis.LEFT

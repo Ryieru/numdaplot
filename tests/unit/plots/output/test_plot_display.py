@@ -1,29 +1,29 @@
 """
-Unit tests of the display of a Plot.
+Unit tests of the display of a Plot or a Figure.
 
 .. versionadded:: 0.1.0
 """
+
+# The matplotlib stubs leave the keyword arguments of most drawing methods untyped.
+# pyright: reportUnknownMemberType=false
 
 from types import SimpleNamespace
 from typing import Any
 
 import pytest
 from matplotlib import pyplot
-from matplotlib.figure import Figure
+from matplotlib.figure import Figure, FigureBase
 
-import numdaplot as ndp
-from numdaplot.plots.chart_layer import ChartLayer
-from numdaplot.plots.data.array_values import read_array_values
+from numdaplot.plots.drawing.plot_drawing import FigureDrawing
 from numdaplot.plots.output import plot_display
-from numdaplot.plots.output.plot_display import show_figure_in_notebook, show_plot, show_plot_in_window
+from numdaplot.plots.output.plot_display import show_drawing, show_drawing_in_window, show_figure_in_notebook
 
-PRICES = ndp.Array.from_list([12.0, 15.5])
-LAYERS = [ChartLayer(ndp.LineChart(), read_array_values(PRICES, "LineChart"))]
-STYLE = ndp.Style(title="Prices")
+TITLE = "Prices"
+DRAWING_SIZE = (6.4, 4.8)
 PNG_SIGNATURE = b"\x89PNG"
 IS_NOTEBOOK_NAME = "is_notebook"
 IMPORT_MODULE_NAME = "import_module"
-SHOW_IN_WINDOW_NAME = "show_plot_in_window"
+SHOW_IN_WINDOW_NAME = "show_drawing_in_window"
 SHOW_IN_NOTEBOOK_NAME = "show_figure_in_notebook"
 
 
@@ -105,6 +105,37 @@ class Recorder:
 		self.calls.append(arguments)
 
 
+def draw_titled_axes(target: FigureBase) -> None:
+	"""
+	Draw axes titled Prices on a matplotlib figure.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	target
+		The figure drawn on.
+	"""
+	axes = target.add_subplot()
+	axes.set_title(TITLE)
+
+
+def describe_plot_drawing() -> FigureDrawing:
+	"""
+	Return a drawing of axes titled Prices.
+
+	.. versionadded:: 0.1.0
+
+	Returns
+	-------
+	FigureDrawing
+		What is drawn, and its size.
+	"""
+	drawing = FigureDrawing(draw_titled_axes, DRAWING_SIZE)
+
+	return drawing
+
+
 def answer_value(answer: bool) -> Any:
 	"""
 	Return a fake notebook check giving one answer.
@@ -178,9 +209,9 @@ def test_show_figure_in_notebook_displays_a_png_image(monkeypatch: pytest.Monkey
 	assert image_start == PNG_SIGNATURE
 
 
-def test_show_plot_opens_a_window_outside_a_notebook(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_show_drawing_opens_a_window_outside_a_notebook(monkeypatch: pytest.MonkeyPatch) -> None:
 	"""
-	Check that a script shows the Plot in a matplotlib window.
+	Check that a script shows the drawing in a matplotlib window.
 
 	.. versionadded:: 0.1.0
 
@@ -193,12 +224,14 @@ def test_show_plot_opens_a_window_outside_a_notebook(monkeypatch: pytest.MonkeyP
 	monkeypatch.setattr(plot_display, IS_NOTEBOOK_NAME, answer_value(False))
 	monkeypatch.setattr(plot_display, SHOW_IN_WINDOW_NAME, window_display)
 
-	show_plot(LAYERS, STYLE)
+	drawing = describe_plot_drawing()
 
-	assert window_display.calls == [(LAYERS, STYLE)]
+	show_drawing(drawing)
+
+	assert window_display.calls == [(drawing,)]
 
 
-def test_show_plot_displays_an_image_in_a_notebook(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_show_drawing_displays_an_image_in_a_notebook(monkeypatch: pytest.MonkeyPatch) -> None:
 	"""
 	Check that a notebook receives the drawn figure.
 
@@ -213,20 +246,23 @@ def test_show_plot_displays_an_image_in_a_notebook(monkeypatch: pytest.MonkeyPat
 	monkeypatch.setattr(plot_display, IS_NOTEBOOK_NAME, answer_value(True))
 	monkeypatch.setattr(plot_display, SHOW_IN_NOTEBOOK_NAME, notebook_display)
 
-	show_plot(LAYERS, STYLE)
+	drawing = describe_plot_drawing()
+
+	show_drawing(drawing)
 
 	shown_figure = notebook_display.calls[0][0]
 	assert shown_figure.axes[0].get_title() == "Prices"
 
 
-def test_show_plot_in_window_closes_the_figure_once_shown() -> None:
+def test_show_drawing_in_window_closes_the_figure_once_shown() -> None:
 	"""
 	Check that pyplot keeps no figure after a non-interactive display.
 
 	.. versionadded:: 0.1.0
 	"""
 	figure_numbers = pyplot.get_fignums()
+	drawing = describe_plot_drawing()
 
-	show_plot_in_window(LAYERS, STYLE)
+	show_drawing_in_window(drawing)
 
 	assert pyplot.get_fignums() == figure_numbers

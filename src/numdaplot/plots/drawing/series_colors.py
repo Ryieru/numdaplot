@@ -100,8 +100,7 @@ def choose_series_colors(colors: Sequence[Color | CustomColor] | None, series_co
 	"""
 	chosen_colors = colors
 	if chosen_colors is None:
-		default_colors = cycle(DEFAULT_CYCLE)
-		cycled_colors = islice(default_colors, series_count)
+		cycled_colors = take_cycle_colors(0, series_count)
 		chosen_colors = list[Color | CustomColor](cycled_colors)
 
 	require_color_count(chosen_colors, series_count)
@@ -144,3 +143,35 @@ def require_color_count(colors: Sequence[Color | CustomColor] | None, series_cou
 	color_count = len(colors)
 	if color_count != series_count:
 		raise InvalidColorCountError(color_count, series_count)
+
+
+def take_cycle_colors(start: int, color_count: int) -> list[Color]:
+	"""
+	Return colors of the default cycle, which starts again after ten colors.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	start
+		The number of colors of the cycle already used, from 0.
+	color_count
+		The number of colors taken.
+
+	Returns
+	-------
+	list[Color]
+		The colors following the ones already used.
+
+	Examples
+	--------
+	>>> from numdaplot.plots.drawing.series_colors import take_cycle_colors
+	>>> take_cycle_colors(9, 2)
+	[<Color.CYAN: 10>, <Color.BLUE: 1>]
+	"""
+	end = start + color_count
+	default_colors = cycle(DEFAULT_CYCLE)
+	taken_colors = islice(default_colors, start, end)
+	color_list = list(taken_colors)
+
+	return color_list

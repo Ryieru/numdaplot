@@ -9,6 +9,7 @@ import pytest
 import numdaplot as ndp
 
 PRECISE_ERRORS = [
+	ndp.CellOutOfRangeError,
 	ndp.ColumnNotFoundError,
 	ndp.ConflictingSettingsError,
 	ndp.DimensionError,
@@ -21,6 +22,7 @@ PRECISE_ERRORS = [
 	ndp.EmptyValuesError,
 	ndp.FileExistsError,
 	ndp.FileNotFoundError,
+	ndp.IncompatibleChartsError,
 	ndp.IncompatibleTypesError,
 	ndp.InvalidBaseError,
 	ndp.InvalidBinWidthError,
@@ -47,6 +49,7 @@ PRECISE_ERRORS = [
 	ndp.MissingTypeError,
 	ndp.MissingValueError,
 	ndp.NotSingleValueError,
+	ndp.OccupiedCellError,
 	ndp.OutOfDomainError,
 	ndp.RefusedOperationError,
 	ndp.RefusedSettingError,

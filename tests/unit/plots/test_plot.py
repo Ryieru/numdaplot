@@ -8,8 +8,8 @@ Unit tests of Plot.
 # pyright: reportUnknownMemberType=false
 
 from pathlib import Path
-from typing import Any
 
+import numpy
 import pytest
 from matplotlib.figure import Figure
 
@@ -17,6 +17,8 @@ import numdaplot as ndp
 from numdaplot.plots import plot as plot_module
 from numdaplot.plots.chart_layer import ChartLayer
 from numdaplot.plots.data.array_values import read_array_values
+from numdaplot.plots.drawing.plot_drawing import FigureDrawing, build_figure
+from numdaplot.plots.output import image_saving
 from numdaplot.plots.plot import Plot
 
 PRICES = ndp.Array.from_list([12.0, 15.5, 14.0])
@@ -28,7 +30,20 @@ DEFAULT_RESOLUTION = 100
 SHARP_RESOLUTION = 200
 SAVE_FUNCTION_NAME = "save_figure"
 SHARP_OPTIONS = ndp.ImageOptions(dpi=200)
-SHOW_FUNCTION_NAME = "show_plot"
+SHOW_FUNCTION_NAME = "show_drawing"
+DEFAULT_INCHES = (6.4, 4.8)
+MONTHS = ndp.Array.from_list(["Jan", "Feb", "Mar"])
+SHOP = ndp.Table.from_arrays(
+	{
+		"month": MONTHS,
+		"sales": ndp.Array.from_list([120.0, 150.0, 90.0]),
+		"price": ndp.Array.from_list([12.5, 11.0, 14.0]),
+	}
+)
+SALES_BARS = ndp.BarChart(x="month", y=["sales"])
+PRICE_LINE = ndp.LineChart(x="month", y=["price"])
+PRICE_POINTS = ndp.ScatterChart(x="month", y="price")
+BOX_PLOT = ndp.plot_box(PRICES, ndp.BoxChart())
 OLD_CONTENT = "old"
 
 
@@ -136,7 +151,7 @@ def test_save_saves_a_png_image_at_the_resolution_of_its_options(
 		The resolution of the saved image.
 	"""
 	save_recorder = SaveRecorder()
-	monkeypatch.setattr(plot_module, SAVE_FUNCTION_NAME, save_recorder)
+	monkeypatch.setattr(image_saving, SAVE_FUNCTION_NAME, save_recorder)
 
 	build_plot().save(PNG_NAME, options)
 
@@ -200,9 +215,9 @@ def test_save_checks_the_extension_before_the_existing_file(tmp_path: Path) -> N
 		build_plot().save(path)
 
 
-def test_show_hands_the_charts_and_the_style_to_the_display(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_show_hands_the_drawing_of_the_plot_to_the_display(monkeypatch: pytest.MonkeyPatch) -> None:
 	"""
-	Check that show displays the layers with the style of the Plot.
+	Check that show displays what the Plot draws, at the size of its style.
 
 	.. versionadded:: 0.1.0
 
@@ -211,27 +226,133 @@ def test_show_hands_the_charts_and_the_style_to_the_display(monkeypatch: pytest.
 	monkeypatch
 		Replaces the display with a fake.
 	"""
-	shown_calls = list[tuple[Any, Any]]()
-
-	def record_show(layers: list[ChartLayer], style: ndp.Style) -> None:
-		"""
-		Keep the shown layers and style.
-
-		.. versionadded:: 0.1.0
-
-		Parameters
-		----------
-		layers
-			The shown layers.
-		style
-			The shown style.
-		"""
-		shown_calls.append((layers, style))
-
-	monkeypatch.setattr(plot_module, SHOW_FUNCTION_NAME, record_show)
+	shown_drawings = list[FigureDrawing]()
+	monkeypatch.setattr(plot_module, SHOW_FUNCTION_NAME, shown_drawings.append)
 
 	build_plot().show()
 
-	shown_layers, shown_style = shown_calls[0]
-	assert shown_layers == [LAYER]
-	assert shown_style is STYLE
+	shown_drawing = shown_drawings[0]
+	shown_figure = build_figure(shown_drawing)
+	assert shown_drawing.size_inches == DEFAULT_INCHES
+	assert shown_figure.axes[0].get_title() == "Prices"
+
+
+def build_sales_plot() -> Plot:
+	"""
+	Return a Plot of the sales of each month as bars.
+
+	.. versionadded:: 0.1.0
+
+	Returns
+	-------
+	Plot
+		A bar Plot of three months.
+	"""
+	plot = ndp.plot_bar(SHOP, SALES_BARS)
+
+	return plot
+
+
+def test_add_line_draws_a_line_over_the_bars_and_leaves_the_plot_unchanged() -> None:
+	"""
+	Check that the new Plot has the bars and the line, and the first one only the bars.
+
+	.. versionadded:: 0.1.0
+	"""
+	plot = build_sales_plot()
+
+	both = plot.add_line(SHOP, PRICE_LINE)
+
+	plot_axes = plot.to_matplotlib().axes[0]
+	both_axes = both.to_matplotlib().axes[0]
+	assert len(plot_axes.lines) == 0
+	assert len(both_axes.lines) == 1
+	assert len(both_axes.patches) == 3
+
+
+def test_add_line_on_the_right_draws_a_second_axis() -> None:
+	"""
+	Check that a line on the right gets axes of its own, labeled with its column.
+
+	.. versionadded:: 0.1.0
+	"""
+	plot = build_sales_plot()
+
+	both = plot.add_line(SHOP, PRICE_LINE, axis=ndp.ValueAxis.RIGHT)
+
+	figure = both.to_matplotlib()
+	axes_count = len(figure.axes)
+	assert axes_count == 2
+	assert figure.axes[1].get_ylabel() == "price"
+
+
+def test_add_bar_rejects_horizontal_bars() -> None:
+	"""
+	Check that added bars must be vertical.
+
+	.. versionadded:: 0.1.0
+	"""
+	horizontal_bars = ndp.BarChart(x="month", y=["price"], orientation=ndp.Orientation.HORIZONTAL)
+
+	with pytest.raises(ndp.RefusedSettingError):
+		build_sales_plot().add_bar(SHOP, horizontal_bars)
+
+
+def test_add_bar_draws_bars_over_the_bars() -> None:
+	"""
+	Check that added bars are drawn after the first ones.
+
+	.. versionadded:: 0.1.0
+	"""
+	both = build_sales_plot().add_bar(SHOP, ndp.BarChart(x="month", y=["price"]))
+
+	both_axes = both.to_matplotlib().axes[0]
+	assert len(both_axes.patches) == 6
+
+
+def test_add_scatter_draws_points_over_the_bars() -> None:
+	"""
+	Check that added points are drawn on the labels of the bars.
+
+	.. versionadded:: 0.1.0
+	"""
+	both = build_sales_plot().add_scatter(SHOP, PRICE_POINTS)
+
+	both_axes = both.to_matplotlib().axes[0]
+	point_offsets = both_axes.collections[0].get_offsets()
+	offsets = numpy.asarray(point_offsets).tolist()
+	assert offsets == [[0.0, 12.5], [1.0, 11.0], [2.0, 14.0]]
+
+
+def test_add_line_rejects_a_plot_of_boxes() -> None:
+	"""
+	Check that a Plot of boxes refuses added charts.
+
+	.. versionadded:: 0.1.0
+	"""
+	with pytest.raises(ndp.RefusedSettingError, match="BoxChart"):
+		BOX_PLOT.add_line(PRICES, ndp.LineChart())
+
+
+def test_add_line_rejects_numbers_over_texts() -> None:
+	"""
+	Check that a line of numbers cannot be added over bars of texts.
+
+	.. versionadded:: 0.1.0
+	"""
+	with pytest.raises(ndp.IncompatibleChartsError):
+		build_sales_plot().add_line(PRICES, ndp.LineChart())
+
+
+def test_add_line_keeps_the_style_of_the_plot() -> None:
+	"""
+	Check that the new Plot has the title of the first one.
+
+	.. versionadded:: 0.1.0
+	"""
+	plot = ndp.plot_bar(SHOP, SALES_BARS, ndp.Style(title="Shop"))
+
+	both = plot.add_line(SHOP, PRICE_LINE)
+
+	both_axes = both.to_matplotlib().axes[0]
+	assert both_axes.get_title() == "Shop"

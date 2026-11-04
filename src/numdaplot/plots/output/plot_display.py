@@ -1,5 +1,5 @@
 """
-Display of a Plot in a Jupyter notebook or in a matplotlib window.
+Display of a Plot or a Figure in a Jupyter notebook or in a matplotlib window.
 
 .. versionadded:: 0.1.0
 """
@@ -12,44 +12,37 @@ from io import BytesIO
 
 from matplotlib.figure import Figure
 
-from numdaplot.plots.chart_layer import ChartLayer
-from numdaplot.plots.drawing.plot_drawing import FIGURE_LAYOUT, build_figure, draw_plot
+from numdaplot.plots.drawing.plot_drawing import FIGURE_LAYOUT, FigureDrawing, build_figure
 from numdaplot.plots.style.image_options import DEFAULT_DPI
-from numdaplot.plots.style.style import Style
 from numdaplot.tables.preview.notebook_display import is_notebook
 
 IPYTHON_DISPLAY_MODULE = "IPython.display"
 PNG_FORMAT = "png"
 
 
-def show_plot(layers: list[ChartLayer], style: Style) -> None:
+def show_drawing(drawing: FigureDrawing) -> None:
 	"""
-	Show a Plot: as an image in a Jupyter notebook, in a matplotlib window anywhere else.
+	Show what a Plot or a Figure draws: as an image in a Jupyter notebook, in a matplotlib window anywhere else.
 
 	.. versionadded:: 0.1.0
 
 	Parameters
 	----------
-	layers
-		The charts of the Plot and their values.
-	style
-		The look of the Plot.
+	drawing
+		What is drawn, and the size of the figure.
 
 	Examples
 	--------
-	>>> import numdaplot as ndp
-	>>> from numdaplot.plots.chart_layer import ChartLayer
-	>>> from numdaplot.plots.data.array_values import read_array_values
-	>>> from numdaplot.plots.output.plot_display import show_plot
-	>>> prices = ndp.Array.from_list([12.0, 15.5])
-	>>> show_plot([ChartLayer(ndp.LineChart(), read_array_values(prices, "LineChart"))], ndp.Style())
+	>>> from numdaplot.plots.drawing.plot_drawing import FigureDrawing
+	>>> from numdaplot.plots.output.plot_display import show_drawing
+	>>> show_drawing(FigureDrawing(lambda target: target.suptitle("Sales"), (3.0, 2.0)))
 	"""
 	runs_in_notebook = is_notebook()
 	if not runs_in_notebook:
-		show_plot_in_window(layers, style)
+		show_drawing_in_window(drawing)
 		return
 
-	figure = build_figure(layers, style)
+	figure = build_figure(drawing)
 	show_figure_in_notebook(figure)
 
 
@@ -72,37 +65,31 @@ def show_figure_in_notebook(figure: Figure) -> None:
 	display_module.display(image)
 
 
-def show_plot_in_window(layers: list[ChartLayer], style: Style) -> None:
+def show_drawing_in_window(drawing: FigureDrawing) -> None:
 	"""
-	Show a Plot in a matplotlib window, and wait until it is closed unless matplotlib runs interactively.
+	Show what a Plot or a Figure draws in a matplotlib window.
 
-	With a matplotlib backend that opens no window, such as the one of a server, matplotlib warns that the
-	figure cannot be shown.
+	The call waits until the window is closed, unless matplotlib runs interactively. With a matplotlib backend
+	that opens no window, such as the one of a server, matplotlib warns that the figure cannot be shown.
 
 	.. versionadded:: 0.1.0
 
 	Parameters
 	----------
-	layers
-		The charts of the Plot and their values.
-	style
-		The look of the Plot.
+	drawing
+		What is drawn, and the size of the figure.
 
 	Examples
 	--------
-	>>> import numdaplot as ndp
-	>>> from numdaplot.plots.chart_layer import ChartLayer
-	>>> from numdaplot.plots.data.array_values import read_array_values
-	>>> from numdaplot.plots.output.plot_display import show_plot_in_window
-	>>> prices = ndp.Array.from_list([12.0, 15.5])
-	>>> show_plot_in_window([ChartLayer(ndp.LineChart(), read_array_values(prices, "LineChart"))], ndp.Style())
+	>>> from numdaplot.plots.drawing.plot_drawing import FigureDrawing
+	>>> from numdaplot.plots.output.plot_display import show_drawing_in_window
+	>>> show_drawing_in_window(FigureDrawing(lambda target: target.suptitle("Sales"), (3.0, 2.0)))
 	"""
 	# pyplot chooses a matplotlib backend when imported, so it is only imported to open a window.
 	from matplotlib import pyplot
 
-	figure_size = style.size.to_inches()
-	figure = pyplot.figure(figsize=figure_size, dpi=DEFAULT_DPI, layout=FIGURE_LAYOUT)
-	draw_plot(figure, layers, style)
+	figure = pyplot.figure(figsize=drawing.size_inches, dpi=DEFAULT_DPI, layout=FIGURE_LAYOUT)
+	drawing.draw_on(figure)
 	pyplot.show()
 	is_interactive = pyplot.isinteractive()
 	if not is_interactive:

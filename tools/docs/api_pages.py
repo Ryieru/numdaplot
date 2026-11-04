@@ -42,6 +42,7 @@ FIRST_CLASSES = frozenset(
 		"TimeFunction",
 		"Plot",
 		"Chart",
+		"Figure",
 	}
 )
 
@@ -118,6 +119,7 @@ SECTIONS = (
 	Section("numdaplot.ordering", "Sort settings", "ordering"),
 	Section("numdaplot.plots.charts", "Plots", "plots", "Chart settings"),
 	Section("numdaplot.plots.style", "Plots", "plots", "Style settings"),
+	Section("numdaplot.plots.figure", "Plots", "plots", "Figures"),
 	Section("numdaplot.plots", "Plots", "plots"),
 	Section("numdaplot.errors", "Errors", "errors"),
 )

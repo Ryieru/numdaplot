@@ -145,6 +145,7 @@ def test_style_defaults_draw_grid_lines_and_place_the_legend_best() -> None:
 	assert style.title is None
 	assert style.x_label is None
 	assert style.y_label is None
+	assert style.right_label is None
 	assert style.legend == LegendPosition.BEST
 	assert style.grid_lines == GridLines.SHOWN
 	assert style.size == Size()

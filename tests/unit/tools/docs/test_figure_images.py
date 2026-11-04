@@ -4,6 +4,9 @@ Unit tests of the griffe extension showing the image of each plot example.
 .. versionadded:: 0.1.0
 """
 
+# The matplotlib stubs leave the keyword arguments of most drawing methods untyped.
+# pyright: reportUnknownMemberType=false
+
 import base64
 import doctest
 
@@ -17,11 +20,9 @@ from figure_images import (
 	write_image_line,
 	write_svg_image,
 )
-from matplotlib.figure import Figure
+from matplotlib.figure import Figure, FigureBase
 
-import numdaplot as ndp
-from numdaplot.plots.chart_layer import ChartLayer
-from numdaplot.plots.data.array_values import read_array_values
+from numdaplot.plots.drawing.plot_drawing import FigureDrawing
 
 MODULE_NAME = "plots"
 PLOT_LINES = [
@@ -42,19 +43,42 @@ BROKEN_PLOT_TEXT = ">>> plot.show()"
 SVG_START = "<?xml"
 PRINTING_EXAMPLE = ">>> print('hidden')\nhidden\n"
 SVG_TEXT = "<svg/>"
-PRICES = ndp.Array.from_list([12.0, 15.5])
-LAYERS = [ChartLayer(ndp.LineChart(), read_array_values(PRICES, "LineChart"))]
+FIGURE_LINES = [
+	">>> import numdaplot as ndp",
+	">>> plot = ndp.plot_line(ndp.Array.from_list([12.0, 15.5]), ndp.LineChart())",
+	">>> figure = ndp.Figure(ndp.Layout(rows=1, columns=1)).place(plot, ndp.Cell(row=0, column=0))",
+	">>> figure.show()",
+]
+FIGURE_TEXT = "\n".join(FIGURE_LINES)
+SMALL_SIZE = (3.0, 2.0)
 
 
-def test_shown_images_record_each_shown_plot_as_svg() -> None:
+def draw_title(target: FigureBase) -> None:
 	"""
-	Check that a recorded Plot becomes an SVG image.
+	Draw a title on a matplotlib figure.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	target
+		The figure drawn on.
+	"""
+	target.suptitle("Sales")
+
+
+TITLE_DRAWING = FigureDrawing(draw_title, SMALL_SIZE)
+
+
+def test_shown_images_record_each_shown_drawing_as_svg() -> None:
+	"""
+	Check that a recorded drawing becomes an SVG image.
 
 	.. versionadded:: 0.1.0
 	"""
 	shown_images = ShownImages()
 
-	shown_images.record(LAYERS, ndp.Style())
+	shown_images.record(TITLE_DRAWING)
 
 	image_count = len(shown_images.images)
 	assert image_count == 1
@@ -185,3 +209,16 @@ def test_figure_images_skip_an_object_without_docstring() -> None:
 	extension.on_object(obj=module)
 
 	assert module.docstring is None
+
+
+def test_insert_plot_images_places_the_image_of_a_shown_figure() -> None:
+	"""
+	Check that an example showing a Figure also gets its image.
+
+	.. versionadded:: 0.1.0
+	"""
+	shown_text = insert_plot_images(FIGURE_TEXT)
+
+	shown_lines = shown_text.splitlines()
+	image_lines = [line for line in shown_lines if line.startswith(IMAGE_START)]
+	assert len(image_lines) == 1

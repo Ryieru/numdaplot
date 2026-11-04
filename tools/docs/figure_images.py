@@ -1,10 +1,10 @@
 """
 Griffe extension showing the image of each plot example under its code in the documentation site.
 
-The examples of the plots end with ``plot.show()``. When ``mkdocs`` reads a docstring holding such an
-example, this extension runs its examples in order, as doctest does, while ``Plot.show`` draws the Plot as an
-SVG image instead of opening a window. Each image is written in the docstring right under the example that
-showed it, so the documentation shows exactly what the code draws.
+The examples of the plots end with ``plot.show()`` or ``figure.show()``. When ``mkdocs`` reads a docstring
+holding such an example, this extension runs its examples in order, as doctest does, while ``Plot.show`` and
+``Figure.show`` draw an SVG image instead of opening a window. Each image is written in the docstring right
+under the example that showed it, so the documentation shows exactly what the code draws.
 
 .. versionadded:: 0.1.0
 """
@@ -22,12 +22,10 @@ from unittest import mock
 import griffe
 from matplotlib.figure import Figure
 
-from numdaplot.plots.chart_layer import ChartLayer
-from numdaplot.plots.drawing.plot_drawing import build_figure
-from numdaplot.plots.style.style import Style
+from numdaplot.plots.drawing.plot_drawing import FigureDrawing, build_figure
 
 SHOW_CALL = ".show()"
-SHOWN_FUNCTION_PATH = "numdaplot.plots.plot.show_plot"
+SHOWN_FUNCTION_PATHS = ("numdaplot.plots.plot.show_drawing", "numdaplot.plots.figure.figure.show_drawing")
 SVG_FORMAT = "svg"
 TEXT_ENCODING = "utf-8"
 EXAMPLE_FILE_NAME = "<plot example>"
@@ -38,19 +36,16 @@ LINE_SEPARATOR = "\n"
 
 class ShownImages:
 	"""
-	The SVG images of the Plots shown while examples run.
+	The SVG images of the Plots and Figures shown while examples run.
 
 	.. versionadded:: 0.1.0
 
 	Examples
 	--------
-	>>> import numdaplot as ndp
 	>>> from figure_images import ShownImages
-	>>> from numdaplot.plots.chart_layer import ChartLayer
-	>>> from numdaplot.plots.data.array_values import read_array_values
+	>>> from numdaplot.plots.drawing.plot_drawing import FigureDrawing
 	>>> shown_images = ShownImages()
-	>>> prices = ndp.Array.from_list([12.0, 15.5])
-	>>> shown_images.record([ChartLayer(ndp.LineChart(), read_array_values(prices, "LineChart"))], ndp.Style())
+	>>> shown_images.record(FigureDrawing(lambda target: target.suptitle("Sales"), (3.0, 2.0)))
 	>>> shown_images.images[0].startswith("<?xml")
 	True
 	"""
@@ -63,20 +58,18 @@ class ShownImages:
 		"""
 		self.images = list[str]()
 
-	def record(self, layers: list[ChartLayer], style: Style) -> None:
+	def record(self, drawing: FigureDrawing) -> None:
 		"""
-		Draw a shown Plot as an SVG image and keep it, in place of the display of ``Plot.show``.
+		Draw a shown Plot or Figure as an SVG image and keep it, in place of the display of ``show``.
 
 		.. versionadded:: 0.1.0
 
 		Parameters
 		----------
-		layers
-			The charts of the Plot and their values.
-		style
-			The look of the Plot.
+		drawing
+			What the Plot or the Figure draws, and its size.
 		"""
-		figure = build_figure(layers, style)
+		figure = build_figure(drawing)
 		svg_image = write_svg_image(figure)
 		self.images.append(svg_image)
 
@@ -175,7 +168,14 @@ def run_examples(examples: list[doctest.Example]) -> list[list[str]]:
 	example_images = list[list[str]]()
 	printed_output = io.StringIO()
 
-	with mock.patch(SHOWN_FUNCTION_PATH, shown_images.record), contextlib.redirect_stdout(printed_output):
+	with contextlib.ExitStack() as patches:
+		for function_path in SHOWN_FUNCTION_PATHS:
+			function_patch = mock.patch(function_path, shown_images.record)
+			patches.enter_context(function_patch)
+
+		printed_redirection = contextlib.redirect_stdout(printed_output)
+		patches.enter_context(printed_redirection)
+
 		for example in examples:
 			image_count = len(shown_images.images)
 			code = compile(example.source, EXAMPLE_FILE_NAME, SINGLE_STATEMENT_MODE)

@@ -13,7 +13,6 @@ import pytest
 from numpy.typing import NDArray
 
 import numdaplot as ndp
-from numdaplot.errors.duplicate_label_error import DuplicateLabelError
 from numdaplot.errors.empty_total_error import EmptyTotalError
 from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
 from numdaplot.errors.invalid_chart_data_error import InvalidChartDataError
@@ -25,7 +24,6 @@ from numdaplot.plots.data.pie_values import (
 	read_pie_values,
 	require_present_values,
 	require_shares,
-	require_unique_labels,
 	warn_slice_count,
 )
 from numdaplot.plots.data.position_kind import PositionKind
@@ -41,7 +39,6 @@ MISSING_LABEL_SHARES = ndp.Table.from_pandas(MISSING_LABEL_FRAME)
 LABELS_WITH_MISSING = numpy.array(["Paris", None], dtype=object)
 NUMBERS_WITH_MISSING = numpy.array([120.0, numpy.nan])
 PRESENT_NUMBERS = numpy.array([120.0, 80.0])
-REPEATED_LABELS = numpy.array(["Paris", "Lyon", "Paris"], dtype=object)
 NEGATIVE_NUMBERS = numpy.array([120.0, -3.0, -5.0])
 ZERO_NUMBERS = numpy.array([0.0, 0.0])
 READABLE_SLICE_COUNT = 5
@@ -125,16 +122,6 @@ def test_require_present_values_rejects_a_missing_value(values: NDArray[Any]) ->
 	"""
 	with pytest.raises(MissingValueError):
 		require_present_values(values, "sales")
-
-
-def test_require_unique_labels_rejects_a_repeated_label() -> None:
-	"""
-	Check that the first repeated label raises DuplicateLabelError.
-
-	.. versionadded:: 0.1.0
-	"""
-	with pytest.raises(DuplicateLabelError, match="'Paris'"):
-		require_unique_labels(REPEATED_LABELS)
 
 
 def test_require_shares_accepts_a_value_of_zero() -> None:

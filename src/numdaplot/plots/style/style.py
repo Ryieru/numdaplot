@@ -30,12 +30,17 @@ class Style:
 	y_label
 		The label of the axis of the ``y`` values: by default the name of the ``y`` column when the chart
 		draws a single one, no label otherwise, the legend naming the series. An empty text draws no label.
+	right_label
+		The label of the axis on the right, drawn when a chart is added with ``ValueAxis.RIGHT``: by default
+		the name of the column of the first chart on the right when it draws a single one. An empty text draws
+		no label.
 	legend
 		Where the legend is placed, ``LegendPosition.BEST`` by default. It is only drawn for several series.
 	grid_lines
 		Whether light grid lines are drawn behind the values, ``GridLines.SHOWN`` by default.
 	size
-		The width and the height, 6.4 by 4.8 inches by default.
+		The width and the height, 6.4 by 4.8 inches by default. A Plot placed in a ``Figure`` takes the size of
+		its cells instead.
 
 	Examples
 	--------
@@ -53,6 +58,7 @@ class Style:
 	title: str | None = None
 	x_label: str | None = None
 	y_label: str | None = None
+	right_label: str | None = None
 	legend: LegendPosition = LegendPosition.BEST
 	grid_lines: GridLines = GridLines.SHOWN
 	size: Size = Size()

@@ -21,7 +21,7 @@ from numdaplot.plots.plot_line import plot_line
 from numdaplot.plots.plot_missing_by_column import plot_missing_by_column
 from numdaplot.plots.plot_missing_map import plot_missing_map
 from numdaplot.plots.plot_pie import plot_pie, require_no_axis_labels
-from numdaplot.plots.plot_scatter import plot_scatter, read_scatter_layer
+from numdaplot.plots.plot_scatter import plot_scatter
 
 DAYS = ndp.Array.from_list([1, 2, 3])
 PRICES = ndp.Array.from_list([12.0, 15.5, 14.0])
@@ -84,20 +84,6 @@ def test_plot_bar_rejects_colors_not_one_per_series_when_created() -> None:
 		plot_bar(PRICES, ndp.BarChart(colors=TWO_COLORS))
 
 
-def test_plot_scatter_reads_the_color_values_of_a_table() -> None:
-	"""
-	Check that a ScatterChart of a Table keeps the values of its color_by column.
-
-	.. versionadded:: 0.1.0
-	"""
-	chart = ndp.ScatterChart(x="day", y="price", color_by="city")
-
-	layer = read_scatter_layer(SALES, chart)
-
-	assert layer.points is not None
-	assert layer.points.color_name == "city"
-
-
 def test_plot_scatter_rejects_a_table_without_y() -> None:
 	"""
 	Check that a Table needs y.
@@ -126,17 +112,6 @@ def test_plot_scatter_rejects_one_color_for_several_array_columns() -> None:
 	"""
 	with pytest.raises(ndp.InvalidColorCountError):
 		plot_scatter(GRID, ndp.ScatterChart(color=ndp.Color.RED))
-
-
-def test_plot_scatter_accepts_one_color_for_a_single_array_column() -> None:
-	"""
-	Check that one color for a one-dimensional Array is accepted.
-
-	.. versionadded:: 0.1.0
-	"""
-	layer = read_scatter_layer(PRICES, ndp.ScatterChart(color=ndp.Color.RED))
-
-	assert layer.points is None
 
 
 def test_plot_histogram_rejects_a_table_without_columns() -> None:

@@ -8,11 +8,12 @@ Drawing of a Plot on a matplotlib figure.
 # pyright: reportUnknownMemberType=false
 
 from collections.abc import Callable
+from dataclasses import dataclass
 from typing import Any, cast
 
 import matplotlib
 from matplotlib.axes import Axes
-from matplotlib.figure import Figure
+from matplotlib.figure import Figure, FigureBase
 
 from numdaplot.plots.chart_layer import ChartLayer
 from numdaplot.plots.charts.bar_chart import BarChart
@@ -25,14 +26,18 @@ from numdaplot.plots.charts.missing_chart import MissingChart
 from numdaplot.plots.charts.missing_map_chart import MissingMapChart
 from numdaplot.plots.charts.pie_chart import PieChart
 from numdaplot.plots.charts.scatter_chart import ScatterChart
+from numdaplot.plots.charts.value_axis import ValueAxis
 from numdaplot.plots.drawing.bar_drawing import draw_bar_chart
 from numdaplot.plots.drawing.box_drawing import draw_box_chart
 from numdaplot.plots.drawing.drawn_chart import DrawnChart
 from numdaplot.plots.drawing.heatmap_drawing import draw_heatmap_chart
 from numdaplot.plots.drawing.histogram_drawing import draw_histogram_chart
+from numdaplot.plots.drawing.layer_alignment import align_layers
+from numdaplot.plots.drawing.layer_colors import continue_color_cycle
 from numdaplot.plots.drawing.line_drawing import draw_line_chart
 from numdaplot.plots.drawing.missing_drawing import draw_missing_chart, draw_missing_map
 from numdaplot.plots.drawing.pie_drawing import draw_pie_chart
+from numdaplot.plots.drawing.plot_axes import PlotAxes
 from numdaplot.plots.drawing.plot_theme import BACKGROUND_COLOR, THEME
 from numdaplot.plots.drawing.scatter_drawing import draw_scatter_chart
 from numdaplot.plots.drawing.style_drawing import apply_style
@@ -61,46 +66,67 @@ CHART_DRAWERS = dict[type[Chart], ChartDrawer](
 FIGURE_LAYOUT = "constrained"
 
 
-def build_figure(layers: list[ChartLayer], style: Style) -> Figure:
+@dataclass(frozen=True, eq=False)
+class FigureDrawing:
 	"""
-	Return a new matplotlib figure with a Plot drawn on it, which no matplotlib window or notebook shows on its own.
+	What a Plot or a Figure draws, and the size of the figure it needs.
 
 	.. versionadded:: 0.1.0
 
 	Parameters
 	----------
-	layers
-		The charts of the Plot and their values.
-	style
-		The look of the Plot.
+	draw_on
+		The function drawing on an empty matplotlib figure or subfigure.
+	size_inches
+		The width and the height of the figure, in inches.
+
+	Examples
+	--------
+	>>> from numdaplot.plots.drawing.plot_drawing import FigureDrawing
+	>>> FigureDrawing(print, (6.4, 4.8)).size_inches
+	(6.4, 4.8)
+	"""
+
+	draw_on: Callable[[FigureBase], None]
+	size_inches: tuple[float, float]
+
+
+def build_figure(drawing: FigureDrawing) -> Figure:
+	"""
+	Return a new matplotlib figure with a Plot or a Figure drawn on it.
+
+	No matplotlib window or notebook shows the figure on its own.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	drawing
+		What is drawn, and the size of the figure.
 
 	Returns
 	-------
 	matplotlib.figure.Figure
-		The figure, of the size of the style at 100 dots per inch.
+		The figure, at 100 dots per inch.
 
 	Examples
 	--------
-	>>> import numdaplot as ndp
-	>>> from numdaplot.plots.chart_layer import ChartLayer
-	>>> from numdaplot.plots.data.array_values import read_array_values
-	>>> from numdaplot.plots.drawing.plot_drawing import build_figure
-	>>> prices = ndp.Array.from_list([12.0, 15.5])
-	>>> layer = ChartLayer(ndp.LineChart(), read_array_values(prices, "LineChart"))
-	>>> build_figure([layer], ndp.Style()).get_size_inches().tolist()
-	[6.4, 4.8]
+	>>> from numdaplot.plots.drawing.plot_drawing import FigureDrawing, build_figure
+	>>> figure = build_figure(FigureDrawing(lambda target: target.suptitle("Sales"), (3.0, 2.0)))
+	>>> figure.get_size_inches().tolist()
+	[3.0, 2.0]
 	"""
-	figure_size = style.size.to_inches()
-	figure = Figure(figsize=figure_size, dpi=DEFAULT_DPI, layout=FIGURE_LAYOUT)
-	draw_plot(figure, layers, style)
+	figure = Figure(figsize=drawing.size_inches, dpi=DEFAULT_DPI, layout=FIGURE_LAYOUT)
+	drawing.draw_on(figure)
 
 	return figure
 
 
-def draw_plot(figure: Figure, layers: list[ChartLayer], style: Style) -> None:
+def draw_plot(figure: FigureBase, layers: list[ChartLayer], style: Style) -> None:
 	"""
 	Draw the charts of a Plot on new axes of a figure, then its style.
 
+	The charts after the first one continue the default colors and share the ``x`` labels of the others.
 	The numdaplot look is applied while drawing only, so the global matplotlib settings never change.
 
 	.. versionadded:: 0.1.0
@@ -108,7 +134,7 @@ def draw_plot(figure: Figure, layers: list[ChartLayer], style: Style) -> None:
 	Parameters
 	----------
 	figure
-		An empty matplotlib figure.
+		An empty matplotlib figure or subfigure.
 	layers
 		The charts of the Plot and their values, the first one giving the default labels.
 	style
@@ -122,7 +148,7 @@ def draw_plot(figure: Figure, layers: list[ChartLayer], style: Style) -> None:
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> from matplotlib.figure import Figure
+	>>> from matplotlib.figure import Figure, FigureBase
 	>>> from numdaplot.plots.chart_layer import ChartLayer
 	>>> from numdaplot.plots.data.array_values import read_array_values
 	>>> from numdaplot.plots.drawing.plot_drawing import draw_plot
@@ -133,18 +159,114 @@ def draw_plot(figure: Figure, layers: list[ChartLayer], style: Style) -> None:
 	False
 	"""
 	figure.set_facecolor(BACKGROUND_COLOR)
-	drawn_charts = list[DrawnChart]()
+	colored_layers = continue_color_cycle(layers)
+	aligned_layers = align_layers(colored_layers)
 
 	# Some versions of the matplotlib stubs only accept the names of known settings as keys.
 	theme = cast(Any, THEME)
 
 	with matplotlib.rc_context(theme):
-		axes = figure.add_subplot()
+		left_axes = figure.add_subplot()
+		plot_axes, first_chart = draw_layers(left_axes, aligned_layers)
+		apply_style(plot_axes, first_chart, style)
 
-		for layer in layers:
-			chart_class = type(layer.chart)
-			draw_chart = CHART_DRAWERS[chart_class]
-			drawn_chart = draw_chart(axes, layer)
-			drawn_charts.append(drawn_chart)
 
-		apply_style(axes, drawn_charts[0], style)
+def draw_layers(left_axes: Axes, layers: list[ChartLayer]) -> tuple[PlotAxes, DrawnChart]:
+	"""
+	Draw each chart of a Plot in order, on the left axes or on axes measured on the right.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	left_axes
+		The main matplotlib axes of the Plot.
+	layers
+		The charts of the Plot and their values, the first one on the left.
+
+	Returns
+	-------
+	tuple[PlotAxes, DrawnChart]
+		The axes drawn on, with the default label of the axis on the right, and what the first chart tells the
+		style.
+
+	Examples
+	--------
+	>>> import numdaplot as ndp
+	>>> from dataclasses import replace
+	>>> from matplotlib.figure import Figure, FigureBase
+	>>> from numdaplot.plots.chart_layer import ChartLayer
+	>>> from numdaplot.plots.data.table_values import read_table_values
+	>>> from numdaplot.plots.drawing.plot_drawing import draw_layers
+	>>> sales = ndp.Table.from_arrays(
+	... 	{"sales": ndp.Array.from_list([120.0, 80.0]), "price": ndp.Array.from_list([12.5, 11.0])}
+	... )
+	>>> bars = ChartLayer(ndp.BarChart(), read_table_values(sales, None, ["sales"], "BarChart"))
+	>>> line = ChartLayer(ndp.LineChart(), read_table_values(sales, None, ["price"], "LineChart"))
+	>>> right_line = replace(line, value_axis=ndp.ValueAxis.RIGHT)
+	>>> plot_axes, first_chart = draw_layers(Figure().add_subplot(), [bars, right_line])
+	>>> plot_axes.right_label, first_chart.y_label
+	('price', 'sales')
+	"""
+	right_axes = None
+	left_charts = list[DrawnChart]()
+	right_charts = list[DrawnChart]()
+
+	for layer in layers:
+		target_axes = left_axes
+		target_charts = left_charts
+		if layer.value_axis == ValueAxis.RIGHT:
+			right_axes = find_right_axes(left_axes, right_axes)
+			target_axes = right_axes
+			target_charts = right_charts
+
+		chart_class = type(layer.chart)
+		draw_chart = CHART_DRAWERS[chart_class]
+		drawn_chart = draw_chart(target_axes, layer)
+		target_charts.append(drawn_chart)
+
+	right_label = None
+	if right_charts != []:
+		right_label = right_charts[0].y_label
+
+	plot_axes = PlotAxes(left_axes, right_axes, right_label)
+
+	return plot_axes, left_charts[0]
+
+
+def find_right_axes(left_axes: Axes, right_axes: Axes | None) -> Axes:
+	"""
+	Return the axes measured on the right, created the first time a chart is drawn on them.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	left_axes
+		The main matplotlib axes of the Plot.
+	right_axes
+		The axes on the right already created, or None.
+
+	Returns
+	-------
+	matplotlib.axes.Axes
+		Axes sharing the ``x`` values of the main ones, with their scale drawn on the right.
+
+	Examples
+	--------
+	>>> from matplotlib.figure import Figure, FigureBase
+	>>> from numdaplot.plots.drawing.plot_drawing import find_right_axes
+	>>> left_axes = Figure().add_subplot()
+	>>> right_axes = find_right_axes(left_axes, None)
+	>>> find_right_axes(left_axes, right_axes) is right_axes
+	True
+	"""
+	if right_axes is not None:
+		return right_axes
+
+	new_axes = left_axes.twinx()
+	# The numdaplot look hides the line on the right, which the scale on the right needs.
+	right_spine = new_axes.spines["right"]
+	right_spine.set_visible(True)
+
+	return new_axes

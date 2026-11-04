@@ -49,6 +49,7 @@ from numdaplot.dates.time_zone_change import TimeZoneChange
 from numdaplot.dates.time_zone_mode import TimeZoneMode
 from numdaplot.dates.to_duration import ToDuration
 from numdaplot.errors.broadcast_warning import BroadcastWarning
+from numdaplot.errors.cell_out_of_range_error import CellOutOfRangeError
 from numdaplot.errors.column_not_found_error import ColumnNotFoundError
 from numdaplot.errors.conflicting_settings_error import ConflictingSettingsError
 from numdaplot.errors.dimension_error import DimensionError
@@ -61,6 +62,7 @@ from numdaplot.errors.empty_total_error import EmptyTotalError
 from numdaplot.errors.empty_values_error import EmptyValuesError
 from numdaplot.errors.file_exists_error import FileExistsError
 from numdaplot.errors.file_not_found_error import FileNotFoundError
+from numdaplot.errors.incompatible_charts_error import IncompatibleChartsError
 from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
 from numdaplot.errors.invalid_base_error import InvalidBaseError
 from numdaplot.errors.invalid_bin_width_error import InvalidBinWidthError
@@ -88,6 +90,7 @@ from numdaplot.errors.missing_type_error import MissingTypeError
 from numdaplot.errors.missing_value_error import MissingValueError
 from numdaplot.errors.not_single_value_error import NotSingleValueError
 from numdaplot.errors.numdaplot_error import NumdaplotError
+from numdaplot.errors.occupied_cell_error import OccupiedCellError
 from numdaplot.errors.out_of_domain_error import OutOfDomainError
 from numdaplot.errors.readability_warning import ReadabilityWarning
 from numdaplot.errors.refused_operation_error import RefusedOperationError
@@ -123,6 +126,10 @@ from numdaplot.plots.charts.outliers import Outliers
 from numdaplot.plots.charts.percentages import Percentages
 from numdaplot.plots.charts.pie_chart import PieChart
 from numdaplot.plots.charts.scatter_chart import ScatterChart
+from numdaplot.plots.charts.value_axis import ValueAxis
+from numdaplot.plots.figure.cell import Cell
+from numdaplot.plots.figure.figure import Figure
+from numdaplot.plots.figure.layout import Layout
 from numdaplot.plots.plot import Plot
 from numdaplot.plots.plot_bar import plot_bar
 from numdaplot.plots.plot_box import plot_box
@@ -221,6 +228,8 @@ __all__ = [
 	"BroadcastWarning",
 	"Calculation",
 	"Case",
+	"Cell",
+	"CellOutOfRangeError",
 	"CellValues",
 	"Chart",
 	"Color",
@@ -262,6 +271,7 @@ __all__ = [
 	"Equality",
 	"ExcelOptions",
 	"Exponential",
+	"Figure",
 	"FileExistsError",
 	"FileNotFoundError",
 	"Filter",
@@ -272,6 +282,7 @@ __all__ = [
 	"HeatmapChart",
 	"HistogramChart",
 	"ImageOptions",
+	"IncompatibleChartsError",
 	"IncompatibleTypesError",
 	"Index",
 	"InvalidBaseError",
@@ -301,6 +312,7 @@ __all__ = [
 	"JsonLayout",
 	"JsonOptions",
 	"Keep",
+	"Layout",
 	"LegendPosition",
 	"Less",
 	"LessOrEqual",
@@ -330,6 +342,7 @@ __all__ = [
 	"NotEqual",
 	"NotSingleValueError",
 	"NumdaplotError",
+	"OccupiedCellError",
 	"Order",
 	"Orientation",
 	"OutOfDomainError",
@@ -384,6 +397,7 @@ __all__ = [
 	"UnsupportedMissingError",
 	"UnsupportedOperandError",
 	"UnsupportedTypeError",
+	"ValueAxis",
 	"ValueConversionError",
 	"XptOptions",
 	"plot_bar",

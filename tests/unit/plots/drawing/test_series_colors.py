@@ -13,6 +13,7 @@ from numdaplot.plots.drawing.series_colors import (
 	choose_series_colors,
 	find_color_code,
 	require_color_count,
+	take_cycle_colors,
 )
 from numdaplot.plots.style.color import Color
 from numdaplot.plots.style.custom_color import CustomColor
@@ -96,3 +97,25 @@ def test_require_color_count_rejects_a_count_different_from_the_series() -> None
 
 	with pytest.raises(InvalidColorCountError):
 		require_color_count(colors, 2)
+
+
+def test_take_cycle_colors_follows_the_colors_already_used() -> None:
+	"""
+	Check that the colors start after the ones used.
+
+	.. versionadded:: 0.1.0
+	"""
+	colors = take_cycle_colors(1, 2)
+
+	assert colors == [Color.ORANGE, Color.GREEN]
+
+
+def test_take_cycle_colors_starts_again_after_ten_colors() -> None:
+	"""
+	Check that the cycle starts again with blue after cyan.
+
+	.. versionadded:: 0.1.0
+	"""
+	colors = take_cycle_colors(9, 2)
+
+	assert colors == [Color.CYAN, Color.BLUE]

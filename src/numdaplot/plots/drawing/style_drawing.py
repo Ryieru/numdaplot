@@ -7,13 +7,17 @@ Drawing of the Style of a Plot: title, axis labels, grid lines and legend.
 # The matplotlib stubs leave the keyword arguments of most drawing methods untyped.
 # pyright: reportUnknownMemberType=false
 
-from typing import Literal
+from operator import itemgetter
+from typing import Any, Literal, cast
 
+from matplotlib.artist import Artist
 from matplotlib.axes import Axes
 from matplotlib.collections import PathCollection
+from matplotlib.container import Container
 
 from numdaplot.plots.drawing.drawn_chart import DrawnChart
 from numdaplot.plots.drawing.grid_axes import GridAxes
+from numdaplot.plots.drawing.plot_axes import PlotAxes
 from numdaplot.plots.style.grid_lines import GridLines
 from numdaplot.plots.style.legend_position import LegendPosition
 from numdaplot.plots.style.style import Style
@@ -41,7 +45,7 @@ MINIMUM_LEGEND_ENTRIES = 2
 LEGEND_POINT_AREA = 36.0
 
 
-def apply_style(axes: Axes, drawn_chart: DrawnChart, style: Style) -> None:
+def apply_style(plot_axes: PlotAxes, drawn_chart: DrawnChart, style: Style) -> None:
 	"""
 	Draw the title, the axis labels, the grid lines and the legend of a Plot.
 
@@ -49,10 +53,10 @@ def apply_style(axes: Axes, drawn_chart: DrawnChart, style: Style) -> None:
 
 	Parameters
 	----------
-	axes
-		The matplotlib axes of the Plot.
+	plot_axes
+		The matplotlib axes of the Plot, with the ones on the right if any.
 	drawn_chart
-		The default labels and axis directions of its chart.
+		The default labels and axis directions of its first chart.
 	style
 		The look of the Plot.
 
@@ -62,21 +66,25 @@ def apply_style(axes: Axes, drawn_chart: DrawnChart, style: Style) -> None:
 	>>> from matplotlib.figure import Figure
 	>>> from numdaplot.plots.drawing.drawn_chart import DrawnChart
 	>>> from numdaplot.plots.drawing.grid_axes import GridAxes
+	>>> from numdaplot.plots.drawing.plot_axes import PlotAxes
 	>>> from numdaplot.plots.drawing.style_drawing import apply_style
 	>>> axes = Figure().add_subplot()
-	>>> apply_style(axes, DrawnChart("day", "price", False, GridAxes.BOTH, None), ndp.Style(title="Sales"))
+	>>> drawn_chart = DrawnChart("day", "price", False, GridAxes.BOTH, None)
+	>>> apply_style(PlotAxes(axes, None, None), drawn_chart, ndp.Style(title="Sales"))
 	>>> axes.get_title(), axes.get_xlabel(), axes.get_ylabel()
 	('Sales', 'day', 'price')
 	"""
+	axes = plot_axes.left
 	if style.title is not None:
 		axes.set_title(style.title)
 
 	write_axis_labels(axes, drawn_chart, style)
+	write_right_label(plot_axes, style)
 	if style.grid_lines == GridLines.SHOWN:
 		draw_grid_lines(axes, drawn_chart)
 
 	if style.legend != LegendPosition.HIDDEN:
-		place_legend(axes, drawn_chart, style.legend)
+		place_legend(plot_axes, drawn_chart, style.legend)
 
 
 def write_axis_labels(axes: Axes, drawn_chart: DrawnChart, style: Style) -> None:
@@ -185,17 +193,51 @@ def draw_grid_lines(axes: Axes, drawn_chart: DrawnChart) -> None:
 	axes.grid(True, axis=value_axis)
 
 
-def place_legend(axes: Axes, drawn_chart: DrawnChart, legend_position: LegendPosition) -> None:
+def write_right_label(plot_axes: PlotAxes, style: Style) -> None:
 	"""
-	Draw the legend naming the series, when there are at least two of them.
-
-	Points sized by ``size_by`` are all shown with the same size in the legend, which names their colors.
+	Write the label of the axis on the right, the style one or else the default one, when the Plot has that axis.
 
 	.. versionadded:: 0.1.0
 
 	Parameters
 	----------
-	axes
+	plot_axes
+		The matplotlib axes of the Plot.
+	style
+		The label chosen, None for the default.
+
+	Examples
+	--------
+	>>> import numdaplot as ndp
+	>>> from matplotlib.figure import Figure
+	>>> from numdaplot.plots.drawing.plot_axes import PlotAxes
+	>>> from numdaplot.plots.drawing.style_drawing import write_right_label
+	>>> axes = Figure().add_subplot()
+	>>> right_axes = axes.twinx()
+	>>> write_right_label(PlotAxes(axes, right_axes, "price"), ndp.Style())
+	>>> right_axes.get_ylabel()
+	'price'
+	"""
+	if plot_axes.right is None:
+		return
+
+	right_label = choose_label(style.right_label, plot_axes.right_label)
+	plot_axes.right.set_ylabel(right_label)
+
+
+def place_legend(plot_axes: PlotAxes, drawn_chart: DrawnChart, legend_position: LegendPosition) -> None:
+	"""
+	Draw the legend naming the series of every chart, when there are at least two of them.
+
+	The series are named in the order they are drawn, the ones of the left axes first. The legend is drawn over
+	the axes on the right if any, so their charts never hide it. Points sized by
+	``size_by`` are all shown with the same size in the legend, which names their colors.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	plot_axes
 		The matplotlib axes of the Plot.
 	drawn_chart
 		The title of the legend, if any.
@@ -208,14 +250,25 @@ def place_legend(axes: Axes, drawn_chart: DrawnChart, legend_position: LegendPos
 	>>> from matplotlib.figure import Figure
 	>>> from numdaplot.plots.drawing.drawn_chart import DrawnChart
 	>>> from numdaplot.plots.drawing.grid_axes import GridAxes
+	>>> from numdaplot.plots.drawing.plot_axes import PlotAxes
 	>>> from numdaplot.plots.drawing.style_drawing import place_legend
 	>>> axes = Figure().add_subplot()
-	>>> lines = axes.plot([1, 2], label="price") + axes.plot([2, 1], label="cost")
-	>>> place_legend(axes, DrawnChart(None, None, False, GridAxes.BOTH, None), ndp.LegendPosition.UPPER_LEFT)
-	>>> [text.get_text() for text in axes.get_legend().get_texts()]
+	>>> price_lines = axes.plot([1.0, 2.0], label="price")
+	>>> right_axes = axes.twinx()
+	>>> cost_lines = right_axes.plot([3.0, 1.0], label="cost")
+	>>> drawn_chart = DrawnChart(None, None, False, GridAxes.BOTH, None)
+	>>> place_legend(PlotAxes(axes, right_axes, None), drawn_chart, ndp.LegendPosition.UPPER_LEFT)
+	>>> [text.get_text() for text in right_axes.get_legend().get_texts()]
 	['price', 'cost']
 	"""
-	_, labels = axes.get_legend_handles_labels()
+	handles, labels = list_legend_entries(plot_axes.left)
+	legend_axes = plot_axes.left
+	if plot_axes.right is not None:
+		right_handles, right_labels = list_legend_entries(plot_axes.right)
+		handles = [*handles, *right_handles]
+		labels = [*labels, *right_labels]
+		legend_axes = plot_axes.right
+
 	label_count = len(labels)
 	if label_count < MINIMUM_LEGEND_ENTRIES:
 		return
@@ -225,8 +278,98 @@ def place_legend(axes: Axes, drawn_chart: DrawnChart, legend_position: LegendPos
 	if legend_position == LegendPosition.OUTSIDE_RIGHT:
 		anchor = OUTSIDE_ANCHOR
 
-	legend = axes.legend(loc=location, bbox_to_anchor=anchor, title=drawn_chart.legend_title)
+	legend = legend_axes.legend(handles, labels, loc=location, bbox_to_anchor=anchor, title=drawn_chart.legend_title)
 
 	for handle in legend.legend_handles:
 		if isinstance(handle, PathCollection):
 			handle.set_sizes([LEGEND_POINT_AREA])
+
+
+def list_legend_entries(axes: Axes) -> tuple[list[Any], list[str]]:
+	"""
+	Return the legend entries of matplotlib axes in the order their series were drawn.
+
+	matplotlib lists bars and boxes after lines and points, whatever their order: each entry is placed back at
+	the position of its first drawn shape.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	axes
+		The matplotlib axes.
+
+	Returns
+	-------
+	tuple[list[Any], list[str]]
+		The handles drawn in the legend, and the label of each one.
+
+	Examples
+	--------
+	>>> from matplotlib.figure import Figure
+	>>> from numdaplot.plots.drawing.style_drawing import list_legend_entries
+	>>> axes = Figure().add_subplot()
+	>>> bars = axes.bar([0.0, 1.0], [3.0, 4.0], label="sales")
+	>>> lines = axes.plot([0.0, 1.0], [2.0, 5.0], label="target")
+	>>> list_legend_entries(axes)[1]
+	['sales', 'target']
+	"""
+	handles, labels = axes.get_legend_handles_labels()
+	children = axes.get_children()
+	child_positions = {id(child): i for i, child in enumerate(children)}
+	child_count = len(children)
+	entry_positions = list[int]()
+
+	for handle in handles:
+		shape_id = find_first_shape_id(handle)
+		entry_position = child_positions.get(shape_id, child_count)
+		entry_positions.append(entry_position)
+
+	entries = zip(entry_positions, handles, labels, strict=True)
+	ordered_entries = sorted(entries, key=itemgetter(0))
+	ordered_handles = [handle for _, handle, _ in ordered_entries]
+	ordered_labels = [label for _, _, label in ordered_entries]
+
+	return ordered_handles, ordered_labels
+
+
+def find_first_shape_id(handle: Any) -> int:
+	"""
+	Return the identity of the first shape drawn for a legend entry.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	handle
+		A legend handle: a drawn shape, or a container of shapes such as the bars of a series.
+
+	Returns
+	-------
+	int
+		The ``id`` of the shape, or of the first shape of a container that holds one, else of the handle.
+
+	Examples
+	--------
+	>>> from matplotlib.figure import Figure
+	>>> from numdaplot.plots.drawing.style_drawing import find_first_shape_id
+	>>> axes = Figure().add_subplot()
+	>>> bars = axes.bar([0.0, 1.0], [3.0, 4.0])
+	>>> find_first_shape_id(bars) == id(bars.patches[0])
+	True
+	"""
+	if not isinstance(handle, Container):
+		handle_id = id(handle)
+		return handle_id
+
+	# The matplotlib stubs leave the shapes of a container untyped.
+	shapes = cast(tuple[Artist, ...], handle)
+	shape_count = len(shapes)
+	if shape_count == 0:
+		container_id = id(handle)
+		return container_id
+
+	first_shape = shapes[0]
+	shape_id = id(first_shape)
+
+	return shape_id

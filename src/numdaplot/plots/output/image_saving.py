@@ -13,7 +13,10 @@ from matplotlib.figure import Figure
 
 from numdaplot.errors.refused_setting_error import RefusedSettingError
 from numdaplot.errors.unsupported_image_format_error import UnsupportedImageFormatError
+from numdaplot.plots.drawing.plot_drawing import FigureDrawing, build_figure
 from numdaplot.plots.style.image_options import DEFAULT_DPI, ImageOptions
+from numdaplot.tables.conflict import Conflict
+from numdaplot.tables.files.file_paths import FilePath, require_free_path
 
 IMAGE_FORMATS = {".png": "png", ".svg": "svg", ".pdf": "pdf"}
 RESOLUTION_EXTENSION = ".png"
@@ -132,3 +135,49 @@ def save_figure(figure: Figure, path: Path, image_format: str, resolution: int) 
 	b'%PDF'
 	"""
 	figure.savefig(path, format=image_format, dpi=resolution)
+
+
+def write_image(drawing: FigureDrawing, path: FilePath, options: ImageOptions | None, on_conflict: Conflict) -> None:
+	"""
+	Save what a Plot or a Figure draws as an image, in the format named by the extension of the path.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	drawing
+		What is drawn, and the size of the image.
+	path
+		The path of the image, ending with ``.png``, ``.svg`` or ``.pdf``.
+	options
+		The resolution of a PNG image, 100 dots per inch when omitted. SVG and PDF images take none.
+	on_conflict
+		``ERROR`` refuses to overwrite an existing file, ``REPLACE`` overwrites it.
+
+	Raises
+	------
+	UnsupportedImageFormatError
+		When the path does not end with ``.png``, ``.svg`` or ``.pdf``.
+	RefusedSettingError
+		When options are given for an SVG or PDF image.
+	FileExistsError
+		When a file exists at the path and ``on_conflict`` is ``ERROR``.
+
+	Examples
+	--------
+	>>> import tempfile
+	>>> from pathlib import Path
+	>>> import numdaplot as ndp
+	>>> from numdaplot.plots.drawing.plot_drawing import FigureDrawing
+	>>> from numdaplot.plots.output.image_saving import write_image
+	>>> path = Path(tempfile.mkdtemp()) / "title.svg"
+	>>> write_image(FigureDrawing(lambda target: target.suptitle("Sales"), (3.0, 2.0)), path, None, ndp.Conflict.ERROR)
+	>>> path.read_text().startswith("<?xml")
+	True
+	"""
+	file_path = Path(path)
+	image_format = find_image_format(file_path)
+	resolution = choose_resolution(file_path, options)
+	require_free_path(file_path, on_conflict)
+	figure = build_figure(drawing)
+	save_figure(figure, file_path, image_format, resolution)

@@ -4,15 +4,21 @@ Unit tests of the image files of a Plot.
 .. versionadded:: 0.1.0
 """
 
+# The matplotlib stubs leave the keyword arguments of most drawing methods untyped.
+# pyright: reportUnknownMemberType=false
+
 from pathlib import Path
 
 import pytest
-from matplotlib.figure import Figure
+from matplotlib.figure import Figure, FigureBase
 
+from numdaplot.errors.file_exists_error import FileExistsError
 from numdaplot.errors.refused_setting_error import RefusedSettingError
 from numdaplot.errors.unsupported_image_format_error import UnsupportedImageFormatError
-from numdaplot.plots.output.image_saving import choose_resolution, find_image_format, save_figure
+from numdaplot.plots.drawing.plot_drawing import FigureDrawing
+from numdaplot.plots.output.image_saving import choose_resolution, find_image_format, save_figure, write_image
 from numdaplot.plots.style.image_options import ImageOptions
+from numdaplot.tables.conflict import Conflict
 
 PNG_PATH = Path("sales.png")
 SVG_PATH = Path("sales.svg")
@@ -21,6 +27,25 @@ REJECTED_PATHS = [Path("sales.jpg"), Path("sales")]
 HIGH_RESOLUTION = 200
 DEFAULT_RESOLUTION = 100
 PNG_SIGNATURE = b"\x89PNG"
+SMALL_INCHES = (3.0, 2.0)
+OLD_CONTENT = "old"
+
+
+def draw_title(target: FigureBase) -> None:
+	"""
+	Draw a title on a matplotlib figure.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	target
+		The figure drawn on.
+	"""
+	target.suptitle("Sales")
+
+
+TITLE_DRAWING = FigureDrawing(draw_title, SMALL_INCHES)
 
 
 @pytest.mark.parametrize(
@@ -110,3 +135,61 @@ def test_save_figure_writes_the_image_in_its_format(tmp_path: Path) -> None:
 
 	image_start = path.read_bytes()[:4]
 	assert image_start == PNG_SIGNATURE
+
+
+def test_write_image_saves_the_drawing_in_the_format_of_the_extension(tmp_path: Path) -> None:
+	"""
+	Check that a drawing saved as .png is a PNG image.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	tmp_path
+		A temporary folder.
+	"""
+	image_path = tmp_path / PNG_PATH
+
+	write_image(TITLE_DRAWING, image_path, None, Conflict.ERROR)
+
+	image_start = image_path.read_bytes()[:4]
+	assert image_start == PNG_SIGNATURE
+
+
+def test_write_image_refuses_to_overwrite_with_error(tmp_path: Path) -> None:
+	"""
+	Check that an existing file raises FileExistsError and keeps its content.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	tmp_path
+		A temporary folder.
+	"""
+	image_path = tmp_path / SVG_PATH
+	image_path.write_text(OLD_CONTENT)
+
+	with pytest.raises(FileExistsError):
+		write_image(TITLE_DRAWING, image_path, None, Conflict.ERROR)
+
+	assert image_path.read_text() == OLD_CONTENT
+
+
+def test_write_image_replaces_a_file_with_replace(tmp_path: Path) -> None:
+	"""
+	Check that REPLACE overwrites an existing file.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	tmp_path
+		A temporary folder.
+	"""
+	image_path = tmp_path / SVG_PATH
+	image_path.write_text(OLD_CONTENT)
+
+	write_image(TITLE_DRAWING, image_path, None, Conflict.REPLACE)
+
+	assert image_path.read_text().startswith("<?xml")
