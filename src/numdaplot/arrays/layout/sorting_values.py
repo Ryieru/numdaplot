@@ -48,7 +48,7 @@ def sort_values(values: NDArray[Any], sorting: ArraySorting) -> NDArray[Any]:
 	>>> from numdaplot.arrays.layout.sorting_values import sort_values
 	>>> sort_values(numpy.array([[3, 1], [2, 4]]), ndp.ArraySorting(axis=ndp.Axis.EACH_COLUMN))
 	array([[2, 1],
-	[3, 4]])
+	       [3, 4]])
 	"""
 	numpy_axis = find_numpy_axis(sorting.axis, values.ndim)
 	if numpy_axis is None:

@@ -67,8 +67,8 @@ class TableReading(TableData):
 		>>> path = Path(tempfile.mkdtemp()) / "sales.csv"
 		>>> _ = path.write_text("city;price\nParis;1.5\nLyon;\n")
 		>>> ndp.Table.from_csv(path, ndp.CsvOptions(separator=";"))
-		city   price
-		TEXT FLOAT64
+		    city   price
+		    TEXT FLOAT64
 		0  Paris     1.5
 		1   Lyon     NaN
 		"""
@@ -118,8 +118,8 @@ class TableReading(TableData):
 		>>> path = Path(tempfile.mkdtemp()) / "sales.jsonl"
 		>>> _ = path.write_text('{"city": "Paris", "count": 2}\n{"city": "Lyon", "count": null}\n')
 		>>> ndp.Table.from_json(path, ndp.JsonOptions(layout=ndp.JsonLayout.LINES))
-		city count
-		TEXT INT64
+		    city count
+		    TEXT INT64
 		0  Paris     2
 		1   Lyon  <NA>
 		"""

@@ -44,8 +44,8 @@ class Sorting:
 	>>> by_city = ndp.SortKey(column="city")
 	>>> by_price = ndp.SortKey(column="price", order=ndp.Order.DESCENDING)
 	>>> sales.sort(ndp.Sorting(keys=[by_city, by_price]))
-	city   price
-	TEXT FLOAT64
+	    city   price
+	    TEXT FLOAT64
 	0   Lyon    80.0
 	1  Paris   150.0
 	2  Paris   120.0

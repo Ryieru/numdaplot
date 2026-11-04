@@ -62,7 +62,7 @@ def read_excel_file(path: Path, options: ExcelOptions) -> pandas.DataFrame:
 	>>> path = Path(tempfile.mkdtemp()) / "sales.xlsx"
 	>>> pandas.DataFrame({"price": [1.5]}).to_excel(path, index=False)
 	>>> read_excel_file(path, ndp.ExcelOptions())
-	price
+	   price
 	0    1.5
 	"""
 	require_package(EXCEL_PACKAGE, EXCEL_EXTRA)

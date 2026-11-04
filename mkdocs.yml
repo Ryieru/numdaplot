@@ -64,6 +64,7 @@ plugins:
               - "!^__post_init__$"
             extensions:
               - tools/docs/figure_images.py
+              - tools/docs/example_code.py
               - tools/docs/version_directives.py
               - tools/docs/tab_indentation.py
               - tools/docs/default_values.py

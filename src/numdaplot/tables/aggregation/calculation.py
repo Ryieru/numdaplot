@@ -46,8 +46,8 @@ class Calculation:
 	>>> total = ndp.Calculation(column="price", function=ndp.Sum())
 	>>> highest = ndp.Calculation(column="price", function=ndp.Max(), result_name="highest_price")
 	>>> sales.aggregate(ndp.Aggregation(calculations=[total, highest]))
-	price_sum highest_price
-	FLOAT64       FLOAT64
+	  price_sum highest_price
+	    FLOAT64       FLOAT64
 	0     350.0         150.0
 	"""
 

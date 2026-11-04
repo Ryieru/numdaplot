@@ -46,8 +46,8 @@ class TableLayout(TableData):
 		>>> import numdaplot as ndp
 		>>> table = ndp.Table.from_arrays({"price": ndp.Array.from_list([20.0, 10.0, 30.0])})
 		>>> table.sort(ndp.Sorting(keys=[ndp.SortKey(column="price", order=ndp.Order.DESCENDING)]))
-		price
-		FLOAT64
+		    price
+		  FLOAT64
 		0    30.0
 		1    20.0
 		2    10.0
@@ -84,10 +84,10 @@ class TableLayout(TableData):
 		>>> import numdaplot as ndp
 		>>> table = ndp.Table.from_arrays({"city": ndp.Array.from_list(["Pau", "Lyon", "Pau"])})
 		>>> table.drop_duplicates(ndp.Deduplication())
-		city
-		TEXT
-		0  Pau
-		1 Lyon
+		   city
+		   TEXT
+		0   Pau
+		1  Lyon
 		"""
 		remaining_frame = drop_duplicate_rows(self._frame, deduplication)
 		remaining_table = self._wrap(remaining_frame)

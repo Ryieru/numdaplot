@@ -25,10 +25,10 @@ class DateFormat(Enum):
 	>>> import numdaplot as ndp
 	>>> days = ndp.Table.from_arrays({"day": ndp.Array.from_list(["31/12/2026", "1.2.2026"])})
 	>>> days.convert(ndp.Conversion(column="day", dtype=ndp.Type.DATE, format=ndp.DateFormat.DAY_MONTH_YEAR))
-	day
-	DATE
-	0  2026-12-31
-	1  2026-02-01
+	         day
+	        DATE
+	0 2026-12-31
+	1 2026-02-01
 	"""
 
 	DAY_MONTH_YEAR = auto()
@@ -40,9 +40,9 @@ class DateFormat(Enum):
 	>>> import numdaplot as ndp
 	>>> days = ndp.Table.from_arrays({"day": ndp.Array.from_list(["31/12/2026"])})
 	>>> days.convert(ndp.Conversion(column="day", dtype=ndp.Type.DATE, format=ndp.DateFormat.DAY_MONTH_YEAR))
-	day
-	DATE
-	0  2026-12-31
+	         day
+	        DATE
+	0 2026-12-31
 	"""
 
 	MONTH_DAY_YEAR = auto()
@@ -54,9 +54,9 @@ class DateFormat(Enum):
 	>>> import numdaplot as ndp
 	>>> days = ndp.Table.from_arrays({"day": ndp.Array.from_list(["12/31/2026"])})
 	>>> days.convert(ndp.Conversion(column="day", dtype=ndp.Type.DATE, format=ndp.DateFormat.MONTH_DAY_YEAR))
-	day
-	DATE
-	0  2026-12-31
+	         day
+	        DATE
+	0 2026-12-31
 	"""
 
 	YEAR_MONTH_DAY = auto()
@@ -68,9 +68,9 @@ class DateFormat(Enum):
 	>>> import numdaplot as ndp
 	>>> days = ndp.Table.from_arrays({"day": ndp.Array.from_list(["2026-12-31"])})
 	>>> days.convert(ndp.Conversion(column="day", dtype=ndp.Type.DATE, format=ndp.DateFormat.YEAR_MONTH_DAY))
-	day
-	DATE
-	0  2026-12-31
+	         day
+	        DATE
+	0 2026-12-31
 	"""
 
 	DAY_MONTH_YEAR_TIME = auto()
@@ -83,9 +83,9 @@ class DateFormat(Enum):
 	>>> times = ndp.Table.from_arrays({"time": ndp.Array.from_list(["31/12/2026 14:30"])})
 	>>> day_first = ndp.DateFormat.DAY_MONTH_YEAR_TIME
 	>>> times.convert(ndp.Conversion(column="time", dtype=ndp.Type.DATETIME, format=day_first))
-	time
-	DATETIME
-	0  2026-12-31 14:30:00
+	                 time
+	             DATETIME
+	0 2026-12-31 14:30:00
 	"""
 
 	MONTH_DAY_YEAR_TIME = auto()
@@ -98,9 +98,9 @@ class DateFormat(Enum):
 	>>> times = ndp.Table.from_arrays({"time": ndp.Array.from_list(["12/31/2026 14:30"])})
 	>>> month_first = ndp.DateFormat.MONTH_DAY_YEAR_TIME
 	>>> times.convert(ndp.Conversion(column="time", dtype=ndp.Type.DATETIME, format=month_first))
-	time
-	DATETIME
-	0  2026-12-31 14:30:00
+	                 time
+	             DATETIME
+	0 2026-12-31 14:30:00
 	"""
 
 	YEAR_MONTH_DAY_TIME = auto()
@@ -114,7 +114,7 @@ class DateFormat(Enum):
 	>>> times = ndp.Table.from_arrays({"time": ndp.Array.from_list(["2026-12-31T14:30:15"])})
 	>>> year_first = ndp.DateFormat.YEAR_MONTH_DAY_TIME
 	>>> times.convert(ndp.Conversion(column="time", dtype=ndp.Type.DATETIME, format=year_first))
-	time
-	DATETIME
-	0  2026-12-31 14:30:15
+	                 time
+	             DATETIME
+	0 2026-12-31 14:30:15
 	"""

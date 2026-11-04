@@ -21,8 +21,8 @@ class ColumnMatch(Enum):
 	>>> ranges = ndp.Table.from_arrays({"low": low, "high": high})
 	>>> above_ten = ndp.Condition(rule=ndp.Greater(10), mode=ndp.ColumnMatch.ALL)
 	>>> ranges.filter(ndp.Filter(conditions=[above_ten]))
-	low    high
-	FLOAT64 FLOAT64
+	      low    high
+	  FLOAT64 FLOAT64
 	0    20.0    40.0
 	"""
 
@@ -38,8 +38,8 @@ class ColumnMatch(Enum):
 	>>> ranges = ndp.Table.from_arrays({"low": low, "high": high})
 	>>> above_ten = ndp.Condition(rule=ndp.Greater(10), mode=ndp.ColumnMatch.ANY)
 	>>> ranges.filter(ndp.Filter(conditions=[above_ten]))
-	low    high
-	FLOAT64 FLOAT64
+	      low    high
+	  FLOAT64 FLOAT64
 	0     5.0    30.0
 	1    20.0    40.0
 	"""
@@ -56,7 +56,7 @@ class ColumnMatch(Enum):
 	>>> ranges = ndp.Table.from_arrays({"low": low, "high": high})
 	>>> above_ten = ndp.Condition(rule=ndp.Greater(10), mode=ndp.ColumnMatch.ALL)
 	>>> ranges.filter(ndp.Filter(conditions=[above_ten]))
-	low    high
-	FLOAT64 FLOAT64
+	      low    high
+	  FLOAT64 FLOAT64
 	0    20.0    40.0
 	"""

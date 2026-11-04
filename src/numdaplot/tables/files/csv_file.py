@@ -52,7 +52,7 @@ def read_csv_file(path: Path, options: CsvOptions) -> pandas.DataFrame:
 	>>> path = folder / "sales.csv"
 	>>> _ = path.write_text("city;price\nParis;1.5\n")
 	>>> read_csv_file(path, ndp.CsvOptions(separator=";"))
-	city  price
+	    city  price
 	0  Paris    1.5
 	"""
 	header = read_csv_header(path, options)

@@ -47,8 +47,8 @@ class NewColumn:
 	>>> sales = ndp.Table.from_arrays({"city": cities, "price": prices})
 	>>> taxed_prices = sales.column("price") * 1.2
 	>>> sales.add_column(ndp.NewColumn(name="taxed_price", values=taxed_prices))
-	city   price taxed_price
-	TEXT FLOAT64     FLOAT64
+	    city   price taxed_price
+	    TEXT FLOAT64     FLOAT64
 	0  Paris   120.0       144.0
 	1   Lyon    80.0        96.0
 	2  Paris   150.0       180.0

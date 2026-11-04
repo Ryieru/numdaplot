@@ -23,8 +23,8 @@ class Conflict(Enum):
 	>>> sales = ndp.Table.from_arrays({"city": cities, "price": prices})
 	>>> taxed_prices = sales.column("price") * 1.2
 	>>> sales.add_column(ndp.NewColumn(name="price", values=taxed_prices, on_conflict=ndp.Conflict.REPLACE))
-	city   price
-	TEXT FLOAT64
+	    city   price
+	    TEXT FLOAT64
 	0  Paris   144.0
 	1   Lyon    96.0
 	2  Paris   180.0
@@ -60,8 +60,8 @@ class Conflict(Enum):
 	>>> sales = ndp.Table.from_arrays({"city": cities, "price": prices})
 	>>> taxed_prices = sales.column("price") * 1.2
 	>>> sales.add_column(ndp.NewColumn(name="price", values=taxed_prices, on_conflict=ndp.Conflict.REPLACE))
-	city   price
-	TEXT FLOAT64
+	    city   price
+	    TEXT FLOAT64
 	0  Paris   144.0
 	1   Lyon    96.0
 	2  Paris   180.0

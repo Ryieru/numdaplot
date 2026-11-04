@@ -36,7 +36,7 @@ def choose_preview_rows(frame: pandas.DataFrame, preview: Preview) -> pandas.Dat
 	>>> from numdaplot.tables.preview.preview_rows import choose_preview_rows
 	>>> frame = pandas.DataFrame({"price": [1.0, 2.0, 3.0]})
 	>>> choose_preview_rows(frame, ndp.Preview(count=2, side=ndp.Side.END))
-	price
+	   price
 	1    2.0
 	2    3.0
 	"""

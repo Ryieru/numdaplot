@@ -20,8 +20,8 @@ class ColumnMode(Enum):
 	>>> prices = ndp.Array.from_list([120.0, 80.0, 150.0])
 	>>> sales = ndp.Table.from_arrays({"city": cities, "price": prices})
 	>>> sales.choose_columns(ndp.ColumnChoice(columns=["price"], mode=ndp.ColumnMode.DROP))
-	city
-	TEXT
+	    city
+	    TEXT
 	0  Paris
 	1   Lyon
 	2  Paris
@@ -38,8 +38,8 @@ class ColumnMode(Enum):
 	>>> prices = ndp.Array.from_list([120.0, 80.0, 150.0])
 	>>> sales = ndp.Table.from_arrays({"city": cities, "price": prices})
 	>>> sales.choose_columns(ndp.ColumnChoice(columns=["price"], mode=ndp.ColumnMode.KEEP))
-	price
-	FLOAT64
+	    price
+	  FLOAT64
 	0   120.0
 	1    80.0
 	2   150.0
@@ -56,8 +56,8 @@ class ColumnMode(Enum):
 	>>> prices = ndp.Array.from_list([120.0, 80.0, 150.0])
 	>>> sales = ndp.Table.from_arrays({"city": cities, "price": prices})
 	>>> sales.choose_columns(ndp.ColumnChoice(columns=["price"], mode=ndp.ColumnMode.DROP))
-	city
-	TEXT
+	    city
+	    TEXT
 	0  Paris
 	1   Lyon
 	2  Paris

@@ -53,8 +53,8 @@ class TableSelection(TableData):
 		>>> stocks = ndp.Array.from_list([3.0, 5.0, None])
 		>>> table = ndp.Table.from_arrays({"price": prices, "stock": stocks})
 		>>> table.check(ndp.IsMissing())
-		price  stock
-		BOOL   BOOL
+		   price  stock
+		    BOOL   BOOL
 		0  False  False
 		1   True  False
 		2  False   True
@@ -95,8 +95,8 @@ class TableSelection(TableData):
 		>>> table = ndp.Table.from_arrays({"city": cities, "price": prices})
 		>>> expensive = ndp.Condition(rule=ndp.Greater(100), columns=["price"])
 		>>> table.filter(ndp.Filter(conditions=[expensive]))
-		city   price
-		TEXT FLOAT64
+		    city   price
+		    TEXT FLOAT64
 		0  Paris   120.0
 		1    Pau   150.0
 		"""
@@ -141,8 +141,8 @@ class TableSelection(TableData):
 		>>> prices = ndp.Array.from_list([120.0, 80.0, 150.0])
 		>>> table = ndp.Table.from_arrays({"price": prices})
 		>>> table.take(ndp.Region(rows=ndp.Range(start=1, stop=2), columns=["price"]))
-		price
-		FLOAT64
+		    price
+		  FLOAT64
 		0    80.0
 		1   150.0
 		"""

@@ -50,7 +50,7 @@ def rename_frame_columns(frame: pandas.DataFrame, renamings: list[Renaming]) -> 
 	>>> frame = pandas.DataFrame({"low": [1.0], "high": [9.0]})
 	>>> swap = [ndp.Renaming(old_name="low", new_name="high"), ndp.Renaming(old_name="high", new_name="low")]
 	>>> rename_frame_columns(frame, swap)
-	high  low
+	   high  low
 	0   1.0  9.0
 	"""
 	if renamings == []:

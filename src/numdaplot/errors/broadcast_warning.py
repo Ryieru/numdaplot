@@ -27,7 +27,7 @@ class BroadcastWarning(UserWarning):
 	... 	sums = grid + row
 	>>> sums
 	Array([[11, 22],
-	[13, 24]], dtype=INT64)
+	       [13, 24]], dtype=INT64)
 	>>> print(caught_warnings[0].message)
 	Shapes (2, 2) and (2,) differ, values are repeated to match.
 	"""

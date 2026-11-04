@@ -338,7 +338,7 @@ def build_durations(values: NDArray[Any], unit: DurationUnit, function_name: str
 	>>> import numdaplot as ndp
 	>>> from numdaplot.arrays.calculation.time_function_values import build_durations
 	>>> build_durations(numpy.array([1.5, numpy.nan]), ndp.DurationUnit.DAY, "ToDuration")
-	array([129600000000000,                'NaT'], dtype='timedelta64[ns]')
+	array([129600000000000,           'NaT'], dtype='timedelta64[ns]')
 	"""
 	require_family(values, NUMBER_FAMILIES, function_name)
 	unit_code = DURATION_UNIT_CODES[unit]

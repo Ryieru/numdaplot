@@ -136,8 +136,8 @@ class TableColumns(TableData):
 		>>> import numdaplot as ndp
 		>>> table = ndp.Table.from_arrays({"zip_code": ndp.Array.from_list(["06000", "75001"])})
 		>>> table.convert(ndp.Conversion(column="zip_code", dtype=ndp.Type.INT32))
-		zip_code
-		INT32
+		  zip_code
+		     INT32
 		0     6000
 		1    75001
 		"""
@@ -180,8 +180,8 @@ class TableColumns(TableData):
 		>>> table = ndp.Table.from_arrays({"price": ndp.Array.from_list([10.0, 20.0])})
 		>>> taxed_prices = table.column("price") * 1.2
 		>>> table.add_column(ndp.NewColumn(name="taxed_price", values=taxed_prices))
-		price taxed_price
-		FLOAT64     FLOAT64
+		    price taxed_price
+		  FLOAT64     FLOAT64
 		0    10.0        12.0
 		1    20.0        24.0
 		"""

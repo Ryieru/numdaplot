@@ -44,8 +44,8 @@ class Aggregation:
 	>>> sales = ndp.Table.from_arrays({"city": cities, "price": prices})
 	>>> average_price = ndp.Calculation(column="price", function=ndp.Mean())
 	>>> sales.aggregate(ndp.Aggregation(calculations=[average_price], group_by=["city"]))
-	city price_mean
-	TEXT    FLOAT64
+	    city price_mean
+	    TEXT    FLOAT64
 	0   Lyon       80.0
 	1  Paris      135.0
 	"""

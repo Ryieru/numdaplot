@@ -57,7 +57,7 @@ def build_array_frame(columns: dict[str, Array]) -> pandas.DataFrame:
 	>>> import numdaplot as ndp
 	>>> from numdaplot.tables.frames.array_frame import build_array_frame
 	>>> build_array_frame({"city": ndp.Array.from_list(["Pau"]), "price": ndp.Array.from_list([1.5])})
-	city  price
+	  city  price
 	0  Pau    1.5
 	"""
 	if columns == {}:

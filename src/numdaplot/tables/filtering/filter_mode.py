@@ -22,8 +22,8 @@ class FilterMode(Enum):
 	>>> expensive = ndp.Condition(rule=ndp.Greater(130), columns=["price"])
 	>>> in_lyon = ndp.Condition(rule=ndp.Equal("Lyon"), columns=["city"])
 	>>> sales.filter(ndp.Filter(conditions=[expensive, in_lyon], mode=ndp.FilterMode.ANY))
-	city   price
-	TEXT FLOAT64
+	    city   price
+	    TEXT FLOAT64
 	0   Lyon    80.0
 	1  Paris   150.0
 	"""
@@ -59,8 +59,8 @@ class FilterMode(Enum):
 	>>> expensive = ndp.Condition(rule=ndp.Greater(100), columns=["price"])
 	>>> in_lyon = ndp.Condition(rule=ndp.Equal("Lyon"), columns=["city"])
 	>>> sales.filter(ndp.Filter(conditions=[expensive, in_lyon], mode=ndp.FilterMode.ANY))
-	city   price
-	TEXT FLOAT64
+	    city   price
+	    TEXT FLOAT64
 	0  Paris   120.0
 	1   Lyon    80.0
 	2  Paris   150.0

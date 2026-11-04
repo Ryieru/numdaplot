@@ -49,8 +49,8 @@ class TableMissing(TableData):
 		>>> table.count_missing(ndp.MissingCount()).to_value()
 		2
 		>>> table.count_missing(ndp.MissingCount(axis=ndp.Axis.EACH_COLUMN, measure=ndp.Measure.RATIO))
-		column missing_ratio
-		TEXT       FLOAT64
+		  column missing_ratio
+		    TEXT       FLOAT64
 		0   city           0.0
 		1  price           0.5
 		"""
@@ -75,7 +75,7 @@ class TableMissing(TableData):
 		>>> prices = ndp.Array.from_list([120.0, None, 150.0])
 		>>> table = ndp.Table.from_arrays({"city": cities, "price": prices})
 		>>> table.preview_missing()
-		column     type  missing_count missing_ratio
+		  column     type  missing_count missing_ratio
 		0   city     TEXT              0         0.0 %
 		1  price  FLOAT64              1        33.3 %
 		2  total                       1        16.7 %
@@ -112,8 +112,8 @@ class TableMissing(TableData):
 		>>> prices = ndp.Array.from_list([120.0, None, 150.0])
 		>>> table = ndp.Table.from_arrays({"city": cities, "price": prices})
 		>>> table.drop_missing(ndp.MissingDrop())
-		city   price
-		TEXT FLOAT64
+		    city   price
+		    TEXT FLOAT64
 		0  Paris   120.0
 		1    Pau   150.0
 		"""

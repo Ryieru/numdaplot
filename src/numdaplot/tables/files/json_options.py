@@ -32,8 +32,8 @@ class JsonOptions:
 	>>> path = folder / "sales.json"
 	>>> _ = path.write_text('[{"city": "Paris", "count": 2}]')
 	>>> ndp.Table.from_json(path, ndp.JsonOptions())
-	city count
-	TEXT INT64
+	    city count
+	    TEXT INT64
 	0  Paris     2
 	"""
 

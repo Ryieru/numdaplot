@@ -41,7 +41,7 @@ def check_frame(frame: pandas.DataFrame, rule: Rule) -> pandas.DataFrame:
 	>>> import numdaplot as ndp
 	>>> from numdaplot.tables.filtering.checked_frame import check_frame
 	>>> check_frame(pandas.DataFrame({"price": [1.5, None]}), ndp.IsMissing())
-	price
+	   price
 	0  False
 	1   True
 	"""

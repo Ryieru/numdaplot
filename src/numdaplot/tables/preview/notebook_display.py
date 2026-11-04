@@ -34,8 +34,8 @@ def show_frame(frame: pandas.DataFrame) -> None:
 	>>> import pandas
 	>>> from numdaplot.tables.preview.notebook_display import show_frame
 	>>> show_frame(pandas.DataFrame({"price": [1.5]}))
-	price
-	FLOAT64
+	    price
+	  FLOAT64
 	0     1.5
 	"""
 	typed_frame = build_typed_frame(frame)
@@ -58,7 +58,7 @@ def show_pandas_frame(frame: pandas.DataFrame) -> None:
 	>>> import pandas
 	>>> from numdaplot.tables.preview.notebook_display import show_pandas_frame
 	>>> show_pandas_frame(pandas.DataFrame({"price": [1.5]}))
-	price
+	   price
 	0    1.5
 	"""
 	runs_in_notebook = is_notebook()

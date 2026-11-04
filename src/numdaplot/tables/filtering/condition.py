@@ -48,8 +48,8 @@ class Condition:
 	>>> sales = ndp.Table.from_arrays({"city": cities, "price": prices})
 	>>> expensive = ndp.Condition(rule=ndp.Greater(100), columns=["price"])
 	>>> sales.filter(ndp.Filter(conditions=[expensive]))
-	city   price
-	TEXT FLOAT64
+	    city   price
+	    TEXT FLOAT64
 	0  Paris   120.0
 	1  Paris   150.0
 	"""

@@ -67,7 +67,7 @@ def convert_list(values: list[object], dtype: Type | None) -> NDArray[Any]:
 	>>> from numdaplot.arrays.creation.list_conversion import convert_list
 	>>> convert_list([[1, 2], [3, 4.5]], None)
 	array([[1. , 2. ],
-	[3. , 4.5]])
+	       [3. , 4.5]])
 	"""
 	dimensions = find_list_shape(values)
 	single_values = flatten_list(values)

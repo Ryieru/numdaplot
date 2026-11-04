@@ -52,7 +52,7 @@ def add_frame_column(frame: pandas.DataFrame, new_column: NewColumn) -> pandas.D
 	>>> from numdaplot.tables.columns.added_column import add_frame_column
 	>>> frame = pandas.DataFrame({"price": [1.5, 8.0]})
 	>>> add_frame_column(frame, ndp.NewColumn(name="count", values=ndp.Array.from_list([2, 1])))
-	price  count
+	   price  count
 	0    1.5      2
 	1    8.0      1
 	"""

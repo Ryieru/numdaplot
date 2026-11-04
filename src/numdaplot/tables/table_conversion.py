@@ -68,8 +68,8 @@ class TableConversion(TableData):
 		>>> import pandas
 		>>> import numdaplot as ndp
 		>>> ndp.Table.from_pandas(pandas.DataFrame({"city": ["Pau", None], "count": [2, 3]}))
-		city count
-		TEXT INT64
+		   city count
+		   TEXT INT64
 		0   Pau     2
 		1  <NA>     3
 		"""
@@ -111,8 +111,8 @@ class TableConversion(TableData):
 		>>> cities = ndp.Array.from_list(["Paris", "Lyon"])
 		>>> prices = ndp.Array.from_list([1.5, 8.0])
 		>>> ndp.Table.from_arrays({"city": cities, "price": prices})
-		city   price
-		TEXT FLOAT64
+		    city   price
+		    TEXT FLOAT64
 		0  Paris     1.5
 		1   Lyon     8.0
 		"""
@@ -290,8 +290,8 @@ class TableConversion(TableData):
 		--------
 		>>> import numdaplot as ndp
 		>>> print(ndp.Table.from_arrays({"paid": ndp.Array.from_list([True, False])}))
-		paid
-		BOOL
+		    paid
+		    BOOL
 		0   True
 		1  False
 		"""

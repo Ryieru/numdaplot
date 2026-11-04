@@ -54,7 +54,7 @@ def sort_frame(frame: pandas.DataFrame, sorting: Sorting) -> pandas.DataFrame:
 	>>> by_city = ndp.SortKey(column="city")
 	>>> by_price = ndp.SortKey(column="price", order=ndp.Order.DESCENDING)
 	>>> sort_frame(frame, ndp.Sorting(keys=[by_city, by_price]))
-	city  price
+	   city  price
 	0  Lyon    2.0
 	1   Pau    3.0
 	2   Pau    1.0

@@ -90,7 +90,7 @@ class ArrayCreation(ArrayData):
 		>>> import numdaplot as ndp
 		>>> ndp.Array.from_list([[1, 2], [3, None]], dtype=ndp.Type.FLOAT64)
 		Array([[ 1.,  2.],
-		[ 3., nan]], dtype=FLOAT64)
+		       [ 3., nan]], dtype=FLOAT64)
 		"""
 		value_list = list[object](values)
 		converted_values = convert_list(value_list, dtype)
@@ -163,7 +163,7 @@ class ArrayCreation(ArrayData):
 		>>> import numdaplot as ndp
 		>>> ndp.Array.filled(shape=ndp.Shape((2, 3)), value=0)
 		Array([[0, 0, 0],
-		[0, 0, 0]], dtype=INT64)
+		       [0, 0, 0]], dtype=INT64)
 		"""
 		filled_values = build_filled_values(shape, value, dtype)
 		created_array = cls(filled_values)

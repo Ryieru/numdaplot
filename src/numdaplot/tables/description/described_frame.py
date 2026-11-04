@@ -65,7 +65,7 @@ def describe_frame(frame: pandas.DataFrame, description: Description) -> pandas.
 	>>> from numdaplot.tables.description.described_frame import describe_frame
 	>>> frame = pandas.DataFrame({"price": [1.0, 3.0]})
 	>>> describe_frame(frame, ndp.Description(functions=[ndp.Count(), ndp.Mean()]))
-	statistic  price
+	  statistic  price
 	0     count    2.0
 	1      mean    2.0
 	"""

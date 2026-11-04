@@ -53,7 +53,7 @@ def take_region(frame: pandas.DataFrame, region: Region) -> pandas.DataFrame:
 	>>> from numdaplot.tables.frames.region_positions import take_region
 	>>> frame = pandas.DataFrame({"city": ["Paris", "Lyon"], "price": [1.5, 8.0]})
 	>>> take_region(frame, ndp.Region(rows=ndp.Index(-1), columns=["price"]))
-	price
+	   price
 	0    8.0
 	"""
 	row_count = len(frame)

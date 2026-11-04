@@ -29,8 +29,8 @@ class ExcelOptions:
 	>>> prices = ndp.Table.from_arrays({"price": ndp.Array.from_list([1.5])})
 	>>> prices.to_excel(path, ndp.ExcelOptions(sheet="Sales"))
 	>>> ndp.Table.from_excel(path, ndp.ExcelOptions(sheet="Sales"))
-	price
-	FLOAT64
+	    price
+	  FLOAT64
 	0     1.5
 	"""
 

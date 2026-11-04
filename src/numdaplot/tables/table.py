@@ -64,8 +64,8 @@ class Table(
 	>>> sales = ndp.Table.from_arrays({"city": cities, "price": prices})
 	>>> total = ndp.Calculation(column="price", function=ndp.Sum())
 	>>> sales.aggregate(ndp.Aggregation(calculations=[total], group_by=["city"]))
-	city price_sum
-	TEXT   FLOAT64
+	    city price_sum
+	    TEXT   FLOAT64
 	0   Lyon      80.0
 	1  Paris     270.0
 	"""

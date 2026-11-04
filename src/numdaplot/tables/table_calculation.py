@@ -53,8 +53,8 @@ class TableCalculation(TableData):
 		>>> table = ndp.Table.from_arrays({"city": cities, "price": prices})
 		>>> average_price = ndp.Calculation(column="price", function=ndp.Mean())
 		>>> table.aggregate(ndp.Aggregation(calculations=[average_price], group_by=["city"]))
-		city price_mean
-		TEXT    FLOAT64
+		   city price_mean
+		   TEXT    FLOAT64
 		0  Lyon       30.0
 		1   Pau       15.0
 		"""
@@ -93,8 +93,8 @@ class TableCalculation(TableData):
 		>>> import numdaplot as ndp
 		>>> table = ndp.Table.from_arrays({"price": ndp.Array.from_list([10.0, 30.0])})
 		>>> table.describe(ndp.Description(functions=[ndp.Count(), ndp.Mean(), ndp.Max()]))
-		statistic   price
-		TEXT FLOAT64
+		  statistic   price
+		       TEXT FLOAT64
 		0     count     2.0
 		1      mean    20.0
 		2       max    30.0

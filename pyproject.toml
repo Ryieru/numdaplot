@@ -64,7 +64,7 @@ indent-style = "tab"
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "N", "UP", "B", "D"]
-ignore = ["W191", "D206"]
+ignore = ["W191", "D206", "E101"]
 
 [tool.ruff.lint.pydocstyle]
 convention = "numpy"

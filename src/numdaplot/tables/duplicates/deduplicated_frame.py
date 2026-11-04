@@ -51,7 +51,7 @@ def drop_duplicate_rows(frame: pandas.DataFrame, deduplication: Deduplication) -
 	>>> from numdaplot.tables.duplicates.deduplicated_frame import drop_duplicate_rows
 	>>> frame = pandas.DataFrame({"email": ["a@x.fr", "b@x.fr", "a@x.fr"], "visit": [1, 2, 3]})
 	>>> drop_duplicate_rows(frame, ndp.Deduplication(columns=["email"], keep=ndp.Keep.LAST))
-	email  visit
+	    email  visit
 	0  b@x.fr      2
 	1  a@x.fr      3
 	"""

@@ -35,8 +35,8 @@ class TableDisplay(TableData):
 		>>> import numdaplot as ndp
 		>>> table = ndp.Table.from_arrays({"price": ndp.Array.from_list([10.0, 20.0, 30.0])})
 		>>> table.preview(ndp.Preview(count=2, side=ndp.Side.END))
-		price
-		FLOAT64
+		    price
+		  FLOAT64
 		1    20.0
 		2    30.0
 		"""

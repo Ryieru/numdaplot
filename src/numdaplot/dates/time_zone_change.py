@@ -38,8 +38,8 @@ class TimeZoneChange:
 	>>> times = ndp.Table.from_arrays({"time": ndp.Array.from_list([datetime(2026, 7, 1, 10, 30)])})
 	>>> paris = ndp.TimeZoneChange(mode=ndp.TimeZoneMode.ATTRIBUTE, zone=ndp.TimeZone("Europe/Paris"))
 	>>> times.convert(ndp.Conversion(column="time", dtype=ndp.Type.DATETIME, timezone=paris))
-	time
-	DATETIME Europe/Paris
+	                       time
+	      DATETIME Europe/Paris
 	0 2026-07-01 10:30:00+02:00
 	"""
 

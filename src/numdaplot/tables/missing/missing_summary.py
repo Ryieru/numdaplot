@@ -45,7 +45,7 @@ def summarize_missing(frame: pandas.DataFrame) -> pandas.DataFrame:
 	>>> import pandas
 	>>> from numdaplot.tables.missing.missing_summary import summarize_missing
 	>>> summarize_missing(pandas.DataFrame({"price": [1.5, None, 3.0], "stock": [2.0, 4.0, 1.0]}))
-	column     type  missing_count missing_ratio
+	  column     type  missing_count missing_ratio
 	0  price  FLOAT64              1        33.3 %
 	1  stock  FLOAT64              0         0.0 %
 	2  total                       1        16.7 %

@@ -46,7 +46,7 @@ def read_parquet_file(path: Path) -> pandas.DataFrame:
 	>>> path = Path(tempfile.mkdtemp()) / "sales.parquet"
 	>>> pandas.DataFrame({"price": [1.5]}).to_parquet(path, index=False)
 	>>> read_parquet_file(path)
-	price
+	   price
 	0    1.5
 	"""
 	require_package(PARQUET_PACKAGE, PARQUET_EXTRA)

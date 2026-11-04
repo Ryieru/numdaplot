@@ -58,7 +58,7 @@ def aggregate_frame(frame: pandas.DataFrame, aggregation: Aggregation) -> pandas
 	>>> frame = pandas.DataFrame({"city": ["Pau", "Lyon", "Pau"], "price": [1.0, 2.0, 3.0]})
 	>>> total = ndp.Calculation(column="price", function=ndp.Sum())
 	>>> aggregate_frame(frame, ndp.Aggregation(calculations=[total], group_by=["city"]))
-	city  price_sum
+	   city  price_sum
 	0  Lyon        2.0
 	1   Pau        4.0
 	"""

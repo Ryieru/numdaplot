@@ -46,7 +46,7 @@ def build_filled_values(shape: Shape, value: ScalarValue, dtype: Type | None) ->
 	>>> from numdaplot.arrays.creation.filled_values import build_filled_values
 	>>> build_filled_values(ndp.Shape((2, 3)), 0, None)
 	array([[0, 0, 0],
-	[0, 0, 0]])
+	       [0, 0, 0]])
 	"""
 	single_value_list = list[object]([value])
 	stored_value = convert_list(single_value_list, dtype)

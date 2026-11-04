@@ -73,8 +73,8 @@ def format_table(frame: pandas.DataFrame) -> str:
 	>>> import pandas
 	>>> from numdaplot.tables.frames.table_text import format_table
 	>>> print(format_table(pandas.DataFrame({"price": [1.5, 8.0]})))
-	price
-	FLOAT64
+	    price
+	  FLOAT64
 	0     1.5
 	1     8.0
 	"""

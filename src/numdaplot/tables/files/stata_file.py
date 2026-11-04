@@ -38,7 +38,7 @@ def read_stata_file(path: Path) -> pandas.DataFrame:
 	>>> path = Path(tempfile.mkdtemp()) / "sales.dta"
 	>>> pandas.DataFrame({"price": [1.5]}).to_stata(path, write_index=False)
 	>>> read_stata_file(path)
-	price
+	   price
 	0    1.5
 	"""
 	frame = pandas.read_stata(path)

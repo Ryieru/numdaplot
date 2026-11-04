@@ -41,7 +41,7 @@ def choose_frame_columns(frame: pandas.DataFrame, choice: ColumnChoice) -> panda
 	>>> from numdaplot.tables.columns.chosen_columns import choose_frame_columns
 	>>> frame = pandas.DataFrame({"city": ["Pau"], "price": [1.5]})
 	>>> choose_frame_columns(frame, ndp.ColumnChoice(columns=["price", "city"]))
-	price city
+	   price city
 	0    1.5  Pau
 	"""
 	column_names = [str(column_name) for column_name in frame.columns]

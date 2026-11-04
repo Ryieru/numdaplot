@@ -41,8 +41,8 @@ class CsvOptions:
 	>>> path = folder / "sales.csv"
 	>>> _ = path.write_text("city;price\nParis;1.5\nLyon;8.0\n")
 	>>> ndp.Table.from_csv(path, ndp.CsvOptions(separator=";"))
-	city   price
-	TEXT FLOAT64
+	    city   price
+	    TEXT FLOAT64
 	0  Paris     1.5
 	1   Lyon     8.0
 	"""

@@ -50,7 +50,7 @@ class ArrayLayout(ArrayData):
 		>>> import numdaplot as ndp
 		>>> ndp.Array.from_list([1, 2, 3, 4, 5, 6]).reshape(ndp.Shape((2, 3)))
 		Array([[1, 2, 3],
-		[4, 5, 6]], dtype=INT64)
+		       [4, 5, 6]], dtype=INT64)
 		"""
 		new_size = math.prod(shape.dimensions)
 		if new_size != self._values.size:
@@ -79,8 +79,8 @@ class ArrayLayout(ArrayData):
 		>>> import numdaplot as ndp
 		>>> ndp.Array.from_list([[1, 2, 3], [4, 5, 6]]).transpose()
 		Array([[1, 4],
-		[2, 5],
-		[3, 6]], dtype=INT64)
+		       [2, 5],
+		       [3, 6]], dtype=INT64)
 		"""
 		transposed_values = self._values.transpose()
 		transposed_array = self._wrap(transposed_values)

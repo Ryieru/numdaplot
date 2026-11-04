@@ -52,7 +52,7 @@ def count_frame_missing(frame: pandas.DataFrame, missing_count: MissingCount) ->
 	>>> from numdaplot.tables.missing.missing_counts import count_frame_missing
 	>>> frame = pandas.DataFrame({"price": [1.5, None], "stock": [None, None]})
 	>>> count_frame_missing(frame, ndp.MissingCount(axis=ndp.Axis.EACH_ROW, measure=ndp.Measure.RATIO))
-	missing_ratio
+	   missing_ratio
 	0            0.5
 	1            1.0
 	"""
@@ -96,7 +96,7 @@ def find_frame_missing(frame: pandas.DataFrame) -> NDArray[numpy.bool_]:
 	>>> from numdaplot.tables.missing.missing_counts import find_frame_missing
 	>>> find_frame_missing(pandas.DataFrame({"price": [1.5, None]}))
 	array([[False],
-	[ True]])
+	       [ True]])
 	"""
 	missing_frame = frame.isna()
 	missing_grid = missing_frame.to_numpy(dtype=numpy.bool_)

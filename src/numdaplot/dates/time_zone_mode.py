@@ -20,8 +20,8 @@ class TimeZoneMode(Enum):
 	>>> times = ndp.Table.from_arrays({"time": ndp.Array.from_list([datetime(2026, 7, 1, 10, 30)])})
 	>>> paris = ndp.TimeZoneChange(mode=ndp.TimeZoneMode.ATTRIBUTE, zone=ndp.TimeZone("Europe/Paris"))
 	>>> times.convert(ndp.Conversion(column="time", dtype=ndp.Type.DATETIME, timezone=paris))
-	time
-	DATETIME Europe/Paris
+	                       time
+	      DATETIME Europe/Paris
 	0 2026-07-01 10:30:00+02:00
 	"""
 
@@ -39,8 +39,8 @@ class TimeZoneMode(Enum):
 	>>> times = ndp.Table.from_arrays({"time": ndp.Array.from_list([datetime(2026, 7, 1, 10, 30)])})
 	>>> paris = ndp.TimeZoneChange(mode=ndp.TimeZoneMode.ATTRIBUTE, zone=ndp.TimeZone("Europe/Paris"))
 	>>> times.convert(ndp.Conversion(column="time", dtype=ndp.Type.DATETIME, timezone=paris))
-	time
-	DATETIME Europe/Paris
+	                       time
+	      DATETIME Europe/Paris
 	0 2026-07-01 10:30:00+02:00
 	"""
 
@@ -57,8 +57,8 @@ class TimeZoneMode(Enum):
 	>>> utc_times = times.convert(ndp.Conversion(column="time", dtype=ndp.Type.DATETIME, timezone=utc))
 	>>> paris = ndp.TimeZoneChange(mode=ndp.TimeZoneMode.SHIFT, zone=ndp.TimeZone("Europe/Paris"))
 	>>> utc_times.convert(ndp.Conversion(column="time", dtype=ndp.Type.DATETIME, timezone=paris))
-	time
-	DATETIME Europe/Paris
+	                       time
+	      DATETIME Europe/Paris
 	0 2026-07-01 12:30:00+02:00
 	"""
 
@@ -75,7 +75,7 @@ class TimeZoneMode(Enum):
 	>>> paris_times = times.convert(ndp.Conversion(column="time", dtype=ndp.Type.DATETIME, timezone=paris))
 	>>> no_zone = ndp.TimeZoneChange(mode=ndp.TimeZoneMode.REMOVE)
 	>>> paris_times.convert(ndp.Conversion(column="time", dtype=ndp.Type.DATETIME, timezone=no_zone))
-	time
-	DATETIME
+	                 time
+	             DATETIME
 	0 2026-07-01 10:30:00
 	"""

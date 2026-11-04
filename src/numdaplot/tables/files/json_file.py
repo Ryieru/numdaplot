@@ -49,7 +49,7 @@ def read_json_file(path: Path, options: JsonOptions) -> pandas.DataFrame:
 	>>> path = Path(tempfile.mkdtemp()) / "sales.json"
 	>>> _ = path.write_text('[{"city": "Paris", "count": 2}]')
 	>>> read_json_file(path, ndp.JsonOptions())
-	city count
+	    city count
 	0  Paris     2
 	"""
 	with path.open(encoding=JSON_ENCODING) as file:

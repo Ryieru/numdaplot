@@ -32,8 +32,8 @@ class MissingCount:
 	>>> prices = ndp.Array.from_list([120.0, None, None])
 	>>> table = ndp.Table.from_arrays({"city": cities, "price": prices})
 	>>> table.count_missing(ndp.MissingCount(axis=ndp.Axis.EACH_COLUMN))
-	column missing_count
-	TEXT         INT64
+	  column missing_count
+	    TEXT         INT64
 	0   city             0
 	1  price             2
 	"""

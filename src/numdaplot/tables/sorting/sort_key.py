@@ -33,8 +33,8 @@ class SortKey:
 	>>> prices = ndp.Array.from_list([120.0, 80.0, 150.0])
 	>>> sales = ndp.Table.from_arrays({"city": cities, "price": prices})
 	>>> sales.sort(ndp.Sorting(keys=[ndp.SortKey(column="price", order=ndp.Order.DESCENDING)]))
-	city   price
-	TEXT FLOAT64
+	    city   price
+	    TEXT FLOAT64
 	0  Paris   150.0
 	1  Paris   120.0
 	2   Lyon    80.0

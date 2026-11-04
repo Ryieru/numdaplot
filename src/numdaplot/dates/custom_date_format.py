@@ -39,10 +39,10 @@ class CustomDateFormat:
 	>>> import numdaplot as ndp
 	>>> days = ndp.Table.from_arrays({"day": ndp.Array.from_list(["31 Dec 2026", "1 Feb 2026"])})
 	>>> days.convert(ndp.Conversion(column="day", dtype=ndp.Type.DATE, format=ndp.CustomDateFormat("%d %b %Y")))
-	day
-	DATE
-	0  2026-12-31
-	1  2026-02-01
+	         day
+	        DATE
+	0 2026-12-31
+	1 2026-02-01
 	"""
 
 	pattern: str

@@ -52,7 +52,7 @@ def drop_frame_missing(frame: pandas.DataFrame, missing_drop: MissingDrop) -> pa
 	>>> from numdaplot.tables.missing.missing_removal import drop_frame_missing
 	>>> frame = pandas.DataFrame({"price": [1.5, None, 3.0]})
 	>>> drop_frame_missing(frame, ndp.MissingDrop())
-	price
+	   price
 	0    1.5
 	1    3.0
 	"""
@@ -102,7 +102,7 @@ def drop_missing_rows(
 	>>> from numdaplot.tables.missing.missing_removal import drop_missing_rows
 	>>> frame = pandas.DataFrame({"price": [1.5, None], "stock": [None, None]}, dtype="float64")
 	>>> drop_missing_rows(frame, frame, ndp.MissingMode.ALL)
-	price  stock
+	   price  stock
 	0    1.5    NaN
 	"""
 	missing_grid = find_frame_missing(looked_frame)
@@ -147,7 +147,7 @@ def drop_missing_columns(
 	>>> from numdaplot.tables.missing.missing_removal import drop_missing_columns
 	>>> frame = pandas.DataFrame({"price": [1.5, None], "stock": [None, None]}, dtype="float64")
 	>>> drop_missing_columns(frame, frame, ndp.MissingMode.ALL)
-	price
+	   price
 	0    1.5
 	1    NaN
 	"""

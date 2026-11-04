@@ -42,15 +42,15 @@ class Conversion:
 	>>> import numdaplot as ndp
 	>>> codes = ndp.Table.from_arrays({"zip_code": ndp.Array.from_list(["06000", "75001"])})
 	>>> codes.convert(ndp.Conversion(column="zip_code", dtype=ndp.Type.INT32))
-	zip_code
-	INT32
+	  zip_code
+	     INT32
 	0     6000
 	1    75001
 	>>> days = ndp.Table.from_arrays({"day": ndp.Array.from_list(["31/12/2026"])})
 	>>> days.convert(ndp.Conversion(column="day", dtype=ndp.Type.DATE, format=ndp.DateFormat.DAY_MONTH_YEAR))
-	day
-	DATE
-	0  2026-12-31
+	         day
+	        DATE
+	0 2026-12-31
 	"""
 
 	column: str
