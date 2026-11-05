@@ -32,6 +32,7 @@ from numdaplot.tables.aggregation.aggregation import Aggregation
 from numdaplot.tables.aggregation.calculation import Calculation
 from numdaplot.tables.columns.column_choice import ColumnChoice
 from numdaplot.tables.columns.conversion import Conversion
+from numdaplot.tables.columns.name_change import NameChange
 from numdaplot.tables.columns.new_column import NewColumn
 from numdaplot.tables.columns.renaming import Renaming
 from numdaplot.tables.description.description import Description
@@ -66,7 +67,7 @@ FRAME_OPERATIONS = list[tuple[ModuleType, str, TableOperation]](
 		(
 			table_columns,
 			"rename_frame_columns",
-			lambda table: table.rename([Renaming(old_name="price", new_name="cost")]),
+			lambda table: table.rename(Renaming(changes=[NameChange(old_name="price", new_name="cost")])),
 		),
 		(
 			table_columns,

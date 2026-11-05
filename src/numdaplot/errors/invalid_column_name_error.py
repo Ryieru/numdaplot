@@ -29,7 +29,7 @@ class InvalidColumnNameError(NumdaplotError):
 	--------
 	>>> import numdaplot as ndp
 	>>> try:
-	... 	ndp.Renaming(old_name="price", new_name="")
+	... 	ndp.NameChange(old_name="price", new_name="")
 	... except ndp.InvalidColumnNameError as error:
 	... 	print(error)
 	Expected a column name as a non-empty text, got ''.

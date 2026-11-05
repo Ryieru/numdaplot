@@ -52,8 +52,8 @@ and numdaplot follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
   `Table.drop_duplicates`, `Table.drop_missing` and `Table.count_missing` use their default settings, and the plot
   functions and `Plot.add_*`, except `plot_pie`, their default chart.
 - Table settings: `CsvOptions`, `JsonOptions`, `ExcelOptions`, `SasOptions`, `XptOptions`, `Filter`, `Condition`,
-  `Aggregation`, `Calculation`, `Description`, `ColumnChoice`, `Renaming`, `Conversion`, `NewColumn`, `Sorting`,
-  `SortKey`, `Deduplication`, `Preview`, `MissingCount`, `MissingDrop`, `MissingRatio`, and the `Encoding`,
+  `Aggregation`, `Calculation`, `Description`, `ColumnChoice`, `Renaming`, `NameChange`, `Conversion`, `NewColumn`,
+  `Sorting`, `SortKey`, `Deduplication`, `Preview`, `MissingCount`, `MissingDrop`, `MissingRatio`, and the `Encoding`,
   `JsonLayout`, `Conflict`, `FilterMode`, `ColumnMatch`, `ColumnMode`, `Keep`, `Side`, `MissingMode`,
   `RatioComparison` and `Measure` enums. `Equality` compares two Tables as well as two Arrays.
 - Table errors: `ColumnNotFoundError`, `DuplicateColumnError`, `DuplicateStatisticError`, `EmptyListError`,

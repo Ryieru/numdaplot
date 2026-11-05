@@ -1,5 +1,5 @@
 """
-Unit tests of ColumnChoice, Renaming, Conversion and NewColumn.
+Unit tests of ColumnChoice, NameChange, Renaming, Conversion and NewColumn.
 
 .. versionadded:: 0.1.0
 """
@@ -14,6 +14,7 @@ from numdaplot.errors.invalid_column_name_error import InvalidColumnNameError
 from numdaplot.tables.columns.column_choice import ColumnChoice
 from numdaplot.tables.columns.column_mode import ColumnMode
 from numdaplot.tables.columns.conversion import Conversion
+from numdaplot.tables.columns.name_change import NameChange
 from numdaplot.tables.columns.new_column import NewColumn
 from numdaplot.tables.columns.renaming import Renaming
 from numdaplot.tables.conflict import Conflict
@@ -82,14 +83,61 @@ def test_column_choice_rejects_a_repeated_column() -> None:
 		ColumnChoice(columns=REPEATED_NAMES)
 
 
-def test_renaming_rejects_an_empty_new_name() -> None:
+def test_name_change_rejects_an_empty_new_name() -> None:
 	"""
 	Check that an empty new name raises InvalidColumnNameError.
 
 	.. versionadded:: 0.1.0
 	"""
 	with pytest.raises(InvalidColumnNameError):
-		Renaming(old_name=COLUMN_NAME, new_name=EMPTY_NAME)
+		NameChange(old_name=COLUMN_NAME, new_name=EMPTY_NAME)
+
+
+def test_renaming_rejects_no_change() -> None:
+	"""
+	Check that an empty list of changes raises EmptyListError.
+
+	.. versionadded:: 0.1.0
+	"""
+	with pytest.raises(EmptyListError):
+		Renaming(changes=[])
+
+
+@pytest.mark.parametrize(
+	"changes",
+	[
+		[NameChange(old_name="city", new_name="town"), NameChange(old_name="city", new_name="place")],
+		[NameChange(old_name="city", new_name="place"), NameChange(old_name="price", new_name="place")],
+	],
+)
+def test_renaming_rejects_a_column_renamed_twice_or_a_new_name_given_twice(changes: list[NameChange]) -> None:
+	"""
+	Check that a repeated old name or a repeated new name raises DuplicateColumnError.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	changes
+		Changes repeating a name.
+	"""
+	with pytest.raises(DuplicateColumnError):
+		Renaming(changes=changes)
+
+
+def test_renaming_keeps_its_own_copy_of_the_changes() -> None:
+	"""
+	Check that changing the given list afterwards changes nothing.
+
+	.. versionadded:: 0.1.0
+	"""
+	changes = [NameChange(old_name="city", new_name="town")]
+	renaming = Renaming(changes=changes)
+
+	changes.clear()
+
+	change_count = len(renaming.changes)
+	assert change_count == 1
 
 
 def test_conversion_keeps_its_settings() -> None:

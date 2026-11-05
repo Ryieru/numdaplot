@@ -11,12 +11,12 @@ from numdaplot.arrays.array import Array
 from numdaplot.errors.column_not_found_error import ColumnNotFoundError
 from numdaplot.errors.dimension_error import DimensionError
 from numdaplot.errors.duplicate_column_error import DuplicateColumnError
-from numdaplot.errors.empty_list_error import EmptyListError
 from numdaplot.errors.shape_mismatch_error import ShapeMismatchError
 from numdaplot.tables.columns.added_column import add_frame_column
 from numdaplot.tables.columns.chosen_columns import choose_frame_columns
 from numdaplot.tables.columns.column_choice import ColumnChoice
 from numdaplot.tables.columns.column_mode import ColumnMode
+from numdaplot.tables.columns.name_change import NameChange
 from numdaplot.tables.columns.new_column import NewColumn
 from numdaplot.tables.columns.renamed_columns import rename_frame_columns
 from numdaplot.tables.columns.renaming import Renaming
@@ -83,9 +83,9 @@ def test_rename_frame_columns_renames_in_place() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	renamings = [Renaming(old_name="city", new_name="town")]
+	renaming = Renaming(changes=[NameChange(old_name="city", new_name="town")])
 
-	renamed_frame = rename_frame_columns(FRAME, renamings)
+	renamed_frame = rename_frame_columns(FRAME, renaming)
 
 	column_names = renamed_frame.columns.tolist()
 	assert column_names == EXPECTED_RENAMED_NAMES
@@ -97,22 +97,13 @@ def test_rename_frame_columns_swaps_two_names() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	renamings = [Renaming(old_name="city", new_name="price"), Renaming(old_name="price", new_name="city")]
+	swap = [NameChange(old_name="city", new_name="price"), NameChange(old_name="price", new_name="city")]
+	renaming = Renaming(changes=swap)
 
-	renamed_frame = rename_frame_columns(FRAME, renamings)
+	renamed_frame = rename_frame_columns(FRAME, renaming)
 
 	column_names = renamed_frame.columns.tolist()
 	assert column_names == EXPECTED_SWAPPED_NAMES
-
-
-def test_rename_frame_columns_rejects_no_renaming() -> None:
-	"""
-	Check that an empty list raises EmptyListError.
-
-	.. versionadded:: 0.1.0
-	"""
-	with pytest.raises(EmptyListError):
-		rename_frame_columns(FRAME, [])
 
 
 def test_rename_frame_columns_rejects_an_existing_new_name() -> None:
@@ -121,22 +112,10 @@ def test_rename_frame_columns_rejects_an_existing_new_name() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	renamings = [Renaming(old_name="city", new_name="price")]
+	renaming = Renaming(changes=[NameChange(old_name="city", new_name="price")])
 
 	with pytest.raises(DuplicateColumnError):
-		rename_frame_columns(FRAME, renamings)
-
-
-def test_rename_frame_columns_rejects_renaming_a_column_twice() -> None:
-	"""
-	Check that two renamings of the same column raise DuplicateColumnError.
-
-	.. versionadded:: 0.1.0
-	"""
-	renamings = [Renaming(old_name="city", new_name="town"), Renaming(old_name="city", new_name="place")]
-
-	with pytest.raises(DuplicateColumnError):
-		rename_frame_columns(FRAME, renamings)
+		rename_frame_columns(FRAME, renaming)
 
 
 def test_rename_frame_columns_rejects_an_unknown_column() -> None:
@@ -145,10 +124,10 @@ def test_rename_frame_columns_rejects_an_unknown_column() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	renamings = [Renaming(old_name="prise", new_name="cost")]
+	renaming = Renaming(changes=[NameChange(old_name="prise", new_name="cost")])
 
 	with pytest.raises(ColumnNotFoundError):
-		rename_frame_columns(FRAME, renamings)
+		rename_frame_columns(FRAME, renaming)
 
 
 def test_add_frame_column_places_a_new_column_last() -> None:

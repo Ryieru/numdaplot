@@ -59,7 +59,7 @@ class TableColumns(TableData):
 
 		return chosen_table
 
-	def rename(self, renamings: list[Renaming]) -> Self:
+	def rename(self, renaming: Renaming) -> Self:
 		"""
 		Return the Table with renamed columns, every renaming applied at once.
 
@@ -69,8 +69,8 @@ class TableColumns(TableData):
 
 		Parameters
 		----------
-		renamings
-			The new names, at least one.
+		renaming
+			The ``NameChange`` of each renamed column.
 
 		Returns
 		-------
@@ -79,21 +79,19 @@ class TableColumns(TableData):
 
 		Raises
 		------
-		EmptyListError
-			When ``renamings`` is empty.
 		ColumnNotFoundError
 			When a renamed column does not exist.
 		DuplicateColumnError
-			When a column is renamed twice, or two columns would end with the same name.
+			When a new name is the name of a column kept as it is.
 
 		Examples
 		--------
 		>>> import numdaplot as ndp
 		>>> table = ndp.Table.from_arrays({"prix": ndp.Array.from_list([1.5])})
-		>>> table.rename([ndp.Renaming(old_name="prix", new_name="price")]).column_names
+		>>> table.rename(ndp.Renaming(changes=[ndp.NameChange(old_name="prix", new_name="price")])).column_names
 		['price']
 		"""
-		renamed_frame = rename_frame_columns(self._frame, renamings)
+		renamed_frame = rename_frame_columns(self._frame, renaming)
 		renamed_table = self._wrap(renamed_frame)
 
 		return renamed_table

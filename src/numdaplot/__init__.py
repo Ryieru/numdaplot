@@ -189,6 +189,7 @@ from numdaplot.tables.aggregation.calculation import Calculation
 from numdaplot.tables.columns.column_choice import ColumnChoice
 from numdaplot.tables.columns.column_mode import ColumnMode
 from numdaplot.tables.columns.conversion import Conversion
+from numdaplot.tables.columns.name_change import NameChange
 from numdaplot.tables.columns.new_column import NewColumn
 from numdaplot.tables.columns.renaming import Renaming
 from numdaplot.tables.conflict import Conflict
@@ -347,6 +348,7 @@ __all__ = [
 	"MissingValueError",
 	"MostFrequent",
 	"MostFrequentCount",
+	"NameChange",
 	"NewColumn",
 	"Normal",
 	"NotEqual",

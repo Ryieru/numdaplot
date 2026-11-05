@@ -63,9 +63,9 @@ def test_two_columns_swap_their_names_in_one_call() -> None:
 	.. versionadded:: 0.1.0
 	"""
 	shops = build_shops()
-	swap = [ndp.Renaming(old_name="city", new_name="price"), ndp.Renaming(old_name="price", new_name="city")]
+	swap = [ndp.NameChange(old_name="city", new_name="price"), ndp.NameChange(old_name="price", new_name="city")]
 
-	renamed_shops = shops.rename(swap)
+	renamed_shops = shops.rename(ndp.Renaming(changes=swap))
 
 	assert renamed_shops.column_names == EXPECTED_SWAPPED_NAMES
 

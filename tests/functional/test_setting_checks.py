@@ -15,7 +15,7 @@ EMPTY_NAME_CASES = [
 	lambda: ndp.Calculation(column="", function=SUM),
 	lambda: ndp.Conversion(column="", dtype=ndp.Type.TEXT),
 	lambda: ndp.SortKey(column=""),
-	lambda: ndp.Renaming(old_name="", new_name="city"),
+	lambda: ndp.NameChange(old_name="", new_name="city"),
 	lambda: ndp.BarChart(x=""),
 	lambda: ndp.BarChart(y=[""]),
 	lambda: ndp.LineChart(x=""),
