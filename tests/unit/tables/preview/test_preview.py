@@ -13,6 +13,7 @@ import pytest
 from numdaplot.errors.invalid_count_error import InvalidCountError
 from numdaplot.errors.invalid_seed_error import InvalidSeedError
 from numdaplot.errors.invalid_setting_type_error import InvalidSettingTypeError
+from numdaplot.errors.refused_setting_error import RefusedSettingError
 from numdaplot.tables.preview import notebook_display
 from numdaplot.tables.preview.notebook_display import is_notebook, show_frame, show_pandas_frame
 from numdaplot.tables.preview.preview import Preview
@@ -394,3 +395,30 @@ def test_preview_rejects_a_side_written_as_text() -> None:
 
 	with pytest.raises(InvalidSettingTypeError):
 		untyped_preview(side="end")
+
+
+@pytest.mark.parametrize("side", [Side.START, Side.END])
+def test_preview_rejects_a_seed_without_random_draw(side: Side) -> None:
+	"""
+	Check that a seed with the first or the last rows raises RefusedSettingError.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	side
+		A side that draws nothing.
+	"""
+	with pytest.raises(RefusedSettingError):
+		Preview(side=side, seed=SEED)
+
+
+def test_preview_keeps_a_seed_for_a_random_draw() -> None:
+	"""
+	Check that a random draw accepts a seed.
+
+	.. versionadded:: 0.1.0
+	"""
+	preview = Preview(side=Side.RANDOM, seed=SEED)
+
+	assert preview.seed == SEED

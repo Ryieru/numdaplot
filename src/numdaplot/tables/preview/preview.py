@@ -8,6 +8,7 @@ from dataclasses import dataclass
 
 from numdaplot.arrays.creation.random_values import require_valid_seed
 from numdaplot.errors.invalid_count_error import InvalidCountError
+from numdaplot.errors.refused_setting_error import RefusedSettingError
 from numdaplot.settings.setting_types import require_setting_type
 from numdaplot.tables.preview.side import Side
 
@@ -16,6 +17,8 @@ MINIMUM_PREVIEW_COUNT = 1
 SIDE_SETTING = "Preview side"
 SIDE_EXPECTED = "a Side such as Side.END"
 SIDE_TYPES = (Side,)
+SEED_SETTING = "seed"
+SIDE_OWNER = "Side.{side_name}"
 
 
 @dataclass(frozen=True)
@@ -33,8 +36,8 @@ class Preview:
 		The first rows, ``Side.START`` by default, the last rows, ``Side.END``, or rows drawn at random,
 		``Side.RANDOM``.
 	seed
-		The seed of the random draw, to show the same rows each time, other rows at each call when omitted. Only used
-		with ``Side.RANDOM``.
+		The seed of the random draw, to show the same rows each time, other rows at each call when omitted. Only
+		``Side.RANDOM`` accepts it.
 
 	Raises
 	------
@@ -44,6 +47,8 @@ class Preview:
 		When ``count`` is lower than 1.
 	InvalidSeedError
 		When ``seed`` is negative.
+	RefusedSettingError
+		When ``seed`` is given with ``Side.START`` or ``Side.END``, which draw nothing.
 
 	Examples
 	--------
@@ -64,7 +69,7 @@ class Preview:
 
 	def __post_init__(self) -> None:
 		"""
-		Check the side, the count and the seed.
+		Check the side, the count and the seed, which only a random draw uses.
 
 		.. versionadded:: 0.1.0
 
@@ -76,11 +81,18 @@ class Preview:
 			When ``count`` is lower than 1.
 		InvalidSeedError
 			When ``seed`` is negative.
+		RefusedSettingError
+			When ``seed`` is given with ``Side.START`` or ``Side.END``.
 		"""
 		require_setting_type(SIDE_SETTING, SIDE_EXPECTED, self.side, SIDE_TYPES)
 
 		if self.count < MINIMUM_PREVIEW_COUNT:
 			raise InvalidCountError(self.count, MINIMUM_PREVIEW_COUNT)
 
-		if self.seed is not None:
-			require_valid_seed(self.seed)
+		if self.seed is None:
+			return
+
+		require_valid_seed(self.seed)
+		if self.side != Side.RANDOM:
+			side_owner = SIDE_OWNER.format(side_name=self.side.name)
+			raise RefusedSettingError(SEED_SETTING, side_owner)

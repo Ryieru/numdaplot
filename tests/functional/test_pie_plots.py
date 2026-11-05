@@ -18,6 +18,7 @@ DEVICES = ndp.Array.from_list(["Phone", "Computer", "Tablet"])
 VISITS = ndp.Array.from_list([5000.0, 4000.0, 1000.0])
 TRAFFIC = ndp.Table.from_arrays({"device": DEVICES, "visits": VISITS})
 CHART = ndp.PieChart(labels="device", values="visits")
+EXPECTED_ROTATION_MESSAGE = "PieChart does not accept x_tick_rotation."
 EXPECTED_TEXTS = ["Phone", "Computer", "Tablet", "50.0%", "40.0%", "10.0%"]
 EXPECTED_ANGLES = [180.0, 144.0, 36.0]
 FRUITS = ndp.Array.from_list(["apple", "pear", "plum", "fig", "kiwi", "lime"])
@@ -86,3 +87,18 @@ def test_a_pie_plot_is_saved_as_an_svg_image(tmp_path: Path) -> None:
 
 	image_start = image_path.read_bytes()[:5]
 	assert image_start == b"<?xml"
+
+
+def test_pie_refuses_a_rotation_of_the_axis_values() -> None:
+	"""
+	Check that a pie, which has no axes, refuses a rotation as it refuses an axis label.
+
+	.. versionadded:: 0.1.0
+	"""
+	style = ndp.Style(x_tick_rotation=45)
+
+	with pytest.raises(ndp.RefusedSettingError) as error_info:
+		ndp.plot_pie(TRAFFIC, CHART, style)
+
+	message = str(error_info.value)
+	assert message == EXPECTED_ROTATION_MESSAGE

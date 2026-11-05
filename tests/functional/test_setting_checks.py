@@ -36,6 +36,7 @@ EXPECTED_CELL_MESSAGE = "Expected a whole position of at least 0, got -1."
 EXPECTED_INDEX_MESSAGE = "Expected a whole position, got 1.5."
 EXPECTED_RANGE_MESSAGE = "Expected a step going from start to stop, got step 1 from 5 to 1."
 EXPECTED_STATISTIC_MESSAGE = "The statistic Sum() appears more than once."
+EXPECTED_SEED_MESSAGE = "Side.START does not accept seed."
 
 
 @pytest.mark.parametrize("create", EMPTY_NAME_CASES)
@@ -118,3 +119,16 @@ def test_an_empty_list_of_region_columns_is_refused() -> None:
 	"""
 	with pytest.raises(ndp.EmptyListError):
 		ndp.Region(columns=[])
+
+
+def test_a_seed_without_random_draw_is_refused() -> None:
+	"""
+	Check that Preview refuses a seed with the first rows, where it would do nothing.
+
+	.. versionadded:: 0.1.0
+	"""
+	with pytest.raises(ndp.RefusedSettingError) as error_info:
+		ndp.Preview(seed=3)
+
+	message = str(error_info.value)
+	assert message == EXPECTED_SEED_MESSAGE

@@ -36,7 +36,8 @@ class Style:
 		single one, no label otherwise, the legend naming the series. An empty text draws no label.
 	right_label
 		The label of the axis on the right, drawn when a chart is added with ``ValueAxis.RIGHT``: when omitted, the name
-		of the column of the first chart on the right when it draws a single one. An empty text draws no label.
+		of the column of the first chart on the right when it draws a single one. An empty text draws no label. It has
+		no effect while no chart is on the right.
 	x_tick_rotation
 		The angle of the labels of the ``x`` values, in degrees from -90 to 90. When omitted, 45 degrees for texts,
 		dates and datetimes, and no rotation for numbers and for the texts on the left of horizontal bars.
@@ -44,9 +45,11 @@ class Style:
 		The angle of the labels of the ``y`` values, in degrees from -90 to 90, no rotation when omitted. The values of
 		the axis on the right keep no rotation.
 	legend
-		Where the legend is placed, ``LegendPosition.BEST`` by default. It is only drawn for several series.
+		Where the legend is placed, ``LegendPosition.BEST`` by default. It is only drawn for several series, so never on
+		a pie or a heatmap.
 	grid_lines
-		Whether light grid lines are drawn behind the values, ``GridLines.SHOWN`` by default.
+		Whether light grid lines are drawn behind the values, ``GridLines.SHOWN`` by default. A pie and a heatmap have
+		none.
 	size
 		The width and the height, 6.4 by 4.8 inches by default. A Plot placed in a ``Figure`` takes the size of
 		its cells instead.

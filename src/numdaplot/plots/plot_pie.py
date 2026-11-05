@@ -18,6 +18,9 @@ from numdaplot.tables.table import Table
 CHART_NAME = "PieChart"
 X_LABEL_SETTING = "x_label"
 Y_LABEL_SETTING = "y_label"
+RIGHT_LABEL_SETTING = "right_label"
+X_TICK_ROTATION_SETTING = "x_tick_rotation"
+Y_TICK_ROTATION_SETTING = "y_tick_rotation"
 FUNCTION_NAME = "plot_pie"
 
 
@@ -63,7 +66,8 @@ def plot_pie(data: Table, chart: PieChart, style: Style | None = None) -> Plot:
 	InvalidColorCountError
 		When the colors of the chart are not one per slice.
 	RefusedSettingError
-		When the style has an ``x_label`` or a ``y_label``.
+		When the style has an axis setting: ``x_label``, ``y_label``, ``right_label``, ``x_tick_rotation`` or
+		``y_tick_rotation``.
 
 	Warns
 	-----
@@ -87,16 +91,18 @@ def plot_pie(data: Table, chart: PieChart, style: Style | None = None) -> Plot:
 	values = read_pie_values(data, chart)
 	slice_count = len(values.rows)
 	require_color_count(chart.colors, slice_count)
-	require_no_axis_labels(style)
+	require_no_axis_settings(style)
 	layer = ChartLayer(chart, values)
 	plot = create_plot(layer, style)
 
 	return plot
 
 
-def require_no_axis_labels(style: Style | None) -> None:
+def require_no_axis_settings(style: Style | None) -> None:
 	"""
-	Check that the style of a pie has no axis label, a pie having no axes.
+	Check that the style of a pie has no axis setting, a pie having no axes.
+
+	The grid lines and the legend keep their default values, so a pie leaves them without effect.
 
 	.. versionadded:: 0.1.0
 
@@ -108,23 +114,30 @@ def require_no_axis_labels(style: Style | None) -> None:
 	Raises
 	------
 	RefusedSettingError
-		When the style has an ``x_label`` or a ``y_label``.
+		When the style has an ``x_label``, a ``y_label``, a ``right_label``, an ``x_tick_rotation`` or a
+		``y_tick_rotation``.
 
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> from numdaplot.plots.plot_pie import require_no_axis_labels
+	>>> from numdaplot.plots.plot_pie import require_no_axis_settings
 	>>> try:
-	... 	require_no_axis_labels(ndp.Style(x_label="City"))
+	... 	require_no_axis_settings(ndp.Style(x_tick_rotation=45))
 	... except ndp.RefusedSettingError as error:
 	... 	print(error)
-	PieChart does not accept x_label.
+	PieChart does not accept x_tick_rotation.
 	"""
 	if style is None:
 		return
 
-	if style.x_label is not None:
-		raise RefusedSettingError(X_LABEL_SETTING, CHART_NAME)
+	axis_settings = [
+		(X_LABEL_SETTING, style.x_label),
+		(Y_LABEL_SETTING, style.y_label),
+		(RIGHT_LABEL_SETTING, style.right_label),
+		(X_TICK_ROTATION_SETTING, style.x_tick_rotation),
+		(Y_TICK_ROTATION_SETTING, style.y_tick_rotation),
+	]
 
-	if style.y_label is not None:
-		raise RefusedSettingError(Y_LABEL_SETTING, CHART_NAME)
+	for setting_name, setting_value in axis_settings:
+		if setting_value is not None:
+			raise RefusedSettingError(setting_name, CHART_NAME)

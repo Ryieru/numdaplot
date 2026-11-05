@@ -21,7 +21,7 @@ from numdaplot.plots.plot_histogram import plot_histogram
 from numdaplot.plots.plot_line import plot_line
 from numdaplot.plots.plot_missing_by_column import plot_missing_by_column
 from numdaplot.plots.plot_missing_map import plot_missing_map
-from numdaplot.plots.plot_pie import plot_pie, require_no_axis_labels
+from numdaplot.plots.plot_pie import plot_pie, require_no_axis_settings
 from numdaplot.plots.plot_scatter import plot_scatter
 
 DAYS = ndp.Array.from_list([1, 2, 3])
@@ -230,22 +230,22 @@ def test_plot_pie_is_silent_up_to_five_slices() -> None:
 	assert caught_warnings == []
 
 
-def test_require_no_axis_labels_accepts_a_title() -> None:
+def test_require_no_axis_settings_accepts_a_title() -> None:
 	"""
 	Check that a pie style may have a title.
 
 	.. versionadded:: 0.1.0
 	"""
-	require_no_axis_labels(ndp.Style(title="Sales"))
+	require_no_axis_settings(ndp.Style(title="Sales"))
 
 
-def test_require_no_axis_labels_accepts_no_style() -> None:
+def test_require_no_axis_settings_accepts_no_style() -> None:
 	"""
 	Check that the default style passes.
 
 	.. versionadded:: 0.1.0
 	"""
-	require_no_axis_labels(None)
+	require_no_axis_settings(None)
 
 
 def test_read_heatmap_values_reads_the_labels_and_columns_of_a_table() -> None:
@@ -361,3 +361,27 @@ def test_plot_function_without_chart_still_needs_the_columns_of_a_table() -> Non
 	"""
 	with pytest.raises(ndp.InvalidChartDataError):
 		plot_bar(SALES)
+
+
+@pytest.mark.parametrize(
+	"style",
+	[
+		ndp.Style(y_label="Sales"),
+		ndp.Style(right_label="Price"),
+		ndp.Style(x_tick_rotation=45),
+		ndp.Style(y_tick_rotation=45),
+	],
+)
+def test_require_no_axis_settings_rejects_every_axis_setting(style: ndp.Style) -> None:
+	"""
+	Check that each axis setting raises RefusedSettingError for a pie.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	style
+		A style with one axis setting.
+	"""
+	with pytest.raises(ndp.RefusedSettingError):
+		require_no_axis_settings(style)
