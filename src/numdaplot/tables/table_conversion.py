@@ -168,7 +168,8 @@ class TableConversion(TableData):
 		Returns
 		-------
 		Array
-			A one-dimensional Array of the type of the column; a ``CATEGORY`` column gives a ``TEXT`` Array.
+			A one-dimensional Array of the type of the column, with the same number of values as the Table has rows;
+			a ``CATEGORY`` column gives a ``TEXT`` Array.
 
 		Raises
 		------
@@ -177,8 +178,8 @@ class TableConversion(TableData):
 		ColumnNotFoundError
 			When no column has this name.
 		UnsupportedMissingError
-			When an integer, boolean, text or category column has missing values, which an Array cannot hold:
-			convert it to ``FLOAT64`` first, or drop its missing values.
+			When an integer or boolean column has missing values, which an Array cannot hold: remove them with
+			``drop_missing``, or convert an integer column to ``FLOAT64`` first.
 		TimeZoneMismatchError
 			When the column holds datetimes with a time zone, which an Array cannot hold: remove the zone first
 			with ``TimeZoneMode.REMOVE``.

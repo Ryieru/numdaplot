@@ -9,13 +9,13 @@ from typing import Any
 import numpy
 from numpy.typing import NDArray
 
-DECIMAL_KIND = "f"
+NAN_KINDS = frozenset({"f", "T"})
 TIME_KINDS = frozenset({"M", "m"})
 
 
 def find_missing(values: NDArray[Any]) -> NDArray[numpy.bool_]:
 	"""
-	Return which values are missing: NaN for decimals, NaT for dates, datetimes and durations.
+	Return which values are missing: NaN for decimals and texts, NaT for dates, datetimes and durations.
 
 	.. versionadded:: 0.1.0
 
@@ -37,9 +37,9 @@ def find_missing(values: NDArray[Any]) -> NDArray[numpy.bool_]:
 	array([False,  True])
 	"""
 	value_kind = values.dtype.kind
-	if value_kind == DECIMAL_KIND:
-		missing_decimals = numpy.isnan(values)
-		return missing_decimals
+	if value_kind in NAN_KINDS:
+		missing_values = numpy.isnan(values)
+		return missing_values
 
 	if value_kind in TIME_KINDS:
 		missing_times = numpy.isnat(values)

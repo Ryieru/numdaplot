@@ -4,6 +4,8 @@ Unit tests of the conversion between ndp.Type and numpy dtypes.
 .. versionadded:: 0.1.0
 """
 
+from typing import Any, cast
+
 import numpy
 import pytest
 
@@ -14,7 +16,9 @@ from numdaplot.errors.unsupported_type_error import UnsupportedTypeError
 
 NUMPY_COMPATIBLE_TYPES = [data_type for data_type in Type if data_type != Type.CATEGORY]
 FIXED_LENGTH_TEXT_DTYPE = numpy.dtype("<U5")
-VARIABLE_LENGTH_TEXT_DTYPE = numpy.dtype("T")
+# Some versions of the numpy stubs leave out the missing value marker of StringDType.
+STRING_DTYPE_CLASS = cast(Any, numpy.dtypes.StringDType)
+VARIABLE_LENGTH_TEXT_DTYPE = STRING_DTYPE_CLASS(na_object=numpy.nan)
 SECOND_DURATION_DTYPE = numpy.dtype("timedelta64[s]")
 DAY_DATETIME_DTYPE = numpy.dtype("datetime64[D]")
 SECOND_DATETIME_DTYPE = numpy.dtype("datetime64[s]")
@@ -36,7 +40,7 @@ def test_to_numpy_dtype_converts_int32() -> None:
 
 def test_to_numpy_dtype_converts_text_to_variable_length_strings() -> None:
 	"""
-	Check that TEXT gives the variable-length StringDType.
+	Check that TEXT gives the variable-length StringDType with NaN as missing value.
 
 	.. versionadded:: 0.1.0
 	"""

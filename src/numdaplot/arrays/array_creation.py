@@ -76,7 +76,7 @@ class ArrayCreation(ArrayData):
 
 		The type is guessed when omitted: integers give ``INT64``, decimals or a mix of integers and
 		decimals give ``FLOAT64``, then ``BOOL``, ``TEXT``, ``DATE``, ``DATETIME`` and ``DURATION``.
-		``None`` is a missing value, only accepted for decimals, dates, datetimes and durations.
+		``None`` is a missing value, only accepted for decimals, texts, dates, datetimes and durations.
 
 		.. versionadded:: 0.1.0
 
@@ -134,7 +134,7 @@ class ArrayCreation(ArrayData):
 		Parameters
 		----------
 		values
-			The numpy array.
+			The numpy array. Texts may mark their missing values with any marker of ``StringDType``.
 
 		Returns
 		-------

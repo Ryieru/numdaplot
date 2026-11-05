@@ -35,6 +35,9 @@ DAY_DTYPE = numpy.dtype("datetime64[D]")
 DECIMALS_WITH_MISSING = pandas.Series([1.5, None])
 EXPECTED_DECIMAL_COUNT = 2
 TEXTS_WITH_MISSING = pandas.Series(["a", None], dtype="string")
+CATEGORIES_WITH_MISSING = pandas.Series(["a", None], dtype="category")
+BOOLEANS_WITH_MISSING = pandas.Series([True, None], dtype="boolean")
+COLUMN_NAME = "age"
 TEXT_VALUES = numpy.array(["a", "b"], dtype="T")
 TEXT_DTYPE_NAME = "string"
 INTEGER_VALUES = numpy.array([1, 3])
@@ -139,20 +142,52 @@ def test_read_array_values_keeps_missing_decimals() -> None:
 	assert missing[1]
 
 
-@pytest.mark.parametrize("column", [INTEGERS_WITH_MISSING, TEXTS_WITH_MISSING])
+@pytest.mark.parametrize("column", [INTEGERS_WITH_MISSING, BOOLEANS_WITH_MISSING])
 def test_read_array_values_rejects_missing_values_an_array_cannot_hold(column: Column) -> None:
 	"""
-	Check that integers or texts with a missing value raise UnsupportedMissingError.
+	Check that integers or booleans with a missing value raise UnsupportedMissingError.
 
 	.. versionadded:: 0.1.0
 
 	Parameters
 	----------
 	column
-		A column with a missing integer or text.
+		A column with a missing integer or boolean.
 	"""
 	with pytest.raises(UnsupportedMissingError):
 		read_array_values(column)
+
+
+def test_read_array_values_names_the_column_it_rejects() -> None:
+	"""
+	Check that the error gives the name of the column holding the missing values.
+
+	.. versionadded:: 0.1.0
+	"""
+	named_column = INTEGERS_WITH_MISSING.rename(COLUMN_NAME)
+
+	with pytest.raises(UnsupportedMissingError) as error_info:
+		read_array_values(named_column)
+
+	assert error_info.value.column_name == COLUMN_NAME
+
+
+@pytest.mark.parametrize("column", [TEXTS_WITH_MISSING, CATEGORIES_WITH_MISSING])
+def test_read_array_values_marks_missing_texts_and_categories_with_nan(column: Column) -> None:
+	"""
+	Check that texts and categories keep their missing value, marked with NaN.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	column
+		A column with a missing text or category.
+	"""
+	values = read_array_values(column)
+
+	missing = numpy.isnan(values)
+	assert missing.tolist() == [False, True]
 
 
 def test_build_column_stores_texts_with_the_pandas_text_dtype() -> None:

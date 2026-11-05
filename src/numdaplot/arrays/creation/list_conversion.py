@@ -25,6 +25,7 @@ NANOSECOND_UNIT = "ns"
 MISSING_MARKERS = {
 	Type.FLOAT32: numpy.nan,
 	Type.FLOAT64: numpy.nan,
+	Type.TEXT: numpy.nan,
 	Type.DATE: numpy.datetime64(NOT_A_TIME, NANOSECOND_UNIT),
 	Type.DATETIME: numpy.datetime64(NOT_A_TIME, NANOSECOND_UNIT),
 	Type.DURATION: numpy.timedelta64(NOT_A_TIME, NANOSECOND_UNIT),

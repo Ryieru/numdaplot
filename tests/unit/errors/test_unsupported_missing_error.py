@@ -8,7 +8,17 @@ from numdaplot.errors.numdaplot_error import NumdaplotError
 from numdaplot.errors.unsupported_missing_error import UnsupportedMissingError
 
 TYPE_NAME = "INT64"
-EXPECTED_MESSAGE = "INT64 values cannot be missing, use a decimal, date or duration type."
+BOOL_TYPE_NAME = "BOOL"
+COLUMN_NAME = "age"
+EXPECTED_MESSAGE = "INT64 values cannot be missing in an Array. Remove them, or give dtype=ndp.Type.FLOAT64."
+EXPECTED_BOOL_MESSAGE = "BOOL values cannot be missing in an Array. Remove them."
+EXPECTED_COLUMN_MESSAGE = (
+	"The column 'age' has missing values, which an INT64 Array cannot hold. "
+	"Remove them with drop_missing, or convert the column to FLOAT64."
+)
+EXPECTED_BOOL_COLUMN_MESSAGE = (
+	"The column 'age' has missing values, which a BOOL Array cannot hold. Remove them with drop_missing."
+)
 
 
 def test_unsupported_missing_error_is_a_numdaplot_error() -> None:
@@ -30,6 +40,55 @@ def test_unsupported_missing_error_message_states_the_problem() -> None:
 
 	error_text = str(error)
 	assert error_text == EXPECTED_MESSAGE
+
+
+def test_unsupported_missing_error_gives_no_conversion_for_booleans() -> None:
+	"""
+	Check that booleans, which cannot become decimals, are only advised to remove the missing values.
+
+	.. versionadded:: 0.1.0
+	"""
+	error = UnsupportedMissingError(BOOL_TYPE_NAME)
+
+	error_text = str(error)
+	assert error_text == EXPECTED_BOOL_MESSAGE
+
+
+def test_unsupported_missing_error_names_the_column_and_its_conversion() -> None:
+	"""
+	Check the message of an integer column.
+
+	.. versionadded:: 0.1.0
+	"""
+	error = UnsupportedMissingError(TYPE_NAME, COLUMN_NAME)
+
+	error_text = str(error)
+	assert error_text == EXPECTED_COLUMN_MESSAGE
+
+
+def test_unsupported_missing_error_names_the_column_without_conversion_for_booleans() -> None:
+	"""
+	Check the message of a boolean column.
+
+	.. versionadded:: 0.1.0
+	"""
+	error = UnsupportedMissingError(BOOL_TYPE_NAME, COLUMN_NAME)
+
+	error_text = str(error)
+	assert error_text == EXPECTED_BOOL_COLUMN_MESSAGE
+
+
+def test_unsupported_missing_error_keeps_the_column_name() -> None:
+	"""
+	Check that the column name is available as an attribute, and None without column.
+
+	.. versionadded:: 0.1.0
+	"""
+	column_error = UnsupportedMissingError(TYPE_NAME, COLUMN_NAME)
+	list_error = UnsupportedMissingError(TYPE_NAME)
+
+	assert column_error.column_name == COLUMN_NAME
+	assert list_error.column_name is None
 
 
 def test_unsupported_missing_error_keeps_its_values() -> None:

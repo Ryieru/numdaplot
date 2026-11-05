@@ -10,6 +10,8 @@ import numpy
 import pytest
 
 from numdaplot.arrays.selection.membership_masks import build_contains_mask, build_membership_mask
+from numdaplot.data_types.numpy_mapping import to_numpy_dtype
+from numdaplot.data_types.type import Type
 from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
 from numdaplot.rules.case import Case
 from numdaplot.rules.contains import Contains
@@ -124,3 +126,17 @@ def test_build_membership_mask_finds_datetimes() -> None:
 
 	matches = mask.tolist()
 	assert matches == EXPECTED_MOMENT_MATCHES
+
+
+def test_build_contains_mask_leaves_out_a_missing_text() -> None:
+	"""
+	Check that a missing text contains nothing, without error.
+
+	.. versionadded:: 0.1.0
+	"""
+	text_dtype = to_numpy_dtype(Type.TEXT)
+	texts = numpy.array(["Paris", numpy.nan], dtype=text_dtype)
+
+	mask = build_contains_mask(texts, IGNORED_CASE_RULE)
+
+	assert mask.tolist() == [True, False]

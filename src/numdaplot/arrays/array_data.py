@@ -121,7 +121,7 @@ class ArrayData:
 		Returns
 		-------
 		numpy.typing.NDArray
-			A writable copy of the values.
+			A writable copy of the values. Texts use ``StringDType`` with NaN as missing value.
 
 		Examples
 		--------

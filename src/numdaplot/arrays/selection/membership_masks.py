@@ -20,6 +20,7 @@ from numdaplot.rules.is_in import IsIn
 IS_IN_NAME = "IsIn"
 CONTAINS_NAME = "Contains"
 TEXT_FAMILIES = frozenset({ValueFamily.TEXT})
+EMPTY_TEXT = ""
 NOT_FOUND_POSITION = -1
 
 
@@ -99,13 +100,17 @@ def build_contains_mask(values: NDArray[Any], rule: Contains) -> NDArray[numpy.b
 	"""
 	require_family(values, TEXT_FAMILIES, CONTAINS_NAME)
 
-	searched_values = values
+	missing = find_missing(values)
+	present = ~missing
+	# numpy cannot search a missing text. The mask of the present texts removes the empty text standing for it.
+	searched_values = numpy.where(missing, EMPTY_TEXT, values)
 	searched_text = rule.text
 	if rule.case == Case.IGNORED:
-		searched_values = numpy.strings.lower(values)
+		searched_values = numpy.strings.lower(searched_values)
 		searched_text = rule.text.lower()
 
 	positions = numpy.strings.find(searched_values, searched_text)
-	mask = positions != NOT_FOUND_POSITION
+	found = positions != NOT_FOUND_POSITION
+	mask = found & present
 
 	return mask

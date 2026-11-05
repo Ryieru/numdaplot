@@ -9,6 +9,8 @@ from datetime import date, datetime, timedelta
 import numpy
 
 from numdaplot.arrays.conversion.python_values import to_python_list
+from numdaplot.data_types.numpy_mapping import to_numpy_dtype
+from numdaplot.data_types.type import Type
 
 DATETIMES = numpy.array(["2026-01-31T08:30", "NaT"], dtype="datetime64[ns]")
 EXPECTED_DATETIMES = [datetime(2026, 1, 31, 8, 30), None]
@@ -17,6 +19,20 @@ EXPECTED_DATES = [date(2026, 1, 31)]
 DURATIONS = numpy.array([3600], dtype="timedelta64[s]")
 EXPECTED_DURATIONS = [timedelta(hours=1)]
 GRID = [[1, 2], [3, 4]]
+
+
+def test_to_python_list_gives_none_for_missing_texts() -> None:
+	"""
+	Check that a missing text becomes None, at any depth.
+
+	.. versionadded:: 0.1.0
+	"""
+	text_dtype = to_numpy_dtype(Type.TEXT)
+	texts = numpy.array([["a", numpy.nan], ["b", "c"]], dtype=text_dtype)
+
+	python_values = to_python_list(texts)
+
+	assert python_values == [["a", None], ["b", "c"]]
 
 
 def test_to_python_list_converts_datetimes_and_missing_datetimes() -> None:

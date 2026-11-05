@@ -11,7 +11,7 @@ from numpy.typing import NDArray
 from numdaplot.data_types.numpy_mapping import from_numpy_dtype, to_numpy_dtype
 from numdaplot.data_types.type import Type
 
-FIXED_LENGTH_TEXT_KIND = "U"
+TEXT_KINDS = frozenset({"U", "T"})
 
 
 def copy_numpy_values(values: NDArray[Any]) -> NDArray[Any]:
@@ -28,7 +28,7 @@ def copy_numpy_values(values: NDArray[Any]) -> NDArray[Any]:
 	Returns
 	-------
 	NDArray
-		An independent copy, with fixed-length texts stored as variable-length texts.
+		An independent copy, with texts stored as variable-length texts with NaN as missing value.
 
 	Raises
 	------
@@ -40,7 +40,7 @@ def copy_numpy_values(values: NDArray[Any]) -> NDArray[Any]:
 	>>> import numpy
 	>>> from numdaplot.arrays.creation.numpy_conversion import copy_numpy_values
 	>>> copy_numpy_values(numpy.array(["a", "bc"])).dtype
-	StringDType()
+	StringDType(na_object=nan)
 	"""
 	from_numpy_dtype(values.dtype)
 	copied_values = values.copy()
@@ -51,7 +51,9 @@ def copy_numpy_values(values: NDArray[Any]) -> NDArray[Any]:
 
 def normalize_text(values: NDArray[Any]) -> NDArray[Any]:
 	"""
-	Return values whose fixed-length texts are stored as variable-length texts, as every ``TEXT`` Array.
+	Return values whose texts are stored with the numpy type of every ``TEXT`` Array.
+
+	Fixed-length texts become variable-length texts, and any other marker of a missing text becomes NaN.
 
 	.. versionadded:: 0.1.0
 
@@ -63,19 +65,25 @@ def normalize_text(values: NDArray[Any]) -> NDArray[Any]:
 	Returns
 	-------
 	NDArray
-		The same array when it holds no fixed-length text, otherwise a converted copy.
+		The same array when it holds no text or already has this type, otherwise a converted copy.
 
 	Examples
 	--------
 	>>> import numpy
 	>>> from numdaplot.arrays.creation.numpy_conversion import normalize_text
 	>>> normalize_text(numpy.array(["a"])).dtype
-	StringDType()
+	StringDType(na_object=nan)
+	>>> marked_with_none = numpy.dtypes.StringDType(na_object=None)
+	>>> normalize_text(numpy.array(["a", None], dtype=marked_with_none))
+	array(['a', nan], dtype=StringDType(na_object=nan))
 	"""
-	if values.dtype.kind != FIXED_LENGTH_TEXT_KIND:
+	if values.dtype.kind not in TEXT_KINDS:
 		return values
 
 	text_dtype = to_numpy_dtype(Type.TEXT)
+	if values.dtype == text_dtype:
+		return values
+
 	text_values = values.astype(text_dtype)
 
 	return text_values

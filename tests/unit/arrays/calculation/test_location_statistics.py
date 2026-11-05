@@ -20,6 +20,8 @@ from numdaplot.arrays.calculation.location_statistics import (
 	compute_standard_deviation,
 	compute_sum,
 )
+from numdaplot.data_types.numpy_mapping import to_numpy_dtype
+from numdaplot.data_types.type import Type
 from numdaplot.statistics.maximum import Max
 from numdaplot.statistics.mean import Mean
 from numdaplot.statistics.median import Median
@@ -115,6 +117,48 @@ def test_compute_minimum_orders_texts_alphabetically() -> None:
 	minimum = compute_minimum(values, None, Min())
 
 	assert minimum == FIRST_TEXT
+
+
+def test_compute_minimum_ignores_missing_texts() -> None:
+	"""
+	Check that a missing text is not the lowest text.
+
+	.. versionadded:: 0.1.0
+	"""
+	text_dtype = to_numpy_dtype(Type.TEXT)
+	texts = numpy.array(["b", numpy.nan, "a"], dtype=text_dtype)
+
+	minimum = compute_minimum(texts, None, Min())
+
+	assert minimum == "a"
+
+
+def test_compute_maximum_ignores_missing_texts() -> None:
+	"""
+	Check that a missing text is not the highest text.
+
+	.. versionadded:: 0.1.0
+	"""
+	text_dtype = to_numpy_dtype(Type.TEXT)
+	texts = numpy.array(["b", numpy.nan, "a"], dtype=text_dtype)
+
+	maximum = compute_maximum(texts, None, Max())
+
+	assert maximum == "b"
+
+
+def test_compute_maximum_ignores_missing_texts_along_an_axis() -> None:
+	"""
+	Check that each slice gives its highest present text.
+
+	.. versionadded:: 0.1.0
+	"""
+	text_dtype = to_numpy_dtype(Type.TEXT)
+	texts = numpy.array([["a", numpy.nan], ["b", "c"]], dtype=text_dtype)
+
+	maximums = compute_maximum(texts, 1, Max())
+
+	assert maximums.tolist() == ["a", "c"]
 
 
 def test_compute_minimum_ignores_missing_dates() -> None:

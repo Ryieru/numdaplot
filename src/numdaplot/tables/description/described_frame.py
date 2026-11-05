@@ -250,7 +250,7 @@ def compute_description_cell(
 	>>> from numdaplot.tables.description.described_frame import compute_description_cell
 	>>> texts = numpy.array(["b", "a"], dtype="T")
 	>>> compute_description_cell(texts, ndp.Min(), 2)
-	array(['a'], dtype=StringDType())
+	array(['a'], dtype=StringDType(na_object=nan))
 	>>> print(compute_description_cell(texts, ndp.Mean(), 2))
 	None
 	"""
@@ -315,7 +315,7 @@ def convert_result_to_text(result: NDArray[Any] | None, time_zone: TimeZone | No
 	>>> import numpy
 	>>> from numdaplot.tables.description.described_frame import convert_result_to_text
 	>>> convert_result_to_text(numpy.array([2]), None)
-	array(['2'], dtype=StringDType())
+	array(['2'], dtype=StringDType(na_object=nan))
 	"""
 	if result is None:
 		return None

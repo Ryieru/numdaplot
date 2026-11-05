@@ -18,7 +18,9 @@ from numdaplot.errors.unsupported_missing_error import UnsupportedMissingError
 from numdaplot.tables.frames.column import Column
 from numdaplot.tables.frames.time_zones import find_column_time_zone, remove_utc_zone
 
-MISSING_CAPABLE_TYPES = frozenset({Type.FLOAT32, Type.FLOAT64, Type.DATE, Type.DATETIME, Type.DURATION})
+MISSING_CAPABLE_TYPES = frozenset(
+	{Type.FLOAT32, Type.FLOAT64, Type.TEXT, Type.CATEGORY, Type.DATE, Type.DATETIME, Type.DURATION}
+)
 TEXT_TYPES = frozenset({Type.TEXT, Type.CATEGORY})
 PYTHON_OBJECT_DTYPE = numpy.dtype(object)
 ARRAY_OPERATION = "An Array"
@@ -83,14 +85,14 @@ def find_column_missing(column: Column) -> NDArray[numpy.bool_]:
 
 def convert_column_values(column: Column) -> NDArray[Any]:
 	"""
-	Return the numpy values of a Table column that has no missing value of a type that cannot be missing.
+	Return the numpy values of a Table column, whose integers and booleans have no missing value.
 
 	.. versionadded:: 0.1.0
 
 	Parameters
 	----------
 	column
-		A Table column. Integers, booleans, texts and categories must have no missing value.
+		A Table column. Integers and booleans must have no missing value.
 
 	Returns
 	-------
@@ -113,7 +115,7 @@ def convert_column_values(column: Column) -> NDArray[Any]:
 		return utc_values
 
 	if column_type in TEXT_TYPES:
-		object_values = column.to_numpy(dtype=PYTHON_OBJECT_DTYPE)
+		object_values = column.to_numpy(dtype=PYTHON_OBJECT_DTYPE, na_value=numpy.nan)
 		text_dtype = to_numpy_dtype(Type.TEXT)
 		text_values = object_values.astype(text_dtype)
 		return text_values
@@ -167,12 +169,12 @@ def read_array_values(column: Column) -> NDArray[Any]:
 	Returns
 	-------
 	NDArray
-		The values, with NaN or NaT at the missing values of decimals, dates, datetimes and durations.
+		The values, with NaN at the missing decimals and texts, and NaT at the missing dates, datetimes and durations.
 
 	Raises
 	------
 	UnsupportedMissingError
-		When an integer, boolean, text or category column has a missing value, which an Array cannot hold.
+		When an integer or boolean column has a missing value, which an Array cannot hold.
 	TimeZoneMismatchError
 		When the column holds datetimes with a time zone, which an Array cannot hold.
 
@@ -192,7 +194,8 @@ def read_array_values(column: Column) -> NDArray[Any]:
 	has_missing = bool(missing.any())
 	rejects_missing = has_missing and column_type not in MISSING_CAPABLE_TYPES
 	if rejects_missing:
-		raise UnsupportedMissingError(column_type.name)
+		column_name = str(column.name)
+		raise UnsupportedMissingError(column_type.name, column_name)
 
 	array_values = convert_column_values(column)
 

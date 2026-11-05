@@ -4,7 +4,7 @@ Conversion between ``ndp.Type`` and numpy dtypes, used by Array.
 .. versionadded:: 0.1.0
 """
 
-from typing import Any
+from typing import Any, cast
 
 import numpy
 
@@ -12,6 +12,9 @@ from numdaplot.data_types.library import Library
 from numdaplot.data_types.type import Type
 from numdaplot.errors.unsupported_type_error import UnsupportedTypeError
 
+# Some versions of the numpy stubs leave out the missing value marker of StringDType.
+STRING_DTYPE_CLASS = cast(Any, numpy.dtypes.StringDType)
+TEXT_DTYPE = STRING_DTYPE_CLASS(na_object=numpy.nan)
 NUMPY_DTYPE_CODES = {
 	Type.INT8: "int8",
 	Type.INT16: "int16",
@@ -24,7 +27,6 @@ NUMPY_DTYPE_CODES = {
 	Type.FLOAT32: "float32",
 	Type.FLOAT64: "float64",
 	Type.BOOL: "bool",
-	Type.TEXT: "T",
 	Type.DATE: "datetime64[D]",
 	Type.DATETIME: "datetime64[ns]",
 	Type.DURATION: "timedelta64[ns]",
@@ -63,7 +65,7 @@ def to_numpy_dtype(data_type: Type) -> numpy.dtype[Any]:
 	Returns
 	-------
 	numpy.dtype
-		The matching numpy dtype. ``TEXT`` gives the variable-length ``StringDType``,
+		The matching numpy dtype. ``TEXT`` gives the variable-length ``StringDType`` with NaN as missing value,
 		``DATE`` gives ``datetime64[D]`` and ``DATETIME`` gives ``datetime64[ns]``.
 
 	Raises
@@ -78,6 +80,9 @@ def to_numpy_dtype(data_type: Type) -> numpy.dtype[Any]:
 	>>> to_numpy_dtype(ndp.Type.INT32)
 	dtype('int32')
 	"""
+	if data_type == Type.TEXT:
+		return TEXT_DTYPE
+
 	if data_type not in NUMPY_DTYPE_CODES:
 		raise UnsupportedTypeError(data_type.name, Library.NUMPY)
 

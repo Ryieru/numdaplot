@@ -11,10 +11,13 @@ from typing import Any, cast
 import numpy
 from numpy.typing import NDArray
 
+from numdaplot.arrays.selection.missing_mask import find_missing
 from numdaplot.statistics.quantile import Quantile
 from numdaplot.statistics.statistic import Statistic
 
 MISSING_AWARE_KINDS = frozenset({"f", "M", "m"})
+TEXT_KIND = "T"
+LOWEST_TEXT = ""
 POPULATION_DEGREES_OF_FREEDOM = 0
 
 
@@ -252,6 +255,13 @@ def compute_maximum(values: NDArray[Any], axis: int | None, statistic: Statistic
 	if values.dtype.kind in MISSING_AWARE_KINDS:
 		present_maximum = numpy.nanmax(values, axis=axis)
 		return present_maximum
+
+	if values.dtype.kind == TEXT_KIND:
+		# numpy orders a missing text last. The empty text orders first, so it never wins over a present text.
+		missing = find_missing(values)
+		ordered_texts = numpy.where(missing, LOWEST_TEXT, values)
+		highest_text = numpy.max(ordered_texts, axis=axis)
+		return highest_text
 
 	maximum = numpy.max(values, axis=axis)
 
