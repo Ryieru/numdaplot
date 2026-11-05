@@ -19,6 +19,7 @@ from numdaplot.plots.drawing.tick_rotation import (
 	apply_rotation,
 	choose_alignment,
 	choose_rotation,
+	do_labels_touch,
 	has_text_labels,
 	is_number_text,
 	rotate_x_labels,
@@ -315,3 +316,74 @@ def test_apply_rotation_leaves_the_alignment_of_a_vertical_axis() -> None:
 	apply_rotation(axes, True, NEGATIVE_ROTATION)
 
 	assert axes.get_yticklabels()[0].get_horizontalalignment() == "right"
+
+
+def test_do_labels_touch_refuses_scalar_labels() -> None:
+	"""
+	Check that labels chosen by matplotlib never touch.
+
+	.. versionadded:: 0.1.0
+	"""
+	axes = Figure().add_subplot()
+
+	labels_touch = do_labels_touch(axes.xaxis)
+
+	assert not labels_touch
+
+
+def test_do_labels_touch_ignores_a_single_label() -> None:
+	"""
+	Check that a single label has nothing to touch.
+
+	.. versionadded:: 0.1.0
+	"""
+	axes = Figure().add_subplot()
+	axes.xaxis.set_ticks([0.0], ["1000000"])
+
+	labels_touch = do_labels_touch(axes.xaxis)
+
+	assert not labels_touch
+
+
+def test_do_labels_touch_finds_wide_labels_on_close_ticks() -> None:
+	"""
+	Check that many wide labels touch.
+
+	.. versionadded:: 0.1.0
+	"""
+	axes = Figure().add_subplot()
+	tick_positions = [float(position) for position in range(30)]
+	tick_labels = [str(1000000 + position) for position in range(30)]
+	axes.xaxis.set_ticks(tick_positions, tick_labels)
+
+	labels_touch = do_labels_touch(axes.xaxis)
+
+	assert labels_touch
+
+
+def test_do_labels_touch_leaves_short_labels_on_distant_ticks() -> None:
+	"""
+	Check that few short labels have room.
+
+	.. versionadded:: 0.1.0
+	"""
+	axes = Figure().add_subplot()
+	axes.xaxis.set_ticks([0.0, 1.0, 2.0], ["1", "2", "3"])
+
+	labels_touch = do_labels_touch(axes.xaxis)
+
+	assert not labels_touch
+
+
+def test_do_labels_touch_uses_the_closest_ticks() -> None:
+	"""
+	Check that two close ticks are enough for labels to touch.
+
+	.. versionadded:: 0.1.0
+	"""
+	axes = Figure().add_subplot()
+	axes.xaxis.set_ticks([0.0, 0.001, 100.0], ["2000", "2001", "2002"])
+
+	labels_touch = do_labels_touch(axes.xaxis)
+
+	assert labels_touch

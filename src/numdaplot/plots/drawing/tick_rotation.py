@@ -7,17 +7,22 @@ Rotation of the labels of the ``x`` and ``y`` values of a Plot.
 # The matplotlib stubs leave the keyword arguments of most drawing methods untyped.
 # pyright: reportUnknownMemberType=false
 
-from typing import Literal
+from typing import Literal, cast
 
+import numpy
 from matplotlib.axes import Axes
 from matplotlib.axis import Axis
 from matplotlib.dates import ConciseDateFormatter
+from matplotlib.figure import Figure
 from matplotlib.ticker import ScalarFormatter
 
 from numdaplot.plots.drawing.drawn_chart import DrawnChart
 from numdaplot.plots.drawing.position_axis import find_axis
 
 TEXT_ROTATION = 45.0
+MINIMUM_TOUCHING_LABELS = 2
+LABEL_GAP_RATIO = 0.5
+POINTS_PER_INCH = 72.0
 NO_ROTATION = 0.0
 ANCHOR_ROTATION_MODE = "anchor"
 MINUS_SIGN = "\N{MINUS SIGN}"
@@ -37,8 +42,8 @@ def rotate_x_labels(axes: Axes, drawn_chart: DrawnChart, rotation: float | None)
 	drawn_chart
 		Which axis holds the ``x`` values.
 	rotation
-		The angle in degrees. When None, 45 degrees for texts and moments, and no rotation for numbers
-		and for labels on the vertical axis.
+		The angle in degrees. When None, 45 degrees for texts, moments and numbers without enough room, and no
+		rotation for other numbers and for labels on the vertical axis.
 
 	Examples
 	--------
@@ -145,7 +150,8 @@ def choose_rotation(axis: Axis, rotation: float | None) -> float:
 	Returns
 	-------
 	float
-		The angle chosen, else 45 degrees for texts and moments, and no rotation for numbers.
+		The angle chosen, else 45 degrees for texts, moments and numbers without enough room, and no rotation for
+		other numbers.
 
 	Examples
 	--------
@@ -162,7 +168,70 @@ def choose_rotation(axis: Axis, rotation: float | None) -> float:
 	if has_text:
 		return TEXT_ROTATION
 
+	labels_touch = do_labels_touch(axis)
+	if labels_touch:
+		return TEXT_ROTATION
+
 	return NO_ROTATION
+
+
+def do_labels_touch(axis: Axis) -> bool:
+	"""
+	Return whether horizontal labels fixed on each tick of a horizontal axis leave too little room between them.
+
+	The axes do not have their final width yet. Their current width is a little lower, which makes the answer prudent.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	axis
+		The horizontal axis, with its ticks.
+
+	Returns
+	-------
+	bool
+		True when the widest label and a gap of half its font size exceed the room between the closest ticks. Labels
+		chosen by matplotlib according to the room, such as those of a line chart, never touch.
+
+	Examples
+	--------
+	>>> from matplotlib.figure import Figure
+	>>> from numdaplot.plots.drawing.tick_rotation import do_labels_touch
+	>>> axes = Figure().add_subplot()
+	>>> years = [float(year) for year in range(24)]
+	>>> axes.xaxis.set_ticks(years, [str(2000 + year) for year in range(24)])  # doctest: +ELLIPSIS
+	[...]
+	>>> do_labels_touch(axes.xaxis)
+	True
+	"""
+	formatter = axis.get_major_formatter()
+	if isinstance(formatter, ScalarFormatter):
+		return False
+
+	ticks = numpy.asarray(axis.get_ticklocs(), dtype=numpy.float64)
+	tick_count = len(ticks)
+	if tick_count < MINIMUM_TOUCHING_LABELS:
+		return False
+
+	axes_box = axis.axes.get_window_extent()
+	view_start, view_stop = axis.axes.get_xbound()
+	pixels_per_unit = axes_box.width / (view_stop - view_start)
+	sorted_ticks = numpy.sort(ticks)
+	tick_gaps = numpy.diff(sorted_ticks)
+	smallest_tick_gap = tick_gaps.min()
+	room = smallest_tick_gap * pixels_per_unit
+	labels = axis.get_ticklabels()
+	label_boxes = [label.get_window_extent() for label in labels]
+	label_widths = [label_box.width for label_box in label_boxes]
+	widest_label = max(label_widths)
+	font_size = cast(float, labels[0].get_fontsize())
+	figure = cast(Figure, axis.axes.get_figure(root=True))
+	gap = font_size * LABEL_GAP_RATIO * figure.dpi / POINTS_PER_INCH
+	needed_room = widest_label + gap
+	labels_touch = bool(needed_room > room)
+
+	return labels_touch
 
 
 def has_text_labels(axis: Axis) -> bool:

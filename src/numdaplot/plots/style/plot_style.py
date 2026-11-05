@@ -41,7 +41,8 @@ class PlotStyle:
 		no effect while no chart is on the right.
 	x_tick_rotation
 		The angle of the labels of the ``x`` values, in degrees from -90 to 90. When omitted, 45 degrees for texts,
-		dates and datetimes, and no rotation for numbers and for the texts on the left of horizontal bars.
+		dates, datetimes and numbers without enough room, and no rotation for other numbers and for the texts on the
+		left of horizontal bars.
 	y_tick_rotation
 		The angle of the labels of the ``y`` values, in degrees from -90 to 90, no rotation when omitted. The values of
 		the axis on the right keep no rotation.
