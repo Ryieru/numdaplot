@@ -48,8 +48,6 @@ def plot_pie(data: Table, chart: PieChart, style: Style | None = None) -> Plot:
 	------
 	UnsupportedDataError
 		When the data is an Array.
-	InvalidChartDataError
-		When ``labels`` or ``values`` is not given.
 	ColumnNotFoundError
 		When a column does not exist.
 	IncompatibleTypesError

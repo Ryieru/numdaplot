@@ -57,7 +57,7 @@ class TableLayout(TableData):
 
 		return sorted_table
 
-	def drop_duplicates(self, deduplication: Deduplication) -> Self:
+	def drop_duplicates(self, deduplication: Deduplication | None = None) -> Self:
 		"""
 		Return the Table without its duplicated rows.
 
@@ -66,7 +66,7 @@ class TableLayout(TableData):
 		Parameters
 		----------
 		deduplication
-			The compared columns, every column with ``ndp.Deduplication()``, and the row kept in each group.
+			The compared columns, every column when omitted, and the row kept in each group.
 			Two missing values are equal.
 
 		Returns
@@ -83,12 +83,15 @@ class TableLayout(TableData):
 		--------
 		>>> import numdaplot as ndp
 		>>> table = ndp.Table.from_arrays({"city": ndp.Array.from_list(["Pau", "Lyon", "Pau"])})
-		>>> table.drop_duplicates(ndp.Deduplication())
+		>>> table.drop_duplicates()
 		   city
 		   TEXT
 		0   Pau
 		1  Lyon
 		"""
+		if deduplication is None:
+			deduplication = Deduplication()
+
 		remaining_frame = drop_duplicate_rows(self._frame, deduplication)
 		remaining_table = self._wrap(remaining_frame)
 

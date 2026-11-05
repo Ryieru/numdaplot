@@ -31,7 +31,7 @@ class Placement:
 	--------
 	>>> import numdaplot as ndp
 	>>> from numdaplot.plots.figure.placement import Placement
-	>>> plot = ndp.plot_line(ndp.Array.from_list([12.0, 15.5]), ndp.LineChart())
+	>>> plot = ndp.plot_line(ndp.Array.from_list([12.0, 15.5]))
 	>>> Placement(plot, ndp.Cell(row=0, column=1)).cell.column
 	1
 	"""
@@ -99,7 +99,7 @@ def require_free_cells(cell: Cell, placements: list[Placement]) -> None:
 	--------
 	>>> import numdaplot as ndp
 	>>> from numdaplot.plots.figure.placement import Placement, require_free_cells
-	>>> plot = ndp.plot_line(ndp.Array.from_list([12.0, 15.5]), ndp.LineChart())
+	>>> plot = ndp.plot_line(ndp.Array.from_list([12.0, 15.5]))
 	>>> wide_placement = Placement(plot, ndp.Cell(row=0, column=0, column_span=2))
 	>>> try:
 	... 	require_free_cells(ndp.Cell(row=0, column=1), [wide_placement])

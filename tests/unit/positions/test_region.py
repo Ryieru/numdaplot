@@ -4,6 +4,9 @@ Unit tests of Region.
 .. versionadded:: 0.1.0
 """
 
+import pytest
+
+from numdaplot.errors.empty_region_error import EmptyRegionError
 from numdaplot.positions.index import Index
 from numdaplot.positions.range import Range
 from numdaplot.positions.region import Region
@@ -14,15 +17,24 @@ FIRST_ROW = Index(0)
 FIRST_ROWS = Range(start=0, stop=4)
 
 
-def test_region_takes_every_row_and_column_by_default() -> None:
+def test_region_refuses_neither_rows_nor_columns() -> None:
 	"""
-	Check that rows and columns are None, meaning everything, when omitted.
+	Check that a Region without rows and columns raises EmptyRegionError.
 
 	.. versionadded:: 0.1.0
 	"""
-	region = Region()
+	with pytest.raises(EmptyRegionError):
+		Region()
 
-	assert region.rows is None
+
+def test_region_takes_every_column_when_columns_are_omitted() -> None:
+	"""
+	Check that columns stay None, meaning every column, when only rows are given.
+
+	.. versionadded:: 0.1.0
+	"""
+	region = Region(rows=FIRST_ROW)
+
 	assert region.columns is None
 
 

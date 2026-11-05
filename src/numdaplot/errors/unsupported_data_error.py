@@ -33,7 +33,7 @@ class UnsupportedDataError(NumdaplotError):
 	--------
 	>>> import numdaplot as ndp
 	>>> sales = ndp.Array.from_list([120.0, 80.0])
-	>>> chart = ndp.PieChart()
+	>>> chart = ndp.PieChart(labels="city", values="sales")
 	>>> try:
 	... 	ndp.plot_pie(sales, chart)
 	... except ndp.UnsupportedDataError as error:

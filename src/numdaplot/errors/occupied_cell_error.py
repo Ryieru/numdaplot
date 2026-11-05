@@ -33,7 +33,7 @@ class OccupiedCellError(NumdaplotError):
 	--------
 	>>> import numdaplot as ndp
 	>>> prices = ndp.Array.from_list([12.0, 15.5, 14.0])
-	>>> plot = ndp.plot_line(prices, ndp.LineChart())
+	>>> plot = ndp.plot_line(prices)
 	>>> figure = ndp.Figure(ndp.Layout(rows=1, columns=2))
 	>>> first_cell = ndp.Cell(row=0, column=0)
 	>>> figure = figure.place(plot, first_cell)

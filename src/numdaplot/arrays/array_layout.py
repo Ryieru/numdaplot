@@ -109,7 +109,7 @@ class ArrayLayout(ArrayData):
 
 		return flat_array
 
-	def sort(self, sorting: ArraySorting) -> Self:
+	def sort(self, sorting: ArraySorting | None = None) -> Self:
 		"""
 		Return the values sorted inside each row, or inside each column.
 
@@ -118,8 +118,8 @@ class ArrayLayout(ArrayData):
 		Parameters
 		----------
 		sorting
-			The order, the axis and the place of missing values. Without axis, each row is sorted,
-			which sorts a one-dimensional Array as a whole.
+			The order, the axis and the place of missing values, the default ``ArraySorting`` when omitted.
+			Without axis, each row is sorted, which sorts a one-dimensional Array as a whole.
 
 		Returns
 		-------
@@ -137,6 +137,9 @@ class ArrayLayout(ArrayData):
 		>>> ndp.Array.from_list([3.0, None, 1.0]).sort(ndp.ArraySorting(order=ndp.Order.DESCENDING))
 		Array([ 3.,  1., nan], dtype=FLOAT64)
 		"""
+		if sorting is None:
+			sorting = ArraySorting()
+
 		sorted_values = sort_values(self._values, sorting)
 		sorted_array = self._wrap(sorted_values)
 

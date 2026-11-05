@@ -172,3 +172,47 @@ def test_unique_returns_the_distinct_values(monkeypatch: pytest.MonkeyPatch) -> 
 
 	unique_values = read_values(unique_array)
 	assert unique_values == EXPECTED_FAKE_VALUES
+
+
+def test_sort_without_settings_sorts_with_the_default_sorting(monkeypatch: pytest.MonkeyPatch) -> None:
+	"""
+	Check that sort without settings hands the default ArraySorting to the sorting.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	monkeypatch
+		Replaces the sorting with a recorder.
+	"""
+	received_sortings = list[ArraySorting]()
+
+	def sort_recorded_values(values: NDArray[Any], sorting: ArraySorting) -> NDArray[Any]:
+		"""
+		Keep the sorting and return the fake values.
+
+		.. versionadded:: 0.1.0
+
+		Parameters
+		----------
+		values
+			The values, ignored.
+		sorting
+			The sorting received.
+
+		Returns
+		-------
+		NDArray
+			Always the fake values.
+		"""
+		received_sortings.append(sorting)
+
+		return FAKE_VALUES
+
+	monkeypatch.setattr(array_layout, SORT_VALUES_NAME, sort_recorded_values)
+	values = numpy.array(LINE)
+	array = ArrayLayout._create(values)
+
+	array.sort()
+
+	assert received_sortings == [ArraySorting()]

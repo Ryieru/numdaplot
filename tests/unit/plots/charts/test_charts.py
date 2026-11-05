@@ -34,13 +34,15 @@ from numdaplot.ratios.measure import Measure
 
 Y_COLUMNS = ["price", "cost"]
 COLORS = [Color.BLUE, Color.ORANGE]
+PIE_LABELS = "city"
+PIE_VALUES = "sales"
 CHARTS = [
 	LineChart(),
 	BarChart(),
 	ScatterChart(),
 	HistogramChart(),
 	BoxChart(),
-	PieChart(),
+	PieChart(labels=PIE_LABELS, values=PIE_VALUES),
 	HeatmapChart(),
 	MissingChart(),
 	MissingMapChart(),
@@ -234,10 +236,8 @@ def test_pie_chart_defaults_show_the_percentages() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	chart = PieChart()
+	chart = PieChart(labels=PIE_LABELS, values=PIE_VALUES)
 
-	assert chart.labels is None
-	assert chart.values is None
 	assert chart.percentages == Percentages.SHOWN
 	assert chart.colors is None
 
@@ -248,7 +248,7 @@ def test_pie_chart_keeps_its_own_copy_of_the_colors() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	chart = PieChart(colors=COLORS)
+	chart = PieChart(labels=PIE_LABELS, values=PIE_VALUES, colors=COLORS)
 
 	assert chart.colors == COLORS
 	assert chart.colors is not COLORS
@@ -261,7 +261,7 @@ def test_pie_chart_rejects_empty_colors() -> None:
 	.. versionadded:: 0.1.0
 	"""
 	with pytest.raises(EmptyListError):
-		PieChart(colors=[])
+		PieChart(labels=PIE_LABELS, values=PIE_VALUES, colors=[])
 
 
 def test_heatmap_chart_defaults_hide_the_values_on_viridis() -> None:

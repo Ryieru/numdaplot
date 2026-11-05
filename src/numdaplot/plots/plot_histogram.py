@@ -19,7 +19,7 @@ CHART_NAME = "HistogramChart"
 FUNCTION_NAME = "plot_histogram"
 
 
-def plot_histogram(data: Table | Array, chart: HistogramChart, style: Style | None = None) -> Plot:
+def plot_histogram(data: Table | Array, chart: HistogramChart | None = None, style: Style | None = None) -> Plot:
 	"""
 	Return a Plot drawing how many values of columns of numbers fall in each bin.
 
@@ -34,6 +34,7 @@ def plot_histogram(data: Table | Array, chart: HistogramChart, style: Style | No
 		The Table or the Array drawn.
 	chart
 		The columns drawn, the bins, the measure and the colors.
+		The default ``HistogramChart`` when omitted, which draws an Array: a Table needs the columns named.
 	style
 		The look of the Plot, the default ``Style`` when omitted.
 
@@ -67,6 +68,9 @@ def plot_histogram(data: Table | Array, chart: HistogramChart, style: Style | No
 	>>> plot = ndp.plot_histogram(flats, chart, style)
 	>>> plot.show()
 	"""
+	if chart is None:
+		chart = HistogramChart()
+
 	require_chart_class(chart, HistogramChart, FUNCTION_NAME)
 	values = read_sample_values(data, chart.columns, None, CHART_NAME)
 	series_count = len(values.series)

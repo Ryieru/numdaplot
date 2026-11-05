@@ -23,7 +23,7 @@ LABELS_SETTING = "labels"
 FUNCTION_NAME = "plot_heatmap"
 
 
-def plot_heatmap(data: Table | Array, chart: HeatmapChart, style: Style | None = None) -> Plot:
+def plot_heatmap(data: Table | Array, chart: HeatmapChart | None = None, style: Style | None = None) -> Plot:
 	"""
 	Return a Plot coloring each value of columns of numbers along a color scale.
 
@@ -39,6 +39,7 @@ def plot_heatmap(data: Table | Array, chart: HeatmapChart, style: Style | None =
 		The Table or the Array drawn.
 	chart
 		The columns drawn, the row labels, the color scale and the cell values.
+		The default ``HeatmapChart`` when omitted, which draws an Array: a Table needs the columns named.
 	style
 		The look of the Plot, the default ``Style`` when omitted.
 
@@ -73,6 +74,9 @@ def plot_heatmap(data: Table | Array, chart: HeatmapChart, style: Style | None =
 	>>> plot = ndp.plot_heatmap(orders, chart, style)
 	>>> plot.show()
 	"""
+	if chart is None:
+		chart = HeatmapChart()
+
 	require_chart_class(chart, HeatmapChart, FUNCTION_NAME)
 	values = read_heatmap_values(data, chart)
 	layer = ChartLayer(chart, values)

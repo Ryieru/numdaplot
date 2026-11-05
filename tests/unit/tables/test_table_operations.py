@@ -10,6 +10,7 @@ Each method hands the columns to a helper, faked here, and wraps the result in a
 # pyright: reportPrivateUsage=false
 
 from collections.abc import Callable
+from dataclasses import dataclass
 from types import ModuleType
 from typing import Any
 
@@ -228,3 +229,100 @@ def test_convert_replaces_the_column_with_its_conversion(monkeypatch: pytest.Mon
 	original_types = table.column_types
 	assert converted_table.column_types == EXPECTED_CONVERTED_TYPES
 	assert original_types == {"price": Type.FLOAT64}
+
+
+@dataclass(frozen=True)
+class DefaultSettingsCase:
+	"""
+	A Table method called without settings, and the settings its helper must receive.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	module
+		The module of the group of methods.
+	helper_name
+		The name of the helper the method calls.
+	operation
+		A function calling the method without settings.
+	expected_settings
+		The default settings the helper must receive.
+	"""
+
+	module: ModuleType
+	helper_name: str
+	operation: TableOperation
+	expected_settings: object
+
+
+class SettingsRecorder:
+	"""
+	Fake helper keeping the settings it receives.
+
+	.. versionadded:: 0.1.0
+	"""
+
+	def __init__(self) -> None:
+		"""
+		Start without settings.
+
+		.. versionadded:: 0.1.0
+		"""
+		self.settings = list[object]()
+
+	def record(self, frame: pandas.DataFrame, settings: object) -> pandas.DataFrame:
+		"""
+		Keep the settings and return the fake columns.
+
+		.. versionadded:: 0.1.0
+
+		Parameters
+		----------
+		frame
+			The columns, ignored.
+		settings
+			The settings received.
+
+		Returns
+		-------
+		pandas.DataFrame
+			Always the fake columns.
+		"""
+		self.settings.append(settings)
+
+		return FAKE_FRAME
+
+
+DEFAULT_SETTINGS_CASES = [
+	DefaultSettingsCase(table_calculation, "describe_frame", lambda table: table.describe(), Description()),
+	DefaultSettingsCase(table_layout, "drop_duplicate_rows", lambda table: table.drop_duplicates(), Deduplication()),
+	DefaultSettingsCase(table_missing, "count_frame_missing", lambda table: table.count_missing(), MissingCount()),
+	DefaultSettingsCase(table_missing, "drop_frame_missing", lambda table: table.drop_missing(), MissingDrop()),
+]
+
+
+@pytest.mark.parametrize("case", DEFAULT_SETTINGS_CASES)
+def test_method_without_settings_uses_the_default_settings(
+	monkeypatch: pytest.MonkeyPatch,
+	case: DefaultSettingsCase,
+) -> None:
+	"""
+	Check that a method called without settings hands the default settings to its helper.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	monkeypatch
+		Replaces the helper with a recorder.
+	case
+		The method, its helper and the expected default settings.
+	"""
+	recorder = SettingsRecorder()
+	monkeypatch.setattr(case.module, case.helper_name, recorder.record)
+	table = Table._create(FRAME)
+
+	case.operation(table)
+
+	assert recorder.settings == [case.expected_settings]

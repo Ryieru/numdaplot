@@ -57,6 +57,7 @@ from numdaplot.errors.duplicate_column_error import DuplicateColumnError
 from numdaplot.errors.duplicate_label_error import DuplicateLabelError
 from numdaplot.errors.empty_array_error import EmptyArrayError
 from numdaplot.errors.empty_list_error import EmptyListError
+from numdaplot.errors.empty_region_error import EmptyRegionError
 from numdaplot.errors.empty_text_error import EmptyTextError
 from numdaplot.errors.empty_total_error import EmptyTotalError
 from numdaplot.errors.empty_values_error import EmptyValuesError
@@ -264,6 +265,7 @@ __all__ = [
 	"DurationUnit",
 	"EmptyArrayError",
 	"EmptyListError",
+	"EmptyRegionError",
 	"EmptyTextError",
 	"EmptyTotalError",
 	"EmptyValuesError",

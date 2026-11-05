@@ -48,7 +48,7 @@ class MissingDrop:
 	>>> cities = ndp.Array.from_list(["Paris", "Lyon", "Pau"])
 	>>> prices = ndp.Array.from_list([120.0, None, 150.0])
 	>>> table = ndp.Table.from_arrays({"city": cities, "price": prices})
-	>>> table.drop_missing(ndp.MissingDrop())
+	>>> table.drop_missing()
 	    city   price
 	    TEXT FLOAT64
 	0  Paris   120.0

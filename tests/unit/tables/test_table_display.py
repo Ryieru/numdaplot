@@ -104,3 +104,47 @@ def test_preview_missing_shows_the_summary_as_it_is(monkeypatch: pytest.MonkeyPa
 	table.preview_missing()
 
 	assert shown_frames == [SUMMARY_FRAME]
+
+
+def test_preview_without_settings_shows_the_default_preview(monkeypatch: pytest.MonkeyPatch) -> None:
+	"""
+	Check that preview without settings chooses the rows with the default Preview.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	monkeypatch
+		Replaces the row choice and the display with fakes.
+	"""
+	received_previews = list[Preview]()
+
+	def choose_recorded_rows(frame: pandas.DataFrame, preview: Preview) -> pandas.DataFrame:
+		"""
+		Keep the preview and return the fake rows.
+
+		.. versionadded:: 0.1.0
+
+		Parameters
+		----------
+		frame
+			The columns, ignored.
+		preview
+			The preview received.
+
+		Returns
+		-------
+		pandas.DataFrame
+			Always the fake rows.
+		"""
+		received_previews.append(preview)
+
+		return PREVIEW_FRAME
+
+	monkeypatch.setattr(table_display, CHOOSE_PREVIEW_ROWS_NAME, choose_recorded_rows)
+	monkeypatch.setattr(table_display, SHOW_FRAME_NAME, list[pandas.DataFrame]().append)
+	table = TableDisplay._create(FRAME)
+
+	table.preview()
+
+	assert received_previews == [Preview()]

@@ -368,3 +368,18 @@ def test_add_line_keeps_the_style_of_the_plot() -> None:
 
 	both_axes = both.to_matplotlib().axes[0]
 	assert both_axes.get_title() == "Shop"
+
+
+def test_add_line_without_chart_draws_the_lines_of_an_array() -> None:
+	"""
+	Check that add_line without chart draws a line over the bars.
+
+	.. versionadded:: 0.1.0
+	"""
+	bar_plot = ndp.plot_bar(PRICES)
+
+	both = bar_plot.add_line(PRICES)
+
+	figure = both.to_matplotlib()
+	line_count = len(figure.axes[0].lines)
+	assert line_count == 1

@@ -63,7 +63,7 @@ class TableCalculation(TableData):
 
 		return aggregated_table
 
-	def describe(self, description: Description) -> Self:
+	def describe(self, description: Description | None = None) -> Self:
 		"""
 		Return statistics describing columns, one row per statistic and one column per described column.
 
@@ -72,8 +72,8 @@ class TableCalculation(TableData):
 		Parameters
 		----------
 		description
-			The statistics and the columns. ``ndp.Description()`` describes every number column with
-			the statistics of pandas.
+			The statistics and the columns. When omitted, every number column is described with the
+			statistics of pandas.
 
 		Returns
 		-------
@@ -99,6 +99,9 @@ class TableCalculation(TableData):
 		1      mean    20.0
 		2       max    30.0
 		"""
+		if description is None:
+			description = Description()
+
 		described_frame = describe_frame(self._frame, description)
 		described_table = self._wrap(described_frame)
 

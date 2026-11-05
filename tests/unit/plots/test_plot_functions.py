@@ -8,6 +8,7 @@ Unit tests of the plot_* functions.
 # pyright: reportUnknownMemberType=false
 
 import warnings
+from collections.abc import Callable
 from typing import Any, cast
 
 import pytest
@@ -33,6 +34,7 @@ CITY_TOTALS = ndp.Table.from_arrays(
 	{"city": ndp.Array.from_list(["Paris", "Lyon"]), "sales": ndp.Array.from_list([120.0, 80.0])}
 )
 PIE_CHART = ndp.PieChart(labels="city", values="sales")
+MISSING_PRICES = ndp.Table.from_arrays({"price": ndp.Array.from_list([12.0, None])})
 FRUITS = ndp.Array.from_list(["apple", "pear", "plum", "fig", "kiwi", "lime"])
 FRUIT_SALES = ndp.Array.from_list([30.0, 25.0, 15.0, 12.0, 10.0, 8.0])
 FRUIT_SHARES = ndp.Table.from_arrays({"fruit": FRUITS, "sales": FRUIT_SALES})
@@ -175,7 +177,7 @@ def test_plot_pie_rejects_an_array() -> None:
 	untyped_plot_pie = cast(Any, plot_pie)
 
 	with pytest.raises(ndp.UnsupportedDataError):
-		untyped_plot_pie(PRICES, ndp.PieChart())
+		untyped_plot_pie(PRICES, ndp.PieChart(labels="city", values="price"))
 
 
 def test_plot_pie_rejects_colors_not_one_per_slice_when_created() -> None:
@@ -314,3 +316,48 @@ def test_plot_missing_map_rejects_an_array() -> None:
 
 	with pytest.raises(ndp.UnsupportedDataError, match="plot_missing_map"):
 		untyped_plot(PRICES)
+
+
+@pytest.mark.parametrize(
+	("plot_function", "data"),
+	[
+		(plot_line, PRICES),
+		(plot_bar, PRICES),
+		(plot_scatter, PRICES),
+		(plot_box, PRICES),
+		(plot_histogram, PRICES),
+		(plot_heatmap, GRID),
+		(plot_missing_by_column, MISSING_PRICES),
+	],
+)
+def test_plot_function_without_chart_draws_with_the_default_chart(
+	plot_function: Callable[..., ndp.Plot],
+	data: ndp.Table | ndp.Array,
+) -> None:
+	"""
+	Check that a plot function called without chart draws one chart.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	plot_function
+		The plot function.
+	data
+		Data the default chart draws.
+	"""
+	plot = plot_function(data)
+
+	figure = plot.to_matplotlib()
+	axes_count = len(figure.axes)
+	assert axes_count >= 1
+
+
+def test_plot_function_without_chart_still_needs_the_columns_of_a_table() -> None:
+	"""
+	Check that a Table without chart raises InvalidChartDataError.
+
+	.. versionadded:: 0.1.0
+	"""
+	with pytest.raises(ndp.InvalidChartDataError):
+		plot_bar(SALES)

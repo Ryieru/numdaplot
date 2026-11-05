@@ -19,7 +19,7 @@ CHART_NAME = "BoxChart"
 FUNCTION_NAME = "plot_box"
 
 
-def plot_box(data: Table | Array, chart: BoxChart, style: Style | None = None) -> Plot:
+def plot_box(data: Table | Array, chart: BoxChart | None = None, style: Style | None = None) -> Plot:
 	"""
 	Return a Plot summing up the spread of columns of numbers as boxes.
 
@@ -34,6 +34,7 @@ def plot_box(data: Table | Array, chart: BoxChart, style: Style | None = None) -
 		The Table or the Array drawn.
 	chart
 		The columns drawn, their groups, the outliers and the colors.
+		The default ``BoxChart`` when omitted, which draws an Array: a Table needs the columns named.
 	style
 		The look of the Plot, the default ``Style`` when omitted.
 
@@ -68,6 +69,9 @@ def plot_box(data: Table | Array, chart: BoxChart, style: Style | None = None) -
 	>>> plot = ndp.plot_box(flats, chart, style)
 	>>> plot.show()
 	"""
+	if chart is None:
+		chart = BoxChart()
+
 	require_chart_class(chart, BoxChart, FUNCTION_NAME)
 	values = read_sample_values(data, chart.columns, chart.group_by, CHART_NAME)
 	series_count = len(values.series)

@@ -28,9 +28,9 @@ class PieChart(Chart):
 	Parameters
 	----------
 	labels
-		The column of texts naming the slices. A Table needs it.
+		The column of texts naming the slices.
 	values
-		The column of numbers sizing the slices. A Table needs it.
+		The column of numbers sizing the slices.
 	percentages
 		Whether each slice shows its share, such as ``42.5%``, ``Percentages.SHOWN`` by default.
 	colors
@@ -52,8 +52,8 @@ class PieChart(Chart):
 	>>> plot.show()
 	"""
 
-	labels: str | None = None
-	values: str | None = None
+	labels: str
+	values: str
 	percentages: Percentages = Percentages.SHOWN
 	colors: Sequence[Color | CustomColor] | None = None
 

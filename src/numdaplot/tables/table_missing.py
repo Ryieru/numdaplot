@@ -22,7 +22,7 @@ class TableMissing(TableData):
 	.. versionadded:: 0.1.0
 	"""
 
-	def count_missing(self, missing_count: MissingCount) -> Self:
+	def count_missing(self, missing_count: MissingCount | None = None) -> Self:
 		"""
 		Return the number or the ratio of missing values, for the whole Table, each row or each column.
 
@@ -31,7 +31,7 @@ class TableMissing(TableData):
 		Parameters
 		----------
 		missing_count
-			The axis and the measure: a single number for the whole Table with ``ndp.MissingCount()``.
+			The axis and the measure, a single number for the whole Table when omitted.
 
 		Returns
 		-------
@@ -46,7 +46,7 @@ class TableMissing(TableData):
 		>>> cities = ndp.Array.from_list(["Paris", "Lyon", "Pau", "Nice"])
 		>>> prices = ndp.Array.from_list([120.0, None, None, 90.0])
 		>>> table = ndp.Table.from_arrays({"city": cities, "price": prices})
-		>>> table.count_missing(ndp.MissingCount()).to_value()
+		>>> table.count_missing().to_value()
 		2
 		>>> table.count_missing(ndp.MissingCount(axis=ndp.Axis.EACH_COLUMN, measure=ndp.Measure.RATIO))
 		  column missing_ratio
@@ -54,6 +54,9 @@ class TableMissing(TableData):
 		0   city           0.0
 		1  price           0.5
 		"""
+		if missing_count is None:
+			missing_count = MissingCount()
+
 		count_frame = count_frame_missing(self._frame, missing_count)
 		count_table = self._wrap(count_frame)
 
@@ -83,7 +86,7 @@ class TableMissing(TableData):
 		summary = summarize_missing(self._frame)
 		show_pandas_frame(summary)
 
-	def drop_missing(self, missing_drop: MissingDrop) -> Self:
+	def drop_missing(self, missing_drop: MissingDrop | None = None) -> Self:
 		"""
 		Return the Table without its rows, or its columns, holding missing values.
 
@@ -92,8 +95,8 @@ class TableMissing(TableData):
 		Parameters
 		----------
 		missing_drop
-			What is removed: every row holding a missing value with ``ndp.MissingDrop()``, or columns, and
-			how many missing values are needed.
+			What is removed: every row holding a missing value when omitted, or columns, and how many
+			missing values are needed.
 
 		Returns
 		-------
@@ -111,12 +114,15 @@ class TableMissing(TableData):
 		>>> cities = ndp.Array.from_list(["Paris", "Lyon", "Pau"])
 		>>> prices = ndp.Array.from_list([120.0, None, 150.0])
 		>>> table = ndp.Table.from_arrays({"city": cities, "price": prices})
-		>>> table.drop_missing(ndp.MissingDrop())
+		>>> table.drop_missing()
 		    city   price
 		    TEXT FLOAT64
 		0  Paris   120.0
 		1    Pau   150.0
 		"""
+		if missing_drop is None:
+			missing_drop = MissingDrop()
+
 		remaining_frame = drop_frame_missing(self._frame, missing_drop)
 		remaining_table = self._wrap(remaining_frame)
 

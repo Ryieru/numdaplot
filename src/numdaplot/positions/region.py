@@ -6,6 +6,7 @@ A rectangular part of an Array or a Table, chosen by position.
 
 from dataclasses import dataclass
 
+from numdaplot.errors.empty_region_error import EmptyRegionError
 from numdaplot.positions.index import Index
 from numdaplot.positions.range import Range
 
@@ -20,10 +21,16 @@ class Region:
 	Parameters
 	----------
 	rows
-		The rows to take: one ``Index`` or a ``Range``. Every row when omitted.
+		The rows to take: one ``Index`` or a ``Range``. Every row when omitted, but a Region needs rows,
+		columns or both.
 	columns
 		The columns to take: one ``Index``, a ``Range``, or a list of column names for a Table.
 		Every column when omitted. The region keeps its own copy of a list of names.
+
+	Raises
+	------
+	EmptyRegionError
+		When ``rows`` and ``columns`` are both omitted.
 
 	Examples
 	--------
@@ -38,10 +45,19 @@ class Region:
 
 	def __post_init__(self) -> None:
 		"""
-		Replace a given list of column names with a copy that only the region holds.
+		Check that rows or columns are chosen, and replace a list of column names with a copy only the region holds.
 
 		.. versionadded:: 0.1.0
+
+		Raises
+		------
+		EmptyRegionError
+			When ``rows`` and ``columns`` are both omitted.
 		"""
+		has_no_position = self.rows is None and self.columns is None
+		if has_no_position:
+			raise EmptyRegionError()
+
 		if not isinstance(self.columns, list):
 			return
 

@@ -16,7 +16,7 @@ from numdaplot.tables.table import Table
 FUNCTION_NAME = "plot_bar"
 
 
-def plot_bar(data: Table | Array, chart: BarChart, style: Style | None = None) -> Plot:
+def plot_bar(data: Table | Array, chart: BarChart | None = None, style: Style | None = None) -> Plot:
 	"""
 	Return a Plot drawing columns of numbers as bars.
 
@@ -31,6 +31,7 @@ def plot_bar(data: Table | Array, chart: BarChart, style: Style | None = None) -
 		The Table or the Array drawn.
 	chart
 		The columns drawn and the look of the bars.
+		The default ``BarChart`` when omitted, which draws an Array: a Table needs the columns named.
 	style
 		The look of the Plot, the default ``Style`` when omitted.
 
@@ -66,6 +67,9 @@ def plot_bar(data: Table | Array, chart: BarChart, style: Style | None = None) -
 	>>> plot = ndp.plot_bar(sales, chart, style)
 	>>> plot.show()
 	"""
+	if chart is None:
+		chart = BarChart()
+
 	require_chart_class(chart, BarChart, FUNCTION_NAME)
 	layer = read_bar_layer(data, chart)
 	plot = create_plot(layer, style)

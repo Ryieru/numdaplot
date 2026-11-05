@@ -52,7 +52,7 @@ class Plot:
 	--------
 	>>> import numdaplot as ndp
 	>>> prices = ndp.Array.from_list([12.0, 15.5, 14.0, 17.0])
-	>>> plot = ndp.plot_line(prices, ndp.LineChart())
+	>>> plot = ndp.plot_line(prices)
 	>>> plot.show()
 	"""
 
@@ -124,7 +124,7 @@ class Plot:
 		>>> import numdaplot as ndp
 		>>> prices = ndp.Array.from_list([12.0, 15.5, 14.0])
 		>>> style = ndp.Style(title="Prices")
-		>>> figure = ndp.plot_line(prices, ndp.LineChart(), style).to_matplotlib()
+		>>> figure = ndp.plot_line(prices, style=style).to_matplotlib()
 		>>> figure.axes[0].get_title()
 		'Prices'
 		>>> figure.axes[0].lines[0].get_ydata()
@@ -170,7 +170,7 @@ class Plot:
 		>>> import numdaplot as ndp
 		>>> path = Path(tempfile.mkdtemp()) / "prices.svg"
 		>>> prices = ndp.Array.from_list([12.0, 15.5, 14.0])
-		>>> plot = ndp.plot_line(prices, ndp.LineChart())
+		>>> plot = ndp.plot_line(prices)
 		>>> plot.save(path)
 		>>> path.read_text().startswith("<?xml")
 		True
@@ -191,13 +191,13 @@ class Plot:
 		--------
 		>>> import numdaplot as ndp
 		>>> prices = ndp.Array.from_list([12.0, 15.5, 14.0, 17.0])
-		>>> plot = ndp.plot_bar(prices, ndp.BarChart())
+		>>> plot = ndp.plot_bar(prices)
 		>>> plot.show()
 		"""
 		drawing = self._describe_drawing()
 		show_drawing(drawing)
 
-	def add_line(self, data: Table | Array, chart: LineChart, axis: ValueAxis = ValueAxis.LEFT) -> Self:
+	def add_line(self, data: Table | Array, chart: LineChart | None = None, axis: ValueAxis = ValueAxis.LEFT) -> Self:
 		"""
 		Return a new Plot with lines added over the charts of this one.
 
@@ -212,6 +212,7 @@ class Plot:
 			The Table or the Array of the lines, which may differ from the one of the Plot.
 		chart
 			The columns drawn and the look of the lines.
+			The default ``LineChart`` when omitted, which draws an Array: a Table needs the columns named.
 		axis
 			``ValueAxis.LEFT`` by default to share the scale of the Plot, ``ValueAxis.RIGHT`` for a scale of
 			their own on the right.
@@ -248,13 +249,16 @@ class Plot:
 		>>> both = plot.add_line(shop, line)
 		>>> both.show()
 		"""
+		if chart is None:
+			chart = LineChart()
+
 		require_chart_class(chart, LineChart, ADD_LINE_NAME)
 		layer = read_line_layer(data, chart)
 		added_plot = self._add_layer(layer, axis, ADD_LINE_NAME)
 
 		return added_plot
 
-	def add_bar(self, data: Table | Array, chart: BarChart, axis: ValueAxis = ValueAxis.LEFT) -> Self:
+	def add_bar(self, data: Table | Array, chart: BarChart | None = None, axis: ValueAxis = ValueAxis.LEFT) -> Self:
 		"""
 		Return a new Plot with vertical bars added over the charts of this one.
 
@@ -270,6 +274,7 @@ class Plot:
 			The Table or the Array of the bars, which may differ from the one of the Plot.
 		chart
 			The columns drawn and the look of the bars, which must be vertical.
+			The default ``BarChart`` when omitted, which draws an Array: a Table needs the columns named.
 		axis
 			``ValueAxis.LEFT`` by default to share the scale of the Plot, ``ValueAxis.RIGHT`` for a scale of
 			their own on the right.
@@ -306,6 +311,9 @@ class Plot:
 		>>> both = plot.add_bar(shop, bars)
 		>>> both.show()
 		"""
+		if chart is None:
+			chart = BarChart()
+
 		require_chart_class(chart, BarChart, ADD_BAR_NAME)
 		require_vertical_bars(chart, ADD_BAR_NAME)
 		layer = read_bar_layer(data, chart)
@@ -313,7 +321,9 @@ class Plot:
 
 		return added_plot
 
-	def add_scatter(self, data: Table | Array, chart: ScatterChart, axis: ValueAxis = ValueAxis.LEFT) -> Self:
+	def add_scatter(
+		self, data: Table | Array, chart: ScatterChart | None = None, axis: ValueAxis = ValueAxis.LEFT
+	) -> Self:
 		"""
 		Return a new Plot with points added over the charts of this one.
 
@@ -328,6 +338,7 @@ class Plot:
 			The Table or the Array of the points, which may differ from the one of the Plot.
 		chart
 			The columns drawn and the look of the points.
+			The default ``ScatterChart`` when omitted, which draws an Array: a Table needs the columns named.
 		axis
 			``ValueAxis.LEFT`` by default to share the scale of the Plot, ``ValueAxis.RIGHT`` for a scale of
 			their own on the right.
@@ -364,6 +375,9 @@ class Plot:
 		>>> both = plot.add_scatter(readings, points)
 		>>> both.show()
 		"""
+		if chart is None:
+			chart = ScatterChart()
+
 		require_chart_class(chart, ScatterChart, ADD_SCATTER_NAME)
 		layer = read_scatter_layer(data, chart)
 		added_plot = self._add_layer(layer, axis, ADD_SCATTER_NAME)

@@ -38,9 +38,8 @@ class Size:
 	--------
 	>>> import numdaplot as ndp
 	>>> prices = ndp.Array.from_list([12.0, 15.5, 14.0, 17.0])
-	>>> chart = ndp.LineChart()
 	>>> style = ndp.Style(size=ndp.Size(width=6, height=2.5))
-	>>> plot = ndp.plot_line(prices, chart, style)
+	>>> plot = ndp.plot_line(prices, style=style)
 	>>> plot.show()
 	"""
 

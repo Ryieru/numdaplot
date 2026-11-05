@@ -17,7 +17,7 @@ from numdaplot.tables.table import Table
 FUNCTION_NAME = "plot_missing_by_column"
 
 
-def plot_missing_by_column(table: Table, chart: MissingChart, style: Style | None = None) -> Plot:
+def plot_missing_by_column(table: Table, chart: MissingChart | None = None, style: Style | None = None) -> Plot:
 	"""
 	Return a Plot drawing one bar per column of a Table, as high as its missing values.
 
@@ -28,7 +28,7 @@ def plot_missing_by_column(table: Table, chart: MissingChart, style: Style | Non
 	table
 		The Table whose missing values are counted.
 	chart
-		The measure, the share of missing values of each column with ``MissingChart()``.
+		The measure, the share of missing values of each column when omitted.
 	style
 		The look of the Plot, the default ``Style`` when omitted.
 
@@ -51,11 +51,13 @@ def plot_missing_by_column(table: Table, chart: MissingChart, style: Style | Non
 	>>> prices = ndp.Array.from_list([12.0, None, None, 15.5, None])
 	>>> surfaces = ndp.Array.from_list([30.0, 45.0, None, 60.0, 52.0])
 	>>> flats = ndp.Table.from_arrays({"city": cities, "price": prices, "surface": surfaces})
-	>>> chart = ndp.MissingChart()
 	>>> style = ndp.Style(title="Missing values")
-	>>> plot = ndp.plot_missing_by_column(flats, chart, style)
+	>>> plot = ndp.plot_missing_by_column(flats, style=style)
 	>>> plot.show()
 	"""
+	if chart is None:
+		chart = MissingChart()
+
 	require_chart_class(chart, MissingChart, FUNCTION_NAME)
 	checked_table = require_table(table, FUNCTION_NAME)
 	values = read_missing_counts(checked_table, chart.measure)

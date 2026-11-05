@@ -16,7 +16,7 @@ from numdaplot.tables.table import Table
 FUNCTION_NAME = "plot_line"
 
 
-def plot_line(data: Table | Array, chart: LineChart, style: Style | None = None) -> Plot:
+def plot_line(data: Table | Array, chart: LineChart | None = None, style: Style | None = None) -> Plot:
 	"""
 	Return a Plot drawing columns of numbers as lines.
 
@@ -31,6 +31,7 @@ def plot_line(data: Table | Array, chart: LineChart, style: Style | None = None)
 		The Table or the Array drawn.
 	chart
 		The columns drawn and the look of the lines.
+		The default ``LineChart`` when omitted, which draws an Array: a Table needs the columns named.
 	style
 		The look of the Plot, the default ``Style`` when omitted.
 
@@ -66,6 +67,9 @@ def plot_line(data: Table | Array, chart: LineChart, style: Style | None = None)
 	>>> plot = ndp.plot_line(sales, chart, style)
 	>>> plot.show()
 	"""
+	if chart is None:
+		chart = LineChart()
+
 	require_chart_class(chart, LineChart, FUNCTION_NAME)
 	layer = read_line_layer(data, chart)
 	plot = create_plot(layer, style)

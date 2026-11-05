@@ -105,7 +105,7 @@ class Figure:
 		--------
 		>>> import numdaplot as ndp
 		>>> prices = ndp.Array.from_list([12.0, 15.5, 14.0, 17.0])
-		>>> plot = ndp.plot_line(prices, ndp.LineChart(), ndp.Style(title="Prices"))
+		>>> plot = ndp.plot_line(prices, style=ndp.Style(title="Prices"))
 		>>> figure = ndp.Figure(ndp.Layout(rows=1, columns=2))
 		>>> placed_figure = figure.place(plot, ndp.Cell(row=0, column=1))
 		>>> placed_figure.show()
@@ -135,7 +135,7 @@ class Figure:
 		Examples
 		--------
 		>>> import numdaplot as ndp
-		>>> plot = ndp.plot_line(ndp.Array.from_list([12.0, 15.5]), ndp.LineChart())
+		>>> plot = ndp.plot_line(ndp.Array.from_list([12.0, 15.5]))
 		>>> figure = ndp.Figure(ndp.Layout(rows=2, columns=2)).place(plot, ndp.Cell(row=1, column=1))
 		>>> matplotlib_figure = figure.to_matplotlib()
 		>>> len(matplotlib_figure.subfigs), matplotlib_figure.get_size_inches().tolist()
@@ -180,7 +180,7 @@ class Figure:
 		>>> from pathlib import Path
 		>>> import numdaplot as ndp
 		>>> path = Path(tempfile.mkdtemp()) / "shop.pdf"
-		>>> plot = ndp.plot_line(ndp.Array.from_list([12.0, 15.5]), ndp.LineChart())
+		>>> plot = ndp.plot_line(ndp.Array.from_list([12.0, 15.5]))
 		>>> figure = ndp.Figure(ndp.Layout(rows=1, columns=2)).place(plot, ndp.Cell(row=0, column=0))
 		>>> figure.save(path)
 		>>> path.read_bytes()[:4]
@@ -202,8 +202,8 @@ class Figure:
 		--------
 		>>> import numdaplot as ndp
 		>>> prices = ndp.Array.from_list([12.0, 15.5, 14.0, 17.0])
-		>>> line_plot = ndp.plot_line(prices, ndp.LineChart(), ndp.Style(title="Line"))
-		>>> bar_plot = ndp.plot_bar(prices, ndp.BarChart(), ndp.Style(title="Bars"))
+		>>> line_plot = ndp.plot_line(prices, style=ndp.Style(title="Line"))
+		>>> bar_plot = ndp.plot_bar(prices, style=ndp.Style(title="Bars"))
 		>>> figure = ndp.Figure(ndp.Layout(rows=1, columns=2), title="Prices")
 		>>> figure = figure.place(line_plot, ndp.Cell(row=0, column=0))
 		>>> figure = figure.place(bar_plot, ndp.Cell(row=0, column=1))

@@ -16,7 +16,7 @@ from numdaplot.tables.table import Table
 FUNCTION_NAME = "plot_scatter"
 
 
-def plot_scatter(data: Table | Array, chart: ScatterChart, style: Style | None = None) -> Plot:
+def plot_scatter(data: Table | Array, chart: ScatterChart | None = None, style: Style | None = None) -> Plot:
 	"""
 	Return a Plot drawing each row as a point.
 
@@ -32,6 +32,7 @@ def plot_scatter(data: Table | Array, chart: ScatterChart, style: Style | None =
 		The Table or the Array drawn.
 	chart
 		The columns drawn and the look of the points.
+		The default ``ScatterChart`` when omitted, which draws an Array: a Table needs the columns named.
 	style
 		The look of the Plot, the default ``Style`` when omitted.
 
@@ -68,6 +69,9 @@ def plot_scatter(data: Table | Array, chart: ScatterChart, style: Style | None =
 	>>> plot = ndp.plot_scatter(flats, chart, style)
 	>>> plot.show()
 	"""
+	if chart is None:
+		chart = ScatterChart()
+
 	require_chart_class(chart, ScatterChart, FUNCTION_NAME)
 	layer = read_scatter_layer(data, chart)
 	plot = create_plot(layer, style)

@@ -48,6 +48,9 @@ and numdaplot follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 - `Array`, `Table` and `Plot`, and the base classes `Rule`, `Statistic`, `MathFunction`, `TimeFunction`,
   `Distribution` and `Chart`, refuse their constructor with `RefusedOperationError`, which names what to use instead.
   The plot functions and `Plot.add_*` refuse a chart of another class the same way.
+- Settings that work as they are may be omitted: `Array.sort`, `Table.preview`, `Table.describe`,
+  `Table.drop_duplicates`, `Table.drop_missing` and `Table.count_missing` use their default settings, and the plot
+  functions and `Plot.add_*`, except `plot_pie`, their default chart.
 - Table settings: `CsvOptions`, `JsonOptions`, `ExcelOptions`, `SasOptions`, `XptOptions`, `Filter`, `Condition`,
   `Aggregation`, `Calculation`, `Description`, `ColumnChoice`, `Renaming`, `Conversion`, `NewColumn`, `Sorting`,
   `SortKey`, `Deduplication`, `Preview`, `MissingCount`, `MissingDrop`, `MissingRatio`, and the `Encoding`,
@@ -70,5 +73,5 @@ and numdaplot follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
   `Quantile`, `MostFrequent`, `MostFrequentCount`.
 - Positions: `Region`, `Index`, `Range` and the `Axis` enum.
 - Sort settings: `Order` and `MissingPosition` enums.
-- Errors: `NumdaplotError`, `EmptyTextError`, `EmptyValuesError`, `InvalidBoundsError`,
+- Errors: `NumdaplotError`, `EmptyRegionError`, `EmptyTextError`, `EmptyValuesError`, `InvalidBoundsError`,
   `InvalidFractionError`, `InvalidStepError`, `UnsupportedTypeError`, and the `BroadcastWarning` warning.

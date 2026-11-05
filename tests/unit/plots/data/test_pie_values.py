@@ -15,7 +15,6 @@ from numpy.typing import NDArray
 import numdaplot as ndp
 from numdaplot.errors.empty_total_error import EmptyTotalError
 from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
-from numdaplot.errors.invalid_chart_data_error import InvalidChartDataError
 from numdaplot.errors.missing_value_error import MissingValueError
 from numdaplot.errors.out_of_domain_error import OutOfDomainError
 from numdaplot.errors.readability_warning import ReadabilityWarning
@@ -66,17 +65,7 @@ def test_read_pie_values_rejects_an_array() -> None:
 	.. versionadded:: 0.1.0
 	"""
 	with pytest.raises(UnsupportedDataError):
-		read_pie_values(SALES, ndp.PieChart())
-
-
-def test_read_pie_values_rejects_a_chart_without_values() -> None:
-	"""
-	Check that a Table needs the values column.
-
-	.. versionadded:: 0.1.0
-	"""
-	with pytest.raises(InvalidChartDataError, match="needs values"):
-		read_pie_values(SHARES, ndp.PieChart(labels="city"))
+		read_pie_values(SALES, CHART)
 
 
 def test_read_pie_values_rejects_labels_that_are_not_texts() -> None:
