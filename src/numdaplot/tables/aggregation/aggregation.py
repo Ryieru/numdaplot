@@ -9,7 +9,7 @@ from dataclasses import dataclass
 from numdaplot.errors.empty_list_error import EmptyListError
 from numdaplot.settings.setting_types import require_list_not_text
 from numdaplot.tables.aggregation.calculation import Calculation, find_result_name
-from numdaplot.tables.columns.column_names import require_unique_names
+from numdaplot.tables.columns.column_names import require_column_names, require_unique_names
 
 CALCULATION_ITEM_NAME = "calculation"
 GROUP_COLUMN_ITEM_NAME = "group column"
@@ -37,6 +37,8 @@ class Aggregation:
 		When ``group_by`` is a single text instead of a list.
 	EmptyListError
 		When ``calculations`` or ``group_by`` is an empty list.
+	InvalidColumnNameError
+		When a group column name is an empty text.
 	DuplicateColumnError
 		When a name appears twice among the group columns and the result names.
 
@@ -69,6 +71,8 @@ class Aggregation:
 			When ``group_by`` is a single text instead of a list.
 		EmptyListError
 			When ``calculations`` or ``group_by`` is an empty list.
+		InvalidColumnNameError
+			When a group column name is an empty text.
 		DuplicateColumnError
 			When a name appears twice among the group columns and the result names.
 		"""
@@ -84,6 +88,7 @@ class Aggregation:
 		object.__setattr__(self, "calculations", calculations_copy)
 		output_names = list[str]()
 		if self.group_by is not None:
+			require_column_names(self.group_by)
 			group_by_copy = list(self.group_by)
 			object.__setattr__(self, "group_by", group_by_copy)
 			output_names.extend(group_by_copy)

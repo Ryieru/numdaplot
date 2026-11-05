@@ -37,7 +37,7 @@ class Range:
 	Raises
 	------
 	InvalidStepError
-		When ``step`` is zero.
+		When ``step`` is zero, or goes away from ``stop``, such as a step of 1 from 5 to 1.
 
 	Examples
 	--------
@@ -56,14 +56,20 @@ class Range:
 
 	def __post_init__(self) -> None:
 		"""
-		Check that the step is not zero.
+		Check that the step is not zero and goes from the start to the stop.
 
 		.. versionadded:: 0.1.0
 
 		Raises
 		------
 		InvalidStepError
-			When ``step`` is zero.
+			When ``step`` is zero, or goes away from ``stop``.
 		"""
 		if self.step == FORBIDDEN_STEP:
 			raise InvalidStepError(self.step)
+
+		distance = self.stop - self.start
+		signed_progress = distance * self.step
+		goes_away = signed_progress < 0
+		if goes_away:
+			raise InvalidStepError(self.step, self.start, self.stop)

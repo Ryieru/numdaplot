@@ -7,6 +7,7 @@ Unit tests of Cell.
 import pytest
 
 from numdaplot.errors.invalid_count_error import InvalidCountError
+from numdaplot.errors.invalid_position_error import InvalidPositionError
 from numdaplot.plots.figure.cell import Cell
 
 
@@ -40,3 +41,21 @@ def test_cell_rejects_a_column_span_of_zero() -> None:
 	"""
 	with pytest.raises(InvalidCountError):
 		Cell(row=0, column=0, column_span=0)
+
+
+@pytest.mark.parametrize(("row", "column"), [(-1, 0), (0, -1)])
+def test_cell_rejects_a_negative_row_or_column(row: int, column: int) -> None:
+	"""
+	Check that a negative row or column raises InvalidPositionError when the Cell is created.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	row
+		The row.
+	column
+		The column.
+	"""
+	with pytest.raises(InvalidPositionError):
+		Cell(row=row, column=column)

@@ -8,6 +8,7 @@ from dataclasses import dataclass
 
 from numdaplot.ordering.missing_position import MissingPosition
 from numdaplot.ordering.order import Order
+from numdaplot.tables.columns.column_names import require_column_name
 
 
 @dataclass(frozen=True)
@@ -26,6 +27,11 @@ class SortKey:
 	missing
 		Place of the missing values, last by default whatever the order.
 
+	Raises
+	------
+	InvalidColumnNameError
+		When ``column`` is an empty text.
+
 	Examples
 	--------
 	>>> import numdaplot as ndp
@@ -43,3 +49,16 @@ class SortKey:
 	column: str
 	order: Order = Order.ASCENDING
 	missing: MissingPosition = MissingPosition.LAST
+
+	def __post_init__(self) -> None:
+		"""
+		Check that the column name is a non-empty text.
+
+		.. versionadded:: 0.1.0
+
+		Raises
+		------
+		InvalidColumnNameError
+			When ``column`` is an empty text.
+		"""
+		require_column_name(self.column)

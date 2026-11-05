@@ -7,8 +7,10 @@ Place of a Plot in the grid of a Figure.
 from dataclasses import dataclass
 
 from numdaplot.errors.invalid_count_error import InvalidCountError
+from numdaplot.positions.whole_positions import require_whole_position
 
 MINIMUM_SPAN = 1
+FIRST_POSITION = 0
 
 
 @dataclass(frozen=True)
@@ -33,6 +35,8 @@ class Cell:
 
 	Raises
 	------
+	InvalidPositionError
+		When ``row`` or ``column`` is not a whole number of at least 0.
 	InvalidCountError
 		When ``row_span`` or ``column_span`` is lower than 1.
 
@@ -60,15 +64,20 @@ class Cell:
 
 	def __post_init__(self) -> None:
 		"""
-		Check the number of rows and of columns covered.
+		Check the first cell and the number of rows and of columns covered.
 
 		.. versionadded:: 0.1.0
 
 		Raises
 		------
+		InvalidPositionError
+			When ``row`` or ``column`` is not a whole number of at least 0.
 		InvalidCountError
 			When ``row_span`` or ``column_span`` is lower than 1.
 		"""
+		require_whole_position(self.row, FIRST_POSITION)
+		require_whole_position(self.column, FIRST_POSITION)
+
 		if self.row_span < MINIMUM_SPAN:
 			raise InvalidCountError(self.row_span, MINIMUM_SPAN)
 

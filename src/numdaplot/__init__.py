@@ -55,6 +55,7 @@ from numdaplot.errors.conflicting_settings_error import ConflictingSettingsError
 from numdaplot.errors.dimension_error import DimensionError
 from numdaplot.errors.duplicate_column_error import DuplicateColumnError
 from numdaplot.errors.duplicate_label_error import DuplicateLabelError
+from numdaplot.errors.duplicate_statistic_error import DuplicateStatisticError
 from numdaplot.errors.empty_array_error import EmptyArrayError
 from numdaplot.errors.empty_list_error import EmptyListError
 from numdaplot.errors.empty_region_error import EmptyRegionError
@@ -263,6 +264,7 @@ __all__ = [
 	"Distribution",
 	"DuplicateColumnError",
 	"DuplicateLabelError",
+	"DuplicateStatisticError",
 	"DurationIn",
 	"DurationUnit",
 	"EmptyArrayError",

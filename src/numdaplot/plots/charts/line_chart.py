@@ -14,6 +14,7 @@ from numdaplot.plots.charts.marker_shape import MarkerShape
 from numdaplot.plots.style.color import Color
 from numdaplot.plots.style.custom_color import CustomColor
 from numdaplot.settings.setting_types import require_list_not_text
+from numdaplot.tables.columns.column_names import require_optional_column_name
 
 Y_SETTING = "LineChart y"
 
@@ -44,6 +45,8 @@ class LineChart(Chart):
 
 	Raises
 	------
+	InvalidColumnNameError
+		When ``x`` or a name in ``y`` is an empty text.
 	InvalidSettingTypeError
 		When ``y`` is a single text instead of a list.
 	EmptyListError
@@ -78,6 +81,8 @@ class LineChart(Chart):
 
 		Raises
 		------
+		InvalidColumnNameError
+			When ``x`` or a name in ``y`` is an empty text.
 		InvalidSettingTypeError
 			When ``y`` is a single text instead of a list.
 		EmptyListError
@@ -85,6 +90,8 @@ class LineChart(Chart):
 		DuplicateColumnError
 			When a column name appears twice in ``y``.
 		"""
+		require_optional_column_name(self.x)
+
 		require_list_not_text(Y_SETTING, self.y)
 
 		columns_copy = copy_columns(self.y)

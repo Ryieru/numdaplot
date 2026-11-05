@@ -35,7 +35,7 @@ def compute_range_values(sequence: Range) -> NDArray[Any]:
 	-------
 	NDArray
 		Integers when the start and the step are integers, decimals otherwise.
-		Empty when the step goes away from the stop.
+		Empty when the excluded bounds leave no number, such as from 1 to 1 with ``Bounds.EXCLUDED``.
 
 	Examples
 	--------

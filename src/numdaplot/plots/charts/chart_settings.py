@@ -9,7 +9,7 @@ from collections.abc import Sequence
 from numdaplot.errors.empty_list_error import EmptyListError
 from numdaplot.plots.style.color import Color
 from numdaplot.plots.style.custom_color import CustomColor
-from numdaplot.tables.columns.column_names import require_unique_names
+from numdaplot.tables.columns.column_names import require_column_names
 
 COLUMN_ITEM_NAME = "column"
 COLOR_ITEM_NAME = "color"
@@ -35,6 +35,8 @@ def copy_columns(columns: list[str] | None) -> list[str] | None:
 	------
 	EmptyListError
 		When the list is empty.
+	InvalidColumnNameError
+		When a column name is an empty text.
 	DuplicateColumnError
 		When a name appears twice.
 
@@ -54,7 +56,7 @@ def copy_columns(columns: list[str] | None) -> list[str] | None:
 	if columns == []:
 		raise EmptyListError(COLUMN_ITEM_NAME)
 
-	require_unique_names(columns)
+	require_column_names(columns)
 	columns_copy = list(columns)
 
 	return columns_copy

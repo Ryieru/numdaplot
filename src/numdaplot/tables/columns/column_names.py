@@ -45,6 +45,39 @@ def require_column_name(column_name: object) -> None:
 		raise InvalidColumnNameError(column_name)
 
 
+def require_optional_column_name(column_name: object) -> None:
+	"""
+	Check that a column name, when given, is a non-empty text.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	column_name
+		The name to check, or None when the setting is omitted.
+
+	Raises
+	------
+	InvalidColumnNameError
+		When the name is given and is not a non-empty text.
+
+	Examples
+	--------
+	>>> import numdaplot as ndp
+	>>> from numdaplot.tables.columns.column_names import require_optional_column_name
+	>>> require_optional_column_name(None)
+	>>> try:
+	... 	require_optional_column_name("")
+	... except ndp.InvalidColumnNameError as error:
+	... 	print(error)
+	Expected a column name as a non-empty text, got ''.
+	"""
+	if column_name is None:
+		return
+
+	require_column_name(column_name)
+
+
 def require_unique_names(column_names: Sequence[str]) -> None:
 	"""
 	Check that no column name appears twice.

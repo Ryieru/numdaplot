@@ -7,11 +7,13 @@ Unit tests of Description.
 import pytest
 
 from numdaplot.errors.duplicate_column_error import DuplicateColumnError
+from numdaplot.errors.duplicate_statistic_error import DuplicateStatisticError
 from numdaplot.errors.empty_list_error import EmptyListError
 from numdaplot.statistics.maximum import Max
 from numdaplot.statistics.minimum import Min
+from numdaplot.statistics.quantile import Quantile
 from numdaplot.statistics.statistic import Statistic
-from numdaplot.tables.description.description import Description
+from numdaplot.tables.description.description import Description, require_distinct_statistics
 
 COLUMN_NAMES = ["price"]
 REPEATED_NAMES = ["price", "price"]
@@ -80,3 +82,22 @@ def test_description_rejects_a_repeated_column() -> None:
 	"""
 	with pytest.raises(DuplicateColumnError):
 		Description(columns=REPEATED_NAMES)
+
+
+def test_description_rejects_a_statistic_given_twice() -> None:
+	"""
+	Check that the same statistic twice raises DuplicateStatisticError.
+
+	.. versionadded:: 0.1.0
+	"""
+	with pytest.raises(DuplicateStatisticError):
+		Description(functions=[Max(), Min(), Max()])
+
+
+def test_require_distinct_statistics_accepts_statistics_with_other_settings() -> None:
+	"""
+	Check that two quantiles of different fractions are distinct.
+
+	.. versionadded:: 0.1.0
+	"""
+	require_distinct_statistics([Quantile(0.25), Quantile(0.75)])

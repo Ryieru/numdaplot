@@ -13,6 +13,7 @@ from numdaplot.tables.columns.column_names import (
 	require_column_name,
 	require_column_names,
 	require_known_columns,
+	require_optional_column_name,
 	require_unique_names,
 )
 
@@ -104,3 +105,22 @@ def test_require_known_columns_names_the_unknown_column() -> None:
 
 	error = error_info.value
 	assert error.column_name == UNKNOWN_NAME
+
+
+def test_require_optional_column_name_accepts_none() -> None:
+	"""
+	Check that an omitted name passes.
+
+	.. versionadded:: 0.1.0
+	"""
+	require_optional_column_name(None)
+
+
+def test_require_optional_column_name_rejects_an_empty_text() -> None:
+	"""
+	Check that an empty name raises InvalidColumnNameError.
+
+	.. versionadded:: 0.1.0
+	"""
+	with pytest.raises(InvalidColumnNameError):
+		require_optional_column_name("")

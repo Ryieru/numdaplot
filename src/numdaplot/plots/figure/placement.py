@@ -56,7 +56,7 @@ def require_cell_inside(cell: Cell, layout: Layout) -> None:
 	Raises
 	------
 	CellOutOfRangeError
-		When the first cell is before row or column 0, or a cell it spans is after the last row or column.
+		When a cell it spans is after the last row or column. ``Cell`` already refuses a negative row or column.
 
 	Examples
 	--------
@@ -70,9 +70,7 @@ def require_cell_inside(cell: Cell, layout: Layout) -> None:
 	"""
 	row_end = cell.row + cell.row_span
 	column_end = cell.column + cell.column_span
-	starts_before = cell.row < 0 or cell.column < 0
-	ends_after = row_end > layout.rows or column_end > layout.columns
-	is_outside = starts_before or ends_after
+	is_outside = row_end > layout.rows or column_end > layout.columns
 	if is_outside:
 		raise CellOutOfRangeError(cell.row, cell.column, layout.rows, layout.columns)
 

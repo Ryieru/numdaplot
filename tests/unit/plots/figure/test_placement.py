@@ -19,7 +19,6 @@ PLOT = ndp.plot_line(ndp.Array.from_list([12.0, 15.5]), ndp.LineChart())
 WIDE_TOP = Placement(PLOT, ndp.Cell(row=0, column=0, column_span=2))
 OUTSIDE_CELLS = [
 	ndp.Cell(row=2, column=0),
-	ndp.Cell(row=0, column=-1),
 	ndp.Cell(row=1, column=1, row_span=2),
 	ndp.Cell(row=0, column=1, column_span=2),
 ]

@@ -26,6 +26,8 @@ class Renaming:
 	Raises
 	------
 	InvalidColumnNameError
+		When ``old_name`` is an empty text.
+	InvalidColumnNameError
 		When ``new_name`` is empty.
 
 	Examples
@@ -54,6 +56,10 @@ class Renaming:
 		Raises
 		------
 		InvalidColumnNameError
+			When ``old_name`` is an empty text.
+		InvalidColumnNameError
 			When ``new_name`` is empty.
 		"""
+		require_column_name(self.old_name)
+
 		require_column_name(self.new_name)

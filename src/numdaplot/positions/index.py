@@ -6,6 +6,8 @@ A single position in one dimension.
 
 from dataclasses import dataclass
 
+from numdaplot.positions.whole_positions import require_whole_position
+
 
 @dataclass(frozen=True)
 class Index:
@@ -20,6 +22,11 @@ class Index:
 		The position, starting at 0. A negative position counts from the end:
 		-1 is the last one.
 
+	Raises
+	------
+	InvalidPositionError
+		When ``position`` is not a whole number, such as ``1.5``.
+
 	Examples
 	--------
 	>>> import numdaplot as ndp
@@ -29,3 +36,16 @@ class Index:
 	"""
 
 	position: int
+
+	def __post_init__(self) -> None:
+		"""
+		Check that the position is a whole number.
+
+		.. versionadded:: 0.1.0
+
+		Raises
+		------
+		InvalidPositionError
+			When ``position`` is not a whole number.
+		"""
+		require_whole_position(self.position, None)

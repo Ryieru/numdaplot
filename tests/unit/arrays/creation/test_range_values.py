@@ -11,7 +11,7 @@ from numdaplot.rules.bounds import Bounds
 INTEGER_RANGE = Range(start=0, stop=10, step=5)
 DECIMAL_RANGE = Range(start=0, stop=1, step=0.1)
 DOWNWARD_RANGE = Range(start=10, stop=0, step=-3)
-AWAY_RANGE = Range(start=0, stop=10, step=-1)
+SINGLE_EXCLUDED_RANGE = Range(start=1, stop=1, bounds=Bounds.EXCLUDED)
 EXCLUDED_RANGE = Range(start=0, stop=3, bounds=Bounds.EXCLUDED)
 HIGH_ONLY_RANGE = Range(start=0, stop=3, bounds=Bounds.HIGH_ONLY)
 UNREACHED_STOP_RANGE = Range(start=0, stop=10, step=4, bounds=Bounds.LOW_ONLY)
@@ -62,13 +62,13 @@ def test_compute_range_values_goes_downwards_with_a_negative_step() -> None:
 	assert value_list == EXPECTED_DOWNWARD_VALUES
 
 
-def test_compute_range_values_is_empty_when_the_step_goes_away_from_the_stop() -> None:
+def test_compute_range_values_is_empty_when_the_excluded_bounds_leave_no_number() -> None:
 	"""
-	Check that a step in the wrong direction gives no value.
+	Check that a range from 1 to 1 without its bounds gives no value.
 
 	.. versionadded:: 0.1.0
 	"""
-	values = compute_range_values(AWAY_RANGE)
+	values = compute_range_values(SINGLE_EXCLUDED_RANGE)
 
 	assert values.size == EMPTY_SIZE
 

@@ -8,7 +8,7 @@ from dataclasses import dataclass
 
 from numdaplot.errors.empty_list_error import EmptyListError
 from numdaplot.settings.setting_types import require_list_not_text
-from numdaplot.tables.columns.column_names import require_unique_names
+from numdaplot.tables.columns.column_names import require_column_names
 from numdaplot.tables.duplicates.keep import Keep
 
 COLUMN_ITEM_NAME = "column"
@@ -38,6 +38,8 @@ class Deduplication:
 		When ``columns`` is a single text instead of a list.
 	EmptyListError
 		When ``columns`` is an empty list.
+	InvalidColumnNameError
+		When a column name is an empty text.
 	DuplicateColumnError
 		When a column name appears twice.
 
@@ -69,6 +71,8 @@ class Deduplication:
 			When ``columns`` is a single text instead of a list.
 		EmptyListError
 			When ``columns`` is an empty list.
+		InvalidColumnNameError
+			When a column name is an empty text.
 		DuplicateColumnError
 			When a column name appears twice.
 		"""
@@ -80,6 +84,6 @@ class Deduplication:
 		if self.columns == []:
 			raise EmptyListError(COLUMN_ITEM_NAME)
 
-		require_unique_names(self.columns)
+		require_column_names(self.columns)
 		columns_copy = list(self.columns)
 		object.__setattr__(self, "columns", columns_copy)

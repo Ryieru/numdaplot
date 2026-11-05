@@ -7,10 +7,12 @@ A rectangular part of an Array or a Table, chosen by position.
 from dataclasses import dataclass
 from types import NoneType
 
+from numdaplot.errors.empty_list_error import EmptyListError
 from numdaplot.errors.empty_region_error import EmptyRegionError
 from numdaplot.positions.index import Index
 from numdaplot.positions.range import Range
 from numdaplot.settings.setting_types import require_list_not_text, require_setting_type
+from numdaplot.tables.columns.column_names import require_column_names
 
 ROWS_SETTING = "Region rows"
 ROWS_EXPECTED = "an Index, a Range or None"
@@ -18,6 +20,7 @@ ROW_TYPES = (Index, Range, NoneType)
 COLUMNS_SETTING = "Region columns"
 COLUMNS_EXPECTED = "an Index, a Range, a list of column names or None"
 COLUMN_TYPES = (Index, Range, list, NoneType)
+COLUMN_ITEM_NAME = "column"
 
 
 @dataclass(frozen=True)
@@ -42,6 +45,12 @@ class Region:
 		When ``rows`` or ``columns`` is of another kind, such as a number or a single text.
 	EmptyRegionError
 		When ``rows`` and ``columns`` are both omitted.
+	EmptyListError
+		When ``columns`` is an empty list.
+	InvalidColumnNameError
+		When a column name is an empty text.
+	DuplicateColumnError
+		When a column name appears twice.
 
 	Examples
 	--------
@@ -66,6 +75,12 @@ class Region:
 			When ``rows`` or ``columns`` is of another kind, such as a number or a single text.
 		EmptyRegionError
 			When ``rows`` and ``columns`` are both omitted.
+		EmptyListError
+			When ``columns`` is an empty list.
+		InvalidColumnNameError
+			When a column name is an empty text.
+		DuplicateColumnError
+			When a column name appears twice.
 		"""
 		require_setting_type(ROWS_SETTING, ROWS_EXPECTED, self.rows, ROW_TYPES)
 		require_list_not_text(COLUMNS_SETTING, self.columns)
@@ -77,5 +92,9 @@ class Region:
 		if not isinstance(self.columns, list):
 			return
 
+		if self.columns == []:
+			raise EmptyListError(COLUMN_ITEM_NAME)
+
+		require_column_names(self.columns)
 		columns_copy = list(self.columns)
 		object.__setattr__(self, "columns", columns_copy)

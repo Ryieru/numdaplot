@@ -36,6 +36,8 @@ class Calculation:
 
 	Raises
 	------
+	InvalidColumnNameError
+		When ``column`` is an empty text.
 	InvalidSettingTypeError
 		When ``function`` is a class, written without its parentheses.
 	InvalidColumnNameError
@@ -69,6 +71,8 @@ class Calculation:
 
 		Raises
 		------
+		InvalidColumnNameError
+			When ``column`` is an empty text.
 		InvalidSettingTypeError
 			When ``function`` is a class, written without its parentheses.
 		InvalidColumnNameError
@@ -76,6 +80,8 @@ class Calculation:
 		RefusedOperationError
 			When ``function`` is not a statistic of numdaplot.
 		"""
+		require_column_name(self.column)
+
 		require_object_not_class(FUNCTION_SETTING, FUNCTION_EXPECTED, self.function)
 
 		result_name = find_result_name(self)

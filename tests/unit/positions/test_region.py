@@ -8,7 +8,10 @@ from typing import Any, cast
 
 import pytest
 
+from numdaplot.errors.duplicate_column_error import DuplicateColumnError
+from numdaplot.errors.empty_list_error import EmptyListError
 from numdaplot.errors.empty_region_error import EmptyRegionError
+from numdaplot.errors.invalid_column_name_error import InvalidColumnNameError
 from numdaplot.errors.invalid_setting_type_error import InvalidSettingTypeError
 from numdaplot.positions.index import Index
 from numdaplot.positions.range import Range
@@ -85,3 +88,24 @@ def test_region_rejects_positions_of_another_kind(rows: object, columns: object)
 
 	with pytest.raises(InvalidSettingTypeError):
 		untyped_region(rows=rows, columns=columns)
+
+
+@pytest.mark.parametrize(
+	("columns", "error_class"),
+	[([], EmptyListError), (["price", "price"], DuplicateColumnError), ([""], InvalidColumnNameError)],
+)
+def test_region_rejects_an_empty_or_wrong_list_of_columns(columns: list[str], error_class: type[Exception]) -> None:
+	"""
+	Check that an empty list, a repeated name or an empty name is refused when the Region is created.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	columns
+		The rejected list of column names.
+	error_class
+		The expected error.
+	"""
+	with pytest.raises(error_class):
+		Region(columns=columns)

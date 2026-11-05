@@ -11,6 +11,7 @@ from numdaplot.plots.charts.chart import Chart
 from numdaplot.plots.charts.chart_settings import copy_columns
 from numdaplot.plots.charts.color_scale import ColorScale
 from numdaplot.settings.setting_types import require_list_not_text
+from numdaplot.tables.columns.column_names import require_optional_column_name
 
 COLUMNS_SETTING = "HeatmapChart columns"
 
@@ -40,6 +41,8 @@ class HeatmapChart(Chart):
 
 	Raises
 	------
+	InvalidColumnNameError
+		When ``labels`` or a name in ``columns`` is an empty text.
 	InvalidSettingTypeError
 		When ``columns`` is a single text instead of a list.
 	EmptyListError
@@ -73,6 +76,8 @@ class HeatmapChart(Chart):
 
 		Raises
 		------
+		InvalidColumnNameError
+			When ``labels`` or a name in ``columns`` is an empty text.
 		InvalidSettingTypeError
 			When ``columns`` is a single text instead of a list.
 		EmptyListError
@@ -80,6 +85,8 @@ class HeatmapChart(Chart):
 		DuplicateColumnError
 			When a column name appears twice in ``columns``.
 		"""
+		require_optional_column_name(self.labels)
+
 		require_list_not_text(COLUMNS_SETTING, self.columns)
 
 		columns_copy = copy_columns(self.columns)

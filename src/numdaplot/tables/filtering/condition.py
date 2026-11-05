@@ -9,7 +9,7 @@ from dataclasses import dataclass
 from numdaplot.errors.empty_list_error import EmptyListError
 from numdaplot.rules.rule import Rule
 from numdaplot.settings.setting_types import require_list_not_text, require_object_not_class
-from numdaplot.tables.columns.column_names import require_unique_names
+from numdaplot.tables.columns.column_names import require_column_names
 from numdaplot.tables.filtering.column_match import ColumnMatch
 
 COLUMN_ITEM_NAME = "column"
@@ -43,6 +43,8 @@ class Condition:
 		When ``rule`` is a class written without its parentheses, or ``columns`` is a single text.
 	EmptyListError
 		When ``columns`` is an empty list.
+	InvalidColumnNameError
+		When a column name is an empty text.
 	DuplicateColumnError
 		When a column name appears twice.
 
@@ -78,6 +80,8 @@ class Condition:
 			When ``columns`` is a single text instead of a list.
 		EmptyListError
 			When ``columns`` is an empty list.
+		InvalidColumnNameError
+			When a column name is an empty text.
 		DuplicateColumnError
 			When a column name appears twice.
 		"""
@@ -90,6 +94,6 @@ class Condition:
 		if self.columns == []:
 			raise EmptyListError(COLUMN_ITEM_NAME)
 
-		require_unique_names(self.columns)
+		require_column_names(self.columns)
 		columns_copy = list(self.columns)
 		object.__setattr__(self, "columns", columns_copy)

@@ -47,3 +47,34 @@ def test_range_rejects_a_zero_step() -> None:
 	"""
 	with pytest.raises(InvalidStepError):
 		Range(start=START, stop=STOP, step=ZERO_STEP)
+
+
+@pytest.mark.parametrize(("start", "stop", "step"), [(10, 0, 1), (0, 10, -1)])
+def test_range_rejects_a_step_going_away_from_the_stop(start: int, stop: int, step: int) -> None:
+	"""
+	Check that a step going away from the stop raises InvalidStepError.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	start
+		The start.
+	stop
+		The stop, on the other side of the step.
+	step
+		The step going away.
+	"""
+	with pytest.raises(InvalidStepError):
+		Range(start=start, stop=stop, step=step)
+
+
+def test_range_accepts_a_start_equal_to_its_stop() -> None:
+	"""
+	Check that a range of a single number is accepted.
+
+	.. versionadded:: 0.1.0
+	"""
+	single_range = Range(start=START, stop=START)
+
+	assert single_range.stop == START

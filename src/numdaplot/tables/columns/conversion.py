@@ -10,6 +10,7 @@ from numdaplot.data_types.type import Type
 from numdaplot.dates.custom_date_format import CustomDateFormat
 from numdaplot.dates.date_format import DateFormat
 from numdaplot.dates.time_zone_change import TimeZoneChange
+from numdaplot.tables.columns.column_names import require_column_name
 
 
 @dataclass(frozen=True)
@@ -37,6 +38,11 @@ class Conversion:
 	timezone
 		A change of the time zone of a datetime column.
 
+	Raises
+	------
+	InvalidColumnNameError
+		When ``column`` is an empty text.
+
 	Examples
 	--------
 	>>> import numdaplot as ndp
@@ -57,3 +63,16 @@ class Conversion:
 	dtype: Type
 	format: DateFormat | CustomDateFormat | None = None
 	timezone: TimeZoneChange | None = None
+
+	def __post_init__(self) -> None:
+		"""
+		Check that the column name is a non-empty text.
+
+		.. versionadded:: 0.1.0
+
+		Raises
+		------
+		InvalidColumnNameError
+			When ``column`` is an empty text.
+		"""
+		require_column_name(self.column)

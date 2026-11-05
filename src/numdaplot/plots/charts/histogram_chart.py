@@ -47,6 +47,8 @@ class HistogramChart(Chart):
 	------
 	InvalidSettingTypeError
 		When ``columns`` is a single text instead of a list.
+	InvalidColumnNameError
+		When a name in ``columns`` is an empty text.
 	EmptyListError
 		When ``columns`` or ``colors`` is an empty list.
 	DuplicateColumnError
@@ -78,6 +80,8 @@ class HistogramChart(Chart):
 		------
 		InvalidSettingTypeError
 			When ``columns`` is a single text instead of a list.
+		InvalidColumnNameError
+			When a name in ``columns`` is an empty text.
 		EmptyListError
 			When ``columns`` or ``colors`` is an empty list.
 		DuplicateColumnError

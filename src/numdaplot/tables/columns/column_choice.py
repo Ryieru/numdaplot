@@ -9,7 +9,7 @@ from dataclasses import dataclass
 from numdaplot.errors.empty_list_error import EmptyListError
 from numdaplot.settings.setting_types import require_list_not_text
 from numdaplot.tables.columns.column_mode import ColumnMode
-from numdaplot.tables.columns.column_names import require_unique_names
+from numdaplot.tables.columns.column_names import require_column_names
 
 COLUMN_ITEM_NAME = "column"
 COLUMNS_SETTING = "ColumnChoice columns"
@@ -36,6 +36,8 @@ class ColumnChoice:
 		When ``columns`` is a single text instead of a list.
 	EmptyListError
 		When ``columns`` is empty with ``KEEP``, which would keep nothing.
+	InvalidColumnNameError
+		When a column name is an empty text.
 	DuplicateColumnError
 		When a column name appears twice.
 
@@ -68,6 +70,8 @@ class ColumnChoice:
 			When ``columns`` is a single text instead of a list.
 		EmptyListError
 			When ``columns`` is empty with ``KEEP``.
+		InvalidColumnNameError
+			When a column name is an empty text.
 		DuplicateColumnError
 			When a column name appears twice.
 		"""
@@ -77,6 +81,6 @@ class ColumnChoice:
 		if keeps_nothing:
 			raise EmptyListError(COLUMN_ITEM_NAME)
 
-		require_unique_names(self.columns)
+		require_column_names(self.columns)
 		columns_copy = list(self.columns)
 		object.__setattr__(self, "columns", columns_copy)
