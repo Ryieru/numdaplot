@@ -134,7 +134,7 @@ def write_layer_labels(layer: ChartLayer) -> list[str]:
 	Returns
 	-------
 	list[str]
-		The labels, such as ``2026-01-01`` for a date.
+		The labels, such as ``"2026-01-01"`` for a date.
 
 	Raises
 	------

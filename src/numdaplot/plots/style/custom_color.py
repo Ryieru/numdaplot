@@ -24,7 +24,7 @@ class CustomColor:
 	Parameters
 	----------
 	code
-		The color, such as ``#ff8800`` for orange, in lowercase or uppercase.
+		The color, such as ``"#ff8800"`` for orange, in lowercase or uppercase.
 
 	Raises
 	------

@@ -45,7 +45,7 @@ class TableReading(TableData):
 		path
 			The path of the file, a ``FilePath`` such as ``"sales.csv"`` or ``Path("data/sales.csv")``.
 		options
-			The separator and the encoding, ``,`` and UTF-8 by default.
+			The separator and the encoding, ``","`` and UTF-8 by default.
 
 		Returns
 		-------

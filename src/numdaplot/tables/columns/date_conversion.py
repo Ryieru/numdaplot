@@ -113,7 +113,7 @@ def parse_dates(column: Column, target_type: Type, date_format: DateFormat | Cus
 	Raises
 	------
 	ValueConversionError
-		At the first text that does not follow the format or is not a real date, such as ``31/02/2026``.
+		At the first text that does not follow the format or is not a real date, such as ``"31/02/2026"``.
 
 	Examples
 	--------
@@ -164,7 +164,7 @@ def read_common_format(texts: Column, date_format: DateFormat) -> Column:
 	-------
 	Column
 		The datetimes, NaT for a missing text, a text that does not follow the format, or an impossible date
-		or time such as ``31/02/2026`` or ``25:00``.
+		or time such as ``"31/02/2026"`` or ``"25:00"``.
 
 	Examples
 	--------
@@ -206,8 +206,8 @@ def write_dates(column: Column, date_format: DateFormat | CustomDateFormat | Non
 	column
 		A date or datetime column.
 	date_format
-		How to write the texts: year, month and day separated by ``-``, then the time for datetimes, when
-		omitted. A datetime with a time zone is written with its offset, such as ``+02:00``, except with
+		How to write the texts: year, month and day separated by ``"-"``, then the time for datetimes, when
+		omitted. A datetime with a time zone is written with its offset, such as ``"+02:00"``, except with
 		a custom pattern.
 
 	Returns
@@ -264,7 +264,7 @@ def write_durations(column: Column) -> Column:
 	Returns
 	-------
 	Column
-		Texts such as ``1 days 12:00:00``, missing values staying missing.
+		Texts such as ``"1 days 12:00:00"``, missing values staying missing.
 
 	Examples
 	--------

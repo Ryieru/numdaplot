@@ -37,7 +37,7 @@ def combine_values(left: Operand, right: Operand, function: numpy.ufunc, symbol:
 	function
 		The numpy function, such as ``numpy.add``.
 	symbol
-		The operator shown in error messages, such as ``+``.
+		The operator shown in error messages, such as ``"+"``.
 
 	Returns
 	-------

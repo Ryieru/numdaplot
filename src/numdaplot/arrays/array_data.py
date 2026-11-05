@@ -170,7 +170,7 @@ class ArrayData:
 		function
 			The numpy function, such as ``numpy.add``.
 		symbol
-			The operator shown in error messages, such as ``+``.
+			The operator shown in error messages, such as ``"+"``.
 
 		Returns
 		-------
@@ -201,7 +201,7 @@ class ArrayData:
 		function
 			The numpy function, such as ``numpy.subtract``.
 		symbol
-			The operator shown in error messages, such as ``-``.
+			The operator shown in error messages, such as ``"-"``.
 
 		Returns
 		-------

@@ -101,7 +101,7 @@ def combine_time_values(left: Operand, right: Operand, function: numpy.ufunc, sy
 	function
 		The numpy function, such as ``numpy.add``.
 	symbol
-		The operator shown in error messages, such as ``+``.
+		The operator shown in error messages, such as ``"+"``.
 
 	Returns
 	-------

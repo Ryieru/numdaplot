@@ -23,7 +23,7 @@ def require_booleans(operands: list[Operand], symbol: str) -> None:
 	operands
 		The values of Arrays, or single values.
 	symbol
-		The operator shown in error messages, such as ``&``.
+		The operator shown in error messages, such as ``"&"``.
 
 	Raises
 	------

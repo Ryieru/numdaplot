@@ -126,7 +126,7 @@ def write_excel_file(frame: pandas.DataFrame, path: Path, options: ExcelOptions)
 	path
 		The path of the file, replaced when it exists.
 	options
-		The name of the sheet, ``Sheet1`` when omitted.
+		The name of the sheet, ``"Sheet1"`` when omitted.
 
 	Raises
 	------

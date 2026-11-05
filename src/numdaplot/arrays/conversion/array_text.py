@@ -23,7 +23,7 @@ def format_array(values: NDArray[Any]) -> str:
 	Return the text of an Array: its values as nested lists, then its type.
 
 	Rows of a two-dimensional Array are aligned on separate lines, and long Arrays are shortened with ``...``.
-	Datetimes are written as ``2026-01-02 10:30:00`` and durations as pandas writes them, ``1 days 12:00:00``.
+	Datetimes are written as ``"2026-01-02 10:30:00"`` and durations as pandas writes them, ``"1 days 12:00:00"``.
 
 	.. versionadded:: 0.1.0
 

@@ -24,7 +24,7 @@ def parse_booleans(column: Column) -> Column:
 	"""
 	Return a text or category column read as booleans.
 
-	``true`` and ``false`` are accepted whatever their case and the spaces around them.
+	``"true"`` and ``"false"`` are accepted whatever their case and the spaces around them.
 
 	.. versionadded:: 0.1.0
 
@@ -41,7 +41,7 @@ def parse_booleans(column: Column) -> Column:
 	Raises
 	------
 	ValueConversionError
-		At the first text that is neither ``true`` nor ``false``.
+		At the first text that is neither ``"true"`` nor ``"false"``.
 
 	Examples
 	--------

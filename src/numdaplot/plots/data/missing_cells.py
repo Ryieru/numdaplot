@@ -43,8 +43,8 @@ def read_missing_counts(table: Table, measure: Measure) -> ChartValues:
 	Returns
 	-------
 	ChartValues
-		The column names as text positions, the counts as a single series, and ``Missing count`` or
-		``Missing ratio`` as label of the axis of the values.
+		The column names as text positions, the counts as a single series, and ``"Missing count"`` or
+		``"Missing ratio"`` as label of the axis of the values.
 
 	Examples
 	--------

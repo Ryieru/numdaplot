@@ -3,8 +3,9 @@ Griffe extension showing the value of the constants used as default values of pa
 
 numdaplot names every default value with a constant, such as ``separator: str = DEFAULT_SEPARATOR``.
 In the documentation, a reader needs the value itself, so this extension replaces such a default
-with the value of the constant, ``","``, once griffe has loaded the whole package. The fields of
-dataclasses are resolved too, so the ``__init__`` griffe builds from them afterwards shows the values.
+with the value of the constant, ``","``, once griffe has loaded the whole package. A constant given to a call,
+such as ``BinCount(DEFAULT_BIN_COUNT)``, is replaced the same way. The fields of dataclasses are resolved too,
+so the ``__init__`` griffe builds from them afterwards shows the values.
 
 .. versionadded:: 0.1.0
 """
@@ -67,9 +68,9 @@ def resolve_parameter_defaults(function: griffe.Function, loader: griffe.GriffeL
 		The loader that holds every loaded module.
 	"""
 	for parameter in function.parameters:
-		constant_value = find_constant_value(parameter.default, loader)
-		if constant_value is not None:
-			parameter.default = constant_value
+		resolved_default = resolve_expression(parameter.default, loader)
+		if resolved_default is not None:
+			parameter.default = resolved_default
 
 
 def resolve_attribute_value(attribute: griffe.Attribute, loader: griffe.GriffeLoader) -> None:
@@ -91,9 +92,75 @@ def resolve_attribute_value(attribute: griffe.Attribute, loader: griffe.GriffeLo
 	if not attribute.parent.is_class:
 		return
 
-	constant_value = find_constant_value(attribute.value, loader)
-	if constant_value is not None:
-		attribute.value = constant_value
+	resolved_value = resolve_expression(attribute.value, loader)
+	if resolved_value is not None:
+		attribute.value = resolved_value
+
+
+def resolve_expression(expression: str | griffe.Expr | None, loader: griffe.GriffeLoader) -> str | griffe.Expr | None:
+	"""
+	Return an expression with the constants it names replaced by their values.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	expression
+		A default value or an attribute value, as griffe reads it.
+	loader
+		The loader that holds every loaded module.
+
+	Returns
+	-------
+	str, griffe.Expr or None
+		The value of the constant named, the call with the values of its constant arguments, or ``None`` when
+		the expression holds no constant to replace.
+	"""
+	if isinstance(expression, griffe.ExprCall):
+		resolved_call = resolve_call_arguments(expression, loader)
+		return resolved_call
+
+	constant_value = find_constant_value(expression, loader)
+
+	return constant_value
+
+
+def resolve_call_arguments(call: griffe.ExprCall, loader: griffe.GriffeLoader) -> griffe.ExprCall | None:
+	"""
+	Return a call with the constants given as arguments replaced by their values.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	call
+		A call, such as ``BinCount(DEFAULT_BIN_COUNT)``.
+	loader
+		The loader that holds every loaded module.
+
+	Returns
+	-------
+	griffe.ExprCall or None
+		The new call, such as ``BinCount(10)``, or ``None`` when no argument names a constant.
+	"""
+	resolved_arguments = list[str | griffe.Expr]()
+	has_constant = False
+
+	for argument in call.arguments:
+		constant_value = find_constant_value(argument, loader)
+		if constant_value is None:
+			resolved_arguments.append(argument)
+			continue
+
+		resolved_arguments.append(constant_value)
+		has_constant = True
+
+	if not has_constant:
+		return None
+
+	resolved_call = griffe.ExprCall(call.function, resolved_arguments)
+
+	return resolved_call
 
 
 def find_constant_value(expression: str | griffe.Expr | None, loader: griffe.GriffeLoader) -> str | None:

@@ -272,7 +272,7 @@ def refuse_table_comparison(symbol: str, alternative: str) -> NoReturn:
 	Parameters
 	----------
 	symbol
-		The comparison operator, such as ``<``.
+		The comparison operator, such as ``"<"``.
 	alternative
 		What to use instead.
 

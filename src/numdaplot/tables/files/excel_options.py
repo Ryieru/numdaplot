@@ -17,7 +17,7 @@ class ExcelOptions:
 	Parameters
 	----------
 	sheet
-		The name of the sheet. When omitted, the first sheet is read, and the written sheet is named ``Sheet1``.
+		The name of the sheet. When omitted, the first sheet is read, and the written sheet is named ``"Sheet1"``.
 
 	Examples
 	--------

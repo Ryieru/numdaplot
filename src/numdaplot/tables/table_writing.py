@@ -41,7 +41,7 @@ class TableWriting(TableData):
 		path
 			The path of the file, a ``FilePath`` such as ``"sales.csv"`` or ``Path("data/sales.csv")``.
 		options
-			The separator and the encoding, ``,`` and UTF-8 by default.
+			The separator and the encoding, ``","`` and UTF-8 by default.
 		on_conflict
 			``ERROR`` refuses to overwrite an existing file, ``REPLACE`` overwrites it.
 
@@ -127,7 +127,7 @@ class TableWriting(TableData):
 		path
 			The path of the file, a ``FilePath`` such as ``"sales.xlsx"`` or ``Path("data/sales.xlsx")``.
 		options
-			The name of the sheet, ``Sheet1`` by default.
+			The name of the sheet, ``"Sheet1"`` by default.
 		on_conflict
 			``ERROR`` refuses to overwrite an existing file, ``REPLACE`` overwrites it.
 

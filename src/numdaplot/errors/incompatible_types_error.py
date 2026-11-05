@@ -21,14 +21,14 @@ class IncompatibleTypesError(NumdaplotError):
 	Parameters
 	----------
 	operation
-		Name of the operation: an operator such as ``+``, or a rule, statistic or function name.
+		Name of the operation: an operator such as ``"+"``, or a rule, statistic or function name.
 	type_names
 		Names of the ``ndp.Type`` members the operation received, in order.
 
 	Attributes
 	----------
 	operation
-		Name of the operation: an operator such as ``+``, or a rule, statistic or function name.
+		Name of the operation: an operator such as ``"+"``, or a rule, statistic or function name.
 	type_names
 		Names of the ``ndp.Type`` members the operation received, in order.
 
@@ -52,7 +52,7 @@ class IncompatibleTypesError(NumdaplotError):
 		Parameters
 		----------
 		operation
-			Name of the operation: an operator such as ``+``, or a rule, statistic or function name.
+			Name of the operation: an operator such as ``"+"``, or a rule, statistic or function name.
 		type_names
 			Names of the ``ndp.Type`` members the operation received, in order.
 		"""

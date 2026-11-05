@@ -27,7 +27,7 @@ class CustomDateFormat:
 	Parameters
 	----------
 	pattern
-		The pattern, such as ``"%d %b %Y"`` for ``31 Dec 2026``.
+		The pattern, such as ``"%d %b %Y"`` for ``"31 Dec 2026"``.
 
 	Raises
 	------

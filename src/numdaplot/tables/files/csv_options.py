@@ -23,7 +23,7 @@ class CsvOptions:
 	Parameters
 	----------
 	separator
-		The character between two values of a row, ``,`` by default.
+		The character between two values of a row, ``","`` by default.
 	encoding
 		The text encoding of the file, UTF-8 by default.
 

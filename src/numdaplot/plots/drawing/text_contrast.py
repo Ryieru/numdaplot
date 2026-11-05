@@ -27,7 +27,7 @@ def choose_text_color(background_rgba: Sequence[float]) -> str:
 	Returns
 	-------
 	str
-		``#000000`` or ``#ffffff``.
+		``"#000000"`` or ``"#ffffff"``.
 
 	Examples
 	--------

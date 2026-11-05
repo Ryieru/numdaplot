@@ -26,7 +26,7 @@ def transform_values(values: NDArray[Any], function: numpy.ufunc, name: str) -> 
 	function
 		The numpy function, such as ``numpy.negative``.
 	name
-		The operator or function name shown in error messages, such as ``-``.
+		The operator or function name shown in error messages, such as ``"-"``.
 
 	Returns
 	-------

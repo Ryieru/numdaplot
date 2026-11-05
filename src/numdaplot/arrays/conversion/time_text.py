@@ -29,7 +29,7 @@ NANOSECOND_DTYPE = "timedelta64[ns]"
 
 def format_datetimes(values: NDArray[numpy.datetime64]) -> NDArray[numpy.str_]:
 	"""
-	Return the text of each datetime, such as ``2026-01-02 10:30:00``.
+	Return the text of each datetime, such as ``"2026-01-02 10:30:00"``.
 
 	Fractions of a second are written only when a value has one, with the same number of digits for every value.
 
@@ -101,9 +101,9 @@ def find_datetime_unit(values: NDArray[numpy.datetime64]) -> DatetimeUnit:
 
 def format_durations(values: NDArray[numpy.timedelta64]) -> NDArray[numpy.str_]:
 	"""
-	Return the text of each duration as pandas writes it, such as ``1 days 12:00:00``.
+	Return the text of each duration as pandas writes it, such as ``"1 days 12:00:00"``.
 
-	A negative duration counts whole days down, then the time up: 12 hours less is ``-1 days +12:00:00``.
+	A negative duration counts whole days down, then the time up: 12 hours less is ``"-1 days +12:00:00"``.
 	Fractions of a second are written with nine digits, only for the values that have one.
 
 	.. versionadded:: 0.1.0
@@ -160,7 +160,7 @@ def join_clock_parts(parts: list[NDArray[numpy.int64]]) -> NDArray[numpy.str_]:
 	Returns
 	-------
 	NDArray[numpy.str_]
-		One text per value, such as ``12:05:00``.
+		One text per value, such as ``"12:05:00"``.
 
 	Examples
 	--------
@@ -199,7 +199,7 @@ def format_fractions(fractions: NDArray[numpy.int64]) -> NDArray[Any]:
 	Returns
 	-------
 	NDArray
-		One text per value, such as ``.000001500`` or ``""``.
+		One text per value, such as ``".000001500"`` or ``""``.
 
 	Examples
 	--------

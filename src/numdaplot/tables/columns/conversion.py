@@ -32,7 +32,7 @@ class Conversion:
 		Its new type.
 	format
 		How dates are written as texts, when texts are read as dates or datetimes, or dates or datetimes are
-		written as texts. Texts are read as year, month and day separated by ``-`` when omitted, and
+		written as texts. Texts are read as year, month and day separated by ``"-"`` when omitted, and
 		written the same way, with the time for datetimes.
 	timezone
 		A change of the time zone of a datetime column.

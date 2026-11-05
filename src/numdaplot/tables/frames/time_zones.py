@@ -71,7 +71,7 @@ def name_column_type(column: Column, column_type: Type) -> str:
 	Returns
 	-------
 	str
-		The name of the type, such as ``FLOAT64`` or ``DATETIME Europe/Paris``.
+		The name of the type, such as ``"FLOAT64"`` or ``"DATETIME Europe/Paris"``.
 
 	Examples
 	--------

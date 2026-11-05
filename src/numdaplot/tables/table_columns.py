@@ -109,7 +109,7 @@ class TableColumns(TableData):
 		conversion
 			The column, its new type, and the date format or the time zone change. Accepted: between number
 			types, from numbers, booleans, categories, dates, datetimes and durations to texts, from texts and
-			categories to numbers, booleans (``true`` or ``false`` in any case), dates or datetimes, from any
+			categories to numbers, booleans (``"true"`` or ``"false"`` in any case), dates or datetimes, from any
 			other type to categories, between dates and datetimes, and a time zone change of datetimes.
 
 		Returns
@@ -126,8 +126,8 @@ class TableColumns(TableData):
 		InvalidConversionError
 			When the format or the time zone change does not apply to the conversion.
 		ValueConversionError
-			At the first value that cannot be stored in the new type, such as ``abc`` read as a number,
-			2.5 stored as an integer, or ``31/02/2026`` read as a date.
+			At the first value that cannot be stored in the new type, such as ``"abc"`` read as a number,
+			2.5 stored as an integer, or ``"31/02/2026"`` read as a date.
 		TimeZoneMismatchError
 			When the time zone change does not apply to whether the datetimes have a zone.
 

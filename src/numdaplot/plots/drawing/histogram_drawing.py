@@ -55,7 +55,7 @@ def draw_histogram_chart(axes: Axes, layer: ChartLayer) -> DrawnChart:
 	Returns
 	-------
 	DrawnChart
-		The single column as default label of the values, ``Count`` or ``Ratio`` as label of the other axis,
+		The single column as default label of the values, ``"Count"`` or ``"Ratio"`` as label of the other axis,
 		and grid lines across that axis only.
 
 	Raises

@@ -60,7 +60,7 @@ def draw_missing_chart(axes: Axes, layer: ChartLayer) -> DrawnChart:
 	Returns
 	-------
 	DrawnChart
-		``Missing count`` or ``Missing ratio`` as label of the values, and grid lines across their axis only.
+		``"Missing count"`` or ``"Missing ratio"`` as label of the values, and grid lines across their axis only.
 
 	Examples
 	--------

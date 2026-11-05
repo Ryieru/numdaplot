@@ -11,6 +11,10 @@ PACKAGE_NAME = "sales"
 FUNCTION_CODE = "LIMIT = 10\ndef cut(limit: int = LIMIT, other: int = 3) -> int:\n    return limit"
 FIELD_CODE = "SEPARATOR = ';'\nclass Options:\n    separator: str = SEPARATOR"
 CALL_CODE = "SHAPE = make_shape()\ndef fill(shape: object = SHAPE) -> None:\n    pass"
+CONSTANT_CALL_CODE = "COUNT = 10\nclass Chart:\n    bins: object = Bins(COUNT)\n    other: object = Bins(3)"
+CONSTANT_CALL_PARAMETER_CODE = "COUNT = 10\ndef draw(bins: object = Bins(COUNT)) -> None:\n    pass"
+EXPECTED_CALL = "Bins(10)"
+EXPECTED_PLAIN_CALL = "Bins(3)"
 EXPECTED_LIMIT = "10"
 EXPECTED_OTHER = "3"
 EXPECTED_SEPARATOR = "';'"
@@ -134,3 +138,42 @@ def test_default_values_resolve_the_whole_package() -> None:
 	limit_default = function.parameters["limit"].default
 	limit_text = str(limit_default)
 	assert limit_text == EXPECTED_LIMIT
+
+
+def test_resolve_default_values_replaces_a_constant_given_to_a_call() -> None:
+	"""
+	Check that a field holding a call shows the value of the constant given to it.
+
+	.. versionadded:: 0.1.0
+	"""
+	package, loader = load_package(CONSTANT_CALL_CODE)
+
+	resolve_default_values(package, loader)
+
+	assert str(package["Chart.bins"].value) == EXPECTED_CALL
+
+
+def test_resolve_default_values_keeps_a_call_without_constant() -> None:
+	"""
+	Check that a call whose arguments are literals is unchanged.
+
+	.. versionadded:: 0.1.0
+	"""
+	package, loader = load_package(CONSTANT_CALL_CODE)
+
+	resolve_default_values(package, loader)
+
+	assert str(package["Chart.other"].value) == EXPECTED_PLAIN_CALL
+
+
+def test_resolve_default_values_replaces_a_constant_in_the_call_of_a_parameter() -> None:
+	"""
+	Check that a parameter holding a call shows the value of the constant given to it.
+
+	.. versionadded:: 0.1.0
+	"""
+	package, loader = load_package(CONSTANT_CALL_PARAMETER_CODE)
+
+	resolve_default_values(package, loader)
+
+	assert str(package["draw"].parameters["bins"].default) == EXPECTED_CALL
