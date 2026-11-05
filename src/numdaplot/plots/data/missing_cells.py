@@ -57,8 +57,8 @@ def read_missing_counts(table: Table, measure: Measure) -> ChartValues:
 	array([0.5, 0. ])
 	"""
 	frame = table.to_pandas()
-	missing_count = MissingCount(axis=Axis.EACH_COLUMN, measure=measure)
-	counts_frame = count_frame_missing(frame, missing_count)
+	missing_count = MissingCount(measure=measure)
+	counts_frame = count_frame_missing(frame, missing_count, Axis.EACH_COLUMN)
 	count_name = MEASURE_COLUMN_NAMES[measure]
 	column_names = counts_frame[COLUMN_NAMES_COLUMN].to_numpy(dtype=TEXT_DTYPE)
 	counts = counts_frame[count_name].to_numpy(dtype=FLOAT_DTYPE, na_value=numpy.nan)

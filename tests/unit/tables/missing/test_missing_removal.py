@@ -58,6 +58,8 @@ class DropCase:
 	----------
 	missing_drop
 		The settings of the removal.
+	axis
+		Whether rows or columns are removed.
 	expected_visits
 		The visits of the remaining rows.
 	expected_names
@@ -65,25 +67,28 @@ class DropCase:
 	"""
 
 	missing_drop: MissingDrop
+	axis: Axis
 	expected_visits: list[float]
 	expected_names: list[str]
 
 
 DROP_CASES = [
-	DropCase(MissingDrop(), [1.0], EVERY_NAME),
-	DropCase(MissingDrop(columns=["price"]), [1.0, 4.0], EVERY_NAME),
-	DropCase(MissingDrop(columns=["price", "stock"], rule=MissingMode.ALL), [1.0, 3.0, 4.0], EVERY_NAME),
-	DropCase(MissingDrop(rule=MissingRatio(ratio=ONE_THIRD_RATIO)), [1.0], EVERY_NAME),
+	DropCase(MissingDrop(), Axis.EACH_ROW, [1.0], EVERY_NAME),
+	DropCase(MissingDrop(columns=["price"]), Axis.EACH_ROW, [1.0, 4.0], EVERY_NAME),
+	DropCase(MissingDrop(columns=["price", "stock"], rule=MissingMode.ALL), Axis.EACH_ROW, [1.0, 3.0, 4.0], EVERY_NAME),
+	DropCase(MissingDrop(rule=MissingRatio(ratio=ONE_THIRD_RATIO)), Axis.EACH_ROW, [1.0], EVERY_NAME),
 	DropCase(
 		MissingDrop(rule=MissingRatio(ratio=ONE_THIRD_RATIO, comparison=RatioComparison.ABOVE)),
+		Axis.EACH_ROW,
 		[1.0, 3.0, 4.0],
 		EVERY_NAME,
 	),
-	DropCase(MissingDrop(axis=Axis.EACH_COLUMN), [1.0, 2.0, 3.0, 4.0], ["visit"]),
-	DropCase(MissingDrop(axis=Axis.EACH_COLUMN, columns=["price"]), [1.0, 2.0, 3.0, 4.0], ["visit", "stock"]),
-	DropCase(MissingDrop(axis=Axis.EACH_COLUMN, rule=MissingMode.ALL), [1.0, 2.0, 3.0, 4.0], EVERY_NAME),
+	DropCase(MissingDrop(), Axis.EACH_COLUMN, [1.0, 2.0, 3.0, 4.0], ["visit"]),
+	DropCase(MissingDrop(columns=["price"]), Axis.EACH_COLUMN, [1.0, 2.0, 3.0, 4.0], ["visit", "stock"]),
+	DropCase(MissingDrop(rule=MissingMode.ALL), Axis.EACH_COLUMN, [1.0, 2.0, 3.0, 4.0], EVERY_NAME),
 	DropCase(
-		MissingDrop(axis=Axis.EACH_COLUMN, rule=MissingRatio(ratio=HALF_RATIO, comparison=RatioComparison.ABOVE)),
+		MissingDrop(rule=MissingRatio(ratio=HALF_RATIO, comparison=RatioComparison.ABOVE)),
+		Axis.EACH_COLUMN,
 		[1.0, 2.0, 3.0, 4.0],
 		EVERY_NAME,
 	),
@@ -124,7 +129,7 @@ def test_drop_frame_missing_removes_what_the_settings_choose(case: DropCase) -> 
 	case
 		The settings and the expected result.
 	"""
-	remaining_frame = drop_frame_missing(FRAME, case.missing_drop)
+	remaining_frame = drop_frame_missing(FRAME, case.missing_drop, case.axis)
 
 	visits = read_visits(remaining_frame)
 	column_names = list(remaining_frame.columns)
@@ -139,7 +144,7 @@ def test_drop_frame_missing_rejects_an_unknown_column() -> None:
 	.. versionadded:: 0.1.0
 	"""
 	with pytest.raises(ColumnNotFoundError):
-		drop_frame_missing(FRAME, MissingDrop(columns=UNKNOWN_NAMES))
+		drop_frame_missing(FRAME, MissingDrop(columns=UNKNOWN_NAMES), Axis.EACH_ROW)
 
 
 def test_drop_missing_rows_numbers_the_remaining_rows_from_zero() -> None:

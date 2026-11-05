@@ -22,7 +22,7 @@ from numdaplot.tables.missing.missing_ratio import MissingRatio
 from numdaplot.tables.missing.ratio_comparison import RatioComparison
 
 
-def drop_frame_missing(frame: pandas.DataFrame, missing_drop: MissingDrop) -> pandas.DataFrame:
+def drop_frame_missing(frame: pandas.DataFrame, missing_drop: MissingDrop, axis: Axis) -> pandas.DataFrame:
 	"""
 	Return a Table without its rows or its columns holding too many missing values.
 
@@ -33,7 +33,9 @@ def drop_frame_missing(frame: pandas.DataFrame, missing_drop: MissingDrop) -> pa
 	frame
 		The columns of a Table.
 	missing_drop
-		The axis, the columns looked at and the rule deciding what is removed.
+		The columns looked at and the rule deciding what is removed.
+	axis
+		``EACH_ROW`` to remove rows, ``EACH_COLUMN`` to remove columns.
 
 	Returns
 	-------
@@ -51,7 +53,7 @@ def drop_frame_missing(frame: pandas.DataFrame, missing_drop: MissingDrop) -> pa
 	>>> import numdaplot as ndp
 	>>> from numdaplot.tables.missing.missing_removal import drop_frame_missing
 	>>> frame = pandas.DataFrame({"price": [1.5, None, 3.0]})
-	>>> drop_frame_missing(frame, ndp.MissingDrop())
+	>>> drop_frame_missing(frame, ndp.MissingDrop(), ndp.Axis.EACH_ROW)
 	   price
 	0    1.5
 	1    3.0
@@ -62,7 +64,7 @@ def drop_frame_missing(frame: pandas.DataFrame, missing_drop: MissingDrop) -> pa
 		looked_names = missing_drop.columns
 
 	looked_frame = frame[looked_names]
-	if missing_drop.axis == Axis.EACH_COLUMN:
+	if axis == Axis.EACH_COLUMN:
 		remaining_columns = drop_missing_columns(frame, looked_frame, missing_drop.rule)
 		return remaining_columns
 

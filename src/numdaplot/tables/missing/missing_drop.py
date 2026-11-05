@@ -7,7 +7,6 @@ Settings of the removal of the rows or the columns of a Table holding missing va
 from dataclasses import dataclass
 
 from numdaplot.errors.empty_list_error import EmptyListError
-from numdaplot.positions.axis import Axis
 from numdaplot.settings.setting_types import require_list_not_text
 from numdaplot.tables.columns.column_names import require_column_names
 from numdaplot.tables.missing.missing_mode import MissingMode
@@ -22,12 +21,12 @@ class MissingDrop:
 	"""
 	Which rows or columns holding missing values are removed, used by ``Table.drop_missing``.
 
+	The axis, rows or columns, is given to ``Table.drop_missing`` itself.
+
 	.. versionadded:: 0.1.0
 
 	Parameters
 	----------
-	axis
-		``Axis.EACH_ROW`` by default to remove rows, ``Axis.EACH_COLUMN`` to remove columns.
 	columns
 		The names of the columns looked at, every column when omitted. Rows are removed according to
 		their values in these columns; columns are only removed among them, the others are always kept.
@@ -59,7 +58,7 @@ class MissingDrop:
 	    TEXT FLOAT64
 	0  Paris   120.0
 	1    Pau   150.0
-	>>> table.drop_missing(ndp.MissingDrop(axis=ndp.Axis.EACH_COLUMN))
+	>>> table.drop_missing(ndp.MissingDrop(columns=["price"]), axis=ndp.Axis.EACH_COLUMN)
 	    city
 	    TEXT
 	0  Paris
@@ -67,7 +66,6 @@ class MissingDrop:
 	2    Pau
 	"""
 
-	axis: Axis = Axis.EACH_ROW
 	columns: list[str] | None = None
 	rule: MissingMode | MissingRatio = MissingMode.ANY
 

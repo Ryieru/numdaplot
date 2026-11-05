@@ -59,6 +59,8 @@ class CountCase:
 	----------
 	missing_count
 		The settings of the count.
+	axis
+		The axis of the count, or None for the whole Table.
 	expected_column_names
 		The names of the columns of the result.
 	expected_measures
@@ -66,17 +68,18 @@ class CountCase:
 	"""
 
 	missing_count: MissingCount
+	axis: Axis | None
 	expected_column_names: list[str]
 	expected_measures: list[float]
 
 
 COUNT_CASES = [
-	CountCase(MissingCount(), [COUNT_NAME], [3]),
-	CountCase(MissingCount(measure=Measure.RATIO), [RATIO_NAME], [0.375]),
-	CountCase(MissingCount(axis=Axis.EACH_ROW), [COUNT_NAME], [0, 2, 1, 0]),
-	CountCase(MissingCount(axis=Axis.EACH_ROW, measure=Measure.RATIO), [RATIO_NAME], [0.0, 1.0, 0.5, 0.0]),
-	CountCase(MissingCount(axis=Axis.EACH_COLUMN), [NAMES_COLUMN, COUNT_NAME], [1, 2]),
-	CountCase(MissingCount(axis=Axis.EACH_COLUMN, measure=Measure.RATIO), [NAMES_COLUMN, RATIO_NAME], [0.25, 0.5]),
+	CountCase(MissingCount(), None, [COUNT_NAME], [3]),
+	CountCase(MissingCount(measure=Measure.RATIO), None, [RATIO_NAME], [0.375]),
+	CountCase(MissingCount(), Axis.EACH_ROW, [COUNT_NAME], [0, 2, 1, 0]),
+	CountCase(MissingCount(measure=Measure.RATIO), Axis.EACH_ROW, [RATIO_NAME], [0.0, 1.0, 0.5, 0.0]),
+	CountCase(MissingCount(), Axis.EACH_COLUMN, [NAMES_COLUMN, COUNT_NAME], [1, 2]),
+	CountCase(MissingCount(measure=Measure.RATIO), Axis.EACH_COLUMN, [NAMES_COLUMN, RATIO_NAME], [0.25, 0.5]),
 ]
 
 
@@ -92,7 +95,7 @@ def test_count_frame_missing_counts_along_the_chosen_axis_with_the_chosen_measur
 	case
 		The settings and the expected result.
 	"""
-	count_frame = count_frame_missing(FRAME, case.missing_count)
+	count_frame = count_frame_missing(FRAME, case.missing_count, case.axis)
 
 	column_names = list(count_frame.columns)
 	last_column = count_frame.iloc[:, -1]
@@ -107,7 +110,7 @@ def test_count_frame_missing_names_each_counted_column() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	count_frame = count_frame_missing(FRAME, MissingCount(axis=Axis.EACH_COLUMN))
+	count_frame = count_frame_missing(FRAME, MissingCount(), Axis.EACH_COLUMN)
 
 	name_column = count_frame[NAMES_COLUMN]
 	names = name_column.tolist()
@@ -120,7 +123,7 @@ def test_count_frame_missing_gives_a_missing_ratio_without_any_value() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	count_frame = count_frame_missing(EMPTY_FRAME, MissingCount(measure=Measure.RATIO))
+	count_frame = count_frame_missing(EMPTY_FRAME, MissingCount(measure=Measure.RATIO), None)
 
 	ratio_column = count_frame[RATIO_NAME]
 	missing_ratios = ratio_column.isna()
@@ -134,8 +137,8 @@ def test_count_frame_missing_stores_counts_as_integers_and_ratios_as_decimals() 
 
 	.. versionadded:: 0.1.0
 	"""
-	count_frame = count_frame_missing(FRAME, MissingCount())
-	ratio_frame = count_frame_missing(FRAME, MissingCount(measure=Measure.RATIO))
+	count_frame = count_frame_missing(FRAME, MissingCount(), None)
+	ratio_frame = count_frame_missing(FRAME, MissingCount(measure=Measure.RATIO), None)
 
 	count_column = count_frame[COUNT_NAME]
 	ratio_column = ratio_frame[RATIO_NAME]

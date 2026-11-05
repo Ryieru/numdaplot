@@ -6,6 +6,7 @@ Missing values of a Table: count, summary and removal.
 
 from typing import Self
 
+from numdaplot.positions.axis import Axis
 from numdaplot.tables.missing.missing_count import MissingCount
 from numdaplot.tables.missing.missing_counts import count_frame_missing
 from numdaplot.tables.missing.missing_drop import MissingDrop
@@ -22,7 +23,7 @@ class TableMissing(TableData):
 	.. versionadded:: 0.1.0
 	"""
 
-	def count_missing(self, missing_count: MissingCount | None = None) -> Self:
+	def count_missing(self, missing_count: MissingCount | None = None, axis: Axis | None = None) -> Self:
 		"""
 		Return the number or the ratio of missing values, for the whole Table, each row or each column.
 
@@ -31,7 +32,10 @@ class TableMissing(TableData):
 		Parameters
 		----------
 		missing_count
-			The axis and the measure, a single number for the whole Table when omitted.
+			The measure, the number of missing values when omitted.
+		axis
+			One count per row with ``Axis.EACH_ROW``, one per column with ``Axis.EACH_COLUMN``, a single count for
+			the whole Table when omitted.
 
 		Returns
 		-------
@@ -48,7 +52,7 @@ class TableMissing(TableData):
 		>>> table = ndp.Table.from_arrays({"city": cities, "price": prices})
 		>>> table.count_missing().to_value()
 		2
-		>>> table.count_missing(ndp.MissingCount(axis=ndp.Axis.EACH_COLUMN, measure=ndp.Measure.RATIO))
+		>>> table.count_missing(ndp.MissingCount(measure=ndp.Measure.RATIO), axis=ndp.Axis.EACH_COLUMN)
 		  column missing_ratio
 		    TEXT       FLOAT64
 		0   city           0.0
@@ -57,7 +61,7 @@ class TableMissing(TableData):
 		if missing_count is None:
 			missing_count = MissingCount()
 
-		count_frame = count_frame_missing(self._frame, missing_count)
+		count_frame = count_frame_missing(self._frame, missing_count, axis)
 		count_table = self._wrap(count_frame)
 
 		return count_table
@@ -86,7 +90,7 @@ class TableMissing(TableData):
 		summary = summarize_missing(self._frame)
 		show_pandas_frame(summary)
 
-	def drop_missing(self, missing_drop: MissingDrop | None = None) -> Self:
+	def drop_missing(self, missing_drop: MissingDrop | None = None, axis: Axis = Axis.EACH_ROW) -> Self:
 		"""
 		Return the Table without its rows, or its columns, holding missing values.
 
@@ -95,8 +99,10 @@ class TableMissing(TableData):
 		Parameters
 		----------
 		missing_drop
-			What is removed: every row holding a missing value when omitted, or columns, and how many
-			missing values are needed.
+			The columns looked at and how many missing values are needed: a single one in any column when
+			omitted.
+		axis
+			``Axis.EACH_ROW`` by default to remove rows, ``Axis.EACH_COLUMN`` to remove columns.
 
 		Returns
 		-------
@@ -123,7 +129,7 @@ class TableMissing(TableData):
 		if missing_drop is None:
 			missing_drop = MissingDrop()
 
-		remaining_frame = drop_frame_missing(self._frame, missing_drop)
+		remaining_frame = drop_frame_missing(self._frame, missing_drop, axis)
 		remaining_table = self._wrap(remaining_frame)
 
 		return remaining_table

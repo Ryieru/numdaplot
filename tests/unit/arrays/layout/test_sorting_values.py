@@ -25,7 +25,7 @@ TEXT_DTYPE = "T"
 TEXTS = ["b", "a", "c"]
 EXPECTED_DESCENDING_TEXTS = ["c", "b", "a"]
 LINE = [3, 1, 2]
-ROW_SORTING = ArraySorting(axis=Axis.EACH_ROW)
+DEFAULT_SORTING = ArraySorting()
 
 
 def test_sort_values_sorts_each_row_by_default() -> None:
@@ -36,7 +36,7 @@ def test_sort_values_sorts_each_row_by_default() -> None:
 	"""
 	values = numpy.array(GRID)
 
-	sorted_values = sort_values(values, ArraySorting())
+	sorted_values = sort_values(values, DEFAULT_SORTING, None)
 
 	sorted_rows = sorted_values.tolist()
 	assert sorted_rows == EXPECTED_ROWS_SORTED
@@ -49,9 +49,8 @@ def test_sort_values_sorts_each_column() -> None:
 	.. versionadded:: 0.1.0
 	"""
 	values = numpy.array(GRID)
-	sorting = ArraySorting(axis=Axis.EACH_COLUMN)
 
-	sorted_values = sort_values(values, sorting)
+	sorted_values = sort_values(values, DEFAULT_SORTING, Axis.EACH_COLUMN)
 
 	sorted_rows = sorted_values.tolist()
 	assert sorted_rows == EXPECTED_COLUMNS_SORTED
@@ -66,7 +65,7 @@ def test_sort_values_rejects_an_axis_on_one_dimension() -> None:
 	values = numpy.array(LINE)
 
 	with pytest.raises(DimensionError):
-		sort_values(values, ROW_SORTING)
+		sort_values(values, DEFAULT_SORTING, Axis.EACH_ROW)
 
 
 def test_sort_slice_keeps_missing_values_last_in_descending_order() -> None:

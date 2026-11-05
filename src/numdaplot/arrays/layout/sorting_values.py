@@ -14,11 +14,12 @@ from numdaplot.arrays.axis_number import find_numpy_axis
 from numdaplot.arrays.selection.missing_mask import find_missing
 from numdaplot.ordering.missing_position import MissingPosition
 from numdaplot.ordering.order import Order
+from numdaplot.positions.axis import Axis
 
 LAST_AXIS = -1
 
 
-def sort_values(values: NDArray[Any], sorting: ArraySorting) -> NDArray[Any]:
+def sort_values(values: NDArray[Any], sorting: ArraySorting, axis: Axis | None) -> NDArray[Any]:
 	"""
 	Return the values sorted inside each row, or inside each column.
 
@@ -29,7 +30,9 @@ def sort_values(values: NDArray[Any], sorting: ArraySorting) -> NDArray[Any]:
 	values
 		The values of an Array.
 	sorting
-		The order, the axis and the place of missing values.
+		The order and the place of missing values.
+	axis
+		``EACH_ROW`` or ``EACH_COLUMN`` for a two-dimensional Array, or None to sort each row.
 
 	Returns
 	-------
@@ -46,11 +49,11 @@ def sort_values(values: NDArray[Any], sorting: ArraySorting) -> NDArray[Any]:
 	>>> import numpy
 	>>> import numdaplot as ndp
 	>>> from numdaplot.arrays.layout.sorting_values import sort_values
-	>>> sort_values(numpy.array([[3, 1], [2, 4]]), ndp.ArraySorting(axis=ndp.Axis.EACH_COLUMN))
+	>>> sort_values(numpy.array([[3, 1], [2, 4]]), ndp.ArraySorting(), ndp.Axis.EACH_COLUMN)
 	array([[2, 1],
 	       [3, 4]])
 	"""
-	numpy_axis = find_numpy_axis(sorting.axis, values.ndim)
+	numpy_axis = find_numpy_axis(axis, values.ndim)
 	if numpy_axis is None:
 		numpy_axis = LAST_AXIS
 

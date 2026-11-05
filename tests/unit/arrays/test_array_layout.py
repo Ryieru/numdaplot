@@ -18,6 +18,7 @@ from numdaplot.arrays.array_layout import ArrayLayout
 from numdaplot.arrays.array_sorting import ArraySorting
 from numdaplot.arrays.shape import Shape
 from numdaplot.errors.shape_mismatch_error import ShapeMismatchError
+from numdaplot.positions.axis import Axis
 
 SORT_VALUES_NAME = "sort_values"
 FIND_UNIQUE_VALUES_NAME = "find_unique_values"
@@ -176,7 +177,7 @@ def test_unique_returns_the_distinct_values(monkeypatch: pytest.MonkeyPatch) -> 
 
 def test_sort_without_settings_sorts_with_the_default_sorting(monkeypatch: pytest.MonkeyPatch) -> None:
 	"""
-	Check that sort without settings hands the default ArraySorting to the sorting.
+	Check that sort without settings hands the default ArraySorting and no axis to the sorting.
 
 	.. versionadded:: 0.1.0
 
@@ -185,11 +186,11 @@ def test_sort_without_settings_sorts_with_the_default_sorting(monkeypatch: pytes
 	monkeypatch
 		Replaces the sorting with a recorder.
 	"""
-	received_sortings = list[ArraySorting]()
+	received_settings = list[tuple[ArraySorting, Axis | None]]()
 
-	def sort_recorded_values(values: NDArray[Any], sorting: ArraySorting) -> NDArray[Any]:
+	def sort_recorded_values(values: NDArray[Any], sorting: ArraySorting, axis: Axis | None) -> NDArray[Any]:
 		"""
-		Keep the sorting and return the fake values.
+		Keep the sorting and the axis, and return the fake values.
 
 		.. versionadded:: 0.1.0
 
@@ -199,13 +200,15 @@ def test_sort_without_settings_sorts_with_the_default_sorting(monkeypatch: pytes
 			The values, ignored.
 		sorting
 			The sorting received.
+		axis
+			The axis received.
 
 		Returns
 		-------
 		NDArray
 			Always the fake values.
 		"""
-		received_sortings.append(sorting)
+		received_settings.append((sorting, axis))
 
 		return FAKE_VALUES
 
@@ -215,4 +218,4 @@ def test_sort_without_settings_sorts_with_the_default_sorting(monkeypatch: pytes
 
 	array.sort()
 
-	assert received_sortings == [ArraySorting()]
+	assert received_settings == [(ArraySorting(), None)]

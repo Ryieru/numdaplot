@@ -11,7 +11,6 @@ import pytest
 from numdaplot.errors.duplicate_column_error import DuplicateColumnError
 from numdaplot.errors.empty_list_error import EmptyListError
 from numdaplot.errors.invalid_fraction_error import InvalidFractionError
-from numdaplot.positions.axis import Axis
 from numdaplot.ratios.measure import Measure
 from numdaplot.tables.missing.missing_count import MissingCount
 from numdaplot.tables.missing.missing_drop import MissingDrop
@@ -29,13 +28,12 @@ ADDED_NAME = "stock"
 
 def test_missing_count_counts_the_whole_table_by_default() -> None:
 	"""
-	Check the default axis and measure.
+	Check the default measure.
 
 	.. versionadded:: 0.1.0
 	"""
 	missing_count = MissingCount()
 
-	assert missing_count.axis is None
 	assert missing_count.measure == Measure.COUNT
 
 
@@ -68,13 +66,12 @@ def test_missing_ratio_rejects_a_value_that_is_not_a_fraction(ratio: float) -> N
 
 def test_missing_drop_removes_rows_with_any_missing_value_in_every_column_by_default() -> None:
 	"""
-	Check the default axis, columns and rule.
+	Check the default columns and rule.
 
 	.. versionadded:: 0.1.0
 	"""
 	missing_drop = MissingDrop()
 
-	assert missing_drop.axis == Axis.EACH_ROW
 	assert missing_drop.columns is None
 	assert missing_drop.rule == MissingMode.ANY
 

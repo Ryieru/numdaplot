@@ -13,6 +13,7 @@ from numdaplot.arrays.layout.sorting_values import sort_values
 from numdaplot.arrays.layout.unique_values import find_unique_values
 from numdaplot.arrays.shape import Shape
 from numdaplot.errors.shape_mismatch_error import ShapeMismatchError
+from numdaplot.positions.axis import Axis
 
 FLAT_DIMENSIONS = (-1,)
 
@@ -109,7 +110,7 @@ class ArrayLayout(ArrayData):
 
 		return flat_array
 
-	def sort(self, sorting: ArraySorting | None = None) -> Self:
+	def sort(self, sorting: ArraySorting | None = None, axis: Axis | None = None) -> Self:
 		"""
 		Return the values sorted inside each row, or inside each column.
 
@@ -118,8 +119,11 @@ class ArrayLayout(ArrayData):
 		Parameters
 		----------
 		sorting
-			The order, the axis and the place of missing values, the default ``ArraySorting`` when omitted.
-			Without axis, each row is sorted, which sorts a one-dimensional Array as a whole.
+			The order and the place of missing values, the default ``ArraySorting`` when omitted.
+		axis
+			``Axis.EACH_ROW`` sorts the values inside each row, ``Axis.EACH_COLUMN`` inside each column. An axis
+			only applies to a two-dimensional Array. When omitted, each row is sorted, which sorts a
+			one-dimensional Array as a whole.
 
 		Returns
 		-------
@@ -140,7 +144,7 @@ class ArrayLayout(ArrayData):
 		if sorting is None:
 			sorting = ArraySorting()
 
-		sorted_values = sort_values(self._values, sorting)
+		sorted_values = sort_values(self._values, sorting, axis)
 		sorted_array = self._wrap(sorted_values)
 
 		return sorted_array

@@ -85,14 +85,14 @@ FRAME_OPERATIONS = list[tuple[ModuleType, str, TableOperation]](
 		(
 			table_missing,
 			"count_frame_missing",
-			lambda table: table.count_missing(MissingCount(axis=Axis.EACH_COLUMN)),
+			lambda table: table.count_missing(MissingCount(), axis=Axis.EACH_COLUMN),
 		),
 		(table_missing, "drop_frame_missing", lambda table: table.drop_missing(MissingDrop())),
 	]
 )
 
 
-def give_fake_frame(frame: pandas.DataFrame, settings: object) -> pandas.DataFrame:
+def give_fake_frame(frame: pandas.DataFrame, settings: object, *axis: object) -> pandas.DataFrame:
 	"""
 	Fake helper returning known columns.
 
@@ -104,6 +104,8 @@ def give_fake_frame(frame: pandas.DataFrame, settings: object) -> pandas.DataFra
 		The columns of the Table, ignored.
 	settings
 		The settings of the operation, ignored.
+	axis
+		The axis given by the methods taking one, ignored.
 
 	Returns
 	-------
@@ -271,10 +273,11 @@ class SettingsRecorder:
 		.. versionadded:: 0.1.0
 		"""
 		self.settings = list[object]()
+		self.axes = list[object]()
 
-	def record(self, frame: pandas.DataFrame, settings: object) -> pandas.DataFrame:
+	def record(self, frame: pandas.DataFrame, settings: object, *axis: object) -> pandas.DataFrame:
 		"""
-		Keep the settings and return the fake columns.
+		Keep the settings and the axis, and return the fake columns.
 
 		.. versionadded:: 0.1.0
 
@@ -284,6 +287,8 @@ class SettingsRecorder:
 			The columns, ignored.
 		settings
 			The settings received.
+		axis
+			The axis received, for the methods taking one.
 
 		Returns
 		-------
@@ -291,6 +296,7 @@ class SettingsRecorder:
 			Always the fake columns.
 		"""
 		self.settings.append(settings)
+		self.axes.extend(axis)
 
 		return FAKE_FRAME
 
@@ -327,3 +333,45 @@ def test_method_without_settings_uses_the_default_settings(
 	case.operation(table)
 
 	assert recorder.settings == [case.expected_settings]
+
+
+AXIS_CASES = list[tuple[str, TableOperation, Axis | None]](
+	[
+		("count_frame_missing", lambda table: table.count_missing(), None),
+		("count_frame_missing", lambda table: table.count_missing(axis=Axis.EACH_ROW), Axis.EACH_ROW),
+		("drop_frame_missing", lambda table: table.drop_missing(), Axis.EACH_ROW),
+		("drop_frame_missing", lambda table: table.drop_missing(axis=Axis.EACH_COLUMN), Axis.EACH_COLUMN),
+	]
+)
+
+
+@pytest.mark.parametrize(("helper_name", "operation", "expected_axis"), AXIS_CASES)
+def test_missing_methods_hand_their_axis_to_their_helper(
+	monkeypatch: pytest.MonkeyPatch,
+	helper_name: str,
+	operation: TableOperation,
+	expected_axis: Axis | None,
+) -> None:
+	"""
+	Check the axis count_missing and drop_missing give to their helper, by default and when given.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	monkeypatch
+		Replaces the helper with a recorder.
+	helper_name
+		The name of the helper.
+	operation
+		Calls the method.
+	expected_axis
+		The axis the helper must receive.
+	"""
+	recorder = SettingsRecorder()
+	monkeypatch.setattr(table_missing, helper_name, recorder.record)
+	table = Table._create(FRAME)
+
+	operation(table)
+
+	assert recorder.axes == [expected_axis]

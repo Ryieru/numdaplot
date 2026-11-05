@@ -20,7 +20,6 @@ COUNTRIES = ["FR", "DE", "FR", "IT"]
 EXPECTED_UNIQUE_COUNTRIES = ["DE", "FR", "IT"]
 TEMPERATURES = [12.0, None, 18.0]
 EXPECTED_PRESENT_FIRST = [18.0, 12.0]
-LINE_SORTING = ndp.ArraySorting(axis=ndp.Axis.EACH_ROW)
 LAST_VALUE = ndp.Region(rows=ndp.Index(-1))
 
 
@@ -89,9 +88,9 @@ def test_each_column_is_sorted_downwards() -> None:
 	.. versionadded:: 0.1.0
 	"""
 	scores = ndp.Array.from_list(SCORES)
-	sorting = ndp.ArraySorting(order=ndp.Order.DESCENDING, axis=ndp.Axis.EACH_COLUMN)
+	sorting = ndp.ArraySorting(order=ndp.Order.DESCENDING)
 
-	sorted_scores = scores.sort(sorting)
+	sorted_scores = scores.sort(sorting, axis=ndp.Axis.EACH_COLUMN)
 
 	sorted_rows = sorted_scores.to_list()
 	assert sorted_rows == EXPECTED_COLUMNS_DESCENDING
@@ -126,7 +125,7 @@ def test_an_axis_on_a_line_is_rejected() -> None:
 	line = ndp.Array.from_list(LINE)
 
 	with pytest.raises(ndp.DimensionError):
-		line.sort(LINE_SORTING)
+		line.sort(axis=ndp.Axis.EACH_ROW)
 
 
 def test_distinct_values_are_listed_once_and_sorted() -> None:

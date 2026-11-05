@@ -26,7 +26,7 @@ COLUMN_SUM_AXIS = 0
 ROW_SUM_AXIS = 1
 
 
-def count_frame_missing(frame: pandas.DataFrame, missing_count: MissingCount) -> pandas.DataFrame:
+def count_frame_missing(frame: pandas.DataFrame, missing_count: MissingCount, axis: Axis | None) -> pandas.DataFrame:
 	"""
 	Return the count of the missing values of a Table, for the whole Table, each row or each column.
 
@@ -37,7 +37,9 @@ def count_frame_missing(frame: pandas.DataFrame, missing_count: MissingCount) ->
 	frame
 		The columns of a Table.
 	missing_count
-		The axis of the count and its measure.
+		The measure of the count.
+	axis
+		``EACH_ROW`` for one count per row, ``EACH_COLUMN`` for one per column, or None for the whole Table.
 
 	Returns
 	-------
@@ -51,13 +53,13 @@ def count_frame_missing(frame: pandas.DataFrame, missing_count: MissingCount) ->
 	>>> import numdaplot as ndp
 	>>> from numdaplot.tables.missing.missing_counts import count_frame_missing
 	>>> frame = pandas.DataFrame({"price": [1.5, None], "stock": [None, None]})
-	>>> count_frame_missing(frame, ndp.MissingCount(axis=ndp.Axis.EACH_ROW, measure=ndp.Measure.RATIO))
+	>>> count_frame_missing(frame, ndp.MissingCount(measure=ndp.Measure.RATIO), ndp.Axis.EACH_ROW)
 	   missing_ratio
 	0            0.5
 	1            1.0
 	"""
 	missing_grid = find_frame_missing(frame)
-	counts, value_count = count_axis_missing(missing_grid, missing_count.axis)
+	counts, value_count = count_axis_missing(missing_grid, axis)
 	measures = counts
 	if missing_count.measure == Measure.RATIO:
 		measures = divide_counts(counts, value_count)
@@ -65,7 +67,7 @@ def count_frame_missing(frame: pandas.DataFrame, missing_count: MissingCount) ->
 	measure_name = MEASURE_COLUMN_NAMES[missing_count.measure]
 	measure_column = build_column(measures)
 	count_columns = dict[str, Column]()
-	if missing_count.axis == Axis.EACH_COLUMN:
+	if axis == Axis.EACH_COLUMN:
 		count_columns[COLUMN_NAMES_COLUMN] = build_name_column(frame)
 
 	count_columns[measure_name] = measure_column

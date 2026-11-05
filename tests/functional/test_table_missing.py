@@ -98,7 +98,7 @@ def test_count_missing_gives_the_total_of_the_table() -> None:
 	"""
 	visits = build_visits()
 
-	missing_count = visits.count_missing(ndp.MissingCount())
+	missing_count = visits.count_missing()
 
 	missing_total = missing_count.to_value()
 	assert missing_total == EXPECTED_MISSING_TOTAL
@@ -111,9 +111,9 @@ def test_count_missing_gives_the_ratio_of_each_column() -> None:
 	.. versionadded:: 0.1.0
 	"""
 	visits = build_visits()
-	settings = ndp.MissingCount(axis=ndp.Axis.EACH_COLUMN, measure=ndp.Measure.RATIO)
+	settings = ndp.MissingCount(measure=ndp.Measure.RATIO)
 
-	column_ratios = visits.count_missing(settings)
+	column_ratios = visits.count_missing(settings, axis=ndp.Axis.EACH_COLUMN)
 
 	names = column_ratios.column("column")
 	ratios = column_ratios.column("missing_ratio")
@@ -131,7 +131,7 @@ def test_count_missing_gives_the_count_of_each_row() -> None:
 	"""
 	visits = build_visits()
 
-	row_counts = visits.count_missing(ndp.MissingCount(axis=ndp.Axis.EACH_ROW))
+	row_counts = visits.count_missing(axis=ndp.Axis.EACH_ROW)
 
 	counts = row_counts.column("missing_count")
 	count_list = counts.to_list()
@@ -167,7 +167,7 @@ def test_drop_missing_removes_every_row_holding_a_missing_value() -> None:
 	"""
 	visits = build_visits()
 
-	complete_visits = visits.drop_missing(ndp.MissingDrop())
+	complete_visits = visits.drop_missing()
 
 	visit_numbers = read_visit_numbers(complete_visits)
 	assert visit_numbers == EXPECTED_COMPLETE_VISITS
@@ -195,7 +195,7 @@ def test_drop_missing_removes_the_columns_holding_a_missing_value() -> None:
 	"""
 	visits = build_visits()
 
-	complete_columns = visits.drop_missing(ndp.MissingDrop(axis=ndp.Axis.EACH_COLUMN))
+	complete_columns = visits.drop_missing(axis=ndp.Axis.EACH_COLUMN)
 
 	assert complete_columns.column_names == EXPECTED_COLUMNS_WITHOUT_MISSING
 
@@ -207,9 +207,9 @@ def test_drop_missing_removes_the_columns_reaching_a_ratio() -> None:
 	.. versionadded:: 0.1.0
 	"""
 	visits = build_visits()
-	settings = ndp.MissingDrop(axis=ndp.Axis.EACH_COLUMN, rule=ndp.MissingRatio(ratio=HALF_RATIO))
+	settings = ndp.MissingDrop(rule=ndp.MissingRatio(ratio=HALF_RATIO))
 
-	remaining = visits.drop_missing(settings)
+	remaining = visits.drop_missing(settings, axis=ndp.Axis.EACH_COLUMN)
 
 	assert remaining.column_names == EXPECTED_COLUMNS_UNDER_HALF
 
