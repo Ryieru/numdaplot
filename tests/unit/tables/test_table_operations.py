@@ -42,6 +42,7 @@ from numdaplot.tables.filtering.filter import Filter
 from numdaplot.tables.frames.column import Column
 from numdaplot.tables.missing.missing_count import MissingCount
 from numdaplot.tables.missing.missing_drop import MissingDrop
+from numdaplot.tables.pivot.pivot_table import PivotTable
 from numdaplot.tables.sorting.sort_key import SortKey
 from numdaplot.tables.sorting.sorting import Sorting
 from numdaplot.tables.table import Table
@@ -58,6 +59,7 @@ ROW_FILTER = Filter(conditions=[Condition(rule=Greater(10))])
 BUILD_FILTER_MASK_NAME = "build_filter_mask"
 CONVERT_COLUMN_NAME = "convert_column"
 PRICE_MEAN = Calculation(column="price", function=Mean())
+PRICE_PIVOT = PivotTable(rows=["city"], columns="day", calculation=PRICE_MEAN)
 type TableOperation = Callable[[Table], Table]
 FRAME_OPERATIONS = list[tuple[ModuleType, str, TableOperation]](
 	[
@@ -80,6 +82,7 @@ FRAME_OPERATIONS = list[tuple[ModuleType, str, TableOperation]](
 			lambda table: table.aggregate(Aggregation(calculations=[PRICE_MEAN])),
 		),
 		(table_calculation, "describe_frame", lambda table: table.describe(Description())),
+		(table_calculation, "pivot_frame", lambda table: table.pivot_table(PRICE_PIVOT)),
 		(table_layout, "sort_frame", lambda table: table.sort(Sorting(keys=[SortKey(column="price")]))),
 		(table_layout, "drop_duplicate_rows", lambda table: table.drop_duplicates(Deduplication())),
 		(

@@ -213,6 +213,7 @@ from numdaplot.tables.missing.missing_drop import MissingDrop
 from numdaplot.tables.missing.missing_mode import MissingMode
 from numdaplot.tables.missing.missing_ratio import MissingRatio
 from numdaplot.tables.missing.ratio_comparison import RatioComparison
+from numdaplot.tables.pivot.pivot_table import PivotTable
 from numdaplot.tables.preview.preview import Preview
 from numdaplot.tables.preview.side import Side
 from numdaplot.tables.sorting.sort_key import SortKey
@@ -366,6 +367,7 @@ __all__ = [
 	"Percentages",
 	"PeriodUnit",
 	"PieChart",
+	"PivotTable",
 	"Plot",
 	"PlotStyle",
 	"Preview",

@@ -22,7 +22,7 @@ from numdaplot.tables.aggregation.aggregated_frame import aggregate_frame, compu
 from numdaplot.tables.aggregation.aggregation import Aggregation
 from numdaplot.tables.aggregation.calculation import Calculation
 from numdaplot.tables.aggregation.result_column import build_result_column, compute_cell
-from numdaplot.tables.aggregation.row_groups import find_row_groups
+from numdaplot.tables.aggregation.row_groups import find_row_groups, split_positions
 
 SALES = pandas.DataFrame(
 	{
@@ -41,6 +41,10 @@ EMPTY_DECIMALS = numpy.array([], dtype=numpy.float64)
 TEXTS = numpy.array(["a"], dtype="T")
 TWO_VALUES = numpy.array([2.0, 4.0])
 EXPECTED_MEAN = [3.0]
+SPLIT_POSITIONS = numpy.array([4, 7, 9])
+SPLIT_GROUP_NUMBERS = numpy.array([2, 0, 2])
+SPLIT_GROUP_COUNT = 3
+EXPECTED_SPLIT_POSITIONS = [[7], [], [4, 9]]
 VALUE_COUNT_WITH_MISSING = 5
 EVERY_ROW_COUNT_PRICES = [10.0, None, None]
 EXPECTED_GROUP_SIZES = [2, 1]
@@ -347,3 +351,15 @@ def test_compute_group_results_counts_every_row_of_each_group() -> None:
 
 	result_list = result_column.tolist()
 	assert result_list == EXPECTED_GROUP_SIZES
+
+
+def test_split_positions_gives_each_group_its_positions_and_empty_groups() -> None:
+	"""
+	Check that positions keep their order in their group, and that a group without position is empty.
+
+	.. versionadded:: 0.1.0
+	"""
+	groups = split_positions(SPLIT_POSITIONS, SPLIT_GROUP_NUMBERS, SPLIT_GROUP_COUNT)
+
+	group_lists = [group.tolist() for group in groups]
+	assert group_lists == EXPECTED_SPLIT_POSITIONS

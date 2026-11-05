@@ -39,7 +39,7 @@ class Table(
 	- Write it with ``to_csv``, ``to_json``, ``to_excel``, ``to_parquet`` or ``to_stata``.
 	- Select rows with ``filter`` and ``take``, check values with ``check``, read a column with ``column``.
 	- Change columns with ``choose_columns``, ``rename``, ``convert`` and ``add_column``.
-	- Compute with ``aggregate`` and ``describe``.
+	- Compute with ``aggregate``, ``pivot_table`` and ``describe``.
 	- Rearrange rows with ``sort`` and ``drop_duplicates``.
 	- Handle missing values with ``count_missing``, ``preview_missing`` and ``drop_missing``.
 	- Read it with ``row_count``, ``column_names``, ``column_types``, ``to_value``, ``to_pandas`` and ``is_equal``,

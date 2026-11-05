@@ -59,6 +59,7 @@ REQUIRED_SETTINGS = dict[str, dict[str, object]](
 		"Shape": {"dimensions": [1]},
 		"SortKey": {"column": "a"},
 		"Sorting": {"keys": [ndp.SortKey(column="a")]},
+		"PivotTable": {"rows": ["a"], "columns": "b", "calculation": SUM_CALCULATION},
 		"Spacing": {"start": 0, "stop": 1, "count": 2},
 		"TimeZone": {"name": "UTC"},
 		"TimeZoneChange": {"mode": ndp.TimeZoneMode.REMOVE},

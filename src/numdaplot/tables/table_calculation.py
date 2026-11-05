@@ -1,5 +1,5 @@
 """
-Statistics of a Table: aggregation and description.
+Statistics of a Table: aggregation, pivot table and description.
 
 .. versionadded:: 0.1.0
 """
@@ -11,12 +11,14 @@ from numdaplot.tables.aggregation.aggregated_frame import aggregate_frame
 from numdaplot.tables.aggregation.aggregation import Aggregation
 from numdaplot.tables.description.described_frame import describe_frame
 from numdaplot.tables.description.description import Description
+from numdaplot.tables.pivot.pivot_table import PivotTable
+from numdaplot.tables.pivot.pivoted_frame import pivot_frame
 from numdaplot.tables.table_data import TableData
 
 
 class TableCalculation(TableData):
 	"""
-	Statistics of a Table with ``aggregate`` and ``describe``. Missing values are ignored.
+	Statistics of a Table with ``aggregate``, ``pivot_table`` and ``describe``. Missing values are ignored.
 
 	.. versionadded:: 0.1.0
 	"""
@@ -66,6 +68,61 @@ class TableCalculation(TableData):
 		aggregated_table = self._wrap(aggregated_frame)
 
 		return aggregated_table
+
+	@checked_arguments
+	def pivot_table(self, pivot: PivotTable) -> Self:
+		"""
+		Return one statistic for each combination of groups of rows and values of a column, as a wide Table.
+
+		``aggregate`` gives one row per combination: ``pivot_table`` gives one column per value of a column, as
+		``plot_heatmap`` draws them.
+
+		.. versionadded:: 0.1.0
+
+		Parameters
+		----------
+		pivot
+			The columns forming the rows and the columns of the result, and the statistic of each cell.
+
+		Returns
+		-------
+		Self
+			A new Table: the columns of ``rows``, then one column per value of ``columns``, named after the value;
+			one row per group, sorted, with missing values as a group of their own, last.
+
+		Raises
+		------
+		InvalidTypeError
+			When an argument is not of the type its annotation names.
+		ColumnNotFoundError
+			When a setting names a column the Table does not have.
+		RefusedOperationError
+			When the column of ``columns`` holds missing values: remove them with ``drop_missing``.
+		DuplicateColumnError
+			When a value written as a text is also the name of a column of ``rows``.
+		InvalidColumnNameError
+			When a value written as a text is empty.
+		IncompatibleTypesError
+			When the statistic does not apply to the type of its column.
+
+		Examples
+		--------
+		>>> import numdaplot as ndp
+		>>> hours = ndp.Array.from_list([8, 8, 9])
+		>>> weekdays = ndp.Array.from_list(["Mon", "Tue", "Mon"])
+		>>> fares = ndp.Array.from_list([7.0, 9.0, 5.0])
+		>>> trips = ndp.Table.from_arrays({"hour": hours, "weekday": weekdays, "fare": fares})
+		>>> trip_count = ndp.Calculation(column="fare", function=ndp.Count(missing=ndp.CountedMissing.INCLUDED))
+		>>> trips.pivot_table(ndp.PivotTable(rows=["hour"], columns="weekday", calculation=trip_count))
+		   hour   Mon   Tue
+		  INT64 INT64 INT64
+		0     8     1     1
+		1     9     1     0
+		"""
+		pivoted_frame = pivot_frame(self._frame, pivot)
+		pivoted_table = self._wrap(pivoted_frame)
+
+		return pivoted_table
 
 	@checked_arguments
 	def describe(self, description: Description | None = None) -> Self:
