@@ -6,6 +6,7 @@ Pie plots of a Table.
 
 from numdaplot.errors.refused_setting_error import RefusedSettingError
 from numdaplot.plots.chart_layer import ChartLayer
+from numdaplot.plots.charts.chart_requirement import require_chart_class
 from numdaplot.plots.charts.pie_chart import PieChart
 from numdaplot.plots.data.pie_values import read_pie_values
 from numdaplot.plots.drawing.series_colors import require_color_count
@@ -17,6 +18,7 @@ from numdaplot.tables.table import Table
 CHART_NAME = "PieChart"
 X_LABEL_SETTING = "x_label"
 Y_LABEL_SETTING = "y_label"
+FUNCTION_NAME = "plot_pie"
 
 
 def plot_pie(data: Table, chart: PieChart, style: Style | None = None) -> Plot:
@@ -69,6 +71,8 @@ def plot_pie(data: Table, chart: PieChart, style: Style | None = None) -> Plot:
 	-----
 	ReadabilityWarning
 		When there are more than 5 slices.
+	RefusedOperationError
+		When ``chart`` is not a ``PieChart``.
 
 	Examples
 	--------
@@ -81,6 +85,7 @@ def plot_pie(data: Table, chart: PieChart, style: Style | None = None) -> Plot:
 	>>> plot = ndp.plot_pie(traffic, chart, style)
 	>>> plot.show()
 	"""
+	require_chart_class(chart, PieChart, FUNCTION_NAME)
 	values = read_pie_values(data, chart)
 	slice_count = len(values.rows)
 	require_color_count(chart.colors, slice_count)

@@ -10,6 +10,7 @@ Drawing of a Figure: its title and the Plots in their cells.
 from matplotlib.figure import FigureBase
 
 from numdaplot.plots.drawing.plot_theme import BACKGROUND_COLOR
+from numdaplot.plots.drawing.size_inches import convert_size_to_inches
 from numdaplot.plots.figure.layout import Layout
 from numdaplot.plots.figure.placement import Placement
 from numdaplot.plots.style.size import Size
@@ -89,7 +90,7 @@ def choose_figure_size(layout: Layout, size: Size | None) -> tuple[float, float]
 	(14.399999999999999, 7.2)
 	"""
 	if size is not None:
-		chosen_size = size.to_inches()
+		chosen_size = convert_size_to_inches(size)
 		return chosen_size
 
 	width = CELL_WIDTH * layout.columns

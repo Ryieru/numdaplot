@@ -4,12 +4,19 @@ Base class of every statistic.
 .. versionadded:: 0.1.0
 """
 
+from numdaplot.errors.refused_operation_error import RefusedOperationError
+
+CONSTRUCTOR_OPERATION = "Creating a Statistic with ndp.Statistic()"
+CONSTRUCTOR_ALTERNATIVE = "a statistic such as ndp.Mean"
+
 
 class Statistic:
 	"""
 	Base class of every statistic, a single result computed from a set of values.
 
 	A statistic is immutable and checks its settings when it is created.
+
+	Only its subclasses are created: calling ``ndp.Statistic()`` raises ``RefusedOperationError``.
 
 	Every statistic, passed to ``Array.compute``, ``Calculation`` and ``Description``:
 
@@ -39,3 +46,18 @@ class Statistic:
 	20.0
 	30.0
 	"""
+
+	def __init__(self) -> None:
+		"""
+		Refuse the creation of the base class itself, and let a subclass be created.
+
+		.. versionadded:: 0.1.0
+
+		Raises
+		------
+		RefusedOperationError
+			When the created object is a Statistic and not one of its subclasses.
+		"""
+		created_class = type(self)
+		if created_class is Statistic:
+			raise RefusedOperationError(CONSTRUCTOR_OPERATION, CONSTRUCTOR_ALTERNATIVE)

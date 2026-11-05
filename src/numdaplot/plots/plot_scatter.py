@@ -5,12 +5,15 @@ Scatter plots of a Table or an Array.
 """
 
 from numdaplot.arrays.array import Array
+from numdaplot.plots.charts.chart_requirement import require_chart_class
 from numdaplot.plots.charts.scatter_chart import ScatterChart
 from numdaplot.plots.layer_reading import read_scatter_layer
 from numdaplot.plots.plot import Plot
 from numdaplot.plots.plot_creation import create_plot
 from numdaplot.plots.style.style import Style
 from numdaplot.tables.table import Table
+
+FUNCTION_NAME = "plot_scatter"
 
 
 def plot_scatter(data: Table | Array, chart: ScatterChart, style: Style | None = None) -> Plot:
@@ -50,6 +53,8 @@ def plot_scatter(data: Table | Array, chart: ScatterChart, style: Style | None =
 		When an Array has more than two dimensions.
 	InvalidColorCountError
 		When ``color`` is given for an Array of several columns.
+	RefusedOperationError
+		When ``chart`` is not a ``ScatterChart``.
 
 	Examples
 	--------
@@ -63,6 +68,7 @@ def plot_scatter(data: Table | Array, chart: ScatterChart, style: Style | None =
 	>>> plot = ndp.plot_scatter(flats, chart, style)
 	>>> plot.show()
 	"""
+	require_chart_class(chart, ScatterChart, FUNCTION_NAME)
 	layer = read_scatter_layer(data, chart)
 	plot = create_plot(layer, style)
 

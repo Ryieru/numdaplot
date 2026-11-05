@@ -5,6 +5,7 @@ Bars of the missing values of each column of a Table.
 """
 
 from numdaplot.plots.chart_layer import ChartLayer
+from numdaplot.plots.charts.chart_requirement import require_chart_class
 from numdaplot.plots.charts.missing_chart import MissingChart
 from numdaplot.plots.data.chart_data import require_table
 from numdaplot.plots.data.missing_cells import read_missing_counts
@@ -40,6 +41,8 @@ def plot_missing_by_column(table: Table, chart: MissingChart, style: Style | Non
 	------
 	UnsupportedDataError
 		When the data is an Array.
+	RefusedOperationError
+		When ``chart`` is not a ``MissingChart``.
 
 	Examples
 	--------
@@ -53,6 +56,7 @@ def plot_missing_by_column(table: Table, chart: MissingChart, style: Style | Non
 	>>> plot = ndp.plot_missing_by_column(flats, chart, style)
 	>>> plot.show()
 	"""
+	require_chart_class(chart, MissingChart, FUNCTION_NAME)
 	checked_table = require_table(table, FUNCTION_NAME)
 	values = read_missing_counts(checked_table, chart.measure)
 	layer = ChartLayer(chart, values)

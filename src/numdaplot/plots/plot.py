@@ -13,11 +13,13 @@ from numdaplot.arrays.array import Array
 from numdaplot.errors.refused_operation_error import RefusedOperationError
 from numdaplot.plots.chart_layer import ChartLayer
 from numdaplot.plots.charts.bar_chart import BarChart
+from numdaplot.plots.charts.chart_requirement import require_chart_class
 from numdaplot.plots.charts.line_chart import LineChart
 from numdaplot.plots.charts.scatter_chart import ScatterChart
 from numdaplot.plots.charts.value_axis import ValueAxis
 from numdaplot.plots.drawing.layer_alignment import align_layers
 from numdaplot.plots.drawing.plot_drawing import FigureDrawing, build_figure, draw_plot
+from numdaplot.plots.drawing.size_inches import convert_size_to_inches
 from numdaplot.plots.layer_reading import read_bar_layer, read_line_layer, read_scatter_layer
 from numdaplot.plots.output.image_saving import write_image
 from numdaplot.plots.output.plot_display import show_drawing
@@ -231,6 +233,8 @@ class Plot:
 			When a Table has no ``y`` columns, or an Array has ``x`` or ``y`` columns.
 		InvalidColorCountError
 			When the colors of the chart are not one per line.
+		RefusedOperationError
+			When ``chart`` is not a ``LineChart``.
 
 		Examples
 		--------
@@ -244,6 +248,7 @@ class Plot:
 		>>> both = plot.add_line(shop, line)
 		>>> both.show()
 		"""
+		require_chart_class(chart, LineChart, ADD_LINE_NAME)
 		layer = read_line_layer(data, chart)
 		added_plot = self._add_layer(layer, axis, ADD_LINE_NAME)
 
@@ -286,6 +291,8 @@ class Plot:
 			When a Table has no ``y`` columns, or an Array has ``x`` or ``y`` columns.
 		InvalidColorCountError
 			When the colors of the chart are not one per series.
+		RefusedOperationError
+			When ``chart`` is not a ``BarChart``.
 
 		Examples
 		--------
@@ -299,6 +306,7 @@ class Plot:
 		>>> both = plot.add_bar(shop, bars)
 		>>> both.show()
 		"""
+		require_chart_class(chart, BarChart, ADD_BAR_NAME)
 		require_vertical_bars(chart, ADD_BAR_NAME)
 		layer = read_bar_layer(data, chart)
 		added_plot = self._add_layer(layer, axis, ADD_BAR_NAME)
@@ -341,6 +349,8 @@ class Plot:
 			When a Table has no ``y`` column, or an Array has a column setting.
 		InvalidColorCountError
 			When ``color`` is given for an Array of several columns.
+		RefusedOperationError
+			When ``chart`` is not a ``ScatterChart``.
 
 		Examples
 		--------
@@ -354,6 +364,7 @@ class Plot:
 		>>> both = plot.add_scatter(readings, points)
 		>>> both.show()
 		"""
+		require_chart_class(chart, ScatterChart, ADD_SCATTER_NAME)
 		layer = read_scatter_layer(data, chart)
 		added_plot = self._add_layer(layer, axis, ADD_SCATTER_NAME)
 
@@ -424,7 +435,7 @@ class Plot:
 		FigureDrawing
 			The drawing of the Plot.
 		"""
-		size_inches = self._style.size.to_inches()
+		size_inches = convert_size_to_inches(self._style.size)
 		drawing = FigureDrawing(self._draw_on, size_inches)
 
 		return drawing

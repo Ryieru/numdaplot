@@ -4,12 +4,19 @@ Base class of every math function.
 .. versionadded:: 0.1.0
 """
 
+from numdaplot.errors.refused_operation_error import RefusedOperationError
+
+CONSTRUCTOR_OPERATION = "Creating a MathFunction with ndp.MathFunction()"
+CONSTRUCTOR_ALTERNATIVE = "a math function such as ndp.SquareRoot"
+
 
 class MathFunction:
 	"""
 	Base class of every math function, applied to each value of a number Array by ``Array.apply``.
 
 	A math function is immutable and checks its settings when it is created.
+
+	Only its subclasses are created: calling ``ndp.MathFunction()`` raises ``RefusedOperationError``.
 
 	Every math function, passed to ``Array.apply``:
 
@@ -34,3 +41,18 @@ class MathFunction:
 	Array([1., 2.], dtype=FLOAT64)
 	Array([0., 2.], dtype=FLOAT64)
 	"""
+
+	def __init__(self) -> None:
+		"""
+		Refuse the creation of the base class itself, and let a subclass be created.
+
+		.. versionadded:: 0.1.0
+
+		Raises
+		------
+		RefusedOperationError
+			When the created object is a MathFunction and not one of its subclasses.
+		"""
+		created_class = type(self)
+		if created_class is MathFunction:
+			raise RefusedOperationError(CONSTRUCTOR_OPERATION, CONSTRUCTOR_ALTERNATIVE)

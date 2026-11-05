@@ -7,6 +7,7 @@ Box plots of a Table or an Array.
 from numdaplot.arrays.array import Array
 from numdaplot.plots.chart_layer import ChartLayer
 from numdaplot.plots.charts.box_chart import BoxChart
+from numdaplot.plots.charts.chart_requirement import require_chart_class
 from numdaplot.plots.data.sample_values import read_sample_values
 from numdaplot.plots.drawing.series_colors import require_color_count
 from numdaplot.plots.plot import Plot
@@ -15,6 +16,7 @@ from numdaplot.plots.style.style import Style
 from numdaplot.tables.table import Table
 
 CHART_NAME = "BoxChart"
+FUNCTION_NAME = "plot_box"
 
 
 def plot_box(data: Table | Array, chart: BoxChart, style: Style | None = None) -> Plot:
@@ -52,6 +54,8 @@ def plot_box(data: Table | Array, chart: BoxChart, style: Style | None = None) -
 		When an Array has more than two dimensions.
 	InvalidColorCountError
 		When the colors of the chart are not one per column.
+	RefusedOperationError
+		When ``chart`` is not a ``BoxChart``.
 
 	Examples
 	--------
@@ -64,6 +68,7 @@ def plot_box(data: Table | Array, chart: BoxChart, style: Style | None = None) -
 	>>> plot = ndp.plot_box(flats, chart, style)
 	>>> plot.show()
 	"""
+	require_chart_class(chart, BoxChart, FUNCTION_NAME)
 	values = read_sample_values(data, chart.columns, chart.group_by, CHART_NAME)
 	series_count = len(values.series)
 	require_color_count(chart.colors, series_count)

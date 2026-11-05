@@ -9,16 +9,20 @@ from typing import Any
 import numpy
 from numpy.typing import NDArray
 
+from numdaplot.arrays.creation.distribution import Distribution
 from numdaplot.arrays.creation.normal import Normal
 from numdaplot.arrays.creation.random_integers import RandomIntegers, find_drawn_interval
 from numdaplot.arrays.creation.uniform import Uniform
 from numdaplot.arrays.shape import Shape
 from numdaplot.errors.invalid_seed_error import InvalidSeedError
+from numdaplot.errors.refused_operation_error import RefusedOperationError
 
 LOWEST_SEED = 0
+UNKNOWN_DISTRIBUTION_OPERATION = "The distribution {distribution_name}"
+UNKNOWN_DISTRIBUTION_ALTERNATIVE = "a distribution of numdaplot"
 
 
-def draw_random_values(distribution: Uniform | Normal | RandomIntegers, shape: Shape, seed: int | None) -> NDArray[Any]:
+def draw_random_values(distribution: Distribution, shape: Shape, seed: int | None) -> NDArray[Any]:
 	"""
 	Return values drawn from a random distribution.
 
@@ -42,6 +46,8 @@ def draw_random_values(distribution: Uniform | Normal | RandomIntegers, shape: S
 	------
 	InvalidSeedError
 		When ``seed`` is lower than 0.
+	RefusedOperationError
+		When the distribution is not a distribution of numdaplot.
 
 	Examples
 	--------
@@ -63,6 +69,10 @@ def draw_random_values(distribution: Uniform | Normal | RandomIntegers, shape: S
 		case RandomIntegers():
 			lowest_value, value_limit = find_drawn_interval(distribution)
 			values = generator.integers(lowest_value, value_limit, shape.dimensions)
+		case _:
+			distribution_class = type(distribution)
+			operation = UNKNOWN_DISTRIBUTION_OPERATION.format(distribution_name=distribution_class.__name__)
+			raise RefusedOperationError(operation, UNKNOWN_DISTRIBUTION_ALTERNATIVE)
 
 	return values
 

@@ -9,12 +9,14 @@ from typing import cast
 import numpy
 import pytest
 
+from numdaplot.arrays.creation.distribution import Distribution
 from numdaplot.arrays.creation.normal import Normal
 from numdaplot.arrays.creation.random_integers import RandomIntegers
 from numdaplot.arrays.creation.random_values import draw_random_values, require_valid_seed
 from numdaplot.arrays.creation.uniform import Uniform
 from numdaplot.arrays.shape import Shape
 from numdaplot.errors.invalid_seed_error import InvalidSeedError
+from numdaplot.errors.refused_operation_error import RefusedOperationError
 from numdaplot.rules.bounds import Bounds
 
 SEED = 42
@@ -116,3 +118,21 @@ def test_draw_random_values_rejects_a_negative_seed() -> None:
 	"""
 	with pytest.raises(InvalidSeedError):
 		draw_random_values(DIE, GRID_SHAPE, NEGATIVE_SEED)
+
+
+class CustomDistribution(Distribution):
+	"""
+	A distribution written outside numdaplot.
+
+	.. versionadded:: 0.1.0
+	"""
+
+
+def test_draw_random_values_refuses_a_distribution_written_outside_numdaplot() -> None:
+	"""
+	Check that an unknown distribution raises RefusedOperationError.
+
+	.. versionadded:: 0.1.0
+	"""
+	with pytest.raises(RefusedOperationError):
+		draw_random_values(CustomDistribution(), GRID_SHAPE, SEED)

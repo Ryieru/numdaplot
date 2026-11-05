@@ -6,11 +6,14 @@ Bar plots of a Table or an Array.
 
 from numdaplot.arrays.array import Array
 from numdaplot.plots.charts.bar_chart import BarChart
+from numdaplot.plots.charts.chart_requirement import require_chart_class
 from numdaplot.plots.layer_reading import read_bar_layer
 from numdaplot.plots.plot import Plot
 from numdaplot.plots.plot_creation import create_plot
 from numdaplot.plots.style.style import Style
 from numdaplot.tables.table import Table
+
+FUNCTION_NAME = "plot_bar"
 
 
 def plot_bar(data: Table | Array, chart: BarChart, style: Style | None = None) -> Plot:
@@ -48,6 +51,8 @@ def plot_bar(data: Table | Array, chart: BarChart, style: Style | None = None) -
 		When an Array has more than two dimensions.
 	InvalidColorCountError
 		When the colors of the chart are not one per series.
+	RefusedOperationError
+		When ``chart`` is not a ``BarChart``.
 
 	Examples
 	--------
@@ -61,6 +66,7 @@ def plot_bar(data: Table | Array, chart: BarChart, style: Style | None = None) -
 	>>> plot = ndp.plot_bar(sales, chart, style)
 	>>> plot.show()
 	"""
+	require_chart_class(chart, BarChart, FUNCTION_NAME)
 	layer = read_bar_layer(data, chart)
 	plot = create_plot(layer, style)
 

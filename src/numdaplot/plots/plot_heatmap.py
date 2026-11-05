@@ -6,6 +6,7 @@ Heatmaps of a Table or an Array.
 
 from numdaplot.arrays.array import Array
 from numdaplot.plots.chart_layer import ChartLayer
+from numdaplot.plots.charts.chart_requirement import require_chart_class
 from numdaplot.plots.charts.heatmap_chart import HeatmapChart
 from numdaplot.plots.data.array_values import read_array_values
 from numdaplot.plots.data.chart_data import require_column_setting, require_no_column_settings
@@ -19,6 +20,7 @@ from numdaplot.tables.table import Table
 CHART_NAME = "HeatmapChart"
 COLUMNS_SETTING = "columns"
 LABELS_SETTING = "labels"
+FUNCTION_NAME = "plot_heatmap"
 
 
 def plot_heatmap(data: Table | Array, chart: HeatmapChart, style: Style | None = None) -> Plot:
@@ -55,6 +57,8 @@ def plot_heatmap(data: Table | Array, chart: HeatmapChart, style: Style | None =
 		When ``labels`` holds booleans or durations, or a drawn column does not hold numbers.
 	DimensionError
 		When an Array has more than two dimensions.
+	RefusedOperationError
+		When ``chart`` is not a ``HeatmapChart``.
 
 	Examples
 	--------
@@ -69,6 +73,7 @@ def plot_heatmap(data: Table | Array, chart: HeatmapChart, style: Style | None =
 	>>> plot = ndp.plot_heatmap(orders, chart, style)
 	>>> plot.show()
 	"""
+	require_chart_class(chart, HeatmapChart, FUNCTION_NAME)
 	values = read_heatmap_values(data, chart)
 	layer = ChartLayer(chart, values)
 	plot = create_plot(layer, style)

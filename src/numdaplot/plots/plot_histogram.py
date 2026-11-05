@@ -6,6 +6,7 @@ Histograms of a Table or an Array.
 
 from numdaplot.arrays.array import Array
 from numdaplot.plots.chart_layer import ChartLayer
+from numdaplot.plots.charts.chart_requirement import require_chart_class
 from numdaplot.plots.charts.histogram_chart import HistogramChart
 from numdaplot.plots.data.sample_values import read_sample_values
 from numdaplot.plots.drawing.series_colors import require_color_count
@@ -15,6 +16,7 @@ from numdaplot.plots.style.style import Style
 from numdaplot.tables.table import Table
 
 CHART_NAME = "HistogramChart"
+FUNCTION_NAME = "plot_histogram"
 
 
 def plot_histogram(data: Table | Array, chart: HistogramChart, style: Style | None = None) -> Plot:
@@ -52,6 +54,8 @@ def plot_histogram(data: Table | Array, chart: HistogramChart, style: Style | No
 		When an Array has more than two dimensions.
 	InvalidColorCountError
 		When the colors of the chart are not one per column.
+	RefusedOperationError
+		When ``chart`` is not a ``HistogramChart``.
 
 	Examples
 	--------
@@ -63,6 +67,7 @@ def plot_histogram(data: Table | Array, chart: HistogramChart, style: Style | No
 	>>> plot = ndp.plot_histogram(flats, chart, style)
 	>>> plot.show()
 	"""
+	require_chart_class(chart, HistogramChart, FUNCTION_NAME)
 	values = read_sample_values(data, chart.columns, None, CHART_NAME)
 	series_count = len(values.series)
 	require_color_count(chart.colors, series_count)

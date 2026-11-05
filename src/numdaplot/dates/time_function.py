@@ -4,12 +4,19 @@ Base class of every function reading or building dates and durations.
 .. versionadded:: 0.1.0
 """
 
+from numdaplot.errors.refused_operation_error import RefusedOperationError
+
+CONSTRUCTOR_OPERATION = "Creating a TimeFunction with ndp.TimeFunction()"
+CONSTRUCTOR_ALTERNATIVE = "a time function such as ndp.DatePart"
+
 
 class TimeFunction:
 	"""
 	Base class of every function reading or building dates and durations, applied by ``Array.apply``.
 
 	A time function is immutable. Missing values stay missing.
+
+	Only its subclasses are created: calling ``ndp.TimeFunction()`` raises ``RefusedOperationError``.
 
 	Every time function, passed to ``Array.apply``:
 
@@ -32,3 +39,18 @@ class TimeFunction:
 	Array([12.], dtype=FLOAT64)
 	Array(['2026-01-01'], dtype=DATE)
 	"""
+
+	def __init__(self) -> None:
+		"""
+		Refuse the creation of the base class itself, and let a subclass be created.
+
+		.. versionadded:: 0.1.0
+
+		Raises
+		------
+		RefusedOperationError
+			When the created object is a TimeFunction and not one of its subclasses.
+		"""
+		created_class = type(self)
+		if created_class is TimeFunction:
+			raise RefusedOperationError(CONSTRUCTOR_OPERATION, CONSTRUCTOR_ALTERNATIVE)

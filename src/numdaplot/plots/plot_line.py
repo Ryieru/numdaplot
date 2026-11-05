@@ -5,12 +5,15 @@ Line plots of a Table or an Array.
 """
 
 from numdaplot.arrays.array import Array
+from numdaplot.plots.charts.chart_requirement import require_chart_class
 from numdaplot.plots.charts.line_chart import LineChart
 from numdaplot.plots.layer_reading import read_line_layer
 from numdaplot.plots.plot import Plot
 from numdaplot.plots.plot_creation import create_plot
 from numdaplot.plots.style.style import Style
 from numdaplot.tables.table import Table
+
+FUNCTION_NAME = "plot_line"
 
 
 def plot_line(data: Table | Array, chart: LineChart, style: Style | None = None) -> Plot:
@@ -48,6 +51,8 @@ def plot_line(data: Table | Array, chart: LineChart, style: Style | None = None)
 		When an Array has more than two dimensions.
 	InvalidColorCountError
 		When the colors of the chart are not one per line.
+	RefusedOperationError
+		When ``chart`` is not a ``LineChart``.
 
 	Examples
 	--------
@@ -61,6 +66,7 @@ def plot_line(data: Table | Array, chart: LineChart, style: Style | None = None)
 	>>> plot = ndp.plot_line(sales, chart, style)
 	>>> plot.show()
 	"""
+	require_chart_class(chart, LineChart, FUNCTION_NAME)
 	layer = read_line_layer(data, chart)
 	plot = create_plot(layer, style)
 

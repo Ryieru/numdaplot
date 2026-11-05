@@ -11,11 +11,6 @@ from numdaplot.plots.style.size_unit import SizeUnit
 
 DEFAULT_WIDTH = 6.4
 DEFAULT_HEIGHT = 4.8
-UNITS_PER_INCH = {
-	SizeUnit.INCH: 1.0,
-	SizeUnit.CENTIMETER: 2.54,
-	SizeUnit.PIXEL: 100.0,
-}
 
 
 @dataclass(frozen=True)
@@ -67,27 +62,3 @@ class Size:
 		is_positive = self.width > 0 and self.height > 0
 		if not is_positive:
 			raise InvalidSizeError(self.width, self.height)
-
-	def to_inches(self) -> tuple[float, float]:
-		"""
-		Return the width and the height in inches, as matplotlib counts sizes.
-
-		.. versionadded:: 0.1.0
-
-		Returns
-		-------
-		tuple[float, float]
-			The width and the height, a pixel counting for a hundredth of an inch.
-
-		Examples
-		--------
-		>>> import numdaplot as ndp
-		>>> ndp.Size(width=600, height=300, unit=ndp.SizeUnit.PIXEL).to_inches()
-		(6.0, 3.0)
-		"""
-		units_per_inch = UNITS_PER_INCH[self.unit]
-		width_inches = self.width / units_per_inch
-		height_inches = self.height / units_per_inch
-		inches = (width_inches, height_inches)
-
-		return inches

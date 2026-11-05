@@ -15,17 +15,11 @@ from numdaplot.plots.style.grid_lines import GridLines
 from numdaplot.plots.style.image_options import ImageOptions
 from numdaplot.plots.style.legend_position import LegendPosition
 from numdaplot.plots.style.size import Size
-from numdaplot.plots.style.size_unit import SizeUnit
 from numdaplot.plots.style.style import Style
 
 COLOR_CODES = ["#ff8800", "#FF8800", "#1f77b4"]
 REJECTED_CODES = ["ff8800", "#ff88", "#ff88001", "#gg8800", "", "orange"]
 REJECTED_SIZES = [(0.0, 4.8), (6.4, -1.0)]
-DEFAULT_INCHES = (6.4, 4.8)
-PIXEL_SIZE = Size(width=600, height=300, unit=SizeUnit.PIXEL)
-EXPECTED_PIXEL_INCHES = (6.0, 3.0)
-CENTIMETER_SIZE = Size(width=2.54, height=5.08, unit=SizeUnit.CENTIMETER)
-EXPECTED_CENTIMETER_INCHES = (1.0, 2.0)
 DEFAULT_DPI = 100
 REJECTED_DPI = 0
 ACCEPTED_ROTATIONS = [-90, 0, 45.5, 90]
@@ -63,39 +57,6 @@ def test_custom_color_rejects_a_code_not_written_as_rrggbb(code: str) -> None:
 	"""
 	with pytest.raises(InvalidColorError):
 		CustomColor(code)
-
-
-def test_size_defaults_to_the_matplotlib_size_in_inches() -> None:
-	"""
-	Check that a Size without arguments is 6.4 by 4.8 inches.
-
-	.. versionadded:: 0.1.0
-	"""
-	inches = Size().to_inches()
-
-	assert inches == DEFAULT_INCHES
-
-
-@pytest.mark.parametrize(
-	("size", "expected_inches"),
-	[(PIXEL_SIZE, EXPECTED_PIXEL_INCHES), (CENTIMETER_SIZE, EXPECTED_CENTIMETER_INCHES)],
-)
-def test_size_to_inches_converts_pixels_and_centimeters(size: Size, expected_inches: tuple[float, float]) -> None:
-	"""
-	Check that a pixel is a hundredth of an inch and an inch is 2.54 centimeters.
-
-	.. versionadded:: 0.1.0
-
-	Parameters
-	----------
-	size
-		A size in pixels or centimeters.
-	expected_inches
-		The same size in inches.
-	"""
-	inches = size.to_inches()
-
-	assert inches == expected_inches
 
 
 @pytest.mark.parametrize(("width", "height"), REJECTED_SIZES)

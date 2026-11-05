@@ -4,12 +4,19 @@ Base class of every rule.
 .. versionadded:: 0.1.0
 """
 
+from numdaplot.errors.refused_operation_error import RefusedOperationError
+
+CONSTRUCTOR_OPERATION = "Creating a Rule with ndp.Rule()"
+CONSTRUCTOR_ALTERNATIVE = "a rule such as ndp.Greater"
+
 
 class Rule:
 	"""
 	Base class of every rule, a test applied to each value of an Array or of Table columns.
 
 	A rule is immutable and checks its settings when it is created.
+
+	Only its subclasses are created: calling ``ndp.Rule()`` raises ``RefusedOperationError``.
 
 	Every rule, passed to ``Array.select``, ``Array.check``, ``Table.check`` and ``Condition``:
 
@@ -38,3 +45,18 @@ class Rule:
 	Array([120], dtype=INT64)
 	Array([80], dtype=INT64)
 	"""
+
+	def __init__(self) -> None:
+		"""
+		Refuse the creation of the base class itself, and let a subclass be created.
+
+		.. versionadded:: 0.1.0
+
+		Raises
+		------
+		RefusedOperationError
+			When the created object is a Rule and not one of its subclasses.
+		"""
+		created_class = type(self)
+		if created_class is Rule:
+			raise RefusedOperationError(CONSTRUCTOR_OPERATION, CONSTRUCTOR_ALTERNATIVE)

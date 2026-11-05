@@ -4,12 +4,19 @@ Base class of every chart.
 .. versionadded:: 0.1.0
 """
 
+from numdaplot.errors.refused_operation_error import RefusedOperationError
+
+CONSTRUCTOR_OPERATION = "Creating a Chart with ndp.Chart()"
+CONSTRUCTOR_ALTERNATIVE = "a chart such as ndp.LineChart"
+
 
 class Chart:
 	"""
 	Base class of every chart, which says what a Plot draws and how its series look.
 
 	A chart is immutable and checks its settings when it is created.
+
+	Only its subclasses are created: calling ``ndp.Chart()`` raises ``RefusedOperationError``.
 
 	Every chart, each passed to its own plot function:
 
@@ -35,3 +42,18 @@ class Chart:
 	>>> line_plot = ndp.plot_line(prices, ndp.LineChart())
 	>>> line_plot.show()
 	"""
+
+	def __init__(self) -> None:
+		"""
+		Refuse the creation of the base class itself, and let a subclass be created.
+
+		.. versionadded:: 0.1.0
+
+		Raises
+		------
+		RefusedOperationError
+			When the created object is a Chart and not one of its subclasses.
+		"""
+		created_class = type(self)
+		if created_class is Chart:
+			raise RefusedOperationError(CONSTRUCTOR_OPERATION, CONSTRUCTOR_ALTERNATIVE)
