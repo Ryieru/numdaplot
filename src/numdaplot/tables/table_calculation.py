@@ -100,11 +100,11 @@ class TableCalculation(TableData):
 		>>> import numdaplot as ndp
 		>>> table = ndp.Table.from_arrays({"price": ndp.Array.from_list([10.0, 30.0])})
 		>>> table.describe(ndp.Description(functions=[ndp.Count(), ndp.Mean(), ndp.Max()]))
-		  statistic   price
-		       TEXT FLOAT64
-		0     count     2.0
-		1      mean    20.0
-		2       max    30.0
+		        statistic   price
+		             TEXT FLOAT64
+		0  count_excluded     2.0
+		1            mean    20.0
+		2             max    30.0
 		"""
 		if description is None:
 			description = Description()

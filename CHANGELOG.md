@@ -72,8 +72,8 @@ and numdaplot follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
   `UnsupportedTypeError`.
 - Rules: `Equal`, `NotEqual`, `Greater`, `GreaterOrEqual`, `Less`, `LessOrEqual`, `Between`, `IsIn`,
   `Contains`, `IsMissing`, `IsPresent`, with the `Bounds` and `Case` enums.
-- Statistics: `Sum`, `Mean`, `Median`, `Min`, `Max`, `Count`, `CountDistinct`, `StandardDeviation`,
-  `Quantile`, `MostFrequent`, `MostFrequentCount`.
+- Statistics: `Sum`, `Mean`, `Median`, `Min`, `Max`, `Count` with the `CountedMissing` enum, `CountDistinct`,
+  `StandardDeviation`, `Quantile`, `MostFrequent`, `MostFrequentCount`.
 - Positions: `Region`, `Index`, `Range` and the `Axis` enum.
 - Sort settings: `Order` and `MissingPosition` enums.
 - Errors: `NumdaplotError`, `EmptyRegionError`, `EmptyTextError`, `EmptyValuesError`, `InvalidBoundsError`,

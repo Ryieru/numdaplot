@@ -19,11 +19,15 @@ from numdaplot.arrays.calculation.counting_statistics import (
 )
 from numdaplot.statistics.count import Count
 from numdaplot.statistics.count_distinct import CountDistinct
+from numdaplot.statistics.counted_missing import CountedMissing
 from numdaplot.statistics.most_frequent import MostFrequent
 from numdaplot.statistics.most_frequent_count import MostFrequentCount
 
 DECIMALS = [2.0, numpy.nan, 2.0, 5.0]
 PRESENT_COUNT = 3
+ROWS_WITH_MISSING = [[1.0, numpy.nan], [numpy.nan, numpy.nan]]
+LAST_AXIS = -1
+EXPECTED_EVERY_VALUE_COUNTS = [2, 2]
 DISTINCT_COUNT = 2
 MOST_FREQUENT_VALUE = 2.0
 MOST_FREQUENT_COUNT = 2
@@ -155,3 +159,30 @@ def test_count_most_frequent_value_gives_zero_without_present_value() -> None:
 	most_frequent_count = count_most_frequent_value(values)
 
 	assert most_frequent_count == NO_VALUE_COUNT
+
+
+def test_compute_count_includes_the_missing_values_on_demand() -> None:
+	"""
+	Check that NaN is counted with CountedMissing.INCLUDED.
+
+	.. versionadded:: 0.1.0
+	"""
+	values = numpy.array(DECIMALS)
+
+	count = compute_count(values, None, Count(missing=CountedMissing.INCLUDED))
+
+	assert count == values.size
+
+
+def test_compute_count_includes_the_missing_values_of_each_row() -> None:
+	"""
+	Check that including the missing values keeps one count per reduced slice.
+
+	.. versionadded:: 0.1.0
+	"""
+	values = numpy.array(ROWS_WITH_MISSING)
+
+	counts = compute_count(values, LAST_AXIS, Count(missing=CountedMissing.INCLUDED))
+
+	count_list = counts.tolist()
+	assert count_list == EXPECTED_EVERY_VALUE_COUNTS

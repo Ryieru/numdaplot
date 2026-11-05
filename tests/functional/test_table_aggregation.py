@@ -27,9 +27,33 @@ EXPECTED_TOTAL_PRICE = 110.0
 ONLY_LYON = ndp.Condition(rule=ndp.Equal("Lyon"), columns=["city"])
 LYON_WITHOUT_PRICE = ndp.Condition(rule=ndp.IsMissing(), columns=["price"])
 EXPECTED_DESCRIBED_NAMES = ["statistic", "price", "count"]
-EXPECTED_STATISTICS = ["count", "mean", "standard_deviation", "min", "quantile_25", "median", "quantile_75", "max"]
+EXPECTED_STATISTICS = [
+	"count_excluded",
+	"mean",
+	"standard_deviation",
+	"min",
+	"quantile_25",
+	"median",
+	"quantile_75",
+	"max",
+]
 EXPECTED_PRICE_COUNT = 4.0
 EXPECTED_CITY_DESCRIPTION = ["4", "Lyon", None]
+TRIPS = ndp.Table.from_pandas(
+	pandas.DataFrame(
+		{
+			"color": pandas.Series(["green", "green", "yellow"], dtype="string"),
+			"payment": pandas.Series(["card", None, "cash"], dtype="string"),
+			"fare": [7.0, None, 9.0],
+		}
+	)
+)
+EXPECTED_ROWS_PER_COLOR = [2, 1]
+EXPECTED_PAYMENTS_PER_COLOR = [1, 1]
+EXPECTED_ROWS_PER_PAYMENT = [1, 1, 1]
+EXPECTED_PRESENT_PER_PAYMENT = [1, 1, 0]
+EXPECTED_COUNT_NAMES = ["count_excluded", "count_included"]
+EXPECTED_FARE_COUNTS = [2, 3]
 
 
 def build_sales() -> ndp.Table:
@@ -185,3 +209,59 @@ def test_describe_writes_mixed_results_of_a_text_column_as_texts() -> None:
 
 	city_description = read_values(description, "city")
 	assert city_description == EXPECTED_CITY_DESCRIPTION
+
+
+def test_a_count_including_the_missing_values_gives_the_rows_of_each_group() -> None:
+	"""
+	Check that the number of rows of each group does not depend on the missing values of the counted column.
+
+	.. versionadded:: 0.1.0
+	"""
+	every_row = ndp.Count(missing=ndp.CountedMissing.INCLUDED)
+	trip_count = ndp.Calculation(column="payment", function=every_row, result_name="trip_count")
+
+	counts = TRIPS.aggregate(ndp.Aggregation(calculations=[trip_count], group_by=["color"]))
+
+	assert counts.column("trip_count").to_list() == EXPECTED_ROWS_PER_COLOR
+
+
+def test_a_default_count_leaves_out_the_missing_values_of_each_group() -> None:
+	"""
+	Check that the default Count only counts the present values.
+
+	.. versionadded:: 0.1.0
+	"""
+	present_payment = ndp.Calculation(column="payment", function=ndp.Count(), result_name="present_payment")
+
+	counts = TRIPS.aggregate(ndp.Aggregation(calculations=[present_payment], group_by=["color"]))
+
+	assert counts.column("present_payment").to_list() == EXPECTED_PAYMENTS_PER_COLOR
+
+
+def test_a_group_of_missing_values_counts_its_rows_when_they_are_included() -> None:
+	"""
+	Check that the group of the missing values gives its rows with INCLUDED, and 0 by default on its own column.
+
+	.. versionadded:: 0.1.0
+	"""
+	every_row = ndp.Calculation(column="payment", function=ndp.Count(missing=ndp.CountedMissing.INCLUDED))
+	present = ndp.Calculation(column="payment", function=ndp.Count())
+
+	counts = TRIPS.aggregate(ndp.Aggregation(calculations=[every_row, present], group_by=["payment"]))
+
+	assert counts.column("payment_count_included").to_list() == EXPECTED_ROWS_PER_PAYMENT
+	assert counts.column("payment_count_excluded").to_list() == EXPECTED_PRESENT_PER_PAYMENT
+
+
+def test_the_two_counts_are_named_after_their_setting_in_a_description() -> None:
+	"""
+	Check that a description holds both counts, each named after its setting.
+
+	.. versionadded:: 0.1.0
+	"""
+	functions = list[ndp.Statistic]([ndp.Count(), ndp.Count(missing=ndp.CountedMissing.INCLUDED)])
+
+	described = TRIPS.describe(ndp.Description(functions=functions, columns=["fare"]))
+
+	assert described.column("statistic").to_list() == EXPECTED_COUNT_NAMES
+	assert described.column("fare").to_list() == EXPECTED_FARE_COUNTS

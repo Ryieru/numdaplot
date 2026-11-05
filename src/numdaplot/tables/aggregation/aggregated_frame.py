@@ -132,7 +132,7 @@ def take_group_keys(frame: pandas.DataFrame, group_by: list[str], row_groups: li
 
 def compute_group_results(column: Column, statistic: Statistic, row_groups: list[NDArray[Any]]) -> Column:
 	"""
-	Return a statistic of the present values of a column, for each group of rows.
+	Return a statistic of the values of a column, for each group of rows, missing values left out unless counted.
 
 	.. versionadded:: 0.1.0
 
@@ -177,7 +177,8 @@ def compute_group_results(column: Column, statistic: Statistic, row_groups: list
 		present_rows = row_group[group_present]
 		group_value_positions = value_positions[present_rows]
 		group_values = present_values[group_value_positions]
-		result = compute_cell(group_values, statistic)
+		group_size = len(row_group)
+		result = compute_cell(group_values, statistic, group_size)
 		results.append(result)
 
 	utc_results = build_result_column(results)

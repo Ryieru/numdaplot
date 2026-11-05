@@ -14,6 +14,7 @@ from numpy.typing import NDArray
 from numdaplot.errors.column_not_found_error import ColumnNotFoundError
 from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
 from numdaplot.statistics.count import Count
+from numdaplot.statistics.counted_missing import CountedMissing
 from numdaplot.statistics.maximum import Max
 from numdaplot.statistics.mean import Mean
 from numdaplot.statistics.sum import Sum
@@ -40,6 +41,9 @@ EMPTY_DECIMALS = numpy.array([], dtype=numpy.float64)
 TEXTS = numpy.array(["a"], dtype="T")
 TWO_VALUES = numpy.array([2.0, 4.0])
 EXPECTED_MEAN = [3.0]
+VALUE_COUNT_WITH_MISSING = 5
+EVERY_ROW_COUNT_PRICES = [10.0, None, None]
+EXPECTED_GROUP_SIZES = [2, 1]
 EXPECTED_RESULTS = [2, pandas.NA]
 EXPECTED_MISSING_RESULT_DTYPE = "float64"
 EXPECTED_COLUMN_NAMES = ["city", "price_sum"]
@@ -188,7 +192,7 @@ def test_compute_cell_gives_nothing_when_a_value_is_needed() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	result = compute_cell(EMPTY_DECIMALS, Mean())
+	result = compute_cell(EMPTY_DECIMALS, Mean(), EMPTY_DECIMALS.size)
 
 	assert result is None
 
@@ -199,7 +203,7 @@ def test_compute_cell_gives_a_one_value_array() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	result = compute_cell(TWO_VALUES, Mean())
+	result = compute_cell(TWO_VALUES, Mean(), TWO_VALUES.size)
 
 	assert result is not None
 	result_list = result.tolist()
@@ -213,7 +217,7 @@ def test_compute_cell_rejects_a_statistic_that_does_not_apply() -> None:
 	.. versionadded:: 0.1.0
 	"""
 	with pytest.raises(IncompatibleTypesError):
-		compute_cell(TEXTS, Mean())
+		compute_cell(TEXTS, Mean(), TEXTS.size)
 
 
 def test_build_result_column_marks_missing_results() -> None:
@@ -304,3 +308,42 @@ def test_compute_group_results_keeps_the_zone_of_a_datetime_column() -> None:
 
 	results = result_column.tolist()
 	assert results == EXPECTED_LATEST
+
+
+def test_compute_cell_counts_every_value_when_the_count_includes_the_missing_ones() -> None:
+	"""
+	Check that a Count including the missing values gives the number of values before they were left out.
+
+	.. versionadded:: 0.1.0
+	"""
+	result = compute_cell(TWO_VALUES, Count(missing=CountedMissing.INCLUDED), VALUE_COUNT_WITH_MISSING)
+
+	assert result is not None
+	assert result.tolist() == [VALUE_COUNT_WITH_MISSING]
+
+
+def test_compute_cell_counts_the_present_values_by_default() -> None:
+	"""
+	Check that a default Count ignores the number of values before the missing ones were left out.
+
+	.. versionadded:: 0.1.0
+	"""
+	result = compute_cell(TWO_VALUES, Count(), VALUE_COUNT_WITH_MISSING)
+
+	assert result is not None
+	assert result.tolist() == [TWO_VALUES.size]
+
+
+def test_compute_group_results_counts_every_row_of_each_group() -> None:
+	"""
+	Check that a Count including the missing values gives the size of each group, a group without value included.
+
+	.. versionadded:: 0.1.0
+	"""
+	price_column = pandas.Series(EVERY_ROW_COUNT_PRICES)
+	row_groups = [numpy.array([0, 1]), numpy.array([2])]
+
+	result_column = compute_group_results(price_column, Count(missing=CountedMissing.INCLUDED), row_groups)
+
+	result_list = result_column.tolist()
+	assert result_list == EXPECTED_GROUP_SIZES

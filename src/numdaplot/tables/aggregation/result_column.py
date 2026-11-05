@@ -11,6 +11,8 @@ from numpy.typing import NDArray
 
 from numdaplot.arrays.calculation.statistic_values import compute_statistic
 from numdaplot.errors.empty_array_error import EmptyArrayError
+from numdaplot.statistics.count import Count
+from numdaplot.statistics.counted_missing import CountedMissing
 from numdaplot.statistics.statistic import Statistic
 from numdaplot.tables.frames.column import Column
 from numdaplot.tables.frames.column_values import build_column, build_column_with_missing
@@ -18,7 +20,7 @@ from numdaplot.tables.frames.column_values import build_column, build_column_wit
 MISSING_RESULT = numpy.nan
 
 
-def compute_cell(present_values: NDArray[Any], statistic: Statistic) -> NDArray[Any] | None:
+def compute_cell(present_values: NDArray[Any], statistic: Statistic, value_count: int) -> NDArray[Any] | None:
 	"""
 	Return a statistic of present values, or nothing when it needs a value and there is none.
 
@@ -30,6 +32,8 @@ def compute_cell(present_values: NDArray[Any], statistic: Statistic) -> NDArray[
 		One-dimensional values without missing value.
 	statistic
 		Any statistic of numdaplot.
+	value_count
+		The number of values before the missing ones were left out, the result of a ``Count`` including them.
 
 	Returns
 	-------
@@ -46,11 +50,18 @@ def compute_cell(present_values: NDArray[Any], statistic: Statistic) -> NDArray[
 	>>> import numpy
 	>>> import numdaplot as ndp
 	>>> from numdaplot.tables.aggregation.result_column import compute_cell
-	>>> compute_cell(numpy.array([10.0, 30.0]), ndp.Mean())
+	>>> compute_cell(numpy.array([10.0, 30.0]), ndp.Mean(), 3)
 	array([20.])
-	>>> print(compute_cell(numpy.array([], dtype=float), ndp.Mean()))
+	>>> print(compute_cell(numpy.array([], dtype=float), ndp.Mean(), 1))
 	None
+	>>> compute_cell(numpy.array([10.0, 30.0]), ndp.Count(missing=ndp.CountedMissing.INCLUDED), 3)
+	array([3])
 	"""
+	counts_every_value = isinstance(statistic, Count) and statistic.missing == CountedMissing.INCLUDED
+	if counts_every_value:
+		every_value_count = numpy.array([value_count])
+		return every_value_count
+
 	try:
 		result = compute_statistic(present_values, statistic, None)
 	except EmptyArrayError:

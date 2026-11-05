@@ -22,7 +22,7 @@ class Statistic:
 
 	|Statistic|What it computes|Example|
 	|---|---|---|
-	|``Count``|Number of values that are not missing|``ndp.Count()``|
+	|``Count``|Number of values, without the missing ones by default|``ndp.Count()``|
 	|``CountDistinct``|Number of distinct values that are not missing|``ndp.CountDistinct()``|
 	|``Sum``|Sum of the values|``ndp.Sum()``|
 	|``Mean``|Arithmetic mean of the values|``ndp.Mean()``|

@@ -7,7 +7,9 @@ Unit tests of the names of statistics.
 import pytest
 
 from numdaplot.errors.refused_operation_error import RefusedOperationError
+from numdaplot.statistics.count import Count
 from numdaplot.statistics.count_distinct import CountDistinct
+from numdaplot.statistics.counted_missing import CountedMissing
 from numdaplot.statistics.most_frequent_count import MostFrequentCount
 from numdaplot.statistics.quantile import Quantile
 from numdaplot.statistics.standard_deviation import StandardDeviation
@@ -33,6 +35,8 @@ class UnknownStatistic(Statistic):
 	("statistic", "expected_name"),
 	[
 		(Sum(), "sum"),
+		(Count(), "count_excluded"),
+		(Count(missing=CountedMissing.INCLUDED), "count_included"),
 		(CountDistinct(), "count_distinct"),
 		(StandardDeviation(), "standard_deviation"),
 		(MostFrequentCount(), "most_frequent_count"),

@@ -8,6 +8,7 @@ from numdaplot.arrays.calculation.statistic_values import UNKNOWN_STATISTIC_ALTE
 from numdaplot.errors.refused_operation_error import RefusedOperationError
 from numdaplot.statistics.count import Count
 from numdaplot.statistics.count_distinct import CountDistinct
+from numdaplot.statistics.counted_missing import CountedMissing
 from numdaplot.statistics.maximum import Max
 from numdaplot.statistics.mean import Mean
 from numdaplot.statistics.median import Median
@@ -25,11 +26,14 @@ STATISTIC_NAMES = {
 	Median: "median",
 	Min: "min",
 	Max: "max",
-	Count: "count",
 	CountDistinct: "count_distinct",
 	StandardDeviation: "standard_deviation",
 	MostFrequent: "most_frequent",
 	MostFrequentCount: "most_frequent_count",
+}
+COUNT_NAMES = {
+	CountedMissing.EXCLUDED: "count_excluded",
+	CountedMissing.INCLUDED: "count_included",
 }
 QUANTILE_NAME = "quantile_{percent}"
 PERCENT_FACTOR = 100
@@ -53,7 +57,8 @@ def name_statistic(statistic: Statistic) -> str:
 	Returns
 	-------
 	str
-		The name, such as ``standard_deviation``, or ``quantile_90`` for ``Quantile(0.9)``.
+		The name, such as ``standard_deviation``, ``quantile_90`` for ``Quantile(0.9)``, or ``count_excluded`` for
+		``Count()``.
 
 	Raises
 	------
@@ -70,6 +75,10 @@ def name_statistic(statistic: Statistic) -> str:
 	if isinstance(statistic, Quantile):
 		quantile_name = name_quantile(statistic)
 		return quantile_name
+
+	if isinstance(statistic, Count):
+		count_name = COUNT_NAMES[statistic.missing]
+		return count_name
 
 	statistic_class = type(statistic)
 	if statistic_class not in STATISTIC_NAMES:

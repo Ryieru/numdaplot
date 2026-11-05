@@ -27,7 +27,7 @@ class ArrayCalculation(ArrayData):
 	@checked_arguments
 	def compute(self, statistic: Statistic, axis: Axis | None = None) -> Self:
 		"""
-		Return a statistic of the values, ignoring missing values.
+		Return a statistic of the values, ignoring missing values unless ``Count`` is set to include them.
 
 		.. versionadded:: 0.1.0
 

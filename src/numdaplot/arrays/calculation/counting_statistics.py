@@ -1,18 +1,21 @@
 """
 Statistics counting the values of an Array: count, distinct count, most frequent value and its count.
 
-Each function ignores missing values and reduces the whole Array when ``axis`` is ``None``.
+Each function ignores missing values, unless ``Count`` is set to include them, and reduces the whole Array when
+``axis`` is ``None``.
 
 .. versionadded:: 0.1.0
 """
 
 from collections.abc import Callable
-from typing import Any
+from typing import Any, cast
 
 import numpy
 from numpy.typing import NDArray
 
 from numdaplot.arrays.selection.missing_mask import find_missing
+from numdaplot.statistics.count import Count
+from numdaplot.statistics.counted_missing import CountedMissing
 from numdaplot.statistics.statistic import Statistic
 
 LAST_AXIS = -1
@@ -21,7 +24,7 @@ NO_VALUE_COUNT = 0
 
 def compute_count(values: NDArray[Any], axis: int | None, statistic: Statistic) -> Any:
 	"""
-	Return the number of present values.
+	Return the number of present values, or of every value when the statistic includes the missing ones.
 
 	.. versionadded:: 0.1.0
 
@@ -32,7 +35,7 @@ def compute_count(values: NDArray[Any], axis: int | None, statistic: Statistic) 
 	axis
 		The numpy axis to reduce, or ``None`` for the whole Array.
 	statistic
-		The ``Count`` statistic.
+		The ``Count`` statistic, holding whether missing values are counted.
 
 	Returns
 	-------
@@ -46,12 +49,18 @@ def compute_count(values: NDArray[Any], axis: int | None, statistic: Statistic) 
 	>>> from numdaplot.arrays.calculation.counting_statistics import compute_count
 	>>> compute_count(numpy.array([1.0, numpy.nan]), None, ndp.Count())
 	np.int64(1)
+	>>> compute_count(numpy.array([1.0, numpy.nan]), None, ndp.Count(missing=ndp.CountedMissing.INCLUDED))
+	np.int64(2)
 	"""
-	missing = find_missing(values)
-	present = ~missing
-	present_count = numpy.sum(present, axis=axis)
+	count = cast(Count, statistic)
+	counted = numpy.ones(values.shape, dtype=numpy.bool_)
+	if count.missing == CountedMissing.EXCLUDED:
+		missing = find_missing(values)
+		counted = ~missing
 
-	return present_count
+	counted_values = numpy.sum(counted, axis=axis)
+
+	return counted_values
 
 
 def compute_count_distinct(values: NDArray[Any], axis: int | None, statistic: Statistic) -> Any:

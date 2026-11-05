@@ -174,6 +174,7 @@ from numdaplot.rules.not_equal import NotEqual
 from numdaplot.rules.rule import Rule
 from numdaplot.statistics.count import Count
 from numdaplot.statistics.count_distinct import CountDistinct
+from numdaplot.statistics.counted_missing import CountedMissing
 from numdaplot.statistics.maximum import Max
 from numdaplot.statistics.mean import Mean
 from numdaplot.statistics.median import Median
@@ -252,6 +253,7 @@ __all__ = [
 	"Cosine",
 	"Count",
 	"CountDistinct",
+	"CountedMissing",
 	"CsvOptions",
 	"CustomColor",
 	"CustomDateFormat",

@@ -27,10 +27,10 @@ class Calculation:
 		The name of the column.
 	function
 		A ``Statistic``, such as ``ndp.Mean()`` or ``ndp.Quantile(0.9)``: see ``Statistic`` for every statistic.
-		Missing values are ignored.
+		Missing values are ignored, unless ``Count`` is set to include them.
 	result_name
 		The name of the result column. When omitted, it is ``<column>_<function>``, such as ``"price_mean"``
-		or ``"price_quantile_90"``.
+		``"price_quantile_90"`` or ``"price_count_excluded"``.
 
 	Raises
 	------

@@ -65,9 +65,9 @@ def describe_frame(frame: pandas.DataFrame, description: Description) -> pandas.
 	>>> from numdaplot.tables.description.described_frame import describe_frame
 	>>> frame = pandas.DataFrame({"price": [1.0, 3.0]})
 	>>> describe_frame(frame, ndp.Description(functions=[ndp.Count(), ndp.Mean()]))
-	  statistic  price
-	0     count    2.0
-	1      mean    2.0
+	        statistic  price
+	0  count_excluded    2.0
+	1            mean    2.0
 	"""
 	functions = list[Statistic](DEFAULT_FUNCTIONS)
 	if description.functions is not None:
@@ -204,7 +204,8 @@ def describe_column(column: Column, functions: list[Statistic]) -> Column:
 	['2', 'a', <NA>]
 	"""
 	present_values = read_present_values(column)
-	results = [compute_description_cell(present_values, function) for function in functions]
+	value_count = len(column)
+	results = [compute_description_cell(present_values, function, value_count) for function in functions]
 	present_results = [result for result in results if result is not None]
 	result_families = {find_result_family(result) for result in present_results}
 	family_count = len(result_families)
@@ -218,7 +219,11 @@ def describe_column(column: Column, functions: list[Statistic]) -> Column:
 	return described_column
 
 
-def compute_description_cell(present_values: NDArray[Any], statistic: Statistic) -> NDArray[Any] | None:
+def compute_description_cell(
+	present_values: NDArray[Any],
+	statistic: Statistic,
+	value_count: int,
+) -> NDArray[Any] | None:
 	"""
 	Return a statistic of present values, or nothing when it does not apply or finds no value.
 
@@ -230,6 +235,8 @@ def compute_description_cell(present_values: NDArray[Any], statistic: Statistic)
 		One-dimensional values without missing value.
 	statistic
 		Any statistic of numdaplot.
+	value_count
+		The number of values before the missing ones were left out.
 
 	Returns
 	-------
@@ -242,13 +249,13 @@ def compute_description_cell(present_values: NDArray[Any], statistic: Statistic)
 	>>> import numdaplot as ndp
 	>>> from numdaplot.tables.description.described_frame import compute_description_cell
 	>>> texts = numpy.array(["b", "a"], dtype="T")
-	>>> compute_description_cell(texts, ndp.Min())
+	>>> compute_description_cell(texts, ndp.Min(), 2)
 	array(['a'], dtype=StringDType())
-	>>> print(compute_description_cell(texts, ndp.Mean()))
+	>>> print(compute_description_cell(texts, ndp.Mean(), 2))
 	None
 	"""
 	try:
-		result = compute_cell(present_values, statistic)
+		result = compute_cell(present_values, statistic, value_count)
 	except IncompatibleTypesError:
 		return None
 

@@ -34,7 +34,16 @@ FRAME = pandas.DataFrame(
 		"paid": pandas.Series([True, False], dtype="boolean"),
 	}
 )
-EXPECTED_DEFAULT_NAMES = ["count", "mean", "standard_deviation", "min", "quantile_25", "median", "quantile_75", "max"]
+EXPECTED_DEFAULT_NAMES = [
+	"count_excluded",
+	"mean",
+	"standard_deviation",
+	"min",
+	"quantile_25",
+	"median",
+	"quantile_75",
+	"max",
+]
 EXPECTED_COLUMN_NAMES = ["statistic", "price", "count"]
 EXPECTED_NUMBER_COLUMNS = ["price", "count"]
 STATISTIC_FRAME = pandas.DataFrame({"statistic": [1.0]})
@@ -143,7 +152,7 @@ def test_compute_description_cell_gives_nothing_for_a_statistic_that_does_not_ap
 
 	.. versionadded:: 0.1.0
 	"""
-	result = compute_description_cell(TEXTS, Mean())
+	result = compute_description_cell(TEXTS, Mean(), TEXTS.size)
 
 	assert result is None
 
