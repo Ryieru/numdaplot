@@ -9,10 +9,10 @@ import pytest
 import numdaplot as ndp
 
 LINE = [1, 2, 3, 4, 5, 6]
-GRID_SHAPE = ndp.Shape((2, 3))
+GRID_SHAPE = ndp.Shape([2, 3])
 EXPECTED_GRID = [[1, 2, 3], [4, 5, 6]]
 EXPECTED_TRANSPOSED = [[1, 4], [2, 5], [3, 6]]
-WRONG_SHAPE = ndp.Shape((4, 2))
+WRONG_SHAPE = ndp.Shape([4, 2])
 SCORES = [[3, 1, 2], [9, 7, 8]]
 EXPECTED_ROWS_SORTED = [[1, 2, 3], [7, 8, 9]]
 EXPECTED_COLUMNS_DESCENDING = [[9, 7, 8], [3, 1, 2]]

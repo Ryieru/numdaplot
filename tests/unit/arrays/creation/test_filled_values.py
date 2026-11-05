@@ -11,7 +11,7 @@ from numdaplot.arrays.shape import Shape
 from numdaplot.data_types.type import Type
 from numdaplot.errors.value_conversion_error import ValueConversionError
 
-GRID_SHAPE = Shape((2, 3))
+GRID_SHAPE = Shape([2, 3])
 ZERO = 0
 DECIMAL_VALUE = 1.5
 EXPECTED_ZEROS = [[0, 0, 0], [0, 0, 0]]

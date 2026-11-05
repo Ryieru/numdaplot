@@ -50,7 +50,7 @@ class Array(
 	>>> prices
 	Array([12.5,  8. , 30. ], dtype=FLOAT64)
 	>>> prices.shape
-	Shape(dimensions=(3,))
+	Shape(dimensions=[3])
 	>>> prices.dtype
 	<Type.FLOAT64: 10>
 	"""

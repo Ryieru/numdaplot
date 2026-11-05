@@ -30,7 +30,7 @@ class InvalidSeedError(NumdaplotError):
 	>>> import numdaplot as ndp
 	>>> dice = ndp.RandomIntegers(low=1, high=6)
 	>>> try:
-	... 	ndp.Array.random(dice, shape=ndp.Shape((3,)), seed=-1)
+	... 	ndp.Array.random(dice, shape=ndp.Shape([3]), seed=-1)
 	... except ndp.InvalidSeedError as error:
 	... 	print(error)
 	Expected a seed of at least 0, got -1.

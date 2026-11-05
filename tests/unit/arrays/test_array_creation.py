@@ -23,7 +23,7 @@ NUMPY_VALUES = [1, 2]
 CHANGED_VALUE = 99
 FIRST_POSITION = 0
 LIST_VALUES = [1, 2]
-SHAPE = Shape((3,))
+SHAPE = Shape([3])
 FILL_VALUE = 0
 SEQUENCE = Range(start=0, stop=2)
 SPACING = Spacing(start=0, stop=1, count=3)

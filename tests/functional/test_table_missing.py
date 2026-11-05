@@ -207,7 +207,7 @@ def test_drop_missing_removes_the_columns_reaching_a_ratio() -> None:
 	.. versionadded:: 0.1.0
 	"""
 	visits = build_visits()
-	settings = ndp.MissingDrop(rule=ndp.MissingRatio(ratio=HALF_RATIO))
+	settings = ndp.MissingDrop(rule=ndp.MissingRatio(HALF_RATIO))
 
 	remaining = visits.drop_missing(settings, axis=ndp.Axis.EACH_COLUMN)
 
@@ -233,4 +233,4 @@ def test_missing_ratio_rejects_a_percentage() -> None:
 	.. versionadded:: 0.1.0
 	"""
 	with pytest.raises(ndp.InvalidFractionError):
-		ndp.MissingRatio(ratio=PERCENTAGE_RATIO)
+		ndp.MissingRatio(PERCENTAGE_RATIO)

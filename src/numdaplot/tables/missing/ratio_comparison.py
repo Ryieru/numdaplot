@@ -19,7 +19,7 @@ class RatioComparison(Enum):
 	>>> prices = ndp.Array.from_list([120.0, None, 80.0, None])
 	>>> stocks = ndp.Array.from_list([3.0, 5.0, None, 2.0])
 	>>> table = ndp.Table.from_arrays({"price": prices, "stock": stocks})
-	>>> half = ndp.MissingRatio(ratio=0.5, comparison=ndp.RatioComparison.ABOVE)
+	>>> half = ndp.MissingRatio(0.5, comparison=ndp.RatioComparison.ABOVE)
 	>>> table.drop_missing(ndp.MissingDrop(rule=half), axis=ndp.Axis.EACH_COLUMN)
 	    price   stock
 	  FLOAT64 FLOAT64
@@ -39,7 +39,7 @@ class RatioComparison(Enum):
 	>>> prices = ndp.Array.from_list([120.0, None, 80.0, None])
 	>>> stocks = ndp.Array.from_list([3.0, 5.0, None, 2.0])
 	>>> table = ndp.Table.from_arrays({"price": prices, "stock": stocks})
-	>>> half = ndp.MissingRatio(ratio=0.5, comparison=ndp.RatioComparison.AT_LEAST)
+	>>> half = ndp.MissingRatio(0.5, comparison=ndp.RatioComparison.AT_LEAST)
 	>>> table.drop_missing(ndp.MissingDrop(rule=half), axis=ndp.Axis.EACH_COLUMN)
 	    stock
 	  FLOAT64
@@ -59,7 +59,7 @@ class RatioComparison(Enum):
 	>>> prices = ndp.Array.from_list([120.0, None, 80.0, None])
 	>>> stocks = ndp.Array.from_list([3.0, 5.0, None, 2.0])
 	>>> table = ndp.Table.from_arrays({"price": prices, "stock": stocks})
-	>>> half = ndp.MissingRatio(ratio=0.5, comparison=ndp.RatioComparison.ABOVE)
+	>>> half = ndp.MissingRatio(0.5, comparison=ndp.RatioComparison.ABOVE)
 	>>> table.drop_missing(ndp.MissingDrop(rule=half), axis=ndp.Axis.EACH_COLUMN)
 	    price   stock
 	  FLOAT64 FLOAT64

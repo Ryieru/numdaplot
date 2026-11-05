@@ -18,6 +18,7 @@ EXPECTED_REGION_MESSAGE = "Region rows expects an Index, a Range or None, got 0.
 EXPECTED_PREVIEW_MESSAGE = "Preview side expects a Side such as Side.END, got 'end'."
 EXPECTED_EQUAL_NONE_MESSAGE = "Equal(None) is not available, use IsMissing instead."
 REFUSED_SHEET_NAME = "Sales/2026"
+EXPECTED_SHAPE_MESSAGE = "Shape dimensions expects a list such as [3, 4], got (3, 4)."
 TEXT_FOR_LIST_CASES = [
 	(lambda: ndp.BarChart(x="city", y="price"), "BarChart y expects a list such as ['price'], got 'price'."),
 	(lambda: ndp.LineChart(y="price"), "LineChart y expects a list such as ['price'], got 'price'."),
@@ -49,7 +50,7 @@ CLASS_CASES = [
 	(lambda: PRICES.compute(ndp.Sum), "ndp.Sum is a class, use ndp.Sum() instead."),
 	(lambda: PRICES.apply(ndp.SquareRoot), "ndp.SquareRoot is a class, use ndp.SquareRoot() instead."),
 	(
-		lambda: ndp.Array.random(ndp.Uniform, shape=ndp.Shape((2,))),
+		lambda: ndp.Array.random(ndp.Uniform, shape=ndp.Shape([2])),
 		"ndp.Uniform is a class, use ndp.Uniform() instead.",
 	),
 	(lambda: ndp.plot_line(PRICES, ndp.LineChart), "ndp.LineChart is a class, use ndp.LineChart() instead."),
@@ -158,3 +159,16 @@ def test_an_excel_sheet_name_with_a_slash_is_refused() -> None:
 	"""
 	with pytest.raises(ndp.InvalidSheetNameError):
 		ndp.ExcelOptions(sheet=REFUSED_SHEET_NAME)
+
+
+def test_a_shape_written_as_a_tuple_names_the_list_to_write() -> None:
+	"""
+	Check that a tuple, written as in numpy, names the list a Shape expects.
+
+	.. versionadded:: 0.1.0
+	"""
+	with pytest.raises(ndp.InvalidSettingTypeError) as error_info:
+		ndp.Shape((3, 4))
+
+	message = str(error_info.value)
+	assert message == EXPECTED_SHAPE_MESSAGE

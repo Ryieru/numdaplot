@@ -88,9 +88,10 @@ class ArrayData:
 		--------
 		>>> import numdaplot as ndp
 		>>> ndp.Array.from_list([[1, 2, 3], [4, 5, 6]]).shape
-		Shape(dimensions=(2, 3))
+		Shape(dimensions=[2, 3])
 		"""
-		array_shape = Shape(self._values.shape)
+		dimensions = list(self._values.shape)
+		array_shape = Shape(dimensions)
 
 		return array_shape
 

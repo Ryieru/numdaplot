@@ -44,7 +44,7 @@ def build_filled_values(shape: Shape, value: ScalarValue, dtype: Type | None) ->
 	--------
 	>>> import numdaplot as ndp
 	>>> from numdaplot.arrays.creation.filled_values import build_filled_values
-	>>> build_filled_values(ndp.Shape((2, 3)), 0, None)
+	>>> build_filled_values(ndp.Shape([2, 3]), 0, None)
 	array([[0, 0, 0],
 	       [0, 0, 0]])
 	"""

@@ -7,8 +7,8 @@ Unit tests of InvalidShapeError.
 from numdaplot.errors.invalid_shape_error import InvalidShapeError
 from numdaplot.errors.numdaplot_error import NumdaplotError
 
-DIMENSIONS = (3, -1)
-EXPECTED_MESSAGE = "Expected at least one dimension and no negative dimension, got (3, -1)."
+DIMENSIONS = [3, -1]
+EXPECTED_MESSAGE = "Expected at least one dimension and no negative dimension, got [3, -1]."
 
 
 def test_invalid_shape_error_is_a_numdaplot_error() -> None:

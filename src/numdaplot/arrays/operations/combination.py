@@ -118,7 +118,7 @@ def check_shapes(left: Operand, right: Operand) -> None:
 	... 	check_shapes(numpy.array([1, 2]), numpy.array([1, 2, 3]))
 	... except ndp.ShapeMismatchError as error:
 	... 	print(error)
-	Expected matching shapes, got (2,) and (3,).
+	Expected matching shapes, got [2] and [3].
 	"""
 	if not isinstance(left, numpy.ndarray):
 		return

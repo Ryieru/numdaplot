@@ -54,7 +54,7 @@ Examples
 --------
 >>> import numdaplot as ndp
 >>> ndp.Array.from_list([[1, 2], [3, 4]]).shape
-Shape(dimensions=(2, 2))
+Shape(dimensions=[2, 2])
 """
 
 
@@ -182,7 +182,7 @@ class ArrayCreation(ArrayData):
 		Examples
 		--------
 		>>> import numdaplot as ndp
-		>>> ndp.Array.filled(shape=ndp.Shape((2, 3)), value=0)
+		>>> ndp.Array.filled(shape=ndp.Shape([2, 3]), value=0)
 		Array([[0, 0, 0],
 		       [0, 0, 0]], dtype=INT64)
 		"""
@@ -281,7 +281,7 @@ class ArrayCreation(ArrayData):
 		--------
 		>>> import numdaplot as ndp
 		>>> dice = ndp.RandomIntegers(low=1, high=6)
-		>>> ndp.Array.random(dice, shape=ndp.Shape((5,)), seed=0)
+		>>> ndp.Array.random(dice, shape=ndp.Shape([5]), seed=0)
 		Array([6, 4, 4, 2, 2], dtype=INT64)
 		"""
 		random_values = draw_random_values(distribution, shape, seed)

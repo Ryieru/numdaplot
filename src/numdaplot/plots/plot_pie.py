@@ -24,7 +24,7 @@ Y_TICK_ROTATION_SETTING = "y_tick_rotation"
 FUNCTION_NAME = "plot_pie"
 
 
-def plot_pie(data: Table, chart: PieChart, style: PlotStyle | None = None) -> Plot:
+def plot_pie(table: Table, chart: PieChart, style: PlotStyle | None = None) -> Plot:
 	"""
 	Return a Plot sharing out the values of a column of a Table as slices of a disc.
 
@@ -35,7 +35,7 @@ def plot_pie(data: Table, chart: PieChart, style: PlotStyle | None = None) -> Pl
 
 	Parameters
 	----------
-	data
+	table
 		The Table drawn.
 	chart
 		The labels, the values, the percentages and the colors.
@@ -50,7 +50,7 @@ def plot_pie(data: Table, chart: PieChart, style: PlotStyle | None = None) -> Pl
 	Raises
 	------
 	UnsupportedDataError
-		When the data is an Array.
+		When ``table`` is an Array.
 	ColumnNotFoundError
 		When a column does not exist.
 	IncompatibleTypesError
@@ -88,7 +88,7 @@ def plot_pie(data: Table, chart: PieChart, style: PlotStyle | None = None) -> Pl
 	>>> plot.show()
 	"""
 	require_chart_class(chart, PieChart, FUNCTION_NAME)
-	values = read_pie_values(data, chart)
+	values = read_pie_values(table, chart)
 	slice_count = len(values.rows)
 	require_color_count(chart.colors, slice_count)
 	require_no_axis_settings(style)

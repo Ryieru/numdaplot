@@ -49,7 +49,7 @@ class ArrayLayout(ArrayData):
 		Examples
 		--------
 		>>> import numdaplot as ndp
-		>>> ndp.Array.from_list([1, 2, 3, 4, 5, 6]).reshape(ndp.Shape((2, 3)))
+		>>> ndp.Array.from_list([1, 2, 3, 4, 5, 6]).reshape(ndp.Shape([2, 3]))
 		Array([[1, 2, 3],
 		       [4, 5, 6]], dtype=INT64)
 		"""

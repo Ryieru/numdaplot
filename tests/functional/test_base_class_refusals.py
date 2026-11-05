@@ -9,7 +9,7 @@ import pytest
 import numdaplot as ndp
 
 PRICES = [12.0, 15.5]
-DRAW_SHAPE = ndp.Shape((2,))
+DRAW_SHAPE = ndp.Shape([2])
 BASE_CLASS_MESSAGES = [
 	(ndp.Rule, "Creating a Rule with ndp.Rule() is not available, use a rule such as ndp.Greater instead."),
 	(

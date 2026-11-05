@@ -195,7 +195,7 @@ def find_dropped(
 	>>> from numdaplot.tables.missing.missing_removal import find_dropped
 	>>> find_dropped(numpy.array([0, 1, 2]), 2, ndp.MissingMode.ALL)
 	array([False, False,  True])
-	>>> find_dropped(numpy.array([0, 1, 2]), 2, ndp.MissingRatio(ratio=0.5, comparison=ndp.RatioComparison.ABOVE))
+	>>> find_dropped(numpy.array([0, 1, 2]), 2, ndp.MissingRatio(0.5, comparison=ndp.RatioComparison.ABOVE))
 	array([False, False,  True])
 	"""
 	if value_count == 0:
@@ -244,7 +244,7 @@ def find_ratio_dropped(
 	>>> import numpy
 	>>> import numdaplot as ndp
 	>>> from numdaplot.tables.missing.missing_removal import find_ratio_dropped
-	>>> find_ratio_dropped(numpy.array([0, 1, 2]), 2, ndp.MissingRatio(ratio=0.5))
+	>>> find_ratio_dropped(numpy.array([0, 1, 2]), 2, ndp.MissingRatio(0.5))
 	array([False,  True,  True])
 	"""
 	ratios = divide_counts(counts, value_count)

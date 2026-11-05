@@ -4,15 +4,18 @@ Unit tests of Shape.
 .. versionadded:: 0.1.0
 """
 
+from typing import Any, cast
+
 import pytest
 
 from numdaplot.arrays.shape import Shape
+from numdaplot.errors.invalid_setting_type_error import InvalidSettingTypeError
 from numdaplot.errors.invalid_shape_error import InvalidShapeError
 
-GRID_DIMENSIONS = (3, 4)
-EMPTY_DIMENSIONS = (0, 3)
-NO_DIMENSION = ()
-NEGATIVE_DIMENSIONS = (3, -1)
+GRID_DIMENSIONS = [3, 4]
+EMPTY_DIMENSIONS = [0, 3]
+NO_DIMENSION = list[int]()
+NEGATIVE_DIMENSIONS = [3, -1]
 
 
 def test_shape_keeps_its_dimensions() -> None:
@@ -55,3 +58,35 @@ def test_shape_rejects_a_negative_dimension() -> None:
 	"""
 	with pytest.raises(InvalidShapeError):
 		Shape(NEGATIVE_DIMENSIONS)
+
+
+@pytest.mark.parametrize("dimensions", [(3, 4), 3])
+def test_shape_rejects_dimensions_that_are_not_a_list(dimensions: object) -> None:
+	"""
+	Check that a tuple or a number raises InvalidSettingTypeError.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	dimensions
+		Dimensions that are not a list.
+	"""
+	untyped_shape = cast(Any, Shape)
+
+	with pytest.raises(InvalidSettingTypeError):
+		untyped_shape(dimensions)
+
+
+def test_shape_keeps_its_own_copy_of_the_dimensions() -> None:
+	"""
+	Check that changing the given list afterwards changes nothing.
+
+	.. versionadded:: 0.1.0
+	"""
+	dimensions = list(GRID_DIMENSIONS)
+	shape = Shape(dimensions)
+
+	dimensions.clear()
+
+	assert shape.dimensions == GRID_DIMENSIONS

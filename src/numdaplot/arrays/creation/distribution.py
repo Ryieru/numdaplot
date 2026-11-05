@@ -31,7 +31,7 @@ class Distribution:
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> shape = ndp.Shape((3,))
+	>>> shape = ndp.Shape([3])
 	>>> for distribution in [ndp.Uniform(low=0, high=10), ndp.RandomIntegers(low=0, high=10)]:
 	... 	print(ndp.Array.random(distribution, shape=shape, seed=1))
 	Array([5.11821625, 9.50463696, 1.44159613], dtype=FLOAT64)

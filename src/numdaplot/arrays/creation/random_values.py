@@ -59,7 +59,7 @@ def draw_random_values(distribution: Distribution, shape: Shape, seed: int | Non
 	>>> import numdaplot as ndp
 	>>> from numdaplot.arrays.creation.random_values import draw_random_values
 	>>> dice = ndp.RandomIntegers(low=1, high=6)
-	>>> draw_random_values(dice, ndp.Shape((4,)), 0)
+	>>> draw_random_values(dice, ndp.Shape([4]), 0)
 	array([6, 4, 4, 2])
 	"""
 	require_object_not_class(DISTRIBUTION_SETTING, DISTRIBUTION_EXPECTED, distribution)

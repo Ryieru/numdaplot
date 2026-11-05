@@ -29,13 +29,13 @@ class InvalidShapeError(NumdaplotError):
 	--------
 	>>> import numdaplot as ndp
 	>>> try:
-	... 	ndp.Shape((3, -1))
+	... 	ndp.Shape([3, -1])
 	... except ndp.InvalidShapeError as error:
 	... 	print(error)
-	Expected at least one dimension and no negative dimension, got (3, -1).
+	Expected at least one dimension and no negative dimension, got [3, -1].
 	"""
 
-	def __init__(self, dimensions: tuple[int, ...]) -> None:
+	def __init__(self, dimensions: list[int]) -> None:
 		"""
 		Build the error message from the dimensions.
 

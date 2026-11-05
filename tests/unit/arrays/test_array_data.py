@@ -22,7 +22,7 @@ from numdaplot.errors.refused_operation_error import RefusedOperationError
 from numdaplot.errors.unsupported_operand_error import UnsupportedOperandError
 
 GRID = [[1, 2, 3], [4, 5, 6]]
-GRID_SHAPE = Shape((2, 3))
+GRID_SHAPE = Shape([2, 3])
 DECIMALS = [1.5]
 CHANGED_VALUE = 99
 FIRST_POSITION = (0, 0)

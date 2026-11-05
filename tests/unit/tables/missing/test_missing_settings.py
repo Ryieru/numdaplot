@@ -43,7 +43,7 @@ def test_missing_ratio_reaches_its_threshold_at_least_by_default() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	missing_ratio = MissingRatio(ratio=HALF_RATIO)
+	missing_ratio = MissingRatio(HALF_RATIO)
 
 	assert missing_ratio.comparison == RatioComparison.AT_LEAST
 
@@ -61,7 +61,7 @@ def test_missing_ratio_rejects_a_value_that_is_not_a_fraction(ratio: float) -> N
 		A rejected ratio.
 	"""
 	with pytest.raises(InvalidFractionError):
-		MissingRatio(ratio=ratio)
+		MissingRatio(ratio)
 
 
 def test_missing_drop_removes_rows_with_any_missing_value_in_every_column_by_default() -> None:

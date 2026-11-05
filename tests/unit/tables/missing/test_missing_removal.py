@@ -76,9 +76,9 @@ DROP_CASES = [
 	DropCase(MissingDrop(), Axis.EACH_ROW, [1.0], EVERY_NAME),
 	DropCase(MissingDrop(columns=["price"]), Axis.EACH_ROW, [1.0, 4.0], EVERY_NAME),
 	DropCase(MissingDrop(columns=["price", "stock"], rule=MissingMode.ALL), Axis.EACH_ROW, [1.0, 3.0, 4.0], EVERY_NAME),
-	DropCase(MissingDrop(rule=MissingRatio(ratio=ONE_THIRD_RATIO)), Axis.EACH_ROW, [1.0], EVERY_NAME),
+	DropCase(MissingDrop(rule=MissingRatio(ONE_THIRD_RATIO)), Axis.EACH_ROW, [1.0], EVERY_NAME),
 	DropCase(
-		MissingDrop(rule=MissingRatio(ratio=ONE_THIRD_RATIO, comparison=RatioComparison.ABOVE)),
+		MissingDrop(rule=MissingRatio(ONE_THIRD_RATIO, comparison=RatioComparison.ABOVE)),
 		Axis.EACH_ROW,
 		[1.0, 3.0, 4.0],
 		EVERY_NAME,
@@ -87,7 +87,7 @@ DROP_CASES = [
 	DropCase(MissingDrop(columns=["price"]), Axis.EACH_COLUMN, [1.0, 2.0, 3.0, 4.0], ["visit", "stock"]),
 	DropCase(MissingDrop(rule=MissingMode.ALL), Axis.EACH_COLUMN, [1.0, 2.0, 3.0, 4.0], EVERY_NAME),
 	DropCase(
-		MissingDrop(rule=MissingRatio(ratio=HALF_RATIO, comparison=RatioComparison.ABOVE)),
+		MissingDrop(rule=MissingRatio(HALF_RATIO, comparison=RatioComparison.ABOVE)),
 		Axis.EACH_COLUMN,
 		[1.0, 2.0, 3.0, 4.0],
 		EVERY_NAME,
@@ -228,7 +228,7 @@ def test_find_ratio_dropped_at_least_includes_the_threshold() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	dropped = find_ratio_dropped(COUNTS, VALUE_COUNT, MissingRatio(ratio=ONE_THIRD_RATIO))
+	dropped = find_ratio_dropped(COUNTS, VALUE_COUNT, MissingRatio(ONE_THIRD_RATIO))
 
 	dropped_list = dropped.tolist()
 	assert dropped_list == EXPECTED_ANY_DROPPED
@@ -240,7 +240,7 @@ def test_find_ratio_dropped_above_excludes_the_threshold() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	above_third = MissingRatio(ratio=ONE_THIRD_RATIO, comparison=RatioComparison.ABOVE)
+	above_third = MissingRatio(ONE_THIRD_RATIO, comparison=RatioComparison.ABOVE)
 
 	dropped = find_ratio_dropped(COUNTS, VALUE_COUNT, above_third)
 

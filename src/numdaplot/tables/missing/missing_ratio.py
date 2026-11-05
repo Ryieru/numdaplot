@@ -38,7 +38,7 @@ class MissingRatio:
 	>>> prices = ndp.Array.from_list([120.0, None, 80.0, None])
 	>>> stocks = ndp.Array.from_list([3.0, 5.0, None, 2.0])
 	>>> table = ndp.Table.from_arrays({"price": prices, "stock": stocks})
-	>>> table.drop_missing(ndp.MissingDrop(rule=ndp.MissingRatio(ratio=0.4)), axis=ndp.Axis.EACH_COLUMN)
+	>>> table.drop_missing(ndp.MissingDrop(rule=ndp.MissingRatio(0.4)), axis=ndp.Axis.EACH_COLUMN)
 	    stock
 	  FLOAT64
 	0     3.0

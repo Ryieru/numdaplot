@@ -23,9 +23,9 @@ from numdaplot.positions.axis import Axis
 SORT_VALUES_NAME = "sort_values"
 FIND_UNIQUE_VALUES_NAME = "find_unique_values"
 LINE = [1, 2, 3, 4, 5, 6]
-GRID_SHAPE = Shape((2, 3))
+GRID_SHAPE = Shape([2, 3])
 EXPECTED_GRID = [[1, 2, 3], [4, 5, 6]]
-WRONG_SHAPE = Shape((4, 2))
+WRONG_SHAPE = Shape([4, 2])
 GRID = [[1, 2, 3], [4, 5, 6]]
 EXPECTED_TRANSPOSED_GRID = [[1, 4], [2, 5], [3, 6]]
 EXPECTED_FLAT_VALUES = [1, 2, 3, 4, 5, 6]

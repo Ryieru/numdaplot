@@ -12,19 +12,19 @@ import pytest
 import numdaplot as ndp
 
 PRICES = [12, 8, 30]
-PRICES_SHAPE = ndp.Shape((3,))
+PRICES_SHAPE = ndp.Shape([3])
 GRID = [[1.5, None], [3.0, 4.0]]
-GRID_SHAPE = ndp.Shape((2, 2))
+GRID_SHAPE = ndp.Shape([2, 2])
 DATES = [date(2026, 1, 31), None]
 MIXED_VALUES = [1, "a"]
 AGES = [8, 30, 255]
 NEGATIVE_AGES = [8, -1]
 SEED = 7
-DIE_SHAPE = ndp.Shape((100,))
+DIE_SHAPE = ndp.Shape([100])
 DIE_FACES = {1, 2, 3, 4, 5, 6}
 EXPECTED_RANGE = [0.0, 0.25, 0.5, 0.75, 1.0]
 EXPECTED_EXCLUDED_SPACING = [0.2, 0.4, 0.6, 0.8]
-FILLED_SHAPE = ndp.Shape((2, 3))
+FILLED_SHAPE = ndp.Shape([2, 3])
 EXPECTED_FILLED = [[0.0, 0.0, 0.0], [0.0, 0.0, 0.0]]
 NUMPY_TEXTS = numpy.array(["Paris", "Lyon"])
 

@@ -20,7 +20,7 @@ EXPECTED_OTHER = "3"
 EXPECTED_SEPARATOR = "';'"
 EXPECTED_SHAPE_NAME = "SHAPE"
 LITERAL_SOURCES = ["','", "10", "None", "(2, 3)"]
-EXPRESSION_SOURCES = ["Shape((2, 3))", "make_shape()", "values"]
+EXPRESSION_SOURCES = ["Shape([2, 3])", "make_shape()", "values"]
 UNKNOWN_NAME = "MISSING"
 
 

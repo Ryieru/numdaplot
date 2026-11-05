@@ -22,8 +22,8 @@ from numdaplot.rules.bounds import Bounds
 SEED = 42
 NEGATIVE_SEED = -1
 DRAW_COUNT = 1000
-DRAW_SHAPE = Shape((DRAW_COUNT,))
-GRID_SHAPE = Shape((2, 3))
+DRAW_SHAPE = Shape([DRAW_COUNT])
+GRID_SHAPE = Shape([2, 3])
 DIE = RandomIntegers(low=1, high=6)
 EXCLUSIVE_DIE = RandomIntegers(low=1, high=6, bounds=Bounds.EXCLUDED)
 UNIT_INTERVAL = Uniform(low=0, high=1)
@@ -54,7 +54,8 @@ def test_draw_random_values_follows_the_shape() -> None:
 	"""
 	values = draw_random_values(UNIT_INTERVAL, GRID_SHAPE, SEED)
 
-	assert values.shape == GRID_SHAPE.dimensions
+	dimensions = list(values.shape)
+	assert dimensions == GRID_SHAPE.dimensions
 
 
 def test_draw_random_values_draws_every_face_of_a_die() -> None:

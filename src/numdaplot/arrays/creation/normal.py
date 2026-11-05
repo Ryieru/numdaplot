@@ -36,7 +36,7 @@ class Normal(Distribution):
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> ndp.Array.random(ndp.Normal(mean=170, deviation=10), shape=ndp.Shape((3,)), seed=0)
+	>>> ndp.Array.random(ndp.Normal(mean=170, deviation=10), shape=ndp.Shape([3]), seed=0)
 	Array([171.25730221, 168.67895137, 176.4042265 ], dtype=FLOAT64)
 	"""
 

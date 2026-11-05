@@ -39,7 +39,7 @@ class RandomIntegers(Distribution):
 	--------
 	>>> import numdaplot as ndp
 	>>> dice = ndp.RandomIntegers(low=1, high=6)
-	>>> ndp.Array.random(dice, shape=ndp.Shape((5,)), seed=0)
+	>>> ndp.Array.random(dice, shape=ndp.Shape([5]), seed=0)
 	Array([6, 4, 4, 2, 2], dtype=INT64)
 	"""
 
