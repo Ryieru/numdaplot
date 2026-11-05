@@ -12,12 +12,13 @@ from typing import Any, cast
 import numpy
 from matplotlib.axes import Axes
 from matplotlib.axis import Axis
-from matplotlib.dates import AutoDateLocator, ConciseDateFormatter
+from matplotlib.dates import AutoDateLocator
 from numpy.typing import NDArray
 
 from numdaplot.arrays.conversion.time_text import format_datetimes
 from numdaplot.plots.data.chart_values import Positions
 from numdaplot.plots.data.position_kind import PositionKind
+from numdaplot.plots.drawing.moment_period_formatter import MomentPeriodFormatter
 from numdaplot.plots.drawing.whole_numbers import place_whole_ticks
 
 DAY_UNIT = "D"
@@ -30,7 +31,8 @@ def place_positions(axes: Axes, positions: Positions, on_vertical_axis: bool) ->
 	Return the coordinates of the ``x`` values of a line or scatter chart, and set the ticks of their axis.
 
 	Numbers keep their value, with ticks on whole numbers only when every number is whole, moments are
-	placed on a time axis, and texts are placed at 0, 1, 2 and so on, each labeled with its text.
+	placed on a time axis whose corner label gives their period, and texts are placed at 0, 1, 2 and so on,
+	each labeled with its text.
 
 	.. versionadded:: 0.1.0
 
@@ -72,7 +74,7 @@ def place_positions(axes: Axes, positions: Positions, on_vertical_axis: bool) ->
 
 	if positions.kind == PositionKind.MOMENTS:
 		date_locator = AutoDateLocator()
-		date_formatter = ConciseDateFormatter(date_locator)
+		date_formatter = MomentPeriodFormatter(date_locator, axes, on_vertical_axis)
 		position_axis.set_major_locator(date_locator)
 		position_axis.set_major_formatter(date_formatter)
 

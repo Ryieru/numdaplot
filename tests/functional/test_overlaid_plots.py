@@ -138,3 +138,33 @@ def test_an_overlaid_plot_is_saved_as_an_image(tmp_path: Path) -> None:
 
 	image_start = image_path.read_bytes()[:4]
 	assert image_start == b"\x89PNG"
+
+
+def test_a_date_axis_labels_the_period_of_the_charts_on_both_sides() -> None:
+	"""
+	Check that the corner label of a date axis covers the dates of a chart on the right.
+
+	.. versionadded:: 0.1.0
+	"""
+	march_sales = ndp.Table.from_arrays(
+		{
+			"day": ndp.Array.from_list([date(2019, 3, 1), date(2019, 3, 31)]),
+			"sales": ndp.Array.from_list([10.0, 12.0]),
+		}
+	)
+	may_prices = ndp.Table.from_arrays(
+		{
+			"day": ndp.Array.from_list([date(2019, 4, 1), date(2019, 5, 20)]),
+			"price": ndp.Array.from_list([3.0, 4.0]),
+		}
+	)
+	plot = ndp.plot_line(march_sales, ndp.LineChart(x="day", y=["sales"]))
+	both = plot.add_line(may_prices, ndp.LineChart(x="day", y=["price"]), axis=ndp.ValueAxis.RIGHT)
+
+	figure = both.to_matplotlib()
+	figure.draw_without_rendering()
+
+	left_axes = figure.axes[0]
+	corner_label = left_axes.xaxis.get_offset_text()
+	corner_text = corner_label.get_text()
+	assert corner_text == "2019-Mar to 2019-May"

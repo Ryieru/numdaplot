@@ -396,3 +396,29 @@ def test_horizontal_bar_plot_applies_the_y_rotation_to_its_values() -> None:
 	plot = ndp.plot_bar(build_city_sales(), chart, style)
 
 	assert read_first_x_rotation(plot) == CHOSEN_ROTATION
+
+
+def test_a_date_axis_does_not_name_a_month_past_the_values() -> None:
+	"""
+	Check that days of March give March in the corner label, despite a last tick on April 1.
+
+	.. versionadded:: 0.1.0
+	"""
+	march_table = ndp.Table.from_arrays(
+		{
+			"day": ndp.Array.from_list([date(2019, 3, 1), date(2019, 3, 31)]),
+			"trips": ndp.Array.from_list([10.0, 12.0]),
+		}
+	)
+
+	plot = ndp.plot_line(march_table, ndp.LineChart(x="day", y=["trips"]))
+
+	figure = plot.to_matplotlib()
+	figure.draw_without_rendering()
+	axes = figure.axes[0]
+	tick_labels = axes.xaxis.get_ticklabels()
+	last_tick_text = tick_labels[-1].get_text()
+	corner_label = axes.xaxis.get_offset_text()
+	corner_text = corner_label.get_text()
+	assert last_tick_text == "Apr"
+	assert corner_text == "2019-Mar"
