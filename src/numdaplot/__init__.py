@@ -81,6 +81,8 @@ from numdaplot.errors.invalid_count_error import InvalidCountError
 from numdaplot.errors.invalid_date_format_error import InvalidDateFormatError
 from numdaplot.errors.invalid_deviation_error import InvalidDeviationError
 from numdaplot.errors.invalid_fraction_error import InvalidFractionError
+from numdaplot.errors.invalid_opacity_error import InvalidOpacityError
+from numdaplot.errors.invalid_point_size_error import InvalidPointSizeError
 from numdaplot.errors.invalid_position_error import InvalidPositionError
 from numdaplot.errors.invalid_resolution_error import InvalidResolutionError
 from numdaplot.errors.invalid_rotation_error import InvalidRotationError
@@ -314,6 +316,8 @@ __all__ = [
 	"InvalidDateFormatError",
 	"InvalidDeviationError",
 	"InvalidFractionError",
+	"InvalidOpacityError",
+	"InvalidPointSizeError",
 	"InvalidPositionError",
 	"InvalidResolutionError",
 	"InvalidRotationError",

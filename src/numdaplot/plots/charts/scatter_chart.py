@@ -4,9 +4,12 @@ Chart drawing each row as a point.
 .. versionadded:: 0.1.0
 """
 
+import math
 from dataclasses import dataclass
 
 from numdaplot.errors.conflicting_settings_error import ConflictingSettingsError
+from numdaplot.errors.invalid_opacity_error import InvalidOpacityError
+from numdaplot.errors.invalid_point_size_error import InvalidPointSizeError
 from numdaplot.errors.refused_setting_error import RefusedSettingError
 from numdaplot.plots.charts.chart import Chart
 from numdaplot.plots.charts.marker_shape import MarkerShape
@@ -19,6 +22,8 @@ CHART_NAME = "ScatterChart"
 COLOR_SETTING = "color"
 COLOR_BY_SETTING = "color_by"
 NO_MARKER_NAME = "MarkerShape.NONE"
+POINT_SIZE_SETTING = "point_size"
+SIZE_BY_SETTING = "size_by"
 
 
 @dataclass(frozen=True)
@@ -26,7 +31,8 @@ class ScatterChart(Chart):
 	"""
 	Chart drawing each row as a point, used by ``plot_scatter``.
 
-	A row with a missing value in one of the columns used is not drawn.
+	A row with a missing value in one of the columns used is not drawn. In a dense cloud, a low ``opacity`` shows where
+	the points gather, and a small ``point_size`` separates them. The last group drawn stays on top of the others.
 
 	.. versionadded:: 0.1.0
 
@@ -49,6 +55,10 @@ class ScatterChart(Chart):
 		the same size when omitted.
 	marker
 		The shape of the points, ``MarkerShape.CIRCLE`` by default.
+	opacity
+		How opaque the points are, above 0 and up to 1, ``1.0`` by default. The legend and the color scale stay opaque.
+	point_size
+		The diameter of every point, in typographic points, 6 when omitted.
 
 	Raises
 	------
@@ -57,9 +67,13 @@ class ScatterChart(Chart):
 	InvalidColumnNameError
 		When ``x``, ``y``, ``color_by`` or ``size_by`` is an empty text.
 	ConflictingSettingsError
-		When ``color`` and ``color_by`` are both given.
+		When ``color`` and ``color_by`` are both given, or ``point_size`` and ``size_by``.
 	RefusedSettingError
 		When ``marker`` is ``MarkerShape.NONE``, which would draw nothing.
+	InvalidOpacityError
+		When ``opacity`` is 0 or lower, greater than 1, or not a number.
+	InvalidPointSizeError
+		When ``point_size`` is 0 or lower, infinite, or not a number.
 
 	Examples
 	--------
@@ -79,10 +93,12 @@ class ScatterChart(Chart):
 	color_by: str | None = None
 	size_by: str | None = None
 	marker: MarkerShape = MarkerShape.CIRCLE
+	opacity: float = 1.0
+	point_size: float | None = None
 
 	def __post_init__(self) -> None:
 		"""
-		Check that the color settings exclude each other and that the points have a marker.
+		Check that the color and the size settings exclude each other, and that the points can be drawn.
 
 		.. versionadded:: 0.1.0
 
@@ -93,9 +109,13 @@ class ScatterChart(Chart):
 		InvalidColumnNameError
 			When ``x``, ``y``, ``color_by`` or ``size_by`` is an empty text.
 		ConflictingSettingsError
-			When ``color`` and ``color_by`` are both given.
+			When ``color`` and ``color_by`` are both given, or ``point_size`` and ``size_by``.
 		RefusedSettingError
 			When ``marker`` is ``MarkerShape.NONE``.
+		InvalidOpacityError
+			When ``opacity`` is 0 or lower, greater than 1, or not a number.
+		InvalidPointSizeError
+			When ``point_size`` is 0 or lower, infinite, or not a number.
 		"""
 		require_field_types(self)
 
@@ -110,3 +130,16 @@ class ScatterChart(Chart):
 
 		if self.marker == MarkerShape.NONE:
 			raise RefusedSettingError(NO_MARKER_NAME, CHART_NAME)
+
+		has_both_sizes = self.point_size is not None and self.size_by is not None
+		if has_both_sizes:
+			raise ConflictingSettingsError(POINT_SIZE_SETTING, SIZE_BY_SETTING)
+
+		is_drawable_opacity = 0 < self.opacity <= 1
+		if not is_drawable_opacity:
+			raise InvalidOpacityError(self.opacity)
+
+		if self.point_size is not None:
+			is_drawable_size = 0 < self.point_size < math.inf
+			if not is_drawable_size:
+				raise InvalidPointSizeError(self.point_size)

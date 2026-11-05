@@ -136,7 +136,7 @@ def test_choose_areas_scales_the_sizes_and_hides_missing_ones() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	areas = choose_areas(SIZES, 4)
+	areas = choose_areas(SIZES, 4, None)
 
 	assert areas.tolist() == EXPECTED_AREAS
 
@@ -147,7 +147,7 @@ def test_choose_areas_gives_the_middle_area_to_equal_sizes() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	areas = choose_areas(SAME_SIZES, 2)
+	areas = choose_areas(SAME_SIZES, 2, None)
 
 	assert areas.tolist() == [MIDDLE_AREA, MIDDLE_AREA]
 
@@ -158,6 +158,17 @@ def test_choose_areas_gives_the_default_area_without_sizes() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	areas = choose_areas(None, 2)
+	areas = choose_areas(None, 2, None)
 
 	assert areas.tolist() == [DEFAULT_AREA, DEFAULT_AREA]
+
+
+def test_choose_areas_squares_the_point_size() -> None:
+	"""
+	Check that a diameter of 3 gives an area of 9 square points.
+
+	.. versionadded:: 0.1.0
+	"""
+	areas = choose_areas(None, 2, 3.0)
+
+	assert areas.tolist() == [9.0, 9.0]

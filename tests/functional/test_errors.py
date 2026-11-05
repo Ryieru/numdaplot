@@ -36,6 +36,8 @@ PRECISE_ERRORS = [
 	ndp.InvalidDateFormatError,
 	ndp.InvalidDeviationError,
 	ndp.InvalidFractionError,
+	ndp.InvalidOpacityError,
+	ndp.InvalidPointSizeError,
 	ndp.InvalidPositionError,
 	ndp.InvalidResolutionError,
 	ndp.InvalidSeedError,

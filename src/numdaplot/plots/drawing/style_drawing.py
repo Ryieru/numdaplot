@@ -44,6 +44,7 @@ OUTSIDE_ANCHOR = (1.02, 0.5)
 VALUE_GRID_AXES = dict[bool, Literal["x", "y"]]({True: "x", False: "y"})
 MINIMUM_LEGEND_ENTRIES = 2
 LEGEND_POINT_AREA = 36.0
+LEGEND_POINT_OPACITY = 1.0
 
 
 def apply_style(plot_axes: PlotAxes, drawn_chart: DrawnChart, style: PlotStyle) -> None:
@@ -287,6 +288,7 @@ def place_legend(plot_axes: PlotAxes, drawn_chart: DrawnChart, legend_position: 
 	for handle in legend.legend_handles:
 		if isinstance(handle, PathCollection):
 			handle.set_sizes([LEGEND_POINT_AREA])
+			handle.set_alpha(LEGEND_POINT_OPACITY)
 
 
 def list_legend_entries(axes: Axes) -> tuple[list[Any], list[str]]:

@@ -51,5 +51,7 @@ def add_color_bar(
 	'rooms'
 	"""
 	figure = cast(Figure, axes.figure)
-	color_bar = figure.colorbar(scaled_artist, ax=axes, label=scale_label)
+	# A color bar takes the opacity of what it describes, so it gets its own scale to stay opaque.
+	opaque_scale = ScalarMappable(norm=scaled_artist.norm, cmap=scaled_artist.cmap)
+	color_bar = figure.colorbar(opaque_scale, ax=axes, label=scale_label)
 	place_whole_ticks(color_bar.ax.yaxis, scaled_numbers)

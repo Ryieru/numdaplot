@@ -29,7 +29,7 @@ from numdaplot.plots.drawing.series_colors import choose_series_colors
 from numdaplot.plots.style.color import Color
 from numdaplot.plots.style.custom_color import CustomColor
 
-DEFAULT_POINT_AREA = 36.0
+DEFAULT_POINT_SIZE = 6.0
 SMALLEST_POINT_AREA = 16.0
 LARGEST_POINT_AREA = 256.0
 COLOR_SCALE = "viridis"
@@ -51,18 +51,21 @@ class PointLook:
 		The area of each point in square points.
 	marker_code
 		The matplotlib code of the marker shape.
+	opacity
+		How opaque the points are, from 0 to 1.
 
 	Examples
 	--------
 	>>> import numpy
 	>>> from numdaplot.plots.drawing.scatter_drawing import PointLook
-	>>> PointLook(numpy.array([0.0]), numpy.array([36.0]), "o").marker_code
+	>>> PointLook(numpy.array([0.0]), numpy.array([36.0]), "o", 1.0).marker_code
 	'o'
 	"""
 
 	coordinates: NDArray[Any]
 	areas: NDArray[numpy.float64]
 	marker_code: str
+	opacity: float
 
 
 def draw_scatter_chart(axes: Axes, layer: ChartLayer) -> DrawnChart:
@@ -111,9 +114,9 @@ def draw_scatter_chart(axes: Axes, layer: ChartLayer) -> DrawnChart:
 
 	coordinates = place_positions(axes, values.positions, False)
 	row_count = len(coordinates)
-	areas = choose_areas(points.sizes, row_count)
+	areas = choose_areas(points.sizes, row_count, chart.point_size)
 	marker_code = MARKER_CODES[chart.marker]
-	point_look = PointLook(coordinates, areas, marker_code)
+	point_look = PointLook(coordinates, areas, marker_code, chart.opacity)
 	no_legend_chart = DrawnChart(values.positions.name, values.value_name, False, GridAxes.BOTH, None)
 	if points.colors is None:
 		draw_colored_series(axes, chart.color, values.series, point_look)
@@ -132,7 +135,9 @@ def draw_scatter_chart(axes: Axes, layer: ChartLayer) -> DrawnChart:
 	return group_chart
 
 
-def choose_areas(sizes: NDArray[numpy.float64] | None, row_count: int) -> NDArray[numpy.float64]:
+def choose_areas(
+	sizes: NDArray[numpy.float64] | None, row_count: int, point_size: float | None
+) -> NDArray[numpy.float64]:
 	"""
 	Return the area of each point, scaled from the smallest to the largest ``size_by`` value.
 
@@ -144,23 +149,27 @@ def choose_areas(sizes: NDArray[numpy.float64] | None, row_count: int) -> NDArra
 		The ``size_by`` values, NaN where a value is missing, or None for points of the same size.
 	row_count
 		The number of points.
+	point_size
+		The diameter of every point without ``size_by``, or None for the default diameter.
 
 	Returns
 	-------
 	NDArray[numpy.float64]
-		Areas from 16 to 256 square points, 36 for every point without ``size_by``, and the middle area when
-		every value is the same. A point with a missing size is not drawn, its area is 0.
+		Areas from 16 to 256 square points, the square of the diameter for every point without ``size_by``, 36 by
+		default, and the middle area when every value is the same. A point with a missing size is not drawn, its area
+		is 0.
 
 	Examples
 	--------
 	>>> import numpy
 	>>> from numdaplot.plots.drawing.scatter_drawing import choose_areas
-	>>> choose_areas(numpy.array([10.0, 20.0, 30.0]), 3)
+	>>> choose_areas(numpy.array([10.0, 20.0, 30.0]), 3, None)
 	array([ 16., 136., 256.])
 	"""
 	if sizes is None:
-		default_areas = numpy.full(row_count, DEFAULT_POINT_AREA)
-		return default_areas
+		diameter = DEFAULT_POINT_SIZE if point_size is None else point_size
+		same_areas = numpy.full(row_count, diameter**2)
+		return same_areas
 
 	area_range = LARGEST_POINT_AREA - SMALLEST_POINT_AREA
 	middle_area = SMALLEST_POINT_AREA + area_range / 2
@@ -215,7 +224,7 @@ def draw_colored_series(
 	>>> from numdaplot.plots.data.chart_values import Series
 	>>> from numdaplot.plots.drawing.scatter_drawing import PointLook, draw_colored_series
 	>>> axes = Figure().add_subplot()
-	>>> point_look = PointLook(numpy.array([0.0]), numpy.array([36.0]), "o")
+	>>> point_look = PointLook(numpy.array([0.0]), numpy.array([36.0]), "o", 1.0)
 	>>> draw_colored_series(axes, ndp.Color.RED, [Series("price", numpy.array([12.0]))], point_look)
 	>>> axes.collections[0].get_facecolor().round(2).tolist()
 	[[0.84, 0.15, 0.16, 1.0]]
@@ -234,6 +243,7 @@ def draw_colored_series(
 			s=point_look.areas,
 			color=color_code,
 			marker=point_look.marker_code,
+			alpha=point_look.opacity,
 			label=series.name,
 		)
 
@@ -269,7 +279,7 @@ def draw_color_scale(
 	>>> from numdaplot.plots.data.chart_values import Series
 	>>> from numdaplot.plots.drawing.scatter_drawing import PointLook, draw_color_scale
 	>>> axes = Figure().add_subplot()
-	>>> point_look = PointLook(numpy.array([0.0, 1.0]), numpy.array([36.0, 36.0]), "o")
+	>>> point_look = PointLook(numpy.array([0.0, 1.0]), numpy.array([36.0, 36.0]), "o", 1.0)
 	>>> series = Series("price", numpy.array([1.0, 2.0]))
 	>>> scaled_points = draw_color_scale(axes, series, numpy.array([5.0, 9.0]), point_look)
 	>>> [float(limit) for limit in scaled_points.get_clim()]
@@ -282,6 +292,7 @@ def draw_color_scale(
 		c=color_numbers,
 		cmap=COLOR_SCALE,
 		marker=point_look.marker_code,
+		alpha=point_look.opacity,
 	)
 
 	return scaled_points
@@ -313,7 +324,7 @@ def draw_color_groups(axes: Axes, series: Series, color_texts: NDArray[Any], poi
 	>>> from numdaplot.plots.data.chart_values import Series
 	>>> from numdaplot.plots.drawing.scatter_drawing import PointLook, draw_color_groups
 	>>> axes = Figure().add_subplot()
-	>>> point_look = PointLook(numpy.array([0.0, 1.0]), numpy.array([36.0, 36.0]), "o")
+	>>> point_look = PointLook(numpy.array([0.0, 1.0]), numpy.array([36.0, 36.0]), "o", 1.0)
 	>>> texts = numpy.array(["Pau", "Lyon"], dtype=object)
 	>>> draw_color_groups(axes, Series("price", numpy.array([1.0, 2.0])), texts, point_look)
 	>>> [points.get_label() for points in axes.collections]
@@ -333,5 +344,6 @@ def draw_color_groups(axes: Axes, series: Series, color_texts: NDArray[Any], poi
 			s=point_look.areas[in_group],
 			color=color_code,
 			marker=point_look.marker_code,
+			alpha=point_look.opacity,
 			label=group,
 		)
