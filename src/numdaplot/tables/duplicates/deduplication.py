@@ -7,10 +7,12 @@ Settings of the removal of duplicated rows of a Table.
 from dataclasses import dataclass
 
 from numdaplot.errors.empty_list_error import EmptyListError
+from numdaplot.settings.setting_types import require_list_not_text
 from numdaplot.tables.columns.column_names import require_unique_names
 from numdaplot.tables.duplicates.keep import Keep
 
 COLUMN_ITEM_NAME = "column"
+COLUMNS_SETTING = "Deduplication columns"
 
 
 @dataclass(frozen=True)
@@ -32,6 +34,8 @@ class Deduplication:
 
 	Raises
 	------
+	InvalidSettingTypeError
+		When ``columns`` is a single text instead of a list.
 	EmptyListError
 		When ``columns`` is an empty list.
 	DuplicateColumnError
@@ -61,11 +65,15 @@ class Deduplication:
 
 		Raises
 		------
+		InvalidSettingTypeError
+			When ``columns`` is a single text instead of a list.
 		EmptyListError
 			When ``columns`` is an empty list.
 		DuplicateColumnError
 			When a column name appears twice.
 		"""
+		require_list_not_text(COLUMNS_SETTING, self.columns)
+
 		if self.columns is None:
 			return
 

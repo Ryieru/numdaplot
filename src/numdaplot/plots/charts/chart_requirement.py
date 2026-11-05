@@ -6,9 +6,12 @@ Check that a plot function receives the chart it draws.
 
 from numdaplot.errors.refused_operation_error import RefusedOperationError
 from numdaplot.plots.charts.chart import Chart
+from numdaplot.settings.setting_types import require_object_not_class
 
 WRONG_CHART_OPERATION = "The chart {chart_name} with {function_name}"
 WRONG_CHART_ALTERNATIVE = "a {expected_name}"
+CHART_SETTING = "plot chart"
+CHART_EXPECTED = "a chart such as ndp.LineChart()"
 
 
 def require_chart_class(chart: Chart, chart_class: type[Chart], function_name: str) -> None:
@@ -28,6 +31,8 @@ def require_chart_class(chart: Chart, chart_class: type[Chart], function_name: s
 
 	Raises
 	------
+	InvalidSettingTypeError
+		When ``chart`` is a class, written without its parentheses.
 	RefusedOperationError
 		When the chart is not an instance of ``chart_class``, such as a chart class written outside numdaplot.
 
@@ -41,6 +46,8 @@ def require_chart_class(chart: Chart, chart_class: type[Chart], function_name: s
 	... 	print(error)
 	The chart LineChart with plot_bar is not available, use a BarChart instead.
 	"""
+	require_object_not_class(CHART_SETTING, CHART_EXPECTED, chart)
+
 	is_expected_chart = isinstance(chart, chart_class)
 	if is_expected_chart:
 		return

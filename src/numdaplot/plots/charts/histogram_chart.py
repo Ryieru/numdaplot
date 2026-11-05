@@ -14,8 +14,10 @@ from numdaplot.plots.charts.chart_settings import copy_colors, copy_columns
 from numdaplot.plots.style.color import Color
 from numdaplot.plots.style.custom_color import CustomColor
 from numdaplot.ratios.measure import Measure
+from numdaplot.settings.setting_types import require_list_not_text
 
 DEFAULT_BIN_COUNT = 10
+COLUMNS_SETTING = "HistogramChart columns"
 
 
 @dataclass(frozen=True)
@@ -43,6 +45,8 @@ class HistogramChart(Chart):
 
 	Raises
 	------
+	InvalidSettingTypeError
+		When ``columns`` is a single text instead of a list.
 	EmptyListError
 		When ``columns`` or ``colors`` is an empty list.
 	DuplicateColumnError
@@ -72,11 +76,15 @@ class HistogramChart(Chart):
 
 		Raises
 		------
+		InvalidSettingTypeError
+			When ``columns`` is a single text instead of a list.
 		EmptyListError
 			When ``columns`` or ``colors`` is an empty list.
 		DuplicateColumnError
 			When a column name appears twice in ``columns``.
 		"""
+		require_list_not_text(COLUMNS_SETTING, self.columns)
+
 		columns_copy = copy_columns(self.columns)
 		colors_copy = copy_colors(self.colors)
 		object.__setattr__(self, "columns", columns_copy)

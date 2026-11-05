@@ -5,12 +5,14 @@ Unit tests of Preview, the rows it shows and their display.
 """
 
 from types import SimpleNamespace
+from typing import Any, cast
 
 import pandas
 import pytest
 
 from numdaplot.errors.invalid_count_error import InvalidCountError
 from numdaplot.errors.invalid_seed_error import InvalidSeedError
+from numdaplot.errors.invalid_setting_type_error import InvalidSettingTypeError
 from numdaplot.tables.preview import notebook_display
 from numdaplot.tables.preview.notebook_display import is_notebook, show_frame, show_pandas_frame
 from numdaplot.tables.preview.preview import Preview
@@ -380,3 +382,15 @@ def test_is_notebook_checks_for_a_jupyter_kernel(
 	runs_in_notebook = is_notebook()
 
 	assert runs_in_notebook == expected_answer
+
+
+def test_preview_rejects_a_side_written_as_text() -> None:
+	"""
+	Check that a text in place of a Side raises InvalidSettingTypeError.
+
+	.. versionadded:: 0.1.0
+	"""
+	untyped_preview = cast(Any, Preview)
+
+	with pytest.raises(InvalidSettingTypeError):
+		untyped_preview(side="end")

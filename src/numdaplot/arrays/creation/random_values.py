@@ -16,10 +16,13 @@ from numdaplot.arrays.creation.uniform import Uniform
 from numdaplot.arrays.shape import Shape
 from numdaplot.errors.invalid_seed_error import InvalidSeedError
 from numdaplot.errors.refused_operation_error import RefusedOperationError
+from numdaplot.settings.setting_types import require_object_not_class
 
 LOWEST_SEED = 0
 UNKNOWN_DISTRIBUTION_OPERATION = "The distribution {distribution_name}"
 UNKNOWN_DISTRIBUTION_ALTERNATIVE = "a distribution of numdaplot"
+DISTRIBUTION_SETTING = "random distribution"
+DISTRIBUTION_EXPECTED = "a distribution such as ndp.Uniform(low=0, high=1)"
 
 
 def draw_random_values(distribution: Distribution, shape: Shape, seed: int | None) -> NDArray[Any]:
@@ -44,6 +47,8 @@ def draw_random_values(distribution: Distribution, shape: Shape, seed: int | Non
 
 	Raises
 	------
+	InvalidSettingTypeError
+		When ``distribution`` is a class, written without its parentheses.
 	InvalidSeedError
 		When ``seed`` is lower than 0.
 	RefusedOperationError
@@ -57,6 +62,8 @@ def draw_random_values(distribution: Distribution, shape: Shape, seed: int | Non
 	>>> draw_random_values(dice, ndp.Shape((4,)), 0)
 	array([6, 4, 4, 2])
 	"""
+	require_object_not_class(DISTRIBUTION_SETTING, DISTRIBUTION_EXPECTED, distribution)
+
 	if seed is not None:
 		require_valid_seed(seed)
 

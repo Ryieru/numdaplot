@@ -7,10 +7,12 @@ Settings of the choice of the columns of a Table.
 from dataclasses import dataclass
 
 from numdaplot.errors.empty_list_error import EmptyListError
+from numdaplot.settings.setting_types import require_list_not_text
 from numdaplot.tables.columns.column_mode import ColumnMode
 from numdaplot.tables.columns.column_names import require_unique_names
 
 COLUMN_ITEM_NAME = "column"
+COLUMNS_SETTING = "ColumnChoice columns"
 
 
 @dataclass(frozen=True)
@@ -30,6 +32,8 @@ class ColumnChoice:
 
 	Raises
 	------
+	InvalidSettingTypeError
+		When ``columns`` is a single text instead of a list.
 	EmptyListError
 		When ``columns`` is empty with ``KEEP``, which would keep nothing.
 	DuplicateColumnError
@@ -60,11 +64,15 @@ class ColumnChoice:
 
 		Raises
 		------
+		InvalidSettingTypeError
+			When ``columns`` is a single text instead of a list.
 		EmptyListError
 			When ``columns`` is empty with ``KEEP``.
 		DuplicateColumnError
 			When a column name appears twice.
 		"""
+		require_list_not_text(COLUMNS_SETTING, self.columns)
+
 		keeps_nothing = self.columns == [] and self.mode == ColumnMode.KEEP
 		if keeps_nothing:
 			raise EmptyListError(COLUMN_ITEM_NAME)

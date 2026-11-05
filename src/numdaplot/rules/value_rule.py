@@ -5,8 +5,14 @@ Base class of the rules that compare each value to a single reference value.
 """
 
 from dataclasses import dataclass
+from typing import ClassVar, cast
 
+from numdaplot.errors.refused_operation_error import RefusedOperationError
 from numdaplot.rules.rule import Rule
+from numdaplot.rules.rule_values import require_single_value
+
+MISSING_VALUE_OPERATION = "{rule_name}(None)"
+VALUE_SETTING = "{rule_name} value"
 
 
 @dataclass(frozen=True)
@@ -24,6 +30,13 @@ class ValueRule[ReferenceValue](Rule):
 	value
 		The reference value each tested value is compared to.
 
+	Raises
+	------
+	RefusedOperationError
+		When ``value`` is None for a rule with a rule of its own for missing values, such as ``Equal(None)``.
+	InvalidSettingTypeError
+		When ``value`` is not a single value, such as an Array, a list or None.
+
 	Examples
 	--------
 	>>> import numdaplot as ndp
@@ -34,4 +47,67 @@ class ValueRule[ReferenceValue](Rule):
 	Array([120], dtype=INT64)
 	"""
 
+	# The rule testing missing values in place of this rule given None, such as IsMissing for Equal.
+	MISSING_VALUE_RULE: ClassVar[str | None] = None
+
 	value: ReferenceValue
+
+	def __post_init__(self) -> None:
+		"""
+		Check that the reference value is a single value.
+
+		.. versionadded:: 0.1.0
+
+		Raises
+		------
+		RefusedOperationError
+			When ``value`` is None for a rule with a rule of its own for missing values, such as ``Equal(None)``.
+		InvalidSettingTypeError
+			When ``value`` is not a single value.
+		"""
+		rule_class = type(self)
+		rule_name = rule_class.__name__
+		value = cast(object, self.value)
+		refuse_missing_value(rule_name, self.MISSING_VALUE_RULE, value)
+		setting_name = VALUE_SETTING.format(rule_name=rule_name)
+		require_single_value(setting_name, value)
+
+
+def refuse_missing_value(rule_name: str, missing_value_rule: str | None, value: object) -> None:
+	"""
+	Refuse None as the reference value of a rule that has a rule of its own for missing values.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	rule_name
+		The name of the rule, such as ``"Equal"``.
+	missing_value_rule
+		The rule testing missing values in its place, such as ``"IsMissing"``, or None when there is none.
+	value
+		The reference value.
+
+	Raises
+	------
+	RefusedOperationError
+		When the value is None and the rule has a rule of its own for missing values.
+
+	Examples
+	--------
+	>>> import numdaplot as ndp
+	>>> from numdaplot.rules.value_rule import refuse_missing_value
+	>>> try:
+	... 	refuse_missing_value("Equal", "IsMissing", None)
+	... except ndp.RefusedOperationError as error:
+	... 	print(error)
+	Equal(None) is not available, use IsMissing instead.
+	"""
+	if value is not None:
+		return
+
+	if missing_value_rule is None:
+		return
+
+	operation = MISSING_VALUE_OPERATION.format(rule_name=rule_name)
+	raise RefusedOperationError(operation, missing_value_rule)

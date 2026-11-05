@@ -20,9 +20,12 @@ from numdaplot.rules.is_missing import IsMissing
 from numdaplot.rules.is_present import IsPresent
 from numdaplot.rules.rule import Rule
 from numdaplot.rules.value_rule import ValueRule
+from numdaplot.settings.setting_types import require_object_not_class
 
 UNKNOWN_RULE_OPERATION = "The rule {rule_name}"
 UNKNOWN_RULE_ALTERNATIVE = "a rule of numdaplot"
+RULE_SETTING = "rule"
+RULE_EXPECTED = "a rule such as ndp.Greater(10)"
 
 
 def build_rule_mask(values: NDArray[Any], rule: Rule) -> NDArray[numpy.bool_]:
@@ -45,6 +48,8 @@ def build_rule_mask(values: NDArray[Any], rule: Rule) -> NDArray[numpy.bool_]:
 
 	Raises
 	------
+	InvalidSettingTypeError
+		When ``rule`` is a class, written without its parentheses.
 	IncompatibleTypesError
 		When the rule does not apply to the type of the values.
 	RefusedOperationError
@@ -58,6 +63,8 @@ def build_rule_mask(values: NDArray[Any], rule: Rule) -> NDArray[numpy.bool_]:
 	>>> build_rule_mask(numpy.array([1.0, numpy.nan]), ndp.IsPresent())
 	array([ True, False])
 	"""
+	require_object_not_class(RULE_SETTING, RULE_EXPECTED, rule)
+
 	match rule:
 		case IsMissing():
 			mask = find_missing(values)

@@ -7,6 +7,7 @@ Settings of the description of the columns of a Table.
 from dataclasses import dataclass
 
 from numdaplot.errors.empty_list_error import EmptyListError
+from numdaplot.settings.setting_types import require_list_not_text, require_object_not_class
 from numdaplot.statistics.count import Count
 from numdaplot.statistics.maximum import Max
 from numdaplot.statistics.mean import Mean
@@ -31,6 +32,9 @@ DEFAULT_FUNCTIONS = (
 )
 FUNCTION_ITEM_NAME = "function"
 COLUMN_ITEM_NAME = "column"
+COLUMNS_SETTING = "Description columns"
+FUNCTION_SETTING = "Description functions"
+FUNCTION_EXPECTED = "a statistic such as ndp.Mean()"
 
 
 @dataclass(frozen=True)
@@ -51,6 +55,9 @@ class Description:
 
 	Raises
 	------
+	InvalidSettingTypeError
+		When ``columns`` is a single text instead of a list, or a function is a class written without its
+		parentheses.
 	EmptyListError
 		When ``functions`` or ``columns`` is an empty list.
 	DuplicateColumnError
@@ -81,11 +88,15 @@ class Description:
 
 		Raises
 		------
+		InvalidSettingTypeError
+			When ``columns`` is a single text instead of a list, or a function is a class.
 		EmptyListError
 			When ``functions`` or ``columns`` is an empty list.
 		DuplicateColumnError
 			When a column name appears twice.
 		"""
+		require_list_not_text(COLUMNS_SETTING, self.columns)
+
 		if self.functions == []:
 			raise EmptyListError(FUNCTION_ITEM_NAME)
 
@@ -93,6 +104,9 @@ class Description:
 			raise EmptyListError(COLUMN_ITEM_NAME)
 
 		if self.functions is not None:
+			for function in self.functions:
+				require_object_not_class(FUNCTION_SETTING, FUNCTION_EXPECTED, function)
+
 			functions_copy = list(self.functions)
 			object.__setattr__(self, "functions", functions_copy)
 

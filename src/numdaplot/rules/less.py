@@ -23,6 +23,11 @@ class Less(ValueRule[OrderedValue]):
 		The reference value, an ``OrderedValue`` such as ``10``, ``"M"`` or ``date(2026, 1, 31)``, which is not
 		kept itself.
 
+	Raises
+	------
+	InvalidSettingTypeError
+		When ``value`` is not a single value, such as an Array or a list.
+
 	Examples
 	--------
 	>>> import numdaplot as ndp

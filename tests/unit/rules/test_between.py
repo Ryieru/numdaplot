@@ -5,11 +5,12 @@ Unit tests of Between.
 """
 
 from datetime import date, datetime
-from typing import TypeVar
+from typing import Any, TypeVar, cast
 
 import pytest
 
 from numdaplot.errors.invalid_bounds_error import InvalidBoundsError
+from numdaplot.errors.invalid_setting_type_error import InvalidSettingTypeError
 from numdaplot.rules.between import Between
 from numdaplot.rules.bounds import Bounds
 from numdaplot.rules.rule_values import OrderedValue
@@ -96,3 +97,15 @@ def test_between_type_parameter_holds_the_types_of_its_alias() -> None:
 
 	assert type_parameter.__name__ == OrderedValue.__name__
 	assert type_parameter.__constraints__ == OrderedValue.__value__.__args__
+
+
+def test_between_rejects_a_bound_that_is_not_single() -> None:
+	"""
+	Check that None as a bound raises InvalidSettingTypeError.
+
+	.. versionadded:: 0.1.0
+	"""
+	untyped_between = cast(Any, Between)
+
+	with pytest.raises(InvalidSettingTypeError):
+		untyped_between(low=None, high=HIGH_BOUND)

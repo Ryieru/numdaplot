@@ -9,6 +9,11 @@ from datetime import date, datetime, timedelta
 
 from numdaplot.errors.empty_values_error import EmptyValuesError
 from numdaplot.rules.rule import Rule
+from numdaplot.rules.rule_values import require_single_value
+from numdaplot.settings.setting_types import require_list_not_text
+
+VALUES_SETTING = "IsIn values"
+VALUE_SETTING = "IsIn value"
 
 
 # The type parameter has the name of the alias holding the same types: the documentation shows the alias,
@@ -28,6 +33,8 @@ class IsIn[ScalarValue: (bool, int, float, str, date, datetime, timedelta)](Rule
 
 	Raises
 	------
+	InvalidSettingTypeError
+		When ``values`` is a single text instead of a list, or holds something else than single values.
 	EmptyValuesError
 		When ``values`` is empty.
 
@@ -43,15 +50,22 @@ class IsIn[ScalarValue: (bool, int, float, str, date, datetime, timedelta)](Rule
 
 	def __post_init__(self) -> None:
 		"""
-		Check that the list is not empty, then replace it with a copy that only the rule holds.
+		Check the list and its values, then replace it with a copy that only the rule holds.
 
 		.. versionadded:: 0.1.0
 
 		Raises
 		------
+		InvalidSettingTypeError
+			When ``values`` is a single text, or holds something else than single values.
 		EmptyValuesError
 			When ``values`` is empty.
 		"""
+		require_list_not_text(VALUES_SETTING, self.values)
+
+		for value in self.values:
+			require_single_value(VALUE_SETTING, value)
+
 		value_count = len(self.values)
 		if value_count == 0:
 			raise EmptyValuesError()

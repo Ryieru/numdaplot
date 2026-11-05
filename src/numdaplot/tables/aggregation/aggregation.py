@@ -7,11 +7,13 @@ Settings of the aggregation of the rows of a Table.
 from dataclasses import dataclass
 
 from numdaplot.errors.empty_list_error import EmptyListError
+from numdaplot.settings.setting_types import require_list_not_text
 from numdaplot.tables.aggregation.calculation import Calculation, find_result_name
 from numdaplot.tables.columns.column_names import require_unique_names
 
 CALCULATION_ITEM_NAME = "calculation"
 GROUP_COLUMN_ITEM_NAME = "group column"
+GROUP_BY_SETTING = "Aggregation group_by"
 
 
 @dataclass(frozen=True)
@@ -31,6 +33,8 @@ class Aggregation:
 
 	Raises
 	------
+	InvalidSettingTypeError
+		When ``group_by`` is a single text instead of a list.
 	EmptyListError
 		When ``calculations`` or ``group_by`` is an empty list.
 	DuplicateColumnError
@@ -61,11 +65,15 @@ class Aggregation:
 
 		Raises
 		------
+		InvalidSettingTypeError
+			When ``group_by`` is a single text instead of a list.
 		EmptyListError
 			When ``calculations`` or ``group_by`` is an empty list.
 		DuplicateColumnError
 			When a name appears twice among the group columns and the result names.
 		"""
+		require_list_not_text(GROUP_BY_SETTING, self.group_by)
+
 		if self.calculations == []:
 			raise EmptyListError(CALCULATION_ITEM_NAME)
 

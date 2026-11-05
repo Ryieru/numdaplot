@@ -82,7 +82,9 @@ from numdaplot.errors.invalid_resolution_error import InvalidResolutionError
 from numdaplot.errors.invalid_rotation_error import InvalidRotationError
 from numdaplot.errors.invalid_seed_error import InvalidSeedError
 from numdaplot.errors.invalid_separator_error import InvalidSeparatorError
+from numdaplot.errors.invalid_setting_type_error import InvalidSettingTypeError
 from numdaplot.errors.invalid_shape_error import InvalidShapeError
+from numdaplot.errors.invalid_sheet_name_error import InvalidSheetNameError
 from numdaplot.errors.invalid_size_error import InvalidSizeError
 from numdaplot.errors.invalid_step_error import InvalidStepError
 from numdaplot.errors.invalid_time_zone_change_error import InvalidTimeZoneChangeError
@@ -302,10 +304,12 @@ __all__ = [
 	"InvalidFractionError",
 	"InvalidPositionError",
 	"InvalidResolutionError",
+	"InvalidRotationError",
 	"InvalidSeedError",
 	"InvalidSeparatorError",
+	"InvalidSettingTypeError",
 	"InvalidShapeError",
-	"InvalidRotationError",
+	"InvalidSheetNameError",
 	"InvalidSizeError",
 	"InvalidStepError",
 	"InvalidTimeZoneChangeError",

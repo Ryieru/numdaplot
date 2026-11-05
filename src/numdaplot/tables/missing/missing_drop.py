@@ -8,11 +8,13 @@ from dataclasses import dataclass
 
 from numdaplot.errors.empty_list_error import EmptyListError
 from numdaplot.positions.axis import Axis
+from numdaplot.settings.setting_types import require_list_not_text
 from numdaplot.tables.columns.column_names import require_unique_names
 from numdaplot.tables.missing.missing_mode import MissingMode
 from numdaplot.tables.missing.missing_ratio import MissingRatio
 
 COLUMN_ITEM_NAME = "column"
+COLUMNS_SETTING = "MissingDrop columns"
 
 
 @dataclass(frozen=True)
@@ -37,6 +39,8 @@ class MissingDrop:
 
 	Raises
 	------
+	InvalidSettingTypeError
+		When ``columns`` is a single text instead of a list.
 	EmptyListError
 		When ``columns`` is an empty list.
 	DuplicateColumnError
@@ -73,11 +77,15 @@ class MissingDrop:
 
 		Raises
 		------
+		InvalidSettingTypeError
+			When ``columns`` is a single text instead of a list.
 		EmptyListError
 			When ``columns`` is an empty list.
 		DuplicateColumnError
 			When a column name appears twice.
 		"""
+		require_list_not_text(COLUMNS_SETTING, self.columns)
+
 		if self.columns is None:
 			return
 

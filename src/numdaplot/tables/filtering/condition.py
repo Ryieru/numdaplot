@@ -8,10 +8,14 @@ from dataclasses import dataclass
 
 from numdaplot.errors.empty_list_error import EmptyListError
 from numdaplot.rules.rule import Rule
+from numdaplot.settings.setting_types import require_list_not_text, require_object_not_class
 from numdaplot.tables.columns.column_names import require_unique_names
 from numdaplot.tables.filtering.column_match import ColumnMatch
 
 COLUMN_ITEM_NAME = "column"
+COLUMNS_SETTING = "Condition columns"
+RULE_SETTING = "Condition rule"
+RULE_EXPECTED = "a rule such as ndp.Greater(10)"
 
 
 @dataclass(frozen=True)
@@ -35,6 +39,8 @@ class Condition:
 
 	Raises
 	------
+	InvalidSettingTypeError
+		When ``rule`` is a class written without its parentheses, or ``columns`` is a single text.
 	EmptyListError
 		When ``columns`` is an empty list.
 	DuplicateColumnError
@@ -66,11 +72,18 @@ class Condition:
 
 		Raises
 		------
+		InvalidSettingTypeError
+			When ``rule`` is a class, written without its parentheses.
+		InvalidSettingTypeError
+			When ``columns`` is a single text instead of a list.
 		EmptyListError
 			When ``columns`` is an empty list.
 		DuplicateColumnError
 			When a column name appears twice.
 		"""
+		require_object_not_class(RULE_SETTING, RULE_EXPECTED, self.rule)
+		require_list_not_text(COLUMNS_SETTING, self.columns)
+
 		if self.columns is None:
 			return
 

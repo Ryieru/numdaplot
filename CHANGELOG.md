@@ -57,8 +57,9 @@ and numdaplot follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
   `JsonLayout`, `Conflict`, `FilterMode`, `ColumnMatch`, `ColumnMode`, `Keep`, `Side`, `MissingMode`,
   `RatioComparison` and `Measure` enums. `Equality` compares two Tables as well as two Arrays.
 - Table errors: `ColumnNotFoundError`, `DuplicateColumnError`, `EmptyListError`, `FileExistsError`,
-  `FileNotFoundError`, `InvalidColumnNameError`, `InvalidSeparatorError`, `MissingDependencyError` and
-  `UnsupportedIndexError`. `FileNotFoundError` and `FileExistsError` are also the Python errors of the same name.
+  `FileNotFoundError`, `InvalidColumnNameError`, `InvalidSeparatorError`, `InvalidSheetNameError`,
+  `MissingDependencyError` and `UnsupportedIndexError`. `FileNotFoundError` and `FileExistsError` are also the
+  Python errors of the same name.
 - Distributions: `Distribution`, `Uniform`, `Normal`, `RandomIntegers`.
 - Math functions: `MathFunction`, `SquareRoot`, `Exponential`, `Logarithm`, `Absolute`, `Round`, `Sine`, `Cosine`.
 - Array errors: `DimensionError`, `EmptyArrayError`, `IncompatibleTypesError`, `InvalidBaseError`,
@@ -74,4 +75,5 @@ and numdaplot follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 - Positions: `Region`, `Index`, `Range` and the `Axis` enum.
 - Sort settings: `Order` and `MissingPosition` enums.
 - Errors: `NumdaplotError`, `EmptyRegionError`, `EmptyTextError`, `EmptyValuesError`, `InvalidBoundsError`,
-  `InvalidFractionError`, `InvalidStepError`, `UnsupportedTypeError`, and the `BroadcastWarning` warning.
+  `InvalidFractionError`, `InvalidSettingTypeError`, `InvalidStepError`, `UnsupportedTypeError`, and the
+  `BroadcastWarning` warning.

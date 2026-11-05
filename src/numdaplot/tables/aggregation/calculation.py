@@ -6,11 +6,14 @@ A statistic computed on a column of a Table.
 
 from dataclasses import dataclass
 
+from numdaplot.settings.setting_types import require_object_not_class
 from numdaplot.statistics.statistic import Statistic
 from numdaplot.tables.aggregation.statistic_name import name_statistic
 from numdaplot.tables.columns.column_names import require_column_name
 
 RESULT_NAME = "{column}_{function}"
+FUNCTION_SETTING = "Calculation function"
+FUNCTION_EXPECTED = "a statistic such as ndp.Mean()"
 
 
 @dataclass(frozen=True)
@@ -33,6 +36,8 @@ class Calculation:
 
 	Raises
 	------
+	InvalidSettingTypeError
+		When ``function`` is a class, written without its parentheses.
 	InvalidColumnNameError
 		When ``result_name`` is an empty text.
 	RefusedOperationError
@@ -64,11 +69,15 @@ class Calculation:
 
 		Raises
 		------
+		InvalidSettingTypeError
+			When ``function`` is a class, written without its parentheses.
 		InvalidColumnNameError
 			When ``result_name`` is an empty text.
 		RefusedOperationError
 			When ``function`` is not a statistic of numdaplot.
 		"""
+		require_object_not_class(FUNCTION_SETTING, FUNCTION_EXPECTED, self.function)
+
 		result_name = find_result_name(self)
 		require_column_name(result_name)
 

@@ -13,7 +13,11 @@ from numdaplot.arrays.calculation.time_function_values import apply_time_functio
 from numdaplot.arrays.math_functions.math_function import MathFunction
 from numdaplot.dates.time_function import TimeFunction
 from numdaplot.positions.axis import Axis
+from numdaplot.settings.setting_types import require_object_not_class
 from numdaplot.statistics.statistic import Statistic
+
+FUNCTION_SETTING = "apply function"
+FUNCTION_EXPECTED = "a math or time function such as ndp.SquareRoot()"
 
 
 class ArrayCalculation(ArrayData):
@@ -84,6 +88,8 @@ class ArrayCalculation(ArrayData):
 
 		Raises
 		------
+		InvalidSettingTypeError
+			When ``function`` is a class, written without its parentheses.
 		IncompatibleTypesError
 			When the function does not apply to the type of the values.
 		OutOfDomainError
@@ -98,6 +104,8 @@ class ArrayCalculation(ArrayData):
 		>>> ndp.Array.from_list([date(2026, 3, 14)]).apply(ndp.DatePart(unit=ndp.DatePartUnit.MONTH))
 		Array([3.], dtype=FLOAT64)
 		"""
+		require_object_not_class(FUNCTION_SETTING, FUNCTION_EXPECTED, function)
+
 		if isinstance(function, TimeFunction):
 			time_values = apply_time_function(self._values, function)
 			time_array = self._wrap(time_values)

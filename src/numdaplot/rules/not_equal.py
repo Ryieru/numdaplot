@@ -5,6 +5,7 @@ Rule keeping the values different from a reference value.
 """
 
 from dataclasses import dataclass
+from typing import ClassVar
 
 from numdaplot.rules.rule_values import ScalarValue
 from numdaplot.rules.value_rule import ValueRule
@@ -24,6 +25,13 @@ class NotEqual(ValueRule[ScalarValue]):
 	value
 		The reference value, a ``ScalarValue`` such as ``"Paris"``, ``10`` or ``True``.
 
+	Raises
+	------
+	RefusedOperationError
+		When ``value`` is None: ``IsPresent`` tests the missing values.
+	InvalidSettingTypeError
+		When ``value`` is not a single value, such as an Array or a list.
+
 	Examples
 	--------
 	>>> import numdaplot as ndp
@@ -31,5 +39,7 @@ class NotEqual(ValueRule[ScalarValue]):
 	>>> countries.select(ndp.NotEqual("FR"))
 	Array(['DE'], dtype=TEXT)
 	"""
+
+	MISSING_VALUE_RULE: ClassVar[str | None] = "IsPresent"
 
 	value: ScalarValue

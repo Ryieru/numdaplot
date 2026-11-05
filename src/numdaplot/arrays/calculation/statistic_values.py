@@ -34,6 +34,7 @@ from numdaplot.data_types.value_family import ValueFamily
 from numdaplot.errors.empty_array_error import EmptyArrayError
 from numdaplot.errors.refused_operation_error import RefusedOperationError
 from numdaplot.positions.axis import Axis
+from numdaplot.settings.setting_types import require_object_not_class
 from numdaplot.statistics.count import Count
 from numdaplot.statistics.count_distinct import CountDistinct
 from numdaplot.statistics.maximum import Max
@@ -91,6 +92,8 @@ STATISTIC_CALCULATIONS = {
 SINGLE_VALUE_DIMENSIONS = (1,)
 UNKNOWN_STATISTIC_OPERATION = "The statistic {statistic_name}"
 UNKNOWN_STATISTIC_ALTERNATIVE = "a statistic of numdaplot"
+STATISTIC_SETTING = "compute statistic"
+STATISTIC_EXPECTED = "a statistic such as ndp.Mean()"
 
 
 def compute_statistic(values: NDArray[Any], statistic: Statistic, axis: Axis | None) -> NDArray[Any]:
@@ -116,6 +119,8 @@ def compute_statistic(values: NDArray[Any], statistic: Statistic, axis: Axis | N
 
 	Raises
 	------
+	InvalidSettingTypeError
+		When ``statistic`` is a class, written without its parentheses.
 	IncompatibleTypesError
 		When the statistic does not apply to the type of the values.
 	DimensionError
@@ -133,6 +138,8 @@ def compute_statistic(values: NDArray[Any], statistic: Statistic, axis: Axis | N
 	>>> compute_statistic(numpy.array([[1, 2], [3, 4]]), ndp.Sum(), ndp.Axis.EACH_ROW)
 	array([3, 7])
 	"""
+	require_object_not_class(STATISTIC_SETTING, STATISTIC_EXPECTED, statistic)
+
 	statistic_class = type(statistic)
 	statistic_name = statistic_class.__name__
 	if statistic_class not in STATISTIC_CALCULATIONS:

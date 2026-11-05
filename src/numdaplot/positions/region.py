@@ -5,10 +5,19 @@ A rectangular part of an Array or a Table, chosen by position.
 """
 
 from dataclasses import dataclass
+from types import NoneType
 
 from numdaplot.errors.empty_region_error import EmptyRegionError
 from numdaplot.positions.index import Index
 from numdaplot.positions.range import Range
+from numdaplot.settings.setting_types import require_list_not_text, require_setting_type
+
+ROWS_SETTING = "Region rows"
+ROWS_EXPECTED = "an Index, a Range or None"
+ROW_TYPES = (Index, Range, NoneType)
+COLUMNS_SETTING = "Region columns"
+COLUMNS_EXPECTED = "an Index, a Range, a list of column names or None"
+COLUMN_TYPES = (Index, Range, list, NoneType)
 
 
 @dataclass(frozen=True)
@@ -29,6 +38,8 @@ class Region:
 
 	Raises
 	------
+	InvalidSettingTypeError
+		When ``rows`` or ``columns`` is of another kind, such as a number or a single text.
 	EmptyRegionError
 		When ``rows`` and ``columns`` are both omitted.
 
@@ -45,15 +56,20 @@ class Region:
 
 	def __post_init__(self) -> None:
 		"""
-		Check that rows or columns are chosen, and replace a list of column names with a copy only the region holds.
+		Check the rows and the columns, and replace a list of column names with a copy only the region holds.
 
 		.. versionadded:: 0.1.0
 
 		Raises
 		------
+		InvalidSettingTypeError
+			When ``rows`` or ``columns`` is of another kind, such as a number or a single text.
 		EmptyRegionError
 			When ``rows`` and ``columns`` are both omitted.
 		"""
+		require_setting_type(ROWS_SETTING, ROWS_EXPECTED, self.rows, ROW_TYPES)
+		require_list_not_text(COLUMNS_SETTING, self.columns)
+		require_setting_type(COLUMNS_SETTING, COLUMNS_EXPECTED, self.columns, COLUMN_TYPES)
 		has_no_position = self.rows is None and self.columns is None
 		if has_no_position:
 			raise EmptyRegionError()
