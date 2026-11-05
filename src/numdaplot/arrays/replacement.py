@@ -29,8 +29,9 @@ class Replacement:
 	region
 		The positions to replace.
 	value
-		A single value written at every position of the region, or an Array of exactly the shape
-		of the region. Its type must fit in the type of the Array: a decimal cannot replace an integer.
+		A ``ScalarValue``, such as ``0`` or ``"Paris"``, written at every position of the region, or an Array of
+		exactly the shape of the region. Its type must fit in the type of the Array: a decimal cannot replace
+		an integer.
 
 	Examples
 	--------

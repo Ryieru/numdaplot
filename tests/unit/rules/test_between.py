@@ -5,12 +5,14 @@ Unit tests of Between.
 """
 
 from datetime import date, datetime
+from typing import TypeVar
 
 import pytest
 
 from numdaplot.errors.invalid_bounds_error import InvalidBoundsError
 from numdaplot.rules.between import Between
 from numdaplot.rules.bounds import Bounds
+from numdaplot.rules.rule_values import OrderedValue
 
 LOW_BOUND = 10
 HIGH_BOUND = 20
@@ -81,3 +83,16 @@ def test_between_rejects_a_date_and_a_datetime() -> None:
 	"""
 	with pytest.raises(InvalidBoundsError):
 		Between(low=FIRST_DAY, high=FIRST_DAY_AT_NOON)
+
+
+def test_between_type_parameter_holds_the_types_of_its_alias() -> None:
+	"""
+	Check that the type parameter shown as OrderedValue accepts exactly the types of this alias.
+
+	.. versionadded:: 0.1.0
+	"""
+	type_parameter = Between.__type_params__[0]
+	assert isinstance(type_parameter, TypeVar)
+
+	assert type_parameter.__name__ == OrderedValue.__name__
+	assert type_parameter.__constraints__ == OrderedValue.__value__.__args__

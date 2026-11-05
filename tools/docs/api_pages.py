@@ -14,6 +14,7 @@ from dataclasses import dataclass
 from typing import Any
 
 from mkdocs.structure.files import File, Files
+from value_types import VALUE_TYPES_PAGE_PATH, VALUE_TYPES_SECTION, VALUE_TYPES_TITLE, build_value_types_page
 
 import numdaplot
 
@@ -401,7 +402,8 @@ def build_api_nav(public_objects: list[PublicObject]) -> list[Any]:
 	-------
 	list[Any]
 		One ``{section title: entries}`` item per section, each entry being ``{name: page path}``
-		or ``{group title: entries}``, as MkDocs reads its ``nav`` setting.
+		or ``{group title: entries}``, as MkDocs reads its ``nav`` setting. The page of the value types
+		follows the classes of its section.
 
 	Examples
 	--------
@@ -427,6 +429,8 @@ def build_api_nav(public_objects: list[PublicObject]) -> list[Any]:
 
 		groups[group_key].append(page_entry)
 
+	value_types_entries = sections.setdefault(VALUE_TYPES_SECTION, [])
+	value_types_entries.append({VALUE_TYPES_TITLE: VALUE_TYPES_PAGE_PATH})
 	api_nav = [{title: entries} for title, entries in sections.items()]
 
 	return api_nav
@@ -475,7 +479,7 @@ def on_files(files: Files, config: Any, **kwargs: Any) -> Files:
 	Returns
 	-------
 	Files
-		The files with one generated page per public class or function.
+		The files with one generated page per public class or function, and the page of the value types.
 	"""
 	public_objects = find_public_objects()
 
@@ -484,5 +488,9 @@ def on_files(files: Files, config: Any, **kwargs: Any) -> Files:
 		page_content = build_page_content(public_object)
 		page_file = File.generated(config, page_path, content=page_content)
 		files.append(page_file)
+
+	value_types_content = build_value_types_page()
+	value_types_file = File.generated(config, VALUE_TYPES_PAGE_PATH, content=value_types_content)
+	files.append(value_types_file)
 
 	return files

@@ -158,7 +158,8 @@ class Figure:
 		Parameters
 		----------
 		path
-			The path of the image, ending with ``.png``, ``.svg`` or ``.pdf``.
+			The path of the image, a ``FilePath`` such as ``"chart.png"`` or ``Path("images/chart.svg")``, ending with
+			``.png``, ``.svg`` or ``.pdf``.
 		options
 			The resolution of a PNG image, 100 dots per inch when omitted. SVG and PDF images take none.
 		on_conflict

@@ -64,8 +64,8 @@ class Plot:
 		Parameters
 		----------
 		layers
-			The charts and their values, the first one giving the default labels. The Plot keeps its own copy
-			of the list.
+			The charts and their values, made by the ``plot_*`` functions, the first one giving the default labels.
+			The Plot keeps its own copy of the list.
 		style
 			The look of the Plot.
 		"""
@@ -114,7 +114,8 @@ class Plot:
 		Parameters
 		----------
 		path
-			The path of the image, ending with ``.png``, ``.svg`` or ``.pdf``.
+			The path of the image, a ``FilePath`` such as ``"chart.png"`` or ``Path("images/chart.svg")``, ending with
+			``.png``, ``.svg`` or ``.pdf``.
 		options
 			The resolution of a PNG image, 100 dots per inch when omitted. SVG and PDF images take none.
 		on_conflict

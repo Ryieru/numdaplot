@@ -4,10 +4,13 @@ Rule keeping the values strictly less than a reference value.
 .. versionadded:: 0.1.0
 """
 
+from dataclasses import dataclass
+
 from numdaplot.rules.rule_values import OrderedValue
 from numdaplot.rules.value_rule import ValueRule
 
 
+@dataclass(frozen=True)
 class Less(ValueRule[OrderedValue]):
 	"""
 	Keep the values strictly less than a reference value.
@@ -17,7 +20,8 @@ class Less(ValueRule[OrderedValue]):
 	Parameters
 	----------
 	value
-		The reference value, which is not kept itself.
+		The reference value, an ``OrderedValue`` such as ``10``, ``"M"`` or ``date(2026, 1, 31)``, which is not
+		kept itself.
 
 	Examples
 	--------
@@ -26,3 +30,5 @@ class Less(ValueRule[OrderedValue]):
 	>>> prices.select(ndp.Less(100))
 	Array([80], dtype=INT64)
 	"""
+
+	value: OrderedValue

@@ -42,7 +42,7 @@ class ArrayArithmetic(ArrayData):
 		Parameters
 		----------
 		other
-			An Array or a single value.
+			An Array or a ``ScalarValue``, such as ``10`` or ``2.5``.
 
 		Returns
 		-------
@@ -81,7 +81,7 @@ class ArrayArithmetic(ArrayData):
 		Parameters
 		----------
 		other
-			An Array or a single value.
+			An Array or a ``ScalarValue``, such as ``10`` or ``2.5``.
 
 		Returns
 		-------
@@ -120,7 +120,7 @@ class ArrayArithmetic(ArrayData):
 		Parameters
 		----------
 		other
-			An Array or a single value.
+			An Array or a ``ScalarValue``, such as ``10`` or ``2.5``.
 
 		Returns
 		-------
@@ -159,7 +159,7 @@ class ArrayArithmetic(ArrayData):
 		Parameters
 		----------
 		other
-			An Array or a single value.
+			An Array or a ``ScalarValue``, such as ``10`` or ``2.5``.
 
 		Returns
 		-------
@@ -198,7 +198,7 @@ class ArrayArithmetic(ArrayData):
 		Parameters
 		----------
 		other
-			An Array or a single value.
+			An Array or a ``ScalarValue``, such as ``10`` or ``2.5``.
 
 		Returns
 		-------
@@ -237,7 +237,7 @@ class ArrayArithmetic(ArrayData):
 		Parameters
 		----------
 		other
-			An Array or a single value.
+			An Array or a ``ScalarValue``, such as ``10`` or ``2.5``.
 
 		Returns
 		-------
@@ -276,7 +276,7 @@ class ArrayArithmetic(ArrayData):
 		Parameters
 		----------
 		other
-			An Array or a single value.
+			An Array or a ``ScalarValue``, such as ``10`` or ``2.5``.
 
 		Returns
 		-------

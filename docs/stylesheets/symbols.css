@@ -125,7 +125,8 @@
 	content: "attribute";
 }
 
-.md-typeset .api-link-class a {
+.md-typeset .api-link-class a,
+.md-typeset .api-link-type-alias a {
 	color: var(--doc-symbol-class-fg-color);
 }
 
@@ -207,7 +208,7 @@
 	background-color: transparent;
 }
 
-.md-typeset .doc-section-item > code a.autorefs[title*=" = "] {
+.md-typeset .doc-section-item > code a.autorefs[title*=" = "]:not([title*=" | "]) {
 	color: var(--doc-symbol-attribute-fg-color);
 }
 

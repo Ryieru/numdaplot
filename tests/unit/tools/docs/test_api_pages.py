@@ -56,6 +56,7 @@ EXPECTED_TABLES_NAV = [
 		]
 	}
 ]
+EXPECTED_VALUE_TYPES_SECTION = {"Types": [{"Value types": "api/types/value_types.md"}]}
 
 
 def test_find_section_prefers_the_most_precise_prefix() -> None:
@@ -168,7 +169,8 @@ def test_build_api_nav_groups_settings_inside_their_section() -> None:
 				{"Table": "api/tables/table.md"},
 				{EXPECTED_FILE_GROUP: [{"CsvOptions": "api/tables/csv_options.md"}]},
 			]
-		}
+		},
+		EXPECTED_VALUE_TYPES_SECTION,
 	]
 
 

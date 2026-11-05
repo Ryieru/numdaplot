@@ -12,8 +12,10 @@ from numdaplot.rules.bounds import Bounds
 from numdaplot.rules.rule import Rule
 
 
+# The type parameter has the name of the alias holding the same types: the documentation shows the alias,
+# and both bounds must be of one type.
 @dataclass(frozen=True)
-class Between[BoundValue: (int, float, str, date, datetime, timedelta)](Rule):
+class Between[OrderedValue: (int, float, str, date, datetime, timedelta)](Rule):
 	"""
 	Keep the values inside an interval.
 
@@ -22,9 +24,10 @@ class Between[BoundValue: (int, float, str, date, datetime, timedelta)](Rule):
 	Parameters
 	----------
 	low
-		Low bound of the interval.
+		Low bound of the interval, an ``OrderedValue`` such as ``10``, ``"A"`` or ``date(2026, 1, 1)``.
 	high
-		High bound of the interval, greater than or equal to ``low`` and of a comparable kind.
+		High bound of the interval, an ``OrderedValue`` such as ``20``, ``"M"`` or ``date(2026, 12, 31)``, greater than
+		or equal to ``low`` and of a comparable kind.
 	bounds
 		Which bounds are part of the interval. Both are included by default.
 
@@ -44,8 +47,8 @@ class Between[BoundValue: (int, float, str, date, datetime, timedelta)](Rule):
 	Array([15], dtype=INT64)
 	"""
 
-	low: BoundValue
-	high: BoundValue
+	low: OrderedValue
+	high: OrderedValue
 	bounds: Bounds = Bounds.INCLUDED
 
 	def __post_init__(self) -> None:

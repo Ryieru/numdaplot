@@ -22,6 +22,7 @@ from link_targets import (
 	find_public_paths,
 	find_unique_member_paths,
 )
+from value_types import find_value_type_paths
 
 PACKAGE_NAME = "numdaplot"
 SOURCE_FOLDER = "src"
@@ -67,7 +68,8 @@ def load_reference_index() -> ReferenceIndex:
 	if not isinstance(package, griffe.Module):
 		raise TypeError(package.path)
 
-	public_paths = find_public_paths(package)
+	value_type_paths = find_value_type_paths(loader)
+	public_paths = find_public_paths(package) | value_type_paths
 	member_paths = find_unique_member_paths(public_paths, loader)
 	enum_member_paths = find_enum_member_paths(member_paths)
 	context = LinkContext(None, public_paths, loader, enum_member_paths)

@@ -1,8 +1,8 @@
 """
-Functional tests running the examples of the documented enum members.
+Functional tests running the examples of the documented enum members and type aliases.
 
 doctest only collects the docstrings of modules, classes and functions: the docstring written under an enum
-member, such as ``Type.INT8``, is checked here instead.
+member, such as ``Type.INT8``, or under a type alias, such as ``ScalarValue``, is checked here instead.
 
 .. versionadded:: 0.1.0
 """
@@ -18,11 +18,19 @@ import pytest
 SOURCE_FOLDER = Path(__file__).parent.parent.parent / "src" / "numdaplot"
 EXAMPLES_HEADER = "Examples"
 EXAMPLE_NAME = "{path}:{class_name}.{member_name}"
+ALIAS_EXAMPLE_NAME = "{path}:{alias_name}"
+ALIAS_NAMES = [
+	"rule_values.py:ScalarValue",
+	"rule_values.py:OrderedValue",
+	"array_creation.py:ListValue",
+	"array_creation.py:NestedValues",
+	"file_paths.py:FilePath",
+]
 
 
 def find_member_docstrings(path: Path) -> list[tuple[str, str]]:
 	"""
-	Return the docstrings with examples written under the members of the classes of a file.
+	Return the docstrings with examples written under the type aliases of a file and the members of its classes.
 
 	.. versionadded:: 0.1.0
 
@@ -34,10 +42,21 @@ def find_member_docstrings(path: Path) -> list[tuple[str, str]]:
 	Returns
 	-------
 	list[tuple[str, str]]
-		The name of each member, such as ``type.py:Type.INT8``, and its cleaned docstring.
+		The name of each alias or member, such as ``type.py:Type.INT8``, and its cleaned docstring.
 	"""
 	tree = ast.parse(path.read_text())
 	member_docstrings = list[tuple[str, str]]()
+	module_statement_pairs = zip(tree.body, tree.body[1:], strict=False)
+
+	for statement, following in module_statement_pairs:
+		if not isinstance(statement, ast.TypeAlias):
+			continue
+
+		alias_docstring = read_following_docstring(following)
+		if alias_docstring is not None:
+			name = ALIAS_EXAMPLE_NAME.format(path=path.name, alias_name=statement.name.id)
+			member_docstrings.append((name, alias_docstring))
+
 	class_nodes = [node for node in tree.body if isinstance(node, ast.ClassDef)]
 
 	for class_node in class_nodes:
@@ -82,10 +101,33 @@ def read_member_docstring(assignment: ast.stmt, following: ast.stmt) -> tuple[st
 	if not isinstance(target, ast.Name):
 		return None
 
-	if not isinstance(following, ast.Expr):
+	docstring = read_following_docstring(following)
+	if docstring is None:
 		return None
 
-	constant = following.value
+	return target.id, docstring
+
+
+def read_following_docstring(statement: ast.stmt) -> str | None:
+	"""
+	Return the cleaned docstring holding examples that a statement is, if it is one.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	statement
+		A statement following a member or a type alias.
+
+	Returns
+	-------
+	str or None
+		The cleaned docstring, or ``None`` when the statement is not a text holding examples.
+	"""
+	if not isinstance(statement, ast.Expr):
+		return None
+
+	constant = statement.value
 	if not isinstance(constant, ast.Constant):
 		return None
 
@@ -98,12 +140,12 @@ def read_member_docstring(assignment: ast.stmt, following: ast.stmt) -> tuple[st
 
 	docstring = inspect.cleandoc(raw_docstring)
 
-	return target.id, docstring
+	return docstring
 
 
 def find_all_member_docstrings() -> list[tuple[str, str]]:
 	"""
-	Return the docstrings with examples of the enum members of the whole package.
+	Return the docstrings with examples of the enum members and type aliases of the whole package.
 
 	.. versionadded:: 0.1.0
 
@@ -133,6 +175,16 @@ def test_every_enum_member_with_a_docstring_was_found() -> None:
 	.. versionadded:: 0.1.0
 	"""
 	assert "type.py:Type.INT8" in MEMBER_NAMES
+
+
+@pytest.mark.parametrize("alias_name", ALIAS_NAMES)
+def test_every_value_type_docstring_was_found(alias_name: str) -> None:
+	"""
+	Check that the docstring with examples of each value type is run.
+
+	.. versionadded:: 0.1.0
+	"""
+	assert alias_name in MEMBER_NAMES
 
 
 @pytest.mark.parametrize(("name", "docstring"), MEMBER_DOCSTRINGS, ids=MEMBER_NAMES)

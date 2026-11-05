@@ -69,6 +69,7 @@ plugins:
               - tools/docs/tab_indentation.py
               - tools/docs/default_values.py
               - tools/docs/cross_references.py
+              - tools/docs/public_bases.py
 
 nav:
   - Home: index.md

@@ -26,15 +26,35 @@ from numdaplot.positions.range import Range
 from numdaplot.rules.rule_values import ScalarValue
 
 type ListValue = ScalarValue | None
-"""A single value of a list given to ``Array.from_list``, ``None`` being a missing value.
+"""
+A single value of a list given to ``Array.from_list``: a ``ScalarValue``, or ``None`` for a missing value.
+
+It is a name used by the documentation and the annotations, not an object to create: pass the value itself,
+such as ``10``, ``"Paris"`` or ``None``.
 
 .. versionadded:: 0.1.0
+
+Examples
+--------
+>>> import numdaplot as ndp
+>>> ndp.Array.from_list([1.5, None])
+Array([1.5, nan], dtype=FLOAT64)
 """
 
 type NestedValues = Sequence[ListValue] | Sequence[NestedValues]
-"""A list of single values, or a list of lists nested to any depth.
+"""
+A list of ``ListValue``, or a list of lists nested to any depth, as ``Array.from_list`` reads it.
+
+It is a name used by the documentation and the annotations, not an object to create: pass the value itself,
+such as ``[1, 2, 3]``, ``["Paris", "Lyon"]`` or ``[[1, 2], [3, 4]]``.
 
 .. versionadded:: 0.1.0
+
+Examples
+--------
+>>> import numdaplot as ndp
+>>> ndp.Array.from_list([[1, 2], [3, 4]]).shape
+Shape(dimensions=(2, 2))
 """
 
 
@@ -61,7 +81,8 @@ class ArrayCreation(ArrayData):
 		Parameters
 		----------
 		values
-			The values. Nested lists must form a regular block.
+			The values, a ``NestedValues`` such as ``[1, 2, 3]``, ``["Paris", None]`` or ``[[1, 2], [3, 4]]``.
+			Nested lists must form a regular block.
 		dtype
 			The type to store the values as. Required when no value is present.
 
@@ -144,7 +165,7 @@ class ArrayCreation(ArrayData):
 		shape
 			The shape of the Array.
 		value
-			The repeated value.
+			The repeated value, a ``ScalarValue`` such as ``0``, ``"Paris"`` or ``True``.
 		dtype
 			The type to store the value as, guessed from the value when omitted.
 

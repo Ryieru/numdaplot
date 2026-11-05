@@ -17,6 +17,7 @@ from typing import Any
 import griffe
 from code_links import link_code_tokens
 from link_targets import LinkContext, find_enum_member_paths, find_public_paths, find_unique_member_paths
+from value_types import find_value_type_paths, link_type_parameters
 
 CODE_SPAN = re.compile(r"(?<!`)``(?P<code>[^`\n]+)``(?!`)")
 CODE_TEMPLATE = "<code>{content}</code>"
@@ -140,6 +141,31 @@ def link_object_docstrings(obj: griffe.Object, class_owners: dict[str, str], bas
 		link_object_docstrings(member, class_owners, base_context)
 
 
+def link_package_type_parameters(
+	obj: griffe.Object, value_type_paths: dict[str, str], loader: griffe.GriffeLoader
+) -> None:
+	"""
+	Make the type parameters named after a value type refer to it, in a module and everything below it.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	obj
+		A module or a class loaded by griffe.
+	value_type_paths
+		The path of each value type, by name.
+	loader
+		The loader that holds every loaded module.
+	"""
+	if isinstance(obj, griffe.Class):
+		link_type_parameters(obj, value_type_paths, loader)
+
+	for member in obj.members.values():
+		if isinstance(member, griffe.Module | griffe.Class):
+			link_package_type_parameters(member, value_type_paths, loader)
+
+
 class CrossReferences(griffe.Extension):
 	"""
 	Griffe extension turning the names written in code into links to their documentation.
@@ -164,9 +190,11 @@ class CrossReferences(griffe.Extension):
 		**kwargs
 			The other arguments griffe gives to its extensions, unused.
 		"""
-		public_paths = find_public_paths(pkg)
+		value_type_paths = find_value_type_paths(loader)
+		public_paths = find_public_paths(pkg) | value_type_paths
 		class_owners = find_class_owners(pkg, public_paths)
 		unique_member_paths = find_unique_member_paths(public_paths, loader)
 		enum_member_paths = find_enum_member_paths(unique_member_paths)
 		base_context = LinkContext(None, public_paths, loader, enum_member_paths)
 		link_object_docstrings(pkg, class_owners, base_context)
+		link_package_type_parameters(pkg, value_type_paths, loader)

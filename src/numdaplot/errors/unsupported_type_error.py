@@ -23,14 +23,14 @@ class UnsupportedTypeError(NumdaplotError):
 	type_name
 		Name of the type that cannot be converted.
 	library
-		Library on the other side of the conversion.
+		Library on the other side of the conversion, ``Library.NUMPY`` or ``Library.PANDAS``.
 
 	Attributes
 	----------
 	type_name
 		Name of the type that cannot be converted.
 	library
-		Library on the other side of the conversion.
+		Library on the other side of the conversion, ``Library.NUMPY`` or ``Library.PANDAS``.
 
 	Examples
 	--------
@@ -54,7 +54,7 @@ class UnsupportedTypeError(NumdaplotError):
 		type_name
 			Name of the type that cannot be converted.
 		library
-			Library on the other side of the conversion.
+			Library on the other side of the conversion, ``Library.NUMPY`` or ``Library.PANDAS``.
 		"""
 		message = UNSUPPORTED_TYPE_MESSAGE.format(type_name=type_name, library_name=library.value)
 		super().__init__(message)

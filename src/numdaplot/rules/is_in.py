@@ -11,8 +11,10 @@ from numdaplot.errors.empty_values_error import EmptyValuesError
 from numdaplot.rules.rule import Rule
 
 
+# The type parameter has the name of the alias holding the same types: the documentation shows the alias,
+# and every accepted value must be of one type.
 @dataclass(frozen=True)
-class IsIn[AcceptedValue: (bool, int, float, str, date, datetime, timedelta)](Rule):
+class IsIn[ScalarValue: (bool, int, float, str, date, datetime, timedelta)](Rule):
 	"""
 	Keep the values that belong to a list of accepted values.
 
@@ -21,8 +23,8 @@ class IsIn[AcceptedValue: (bool, int, float, str, date, datetime, timedelta)](Ru
 	Parameters
 	----------
 	values
-		The accepted values, at least one and all of the same kind. The rule keeps its own copy,
-		so changing the list afterwards does not change the rule.
+		The accepted values, a list of ``ScalarValue`` such as ``["Paris", "Lyon"]`` or ``[1, 2]``, at least one and
+		all of the same kind. The rule keeps its own copy, so changing the list afterwards does not change the rule.
 
 	Raises
 	------
@@ -37,7 +39,7 @@ class IsIn[AcceptedValue: (bool, int, float, str, date, datetime, timedelta)](Ru
 	Array(['FR', 'DE'], dtype=TEXT)
 	"""
 
-	values: list[AcceptedValue]
+	values: list[ScalarValue]
 
 	def __post_init__(self) -> None:
 		"""

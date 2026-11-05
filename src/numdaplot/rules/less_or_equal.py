@@ -4,10 +4,13 @@ Rule keeping the values less than or equal to a reference value.
 .. versionadded:: 0.1.0
 """
 
+from dataclasses import dataclass
+
 from numdaplot.rules.rule_values import OrderedValue
 from numdaplot.rules.value_rule import ValueRule
 
 
+@dataclass(frozen=True)
 class LessOrEqual(ValueRule[OrderedValue]):
 	"""
 	Keep the values less than or equal to a reference value.
@@ -17,7 +20,7 @@ class LessOrEqual(ValueRule[OrderedValue]):
 	Parameters
 	----------
 	value
-		The reference value, which is kept itself.
+		The reference value, an ``OrderedValue`` such as ``10``, ``"M"`` or ``date(2026, 1, 31)``, which is kept itself.
 
 	Examples
 	--------
@@ -26,3 +29,5 @@ class LessOrEqual(ValueRule[OrderedValue]):
 	>>> prices.select(ndp.LessOrEqual(100))
 	Array([ 80, 100], dtype=INT64)
 	"""
+
+	value: OrderedValue

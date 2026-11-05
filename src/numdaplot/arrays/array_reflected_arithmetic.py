@@ -37,7 +37,7 @@ class ArrayReflectedArithmetic(ArrayData):
 		Parameters
 		----------
 		other
-			A single value, on the left of the operator.
+			A ``ScalarValue``, such as ``10`` or ``2.5``, on the left of the operator.
 
 		Returns
 		-------
@@ -71,7 +71,7 @@ class ArrayReflectedArithmetic(ArrayData):
 		Parameters
 		----------
 		other
-			A single value, on the left of the operator.
+			A ``ScalarValue``, such as ``10`` or ``2.5``, on the left of the operator.
 
 		Returns
 		-------
@@ -105,7 +105,7 @@ class ArrayReflectedArithmetic(ArrayData):
 		Parameters
 		----------
 		other
-			A single value, on the left of the operator.
+			A ``ScalarValue``, such as ``10`` or ``2.5``, on the left of the operator.
 
 		Returns
 		-------
@@ -139,7 +139,7 @@ class ArrayReflectedArithmetic(ArrayData):
 		Parameters
 		----------
 		other
-			A single value, on the left of the operator.
+			A ``ScalarValue``, such as ``10`` or ``2.5``, on the left of the operator.
 
 		Returns
 		-------
@@ -173,7 +173,7 @@ class ArrayReflectedArithmetic(ArrayData):
 		Parameters
 		----------
 		other
-			A single value, on the left of the operator.
+			A ``ScalarValue``, such as ``10`` or ``2.5``, on the left of the operator.
 
 		Returns
 		-------
@@ -207,7 +207,7 @@ class ArrayReflectedArithmetic(ArrayData):
 		Parameters
 		----------
 		other
-			A single value, on the left of the operator.
+			A ``ScalarValue``, such as ``10`` or ``2.5``, on the left of the operator.
 
 		Returns
 		-------
@@ -241,7 +241,7 @@ class ArrayReflectedArithmetic(ArrayData):
 		Parameters
 		----------
 		other
-			A single value, on the left of the operator.
+			A ``ScalarValue``, such as ``10`` or ``2.5``, on the left of the operator.
 
 		Returns
 		-------

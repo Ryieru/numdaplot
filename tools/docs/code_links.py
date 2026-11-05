@@ -20,6 +20,8 @@ OPENING_PARENTHESIS = "("
 EMPTY_PARENTHESES = "()"
 KEYWORD_SIGN = "="
 EQUALITY_SIGN = "=="
+KIND_WORD_SEPARATOR = " "
+KIND_CLASS_SEPARATOR = "-"
 LINK_TEMPLATE = (
 	'<span class="api-link api-link-{kind}"><autoref identifier="{identifier}" optional>{text}</autoref></span>'
 )
@@ -326,7 +328,8 @@ def build_link(text: str, identifier: str, loader: griffe.GriffeLoader) -> str:
 		The link, such as ``api-link-class`` for a class, ``api-link-object`` for an unknown object.
 	"""
 	target = find_object(identifier, loader)
-	kind = "object" if target is None else target.kind.value
+	kind_name = "object" if target is None else target.kind.value
+	kind = kind_name.replace(KIND_WORD_SEPARATOR, KIND_CLASS_SEPARATOR)
 	link = LINK_TEMPLATE.format(kind=kind, identifier=identifier, text=text)
 
 	return link

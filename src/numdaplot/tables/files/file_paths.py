@@ -11,9 +11,25 @@ from numdaplot.errors.file_not_found_error import FileNotFoundError
 from numdaplot.tables.conflict import Conflict
 
 type FilePath = str | Path
-"""The path of a file, as a text or a ``pathlib.Path``.
+"""
+The path of a file, as a text or a ``pathlib.Path``.
+
+It is a name used by the documentation and the annotations, not an object to create: pass the value itself,
+such as ``"sales.csv"`` or ``Path("data/sales.csv")``.
 
 .. versionadded:: 0.1.0
+
+Examples
+--------
+>>> from pathlib import Path
+>>> from tempfile import TemporaryDirectory
+>>> import numdaplot as ndp
+>>> cities = ndp.Array.from_list(["Paris", "Lyon"])
+>>> sales = ndp.Table.from_arrays({"city": cities})
+>>> with TemporaryDirectory() as folder:
+... 	sales.to_csv(Path(folder) / "sales.csv")
+... 	ndp.Table.from_csv(Path(folder) / "sales.csv").column("city").to_list()
+['Paris', 'Lyon']
 """
 
 
