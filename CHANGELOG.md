@@ -68,7 +68,8 @@ and numdaplot follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
   `InvalidShapeError`, `IrregularListError`, `MissingTypeError`, `NotSingleValueError`, `OutOfDomainError`,
   `RefusedOperationError`, `ShapeMismatchError`, `UnsupportedMissingError`,
   `ValueConversionError`.
-- `Type` enum of value types and its conversion to numpy and pandas dtypes.
+- `Type` enum of value types and its conversion to numpy and pandas dtypes, and the `Library` enum read on
+  `UnsupportedTypeError`.
 - Rules: `Equal`, `NotEqual`, `Greater`, `GreaterOrEqual`, `Less`, `LessOrEqual`, `Between`, `IsIn`,
   `Contains`, `IsMissing`, `IsPresent`, with the `Bounds` and `Case` enums.
 - Statistics: `Sum`, `Mean`, `Median`, `Min`, `Max`, `Count`, `CountDistinct`, `StandardDeviation`,

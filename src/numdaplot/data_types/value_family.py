@@ -28,19 +28,64 @@ class ValueFamily(Enum):
 	"""
 
 	NUMBER = auto()
-	"""Signed and unsigned integers, and decimals."""
+	"""
+	Signed and unsigned integers, and decimals.
+
+	Examples
+	--------
+	>>> import numdaplot as ndp
+	>>> from numdaplot.data_types.value_family import find_family
+	>>> find_family(ndp.Type.UINT8)
+	<ValueFamily.NUMBER: 1>
+	"""
 
 	BOOL = auto()
-	"""True or false."""
+	"""
+	True or false.
+
+	Examples
+	--------
+	>>> import numdaplot as ndp
+	>>> from numdaplot.data_types.value_family import find_family
+	>>> find_family(ndp.Type.BOOL)
+	<ValueFamily.BOOL: 2>
+	"""
 
 	TEXT = auto()
-	"""Texts and categories."""
+	"""
+	Texts and categories.
+
+	Examples
+	--------
+	>>> import numdaplot as ndp
+	>>> from numdaplot.data_types.value_family import find_family
+	>>> find_family(ndp.Type.TEXT)
+	<ValueFamily.TEXT: 3>
+	"""
 
 	MOMENT = auto()
-	"""Dates and datetimes."""
+	"""
+	Dates and datetimes.
+
+	Examples
+	--------
+	>>> import numdaplot as ndp
+	>>> from numdaplot.data_types.value_family import find_family
+	>>> find_family(ndp.Type.DATE)
+	<ValueFamily.MOMENT: 4>
+	"""
 
 	DURATION = auto()
-	"""Gaps between two moments."""
+	"""
+	Gaps between two moments.
+
+	Examples
+	--------
+	>>> import numdaplot as ndp
+	>>> from numdaplot.data_types.value_family import find_family
+	>>> find_family(ndp.Type.DURATION)
+	<ValueFamily.DURATION: 5>
+	"""
 
 
 FAMILIES_BY_TYPE = {

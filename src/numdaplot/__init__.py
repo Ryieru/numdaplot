@@ -34,6 +34,7 @@ from numdaplot.arrays.math_functions.square_root import SquareRoot
 from numdaplot.arrays.replacement import Replacement
 from numdaplot.arrays.shape import Shape
 from numdaplot.arrays.type_match import TypeMatch
+from numdaplot.data_types.library import Library
 from numdaplot.data_types.type import Type
 from numdaplot.dates.custom_date_format import CustomDateFormat
 from numdaplot.dates.date_format import DateFormat
@@ -310,12 +311,12 @@ __all__ = [
 	"InvalidRotationError",
 	"InvalidSeedError",
 	"InvalidSeparatorError",
-	"InvalidTypeError",
 	"InvalidShapeError",
 	"InvalidSheetNameError",
 	"InvalidSizeError",
 	"InvalidStepError",
 	"InvalidTimeZoneChangeError",
+	"InvalidTypeError",
 	"IrregularListError",
 	"IsIn",
 	"IsMissing",
@@ -327,6 +328,7 @@ __all__ = [
 	"LegendPosition",
 	"Less",
 	"LessOrEqual",
+	"Library",
 	"LineChart",
 	"LineType",
 	"Logarithm",

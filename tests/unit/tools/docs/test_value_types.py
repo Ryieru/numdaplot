@@ -23,7 +23,7 @@ PACKAGE_FILES = {
 BETWEEN_PATH = "between.Between"
 ALIAS_PATHS = {"OrderedValue": "sales.values.OrderedValue"}
 ALIAS_PATH = "sales.values.OrderedValue"
-EXPECTED_VALUE_TYPE_COUNT = 6
+EXPECTED_VALUE_TYPE_COUNT = 5
 
 
 def load_package() -> tuple[griffe.Module, griffe.GriffeLoader]:

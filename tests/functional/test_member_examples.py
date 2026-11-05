@@ -17,6 +17,7 @@ import pytest
 
 SOURCE_FOLDER = Path(__file__).parent.parent.parent / "src" / "numdaplot"
 EXAMPLES_HEADER = "Examples"
+ENUM_BASE = "Enum"
 EXAMPLE_NAME = "{path}:{class_name}.{member_name}"
 ALIAS_EXAMPLE_NAME = "{path}:{alias_name}"
 ALIAS_NAMES = [
@@ -166,6 +167,65 @@ def find_all_member_docstrings() -> list[tuple[str, str]]:
 
 MEMBER_DOCSTRINGS = find_all_member_docstrings()
 MEMBER_NAMES = [name for name, _ in MEMBER_DOCSTRINGS]
+
+
+def find_members_without_example(path: Path) -> list[str]:
+	"""
+	Return the members of the enums of a file that have no example in their docstring.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	path
+		The source file.
+
+	Returns
+	-------
+	list[str]
+		The name of each member without example.
+	"""
+	source = path.read_text()
+	tree = ast.parse(source)
+	missing_names = list[str]()
+
+	for statement in tree.body:
+		if not isinstance(statement, ast.ClassDef):
+			continue
+
+		base_names = [ast.unparse(base) for base in statement.bases]
+		is_enum = ENUM_BASE in " ".join(base_names)
+		if not is_enum:
+			continue
+
+		body = statement.body
+
+		for assignment, following in zip(body, body[1:], strict=False):
+			if not isinstance(assignment, ast.Assign):
+				continue
+
+			target = ast.unparse(assignment.targets[0])
+			docstring = read_following_docstring(following) or ""
+			if EXAMPLES_HEADER not in docstring:
+				missing_names.append(f"{statement.name}.{target}")
+
+	return missing_names
+
+
+def test_every_enum_member_has_an_example() -> None:
+	"""
+	Check that no member of an enum of the package lacks an example, its last member included.
+
+	.. versionadded:: 0.1.0
+	"""
+	missing_names = list[str]()
+	source_paths = sorted(SOURCE_FOLDER.rglob("*.py"))
+
+	for source_path in source_paths:
+		file_missing_names = find_members_without_example(source_path)
+		missing_names.extend(file_missing_names)
+
+	assert missing_names == []
 
 
 def test_every_enum_member_with_a_docstring_was_found() -> None:

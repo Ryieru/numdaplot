@@ -27,7 +27,31 @@ class Library(Enum):
 	"""
 
 	NUMPY = "numpy"
-	"""numpy, used by Array."""
+	"""
+	numpy, used by Array.
+
+	Examples
+	--------
+	>>> import numdaplot as ndp
+	>>> import numpy
+	>>> try:
+	... 	ndp.Array.from_numpy(numpy.array([1 + 2j]))
+	... except ndp.UnsupportedTypeError as error:
+	... 	print(error.library == ndp.Library.NUMPY)
+	True
+	"""
 
 	PANDAS = "pandas"
-	"""pandas, used by Table."""
+	"""
+	pandas, used by Table.
+
+	Examples
+	--------
+	>>> import numdaplot as ndp
+	>>> import pandas
+	>>> try:
+	... 	ndp.Table.from_pandas(pandas.DataFrame({"impedance": [1 + 2j]}))
+	... except ndp.UnsupportedTypeError as error:
+	... 	print(error.library == ndp.Library.PANDAS)
+	True
+	"""
