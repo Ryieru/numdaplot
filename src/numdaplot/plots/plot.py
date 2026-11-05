@@ -25,7 +25,7 @@ from numdaplot.plots.output.image_saving import write_image
 from numdaplot.plots.output.plot_display import show_drawing
 from numdaplot.plots.overlay_checks import require_overlay_base, require_same_positions, require_vertical_bars
 from numdaplot.plots.style.image_options import ImageOptions
-from numdaplot.plots.style.style import Style
+from numdaplot.plots.style.plot_style import PlotStyle
 from numdaplot.tables.conflict import Conflict
 from numdaplot.tables.files.file_paths import FilePath
 from numdaplot.tables.table import Table
@@ -57,7 +57,7 @@ class Plot:
 	"""
 
 	_layers: list[ChartLayer]
-	_style: Style
+	_style: PlotStyle
 
 	def __init__(self, *arguments: Never, **keyword_arguments: Never) -> None:
 		"""
@@ -80,7 +80,7 @@ class Plot:
 		raise RefusedOperationError(CONSTRUCTOR_OPERATION, CONSTRUCTOR_ALTERNATIVE)
 
 	@classmethod
-	def _create(cls, layers: list[ChartLayer], style: Style) -> Self:
+	def _create(cls, layers: list[ChartLayer], style: PlotStyle) -> Self:
 		"""
 		Return a new Plot keeping the charts and the style.
 
@@ -123,7 +123,7 @@ class Plot:
 		--------
 		>>> import numdaplot as ndp
 		>>> prices = ndp.Array.from_list([12.0, 15.5, 14.0])
-		>>> style = ndp.Style(title="Prices")
+		>>> style = ndp.PlotStyle(title="Prices")
 		>>> figure = ndp.plot_line(prices, style=style).to_matplotlib()
 		>>> figure.axes[0].get_title()
 		'Prices'

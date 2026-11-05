@@ -24,10 +24,10 @@ and numdaplot follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
   or PDF image with `Plot.save` and turned into a matplotlib figure with `Plot.to_matplotlib`. `Plot.add_line`,
   `Plot.add_bar` and `Plot.add_scatter` draw other charts over a Plot, on its axis or on a second axis on the
   right with the `ValueAxis` enum.
-- Figures: `Figure` places Plots on the cells of a `Layout` with `Figure.place` and `Cell`, and has `show`,
-  `save` and `to_matplotlib` like a Plot.
+- Figures: `Figure` places Plots on the cells of a `Layout` with `Figure.place` and `Cell`, takes its title and its
+  size from a `FigureStyle`, and has `show`, `save` and `to_matplotlib` like a Plot.
 - Plot settings: `Chart`, `LineChart`, `BarChart`, `ScatterChart`, `HistogramChart`, `BoxChart`, `PieChart`,
-  `HeatmapChart`, `MissingChart`, `BinCount`, `BinWidth`, `Style`, `Size`, `CustomColor`, `ImageOptions`, and the
+  `HeatmapChart`, `MissingChart`, `BinCount`, `BinWidth`, `PlotStyle`, `Size`, `CustomColor`, `ImageOptions`, and the
   `Color`, `LineType`, `MarkerShape`, `Orientation`, `BarLayout`, `Outliers`, `Percentages`, `ColorScale`,
   `CellValues`, `LegendPosition`, `GridLines` and `SizeUnit` enums.
 - Plot errors and warning: `ConflictingSettingsError`, `DuplicateLabelError`, `EmptyTotalError`,

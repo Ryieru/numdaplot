@@ -1,5 +1,5 @@
 """
-Drawing of the Style of a Plot: title, axis labels, rotation of the values, grid lines and legend.
+Drawing of the PlotStyle of a Plot: title, axis labels, rotation of the values, grid lines and legend.
 
 .. versionadded:: 0.1.0
 """
@@ -21,7 +21,7 @@ from numdaplot.plots.drawing.plot_axes import PlotAxes
 from numdaplot.plots.drawing.tick_rotation import rotate_x_labels, rotate_y_labels
 from numdaplot.plots.style.grid_lines import GridLines
 from numdaplot.plots.style.legend_position import LegendPosition
-from numdaplot.plots.style.style import Style
+from numdaplot.plots.style.plot_style import PlotStyle
 
 type LegendLocation = Literal["best", "upper left", "upper right", "lower left", "lower right", "center left"]
 """A legend location matplotlib accepts.
@@ -46,7 +46,7 @@ MINIMUM_LEGEND_ENTRIES = 2
 LEGEND_POINT_AREA = 36.0
 
 
-def apply_style(plot_axes: PlotAxes, drawn_chart: DrawnChart, style: Style) -> None:
+def apply_style(plot_axes: PlotAxes, drawn_chart: DrawnChart, style: PlotStyle) -> None:
 	"""
 	Draw the title, the axis labels, the rotation of the values, the grid lines and the legend of a Plot.
 
@@ -71,7 +71,7 @@ def apply_style(plot_axes: PlotAxes, drawn_chart: DrawnChart, style: Style) -> N
 	>>> from numdaplot.plots.drawing.style_drawing import apply_style
 	>>> axes = Figure().add_subplot()
 	>>> drawn_chart = DrawnChart("day", "price", False, GridAxes.BOTH, None)
-	>>> apply_style(PlotAxes(axes, None, None), drawn_chart, ndp.Style(title="Sales"))
+	>>> apply_style(PlotAxes(axes, None, None), drawn_chart, ndp.PlotStyle(title="Sales"))
 	>>> axes.get_title(), axes.get_xlabel(), axes.get_ylabel()
 	('Sales', 'day', 'price')
 	"""
@@ -90,7 +90,7 @@ def apply_style(plot_axes: PlotAxes, drawn_chart: DrawnChart, style: Style) -> N
 		place_legend(plot_axes, drawn_chart, style.legend)
 
 
-def write_axis_labels(axes: Axes, drawn_chart: DrawnChart, style: Style) -> None:
+def write_axis_labels(axes: Axes, drawn_chart: DrawnChart, style: PlotStyle) -> None:
 	"""
 	Write the labels of the axes, the style ones or else the defaults of the chart.
 
@@ -113,7 +113,8 @@ def write_axis_labels(axes: Axes, drawn_chart: DrawnChart, style: Style) -> None
 	>>> from numdaplot.plots.drawing.grid_axes import GridAxes
 	>>> from numdaplot.plots.drawing.style_drawing import write_axis_labels
 	>>> axes = Figure().add_subplot()
-	>>> write_axis_labels(axes, DrawnChart("city", "price", True, GridAxes.VALUES, None), ndp.Style(y_label="Euros"))
+	>>> drawn_chart = DrawnChart("city", "price", True, GridAxes.VALUES, None)
+	>>> write_axis_labels(axes, drawn_chart, ndp.PlotStyle(y_label="Euros"))
 	>>> axes.get_xlabel(), axes.get_ylabel()
 	('Euros', 'city')
 	"""
@@ -196,7 +197,7 @@ def draw_grid_lines(axes: Axes, drawn_chart: DrawnChart) -> None:
 	axes.grid(True, axis=value_axis)
 
 
-def write_right_label(plot_axes: PlotAxes, style: Style) -> None:
+def write_right_label(plot_axes: PlotAxes, style: PlotStyle) -> None:
 	"""
 	Write the label of the axis on the right, the style one or else the default one, when the Plot has that axis.
 
@@ -217,7 +218,7 @@ def write_right_label(plot_axes: PlotAxes, style: Style) -> None:
 	>>> from numdaplot.plots.drawing.style_drawing import write_right_label
 	>>> axes = Figure().add_subplot()
 	>>> right_axes = axes.twinx()
-	>>> write_right_label(PlotAxes(axes, right_axes, "price"), ndp.Style())
+	>>> write_right_label(PlotAxes(axes, right_axes, "price"), ndp.PlotStyle())
 	>>> right_axes.get_ylabel()
 	'price'
 	"""

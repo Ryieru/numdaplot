@@ -1,5 +1,5 @@
 """
-Unit tests of CustomColor, Size, ImageOptions and Style.
+Unit tests of CustomColor, Size, ImageOptions and PlotStyle.
 
 .. versionadded:: 0.1.0
 """
@@ -14,8 +14,8 @@ from numdaplot.plots.style.custom_color import CustomColor
 from numdaplot.plots.style.grid_lines import GridLines
 from numdaplot.plots.style.image_options import ImageOptions
 from numdaplot.plots.style.legend_position import LegendPosition
+from numdaplot.plots.style.plot_style import PlotStyle
 from numdaplot.plots.style.size import Size
-from numdaplot.plots.style.style import Style
 
 COLOR_CODES = ["#ff8800", "#FF8800", "#1f77b4"]
 REJECTED_CODES = ["ff8800", "#ff88", "#ff88001", "#gg8800", "", "orange"]
@@ -100,11 +100,11 @@ def test_image_options_reject_a_resolution_below_one() -> None:
 
 def test_style_defaults_draw_grid_lines_and_place_the_legend_best() -> None:
 	"""
-	Check the defaults of a Style: no title or labels, grid lines, best legend and default size.
+	Check the defaults of a PlotStyle: no title or labels, grid lines, best legend and default size.
 
 	.. versionadded:: 0.1.0
 	"""
-	style = Style()
+	style = PlotStyle()
 
 	assert style.title is None
 	assert style.x_label is None
@@ -122,7 +122,7 @@ def test_style_accepts_a_rotation_from_minus_90_to_90_degrees(rotation: float) -
 
 	.. versionadded:: 0.1.0
 	"""
-	style = Style(x_tick_rotation=rotation)
+	style = PlotStyle(x_tick_rotation=rotation)
 
 	assert style.x_tick_rotation == rotation
 
@@ -135,7 +135,7 @@ def test_style_rejects_another_rotation(rotation: float) -> None:
 	.. versionadded:: 0.1.0
 	"""
 	with pytest.raises(InvalidRotationError):
-		Style(x_tick_rotation=rotation)
+		PlotStyle(x_tick_rotation=rotation)
 
 
 def test_style_leaves_the_rotation_to_the_values_by_default() -> None:
@@ -144,7 +144,7 @@ def test_style_leaves_the_rotation_to_the_values_by_default() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	style = Style()
+	style = PlotStyle()
 
 	assert style.x_tick_rotation is None
 
@@ -156,7 +156,7 @@ def test_style_accepts_a_y_rotation_from_minus_90_to_90_degrees(rotation: float)
 
 	.. versionadded:: 0.1.0
 	"""
-	style = Style(y_tick_rotation=rotation)
+	style = PlotStyle(y_tick_rotation=rotation)
 
 	assert style.y_tick_rotation == rotation
 
@@ -169,4 +169,4 @@ def test_style_rejects_another_y_rotation(rotation: float) -> None:
 	.. versionadded:: 0.1.0
 	"""
 	with pytest.raises(InvalidRotationError):
-		Style(y_tick_rotation=rotation)
+		PlotStyle(y_tick_rotation=rotation)

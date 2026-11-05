@@ -9,7 +9,7 @@ from enum import Enum, auto
 
 class LegendPosition(Enum):
 	"""
-	Where the legend of a Plot is placed, used by ``Style``.
+	Where the legend of a Plot is placed, used by ``PlotStyle``.
 
 	The legend names the series, and is only drawn when a chart has several of them.
 
@@ -23,7 +23,7 @@ class LegendPosition(Enum):
 	>>> costs = ndp.Array.from_list([8.0, 9.5, 9.0, 10.0])
 	>>> sales = ndp.Table.from_arrays({"day": days, "price": prices, "cost": costs})
 	>>> chart = ndp.LineChart(x="day", y=["price", "cost"])
-	>>> style = ndp.Style(legend=ndp.LegendPosition.UPPER_LEFT)
+	>>> style = ndp.PlotStyle(legend=ndp.LegendPosition.UPPER_LEFT)
 	>>> plot = ndp.plot_line(sales, chart, style)
 	>>> plot.show()
 	"""
@@ -40,7 +40,7 @@ class LegendPosition(Enum):
 	>>> costs = ndp.Array.from_list([8.0, 9.5, 9.0, 10.0])
 	>>> sales = ndp.Table.from_arrays({"day": days, "price": prices, "cost": costs})
 	>>> chart = ndp.LineChart(x="day", y=["price", "cost"])
-	>>> style = ndp.Style(legend=ndp.LegendPosition.BEST)
+	>>> style = ndp.PlotStyle(legend=ndp.LegendPosition.BEST)
 	>>> plot = ndp.plot_line(sales, chart, style)
 	>>> plot.show()
 	"""
@@ -57,7 +57,7 @@ class LegendPosition(Enum):
 	>>> costs = ndp.Array.from_list([8.0, 9.5, 9.0, 10.0])
 	>>> sales = ndp.Table.from_arrays({"day": days, "price": prices, "cost": costs})
 	>>> chart = ndp.LineChart(x="day", y=["price", "cost"])
-	>>> style = ndp.Style(legend=ndp.LegendPosition.UPPER_LEFT)
+	>>> style = ndp.PlotStyle(legend=ndp.LegendPosition.UPPER_LEFT)
 	>>> plot = ndp.plot_line(sales, chart, style)
 	>>> plot.show()
 	"""
@@ -74,7 +74,7 @@ class LegendPosition(Enum):
 	>>> costs = ndp.Array.from_list([8.0, 9.5, 9.0, 10.0])
 	>>> sales = ndp.Table.from_arrays({"day": days, "price": prices, "cost": costs})
 	>>> chart = ndp.LineChart(x="day", y=["price", "cost"])
-	>>> style = ndp.Style(legend=ndp.LegendPosition.UPPER_RIGHT)
+	>>> style = ndp.PlotStyle(legend=ndp.LegendPosition.UPPER_RIGHT)
 	>>> plot = ndp.plot_line(sales, chart, style)
 	>>> plot.show()
 	"""
@@ -91,7 +91,7 @@ class LegendPosition(Enum):
 	>>> costs = ndp.Array.from_list([8.0, 9.5, 9.0, 10.0])
 	>>> sales = ndp.Table.from_arrays({"day": days, "price": prices, "cost": costs})
 	>>> chart = ndp.LineChart(x="day", y=["price", "cost"])
-	>>> style = ndp.Style(legend=ndp.LegendPosition.LOWER_LEFT)
+	>>> style = ndp.PlotStyle(legend=ndp.LegendPosition.LOWER_LEFT)
 	>>> plot = ndp.plot_line(sales, chart, style)
 	>>> plot.show()
 	"""
@@ -108,7 +108,7 @@ class LegendPosition(Enum):
 	>>> costs = ndp.Array.from_list([8.0, 9.5, 9.0, 10.0])
 	>>> sales = ndp.Table.from_arrays({"day": days, "price": prices, "cost": costs})
 	>>> chart = ndp.LineChart(x="day", y=["price", "cost"])
-	>>> style = ndp.Style(legend=ndp.LegendPosition.LOWER_RIGHT)
+	>>> style = ndp.PlotStyle(legend=ndp.LegendPosition.LOWER_RIGHT)
 	>>> plot = ndp.plot_line(sales, chart, style)
 	>>> plot.show()
 	"""
@@ -125,7 +125,7 @@ class LegendPosition(Enum):
 	>>> costs = ndp.Array.from_list([8.0, 9.5, 9.0, 10.0])
 	>>> sales = ndp.Table.from_arrays({"day": days, "price": prices, "cost": costs})
 	>>> chart = ndp.LineChart(x="day", y=["price", "cost"])
-	>>> style = ndp.Style(legend=ndp.LegendPosition.OUTSIDE_RIGHT)
+	>>> style = ndp.PlotStyle(legend=ndp.LegendPosition.OUTSIDE_RIGHT)
 	>>> plot = ndp.plot_line(sales, chart, style)
 	>>> plot.show()
 	"""
@@ -142,7 +142,7 @@ class LegendPosition(Enum):
 	>>> costs = ndp.Array.from_list([8.0, 9.5, 9.0, 10.0])
 	>>> sales = ndp.Table.from_arrays({"day": days, "price": prices, "cost": costs})
 	>>> chart = ndp.LineChart(x="day", y=["price", "cost"])
-	>>> style = ndp.Style(legend=ndp.LegendPosition.HIDDEN)
+	>>> style = ndp.PlotStyle(legend=ndp.LegendPosition.HIDDEN)
 	>>> plot = ndp.plot_line(sales, chart, style)
 	>>> plot.show()
 	"""

@@ -11,7 +11,7 @@ INVALID_ROTATION_MESSAGE = "Expected a rotation from -90 to 90 degrees, got {rot
 
 class InvalidRotationError(NumdaplotError):
 	"""
-	Raised when the ``x_tick_rotation`` or the ``y_tick_rotation`` of a ``Style`` is outside -90 to 90 degrees.
+	Raised when the ``x_tick_rotation`` or the ``y_tick_rotation`` of a ``PlotStyle`` is outside -90 to 90 degrees.
 
 	Beyond these angles, the labels would be written upside down.
 
@@ -31,7 +31,7 @@ class InvalidRotationError(NumdaplotError):
 	--------
 	>>> import numdaplot as ndp
 	>>> try:
-	... 	ndp.Style(x_tick_rotation=120)
+	... 	ndp.PlotStyle(x_tick_rotation=120)
 	... except ndp.InvalidRotationError as error:
 	... 	print(error)
 	Expected a rotation from -90 to 90 degrees, got 120.

@@ -12,7 +12,7 @@ from numdaplot.plots.data.pie_values import read_pie_values
 from numdaplot.plots.drawing.series_colors import require_color_count
 from numdaplot.plots.plot import Plot
 from numdaplot.plots.plot_creation import create_plot
-from numdaplot.plots.style.style import Style
+from numdaplot.plots.style.plot_style import PlotStyle
 from numdaplot.tables.table import Table
 
 CHART_NAME = "PieChart"
@@ -24,7 +24,7 @@ Y_TICK_ROTATION_SETTING = "y_tick_rotation"
 FUNCTION_NAME = "plot_pie"
 
 
-def plot_pie(data: Table, chart: PieChart, style: Style | None = None) -> Plot:
+def plot_pie(data: Table, chart: PieChart, style: PlotStyle | None = None) -> Plot:
 	"""
 	Return a Plot sharing out the values of a column of a Table as slices of a disc.
 
@@ -40,7 +40,7 @@ def plot_pie(data: Table, chart: PieChart, style: Style | None = None) -> Plot:
 	chart
 		The labels, the values, the percentages and the colors.
 	style
-		The look of the Plot, the default ``Style`` when omitted.
+		The look of the Plot, the default ``PlotStyle`` when omitted.
 
 	Returns
 	-------
@@ -83,7 +83,7 @@ def plot_pie(data: Table, chart: PieChart, style: Style | None = None) -> Plot:
 	>>> visits = ndp.Array.from_list([5400.0, 3100.0, 900.0])
 	>>> traffic = ndp.Table.from_arrays({"device": devices, "visits": visits})
 	>>> chart = ndp.PieChart(labels="device", values="visits")
-	>>> style = ndp.Style(title="Visits per device")
+	>>> style = ndp.PlotStyle(title="Visits per device")
 	>>> plot = ndp.plot_pie(traffic, chart, style)
 	>>> plot.show()
 	"""
@@ -98,7 +98,7 @@ def plot_pie(data: Table, chart: PieChart, style: Style | None = None) -> Plot:
 	return plot
 
 
-def require_no_axis_settings(style: Style | None) -> None:
+def require_no_axis_settings(style: PlotStyle | None) -> None:
 	"""
 	Check that the style of a pie has no axis setting, a pie having no axes.
 
@@ -122,7 +122,7 @@ def require_no_axis_settings(style: Style | None) -> None:
 	>>> import numdaplot as ndp
 	>>> from numdaplot.plots.plot_pie import require_no_axis_settings
 	>>> try:
-	... 	require_no_axis_settings(ndp.Style(x_tick_rotation=45))
+	... 	require_no_axis_settings(ndp.PlotStyle(x_tick_rotation=45))
 	... except ndp.RefusedSettingError as error:
 	... 	print(error)
 	PieChart does not accept x_tick_rotation.

@@ -9,7 +9,7 @@ from enum import Enum, auto
 
 class GridAxes(Enum):
 	"""
-	Axes crossed by the grid lines of a chart, when its Style shows grid lines.
+	Axes crossed by the grid lines of a chart, when its PlotStyle shows grid lines.
 
 	.. versionadded:: 0.1.0
 

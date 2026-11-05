@@ -15,9 +15,9 @@ import pytest
 import numdaplot as ndp
 
 PRICES = ndp.Array.from_list([12.0, 15.5, 14.0, 17.0])
-LINE_PLOT = ndp.plot_line(PRICES, ndp.LineChart(), ndp.Style(title="Line"))
-BAR_PLOT = ndp.plot_bar(PRICES, ndp.BarChart(), ndp.Style(title="Bars"))
-BOX_PLOT = ndp.plot_box(PRICES, ndp.BoxChart(), ndp.Style(title="Box"))
+LINE_PLOT = ndp.plot_line(PRICES, ndp.LineChart(), ndp.PlotStyle(title="Line"))
+BAR_PLOT = ndp.plot_bar(PRICES, ndp.BarChart(), ndp.PlotStyle(title="Bars"))
+BOX_PLOT = ndp.plot_box(PRICES, ndp.BoxChart(), ndp.PlotStyle(title="Box"))
 LAYOUT = ndp.Layout(rows=2, columns=2)
 PNG_SIZE_START = 16
 PNG_SIZE_END = 24
@@ -36,7 +36,7 @@ def build_figure() -> ndp.Figure:
 	ndp.Figure
 		The Figure of three Plots.
 	"""
-	figure = ndp.Figure(LAYOUT, title="Prices")
+	figure = ndp.Figure(LAYOUT, ndp.FigureStyle(title="Prices"))
 	figure = figure.place(LINE_PLOT, ndp.Cell(row=0, column=0, column_span=2))
 	figure = figure.place(BAR_PLOT, ndp.Cell(row=1, column=0))
 	figure = figure.place(BOX_PLOT, ndp.Cell(row=1, column=1))

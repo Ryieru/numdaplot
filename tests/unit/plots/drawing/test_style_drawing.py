@@ -1,5 +1,5 @@
 """
-Unit tests of the drawing of the Style of a Plot.
+Unit tests of the drawing of the PlotStyle of a Plot.
 
 .. versionadded:: 0.1.0
 """
@@ -34,13 +34,13 @@ HEATMAP = DrawnChart(None, "city", False, GridAxes.NONE, None)
 
 def test_apply_style_writes_no_title_by_default() -> None:
 	"""
-	Check that a default Style draws no title.
+	Check that a default PlotStyle draws no title.
 
 	.. versionadded:: 0.1.0
 	"""
 	axes = Figure().add_subplot()
 
-	apply_style(PlotAxes(axes, None, None), LINE_CHART, ndp.Style())
+	apply_style(PlotAxes(axes, None, None), LINE_CHART, ndp.PlotStyle())
 
 	assert axes.get_title() == ""
 
@@ -53,7 +53,7 @@ def test_write_axis_labels_puts_the_x_label_on_the_vertical_axis_for_horizontal_
 	"""
 	axes = Figure().add_subplot()
 
-	write_axis_labels(axes, HORIZONTAL_BARS, ndp.Style(x_label="City"))
+	write_axis_labels(axes, HORIZONTAL_BARS, ndp.PlotStyle(x_label="City"))
 
 	assert axes.get_ylabel() == "City"
 	assert axes.get_xlabel() == ""
@@ -162,7 +162,7 @@ def test_write_right_label_names_the_right_axis_by_default() -> None:
 	axes = Figure().add_subplot()
 	right_axes = axes.twinx()
 
-	write_right_label(PlotAxes(axes, right_axes, "price"), ndp.Style())
+	write_right_label(PlotAxes(axes, right_axes, "price"), ndp.PlotStyle())
 
 	assert right_axes.get_ylabel() == "price"
 
@@ -176,7 +176,7 @@ def test_write_right_label_writes_the_label_of_the_style() -> None:
 	axes = Figure().add_subplot()
 	right_axes = axes.twinx()
 
-	write_right_label(PlotAxes(axes, right_axes, "price"), ndp.Style(right_label="Euros"))
+	write_right_label(PlotAxes(axes, right_axes, "price"), ndp.PlotStyle(right_label="Euros"))
 
 	assert right_axes.get_ylabel() == "Euros"
 
@@ -189,7 +189,7 @@ def test_write_right_label_does_nothing_without_right_axis() -> None:
 	"""
 	axes = Figure().add_subplot()
 
-	write_right_label(PlotAxes(axes, None, "price"), ndp.Style(right_label="Euros"))
+	write_right_label(PlotAxes(axes, None, "price"), ndp.PlotStyle(right_label="Euros"))
 
 	axes_count = len(axes.figure.axes)
 	assert axes_count == 1

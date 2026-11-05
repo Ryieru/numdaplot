@@ -9,7 +9,7 @@ from enum import Enum, auto
 
 class GridLines(Enum):
 	"""
-	Whether a Plot draws light grid lines behind its values, used by ``Style``.
+	Whether a Plot draws light grid lines behind its values, used by ``PlotStyle``.
 
 	.. versionadded:: 0.1.0
 
@@ -17,7 +17,7 @@ class GridLines(Enum):
 	--------
 	>>> import numdaplot as ndp
 	>>> prices = ndp.Array.from_list([12.0, 15.5, 14.0, 17.0])
-	>>> style = ndp.Style(grid_lines=ndp.GridLines.HIDDEN)
+	>>> style = ndp.PlotStyle(grid_lines=ndp.GridLines.HIDDEN)
 	>>> plot = ndp.plot_line(prices, style=style)
 	>>> plot.show()
 	"""
@@ -30,7 +30,7 @@ class GridLines(Enum):
 	--------
 	>>> import numdaplot as ndp
 	>>> prices = ndp.Array.from_list([12.0, 15.5, 14.0, 17.0])
-	>>> style = ndp.Style(grid_lines=ndp.GridLines.SHOWN)
+	>>> style = ndp.PlotStyle(grid_lines=ndp.GridLines.SHOWN)
 	>>> plot = ndp.plot_line(prices, style=style)
 	>>> plot.show()
 	"""
@@ -43,7 +43,7 @@ class GridLines(Enum):
 	--------
 	>>> import numdaplot as ndp
 	>>> prices = ndp.Array.from_list([12.0, 15.5, 14.0, 17.0])
-	>>> style = ndp.Style(grid_lines=ndp.GridLines.HIDDEN)
+	>>> style = ndp.PlotStyle(grid_lines=ndp.GridLines.HIDDEN)
 	>>> plot = ndp.plot_line(prices, style=style)
 	>>> plot.show()
 	"""

@@ -12,13 +12,13 @@ from matplotlib.figure import FigureBase
 from numdaplot.plots.drawing.plot_drawing import FigureDrawing, build_figure
 from numdaplot.plots.figure.cell import Cell
 from numdaplot.plots.figure.figure_drawing import choose_figure_size, draw_figure
+from numdaplot.plots.figure.figure_style import FigureStyle
 from numdaplot.plots.figure.layout import Layout
 from numdaplot.plots.figure.placement import Placement, require_cell_inside, require_free_cells
 from numdaplot.plots.output.image_saving import write_image
 from numdaplot.plots.output.plot_display import show_drawing
 from numdaplot.plots.plot import Plot
 from numdaplot.plots.style.image_options import ImageOptions
-from numdaplot.plots.style.size import Size
 from numdaplot.tables.conflict import Conflict
 from numdaplot.tables.files.file_paths import FilePath
 
@@ -27,7 +27,7 @@ class Figure:
 	"""
 	Several Plots placed on a grid of cells, shown and saved as one image.
 
-	A Figure is immutable: ``place`` returns a new Figure. Each Plot keeps its own axes and its own Style,
+	A Figure is immutable: ``place`` returns a new Figure. Each Plot keeps its own axes and its own PlotStyle,
 	except its size: the Figure gives it the size of its cells. A cell without Plot stays blank.
 
 	.. versionadded:: 0.1.0
@@ -36,10 +36,8 @@ class Figure:
 	----------
 	layout
 		The grid of cells.
-	size
-		The width and the height of the whole Figure, 4.8 by 3.6 inches per cell when omitted.
-	title
-		The title above the grid, no title when omitted.
+	style
+		The title and the size of the Figure, the default ``FigureStyle`` when omitted.
 
 	Examples
 	--------
@@ -50,15 +48,15 @@ class Figure:
 	>>> shop = ndp.Table.from_arrays({"month": months, "sales": sales, "visits": visits})
 	>>> sales_plot = ndp.plot_bar(shop, ndp.BarChart(x="month", y=["sales"]))
 	>>> visits_plot = ndp.plot_line(shop, ndp.LineChart(x="month", y=["visits"]))
-	>>> figure = ndp.Figure(ndp.Layout(rows=1, columns=2), title="Shop")
+	>>> figure = ndp.Figure(ndp.Layout(rows=1, columns=2), ndp.FigureStyle(title="Shop"))
 	>>> figure = figure.place(sales_plot, ndp.Cell(row=0, column=0))
 	>>> figure = figure.place(visits_plot, ndp.Cell(row=0, column=1))
 	>>> figure.show()
 	"""
 
-	def __init__(self, layout: Layout, size: Size | None = None, title: str | None = None) -> None:
+	def __init__(self, layout: Layout, style: FigureStyle | None = None) -> None:
 		"""
-		Keep the grid, the size and the title of an empty Figure.
+		Keep the grid and the style of an empty Figure.
 
 		.. versionadded:: 0.1.0
 
@@ -66,14 +64,14 @@ class Figure:
 		----------
 		layout
 			The grid of cells.
-		size
-			The width and the height of the whole Figure, 4.8 by 3.6 inches per cell when omitted.
-		title
-			The title above the grid, no title when omitted.
+		style
+			The title and the size of the Figure, the default ``FigureStyle`` when omitted.
 		"""
+		if style is None:
+			style = FigureStyle()
+
 		self._layout = layout
-		self._size = size
-		self._title = title
+		self._style = style
 		self._placements = list[Placement]()
 
 	def place(self, plot: Plot, cell: Cell) -> Self:
@@ -85,7 +83,7 @@ class Figure:
 		Parameters
 		----------
 		plot
-			The Plot placed, which keeps its Style but takes the size of its cells.
+			The Plot placed, which keeps its PlotStyle but takes the size of its cells.
 		cell
 			Its first cell, from row 0 and column 0, and the number of cells it spans.
 
@@ -105,7 +103,7 @@ class Figure:
 		--------
 		>>> import numdaplot as ndp
 		>>> prices = ndp.Array.from_list([12.0, 15.5, 14.0, 17.0])
-		>>> plot = ndp.plot_line(prices, style=ndp.Style(title="Prices"))
+		>>> plot = ndp.plot_line(prices, style=ndp.PlotStyle(title="Prices"))
 		>>> figure = ndp.Figure(ndp.Layout(rows=1, columns=2))
 		>>> placed_figure = figure.place(plot, ndp.Cell(row=0, column=1))
 		>>> placed_figure.show()
@@ -114,7 +112,7 @@ class Figure:
 		require_free_cells(cell, self._placements)
 		placement = Placement(plot, cell)
 		figure_class = type(self)
-		placed_figure = figure_class(self._layout, self._size, self._title)
+		placed_figure = figure_class(self._layout, self._style)
 		placed_figure._placements = [*self._placements, placement]
 
 		return placed_figure
@@ -202,9 +200,9 @@ class Figure:
 		--------
 		>>> import numdaplot as ndp
 		>>> prices = ndp.Array.from_list([12.0, 15.5, 14.0, 17.0])
-		>>> line_plot = ndp.plot_line(prices, style=ndp.Style(title="Line"))
-		>>> bar_plot = ndp.plot_bar(prices, style=ndp.Style(title="Bars"))
-		>>> figure = ndp.Figure(ndp.Layout(rows=1, columns=2), title="Prices")
+		>>> line_plot = ndp.plot_line(prices, style=ndp.PlotStyle(title="Line"))
+		>>> bar_plot = ndp.plot_bar(prices, style=ndp.PlotStyle(title="Bars"))
+		>>> figure = ndp.Figure(ndp.Layout(rows=1, columns=2), ndp.FigureStyle(title="Prices"))
 		>>> figure = figure.place(line_plot, ndp.Cell(row=0, column=0))
 		>>> figure = figure.place(bar_plot, ndp.Cell(row=0, column=1))
 		>>> figure.show()
@@ -223,7 +221,7 @@ class Figure:
 		target
 			The figure drawn on.
 		"""
-		draw_figure(target, self._layout, self._placements, self._title)
+		draw_figure(target, self._layout, self._placements, self._style.title)
 
 	def _describe_drawing(self) -> FigureDrawing:
 		"""
@@ -236,7 +234,7 @@ class Figure:
 		FigureDrawing
 			The drawing of the Figure.
 		"""
-		size_inches = choose_figure_size(self._layout, self._size)
+		size_inches = choose_figure_size(self._layout, self._style.size)
 		drawing = FigureDrawing(self._draw_on, size_inches)
 
 		return drawing

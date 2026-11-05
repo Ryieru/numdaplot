@@ -13,7 +13,7 @@ import numdaplot as ndp
 from numdaplot.plots.figure.figure_drawing import choose_figure_size, draw_figure
 from numdaplot.plots.figure.placement import Placement
 
-PLOT = ndp.plot_line(ndp.Array.from_list([12.0, 15.5]), ndp.LineChart(), ndp.Style(title="Prices"))
+PLOT = ndp.plot_line(ndp.Array.from_list([12.0, 15.5]), ndp.LineChart(), ndp.PlotStyle(title="Prices"))
 LAYOUT = ndp.Layout(rows=2, columns=3)
 
 

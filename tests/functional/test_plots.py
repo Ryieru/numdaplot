@@ -30,7 +30,7 @@ FLATS = ndp.Table.from_arrays(
 	}
 )
 GRID = ndp.Array.from_list([[1.0, 2.0], [3.0, 4.0], [5.0, 6.0]])
-STYLE = ndp.Style(title="Sales", x_label="Day", y_label="Euros", legend=ndp.LegendPosition.UPPER_LEFT)
+STYLE = ndp.PlotStyle(title="Sales", x_label="Day", y_label="Euros", legend=ndp.LegendPosition.UPPER_LEFT)
 IMAGE_NAMES = ["sales.png", "sales.svg", "sales.pdf"]
 IMAGE_STARTS = {"sales.png": b"\x89PNG", "sales.svg": b"<?xml", "sales.pdf": b"%PDF"}
 EXPECTED_PIXEL_SIZE = (600, 300)
@@ -160,7 +160,7 @@ def test_a_hidden_legend_and_hidden_grid_lines_are_not_drawn() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	style = ndp.Style(legend=ndp.LegendPosition.HIDDEN, grid_lines=ndp.GridLines.HIDDEN)
+	style = ndp.PlotStyle(legend=ndp.LegendPosition.HIDDEN, grid_lines=ndp.GridLines.HIDDEN)
 	plot = ndp.plot_line(GRID, ndp.LineChart(), style)
 
 	axes = plot.to_matplotlib().axes[0]
@@ -207,7 +207,7 @@ def test_a_plot_sized_in_pixels_gives_an_image_of_that_size(tmp_path: Path) -> N
 	"""
 	path = tmp_path / IMAGE_NAMES[0]
 	size = ndp.Size(width=600, height=300, unit=ndp.SizeUnit.PIXEL)
-	plot = ndp.plot_line(PRICES, ndp.LineChart(), ndp.Style(size=size))
+	plot = ndp.plot_line(PRICES, ndp.LineChart(), ndp.PlotStyle(size=size))
 
 	plot.save(path)
 
@@ -320,12 +320,12 @@ def test_bar_plot_tilts_its_text_labels_by_default() -> None:
 
 def test_bar_plot_follows_the_rotation_of_the_style() -> None:
 	"""
-	Check that the Style changes the angle of the cities.
+	Check that the PlotStyle changes the angle of the cities.
 
 	.. versionadded:: 0.1.0
 	"""
 	chart = ndp.BarChart(x="city", y=["total"])
-	style = ndp.Style(x_tick_rotation=CHOSEN_ROTATION)
+	style = ndp.PlotStyle(x_tick_rotation=CHOSEN_ROTATION)
 
 	plot = ndp.plot_bar(build_city_sales(), chart, style)
 
@@ -371,12 +371,12 @@ def test_array_bar_plot_keeps_its_row_numbers_flat_by_default() -> None:
 
 def test_line_plot_follows_the_y_rotation_of_the_style() -> None:
 	"""
-	Check that the Style changes the angle of the values on the vertical axis.
+	Check that the PlotStyle changes the angle of the values on the vertical axis.
 
 	.. versionadded:: 0.1.0
 	"""
 	prices = ndp.Array.from_list([12.0, 15.5])
-	style = ndp.Style(y_tick_rotation=CHOSEN_ROTATION)
+	style = ndp.PlotStyle(y_tick_rotation=CHOSEN_ROTATION)
 
 	plot = ndp.plot_line(prices, ndp.LineChart(), style)
 
@@ -391,7 +391,7 @@ def test_horizontal_bar_plot_applies_the_y_rotation_to_its_values() -> None:
 	.. versionadded:: 0.1.0
 	"""
 	chart = ndp.BarChart(x="city", y=["total"], orientation=ndp.Orientation.HORIZONTAL)
-	style = ndp.Style(y_tick_rotation=CHOSEN_ROTATION)
+	style = ndp.PlotStyle(y_tick_rotation=CHOSEN_ROTATION)
 
 	plot = ndp.plot_bar(build_city_sales(), chart, style)
 

@@ -12,14 +12,14 @@ from numdaplot.plots.data.sample_values import read_sample_values
 from numdaplot.plots.drawing.series_colors import require_color_count
 from numdaplot.plots.plot import Plot
 from numdaplot.plots.plot_creation import create_plot
-from numdaplot.plots.style.style import Style
+from numdaplot.plots.style.plot_style import PlotStyle
 from numdaplot.tables.table import Table
 
 CHART_NAME = "BoxChart"
 FUNCTION_NAME = "plot_box"
 
 
-def plot_box(data: Table | Array, chart: BoxChart | None = None, style: Style | None = None) -> Plot:
+def plot_box(data: Table | Array, chart: BoxChart | None = None, style: PlotStyle | None = None) -> Plot:
 	"""
 	Return a Plot summing up the spread of columns of numbers as boxes.
 
@@ -36,7 +36,7 @@ def plot_box(data: Table | Array, chart: BoxChart | None = None, style: Style | 
 		The columns drawn, their groups, the outliers and the colors.
 		The default ``BoxChart`` when omitted, which draws an Array: a Table needs the columns named.
 	style
-		The look of the Plot, the default ``Style`` when omitted.
+		The look of the Plot, the default ``PlotStyle`` when omitted.
 
 	Returns
 	-------
@@ -65,7 +65,7 @@ def plot_box(data: Table | Array, chart: BoxChart | None = None, style: Style | 
 	>>> prices = ndp.Array.from_list([14.0, 9.5, 7.0, 16.5, 10.0, 8.5, 15.0, 11.5, 6.0])
 	>>> flats = ndp.Table.from_arrays({"city": cities, "price": prices})
 	>>> chart = ndp.BoxChart(columns=["price"], group_by="city")
-	>>> style = ndp.Style(y_label="Price per night (euros)")
+	>>> style = ndp.PlotStyle(y_label="Price per night (euros)")
 	>>> plot = ndp.plot_box(flats, chart, style)
 	>>> plot.show()
 	"""

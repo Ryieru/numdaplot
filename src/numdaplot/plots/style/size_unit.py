@@ -17,7 +17,7 @@ class SizeUnit(Enum):
 	--------
 	>>> import numdaplot as ndp
 	>>> prices = ndp.Array.from_list([12.0, 15.5, 14.0, 17.0])
-	>>> style = ndp.Style(size=ndp.Size(width=16, height=8, unit=ndp.SizeUnit.CENTIMETER))
+	>>> style = ndp.PlotStyle(size=ndp.Size(width=16, height=8, unit=ndp.SizeUnit.CENTIMETER))
 	>>> plot = ndp.plot_line(prices, style=style)
 	>>> plot.show()
 	"""
@@ -30,7 +30,7 @@ class SizeUnit(Enum):
 	--------
 	>>> import numdaplot as ndp
 	>>> prices = ndp.Array.from_list([12.0, 15.5, 14.0, 17.0])
-	>>> style = ndp.Style(size=ndp.Size(width=6, height=3, unit=ndp.SizeUnit.INCH))
+	>>> style = ndp.PlotStyle(size=ndp.Size(width=6, height=3, unit=ndp.SizeUnit.INCH))
 	>>> plot = ndp.plot_line(prices, style=style)
 	>>> plot.show()
 	"""
@@ -43,7 +43,7 @@ class SizeUnit(Enum):
 	--------
 	>>> import numdaplot as ndp
 	>>> prices = ndp.Array.from_list([12.0, 15.5, 14.0, 17.0])
-	>>> style = ndp.Style(size=ndp.Size(width=16, height=8, unit=ndp.SizeUnit.CENTIMETER))
+	>>> style = ndp.PlotStyle(size=ndp.Size(width=16, height=8, unit=ndp.SizeUnit.CENTIMETER))
 	>>> plot = ndp.plot_line(prices, style=style)
 	>>> plot.show()
 	"""
@@ -56,7 +56,7 @@ class SizeUnit(Enum):
 	--------
 	>>> import numdaplot as ndp
 	>>> prices = ndp.Array.from_list([12.0, 15.5, 14.0, 17.0])
-	>>> style = ndp.Style(size=ndp.Size(width=600, height=300, unit=ndp.SizeUnit.PIXEL))
+	>>> style = ndp.PlotStyle(size=ndp.Size(width=600, height=300, unit=ndp.SizeUnit.PIXEL))
 	>>> plot = ndp.plot_line(prices, style=style)
 	>>> plot.show()
 	"""

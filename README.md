@@ -20,7 +20,7 @@ average_price = ndp.Calculation(column="price", function=ndp.Mean())
 by_city = expensive_sales.aggregate(ndp.Aggregation(calculations=[average_price], group_by=["city"]))
 
 chart = ndp.BarChart(x="city", y=["price_mean"])
-style = ndp.Style(title="Average price per city")
+style = ndp.PlotStyle(title="Average price per city")
 plot = ndp.plot_bar(by_city, chart, style)
 plot.save("prices.png")
 ```
@@ -82,7 +82,7 @@ src/numdaplot/
 	arrays/         Array and its settings: Shape, Spacing, distributions, math functions...
 	tables/         Table and its settings: file options, Filter, Aggregation, Sorting, Preview, MissingDrop...
 	dates/          DateFormat, TimeZone, TimeZoneChange, DatePart, DatePeriod, DurationIn, ToDuration...
-	plots/          plot_line, plot_bar, plot_histogram, plot_pie..., Plot, the charts, the Style and Figure
+	plots/          plot_line, plot_bar, plot_histogram, plot_pie..., Plot, the charts, the PlotStyle and Figure
 	errors/         NumdaplotError, the precise errors, BroadcastWarning and ReadabilityWarning
 	data_types/     the Type enum and its conversion to numpy and pandas dtypes
 	ratios/         validation of fractions between 0 and 1, and the Measure enum

@@ -112,7 +112,7 @@ def test_draw_plot_hides_the_top_and_right_borders() -> None:
 	"""
 	figure = Figure()
 
-	draw_plot(figure, [LAYER], ndp.Style())
+	draw_plot(figure, [LAYER], ndp.PlotStyle())
 
 	axes = figure.axes[0]
 	assert not axes.spines["top"].get_visible()
@@ -128,7 +128,7 @@ def test_draw_plot_leaves_the_global_matplotlib_settings_unchanged() -> None:
 	"""
 	font_size = matplotlib.rcParams[FONT_SIZE_SETTING]
 
-	draw_plot(Figure(), [LAYER], ndp.Style())
+	draw_plot(Figure(), [LAYER], ndp.PlotStyle())
 
 	assert matplotlib.rcParams[FONT_SIZE_SETTING] == font_size
 
@@ -156,7 +156,7 @@ def test_draw_plot_continues_the_colors_on_added_charts() -> None:
 	"""
 	figure = Figure()
 
-	draw_plot(figure, [BARS, PRICE_LINE], ndp.Style())
+	draw_plot(figure, [BARS, PRICE_LINE], ndp.PlotStyle())
 
 	line_color = figure.axes[0].lines[0].get_color()
 	assert line_color == ORANGE_CODE

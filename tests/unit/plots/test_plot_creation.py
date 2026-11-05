@@ -11,7 +11,7 @@ from numdaplot.plots.plot_creation import create_plot
 
 PRICES = ndp.Array.from_list([12.0, 15.5])
 LAYER = ChartLayer(ndp.LineChart(), read_array_values(PRICES, "LineChart"))
-STYLE = ndp.Style(title="Prices")
+STYLE = ndp.PlotStyle(title="Prices")
 
 
 def test_create_plot_uses_the_default_style_without_style() -> None:

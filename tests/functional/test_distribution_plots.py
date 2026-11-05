@@ -24,7 +24,7 @@ PRICES_FRAME = pandas.DataFrame(
 )
 PRICES = ndp.Table.from_pandas(PRICES_FRAME)
 YEARS = ["2025", "2026"]
-STYLE = ndp.Style(title="Prices", x_label="Euros")
+STYLE = ndp.PlotStyle(title="Prices", x_label="Euros")
 EXPECTED_YEAR_COUNTS = [1.0, 3.0, 0.0, 0.0, 0.0, 1.0]
 EXPECTED_GROUPS = ["Lyon", "Paris", "Pau"]
 GRID = ndp.Array.from_list([[1.0, 2.0], [3.0, 4.0], [5.0, 6.0]])

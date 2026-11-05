@@ -72,7 +72,7 @@ def test_a_line_on_the_right_axis_has_its_own_scale_and_label() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	style = ndp.Style(y_label="Sales", right_label="Price (euros)")
+	style = ndp.PlotStyle(y_label="Sales", right_label="Price (euros)")
 	plot = ndp.plot_bar(SHOP, SALES_BARS, style)
 	line = ndp.LineChart(x="month", y=["price"])
 

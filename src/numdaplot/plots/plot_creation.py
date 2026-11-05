@@ -6,12 +6,12 @@ Creation of a Plot from its chart.
 
 from numdaplot.plots.chart_layer import ChartLayer
 from numdaplot.plots.plot import Plot
-from numdaplot.plots.style.style import Style
+from numdaplot.plots.style.plot_style import PlotStyle
 
 
-def create_plot(layer: ChartLayer, style: Style | None) -> Plot:
+def create_plot(layer: ChartLayer, style: PlotStyle | None) -> Plot:
 	"""
-	Return a Plot drawing one chart, with the default ``Style`` when none is given.
+	Return a Plot drawing one chart, with the default ``PlotStyle`` when none is given.
 
 	.. versionadded:: 0.1.0
 
@@ -20,7 +20,7 @@ def create_plot(layer: ChartLayer, style: Style | None) -> Plot:
 	layer
 		The chart and its values.
 	style
-		The look of the Plot, or None for the default ``Style``.
+		The look of the Plot, or None for the default ``PlotStyle``.
 
 	Returns
 	-------
@@ -40,7 +40,7 @@ def create_plot(layer: ChartLayer, style: Style | None) -> Plot:
 	"""
 	chosen_style = style
 	if chosen_style is None:
-		chosen_style = Style()
+		chosen_style = PlotStyle()
 
 	# The plot_* functions create every Plot, from outside the class.
 	plot = Plot._create([layer], chosen_style)  # pyright: ignore[reportPrivateUsage]

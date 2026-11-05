@@ -16,7 +16,7 @@ DEFAULT_HEIGHT = 4.8
 @dataclass(frozen=True)
 class Size:
 	"""
-	Width and height of a Plot, used by ``Style``.
+	Width and height of a Plot, used by ``PlotStyle``.
 
 	.. versionadded:: 0.1.0
 
@@ -38,7 +38,7 @@ class Size:
 	--------
 	>>> import numdaplot as ndp
 	>>> prices = ndp.Array.from_list([12.0, 15.5, 14.0, 17.0])
-	>>> style = ndp.Style(size=ndp.Size(width=6, height=2.5))
+	>>> style = ndp.PlotStyle(size=ndp.Size(width=6, height=2.5))
 	>>> plot = ndp.plot_line(prices, style=style)
 	>>> plot.show()
 	"""

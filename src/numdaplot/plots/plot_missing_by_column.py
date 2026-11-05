@@ -11,13 +11,13 @@ from numdaplot.plots.data.chart_data import require_table
 from numdaplot.plots.data.missing_cells import read_missing_counts
 from numdaplot.plots.plot import Plot
 from numdaplot.plots.plot_creation import create_plot
-from numdaplot.plots.style.style import Style
+from numdaplot.plots.style.plot_style import PlotStyle
 from numdaplot.tables.table import Table
 
 FUNCTION_NAME = "plot_missing_by_column"
 
 
-def plot_missing_by_column(table: Table, chart: MissingChart | None = None, style: Style | None = None) -> Plot:
+def plot_missing_by_column(table: Table, chart: MissingChart | None = None, style: PlotStyle | None = None) -> Plot:
 	"""
 	Return a Plot drawing one bar per column of a Table, as high as its missing values.
 
@@ -30,7 +30,7 @@ def plot_missing_by_column(table: Table, chart: MissingChart | None = None, styl
 	chart
 		The measure, the number of missing values of each column when omitted.
 	style
-		The look of the Plot, the default ``Style`` when omitted.
+		The look of the Plot, the default ``PlotStyle`` when omitted.
 
 	Returns
 	-------
@@ -51,7 +51,7 @@ def plot_missing_by_column(table: Table, chart: MissingChart | None = None, styl
 	>>> prices = ndp.Array.from_list([12.0, None, None, 15.5, None])
 	>>> surfaces = ndp.Array.from_list([30.0, 45.0, None, 60.0, 52.0])
 	>>> flats = ndp.Table.from_arrays({"city": cities, "price": prices, "surface": surfaces})
-	>>> style = ndp.Style(title="Missing values")
+	>>> style = ndp.PlotStyle(title="Missing values")
 	>>> plot = ndp.plot_missing_by_column(flats, style=style)
 	>>> plot.show()
 	"""

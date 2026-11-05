@@ -10,13 +10,13 @@ from numdaplot.plots.data.chart_data import require_table
 from numdaplot.plots.data.missing_cells import read_missing_cells
 from numdaplot.plots.plot import Plot
 from numdaplot.plots.plot_creation import create_plot
-from numdaplot.plots.style.style import Style
+from numdaplot.plots.style.plot_style import PlotStyle
 from numdaplot.tables.table import Table
 
 FUNCTION_NAME = "plot_missing_map"
 
 
-def plot_missing_map(table: Table, style: Style | None = None) -> Plot:
+def plot_missing_map(table: Table, style: PlotStyle | None = None) -> Plot:
 	"""
 	Return a Plot drawing each value of a Table as a cell, light gray when present and dark when missing.
 
@@ -30,7 +30,7 @@ def plot_missing_map(table: Table, style: Style | None = None) -> Plot:
 	table
 		The Table whose missing values are drawn.
 	style
-		The look of the Plot, the default ``Style`` when omitted.
+		The look of the Plot, the default ``PlotStyle`` when omitted.
 
 	Returns
 	-------
@@ -49,7 +49,7 @@ def plot_missing_map(table: Table, style: Style | None = None) -> Plot:
 	>>> prices = ndp.Array.from_list([12.0, None, None, 15.5, None, 18.0, 11.0, 14.0])
 	>>> surfaces = ndp.Array.from_list([30.0, 45.0, None, 60.0, 52.0, 41.0, None, 38.0])
 	>>> flats = ndp.Table.from_arrays({"city": cities, "price": prices, "surface": surfaces})
-	>>> style = ndp.Style(legend=ndp.LegendPosition.OUTSIDE_RIGHT)
+	>>> style = ndp.PlotStyle(legend=ndp.LegendPosition.OUTSIDE_RIGHT)
 	>>> plot = ndp.plot_missing_map(flats, style)
 	>>> plot.show()
 	"""

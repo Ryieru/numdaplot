@@ -16,7 +16,7 @@ MAXIMUM_ROTATION = 90
 
 
 @dataclass(frozen=True)
-class Style:
+class PlotStyle:
 	"""
 	Look of a whole Plot: title, axis labels, rotation of the values, legend, grid lines and size.
 
@@ -67,7 +67,7 @@ class Style:
 	>>> costs = ndp.Array.from_list([8.0, 9.5, 9.0, 10.0])
 	>>> sales = ndp.Table.from_arrays({"day": days, "price": prices, "cost": costs})
 	>>> chart = ndp.LineChart(x="day", y=["price", "cost"])
-	>>> style = ndp.Style(title="Sales", x_label="Day", y_label="Euros", legend=ndp.LegendPosition.OUTSIDE_RIGHT)
+	>>> style = ndp.PlotStyle(title="Sales", x_label="Day", y_label="Euros", legend=ndp.LegendPosition.OUTSIDE_RIGHT)
 	>>> plot = ndp.plot_line(sales, chart, style)
 	>>> plot.show()
 
@@ -77,7 +77,7 @@ class Style:
 	>>> totals = ndp.Array.from_list([120.0, 80.0, 95.0])
 	>>> city_sales = ndp.Table.from_arrays({"city": cities, "total": totals})
 	>>> city_chart = ndp.BarChart(x="city", y=["total"])
-	>>> city_plot = ndp.plot_bar(city_sales, city_chart, ndp.Style(x_tick_rotation=90))
+	>>> city_plot = ndp.plot_bar(city_sales, city_chart, ndp.PlotStyle(x_tick_rotation=90))
 	>>> city_plot.show()
 	"""
 

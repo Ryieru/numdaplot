@@ -34,7 +34,7 @@ def test_a_pie_plot_shares_out_the_values_with_their_labels_and_percentages() ->
 
 	.. versionadded:: 0.1.0
 	"""
-	style = ndp.Style(title="Visits per device")
+	style = ndp.PlotStyle(title="Visits per device")
 
 	plot = ndp.plot_pie(TRAFFIC, CHART, style)
 
@@ -95,7 +95,7 @@ def test_pie_refuses_a_rotation_of_the_axis_values() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	style = ndp.Style(x_tick_rotation=45)
+	style = ndp.PlotStyle(x_tick_rotation=45)
 
 	with pytest.raises(ndp.RefusedSettingError) as error_info:
 		ndp.plot_pie(TRAFFIC, CHART, style)

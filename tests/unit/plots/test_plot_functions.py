@@ -199,7 +199,7 @@ def test_plot_pie_rejects_an_axis_label() -> None:
 	.. versionadded:: 0.1.0
 	"""
 	with pytest.raises(ndp.RefusedSettingError, match="y_label"):
-		plot_pie(CITY_TOTALS, PIE_CHART, ndp.Style(y_label="Sales"))
+		plot_pie(CITY_TOTALS, PIE_CHART, ndp.PlotStyle(y_label="Sales"))
 
 
 def test_plot_pie_warns_beyond_five_slices() -> None:
@@ -236,7 +236,7 @@ def test_require_no_axis_settings_accepts_a_title() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	require_no_axis_settings(ndp.Style(title="Sales"))
+	require_no_axis_settings(ndp.PlotStyle(title="Sales"))
 
 
 def test_require_no_axis_settings_accepts_no_style() -> None:
@@ -366,13 +366,13 @@ def test_plot_function_without_chart_still_needs_the_columns_of_a_table() -> Non
 @pytest.mark.parametrize(
 	"style",
 	[
-		ndp.Style(y_label="Sales"),
-		ndp.Style(right_label="Price"),
-		ndp.Style(x_tick_rotation=45),
-		ndp.Style(y_tick_rotation=45),
+		ndp.PlotStyle(y_label="Sales"),
+		ndp.PlotStyle(right_label="Price"),
+		ndp.PlotStyle(x_tick_rotation=45),
+		ndp.PlotStyle(y_tick_rotation=45),
 	],
 )
-def test_require_no_axis_settings_rejects_every_axis_setting(style: ndp.Style) -> None:
+def test_require_no_axis_settings_rejects_every_axis_setting(style: ndp.PlotStyle) -> None:
 	"""
 	Check that each axis setting raises RefusedSettingError for a pie.
 

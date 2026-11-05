@@ -42,7 +42,7 @@ from numdaplot.plots.drawing.plot_theme import BACKGROUND_COLOR, THEME
 from numdaplot.plots.drawing.scatter_drawing import draw_scatter_chart
 from numdaplot.plots.drawing.style_drawing import apply_style
 from numdaplot.plots.style.image_options import DEFAULT_DPI
-from numdaplot.plots.style.style import Style
+from numdaplot.plots.style.plot_style import PlotStyle
 
 type ChartDrawer = Callable[[Axes, ChartLayer], DrawnChart]
 """A function drawing one kind of chart on matplotlib axes.
@@ -122,7 +122,7 @@ def build_figure(drawing: FigureDrawing) -> Figure:
 	return figure
 
 
-def draw_plot(figure: FigureBase, layers: list[ChartLayer], style: Style) -> None:
+def draw_plot(figure: FigureBase, layers: list[ChartLayer], style: PlotStyle) -> None:
 	"""
 	Draw the charts of a Plot on new axes of a figure, then its style.
 
@@ -154,7 +154,7 @@ def draw_plot(figure: FigureBase, layers: list[ChartLayer], style: Style) -> Non
 	>>> from numdaplot.plots.drawing.plot_drawing import draw_plot
 	>>> prices = ndp.Array.from_list([12.0, 15.5])
 	>>> figure = Figure()
-	>>> draw_plot(figure, [ChartLayer(ndp.LineChart(), read_array_values(prices, "LineChart"))], ndp.Style())
+	>>> draw_plot(figure, [ChartLayer(ndp.LineChart(), read_array_values(prices, "LineChart"))], ndp.PlotStyle())
 	>>> figure.axes[0].spines["top"].get_visible()
 	False
 	"""

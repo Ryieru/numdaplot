@@ -25,7 +25,7 @@ class DrawnChart:
 	x_on_vertical_axis
 		True when the ``x`` values are on the vertical axis, as with horizontal bars.
 	grid_axes
-		The axes crossed by the grid lines, when the Style shows them.
+		The axes crossed by the grid lines, when the PlotStyle shows them.
 	legend_title
 		The title of the legend, such as the ``color_by`` column of a ScatterChart, or None.
 

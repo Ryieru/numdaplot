@@ -10,13 +10,13 @@ from numdaplot.plots.charts.chart_requirement import require_chart_class
 from numdaplot.plots.layer_reading import read_bar_layer
 from numdaplot.plots.plot import Plot
 from numdaplot.plots.plot_creation import create_plot
-from numdaplot.plots.style.style import Style
+from numdaplot.plots.style.plot_style import PlotStyle
 from numdaplot.tables.table import Table
 
 FUNCTION_NAME = "plot_bar"
 
 
-def plot_bar(data: Table | Array, chart: BarChart | None = None, style: Style | None = None) -> Plot:
+def plot_bar(data: Table | Array, chart: BarChart | None = None, style: PlotStyle | None = None) -> Plot:
 	"""
 	Return a Plot drawing columns of numbers as bars.
 
@@ -33,7 +33,7 @@ def plot_bar(data: Table | Array, chart: BarChart | None = None, style: Style | 
 		The columns drawn and the look of the bars.
 		The default ``BarChart`` when omitted, which draws an Array: a Table needs the columns named.
 	style
-		The look of the Plot, the default ``Style`` when omitted.
+		The look of the Plot, the default ``PlotStyle`` when omitted.
 
 	Returns
 	-------
@@ -63,7 +63,7 @@ def plot_bar(data: Table | Array, chart: BarChart | None = None, style: Style | 
 	>>> sales_2026 = ndp.Array.from_list([150.0, 95.0, 40.0, 70.0])
 	>>> sales = ndp.Table.from_arrays({"city": cities, "2025": sales_2025, "2026": sales_2026})
 	>>> chart = ndp.BarChart(x="city", y=["2025", "2026"], layout=ndp.BarLayout.STACKED)
-	>>> style = ndp.Style(title="Sales per city", y_label="Thousands of euros")
+	>>> style = ndp.PlotStyle(title="Sales per city", y_label="Thousands of euros")
 	>>> plot = ndp.plot_bar(sales, chart, style)
 	>>> plot.show()
 	"""

@@ -12,14 +12,14 @@ from numdaplot.plots.data.sample_values import read_sample_values
 from numdaplot.plots.drawing.series_colors import require_color_count
 from numdaplot.plots.plot import Plot
 from numdaplot.plots.plot_creation import create_plot
-from numdaplot.plots.style.style import Style
+from numdaplot.plots.style.plot_style import PlotStyle
 from numdaplot.tables.table import Table
 
 CHART_NAME = "HistogramChart"
 FUNCTION_NAME = "plot_histogram"
 
 
-def plot_histogram(data: Table | Array, chart: HistogramChart | None = None, style: Style | None = None) -> Plot:
+def plot_histogram(data: Table | Array, chart: HistogramChart | None = None, style: PlotStyle | None = None) -> Plot:
 	"""
 	Return a Plot drawing how many values of columns of numbers fall in each bin.
 
@@ -36,7 +36,7 @@ def plot_histogram(data: Table | Array, chart: HistogramChart | None = None, sty
 		The columns drawn, the bins, the measure and the colors.
 		The default ``HistogramChart`` when omitted, which draws an Array: a Table needs the columns named.
 	style
-		The look of the Plot, the default ``Style`` when omitted.
+		The look of the Plot, the default ``PlotStyle`` when omitted.
 
 	Returns
 	-------
@@ -64,7 +64,7 @@ def plot_histogram(data: Table | Array, chart: HistogramChart | None = None, sty
 	>>> prices = ndp.Array.from_list([12.0, 15.5, 14.0, 17.0, 13.5, 16.0, 14.5, 15.0, 18.5, 11.0])
 	>>> flats = ndp.Table.from_arrays({"price": prices})
 	>>> chart = ndp.HistogramChart(columns=["price"], bins=ndp.BinWidth(2.0), measure=ndp.Measure.RATIO)
-	>>> style = ndp.Style(title="Prices", x_label="Price (euros)")
+	>>> style = ndp.PlotStyle(title="Prices", x_label="Price (euros)")
 	>>> plot = ndp.plot_histogram(flats, chart, style)
 	>>> plot.show()
 	"""

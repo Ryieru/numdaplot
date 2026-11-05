@@ -15,12 +15,14 @@ import numdaplot as ndp
 from numdaplot.plots.drawing.plot_drawing import FigureDrawing, build_figure
 from numdaplot.plots.figure import figure as figure_module
 
-PLOT = ndp.plot_line(ndp.Array.from_list([12.0, 15.5]), ndp.LineChart(), ndp.Style(title="Prices"))
+PLOT = ndp.plot_line(ndp.Array.from_list([12.0, 15.5]), ndp.LineChart(), ndp.PlotStyle(title="Prices"))
 LAYOUT = ndp.Layout(rows=1, columns=2)
 LEFT = ndp.Cell(row=0, column=0)
 RIGHT = ndp.Cell(row=0, column=1)
 SHOW_FUNCTION_NAME = "show_drawing"
 EXPECTED_INCHES = [9.6, 3.6]
+CHOSEN_SIZE = ndp.Size(width=8, height=3)
+EXPECTED_CHOSEN_INCHES = [8.0, 3.0]
 OLD_CONTENT = "old"
 
 
@@ -69,13 +71,29 @@ def test_to_matplotlib_has_the_size_of_its_cells_and_the_title() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	figure = ndp.Figure(LAYOUT, title="Shop").place(PLOT, RIGHT)
+	figure = ndp.Figure(LAYOUT, ndp.FigureStyle(title="Shop")).place(PLOT, RIGHT)
 
 	matplotlib_figure = figure.to_matplotlib()
 
 	inches = matplotlib_figure.get_size_inches().tolist()
 	assert inches == EXPECTED_INCHES
 	assert matplotlib_figure.get_suptitle() == "Shop"
+
+
+def test_to_matplotlib_takes_the_size_of_its_style() -> None:
+	"""
+	Check that the size of the FigureStyle replaces the size of the cells, and stays after a placement.
+
+	.. versionadded:: 0.1.0
+	"""
+	style = ndp.FigureStyle(size=CHOSEN_SIZE)
+	empty_figure = ndp.Figure(LAYOUT, style)
+	figure = empty_figure.place(PLOT, LEFT)
+
+	matplotlib_figure = figure.to_matplotlib()
+
+	inches = matplotlib_figure.get_size_inches().tolist()
+	assert inches == EXPECTED_CHOSEN_INCHES
 
 
 def test_save_writes_the_figure_as_an_image(tmp_path: Path) -> None:

@@ -10,13 +10,13 @@ from numdaplot.plots.charts.line_chart import LineChart
 from numdaplot.plots.layer_reading import read_line_layer
 from numdaplot.plots.plot import Plot
 from numdaplot.plots.plot_creation import create_plot
-from numdaplot.plots.style.style import Style
+from numdaplot.plots.style.plot_style import PlotStyle
 from numdaplot.tables.table import Table
 
 FUNCTION_NAME = "plot_line"
 
 
-def plot_line(data: Table | Array, chart: LineChart | None = None, style: Style | None = None) -> Plot:
+def plot_line(data: Table | Array, chart: LineChart | None = None, style: PlotStyle | None = None) -> Plot:
 	"""
 	Return a Plot drawing columns of numbers as lines.
 
@@ -33,7 +33,7 @@ def plot_line(data: Table | Array, chart: LineChart | None = None, style: Style 
 		The columns drawn and the look of the lines.
 		The default ``LineChart`` when omitted, which draws an Array: a Table needs the columns named.
 	style
-		The look of the Plot, the default ``Style`` when omitted.
+		The look of the Plot, the default ``PlotStyle`` when omitted.
 
 	Returns
 	-------
@@ -63,7 +63,7 @@ def plot_line(data: Table | Array, chart: LineChart | None = None, style: Style 
 	>>> costs = ndp.Array.from_list([8.0, 9.5, 9.0, None, 10.5])
 	>>> sales = ndp.Table.from_arrays({"day": days, "price": prices, "cost": costs})
 	>>> chart = ndp.LineChart(x="day", y=["price", "cost"], marker=ndp.MarkerShape.CIRCLE)
-	>>> style = ndp.Style(title="Sales", y_label="Euros")
+	>>> style = ndp.PlotStyle(title="Sales", y_label="Euros")
 	>>> plot = ndp.plot_line(sales, chart, style)
 	>>> plot.show()
 	"""

@@ -134,6 +134,7 @@ from numdaplot.plots.charts.scatter_chart import ScatterChart
 from numdaplot.plots.charts.value_axis import ValueAxis
 from numdaplot.plots.figure.cell import Cell
 from numdaplot.plots.figure.figure import Figure
+from numdaplot.plots.figure.figure_style import FigureStyle
 from numdaplot.plots.figure.layout import Layout
 from numdaplot.plots.plot import Plot
 from numdaplot.plots.plot_bar import plot_bar
@@ -150,9 +151,9 @@ from numdaplot.plots.style.custom_color import CustomColor
 from numdaplot.plots.style.grid_lines import GridLines
 from numdaplot.plots.style.image_options import ImageOptions
 from numdaplot.plots.style.legend_position import LegendPosition
+from numdaplot.plots.style.plot_style import PlotStyle
 from numdaplot.plots.style.size import Size
 from numdaplot.plots.style.size_unit import SizeUnit
-from numdaplot.plots.style.style import Style
 from numdaplot.positions.axis import Axis
 from numdaplot.positions.index import Index
 from numdaplot.positions.range import Range
@@ -280,6 +281,7 @@ __all__ = [
 	"ExcelOptions",
 	"Exponential",
 	"Figure",
+	"FigureStyle",
 	"FileExistsError",
 	"FileNotFoundError",
 	"Filter",
@@ -363,6 +365,7 @@ __all__ = [
 	"PeriodUnit",
 	"PieChart",
 	"Plot",
+	"PlotStyle",
 	"Preview",
 	"Quantile",
 	"RandomIntegers",
@@ -390,7 +393,6 @@ __all__ = [
 	"SquareRoot",
 	"StandardDeviation",
 	"Statistic",
-	"Style",
 	"Sum",
 	"Table",
 	"TimeFunction",

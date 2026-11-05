@@ -14,7 +14,7 @@ from numdaplot.plots.data.chart_values import ChartValues
 from numdaplot.plots.data.table_values import read_table_values
 from numdaplot.plots.plot import Plot
 from numdaplot.plots.plot_creation import create_plot
-from numdaplot.plots.style.style import Style
+from numdaplot.plots.style.plot_style import PlotStyle
 from numdaplot.tables.table import Table
 
 CHART_NAME = "HeatmapChart"
@@ -23,7 +23,7 @@ LABELS_SETTING = "labels"
 FUNCTION_NAME = "plot_heatmap"
 
 
-def plot_heatmap(data: Table | Array, chart: HeatmapChart | None = None, style: Style | None = None) -> Plot:
+def plot_heatmap(data: Table | Array, chart: HeatmapChart | None = None, style: PlotStyle | None = None) -> Plot:
 	"""
 	Return a Plot coloring each value of columns of numbers along a color scale.
 
@@ -41,7 +41,7 @@ def plot_heatmap(data: Table | Array, chart: HeatmapChart | None = None, style: 
 		The columns drawn, the row labels, the color scale and the cell values.
 		The default ``HeatmapChart`` when omitted, which draws an Array: a Table needs the columns named.
 	style
-		The look of the Plot, the default ``Style`` when omitted.
+		The look of the Plot, the default ``PlotStyle`` when omitted.
 
 	Returns
 	-------
@@ -70,7 +70,7 @@ def plot_heatmap(data: Table | Array, chart: HeatmapChart | None = None, style: 
 	>>> evening = ndp.Array.from_list([18.0, 22.0, None, 19.0, 35.0])
 	>>> orders = ndp.Table.from_arrays({"day": days, "morning": morning, "noon": noon, "evening": evening})
 	>>> chart = ndp.HeatmapChart(columns=["morning", "noon", "evening"], labels="day", values=ndp.CellValues.SHOWN)
-	>>> style = ndp.Style(title="Orders")
+	>>> style = ndp.PlotStyle(title="Orders")
 	>>> plot = ndp.plot_heatmap(orders, chart, style)
 	>>> plot.show()
 	"""

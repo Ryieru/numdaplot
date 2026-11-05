@@ -25,7 +25,7 @@ from numdaplot.plots.plot import Plot
 
 PRICES = ndp.Array.from_list([12.0, 15.5, 14.0])
 LAYER = ChartLayer(ndp.LineChart(), read_array_values(PRICES, "LineChart"))
-STYLE = ndp.Style(title="Prices")
+STYLE = ndp.PlotStyle(title="Prices")
 PNG_NAME = "prices.png"
 SVG_NAME = "prices.svg"
 DEFAULT_RESOLUTION = 100
@@ -362,7 +362,7 @@ def test_add_line_keeps_the_style_of_the_plot() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	plot = ndp.plot_bar(SHOP, SALES_BARS, ndp.Style(title="Shop"))
+	plot = ndp.plot_bar(SHOP, SALES_BARS, ndp.PlotStyle(title="Shop"))
 
 	both = plot.add_line(SHOP, PRICE_LINE)
 

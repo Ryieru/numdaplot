@@ -10,13 +10,13 @@ from numdaplot.plots.charts.scatter_chart import ScatterChart
 from numdaplot.plots.layer_reading import read_scatter_layer
 from numdaplot.plots.plot import Plot
 from numdaplot.plots.plot_creation import create_plot
-from numdaplot.plots.style.style import Style
+from numdaplot.plots.style.plot_style import PlotStyle
 from numdaplot.tables.table import Table
 
 FUNCTION_NAME = "plot_scatter"
 
 
-def plot_scatter(data: Table | Array, chart: ScatterChart | None = None, style: Style | None = None) -> Plot:
+def plot_scatter(data: Table | Array, chart: ScatterChart | None = None, style: PlotStyle | None = None) -> Plot:
 	"""
 	Return a Plot drawing each row as a point.
 
@@ -34,7 +34,7 @@ def plot_scatter(data: Table | Array, chart: ScatterChart | None = None, style: 
 		The columns drawn and the look of the points.
 		The default ``ScatterChart`` when omitted, which draws an Array: a Table needs the columns named.
 	style
-		The look of the Plot, the default ``Style`` when omitted.
+		The look of the Plot, the default ``PlotStyle`` when omitted.
 
 	Returns
 	-------
@@ -65,7 +65,7 @@ def plot_scatter(data: Table | Array, chart: ScatterChart | None = None, style: 
 	>>> rooms = ndp.Array.from_list([1, 2, 3, 4, 3, 2])
 	>>> flats = ndp.Table.from_arrays({"surface": surfaces, "price": prices, "rooms": rooms})
 	>>> chart = ndp.ScatterChart(x="surface", y="price", color_by="rooms")
-	>>> style = ndp.Style(x_label="Surface (m2)", y_label="Price (thousands of euros)")
+	>>> style = ndp.PlotStyle(x_label="Surface (m2)", y_label="Price (thousands of euros)")
 	>>> plot = ndp.plot_scatter(flats, chart, style)
 	>>> plot.show()
 	"""
