@@ -29,7 +29,7 @@ class LineChart(Chart):
 	Parameters
 	----------
 	x
-		For a Table, the column of the horizontal positions: numbers, dates, datetimes or texts, the row
+		For a Table, the column of the horizontal positions: numbers, dates, datetimes, texts or booleans, the row
 		numbers when omitted. An Array takes none, its rows being numbered.
 	y
 		For a Table, the columns drawn, holding numbers, one line each. A Table needs it, even for a single column. An

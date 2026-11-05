@@ -21,9 +21,10 @@ POSITION_KINDS = {
 	ValueFamily.NUMBER: PositionKind.NUMBERS,
 	ValueFamily.MOMENT: PositionKind.MOMENTS,
 	ValueFamily.TEXT: PositionKind.TEXTS,
+	ValueFamily.BOOL: PositionKind.TEXTS,
 }
 NUMBER_FAMILIES = frozenset({ValueFamily.NUMBER})
-TEXT_FAMILIES = frozenset({ValueFamily.TEXT})
+LABEL_FAMILIES = frozenset({ValueFamily.TEXT, ValueFamily.BOOL})
 MOMENT_DTYPE = numpy.dtype("datetime64[ns]")
 TEXT_DTYPE = "string"
 PYTHON_OBJECT_DTYPE = numpy.dtype(object)
@@ -52,7 +53,7 @@ def require_column_family(column: Column, accepted_families: frozenset[ValueFami
 	Raises
 	------
 	IncompatibleTypesError
-		When the column holds values of another family, such as booleans or durations.
+		When the column holds values of another family, such as durations.
 
 	Examples
 	--------
@@ -112,7 +113,7 @@ def read_numbers(column: Column, chart_name: str) -> NDArray[numpy.float64]:
 
 def read_texts(column: Column, chart_name: str) -> NDArray[Any]:
 	"""
-	Return a column of texts or categories as Python texts, None where a value is missing.
+	Return a column of texts, categories or booleans as Python texts, None where a value is missing.
 
 	.. versionadded:: 0.1.0
 
@@ -140,7 +141,7 @@ def read_texts(column: Column, chart_name: str) -> NDArray[Any]:
 	>>> read_texts(pandas.Series(["Paris", None], dtype="string"), "BarChart")
 	array(['Paris', None], dtype=object)
 	"""
-	require_column_family(column, TEXT_FAMILIES, chart_name)
+	require_column_family(column, LABEL_FAMILIES, chart_name)
 	text_column = column.astype(TEXT_DTYPE)
 	text_values = text_column.tolist()
 	missing = find_column_missing(column)
@@ -206,7 +207,7 @@ def read_positions(column: Column, chart_name: str) -> tuple[PositionKind, NDArr
 	Raises
 	------
 	IncompatibleTypesError
-		When the column holds booleans or durations.
+		When the column holds durations.
 
 	Examples
 	--------

@@ -32,7 +32,7 @@ MEAN_ZONE = ndp.Calculation(column="zone", function=ndp.Mean())
 			"Cannot apply BarChart to the DATETIME column 'day'.",
 		),
 		(
-			lambda: ndp.plot_bar(TRIPS, ndp.BarChart(x="paid", y=["fare"])),
+			lambda: ndp.plot_bar(TRIPS, ndp.BarChart(x="fare", y=["paid"])),
 			"Cannot apply BarChart to the BOOL column 'paid'.",
 		),
 		(
@@ -40,7 +40,7 @@ MEAN_ZONE = ndp.Calculation(column="zone", function=ndp.Mean())
 			"Cannot apply LineChart to the TEXT column 'zone'.",
 		),
 		(
-			lambda: ndp.plot_scatter(TRIPS, ndp.ScatterChart(x="fare", y="fare", color_by="paid")),
+			lambda: ndp.plot_scatter(TRIPS, ndp.ScatterChart(x="fare", y="paid")),
 			"Cannot apply ScatterChart to the BOOL column 'paid'.",
 		),
 		(

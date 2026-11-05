@@ -30,7 +30,7 @@ class PieChart(Chart):
 	Parameters
 	----------
 	labels
-		The column of texts naming the slices.
+		The column of texts or booleans naming the slices.
 	values
 		The column of numbers sizing the slices.
 	percentages

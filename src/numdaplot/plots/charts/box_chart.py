@@ -33,9 +33,9 @@ class BoxChart(Chart):
 		For a Table, the columns drawn, holding numbers. A Table needs it, even for a single column. An Array takes
 		none: when omitted, each of its columns is drawn.
 	group_by
-		For a Table, a column of texts splitting the rows into groups, each drawn at its own position in alphabetical
-		order, with the boxes of the columns side by side. A row whose group is missing is left out. One box per column
-		when omitted.
+		For a Table, a column of texts, categories or booleans splitting the rows into groups, each drawn at its own
+		position in alphabetical order, with the boxes of the columns side by side. A row whose group is missing is left
+		out. One box per column when omitted.
 	outliers
 		Whether the outliers are drawn, ``Outliers.SHOWN`` by default.
 	colors

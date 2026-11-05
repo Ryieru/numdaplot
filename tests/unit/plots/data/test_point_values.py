@@ -27,7 +27,6 @@ FLATS = ndp.Table.from_pandas(FLATS_FRAME)
 ALL_ROWS = numpy.arange(3)
 SOME_ROWS = numpy.array([0, 2])
 EXPECTED_SOME_SIZES = [30.0, 60.0]
-BOOLEANS = pandas.Series([True], dtype="boolean")
 
 
 def test_read_point_values_reads_the_given_columns_for_the_drawn_rows() -> None:
@@ -78,14 +77,29 @@ def test_read_point_values_rejects_sizes_that_are_not_numbers() -> None:
 		read_point_values(FLATS, None, "city", ALL_ROWS)
 
 
-def test_read_colors_rejects_booleans() -> None:
+def test_read_colors_writes_booleans_as_texts() -> None:
 	"""
-	Check that a boolean color_by column raises IncompatibleTypesError.
+	Check that a boolean color_by column gives one text per value.
 
 	.. versionadded:: 0.1.0
 	"""
+	column = pandas.Series([True, False], dtype="boolean")
+
+	colors = read_colors(column)
+
+	assert colors.tolist() == ["True", "False"]
+
+
+def test_read_colors_rejects_durations() -> None:
+	"""
+	Check that a color_by column of durations raises IncompatibleTypesError.
+
+	.. versionadded:: 0.1.0
+	"""
+	column = pandas.Series(numpy.array([1], dtype="timedelta64[ns]"))
+
 	with pytest.raises(IncompatibleTypesError):
-		read_colors(BOOLEANS)
+		read_colors(column)
 
 
 def test_hide_missing_points_hides_rows_missing_a_color_or_a_size() -> None:

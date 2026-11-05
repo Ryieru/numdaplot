@@ -19,7 +19,7 @@ from numdaplot.tables.frames.column import Column
 from numdaplot.tables.table import Table
 
 CHART_NAME = "ScatterChart"
-COLOR_FAMILIES = frozenset({ValueFamily.NUMBER, ValueFamily.TEXT})
+COLOR_FAMILIES = frozenset({ValueFamily.NUMBER, ValueFamily.TEXT, ValueFamily.BOOL})
 
 
 @dataclass(frozen=True, eq=False)
@@ -134,7 +134,7 @@ def read_colors(column: Column) -> NDArray[Any]:
 	Raises
 	------
 	IncompatibleTypesError
-		When the column holds neither numbers nor texts.
+		When the column holds neither numbers, texts nor booleans.
 
 	Examples
 	--------

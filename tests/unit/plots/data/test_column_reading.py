@@ -25,7 +25,7 @@ UTC_TIMES = pandas.Series(pandas.to_datetime(["2026-07-01 10:30"])).dt.tz_locali
 PARIS_TIMES = UTC_TIMES.dt.tz_convert("Europe/Paris")
 EXPECTED_PARIS_CLOCK = numpy.datetime64("2026-07-01T12:30", "ns")
 MOMENT_DTYPE = numpy.dtype("datetime64[ns]")
-REFUSED_POSITIONS = [BOOLEANS, DURATIONS]
+REFUSED_POSITIONS = [DURATIONS]
 
 
 def test_read_numbers_gives_nan_at_missing_integers() -> None:
@@ -125,16 +125,41 @@ def test_read_positions_finds_the_kind_of_the_column(column: pandas.Series, expe
 
 
 @pytest.mark.parametrize("column", REFUSED_POSITIONS)
-def test_read_positions_rejects_booleans_and_durations(column: pandas.Series) -> None:
+def test_read_positions_rejects_durations(column: pandas.Series) -> None:
 	"""
-	Check that booleans and durations raise IncompatibleTypesError.
+	Check that durations raise IncompatibleTypesError.
 
 	.. versionadded:: 0.1.0
 
 	Parameters
 	----------
 	column
-		A column of booleans or durations.
+		A column of durations.
 	"""
 	with pytest.raises(IncompatibleTypesError):
 		read_positions(column, CHART_NAME)
+
+
+def test_read_texts_writes_booleans_and_keeps_missing_ones() -> None:
+	"""
+	Check that booleans become the texts shown by a Table, None where one is missing.
+
+	.. versionadded:: 0.1.0
+	"""
+	column = pandas.Series([True, None, False], dtype="boolean")
+
+	texts = read_texts(column, CHART_NAME)
+
+	assert texts.tolist() == ["True", None, "False"]
+
+
+def test_read_positions_places_booleans_as_texts() -> None:
+	"""
+	Check that booleans take the positions of texts.
+
+	.. versionadded:: 0.1.0
+	"""
+	kind, values = read_positions(BOOLEANS, CHART_NAME)
+
+	assert kind == PositionKind.TEXTS
+	assert values.tolist() == ["True", "False"]

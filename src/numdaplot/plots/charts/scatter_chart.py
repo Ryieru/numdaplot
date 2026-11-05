@@ -39,7 +39,7 @@ class ScatterChart(Chart):
 	Parameters
 	----------
 	x
-		For a Table, the column of the horizontal positions: numbers, dates, datetimes or texts, the row
+		For a Table, the column of the horizontal positions: numbers, dates, datetimes, texts or booleans, the row
 		numbers when omitted. An Array takes none, its rows being numbered.
 	y
 		For a Table, the column of the vertical positions, holding numbers. A Table needs it. An Array takes none: when
@@ -48,8 +48,8 @@ class ScatterChart(Chart):
 		The color of every point, the first color of the default cycle when omitted. With an Array of
 		several columns, the series take the colors of the default cycle and ``color`` is refused.
 	color_by
-		For a Table, the column coloring each point: numbers give a color scale shown next to the axes, texts give one
-		color per value, named in the legend. Every point takes the same color when omitted.
+		For a Table, the column coloring each point: numbers give a color scale shown next to the axes, texts and
+		booleans give one color per value, named in the legend. Every point takes the same color when omitted.
 	size_by
 		For a Table, the column of numbers sizing each point, from the smallest to the largest value. Every point has
 		the same size when omitted.
