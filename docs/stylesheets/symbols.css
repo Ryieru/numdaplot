@@ -33,6 +33,11 @@
 	font-size: var(--api-title-badge-font-size);
 }
 
+/* The title of a class page shows its name only: its section Parameters lists the signature. */
+.md-typeset h1.doc-heading code.doc-symbol-class ~ code.highlight > span:not(:first-child) {
+	display: none;
+}
+
 .md-typeset h2.doc-heading,
 .md-typeset h3.doc-heading,
 .md-typeset h4.doc-heading,
