@@ -4,17 +4,21 @@ Columns stored by a Table, shared by every group of Table methods.
 .. versionadded:: 0.1.0
 """
 
-from typing import Self
+from typing import Never, Self
 
 import pandas
 
 from numdaplot.data_types.type import Type
 from numdaplot.dates.time_zone import TimeZone
+from numdaplot.errors.refused_operation_error import RefusedOperationError
 from numdaplot.tables.columns.column_names import require_known_columns
 from numdaplot.tables.frames.column import Column
 from numdaplot.tables.frames.column_values import find_column_type
 from numdaplot.tables.frames.frame_normalization import normalize_frame
 from numdaplot.tables.frames.time_zones import find_column_time_zone
+
+CONSTRUCTOR_OPERATION = "Creating a Table with ndp.Table(...)"
+CONSTRUCTOR_ALTERNATIVE = "ndp.Table.from_arrays, from_pandas or a file method such as from_csv"
 
 
 class TableData:
@@ -24,27 +28,52 @@ class TableData:
 	Use ``ndp.Table`` and its ``from_*`` methods; this base class only holds the columns.
 
 	.. versionadded:: 0.1.0
-
-	Parameters
-	----------
-	frame
-		The columns, already stored with the dtypes given by ``to_pandas_dtype`` and numbered from 0.
 	"""
 
-	def __init__(self, frame: pandas.DataFrame) -> None:
-		"""
-		Store normalized columns without copy.
+	_frame: pandas.DataFrame
 
-		The ``from_*`` methods create Tables; this constructor is reserved to numdaplot.
+	def __init__(self, *arguments: Never, **keyword_arguments: Never) -> None:
+		"""
+		Refuse the creation of a Table by its constructor: the ``from_*`` methods create Tables.
+
+		.. versionadded:: 0.1.0
+
+		Parameters
+		----------
+		arguments
+			Any value, refused.
+		keyword_arguments
+			Any named value, refused.
+
+		Raises
+		------
+		RefusedOperationError
+			Always, naming the ``from_*`` methods.
+		"""
+		raise RefusedOperationError(CONSTRUCTOR_OPERATION, CONSTRUCTOR_ALTERNATIVE)
+
+	@classmethod
+	def _create(cls, frame: pandas.DataFrame) -> Self:
+		"""
+		Return a new Table storing normalized columns without copy.
 
 		.. versionadded:: 0.1.0
 
 		Parameters
 		----------
 		frame
-			The columns, never changed afterwards.
+			The columns, already stored with the dtypes given by ``to_pandas_dtype`` and numbered from 0,
+			never changed afterwards.
+
+		Returns
+		-------
+		Self
+			The new Table.
 		"""
-		self._frame = frame
+		created_table = cls.__new__(cls)
+		created_table._frame = frame
+
+		return created_table
 
 	@property
 	def row_count(self) -> int:
@@ -154,7 +183,7 @@ class TableData:
 			When the pandas DataFrame cannot become a Table, as in ``normalize_frame``.
 		"""
 		normalized_frame = normalize_frame(frame)
-		table = cls(normalized_frame)
+		table = cls._create(normalized_frame)
 
 		return table
 
@@ -175,7 +204,7 @@ class TableData:
 			The new Table.
 		"""
 		table_class = type(self)
-		wrapped_table = table_class(frame)
+		wrapped_table = table_class._create(frame)
 
 		return wrapped_table
 

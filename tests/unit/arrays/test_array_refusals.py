@@ -4,6 +4,9 @@ Unit tests of ArrayRefusals.
 .. versionadded:: 0.1.0
 """
 
+# The tests create the objects from their stored values, with the creation reserved to numdaplot.
+# pyright: reportPrivateUsage=false
+
 from collections.abc import Callable
 
 import numpy
@@ -51,7 +54,7 @@ def test_array_refusals_refuse_each_python_operation(refused_operation: RefusedO
 		A function applying one refused operation to an Array.
 	"""
 	values = numpy.array(VALUES)
-	array = ArrayRefusals(values)
+	array = ArrayRefusals._create(values)
 
 	with pytest.raises(RefusedOperationError):
 		refused_operation(array)

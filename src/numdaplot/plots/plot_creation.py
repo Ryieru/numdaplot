@@ -42,6 +42,7 @@ def create_plot(layer: ChartLayer, style: Style | None) -> Plot:
 	if chosen_style is None:
 		chosen_style = Style()
 
-	plot = Plot([layer], chosen_style)
+	# The plot_* functions create every Plot, from outside the class.
+	plot = Plot._create([layer], chosen_style)  # pyright: ignore[reportPrivateUsage]
 
 	return plot

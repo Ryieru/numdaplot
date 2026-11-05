@@ -4,6 +4,9 @@ Unit tests of TableDisplay and of the display of the missing values summary.
 .. versionadded:: 0.1.0
 """
 
+# The tests create the objects from their stored values, with the creation reserved to numdaplot.
+# pyright: reportPrivateUsage=false
+
 import pandas
 import pytest
 
@@ -56,7 +59,7 @@ def test_preview_shows_the_chosen_rows(monkeypatch: pytest.MonkeyPatch) -> None:
 	shown_frames = list[pandas.DataFrame]()
 	monkeypatch.setattr(table_display, CHOOSE_PREVIEW_ROWS_NAME, choose_fake_rows)
 	monkeypatch.setattr(table_display, SHOW_FRAME_NAME, shown_frames.append)
-	table = TableDisplay(FRAME)
+	table = TableDisplay._create(FRAME)
 
 	table.preview(Preview())
 
@@ -96,7 +99,7 @@ def test_preview_missing_shows_the_summary_as_it_is(monkeypatch: pytest.MonkeyPa
 	shown_frames = list[pandas.DataFrame]()
 	monkeypatch.setattr(table_missing, SUMMARIZE_MISSING_NAME, give_fake_summary)
 	monkeypatch.setattr(table_missing, SHOW_PANDAS_FRAME_NAME, shown_frames.append)
-	table = TableMissing(FRAME)
+	table = TableMissing._create(FRAME)
 
 	table.preview_missing()
 

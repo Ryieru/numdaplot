@@ -4,6 +4,9 @@ Unit tests of ArrayCalculation.
 .. versionadded:: 0.1.0
 """
 
+# The tests create the objects from their stored values, with the creation reserved to numdaplot.
+# pyright: reportPrivateUsage=false
+
 from typing import Any
 
 import numpy
@@ -105,7 +108,7 @@ def test_compute_returns_the_statistic_values(monkeypatch: pytest.MonkeyPatch) -
 	recorder = StatisticRecorder()
 	monkeypatch.setattr(array_calculation, COMPUTE_STATISTIC_NAME, recorder.compute)
 	values = numpy.array(GRID)
-	array = ArrayCalculation(values)
+	array = ArrayCalculation._create(values)
 
 	result_array = array.compute(Mean())
 
@@ -128,7 +131,7 @@ def test_compute_gives_its_axis_to_the_statistic_computation(monkeypatch: pytest
 	recorder = StatisticRecorder()
 	monkeypatch.setattr(array_calculation, COMPUTE_STATISTIC_NAME, recorder.compute)
 	values = numpy.array(GRID)
-	array = ArrayCalculation(values)
+	array = ArrayCalculation._create(values)
 
 	array.compute(Mean(), axis=Axis.EACH_COLUMN)
 
@@ -148,7 +151,7 @@ def test_apply_returns_the_transformed_values(monkeypatch: pytest.MonkeyPatch) -
 	"""
 	monkeypatch.setattr(array_calculation, APPLY_MATH_FUNCTION_NAME, apply_fake_function)
 	values = numpy.array(GRID)
-	array = ArrayCalculation(values)
+	array = ArrayCalculation._create(values)
 
 	result_array = array.apply(SquareRoot())
 
@@ -190,7 +193,7 @@ def test_apply_hands_a_time_function_to_the_time_function_application(monkeypatc
 		Replaces the time function application with a fake.
 	"""
 	monkeypatch.setattr(array_calculation, APPLY_TIME_FUNCTION_NAME, apply_fake_time_function)
-	array = ArrayCalculation(DATES)
+	array = ArrayCalculation._create(DATES)
 
 	transformed_array = array.apply(DatePart(unit=DatePartUnit.MONTH))
 

@@ -5,11 +5,12 @@ A drawn view of a Table or an Array.
 """
 
 from dataclasses import replace
-from typing import Self
+from typing import Never, Self
 
 from matplotlib.figure import Figure, FigureBase
 
 from numdaplot.arrays.array import Array
+from numdaplot.errors.refused_operation_error import RefusedOperationError
 from numdaplot.plots.chart_layer import ChartLayer
 from numdaplot.plots.charts.bar_chart import BarChart
 from numdaplot.plots.charts.line_chart import LineChart
@@ -30,6 +31,8 @@ from numdaplot.tables.table import Table
 ADD_LINE_NAME = "add_line"
 ADD_BAR_NAME = "add_bar"
 ADD_SCATTER_NAME = "add_scatter"
+CONSTRUCTOR_OPERATION = "Creating a Plot with ndp.Plot(...)"
+CONSTRUCTOR_ALTERNATIVE = "a plot_* function such as ndp.plot_line"
 
 
 class Plot:
@@ -38,6 +41,8 @@ class Plot:
 
 	A Plot is immutable: it keeps the values it was made from, so changing the data afterwards never changes it.
 	It is only displayed by ``show``, never on its own in a notebook.
+
+	Calling ``ndp.Plot(...)`` is refused with ``RefusedOperationError``, which names the functions to use instead.
 
 	.. versionadded:: 0.1.0
 
@@ -49,11 +54,33 @@ class Plot:
 	>>> plot.show()
 	"""
 
-	def __init__(self, layers: list[ChartLayer], style: Style) -> None:
-		"""
-		Keep the charts and the style of the Plot.
+	_layers: list[ChartLayer]
+	_style: Style
 
-		The ``plot_*`` functions create Plots; this constructor is reserved to numdaplot.
+	def __init__(self, *arguments: Never, **keyword_arguments: Never) -> None:
+		"""
+		Refuse the creation of a Plot by its constructor: the ``plot_*`` functions create Plots.
+
+		.. versionadded:: 0.1.0
+
+		Parameters
+		----------
+		arguments
+			Any value, refused.
+		keyword_arguments
+			Any named value, refused.
+
+		Raises
+		------
+		RefusedOperationError
+			Always, naming the ``plot_*`` functions.
+		"""
+		raise RefusedOperationError(CONSTRUCTOR_OPERATION, CONSTRUCTOR_ALTERNATIVE)
+
+	@classmethod
+	def _create(cls, layers: list[ChartLayer], style: Style) -> Self:
+		"""
+		Return a new Plot keeping the charts and the style.
 
 		.. versionadded:: 0.1.0
 
@@ -64,9 +91,17 @@ class Plot:
 			The Plot keeps its own copy of the list.
 		style
 			The look of the Plot.
+
+		Returns
+		-------
+		Self
+			The new Plot.
 		"""
-		self._layers = list(layers)
-		self._style = style
+		created_plot = cls.__new__(cls)
+		created_plot._layers = list(layers)
+		created_plot._style = style
+
+		return created_plot
 
 	def to_matplotlib(self) -> Figure:
 		"""
@@ -361,7 +396,7 @@ class Plot:
 		# Aligning the charts on their labels checks them, so a wrong chart is refused when it is added.
 		align_layers(layers)
 		plot_class = type(self)
-		added_plot = plot_class(layers, self._style)
+		added_plot = plot_class._create(layers, self._style)
 
 		return added_plot
 

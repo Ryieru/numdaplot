@@ -4,6 +4,9 @@ Unit tests of TableConversion.
 .. versionadded:: 0.1.0
 """
 
+# The tests create the objects from their stored values, with the creation reserved to numdaplot.
+# pyright: reportPrivateUsage=false
+
 from datetime import datetime
 from zoneinfo import ZoneInfo
 
@@ -134,7 +137,7 @@ def test_to_pandas_gives_a_copy() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	table = TableConversion(FRAME)
+	table = TableConversion._create(FRAME)
 	frame = table.to_pandas()
 
 	frame.loc[0, "price"] = CHANGED_COUNT
@@ -150,7 +153,7 @@ def test_column_gives_an_array_of_the_column() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	table = TableConversion(FRAME)
+	table = TableConversion._create(FRAME)
 
 	prices = table.column("price")
 
@@ -164,7 +167,7 @@ def test_to_value_reads_the_single_value() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	table = TableConversion(SINGLE_PRICE)
+	table = TableConversion._create(SINGLE_PRICE)
 
 	value = table.to_value()
 
@@ -177,7 +180,7 @@ def test_to_value_gives_none_for_a_missing_value() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	table = TableConversion(MISSING_COUNT)
+	table = TableConversion._create(MISSING_COUNT)
 
 	value = table.to_value()
 
@@ -190,7 +193,7 @@ def test_to_value_rejects_several_values() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	table = TableConversion(FRAME)
+	table = TableConversion._create(FRAME)
 
 	with pytest.raises(NotSingleValueError) as error_info:
 		table.to_value()
@@ -212,8 +215,8 @@ def test_is_equal_compares_the_frames_with_the_type_setting(monkeypatch: pytest.
 	"""
 	recorder = EqualityRecorder()
 	monkeypatch.setattr(table_conversion, ARE_FRAMES_EQUAL_NAME, recorder)
-	table = TableConversion(FRAME)
-	other_table = Table(FRAME)
+	table = TableConversion._create(FRAME)
+	other_table = Table._create(FRAME)
 	equality = Equality(other=other_table, types=TypeMatch.STRICT)
 
 	is_equal = table.is_equal(equality)
@@ -228,7 +231,7 @@ def test_is_equal_rejects_an_array() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	table = TableConversion(FRAME)
+	table = TableConversion._create(FRAME)
 	equality = Equality(other=PRICES)
 
 	with pytest.raises(UnsupportedOperandError):
@@ -247,7 +250,7 @@ def test_repr_gives_the_text_of_the_table(monkeypatch: pytest.MonkeyPatch) -> No
 		Replaces the text builder with a fake.
 	"""
 	monkeypatch.setattr(table_conversion, FORMAT_TABLE_NAME, format_fake_table)
-	table = TableConversion(FRAME)
+	table = TableConversion._create(FRAME)
 
 	table_text = repr(table)
 
@@ -260,7 +263,7 @@ def test_to_value_keeps_the_time_zone_of_a_datetime() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	table = TableConversion(TIME_FRAME)
+	table = TableConversion._create(TIME_FRAME)
 
 	single_value = table.to_value()
 
@@ -274,7 +277,7 @@ def test_column_rejects_a_datetime_column_with_a_time_zone() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	table = TableConversion(TIME_FRAME)
+	table = TableConversion._create(TIME_FRAME)
 
 	with pytest.raises(TimeZoneMismatchError):
 		table.column(TIME_COLUMN)

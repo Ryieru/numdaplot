@@ -6,6 +6,8 @@ Unit tests of Plot.
 
 # The matplotlib stubs leave the keyword arguments of most drawing methods untyped.
 # pyright: reportUnknownMemberType=false
+# The tests create the objects from their stored values, with the creation reserved to numdaplot.
+# pyright: reportPrivateUsage=false
 
 from pathlib import Path
 
@@ -58,9 +60,19 @@ def build_plot() -> Plot:
 	Plot
 		A line Plot titled Prices.
 	"""
-	plot = Plot([LAYER], STYLE)
+	plot = Plot._create([LAYER], STYLE)
 
 	return plot
+
+
+def test_plot_refuses_its_constructor() -> None:
+	"""
+	Check that creating a Plot by its constructor raises RefusedOperationError.
+
+	.. versionadded:: 0.1.0
+	"""
+	with pytest.raises(ndp.RefusedOperationError):
+		Plot()
 
 
 def test_plot_keeps_its_own_copy_of_the_layers() -> None:
@@ -70,7 +82,7 @@ def test_plot_keeps_its_own_copy_of_the_layers() -> None:
 	.. versionadded:: 0.1.0
 	"""
 	layers = [LAYER]
-	plot = Plot(layers, STYLE)
+	plot = Plot._create(layers, STYLE)
 
 	layers.clear()
 

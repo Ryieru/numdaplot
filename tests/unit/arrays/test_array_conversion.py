@@ -4,6 +4,9 @@ Unit tests of ArrayConversion.
 .. versionadded:: 0.1.0
 """
 
+# The tests create the objects from their stored values, with the creation reserved to numdaplot.
+# pyright: reportPrivateUsage=false
+
 from typing import Any, cast
 
 import numpy
@@ -94,7 +97,7 @@ def test_to_list_nests_one_list_per_row() -> None:
 	.. versionadded:: 0.1.0
 	"""
 	values = numpy.array(GRID)
-	array = ArrayConversion(values)
+	array = ArrayConversion._create(values)
 
 	python_values = array.to_list()
 
@@ -108,7 +111,7 @@ def test_to_value_reads_the_single_value_whatever_the_dimensions() -> None:
 	.. versionadded:: 0.1.0
 	"""
 	values = numpy.array(SINGLE_GRID)
-	array = ArrayConversion(values)
+	array = ArrayConversion._create(values)
 
 	single_value = array.to_value()
 
@@ -122,7 +125,7 @@ def test_to_value_rejects_several_values() -> None:
 	.. versionadded:: 0.1.0
 	"""
 	values = numpy.array(GRID)
-	array = ArrayConversion(values)
+	array = ArrayConversion._create(values)
 
 	with pytest.raises(NotSingleValueError):
 		array.to_value()
@@ -143,8 +146,8 @@ def test_is_equal_gives_the_type_setting_to_the_comparison(monkeypatch: pytest.M
 	monkeypatch.setattr(array_conversion, ARE_EQUAL_NAME, recorder.compare)
 	values = numpy.array(GRID)
 	other_values = numpy.array(DECIMALS)
-	array = ArrayConversion(values)
-	other = Array(other_values)
+	array = ArrayConversion._create(values)
+	other = Array._create(other_values)
 	equality = Equality(other=other, types=TypeMatch.STRICT)
 
 	is_equal = array.is_equal(equality)
@@ -160,7 +163,7 @@ def test_is_equal_rejects_a_value_that_is_not_an_array() -> None:
 	.. versionadded:: 0.1.0
 	"""
 	values = numpy.array(GRID)
-	array = ArrayConversion(values)
+	array = ArrayConversion._create(values)
 	not_an_array = cast(Array, NOT_AN_ARRAY)
 	equality = Equality(other=not_an_array)
 
@@ -181,7 +184,7 @@ def test_repr_shows_the_formatted_text(monkeypatch: pytest.MonkeyPatch) -> None:
 	"""
 	monkeypatch.setattr(array_conversion, FORMAT_ARRAY_NAME, format_fake_text)
 	values = numpy.array(GRID)
-	array = ArrayConversion(values)
+	array = ArrayConversion._create(values)
 
 	array_text = repr(array)
 

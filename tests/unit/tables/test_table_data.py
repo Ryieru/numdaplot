@@ -4,12 +4,16 @@ Unit tests of TableData.
 .. versionadded:: 0.1.0
 """
 
+# The tests create the objects from their stored values, with the creation reserved to numdaplot.
+# pyright: reportPrivateUsage=false
+
 import pandas
 import pytest
 
 from numdaplot.data_types.type import Type
 from numdaplot.dates.time_zone import TimeZone
 from numdaplot.errors.column_not_found_error import ColumnNotFoundError
+from numdaplot.errors.refused_operation_error import RefusedOperationError
 from numdaplot.tables.frames.column import Column
 from numdaplot.tables.table_data import TableData
 
@@ -110,13 +114,34 @@ class ExposedTableData(TableData):
 		return self._frame
 
 
+def test_table_data_refuses_its_constructor() -> None:
+	"""
+	Check that creating TableData by its constructor raises RefusedOperationError.
+
+	.. versionadded:: 0.1.0
+	"""
+	with pytest.raises(RefusedOperationError):
+		TableData()
+
+
+def test_table_data_create_stores_the_columns_without_copy() -> None:
+	"""
+	Check that _create keeps the given pandas DataFrame itself.
+
+	.. versionadded:: 0.1.0
+	"""
+	table = TableData._create(FRAME)
+
+	assert table._frame is FRAME
+
+
 def test_table_data_counts_its_rows() -> None:
 	"""
 	Check the number of rows.
 
 	.. versionadded:: 0.1.0
 	"""
-	table = TableData(FRAME)
+	table = TableData._create(FRAME)
 
 	assert table.row_count == EXPECTED_ROW_COUNT
 
@@ -127,7 +152,7 @@ def test_table_data_gives_a_copy_of_its_column_names() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	table = TableData(FRAME)
+	table = TableData._create(FRAME)
 	column_names = table.column_names
 
 	column_names.clear()
@@ -141,7 +166,7 @@ def test_table_data_gives_the_type_of_each_column() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	table = TableData(FRAME)
+	table = TableData._create(FRAME)
 
 	assert table.column_types == EXPECTED_COLUMN_TYPES
 
@@ -163,7 +188,7 @@ def test_wrap_keeps_the_class_of_the_table() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	table = ExposedTableData(FRAME)
+	table = ExposedTableData._create(FRAME)
 
 	wrapped_table = table.wrap(OTHER_FRAME)
 
@@ -177,7 +202,7 @@ def test_read_column_gives_the_stored_column() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	table = ExposedTableData(FRAME)
+	table = ExposedTableData._create(FRAME)
 
 	column = table.read_column("price")
 
@@ -192,7 +217,7 @@ def test_read_column_rejects_an_unknown_column() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	table = ExposedTableData(FRAME)
+	table = ExposedTableData._create(FRAME)
 
 	with pytest.raises(ColumnNotFoundError):
 		table.read_column(UNKNOWN_COLUMN)
@@ -204,6 +229,6 @@ def test_table_data_gives_the_time_zone_of_each_datetime_column() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	table = TableData(TIME_FRAME)
+	table = TableData._create(TIME_FRAME)
 
 	assert table.column_time_zones == EXPECTED_TIME_ZONES

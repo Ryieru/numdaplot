@@ -4,6 +4,9 @@ Unit tests of TableWriting.
 .. versionadded:: 0.1.0
 """
 
+# The tests create the objects from their stored values, with the creation reserved to numdaplot.
+# pyright: reportPrivateUsage=false
+
 from collections.abc import Callable
 from dataclasses import dataclass
 from pathlib import Path
@@ -117,7 +120,7 @@ def test_writing_uses_the_default_options_of_the_format(
 	"""
 	recorder = WriteRecorder()
 	monkeypatch.setattr(table_writing, writing_case.writer_name, recorder)
-	table = TableWriting(FRAME)
+	table = TableWriting._create(FRAME)
 	path = tmp_path / FILE_NAME
 	path_text = str(path)
 
@@ -153,7 +156,7 @@ def test_writing_accepts_formats_without_options(
 	"""
 	recorder = WriteRecorder()
 	monkeypatch.setattr(table_writing, writer_name, recorder)
-	table = TableWriting(FRAME)
+	table = TableWriting._create(FRAME)
 	path = tmp_path / FILE_NAME
 
 	write_table(table, path)
@@ -176,7 +179,7 @@ def test_writing_refuses_to_overwrite_a_file_by_default(monkeypatch: pytest.Monk
 	"""
 	recorder = WriteRecorder()
 	monkeypatch.setattr(table_writing, CSV_WRITER_NAME, recorder)
-	table = TableWriting(FRAME)
+	table = TableWriting._create(FRAME)
 	path = tmp_path / FILE_NAME
 	path.write_text(FILE_CONTENT)
 
@@ -201,7 +204,7 @@ def test_writing_overwrites_a_file_to_replace(monkeypatch: pytest.MonkeyPatch, t
 	"""
 	recorder = WriteRecorder()
 	monkeypatch.setattr(table_writing, CSV_WRITER_NAME, recorder)
-	table = TableWriting(FRAME)
+	table = TableWriting._create(FRAME)
 	path = tmp_path / FILE_NAME
 	path.write_text(FILE_CONTENT)
 

@@ -117,7 +117,7 @@ class TableConversion(TableData):
 		1   Lyon     8.0
 		"""
 		frame = build_array_frame(columns)
-		table = cls(frame)
+		table = cls._create(frame)
 
 		return table
 

@@ -4,6 +4,9 @@ Unit tests of ArrayLogic.
 .. versionadded:: 0.1.0
 """
 
+# The tests create the objects from their stored values, with the creation reserved to numdaplot.
+# pyright: reportPrivateUsage=false
+
 from typing import Any, cast
 
 import numpy
@@ -52,8 +55,8 @@ def test_array_logic_combines_with_and() -> None:
 	"""
 	left_values = numpy.array(LEFT_BOOLEANS)
 	right_values = numpy.array(RIGHT_BOOLEANS)
-	left = ArrayLogic(left_values)
-	right = ArrayLogic(right_values)
+	left = ArrayLogic._create(left_values)
+	right = ArrayLogic._create(right_values)
 
 	combined = left & right
 
@@ -69,8 +72,8 @@ def test_array_logic_combines_with_or() -> None:
 	"""
 	left_values = numpy.array(LEFT_BOOLEANS)
 	right_values = numpy.array(RIGHT_BOOLEANS)
-	left = ArrayLogic(left_values)
-	right = ArrayLogic(right_values)
+	left = ArrayLogic._create(left_values)
+	right = ArrayLogic._create(right_values)
 
 	combined = left | right
 
@@ -85,7 +88,7 @@ def test_array_logic_combines_with_a_boolean_on_the_left() -> None:
 	.. versionadded:: 0.1.0
 	"""
 	values = numpy.array(LEFT_BOOLEANS)
-	array = ArrayLogic(values)
+	array = ArrayLogic._create(values)
 
 	combined = True & array
 
@@ -100,7 +103,7 @@ def test_array_logic_inverts_with_not() -> None:
 	.. versionadded:: 0.1.0
 	"""
 	values = numpy.array(LEFT_BOOLEANS)
-	array = ArrayLogic(values)
+	array = ArrayLogic._create(values)
 
 	inverted = ~array
 
@@ -116,8 +119,8 @@ def test_array_logic_rejects_integers() -> None:
 	"""
 	integer_values = numpy.array(INTEGERS)
 	boolean_values = numpy.array(LEFT_BOOLEANS)
-	integers = ArrayLogic(integer_values)
-	booleans = ArrayLogic(boolean_values)
+	integers = ArrayLogic._create(integer_values)
+	booleans = ArrayLogic._create(boolean_values)
 
 	with pytest.raises(IncompatibleTypesError):
 		_ = integers & booleans
@@ -130,7 +133,7 @@ def test_array_logic_rejects_inverting_integers() -> None:
 	.. versionadded:: 0.1.0
 	"""
 	integer_values = numpy.array(INTEGERS)
-	integers = ArrayLogic(integer_values)
+	integers = ArrayLogic._create(integer_values)
 
 	with pytest.raises(IncompatibleTypesError):
 		_ = ~integers

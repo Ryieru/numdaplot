@@ -45,6 +45,8 @@ and numdaplot follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
   `Table.drop_duplicates` and `Table.drop_missing`; read with `Table.column`, `Table.check`,
   `Table.count_missing`, `Table.to_value`, `Table.to_pandas`, `Table.is_equal`, `Table.row_count`,
   `Table.column_names`, `Table.column_types`, `Table.preview`, `Table.preview_missing` and `print`.
+- `Array`, `Table` and `Plot` refuse their constructor with `RefusedOperationError`, which names the methods or
+  functions creating them.
 - Table settings: `CsvOptions`, `JsonOptions`, `ExcelOptions`, `SasOptions`, `XptOptions`, `Filter`, `Condition`,
   `Aggregation`, `Calculation`, `Description`, `ColumnChoice`, `Renaming`, `Conversion`, `NewColumn`, `Sorting`,
   `SortKey`, `Deduplication`, `Preview`, `MissingCount`, `MissingDrop`, `MissingRatio`, and the `Encoding`,

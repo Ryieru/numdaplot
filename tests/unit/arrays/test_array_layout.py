@@ -4,6 +4,9 @@ Unit tests of ArrayLayout.
 .. versionadded:: 0.1.0
 """
 
+# The tests create the objects from their stored values, with the creation reserved to numdaplot.
+# pyright: reportPrivateUsage=false
+
 from typing import Any, cast
 
 import numpy
@@ -78,7 +81,7 @@ def test_reshape_arranges_the_values_in_reading_order() -> None:
 	.. versionadded:: 0.1.0
 	"""
 	values = numpy.array(LINE)
-	array = ArrayLayout(values)
+	array = ArrayLayout._create(values)
 
 	reshaped_array = array.reshape(GRID_SHAPE)
 
@@ -93,7 +96,7 @@ def test_reshape_rejects_another_number_of_values() -> None:
 	.. versionadded:: 0.1.0
 	"""
 	values = numpy.array(LINE)
-	array = ArrayLayout(values)
+	array = ArrayLayout._create(values)
 
 	with pytest.raises(ShapeMismatchError):
 		array.reshape(WRONG_SHAPE)
@@ -106,7 +109,7 @@ def test_transpose_turns_rows_into_columns() -> None:
 	.. versionadded:: 0.1.0
 	"""
 	values = numpy.array(GRID)
-	array = ArrayLayout(values)
+	array = ArrayLayout._create(values)
 
 	transposed_array = array.transpose()
 
@@ -121,7 +124,7 @@ def test_flatten_reads_the_values_in_one_dimension() -> None:
 	.. versionadded:: 0.1.0
 	"""
 	values = numpy.array(GRID)
-	array = ArrayLayout(values)
+	array = ArrayLayout._create(values)
 
 	flat_array = array.flatten()
 
@@ -142,7 +145,7 @@ def test_sort_returns_the_sorted_values(monkeypatch: pytest.MonkeyPatch) -> None
 	"""
 	monkeypatch.setattr(array_layout, SORT_VALUES_NAME, give_fake_values)
 	values = numpy.array(LINE)
-	array = ArrayLayout(values)
+	array = ArrayLayout._create(values)
 
 	sorted_array = array.sort(ArraySorting())
 
@@ -163,7 +166,7 @@ def test_unique_returns_the_distinct_values(monkeypatch: pytest.MonkeyPatch) -> 
 	"""
 	monkeypatch.setattr(array_layout, FIND_UNIQUE_VALUES_NAME, give_fake_values)
 	values = numpy.array(LINE)
-	array = ArrayLayout(values)
+	array = ArrayLayout._create(values)
 
 	unique_array = array.unique()
 

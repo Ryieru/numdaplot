@@ -38,16 +38,10 @@ class Array(
 	- Rearrange it with ``reshape``, ``transpose``, ``flatten``, ``sort`` and ``unique``.
 	- Read it with ``shape``, ``dtype``, ``to_list``, ``to_value``, ``to_numpy`` and ``is_equal``.
 
-	Comparisons, brackets, ``for``, ``in``, ``len``, ``bool`` and ``@`` are refused with ``RefusedOperationError``,
-	which names the method to use instead.
+	Calling ``ndp.Array(...)``, comparisons, brackets, ``for``, ``in``, ``len``, ``bool`` and ``@`` are refused
+	with ``RefusedOperationError``, which names the method to use instead.
 
 	.. versionadded:: 0.1.0
-
-	Parameters
-	----------
-	values
-		The numpy values, stored without copy. Reserved to numdaplot: create an Array with
-		``from_list``, ``from_numpy``, ``filled``, ``from_range``, ``from_spacing`` or ``random``.
 
 	Examples
 	--------

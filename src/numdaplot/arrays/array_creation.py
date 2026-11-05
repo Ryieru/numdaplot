@@ -115,7 +115,7 @@ class ArrayCreation(ArrayData):
 		"""
 		value_list = list[object](values)
 		converted_values = convert_list(value_list, dtype)
-		created_array = cls(converted_values)
+		created_array = cls._create(converted_values)
 
 		return created_array
 
@@ -149,7 +149,7 @@ class ArrayCreation(ArrayData):
 		Array([1.5, 2.5], dtype=FLOAT64)
 		"""
 		copied_values = copy_numpy_values(values)
-		created_array = cls(copied_values)
+		created_array = cls._create(copied_values)
 
 		return created_array
 
@@ -187,7 +187,7 @@ class ArrayCreation(ArrayData):
 		       [0, 0, 0]], dtype=INT64)
 		"""
 		filled_values = build_filled_values(shape, value, dtype)
-		created_array = cls(filled_values)
+		created_array = cls._create(filled_values)
 
 		return created_array
 
@@ -218,7 +218,7 @@ class ArrayCreation(ArrayData):
 		Array([0.  , 0.25, 0.5 , 0.75, 1.  ], dtype=FLOAT64)
 		"""
 		range_values = compute_range_values(sequence)
-		created_array = cls(range_values)
+		created_array = cls._create(range_values)
 
 		return created_array
 
@@ -246,7 +246,7 @@ class ArrayCreation(ArrayData):
 		Array([0.  , 0.25, 0.5 , 0.75, 1.  ], dtype=FLOAT64)
 		"""
 		spacing_values = compute_spacing_values(spacing)
-		created_array = cls(spacing_values)
+		created_array = cls._create(spacing_values)
 
 		return created_array
 
@@ -285,6 +285,6 @@ class ArrayCreation(ArrayData):
 		Array([6, 4, 4, 2, 2], dtype=INT64)
 		"""
 		random_values = draw_random_values(distribution, shape, seed)
-		created_array = cls(random_values)
+		created_array = cls._create(random_values)
 
 		return created_array

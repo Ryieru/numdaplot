@@ -4,6 +4,9 @@ Unit tests of TableRefusals.
 .. versionadded:: 0.1.0
 """
 
+# The tests create the objects from their stored values, with the creation reserved to numdaplot.
+# pyright: reportPrivateUsage=false
+
 from collections.abc import Callable
 
 import pandas
@@ -49,7 +52,7 @@ def test_table_refusals_refuse_each_python_operation(refused_operation: RefusedO
 	refused_operation
 		A function applying one refused operation to a Table.
 	"""
-	table = TableRefusals(FRAME)
+	table = TableRefusals._create(FRAME)
 
 	with pytest.raises(RefusedOperationError):
 		refused_operation(table)
@@ -61,7 +64,7 @@ def test_len_points_to_row_count() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	table = TableRefusals(FRAME)
+	table = TableRefusals._create(FRAME)
 
 	with pytest.raises(RefusedOperationError) as error_info:
 		len(table)

@@ -4,6 +4,9 @@ Unit tests of ArrayData.
 .. versionadded:: 0.1.0
 """
 
+# The tests create the objects from their stored values, with the creation reserved to numdaplot.
+# pyright: reportPrivateUsage=false
+
 from typing import Any, Self
 
 import numpy
@@ -15,6 +18,7 @@ from numdaplot.arrays.array_data import ArrayData
 from numdaplot.arrays.operations.operand import Operand
 from numdaplot.arrays.shape import Shape
 from numdaplot.data_types.type import Type
+from numdaplot.errors.refused_operation_error import RefusedOperationError
 from numdaplot.errors.unsupported_operand_error import UnsupportedOperandError
 
 GRID = [[1, 2, 3], [4, 5, 6]]
@@ -141,6 +145,29 @@ class OperandRecorder:
 		return FAKE_RESULT
 
 
+def test_array_data_refuses_its_constructor() -> None:
+	"""
+	Check that creating ArrayData by its constructor raises RefusedOperationError.
+
+	.. versionadded:: 0.1.0
+	"""
+	with pytest.raises(RefusedOperationError):
+		ArrayData()
+
+
+def test_array_data_create_stores_the_values_without_copy() -> None:
+	"""
+	Check that _create keeps the given numpy values themselves.
+
+	.. versionadded:: 0.1.0
+	"""
+	values = numpy.array(GRID)
+
+	data = ArrayData._create(values)
+
+	assert data._values is values
+
+
 def test_array_data_reads_its_shape() -> None:
 	"""
 	Check that the shape is a Shape of the stored values.
@@ -148,7 +175,7 @@ def test_array_data_reads_its_shape() -> None:
 	.. versionadded:: 0.1.0
 	"""
 	values = numpy.array(GRID)
-	data = ArrayData(values)
+	data = ArrayData._create(values)
 
 	assert data.shape == GRID_SHAPE
 
@@ -160,7 +187,7 @@ def test_array_data_reads_its_type() -> None:
 	.. versionadded:: 0.1.0
 	"""
 	values = numpy.array(DECIMALS)
-	data = ArrayData(values)
+	data = ArrayData._create(values)
 
 	assert data.dtype == Type.FLOAT64
 
@@ -173,7 +200,7 @@ def test_array_data_makes_its_values_read_only() -> None:
 	"""
 	values = numpy.array(GRID)
 
-	ArrayData(values)
+	ArrayData._create(values)
 
 	assert not values.flags.writeable
 
@@ -185,7 +212,7 @@ def test_array_data_gives_an_independent_numpy_copy() -> None:
 	.. versionadded:: 0.1.0
 	"""
 	values = numpy.array(GRID)
-	data = ArrayData(values)
+	data = ArrayData._create(values)
 	numpy_copy = data.to_numpy()
 
 	numpy_copy[FIRST_POSITION] = CHANGED_VALUE
@@ -202,8 +229,8 @@ def test_array_data_reads_the_values_of_another_array_as_operand() -> None:
 	"""
 	values = numpy.array(GRID)
 	other_values = numpy.array(DECIMALS)
-	data = ExposedArrayData(values)
-	other = ArrayData(other_values)
+	data = ExposedArrayData._create(values)
+	other = ArrayData._create(other_values)
 
 	operand = data.read_operand(other)
 
@@ -217,7 +244,7 @@ def test_array_data_rejects_a_list_as_operand() -> None:
 	.. versionadded:: 0.1.0
 	"""
 	values = numpy.array(GRID)
-	data = ExposedArrayData(values)
+	data = ExposedArrayData._create(values)
 
 	with pytest.raises(UnsupportedOperandError):
 		data.read_operand(REJECTED_OPERAND)
@@ -237,7 +264,7 @@ def test_array_data_combines_with_itself_on_the_left(monkeypatch: pytest.MonkeyP
 	recorder = OperandRecorder()
 	monkeypatch.setattr(array_data, COMBINE_VALUES_NAME, recorder.combine)
 	values = numpy.array(GRID)
-	data = ExposedArrayData(values)
+	data = ExposedArrayData._create(values)
 
 	combined = data.combine(SINGLE_VALUE)
 
@@ -261,7 +288,7 @@ def test_array_data_combines_with_itself_on_the_right(monkeypatch: pytest.Monkey
 	recorder = OperandRecorder()
 	monkeypatch.setattr(array_data, COMBINE_VALUES_NAME, recorder.combine)
 	values = numpy.array(GRID)
-	data = ExposedArrayData(values)
+	data = ExposedArrayData._create(values)
 
 	data.combine_reflected(SINGLE_VALUE)
 

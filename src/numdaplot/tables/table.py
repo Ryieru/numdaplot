@@ -45,16 +45,10 @@ class Table(
 	- Read it with ``row_count``, ``column_names``, ``column_types``, ``to_value``, ``to_pandas`` and ``is_equal``,
 	and show it with ``preview`` or ``print``.
 
-	Comparisons, brackets, ``for``, ``in``, ``len`` and ``bool`` are refused with ``RefusedOperationError``,
-	which names the method to use instead.
+	Calling ``ndp.Table(...)``, comparisons, brackets, ``for``, ``in``, ``len`` and ``bool`` are refused
+	with ``RefusedOperationError``, which names the method to use instead.
 
 	.. versionadded:: 0.1.0
-
-	Parameters
-	----------
-	frame
-		The columns, already stored the way a Table stores them. Reserved to numdaplot: create
-		a Table with ``from_csv``, ``from_pandas``, ``from_arrays`` or another ``from_*`` method.
 
 	Examples
 	--------

@@ -4,7 +4,7 @@ Values stored by an Array, shared by every group of Array methods.
 .. versionadded:: 0.1.0
 """
 
-from typing import Any, Self, cast
+from typing import Any, Never, Self, cast
 
 import numpy
 import numpy.typing
@@ -14,7 +14,11 @@ from numdaplot.arrays.operations.operand import Operand, require_single_value
 from numdaplot.arrays.shape import Shape
 from numdaplot.data_types.numpy_mapping import from_numpy_dtype
 from numdaplot.data_types.type import Type
+from numdaplot.errors.refused_operation_error import RefusedOperationError
 from numdaplot.rules.rule_values import ScalarValue
+
+CONSTRUCTOR_OPERATION = "Creating an Array with ndp.Array(...)"
+CONSTRUCTOR_ALTERNATIVE = "ndp.Array.from_list, from_numpy, filled, from_range, from_spacing or random"
 
 
 class ArrayData:
@@ -24,21 +28,36 @@ class ArrayData:
 	Use ``ndp.Array`` and its ``from_*`` methods; this base class only holds the values.
 
 	.. versionadded:: 0.1.0
-
-	Parameters
-	----------
-	values
-		The numpy values, stored without copy and made read-only.
 	"""
 
 	# numpy then hands every operation between an ndarray and an Array to the Array, which refuses it.
 	__array_ufunc__ = None
+	_values: numpy.typing.NDArray[Any]
 
-	def __init__(self, values: numpy.typing.NDArray[Any]) -> None:
+	def __init__(self, *arguments: Never, **keyword_arguments: Never) -> None:
 		"""
-		Store numpy values without copy and make them read-only.
+		Refuse the creation of an Array by its constructor: the ``from_*`` methods create Arrays.
 
-		The ``from_*`` methods create Arrays; this constructor is reserved to numdaplot.
+		.. versionadded:: 0.1.0
+
+		Parameters
+		----------
+		arguments
+			Any value, refused.
+		keyword_arguments
+			Any named value, refused.
+
+		Raises
+		------
+		RefusedOperationError
+			Always, naming the ``from_*`` methods.
+		"""
+		raise RefusedOperationError(CONSTRUCTOR_OPERATION, CONSTRUCTOR_ALTERNATIVE)
+
+	@classmethod
+	def _create(cls, values: numpy.typing.NDArray[Any]) -> Self:
+		"""
+		Return a new Array storing numpy values without copy, made read-only.
 
 		.. versionadded:: 0.1.0
 
@@ -46,9 +65,17 @@ class ArrayData:
 		----------
 		values
 			The numpy values, of a type numdaplot supports.
+
+		Returns
+		-------
+		Self
+			The new Array.
 		"""
+		created_array = cls.__new__(cls)
 		values.flags.writeable = False
-		self._values = values
+		created_array._values = values
+
+		return created_array
 
 	@property
 	def shape(self) -> Shape:
@@ -124,7 +151,7 @@ class ArrayData:
 			The new Array.
 		"""
 		array_class = type(self)
-		wrapped_array = array_class(values)
+		wrapped_array = array_class._create(values)
 
 		return wrapped_array
 

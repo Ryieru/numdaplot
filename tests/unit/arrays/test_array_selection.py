@@ -4,6 +4,9 @@ Unit tests of ArraySelection.
 .. versionadded:: 0.1.0
 """
 
+# The tests create the objects from their stored values, with the creation reserved to numdaplot.
+# pyright: reportPrivateUsage=false
+
 from typing import Any, cast
 
 import numpy
@@ -135,7 +138,7 @@ def test_select_keeps_the_values_of_the_mask(monkeypatch: pytest.MonkeyPatch) ->
 	"""
 	monkeypatch.setattr(array_selection, BUILD_RULE_MASK_NAME, build_fake_mask)
 	values = numpy.array(GRID)
-	array = ArraySelection(values)
+	array = ArraySelection._create(values)
 
 	selected_array = array.select(RULE)
 
@@ -156,7 +159,7 @@ def test_check_returns_the_mask(monkeypatch: pytest.MonkeyPatch) -> None:
 	"""
 	monkeypatch.setattr(array_selection, BUILD_RULE_MASK_NAME, build_fake_mask)
 	values = numpy.array(GRID)
-	array = ArraySelection(values)
+	array = ArraySelection._create(values)
 
 	mask_array = array.check(RULE)
 
@@ -177,7 +180,7 @@ def test_take_returns_the_values_of_the_region_index(monkeypatch: pytest.MonkeyP
 	"""
 	monkeypatch.setattr(array_selection, BUILD_REGION_INDEX_NAME, build_fake_region_index)
 	values = numpy.array(GRID)
-	array = ArraySelection(values)
+	array = ArraySelection._create(values)
 
 	taken_array = array.take(REGION)
 
@@ -198,7 +201,7 @@ def test_replace_returns_the_replaced_values(monkeypatch: pytest.MonkeyPatch) ->
 	"""
 	monkeypatch.setattr(array_selection, REPLACE_REGION_NAME, replace_with_fake_values)
 	values = numpy.array(GRID)
-	array = ArraySelection(values)
+	array = ArraySelection._create(values)
 	replacement = Replacement(region=REGION, value=NEW_VALUE)
 
 	replaced_array = array.replace(replacement)

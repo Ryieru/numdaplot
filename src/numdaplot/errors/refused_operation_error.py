@@ -1,5 +1,5 @@
 """
-Error raised when an operation is not available on an Array or a Table.
+Error raised when an operation is not available on an Array, a Table or a Plot.
 
 .. versionadded:: 0.1.0
 """
@@ -11,7 +11,9 @@ REFUSED_OPERATION_MESSAGE = "{operation} is not available, use {alternative} ins
 
 class RefusedOperationError(NumdaplotError):
 	"""
-	Raised when a Python operation is not available on an Array or a Table, such as ``<``, brackets or ``len``.
+	Raised when a Python operation is not available on an Array, a Table or a Plot, such as ``<`` or ``len``.
+
+	Calling the constructor of an Array, a Table or a Plot raises it too.
 
 	The message names the numdaplot method to use instead.
 

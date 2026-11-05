@@ -6,6 +6,9 @@ Each method hands the columns to a helper, faked here, and wraps the result in a
 .. versionadded:: 0.1.0
 """
 
+# The tests create the objects from their stored values, with the creation reserved to numdaplot.
+# pyright: reportPrivateUsage=false
+
 from collections.abc import Callable
 from types import ModuleType
 from typing import Any
@@ -174,7 +177,7 @@ def test_table_operations_wrap_the_columns_of_their_helper(
 		A function calling the method.
 	"""
 	monkeypatch.setattr(module, helper_name, give_fake_frame)
-	table = Table(FRAME)
+	table = Table._create(FRAME)
 
 	new_table = operation(table)
 
@@ -194,7 +197,7 @@ def test_filter_keeps_the_rows_of_the_mask_and_numbers_them_from_zero(monkeypatc
 		Replaces the mask builder with a fake.
 	"""
 	monkeypatch.setattr(table_selection, BUILD_FILTER_MASK_NAME, give_fake_mask)
-	table = Table(FRAME)
+	table = Table._create(FRAME)
 
 	filtered_table = table.filter(ROW_FILTER)
 
@@ -218,7 +221,7 @@ def test_convert_replaces_the_column_with_its_conversion(monkeypatch: pytest.Mon
 		Replaces the conversion with a fake.
 	"""
 	monkeypatch.setattr(table_columns, CONVERT_COLUMN_NAME, give_fake_column)
-	table = Table(FRAME)
+	table = Table._create(FRAME)
 
 	converted_table = table.convert(Conversion(column="price", dtype=Type.TEXT))
 

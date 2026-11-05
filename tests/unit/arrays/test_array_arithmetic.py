@@ -4,6 +4,9 @@ Unit tests of ArrayArithmetic and ArrayReflectedArithmetic.
 .. versionadded:: 0.1.0
 """
 
+# The tests create the objects from their stored values, with the creation reserved to numdaplot.
+# pyright: reportPrivateUsage=false
+
 from collections.abc import Callable
 from typing import Any
 
@@ -94,7 +97,7 @@ def test_array_arithmetic_hands_each_operator_to_the_combination(
 	recorder = CombinationRecorder()
 	monkeypatch.setattr(ArrayArithmetic, COMBINE_NAME, recorder.combine)
 	values = numpy.array(VALUES)
-	array = ArrayArithmetic(values)
+	array = ArrayArithmetic._create(values)
 
 	python_operator(array, OPERAND)
 
@@ -124,7 +127,7 @@ def test_array_reflected_arithmetic_hands_each_operator_to_the_reflected_combina
 	recorder = CombinationRecorder()
 	monkeypatch.setattr(ArrayReflectedArithmetic, COMBINE_REFLECTED_NAME, recorder.combine)
 	values = numpy.array(VALUES)
-	array = ArrayReflectedArithmetic(values)
+	array = ArrayReflectedArithmetic._create(values)
 
 	python_operator(OPERAND, array)
 
@@ -138,7 +141,7 @@ def test_array_arithmetic_negates_each_value() -> None:
 	.. versionadded:: 0.1.0
 	"""
 	values = numpy.array(VALUES)
-	array = ArrayArithmetic(values)
+	array = ArrayArithmetic._create(values)
 
 	negated_array = -array
 
@@ -154,7 +157,7 @@ def test_array_arithmetic_rejects_the_opposite_of_booleans() -> None:
 	.. versionadded:: 0.1.0
 	"""
 	booleans = numpy.array(BOOLEANS)
-	array = ArrayArithmetic(booleans)
+	array = ArrayArithmetic._create(booleans)
 
 	with pytest.raises(IncompatibleTypesError):
 		_ = -array
