@@ -43,3 +43,42 @@ def test_incompatible_types_error_keeps_its_values() -> None:
 
 	assert error.operation == OPERATION
 	assert error.type_names == TYPE_NAMES
+
+
+def test_incompatible_types_error_has_no_column_by_default() -> None:
+	"""
+	Check that a new error names no column.
+
+	.. versionadded:: 0.1.0
+	"""
+	error = IncompatibleTypesError("+", ["INT64", "TEXT"])
+
+	assert error.column_name is None
+
+
+def test_name_column_names_the_first_type_of_the_message() -> None:
+	"""
+	Check the message once a column is named.
+
+	.. versionadded:: 0.1.0
+	"""
+	error = IncompatibleTypesError("Greater", ["DATETIME", "INT64"])
+
+	error.name_column("day")
+
+	assert str(error) == "Cannot apply Greater to the DATETIME column 'day' and INT64."
+	assert error.column_name == "day"
+
+
+def test_name_column_keeps_the_first_name() -> None:
+	"""
+	Check that a named column does not change.
+
+	.. versionadded:: 0.1.0
+	"""
+	error = IncompatibleTypesError("Mean", ["TEXT"])
+	error.name_column("zone")
+
+	error.name_column("other")
+
+	assert str(error) == "Cannot apply Mean to the TEXT column 'zone'."

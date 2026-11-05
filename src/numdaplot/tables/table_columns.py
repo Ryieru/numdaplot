@@ -15,6 +15,7 @@ from numdaplot.tables.columns.converted_column import convert_column
 from numdaplot.tables.columns.new_column import NewColumn
 from numdaplot.tables.columns.renamed_columns import rename_frame_columns
 from numdaplot.tables.columns.renaming import Renaming
+from numdaplot.tables.frames.named_column_errors import NamedColumnErrors
 from numdaplot.tables.table_data import TableData
 
 
@@ -150,7 +151,9 @@ class TableColumns(TableData):
 		1    75001
 		"""
 		column = self._read_column(conversion.column)
-		converted_column = convert_column(column, conversion)
+		with NamedColumnErrors(column):
+			converted_column = convert_column(column, conversion)
+
 		converted_frame = self._frame.copy(deep=False)
 		converted_frame[conversion.column] = converted_column
 		converted_table = self._wrap(converted_frame)

@@ -18,6 +18,7 @@ from numdaplot.tables.aggregation.row_groups import find_row_groups
 from numdaplot.tables.columns.column_names import require_known_columns
 from numdaplot.tables.frames.column import Column
 from numdaplot.tables.frames.column_values import find_column_missing, read_present_values
+from numdaplot.tables.frames.named_column_errors import NamedColumnErrors
 from numdaplot.tables.frames.time_zones import attribute_source_time_zone
 
 FIRST_ROW = 0
@@ -172,14 +173,15 @@ def compute_group_results(column: Column, statistic: Statistic, row_groups: list
 	value_positions = present_counts - 1
 	results = list[NDArray[Any] | None]()
 
-	for row_group in row_groups:
-		group_present = present[row_group]
-		present_rows = row_group[group_present]
-		group_value_positions = value_positions[present_rows]
-		group_values = present_values[group_value_positions]
-		group_size = len(row_group)
-		result = compute_cell(group_values, statistic, group_size)
-		results.append(result)
+	with NamedColumnErrors(column):
+		for row_group in row_groups:
+			group_present = present[row_group]
+			present_rows = row_group[group_present]
+			group_value_positions = value_positions[present_rows]
+			group_values = present_values[group_value_positions]
+			group_size = len(row_group)
+			result = compute_cell(group_values, statistic, group_size)
+			results.append(result)
 
 	utc_results = build_result_column(results)
 	result_column = attribute_source_time_zone(utc_results, column)

@@ -115,3 +115,73 @@ def test_value_conversion_error_keeps_its_date_format_name() -> None:
 
 	assert error.date_format_name == DATE_FORMAT_NAME
 	assert general_error.date_format_name is None
+
+
+def test_value_conversion_error_has_no_column_by_default() -> None:
+	"""
+	Check that a new error names no column.
+
+	.. versionadded:: 0.1.0
+	"""
+	error = ValueConversionError(SOURCE_TYPE_NAME, TARGET_TYPE_NAME)
+
+	assert error.column_name is None
+
+
+def test_name_column_names_the_values_without_rejected_value() -> None:
+	"""
+	Check the message of values without a rejected value.
+
+	.. versionadded:: 0.1.0
+	"""
+	error = ValueConversionError(SOURCE_TYPE_NAME, TARGET_TYPE_NAME)
+
+	error.name_column("price")
+
+	assert str(error) == "Cannot store FLOAT64 values of the column 'price' as INT64 without losing information."
+
+
+def test_name_column_names_the_rejected_value() -> None:
+	"""
+	Check the message of a rejected value.
+
+	.. versionadded:: 0.1.0
+	"""
+	error = ValueConversionError("TEXT", "FLOAT64", "abc")
+
+	error.name_column("price")
+
+	assert (
+		str(error) == "Cannot store the TEXT value 'abc' of the column 'price' as FLOAT64 without losing information."
+	)
+
+
+def test_name_column_keeps_the_date_format_advice() -> None:
+	"""
+	Check the message of an unreadable date.
+
+	.. versionadded:: 0.1.0
+	"""
+	error = ValueConversionError("TEXT", "DATE", "x", "YEAR_MONTH_DAY")
+
+	error.name_column("day")
+
+	error_text = str(error)
+	assert error_text.startswith(
+		"Cannot read the TEXT value 'x' of the column 'day' as DATE with the format YEAR_MONTH_DAY."
+	)
+	assert "Give the format of the column" in error_text
+
+
+def test_name_column_keeps_the_first_name() -> None:
+	"""
+	Check that a named column does not change.
+
+	.. versionadded:: 0.1.0
+	"""
+	error = ValueConversionError(SOURCE_TYPE_NAME, TARGET_TYPE_NAME)
+	error.name_column("price")
+
+	error.name_column("other")
+
+	assert error.column_name == "price"

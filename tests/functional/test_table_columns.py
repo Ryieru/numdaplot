@@ -16,7 +16,9 @@ PRICES = [10.0, 20.0]
 ZIP_CODES = ["06000", "75001"]
 EXPECTED_ZIP_NUMBERS = [6000, 75001]
 WRONG_ZIP_CODES = ["06000", "Nice"]
-EXPECTED_CONVERSION_MESSAGE = "Cannot store the TEXT value 'Nice' as INT32 without losing information."
+EXPECTED_CONVERSION_MESSAGE = (
+	"Cannot store the TEXT value 'Nice' of the column 'zip_code' as INT32 without losing information."
+)
 SALE_DAY = date(2026, 12, 31)
 EXPECTED_SALE_DAY_TEXT = "31/12/2026 00:00:00"
 THROUGH_DATETIME_HINT = "Convert the column to DATETIME first, then to TEXT"

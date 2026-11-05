@@ -14,6 +14,7 @@ from numdaplot.rules.rule import Rule
 from numdaplot.tables.filtering.rule_moments import match_rule_time_zone
 from numdaplot.tables.frames.column import Column
 from numdaplot.tables.frames.column_values import find_column_missing, read_present_values
+from numdaplot.tables.frames.named_column_errors import NamedColumnErrors
 from numdaplot.tables.frames.time_zones import find_column_time_zone
 
 
@@ -61,7 +62,9 @@ def build_column_mask(column: Column, rule: Rule) -> NDArray[numpy.bool_]:
 	time_zone = find_column_time_zone(column)
 	matched_rule = match_rule_time_zone(rule, time_zone)
 	present_values = read_present_values(column)
-	present_mask = build_rule_mask(present_values, matched_rule)
+	with NamedColumnErrors(column):
+		present_mask = build_rule_mask(present_values, matched_rule)
+
 	mask = numpy.zeros(missing.shape, dtype=numpy.bool_)
 	mask[present] = present_mask
 

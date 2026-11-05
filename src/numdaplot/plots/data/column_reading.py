@@ -14,6 +14,7 @@ from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
 from numdaplot.plots.data.position_kind import PositionKind
 from numdaplot.tables.frames.column import Column
 from numdaplot.tables.frames.column_values import find_column_missing, find_column_type
+from numdaplot.tables.frames.named_column_errors import NamedColumnErrors
 from numdaplot.tables.frames.time_zones import find_column_time_zone
 
 POSITION_KINDS = {
@@ -67,7 +68,8 @@ def require_column_family(column: Column, accepted_families: frozenset[ValueFami
 	column_type = find_column_type(column)
 	family = find_family(column_type)
 	if family not in accepted_families:
-		raise IncompatibleTypesError(chart_name, [column_type.name])
+		with NamedColumnErrors(column):
+			raise IncompatibleTypesError(chart_name, [column_type.name])
 
 	return family
 
