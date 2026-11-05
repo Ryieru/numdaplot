@@ -11,8 +11,8 @@ import pytest
 import numdaplot as ndp
 
 FAMILY_BASES = [ndp.Rule, ndp.Statistic, ndp.MathFunction, ndp.Distribution, ndp.TimeFunction, ndp.Chart]
-MEMBER_ROW = "| ``{name}`` |"
-LISTING_DOCSTRING = "| ``LessOrEqual`` | The values less than or equal to a value | ``ndp.LessOrEqual(10)`` |"
+MEMBER_ROW = "|``{name}``|"
+LISTING_DOCSTRING = "|``LessOrEqual``|The values less than or equal to a value|``ndp.LessOrEqual(10)``|"
 LISTED_MEMBER = "LessOrEqual"
 UNLISTED_MEMBER = "Less"
 

@@ -13,19 +13,19 @@ class Rule:
 
 	Every rule, passed to ``Array.select``, ``Array.check``, ``Table.check`` and ``Condition``:
 
-	| Rule | What it keeps | Example |
-	| --- | --- | --- |
-	| ``Equal`` | The values equal to a reference value | ``ndp.Equal("Paris")`` |
-	| ``NotEqual`` | The values different from a reference value | ``ndp.NotEqual("Paris")`` |
-	| ``Greater`` | The values strictly greater than a reference value | ``ndp.Greater(10)`` |
-	| ``GreaterOrEqual`` | The values greater than or equal to a reference value | ``ndp.GreaterOrEqual(10)`` |
-	| ``Less`` | The values strictly less than a reference value | ``ndp.Less(10)`` |
-	| ``LessOrEqual`` | The values less than or equal to a reference value | ``ndp.LessOrEqual(10)`` |
-	| ``Between`` | The values inside an interval | ``ndp.Between(10, 20)`` |
-	| ``IsIn`` | The values that belong to a list of accepted values | ``ndp.IsIn(["Paris", "Lyon"])`` |
-	| ``Contains`` | The texts that contain a given text | ``ndp.Contains("Pa")`` |
-	| ``IsMissing`` | The missing values | ``ndp.IsMissing()`` |
-	| ``IsPresent`` | The values that are not missing | ``ndp.IsPresent()`` |
+	|Rule|What it keeps|Example|
+	|---|---|---|
+	|``Equal``|The values equal to a reference value|``ndp.Equal("Paris")``|
+	|``NotEqual``|The values different from a reference value|``ndp.NotEqual("Paris")``|
+	|``Greater``|The values strictly greater than a reference value|``ndp.Greater(10)``|
+	|``GreaterOrEqual``|The values greater than or equal to a reference value|``ndp.GreaterOrEqual(10)``|
+	|``Less``|The values strictly less than a reference value|``ndp.Less(10)``|
+	|``LessOrEqual``|The values less than or equal to a reference value|``ndp.LessOrEqual(10)``|
+	|``Between``|The values inside an interval|``ndp.Between(10, 20)``|
+	|``IsIn``|The values that belong to a list of accepted values|``ndp.IsIn(["Paris", "Lyon"])``|
+	|``Contains``|The texts that contain a given text|``ndp.Contains("Pa")``|
+	|``IsMissing``|The missing values|``ndp.IsMissing()``|
+	|``IsPresent``|The values that are not missing|``ndp.IsPresent()``|
 
 	.. versionadded:: 0.1.0
 
