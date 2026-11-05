@@ -288,12 +288,12 @@ def test_heatmap_chart_rejects_empty_columns() -> None:
 		HeatmapChart(columns=[])
 
 
-def test_missing_chart_defaults_to_ratios() -> None:
+def test_missing_chart_defaults_to_counts() -> None:
 	"""
-	Check the default measure of a MissingChart.
+	Check that a MissingChart counts the missing values by default, as MissingCount and HistogramChart do.
 
 	.. versionadded:: 0.1.0
 	"""
 	chart = MissingChart()
 
-	assert chart.measure == Measure.RATIO
+	assert chart.measure == Measure.COUNT

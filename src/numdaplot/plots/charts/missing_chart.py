@@ -22,8 +22,8 @@ class MissingChart(Chart):
 	Parameters
 	----------
 	measure
-		``Measure.RATIO`` by default for the share of missing values of each column, on an axis from 0 to 1,
-		``Measure.COUNT`` for their number.
+		``Measure.COUNT`` by default for the number of missing values of each column, ``Measure.RATIO`` for their
+		share, on an axis from 0 to 1.
 
 	Examples
 	--------
@@ -32,9 +32,9 @@ class MissingChart(Chart):
 	>>> prices = ndp.Array.from_list([12.0, None, None, 15.5])
 	>>> rooms = ndp.Array.from_list([2, 3, 1, 4])
 	>>> flats = ndp.Table.from_arrays({"city": cities, "price": prices, "rooms": rooms})
-	>>> chart = ndp.MissingChart(measure=ndp.Measure.COUNT)
+	>>> chart = ndp.MissingChart(measure=ndp.Measure.RATIO)
 	>>> plot = ndp.plot_missing_by_column(flats, chart)
 	>>> plot.show()
 	"""
 
-	measure: Measure = Measure.RATIO
+	measure: Measure = Measure.COUNT

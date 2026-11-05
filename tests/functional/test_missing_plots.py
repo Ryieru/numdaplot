@@ -35,7 +35,7 @@ def test_missing_values_by_column_are_drawn_as_ratios() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	plot = ndp.plot_missing_by_column(FLATS, ndp.MissingChart())
+	plot = ndp.plot_missing_by_column(FLATS, ndp.MissingChart(measure=ndp.Measure.RATIO))
 
 	axes = plot.to_matplotlib().axes[0]
 	bars = [patch for patch in axes.patches if isinstance(patch, Rectangle)]
@@ -48,15 +48,13 @@ def test_missing_values_by_column_are_drawn_as_ratios() -> None:
 	assert axes.get_ylabel() == "Missing ratio"
 
 
-def test_missing_values_by_column_are_drawn_as_counts() -> None:
+def test_missing_values_by_column_are_drawn_as_counts_by_default() -> None:
 	"""
-	Check that counts label their axis Missing count.
+	Check that, without chart, the bars count the missing values and label their axis Missing count.
 
 	.. versionadded:: 0.1.0
 	"""
-	chart = ndp.MissingChart(measure=ndp.Measure.COUNT)
-
-	plot = ndp.plot_missing_by_column(FLATS, chart)
+	plot = ndp.plot_missing_by_column(FLATS)
 
 	axes = plot.to_matplotlib().axes[0]
 	assert axes.get_ylabel() == "Missing count"

@@ -28,7 +28,7 @@ def plot_missing_by_column(table: Table, chart: MissingChart | None = None, styl
 	table
 		The Table whose missing values are counted.
 	chart
-		The measure, the share of missing values of each column when omitted.
+		The measure, the number of missing values of each column when omitted.
 	style
 		The look of the Plot, the default ``Style`` when omitted.
 

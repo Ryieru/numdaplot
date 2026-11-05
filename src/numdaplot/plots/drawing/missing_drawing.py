@@ -72,7 +72,7 @@ def draw_missing_chart(axes: Axes, layer: ChartLayer) -> DrawnChart:
 	>>> prices = ndp.Array.from_list([12.0, None])
 	>>> flats = ndp.Table.from_arrays({"price": prices})
 	>>> axes = Figure().add_subplot()
-	>>> chart = ndp.MissingChart()
+	>>> chart = ndp.MissingChart(measure=ndp.Measure.RATIO)
 	>>> drawn_chart = draw_missing_chart(axes, ChartLayer(chart, read_missing_counts(flats, chart.measure)))
 	>>> [float(limit) for limit in axes.get_ylim()]
 	[0.0, 1.0]
