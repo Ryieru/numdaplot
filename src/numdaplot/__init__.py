@@ -78,6 +78,7 @@ from numdaplot.errors.invalid_deviation_error import InvalidDeviationError
 from numdaplot.errors.invalid_fraction_error import InvalidFractionError
 from numdaplot.errors.invalid_position_error import InvalidPositionError
 from numdaplot.errors.invalid_resolution_error import InvalidResolutionError
+from numdaplot.errors.invalid_rotation_error import InvalidRotationError
 from numdaplot.errors.invalid_seed_error import InvalidSeedError
 from numdaplot.errors.invalid_separator_error import InvalidSeparatorError
 from numdaplot.errors.invalid_shape_error import InvalidShapeError
@@ -302,6 +303,7 @@ __all__ = [
 	"InvalidSeedError",
 	"InvalidSeparatorError",
 	"InvalidShapeError",
+	"InvalidRotationError",
 	"InvalidSizeError",
 	"InvalidStepError",
 	"InvalidTimeZoneChangeError",

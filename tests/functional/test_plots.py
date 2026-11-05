@@ -38,6 +38,9 @@ EXPECTED_SHARP_SIZE = (1280, 960)
 PNG_SIZE_START = 16
 PNG_SIZE_END = 24
 PNG_SIZE_LAYOUT = ">II"
+DEFAULT_TEXT_ROTATION = 45.0
+CHOSEN_ROTATION = 30.0
+NO_ROTATION = 0.0
 
 
 def read_png_size(path: Path) -> tuple[int, int]:
@@ -259,3 +262,137 @@ def test_a_plot_rejects_durations_on_its_x_axis() -> None:
 
 	with pytest.raises(ndp.IncompatibleTypesError):
 		ndp.plot_line(table, ndp.LineChart(x="wait", y=["price"]))
+
+
+def read_first_x_rotation(plot: ndp.Plot) -> float:
+	"""
+	Return the angle of the first label of the horizontal axis of a Plot.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	plot
+		The Plot.
+
+	Returns
+	-------
+	float
+		The angle in degrees.
+	"""
+	figure = plot.to_matplotlib()
+	first_label = figure.axes[0].get_xticklabels()[0]
+	first_rotation = first_label.get_rotation()
+
+	return first_rotation
+
+
+def build_city_sales() -> ndp.Table:
+	"""
+	Return a Table with a column of texts and a column of numbers holding a missing value.
+
+	.. versionadded:: 0.1.0
+
+	Returns
+	-------
+	ndp.Table
+		The Table.
+	"""
+	cities = ndp.Array.from_list(["Paris", "Lyon"])
+	totals = ndp.Array.from_list([120.0, None])
+	city_sales = ndp.Table.from_arrays({"city": cities, "total": totals})
+
+	return city_sales
+
+
+def test_bar_plot_tilts_its_text_labels_by_default() -> None:
+	"""
+	Check that the cities below the bars are at 45 degrees.
+
+	.. versionadded:: 0.1.0
+	"""
+	chart = ndp.BarChart(x="city", y=["total"])
+
+	plot = ndp.plot_bar(build_city_sales(), chart)
+
+	assert read_first_x_rotation(plot) == DEFAULT_TEXT_ROTATION
+
+
+def test_bar_plot_follows_the_rotation_of_the_style() -> None:
+	"""
+	Check that the Style changes the angle of the cities.
+
+	.. versionadded:: 0.1.0
+	"""
+	chart = ndp.BarChart(x="city", y=["total"])
+	style = ndp.Style(x_tick_rotation=CHOSEN_ROTATION)
+
+	plot = ndp.plot_bar(build_city_sales(), chart, style)
+
+	assert read_first_x_rotation(plot) == CHOSEN_ROTATION
+
+
+def test_missing_plot_tilts_the_column_names_by_default() -> None:
+	"""
+	Check the column names below the bars of the missing values.
+
+	.. versionadded:: 0.1.0
+	"""
+	plot = ndp.plot_missing_by_column(build_city_sales(), ndp.MissingChart())
+
+	assert read_first_x_rotation(plot) == DEFAULT_TEXT_ROTATION
+
+
+def test_line_plot_keeps_its_numbers_flat_by_default() -> None:
+	"""
+	Check that numbers on the horizontal axis are not rotated.
+
+	.. versionadded:: 0.1.0
+	"""
+	prices = ndp.Array.from_list([12.0, 15.5])
+
+	plot = ndp.plot_line(prices, ndp.LineChart())
+
+	assert read_first_x_rotation(plot) == NO_ROTATION
+
+
+def test_array_bar_plot_keeps_its_row_numbers_flat_by_default() -> None:
+	"""
+	Check that the row numbers below the bars of an Array stay numbers.
+
+	.. versionadded:: 0.1.0
+	"""
+	prices = ndp.Array.from_list([12.0, 15.5])
+
+	plot = ndp.plot_bar(prices, ndp.BarChart())
+
+	assert read_first_x_rotation(plot) == NO_ROTATION
+
+
+def test_line_plot_follows_the_y_rotation_of_the_style() -> None:
+	"""
+	Check that the Style changes the angle of the values on the vertical axis.
+
+	.. versionadded:: 0.1.0
+	"""
+	prices = ndp.Array.from_list([12.0, 15.5])
+	style = ndp.Style(y_tick_rotation=CHOSEN_ROTATION)
+
+	plot = ndp.plot_line(prices, ndp.LineChart(), style)
+
+	figure = plot.to_matplotlib()
+	assert figure.axes[0].get_yticklabels()[0].get_rotation() == CHOSEN_ROTATION
+
+
+def test_horizontal_bar_plot_applies_the_y_rotation_to_its_values() -> None:
+	"""
+	Check that the ``y`` rotation follows the values of horizontal bars, on the horizontal axis.
+
+	.. versionadded:: 0.1.0
+	"""
+	chart = ndp.BarChart(x="city", y=["total"], orientation=ndp.Orientation.HORIZONTAL)
+	style = ndp.Style(y_tick_rotation=CHOSEN_ROTATION)
+
+	plot = ndp.plot_bar(build_city_sales(), chart, style)
+
+	assert read_first_x_rotation(plot) == CHOSEN_ROTATION

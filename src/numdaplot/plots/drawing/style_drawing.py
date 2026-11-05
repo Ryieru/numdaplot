@@ -1,5 +1,5 @@
 """
-Drawing of the Style of a Plot: title, axis labels, grid lines and legend.
+Drawing of the Style of a Plot: title, axis labels, rotation of the values, grid lines and legend.
 
 .. versionadded:: 0.1.0
 """
@@ -18,6 +18,7 @@ from matplotlib.container import Container
 from numdaplot.plots.drawing.drawn_chart import DrawnChart
 from numdaplot.plots.drawing.grid_axes import GridAxes
 from numdaplot.plots.drawing.plot_axes import PlotAxes
+from numdaplot.plots.drawing.tick_rotation import rotate_x_labels, rotate_y_labels
 from numdaplot.plots.style.grid_lines import GridLines
 from numdaplot.plots.style.legend_position import LegendPosition
 from numdaplot.plots.style.style import Style
@@ -47,7 +48,7 @@ LEGEND_POINT_AREA = 36.0
 
 def apply_style(plot_axes: PlotAxes, drawn_chart: DrawnChart, style: Style) -> None:
 	"""
-	Draw the title, the axis labels, the grid lines and the legend of a Plot.
+	Draw the title, the axis labels, the rotation of the values, the grid lines and the legend of a Plot.
 
 	.. versionadded:: 0.1.0
 
@@ -80,6 +81,8 @@ def apply_style(plot_axes: PlotAxes, drawn_chart: DrawnChart, style: Style) -> N
 
 	write_axis_labels(axes, drawn_chart, style)
 	write_right_label(plot_axes, style)
+	rotate_x_labels(axes, drawn_chart, style.x_tick_rotation)
+	rotate_y_labels(axes, drawn_chart, style.y_tick_rotation)
 	if style.grid_lines == GridLines.SHOWN:
 		draw_grid_lines(axes, drawn_chart)
 

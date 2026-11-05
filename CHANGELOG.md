@@ -32,7 +32,7 @@ and numdaplot follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
   `CellValues`, `LegendPosition`, `GridLines` and `SizeUnit` enums.
 - Plot errors and warning: `ConflictingSettingsError`, `DuplicateLabelError`, `EmptyTotalError`,
   `InvalidBinWidthError`, `InvalidChartDataError`, `InvalidColorCountError`, `InvalidColorError`,
-  `InvalidResolutionError`, `InvalidSizeError`, `MissingValueError`, `RefusedSettingError`, `UnsupportedDataError`,
+  `InvalidResolutionError`, `InvalidRotationError`, `InvalidSizeError`, `MissingValueError`, `RefusedSettingError`, `UnsupportedDataError`,
   `UnsupportedImageFormatError`, `IncompatibleChartsError`, `OccupiedCellError`, `CellOutOfRangeError` and
   `ReadabilityWarning`.
 - Date errors: `InvalidConversionError`, `InvalidDateFormatError`, `InvalidTimeZoneChangeError`,

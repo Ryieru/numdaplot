@@ -8,6 +8,7 @@ import pytest
 
 from numdaplot.errors.invalid_color_error import InvalidColorError
 from numdaplot.errors.invalid_resolution_error import InvalidResolutionError
+from numdaplot.errors.invalid_rotation_error import InvalidRotationError
 from numdaplot.errors.invalid_size_error import InvalidSizeError
 from numdaplot.plots.style.custom_color import CustomColor
 from numdaplot.plots.style.grid_lines import GridLines
@@ -27,6 +28,8 @@ CENTIMETER_SIZE = Size(width=2.54, height=5.08, unit=SizeUnit.CENTIMETER)
 EXPECTED_CENTIMETER_INCHES = (1.0, 2.0)
 DEFAULT_DPI = 100
 REJECTED_DPI = 0
+ACCEPTED_ROTATIONS = [-90, 0, 45.5, 90]
+REJECTED_ROTATIONS = [-90.5, 91, float("nan")]
 
 
 @pytest.mark.parametrize("code", COLOR_CODES)
@@ -149,3 +152,60 @@ def test_style_defaults_draw_grid_lines_and_place_the_legend_best() -> None:
 	assert style.legend == LegendPosition.BEST
 	assert style.grid_lines == GridLines.SHOWN
 	assert style.size == Size()
+
+
+@pytest.mark.parametrize("rotation", ACCEPTED_ROTATIONS)
+def test_style_accepts_a_rotation_from_minus_90_to_90_degrees(rotation: float) -> None:
+	"""
+	Check the limits and an angle between them.
+
+	.. versionadded:: 0.1.0
+	"""
+	style = Style(x_tick_rotation=rotation)
+
+	assert style.x_tick_rotation == rotation
+
+
+@pytest.mark.parametrize("rotation", REJECTED_ROTATIONS)
+def test_style_rejects_another_rotation(rotation: float) -> None:
+	"""
+	Check angles beyond the limits, and a value that is not a number.
+
+	.. versionadded:: 0.1.0
+	"""
+	with pytest.raises(InvalidRotationError):
+		Style(x_tick_rotation=rotation)
+
+
+def test_style_leaves_the_rotation_to_the_values_by_default() -> None:
+	"""
+	Check that no angle is chosen by default.
+
+	.. versionadded:: 0.1.0
+	"""
+	style = Style()
+
+	assert style.x_tick_rotation is None
+
+
+@pytest.mark.parametrize("rotation", ACCEPTED_ROTATIONS)
+def test_style_accepts_a_y_rotation_from_minus_90_to_90_degrees(rotation: float) -> None:
+	"""
+	Check the limits and an angle between them for the ``y`` values.
+
+	.. versionadded:: 0.1.0
+	"""
+	style = Style(y_tick_rotation=rotation)
+
+	assert style.y_tick_rotation == rotation
+
+
+@pytest.mark.parametrize("rotation", REJECTED_ROTATIONS)
+def test_style_rejects_another_y_rotation(rotation: float) -> None:
+	"""
+	Check angles beyond the limits, and a value that is not a number, for the ``y`` values.
+
+	.. versionadded:: 0.1.0
+	"""
+	with pytest.raises(InvalidRotationError):
+		Style(y_tick_rotation=rotation)
