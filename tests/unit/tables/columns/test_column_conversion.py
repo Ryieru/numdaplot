@@ -11,15 +11,13 @@ import pandas
 import pytest
 
 from numdaplot.data_types.type import Type
-from numdaplot.dates.date_format import DateFormat
 from numdaplot.dates.time_zone import TimeZone
 from numdaplot.dates.time_zone_change import TimeZoneChange
 from numdaplot.dates.time_zone_mode import TimeZoneMode
 from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
-from numdaplot.errors.invalid_conversion_error import InvalidConversionError
 from numdaplot.errors.value_conversion_error import ValueConversionError
 from numdaplot.tables.columns.conversion import Conversion
-from numdaplot.tables.columns.converted_column import convert_column, require_conversion_settings
+from numdaplot.tables.columns.converted_column import convert_column
 from numdaplot.tables.columns.number_conversion import (
 	convert_numbers,
 	find_lost_values,
@@ -57,22 +55,6 @@ ATTRIBUTE_UTC = TimeZoneChange(mode=TimeZoneMode.ATTRIBUTE, zone=UTC_ZONE)
 DATE_TEXTS = pandas.Series(["2026-01-31"], dtype="string")
 DATETIMES = pandas.Series(numpy.array(["2026-01-31T10:30"], dtype="datetime64[ns]"))
 DURATIONS = pandas.Series(numpy.array([36], dtype="timedelta64[h]").astype("timedelta64[ns]"))
-REJECTED_SETTINGS = [
-	Conversion(column=CONVERTED_NAME, dtype=Type.INT64, format=DateFormat.DAY_MONTH_YEAR),
-	Conversion(column=CONVERTED_NAME, dtype=Type.DATE, format=DateFormat.DAY_MONTH_YEAR_TIME),
-	Conversion(column=CONVERTED_NAME, dtype=Type.DATETIME, timezone=ATTRIBUTE_UTC),
-]
-FORMAT_AND_ZONE = Conversion(
-	column=CONVERTED_NAME,
-	dtype=Type.DATETIME,
-	format=DateFormat.YEAR_MONTH_DAY_TIME,
-	timezone=ATTRIBUTE_UTC,
-)
-ACCEPTED_SETTINGS = [
-	Conversion(column=CONVERTED_NAME, dtype=Type.DATE, format=DateFormat.DAY_MONTH_YEAR),
-	Conversion(column=CONVERTED_NAME, dtype=Type.DATETIME, format=DateFormat.DAY_MONTH_YEAR),
-	Conversion(column=CONVERTED_NAME, dtype=Type.DATETIME, format=DateFormat.DAY_MONTH_YEAR_TIME),
-]
 TIME_CONVERSIONS = [
 	(DATES, Type.TEXT),
 	(DATES, Type.CATEGORY),
@@ -405,47 +387,6 @@ def test_require_no_failed_value_names_the_first_failure() -> None:
 
 	error = error_info.value
 	assert error.rejected_value == REJECTED_TEXT
-
-
-@pytest.mark.parametrize("conversion", REJECTED_SETTINGS)
-def test_require_conversion_settings_rejects_a_setting_that_does_not_apply(conversion: Conversion) -> None:
-	"""
-	Check formats and time zone changes given to conversions they do not apply to.
-
-	.. versionadded:: 0.1.0
-
-	Parameters
-	----------
-	conversion
-		A conversion with a setting that does not apply to its types, the column being TEXT.
-	"""
-	with pytest.raises(InvalidConversionError):
-		require_conversion_settings(Type.TEXT, conversion)
-
-
-def test_require_conversion_settings_rejects_a_format_on_datetimes_changing_zone() -> None:
-	"""
-	Check that a format next to a time zone change raises InvalidConversionError.
-
-	.. versionadded:: 0.1.0
-	"""
-	with pytest.raises(InvalidConversionError):
-		require_conversion_settings(Type.DATETIME, FORMAT_AND_ZONE)
-
-
-@pytest.mark.parametrize("conversion", ACCEPTED_SETTINGS)
-def test_require_conversion_settings_accepts_formats_reading_or_writing_dates(conversion: Conversion) -> None:
-	"""
-	Check formats reading texts as dates.
-
-	.. versionadded:: 0.1.0
-
-	Parameters
-	----------
-	conversion
-		A conversion of texts with a fitting format.
-	"""
-	require_conversion_settings(Type.TEXT, conversion)
 
 
 def test_convert_column_reads_texts_as_dates_by_default() -> None:

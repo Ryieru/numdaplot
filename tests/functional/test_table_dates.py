@@ -22,6 +22,7 @@ PICKUP_TEXTS = ["2019-03-23 20:21:09", "2019-03-24T08:15", "2019-03-25"]
 EXPECTED_PICKUPS = [datetime(2019, 3, 23, 20, 21, 9), datetime(2019, 3, 24, 8, 15), datetime(2019, 3, 25)]
 PICKUP_DAY = "2019-03-25"
 PICKUP_TIME = "2019-03-23 20:21:09"
+THROUGH_DATETIME_HINT = "Convert the column to DATETIME first"
 TRIPS_CSV_NAME = "trips.csv"
 MIDNIGHT_PICKUPS = [datetime(2019, 3, 23), datetime(2019, 3, 24)]
 VARIED_PICKUPS = [datetime(2019, 3, 23), datetime(2019, 3, 24, 8, 15)]
@@ -484,3 +485,16 @@ def test_datetimes_written_in_a_csv_file_are_read_back_without_format(tmp_path: 
 
 	pickup_list = converted.column("pickup").to_list()
 	assert pickup_list == pickups
+
+
+def test_a_time_format_on_dates_points_to_a_conversion_through_datetimes() -> None:
+	"""
+	Check that reading dates with a time format explains how to convert the column.
+
+	.. versionadded:: 0.1.0
+	"""
+	trips = ndp.Table.from_arrays({"pickup": ndp.Array.from_list([PICKUP_TIME])})
+	conversion = ndp.Conversion(column="pickup", dtype=ndp.Type.DATE, format=ndp.DateFormat.YEAR_MONTH_DAY_TIME)
+
+	with pytest.raises(ndp.InvalidConversionError, match=THROUGH_DATETIME_HINT):
+		trips.convert(conversion)

@@ -11,6 +11,7 @@ from numdaplot.errors.invalid_conversion_error import InvalidConversionError
 from numdaplot.tables.columns.conversion import Conversion
 from numdaplot.tables.columns.date_conversion import (
 	convert_moments,
+	find_format_name,
 	has_time,
 	parse_dates,
 	write_dates,
@@ -116,7 +117,8 @@ def require_conversion_settings(source_type: Type, conversion: Conversion) -> No
 	... 	require_conversion_settings(ndp.Type.TEXT, day_and_time)
 	... except ndp.InvalidConversionError as error:
 	... 	print(error)
-	The setting format does not apply to a conversion from TEXT to DATE.
+	The format DAY_MONTH_YEAR_TIME has a time, which DATE cannot hold.
+	Convert the column to DATETIME first, then to DATE.
 	"""
 	target_type = conversion.dtype
 	if conversion.timezone is not None:
@@ -138,8 +140,12 @@ def require_conversion_settings(source_type: Type, conversion: Conversion) -> No
 	format_has_time = has_time(conversion.format)
 	misses_time = date_type == Type.DATE and format_has_time
 	uses_format = reads_dates or writes_dates
-	if misses_time or not uses_format:
+	if not uses_format:
 		raise InvalidConversionError(FORMAT_SETTING, source_type.name, target_type.name)
+
+	if misses_time:
+		format_name = find_format_name(target_type, conversion.format)
+		raise InvalidConversionError(FORMAT_SETTING, source_type.name, target_type.name, format_name)
 
 
 def convert_time_column(column: Column, source_type: Type, conversion: Conversion) -> Column | None:

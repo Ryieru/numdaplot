@@ -4,6 +4,8 @@ Functional tests of the column operations of a Table.
 .. versionadded:: 0.1.0
 """
 
+from datetime import date
+
 import numpy
 import pytest
 
@@ -15,6 +17,9 @@ ZIP_CODES = ["06000", "75001"]
 EXPECTED_ZIP_NUMBERS = [6000, 75001]
 WRONG_ZIP_CODES = ["06000", "Nice"]
 EXPECTED_CONVERSION_MESSAGE = "Cannot store the TEXT value 'Nice' as INT32 without losing information."
+SALE_DAY = date(2026, 12, 31)
+EXPECTED_SALE_DAY_TEXT = "31/12/2026 00:00:00"
+THROUGH_DATETIME_HINT = "Convert the column to DATETIME first, then to TEXT"
 TAX_RATE = 1.2
 EXPECTED_TAXED_PRICES = [12.0, 24.0]
 EXPECTED_ADDED_NAMES = ["city", "price", "zip_code", "taxed_price"]
@@ -167,3 +172,22 @@ def test_an_unknown_column_is_named_in_the_error() -> None:
 
 	error = error_info.value
 	assert error.column_name == MISSPELLED_COLUMN
+
+
+def test_dates_written_with_a_time_format_point_to_a_conversion_through_datetimes() -> None:
+	"""
+	Check that the message about a time format on dates gives a path that works.
+
+	.. versionadded:: 0.1.0
+	"""
+	days = ndp.Table.from_arrays({"day": ndp.Array.from_list([SALE_DAY])})
+	day_and_time = ndp.DateFormat.DAY_MONTH_YEAR_TIME
+	to_text = ndp.Conversion(column="day", dtype=ndp.Type.TEXT, format=day_and_time)
+
+	with pytest.raises(ndp.InvalidConversionError, match=THROUGH_DATETIME_HINT):
+		days.convert(to_text)
+
+	datetimes = days.convert(ndp.Conversion(column="day", dtype=ndp.Type.DATETIME))
+	texts = datetimes.convert(to_text)
+	text_list = texts.column("day").to_list()
+	assert text_list == [EXPECTED_SALE_DAY_TEXT]

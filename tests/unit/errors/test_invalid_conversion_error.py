@@ -11,6 +11,17 @@ SETTING_NAME = "format"
 SOURCE_TYPE_NAME = "INT64"
 TARGET_TYPE_NAME = "TEXT"
 EXPECTED_MESSAGE = "The setting format does not apply to a conversion from INT64 to TEXT."
+DATE_TYPE_NAME = "DATE"
+TEXT_TYPE_NAME = "TEXT"
+DATE_FORMAT_NAME = "YEAR_MONTH_DAY_TIME"
+EXPECTED_WRITING_MESSAGE = (
+	"The format YEAR_MONTH_DAY_TIME has a time, which DATE cannot hold. "
+	"Convert the column to DATETIME first, then to TEXT."
+)
+EXPECTED_TIME_FORMAT_MESSAGE = (
+	"The format YEAR_MONTH_DAY_TIME has a time, which DATE cannot hold. "
+	"Convert the column to DATETIME first, then to DATE."
+)
 
 
 def test_invalid_conversion_error_is_a_numdaplot_error() -> None:
@@ -45,3 +56,40 @@ def test_invalid_conversion_error_keeps_its_values() -> None:
 	assert error.setting_name == SETTING_NAME
 	assert error.source_type_name == SOURCE_TYPE_NAME
 	assert error.target_type_name == TARGET_TYPE_NAME
+
+
+def test_invalid_conversion_error_message_points_a_time_format_to_datetimes() -> None:
+	"""
+	Check the message of a format with a time read as dates.
+
+	.. versionadded:: 0.1.0
+	"""
+	error = InvalidConversionError(SETTING_NAME, TEXT_TYPE_NAME, DATE_TYPE_NAME, DATE_FORMAT_NAME)
+
+	error_text = str(error)
+	assert error_text == EXPECTED_TIME_FORMAT_MESSAGE
+
+
+def test_invalid_conversion_error_message_names_the_target_type_after_datetimes() -> None:
+	"""
+	Check that a format with a time used to write dates names the type to convert to last.
+
+	.. versionadded:: 0.1.0
+	"""
+	error = InvalidConversionError(SETTING_NAME, DATE_TYPE_NAME, TEXT_TYPE_NAME, DATE_FORMAT_NAME)
+
+	error_text = str(error)
+	assert error_text == EXPECTED_WRITING_MESSAGE
+
+
+def test_invalid_conversion_error_keeps_its_date_format_name() -> None:
+	"""
+	Check that the format name is available as an attribute, and None when not given.
+
+	.. versionadded:: 0.1.0
+	"""
+	error = InvalidConversionError(SETTING_NAME, TEXT_TYPE_NAME, DATE_TYPE_NAME, DATE_FORMAT_NAME)
+	general_error = InvalidConversionError(SETTING_NAME, SOURCE_TYPE_NAME, TARGET_TYPE_NAME)
+
+	assert error.date_format_name == DATE_FORMAT_NAME
+	assert general_error.date_format_name is None
