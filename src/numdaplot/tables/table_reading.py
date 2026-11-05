@@ -45,7 +45,7 @@ class TableReading(TableData):
 		path
 			The path of the file, a ``FilePath`` such as ``"sales.csv"`` or ``Path("data/sales.csv")``.
 		options
-			The separator and the encoding, ``","`` and UTF-8 by default.
+			The separator and the encoding, ``","`` and UTF-8 when omitted.
 
 		Returns
 		-------
@@ -96,7 +96,7 @@ class TableReading(TableData):
 		path
 			The path of the file, a ``FilePath`` such as ``"sales.json"`` or ``Path("data/sales.json")``.
 		options
-			The layout of the rows, one list of objects by default.
+			The layout of the rows, one list of objects when omitted.
 
 		Returns
 		-------
@@ -147,7 +147,7 @@ class TableReading(TableData):
 		path
 			The path of the file, a ``FilePath`` such as ``"sales.xlsx"`` or ``Path("data/sales.xlsx")``.
 		options
-			The sheet to read, the first one by default.
+			The sheet to read, the first one when omitted.
 
 		Returns
 		-------
@@ -281,7 +281,7 @@ class TableReading(TableData):
 		path
 			The path of the file, a ``FilePath`` such as ``"sales.sas7bdat"`` or ``Path("data/sales.sas7bdat")``.
 		options
-			The encoding of the texts, UTF-8 by default.
+			The encoding of the texts, UTF-8 when omitted.
 
 		Returns
 		-------
@@ -330,7 +330,7 @@ class TableReading(TableData):
 		path
 			The path of the file, a ``FilePath`` such as ``"sales.xpt"`` or ``Path("data/sales.xpt")``.
 		options
-			The encoding of the texts, UTF-8 by default.
+			The encoding of the texts, UTF-8 when omitted.
 
 		Returns
 		-------

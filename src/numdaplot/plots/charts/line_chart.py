@@ -34,8 +34,8 @@ class LineChart(Chart):
 		For a Table, the column of the horizontal positions: numbers, dates, datetimes or texts, the row
 		numbers when omitted. An Array takes none, its rows being numbered.
 	y
-		For a Table, the columns drawn, holding numbers, one line each. A Table needs it, even for a single
-		column. An Array takes none, each of its columns being a line.
+		For a Table, the columns drawn, holding numbers, one line each. A Table needs it, even for a single column. An
+		Array takes none: when omitted, each of its columns is a line.
 	colors
 		One color per line, the colors of the default cycle when omitted. The chart keeps its own list.
 	line

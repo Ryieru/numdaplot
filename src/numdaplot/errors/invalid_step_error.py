@@ -21,18 +21,18 @@ class InvalidStepError(NumdaplotError):
 	step
 		The rejected step.
 	start
-		The start of the range when the step goes away from the stop, or None for a step of zero.
+		The start of the range when the step goes away from the stop. When omitted, the message is about a step of zero.
 	stop
-		The stop of the range when the step goes away from it, or None for a step of zero.
+		The stop of the range when the step goes away from it. When omitted, the message is about a step of zero.
 
 	Attributes
 	----------
 	step
 		The rejected step.
 	start
-		The start of the range, or None.
+		The start of the range, or None for a step of zero.
 	stop
-		The stop of the range, or None.
+		The stop of the range, or None for a step of zero.
 
 	Examples
 	--------
@@ -60,9 +60,10 @@ class InvalidStepError(NumdaplotError):
 		step
 			The rejected step.
 		start
-			The start of the range, or None for a step of zero.
+			The start of the range when the step goes away from the stop. When omitted, the message is about a step of
+			zero.
 		stop
-			The stop of the range, or None for a step of zero.
+			The stop of the range when the step goes away from it. When omitted, the message is about a step of zero.
 		"""
 		if start is None or stop is None:
 			message = INVALID_STEP_MESSAGE.format(step=step)

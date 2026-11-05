@@ -24,7 +24,8 @@ class MissingRatio:
 	ratio
 		The threshold, a fraction between 0 and 1: ``0.3`` for 30 %.
 	comparison
-		Whether a ratio equal to the threshold is enough, which is the default.
+		Whether a ratio equal to the threshold is enough, ``RatioComparison.AT_LEAST`` by default, or the ratio must be
+		above it, ``RatioComparison.ABOVE``.
 
 	Raises
 	------

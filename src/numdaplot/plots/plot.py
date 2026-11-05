@@ -152,7 +152,7 @@ class Plot:
 		options
 			The resolution of a PNG image, 100 dots per inch when omitted. SVG and PDF images take none.
 		on_conflict
-			``ERROR`` refuses to overwrite an existing file, ``REPLACE`` overwrites it.
+			``ERROR`` by default, refusing to overwrite an existing file, or ``REPLACE`` to overwrite it.
 
 		Raises
 		------

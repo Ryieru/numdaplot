@@ -41,9 +41,9 @@ class TableWriting(TableData):
 		path
 			The path of the file, a ``FilePath`` such as ``"sales.csv"`` or ``Path("data/sales.csv")``.
 		options
-			The separator and the encoding, ``","`` and UTF-8 by default.
+			The separator and the encoding, ``","`` and UTF-8 when omitted.
 		on_conflict
-			``ERROR`` refuses to overwrite an existing file, ``REPLACE`` overwrites it.
+			``ERROR`` by default, refusing to overwrite an existing file, or ``REPLACE`` to overwrite it.
 
 		Raises
 		------
@@ -86,9 +86,9 @@ class TableWriting(TableData):
 		path
 			The path of the file, a ``FilePath`` such as ``"sales.json"`` or ``Path("data/sales.json")``.
 		options
-			The layout of the rows, one list of objects by default.
+			The layout of the rows, one list of objects when omitted.
 		on_conflict
-			``ERROR`` refuses to overwrite an existing file, ``REPLACE`` overwrites it.
+			``ERROR`` by default, refusing to overwrite an existing file, or ``REPLACE`` to overwrite it.
 
 		Raises
 		------
@@ -127,9 +127,9 @@ class TableWriting(TableData):
 		path
 			The path of the file, a ``FilePath`` such as ``"sales.xlsx"`` or ``Path("data/sales.xlsx")``.
 		options
-			The name of the sheet, ``"Sheet1"`` by default.
+			The name of the sheet, ``"Sheet1"`` when omitted.
 		on_conflict
-			``ERROR`` refuses to overwrite an existing file, ``REPLACE`` overwrites it.
+			``ERROR`` by default, refusing to overwrite an existing file, or ``REPLACE`` to overwrite it.
 
 		Raises
 		------
@@ -169,7 +169,7 @@ class TableWriting(TableData):
 		path
 			The path of the file, a ``FilePath`` such as ``"sales.parquet"`` or ``Path("data/sales.parquet")``.
 		on_conflict
-			``ERROR`` refuses to overwrite an existing file, ``REPLACE`` overwrites it.
+			``ERROR`` by default, refusing to overwrite an existing file, or ``REPLACE`` to overwrite it.
 
 		Raises
 		------
@@ -207,7 +207,7 @@ class TableWriting(TableData):
 		path
 			The path of the file, a ``FilePath`` such as ``"sales.dta"`` or ``Path("data/sales.dta")``.
 		on_conflict
-			``ERROR`` refuses to overwrite an existing file, ``REPLACE`` overwrites it.
+			``ERROR`` by default, refusing to overwrite an existing file, or ``REPLACE`` to overwrite it.
 
 		Raises
 		------

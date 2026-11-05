@@ -31,8 +31,8 @@ class NewColumn:
 	values
 		A one-dimensional Array with one value per row of the Table.
 	on_conflict
-		``ERROR`` refuses a name that already exists, which is the default.
-		``REPLACE`` replaces the existing column, at its place.
+		``ERROR`` by default, refusing a name that already exists, or ``REPLACE`` to replace the existing column, at its
+		place.
 
 	Raises
 	------

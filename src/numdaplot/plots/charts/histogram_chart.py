@@ -33,8 +33,8 @@ class HistogramChart(Chart):
 	Parameters
 	----------
 	columns
-		For a Table, the columns drawn, holding numbers. A Table needs it, even for a single column.
-		An Array takes none, each of its columns being drawn.
+		For a Table, the columns drawn, holding numbers. A Table needs it, even for a single column. An Array takes
+		none: when omitted, each of its columns is drawn.
 	bins
 		The bins, ``BinCount(10)`` by default, or ``BinWidth`` for bins of a given width.
 	measure

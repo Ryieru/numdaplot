@@ -29,8 +29,8 @@ class HeatmapChart(Chart):
 	Parameters
 	----------
 	columns
-		For a Table, the columns drawn, holding numbers. A Table needs it, even for a single column.
-		An Array of one or two dimensions takes none, each of its columns being drawn.
+		For a Table, the columns drawn, holding numbers. A Table needs it, even for a single column. An Array of one or
+		two dimensions takes none: when omitted, each of its columns is drawn.
 	labels
 		For a Table, the column labeling the rows: numbers, dates, datetimes or texts, the row numbers when
 		omitted. A row whose label text is missing is left out. An Array takes none, its rows being numbered.

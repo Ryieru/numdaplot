@@ -30,9 +30,11 @@ class Preview:
 	count
 		The number of rows, 5 by default. A shorter Table shows all its rows.
 	side
-		The first rows, which is the default, the last rows, or rows drawn at random.
+		The first rows, ``Side.START`` by default, the last rows, ``Side.END``, or rows drawn at random,
+		``Side.RANDOM``.
 	seed
-		The seed of the random draw, to show the same rows each time. Only used with ``Side.RANDOM``.
+		The seed of the random draw, to show the same rows each time, other rows at each call when omitted. Only used
+		with ``Side.RANDOM``.
 
 	Raises
 	------

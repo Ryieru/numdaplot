@@ -28,7 +28,7 @@ class ValueConversionError(NumdaplotError):
 	target_type_name
 		Name of the ``ndp.Type`` member they should be stored as.
 	rejected_value
-		The first value that cannot be stored, or ``None`` when it is not known.
+		The first value that cannot be stored. When omitted, the message names no value.
 
 	Attributes
 	----------
@@ -62,7 +62,7 @@ class ValueConversionError(NumdaplotError):
 		target_type_name
 			Name of the ``ndp.Type`` member they should be stored as.
 		rejected_value
-			The first value that cannot be stored, or ``None`` when it is not known.
+			The first value that cannot be stored. When omitted, the message names no value.
 		"""
 		message = VALUE_CONVERSION_MESSAGE.format(source_type_name=source_type_name, target_type_name=target_type_name)
 		if rejected_value is not None:

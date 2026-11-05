@@ -35,16 +35,17 @@ class ScatterChart(Chart):
 		For a Table, the column of the horizontal positions: numbers, dates, datetimes or texts, the row
 		numbers when omitted. An Array takes none, its rows being numbered.
 	y
-		For a Table, the column of the vertical positions, holding numbers. A Table needs it. An Array takes
-		none, each of its columns being a series of points.
+		For a Table, the column of the vertical positions, holding numbers. A Table needs it. An Array takes none: when
+		omitted, each of its columns is a series of points.
 	color
 		The color of every point, the first color of the default cycle when omitted. With an Array of
 		several columns, the series take the colors of the default cycle and ``color`` is refused.
 	color_by
-		For a Table, the column coloring each point: numbers give a color scale shown next to the axes,
-		texts give one color per value, named in the legend.
+		For a Table, the column coloring each point: numbers give a color scale shown next to the axes, texts give one
+		color per value, named in the legend. Every point takes the same color when omitted.
 	size_by
-		For a Table, the column of numbers sizing each point, from the smallest to the largest value.
+		For a Table, the column of numbers sizing each point, from the smallest to the largest value. Every point has
+		the same size when omitted.
 	marker
 		The shape of the points, ``MarkerShape.CIRCLE`` by default.
 

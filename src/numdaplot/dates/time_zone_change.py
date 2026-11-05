@@ -24,7 +24,8 @@ class TimeZoneChange:
 		Whether a zone is given to datetimes without one, datetimes are moved to another zone, or their zone
 		is removed.
 	zone
-		The new zone, needed by ``TimeZoneMode.ATTRIBUTE`` and ``SHIFT``, refused by ``REMOVE``.
+		The new zone, needed by ``TimeZoneMode.ATTRIBUTE`` and ``SHIFT``. ``REMOVE`` refuses it, so it is the only mode
+		used when omitted.
 
 	Raises
 	------

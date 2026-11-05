@@ -36,7 +36,7 @@ class Conversion:
 		written as texts. Texts are read as year, month and day separated by ``"-"`` when omitted, and
 		written the same way, with the time for datetimes.
 	timezone
-		A change of the time zone of a datetime column.
+		A change of the time zone of a datetime column, the time zone unchanged when omitted.
 
 	Raises
 	------

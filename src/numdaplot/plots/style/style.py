@@ -27,23 +27,22 @@ class Style:
 	Parameters
 	----------
 	title
-		The title above the axes, none by default.
+		The title above the axes, no title when omitted.
 	x_label
-		The label of the axis of the ``x`` values, the name of the ``x`` column by default. An empty text
-		draws no label.
+		The label of the axis of the ``x`` values, the name of the ``x`` column when omitted. An empty text draws no
+		label.
 	y_label
-		The label of the axis of the ``y`` values: by default the name of the ``y`` column when the chart
-		draws a single one, no label otherwise, the legend naming the series. An empty text draws no label.
+		The label of the axis of the ``y`` values: when omitted, the name of the ``y`` column when the chart draws a
+		single one, no label otherwise, the legend naming the series. An empty text draws no label.
 	right_label
-		The label of the axis on the right, drawn when a chart is added with ``ValueAxis.RIGHT``: by default
-		the name of the column of the first chart on the right when it draws a single one. An empty text draws
-		no label.
+		The label of the axis on the right, drawn when a chart is added with ``ValueAxis.RIGHT``: when omitted, the name
+		of the column of the first chart on the right when it draws a single one. An empty text draws no label.
 	x_tick_rotation
-		The angle of the labels of the ``x`` values, in degrees from -90 to 90. By default, 45 degrees for texts,
+		The angle of the labels of the ``x`` values, in degrees from -90 to 90. When omitted, 45 degrees for texts,
 		dates and datetimes, and no rotation for numbers and for the texts on the left of horizontal bars.
 	y_tick_rotation
-		The angle of the labels of the ``y`` values, in degrees from -90 to 90. By default, no rotation. The values
-		of the axis on the right keep no rotation.
+		The angle of the labels of the ``y`` values, in degrees from -90 to 90, no rotation when omitted. The values of
+		the axis on the right keep no rotation.
 	legend
 		Where the legend is placed, ``LegendPosition.BEST`` by default. It is only drawn for several series.
 	grid_lines

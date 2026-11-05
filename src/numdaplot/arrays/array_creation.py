@@ -84,7 +84,7 @@ class ArrayCreation(ArrayData):
 			The values, a ``NestedValues`` such as ``[1, 2, 3]``, ``["Paris", None]`` or ``[[1, 2], [3, 4]]``.
 			Nested lists must form a regular block.
 		dtype
-			The type to store the values as. Required when no value is present.
+			The type to store the values as, guessed from the values when omitted. Required when no value is present.
 
 		Returns
 		-------

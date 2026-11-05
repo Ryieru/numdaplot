@@ -27,8 +27,7 @@ class ColumnChoice:
 	columns
 		The names of the columns. The choice keeps its own copy of the list.
 	mode
-		``KEEP`` keeps only these columns, in the order of the list, which is the default.
-		``DROP`` removes them.
+		``KEEP`` by default, keeping only these columns, in the order of the list, or ``DROP`` to remove them.
 
 	Raises
 	------

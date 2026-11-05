@@ -25,9 +25,9 @@ class InvalidPositionError(NumdaplotError):
 	position
 		The rejected position.
 	size
-		Size of the dimension, or None when it is not known yet.
+		Size of the dimension. When omitted, the size is not known yet, as when an ``Index`` is created.
 	lowest
-		The lowest accepted position when the size is not known, or None when any whole number is accepted.
+		The lowest accepted position when the size is not known. When omitted, any whole number is accepted.
 
 	Attributes
 	----------
@@ -60,9 +60,9 @@ class InvalidPositionError(NumdaplotError):
 		position
 			The rejected position.
 		size
-			Size of the dimension, or None when it is not known yet.
+			Size of the dimension. When omitted, the size is not known yet, as when an ``Index`` is created.
 		lowest
-			The lowest accepted position when the size is not known, or None.
+			The lowest accepted position when the size is not known. When omitted, any whole number is accepted.
 		"""
 		message = build_position_message(position, size, lowest)
 		super().__init__(message)

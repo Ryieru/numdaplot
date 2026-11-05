@@ -39,7 +39,7 @@ class Figure:
 	size
 		The width and the height of the whole Figure, 4.8 by 3.6 inches per cell when omitted.
 	title
-		The title above the grid, none by default.
+		The title above the grid, no title when omitted.
 
 	Examples
 	--------
@@ -69,7 +69,7 @@ class Figure:
 		size
 			The width and the height of the whole Figure, 4.8 by 3.6 inches per cell when omitted.
 		title
-			The title above the grid, none by default.
+			The title above the grid, no title when omitted.
 		"""
 		self._layout = layout
 		self._size = size
@@ -163,7 +163,7 @@ class Figure:
 		options
 			The resolution of a PNG image, 100 dots per inch when omitted. SVG and PDF images take none.
 		on_conflict
-			``ERROR`` refuses to overwrite an existing file, ``REPLACE`` overwrites it.
+			``ERROR`` by default, refusing to overwrite an existing file, or ``REPLACE`` to overwrite it.
 
 		Raises
 		------

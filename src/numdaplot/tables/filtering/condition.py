@@ -35,7 +35,8 @@ class Condition:
 		The names of the columns the rule applies to, every column when omitted.
 		The condition keeps its own copy of the list.
 	mode
-		Whether one column satisfying the rule is enough, which is the default, or every column must.
+		Whether one column satisfying the rule is enough, ``ColumnMatch.ANY`` by default, or every column must,
+		``ColumnMatch.ALL``.
 
 	Raises
 	------

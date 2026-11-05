@@ -25,7 +25,7 @@ class Filter:
 	conditions
 		The conditions, at least one. The filter keeps its own copy of the list.
 	mode
-		Whether a row must satisfy every condition, which is the default, or at least one.
+		Whether a row must satisfy every condition, ``FilterMode.ALL`` by default, or at least one, ``FilterMode.ANY``.
 
 	Raises
 	------
