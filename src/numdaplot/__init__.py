@@ -215,6 +215,7 @@ from numdaplot.tables.missing.missing_ratio import MissingRatio
 from numdaplot.tables.missing.ratio_comparison import RatioComparison
 from numdaplot.tables.pivot.pivot_table import PivotTable
 from numdaplot.tables.preview.preview import Preview
+from numdaplot.tables.preview.shown_columns import ShownColumns
 from numdaplot.tables.preview.side import Side
 from numdaplot.tables.sorting.sort_key import SortKey
 from numdaplot.tables.sorting.sorting import Sorting
@@ -387,6 +388,7 @@ __all__ = [
 	"ScatterChart",
 	"Shape",
 	"ShapeMismatchError",
+	"ShownColumns",
 	"Side",
 	"Sine",
 	"Size",

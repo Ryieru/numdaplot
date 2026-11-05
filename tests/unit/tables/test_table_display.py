@@ -12,6 +12,7 @@ import pytest
 
 from numdaplot.tables import table_display, table_missing
 from numdaplot.tables.preview.preview import Preview
+from numdaplot.tables.preview.shown_columns import ShownColumns
 from numdaplot.tables.table_display import TableDisplay
 from numdaplot.tables.table_missing import TableMissing
 
@@ -22,6 +23,39 @@ SHOW_FRAME_NAME = "show_frame"
 SUMMARIZE_MISSING_NAME = "summarize_missing"
 SHOW_PANDAS_FRAME_NAME = "show_pandas_frame"
 SUMMARY_FRAME = pandas.DataFrame({"column": ["price", "total"]})
+
+
+class ShownRows:
+	"""
+	Fake display keeping what it receives.
+
+	.. versionadded:: 0.1.0
+	"""
+
+	def __init__(self) -> None:
+		"""
+		Start without any display.
+
+		.. versionadded:: 0.1.0
+		"""
+		self.frames = list[pandas.DataFrame]()
+		self.shown_columns = list[ShownColumns]()
+
+	def show(self, frame: pandas.DataFrame, shown_columns: ShownColumns) -> None:
+		"""
+		Keep the rows and the setting of the columns.
+
+		.. versionadded:: 0.1.0
+
+		Parameters
+		----------
+		frame
+			The rows to show.
+		shown_columns
+			Whether every column is shown.
+		"""
+		self.frames.append(frame)
+		self.shown_columns.append(shown_columns)
 
 
 def choose_fake_rows(frame: pandas.DataFrame, preview: Preview) -> pandas.DataFrame:
@@ -56,14 +90,15 @@ def test_preview_shows_the_chosen_rows(monkeypatch: pytest.MonkeyPatch) -> None:
 	monkeypatch
 		Replaces the row choice and the display with fakes.
 	"""
-	shown_frames = list[pandas.DataFrame]()
+	shown_rows = ShownRows()
 	monkeypatch.setattr(table_display, CHOOSE_PREVIEW_ROWS_NAME, choose_fake_rows)
-	monkeypatch.setattr(table_display, SHOW_FRAME_NAME, shown_frames.append)
+	monkeypatch.setattr(table_display, SHOW_FRAME_NAME, shown_rows.show)
 	table = TableDisplay._create(FRAME)
 
-	table.preview(Preview())
+	table.preview(Preview(columns=ShownColumns.COMPACT))
 
-	assert shown_frames == [PREVIEW_FRAME]
+	assert shown_rows.frames == [PREVIEW_FRAME]
+	assert shown_rows.shown_columns == [ShownColumns.COMPACT]
 
 
 def give_fake_summary(frame: pandas.DataFrame) -> pandas.DataFrame:
@@ -142,7 +177,7 @@ def test_preview_without_settings_shows_the_default_preview(monkeypatch: pytest.
 		return PREVIEW_FRAME
 
 	monkeypatch.setattr(table_display, CHOOSE_PREVIEW_ROWS_NAME, choose_recorded_rows)
-	monkeypatch.setattr(table_display, SHOW_FRAME_NAME, list[pandas.DataFrame]().append)
+	monkeypatch.setattr(table_display, SHOW_FRAME_NAME, ShownRows().show)
 	table = TableDisplay._create(FRAME)
 
 	table.preview()

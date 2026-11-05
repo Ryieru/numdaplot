@@ -289,7 +289,8 @@ class TableConversion(TableData):
 		"""
 		Return the text of the Table, with the type of each column under its name.
 
-		A long Table only shows its first and last rows, as in pandas.
+		A long Table only shows its first and last rows, as in pandas. Every column is shown, going on after a line
+		break, ended by a backslash, when they do not fit in the width of the terminal.
 
 		.. versionadded:: 0.1.0
 

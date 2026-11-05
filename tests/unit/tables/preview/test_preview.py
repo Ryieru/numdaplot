@@ -18,6 +18,7 @@ from numdaplot.tables.preview import notebook_display
 from numdaplot.tables.preview.notebook_display import is_notebook, show_frame, show_pandas_frame
 from numdaplot.tables.preview.preview import Preview
 from numdaplot.tables.preview.preview_rows import choose_preview_rows
+from numdaplot.tables.preview.shown_columns import ShownColumns
 from numdaplot.tables.preview.side import Side
 
 FRAME = pandas.DataFrame({"price": [1.0, 2.0, 3.0, 4.0, 5.0, 6.0]})
@@ -262,7 +263,7 @@ def test_show_frame_prints_text_outside_a_notebook(capsys: pytest.CaptureFixture
 	capsys
 		Captures the printed text.
 	"""
-	show_frame(FRAME)
+	show_frame(FRAME, ShownColumns.ALL)
 
 	captured = capsys.readouterr()
 	printed_text = captured.out.strip()
@@ -285,7 +286,7 @@ def test_show_frame_displays_html_in_a_notebook(monkeypatch: pytest.MonkeyPatch)
 	monkeypatch.setattr(notebook_display, IS_NOTEBOOK_NAME, answer_true)
 	monkeypatch.setattr(notebook_display, IMPORT_MODULE_NAME, ModuleGiver(display_module))
 
-	show_frame(FRAME)
+	show_frame(FRAME, ShownColumns.ALL)
 
 	shown_html = shown_objects[0]
 	assert shown_html.startswith(EXPECTED_HTML_START)
@@ -422,3 +423,25 @@ def test_preview_keeps_a_seed_for_a_random_draw() -> None:
 	preview = Preview(side=Side.RANDOM, seed=SEED)
 
 	assert preview.seed == SEED
+
+
+def test_preview_shows_every_column_by_default() -> None:
+	"""
+	Check the default of the setting of the columns.
+
+	.. versionadded:: 0.1.0
+	"""
+	preview = Preview()
+
+	assert preview.columns == ShownColumns.ALL
+
+
+def test_preview_keeps_the_setting_of_the_columns() -> None:
+	"""
+	Check that the setting is available as an attribute.
+
+	.. versionadded:: 0.1.0
+	"""
+	preview = Preview(columns=ShownColumns.COMPACT)
+
+	assert preview.columns == ShownColumns.COMPACT

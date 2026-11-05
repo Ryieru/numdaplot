@@ -10,6 +10,7 @@ from numdaplot.arrays.creation.random_values import require_valid_seed
 from numdaplot.errors.invalid_count_error import InvalidCountError
 from numdaplot.errors.refused_setting_error import RefusedSettingError
 from numdaplot.settings.field_types import require_field_types
+from numdaplot.tables.preview.shown_columns import ShownColumns
 from numdaplot.tables.preview.side import Side
 
 DEFAULT_PREVIEW_COUNT = 5
@@ -21,7 +22,7 @@ SIDE_OWNER = "Side.{side_name}"
 @dataclass(frozen=True)
 class Preview:
 	"""
-	How many rows of a Table to show, and which ones, used by ``Table.preview``.
+	How many rows of a Table to show, which ones, and how its columns are shown, used by ``Table.preview``.
 
 	.. versionadded:: 0.1.0
 
@@ -35,6 +36,9 @@ class Preview:
 	seed
 		The seed of the random draw, to show the same rows each time, other rows at each call when omitted. Only
 		``Side.RANDOM`` accepts it.
+	columns
+		``ShownColumns.ALL`` by default to show every column, going on after a line break when they do not fit, or
+		``ShownColumns.COMPACT`` to replace those that do not fit by ``...``.
 
 	Raises
 	------
@@ -63,6 +67,7 @@ class Preview:
 	count: int = DEFAULT_PREVIEW_COUNT
 	side: Side = Side.START
 	seed: int | None = None
+	columns: ShownColumns = ShownColumns.ALL
 
 	def __post_init__(self) -> None:
 		"""

@@ -23,14 +23,15 @@ class TableDisplay(TableData):
 		"""
 		Show a few rows, with their row numbers and the type of each column under its name.
 
-		In a Jupyter notebook the rows are shown as an HTML table, elsewhere as text. Nothing is returned.
+		In a Jupyter notebook the rows are shown as an HTML table, elsewhere as text. Every column is shown unless
+		the settings ask for a compact display. Nothing is returned.
 
 		.. versionadded:: 0.1.0
 
 		Parameters
 		----------
 		preview
-			How many rows, and which ones: the first 5 when omitted.
+			How many rows, which ones, and how the columns are shown: the first 5, with every column, when omitted.
 
 
 		Raises
@@ -52,4 +53,4 @@ class TableDisplay(TableData):
 			preview = Preview()
 
 		preview_frame = choose_preview_rows(self._frame, preview)
-		show_frame(preview_frame)
+		show_frame(preview_frame, preview.columns)

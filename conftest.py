@@ -15,6 +15,23 @@ matplotlib.use("Agg")
 PROJECT_FOLDER = Path(__file__).parent
 SOURCE_FOLDER = PROJECT_FOLDER / "src"
 EXAMPLE_DATA_FOLDER = PROJECT_FOLDER / "tests" / "data"
+TERMINAL_WIDTH_VARIABLE = "COLUMNS"
+TERMINAL_WIDTH = "100"
+
+
+@pytest.fixture(autouse=True)
+def set_terminal_width(monkeypatch: pytest.MonkeyPatch) -> None:
+	"""
+	Give every test the same terminal width, since the text of a wide Table depends on it.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	monkeypatch
+		Restores the variable after the test.
+	"""
+	monkeypatch.setenv(TERMINAL_WIDTH_VARIABLE, TERMINAL_WIDTH)
 
 
 @pytest.fixture(autouse=True)

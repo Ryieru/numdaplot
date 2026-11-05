@@ -9,14 +9,16 @@ from importlib.util import find_spec
 
 import pandas
 
-from numdaplot.tables.frames.table_text import build_typed_frame
+from numdaplot.tables.frames.table_text import build_typed_frame, format_table
+from numdaplot.tables.preview.shown_columns import ShownColumns
 
 IPYTHON_PACKAGE = "IPython"
 IPYTHON_DISPLAY_MODULE = "IPython.display"
 NOTEBOOK_KERNEL = "IPKernelApp"
+COMPACT_NOTEBOOK_COLUMN_COUNT = 10
 
 
-def show_frame(frame: pandas.DataFrame) -> None:
+def show_frame(frame: pandas.DataFrame, shown_columns: ShownColumns) -> None:
 	"""
 	Show the columns of a Table: as an HTML table in a Jupyter notebook, as text anywhere else.
 
@@ -28,18 +30,32 @@ def show_frame(frame: pandas.DataFrame) -> None:
 	----------
 	frame
 		The rows to show.
+	shown_columns
+		Whether every column is shown. A compact HTML table shows 10 columns.
 
 	Examples
 	--------
 	>>> import pandas
+	>>> import numdaplot as ndp
 	>>> from numdaplot.tables.preview.notebook_display import show_frame
-	>>> show_frame(pandas.DataFrame({"price": [1.5]}))
+	>>> show_frame(pandas.DataFrame({"price": [1.5]}), ndp.ShownColumns.ALL)
 	    price
 	  FLOAT64
 	0     1.5
 	"""
+	runs_in_notebook = is_notebook()
+	if not runs_in_notebook:
+		table_text = format_table(frame, shown_columns)
+		print(table_text)
+		return
+
 	typed_frame = build_typed_frame(frame)
-	show_pandas_frame(typed_frame)
+	column_limit = None
+	if shown_columns == ShownColumns.COMPACT:
+		column_limit = COMPACT_NOTEBOOK_COLUMN_COUNT
+
+	frame_html = typed_frame.to_html(max_cols=column_limit)
+	display_html(frame_html)
 
 
 def show_pandas_frame(frame: pandas.DataFrame) -> None:
@@ -68,6 +84,26 @@ def show_pandas_frame(frame: pandas.DataFrame) -> None:
 		return
 
 	frame_html = frame.to_html()
+	display_html(frame_html)
+
+
+def display_html(frame_html: str) -> None:
+	"""
+	Show an HTML table in a Jupyter notebook.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	frame_html
+		The HTML table.
+
+	Examples
+	--------
+	>>> from numdaplot.tables.preview.notebook_display import display_html, is_notebook
+	>>> if is_notebook():
+	... 	display_html("<table></table>")
+	"""
 	display_module = import_module(IPYTHON_DISPLAY_MODULE)
 	html_object = display_module.HTML(frame_html)
 	display_module.display(html_object)

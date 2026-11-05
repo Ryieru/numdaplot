@@ -4,10 +4,21 @@ Text of a Table, with the type of each column under its name.
 .. versionadded:: 0.1.0
 """
 
+from shutil import get_terminal_size
+
 import pandas
 
 from numdaplot.tables.frames.column_values import find_column_type
 from numdaplot.tables.frames.time_zones import name_column_type
+from numdaplot.tables.preview.shown_columns import ShownColumns
+
+MAX_COLUMNS_OPTION = "display.max_columns"
+WIDTH_OPTION = "display.width"
+# In pandas, no limit shows every column, and a limit of 0 only shows those fitting in the width.
+COLUMN_LIMITS = {
+	ShownColumns.ALL: None,
+	ShownColumns.COMPACT: 0,
+}
 
 
 def build_typed_frame(frame: pandas.DataFrame) -> pandas.DataFrame:
@@ -50,11 +61,12 @@ def build_typed_frame(frame: pandas.DataFrame) -> pandas.DataFrame:
 	return typed_frame
 
 
-def format_table(frame: pandas.DataFrame) -> str:
+def format_table(frame: pandas.DataFrame, shown_columns: ShownColumns = ShownColumns.ALL) -> str:
 	"""
 	Return the text pandas shows for the columns of a Table, with the type of each column under its name.
 
-	A long Table only shows its first and last rows, following the pandas display settings.
+	A long Table only shows its first and last rows, following the pandas display settings. The columns follow the
+	width of the terminal, whatever the pandas display settings.
 
 	.. versionadded:: 0.1.0
 
@@ -62,6 +74,9 @@ def format_table(frame: pandas.DataFrame) -> str:
 	----------
 	frame
 		The columns of a Table.
+	shown_columns
+		``ShownColumns.ALL`` by default for every column, going on after a line break when they do not fit, or
+		``ShownColumns.COMPACT`` to replace those that do not fit by ``...``.
 
 	Returns
 	-------
@@ -79,6 +94,9 @@ def format_table(frame: pandas.DataFrame) -> str:
 	1     8.0
 	"""
 	typed_frame = build_typed_frame(frame)
-	table_text = repr(typed_frame)
+	column_limit = COLUMN_LIMITS[shown_columns]
+	terminal_size = get_terminal_size()
+	with pandas.option_context(MAX_COLUMNS_OPTION, column_limit, WIDTH_OPTION, terminal_size.columns):
+		table_text = repr(typed_frame)
 
 	return table_text
