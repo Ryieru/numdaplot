@@ -14,6 +14,8 @@ from matplotlib.artist import Artist
 from matplotlib.axes import Axes
 from matplotlib.collections import PathCollection
 from matplotlib.container import Container
+from matplotlib.figure import Figure
+from matplotlib.transforms import ScaledTranslation, Transform
 
 from numdaplot.plots.drawing.drawn_chart import DrawnChart
 from numdaplot.plots.drawing.grid_axes import GridAxes
@@ -235,7 +237,8 @@ def place_legend(plot_axes: PlotAxes, drawn_chart: DrawnChart, legend_position: 
 	Draw the legend naming the series of every chart, when there are at least two of them.
 
 	The series are named in the order they are drawn, the ones of the left axes first. The legend is drawn over
-	the axes on the right if any, so their charts never hide it. Points sized by
+	the axes on the right if any, so their charts never hide it. With these axes, ``BEST`` and ``OUTSIDE_RIGHT`` place
+	it past their axis: ``BEST`` would only avoid their charts, not the ones of the left axes. Points sized by
 	``size_by`` are all shown with the same size in the legend, which names their colors.
 
 	.. versionadded:: 0.1.0
@@ -280,15 +283,72 @@ def place_legend(plot_axes: PlotAxes, drawn_chart: DrawnChart, legend_position: 
 
 	location = LEGEND_LOCATIONS[legend_position]
 	anchor = None
-	if legend_position == LegendPosition.OUTSIDE_RIGHT:
+	anchor_transform = None
+	has_right_axes = plot_axes.right is not None
+	best_goes_outside = has_right_axes and legend_position == LegendPosition.BEST
+	is_outside = best_goes_outside or legend_position == LegendPosition.OUTSIDE_RIGHT
+	if is_outside:
+		location = LEGEND_LOCATIONS[LegendPosition.OUTSIDE_RIGHT]
 		anchor = OUTSIDE_ANCHOR
 
-	legend = legend_axes.legend(handles, labels, loc=location, bbox_to_anchor=anchor, title=drawn_chart.legend_title)
+	if is_outside and plot_axes.right is not None:
+		anchor_transform = find_transform_past_right_axis(plot_axes.right)
+
+	legend = legend_axes.legend(
+		handles,
+		labels,
+		loc=location,
+		bbox_to_anchor=anchor,
+		bbox_transform=anchor_transform,
+		title=drawn_chart.legend_title,
+	)
 
 	for handle in legend.legend_handles:
 		if isinstance(handle, PathCollection):
 			handle.set_sizes([LEGEND_POINT_AREA])
 			handle.set_alpha(LEGEND_POINT_OPACITY)
+
+
+def find_transform_past_right_axis(right_axes: Axes) -> Transform:
+	"""
+	Return the coordinates of the axes shifted past the values and the label of their axis on the right.
+
+	The shift is a fixed distance on the page, which stays right when the layout then narrows the axes.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	right_axes
+		The axes on the right, with their label and their ticks.
+
+	Returns
+	-------
+	matplotlib.transforms.Transform
+		The coordinates to anchor the legend with.
+
+	Examples
+	--------
+	>>> from matplotlib.figure import Figure
+	>>> from numdaplot.plots.drawing.style_drawing import find_transform_past_right_axis
+	>>> axes = Figure().add_subplot()
+	>>> right_axes = axes.twinx()
+	>>> transform = find_transform_past_right_axis(right_axes)
+	>>> bool(transform.transform((1.0, 0.0))[0] > right_axes.transAxes.transform((1.0, 0.0))[0])
+	True
+	"""
+	axes_box = right_axes.get_window_extent()
+	axis_box = right_axes.yaxis.get_tightbbox()
+	axis_width = 0.0
+	if axis_box is not None:
+		axis_width = axis_box.x1 - axes_box.x1
+
+	figure = cast(Figure, right_axes.get_figure(root=True))
+	shift_inches = axis_width / figure.dpi
+	shift = ScaledTranslation(shift_inches, 0.0, figure.dpi_scale_trans)
+	transform = right_axes.transAxes + shift
+
+	return transform
 
 
 def list_legend_entries(axes: Axes) -> tuple[list[Any], list[str]]:

@@ -48,7 +48,8 @@ class PlotStyle:
 		the axis on the right keep no rotation.
 	legend
 		Where the legend is placed, ``LegendPosition.BEST`` by default. It is only drawn for several series, so never on
-		a pie or a heatmap.
+		a pie or a heatmap. It names each series after its column: to change a name, use ``result_name`` in a
+		``Calculation`` or ``Table.rename`` before drawing.
 	grid_lines
 		Whether light grid lines are drawn behind the values, ``GridLines.SHOWN`` by default. A pie and a heatmap have
 		none.

@@ -7,6 +7,7 @@ Unit tests of the drawing of the PlotStyle of a Plot.
 # The matplotlib stubs leave the keyword arguments of most drawing methods untyped.
 # pyright: reportUnknownMemberType=false
 
+import pytest
 from matplotlib.collections import PathCollection
 from matplotlib.figure import Figure
 
@@ -20,6 +21,7 @@ from numdaplot.plots.drawing.style_drawing import (
 	choose_label,
 	draw_grid_lines,
 	find_first_shape_id,
+	find_transform_past_right_axis,
 	list_legend_entries,
 	place_legend,
 	write_axis_labels,
@@ -257,3 +259,41 @@ def test_find_first_shape_id_gives_an_empty_container_itself() -> None:
 	shape_id = find_first_shape_id(bars)
 
 	assert shape_id == id(bars)
+
+
+def test_find_transform_past_right_axis_shifts_past_the_axis() -> None:
+	"""
+	Check that the shift covers the width of the values and the label on the right.
+
+	.. versionadded:: 0.1.0
+	"""
+	axes = Figure().add_subplot()
+	right_axes = axes.twinx()
+	right_axes.set_ylabel("Mean price")
+
+	transform = find_transform_past_right_axis(right_axes)
+
+	shifted_edge = transform.transform((1.0, 0.0))[0]
+	axis_box = right_axes.yaxis.get_tightbbox()
+	assert axis_box is not None
+	assert shifted_edge == pytest.approx(axis_box.x1)
+
+
+def test_place_legend_moves_best_outside_with_axes_on_the_right() -> None:
+	"""
+	Check that ``BEST`` uses the location of ``OUTSIDE_RIGHT`` with axes on the right.
+
+	.. versionadded:: 0.1.0
+	"""
+	axes = Figure().add_subplot()
+	axes.plot([1.0, 2.0], label="price")
+	right_axes = axes.twinx()
+	right_axes.plot([3.0, 1.0], label="cost")
+
+	place_legend(PlotAxes(axes, right_axes, None), LINE_CHART, ndp.LegendPosition.BEST)
+
+	legend = right_axes.get_legend()
+	assert legend is not None
+	legend_anchor = legend.get_bbox_to_anchor()
+	axes_box = right_axes.get_window_extent()
+	assert legend_anchor.x0 > axes_box.x1

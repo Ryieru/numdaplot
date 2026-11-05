@@ -30,7 +30,8 @@ class LegendPosition(Enum):
 
 	BEST = auto()
 	"""
-	Inside the axes, where it hides the fewest values. Default value.
+	Inside the axes, where it hides the fewest values. With an axis on the right, the values of both axes leave little
+	room inside: the legend is placed as with ``OUTSIDE_RIGHT``. Default value.
 
 	Examples
 	--------
@@ -115,7 +116,7 @@ class LegendPosition(Enum):
 
 	OUTSIDE_RIGHT = auto()
 	"""
-	Outside the axes, on their right, so it never hides a value.
+	Outside the axes, on their right and past an axis on the right if any, so it never hides a value.
 
 	Examples
 	--------

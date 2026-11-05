@@ -13,6 +13,7 @@ from pathlib import Path
 import numpy
 import pytest
 from matplotlib.colors import to_rgba
+from matplotlib.figure import Figure
 from matplotlib.patches import Rectangle
 
 import numdaplot as ndp
@@ -168,3 +169,132 @@ def test_a_date_axis_labels_the_period_of_the_charts_on_both_sides() -> None:
 	corner_label = left_axes.xaxis.get_offset_text()
 	corner_text = corner_label.get_text()
 	assert corner_text == "2019-Mar to 2019-May"
+
+
+def build_combined_plot(style: ndp.PlotStyle) -> Figure:
+	"""
+	Return the drawn figure of bars and a line measured on the right.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	style
+		The style of the bars.
+
+	Returns
+	-------
+	Figure
+		The drawn figure.
+	"""
+	bars = ndp.plot_bar(SHOP, SALES_BARS, style)
+	both = bars.add_line(SHOP, ndp.LineChart(x="month", y=["price"]), axis=ndp.ValueAxis.RIGHT)
+	figure = both.to_matplotlib()
+	figure.draw_without_rendering()
+
+	return figure
+
+
+@pytest.mark.parametrize("position", [ndp.LegendPosition.BEST, ndp.LegendPosition.OUTSIDE_RIGHT])
+@pytest.mark.parametrize("right_label", ["Mean price in euros", None])
+@pytest.mark.parametrize("size", [ndp.Size(width=6.4, height=4.8), ndp.Size(width=12.0, height=4.0)])
+def test_a_legend_outside_starts_past_the_axis_on_the_right(
+	position: ndp.LegendPosition,
+	right_label: str | None,
+	size: ndp.Size,
+) -> None:
+	"""
+	Check on the drawn figure that the legend hides neither the bars nor the axis on the right.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	position
+		The position of the legend.
+	right_label
+		The label of the axis on the right.
+	size
+		The size of the Plot.
+	"""
+	style = ndp.PlotStyle(legend=position, right_label=right_label, size=size)
+
+	figure = build_combined_plot(style)
+
+	right_axes = figure.axes[1]
+	legend = right_axes.get_legend()
+	assert legend is not None
+	legend_box = legend.get_window_extent()
+	axis_box = right_axes.yaxis.get_tightbbox()
+	assert axis_box is not None
+	assert legend_box.x0 >= axis_box.x1
+
+
+def test_a_fixed_legend_position_stays_inside_with_an_axis_on_the_right() -> None:
+	"""
+	Check that a position inside the axes is kept.
+
+	.. versionadded:: 0.1.0
+	"""
+	figure = build_combined_plot(ndp.PlotStyle(legend=ndp.LegendPosition.UPPER_LEFT))
+
+	right_axes = figure.axes[1]
+	legend = right_axes.get_legend()
+	assert legend is not None
+	legend_box = legend.get_window_extent()
+	axes_box = right_axes.get_window_extent()
+	assert axes_box.x0 <= legend_box.x0
+	assert legend_box.x1 <= axes_box.x1
+
+
+def test_best_stays_inside_without_an_axis_on_the_right() -> None:
+	"""
+	Check that a Plot without axis on the right keeps its legend inside.
+
+	.. versionadded:: 0.1.0
+	"""
+	bars = ndp.plot_bar(SHOP, SALES_BARS)
+	both = bars.add_line(SHOP, ndp.LineChart(x="month", y=["price"]))
+
+	figure = both.to_matplotlib()
+	figure.draw_without_rendering()
+
+	axes = figure.axes[0]
+	legend = axes.get_legend()
+	assert legend is not None
+	legend_box = legend.get_window_extent()
+	axes_box = axes.get_window_extent()
+	assert legend_box.x1 <= axes_box.x1
+
+
+def test_a_legend_outside_stays_in_the_image() -> None:
+	"""
+	Check that the layout keeps room for the legend past the axis on the right.
+
+	.. versionadded:: 0.1.0
+	"""
+	figure = build_combined_plot(ndp.PlotStyle())
+
+	legend = figure.axes[1].get_legend()
+	assert legend is not None
+	legend_box = legend.get_window_extent()
+	figure_box = figure.get_window_extent()
+	assert legend_box.x1 <= figure_box.x1
+
+
+def test_a_legend_names_a_renamed_series() -> None:
+	"""
+	Check the way to change the name of a series in the legend.
+
+	.. versionadded:: 0.1.0
+	"""
+	changes = [ndp.NameChange(old_name="price", new_name="Mean price")]
+	shop = SHOP.rename(ndp.Renaming(changes=changes))
+	bars = ndp.plot_bar(shop, SALES_BARS)
+
+	both = bars.add_line(shop, ndp.LineChart(x="month", y=["Mean price"]), axis=ndp.ValueAxis.RIGHT)
+
+	legend = both.to_matplotlib().axes[1].get_legend()
+	assert legend is not None
+	legend_names = [text.get_text() for text in legend.get_texts()]
+	assert legend_names == ["sales", "Mean price"]
