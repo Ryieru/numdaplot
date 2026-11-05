@@ -43,3 +43,15 @@ def test_out_of_domain_error_keeps_its_values() -> None:
 
 	assert error.function_name == FUNCTION_NAME
 	assert error.value == VALUE
+
+
+def test_out_of_domain_error_gives_the_conversion_between_integers() -> None:
+	"""
+	Check the message of a value that decimals would accept.
+
+	.. versionadded:: 0.1.0
+	"""
+	error = OutOfDomainError("Remainder", 0, True)
+
+	error_text = str(error)
+	assert error_text == "Remainder is not defined for 0 between integers. Convert the values to FLOAT64 first."

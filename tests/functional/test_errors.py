@@ -45,6 +45,7 @@ PRECISE_ERRORS = [
 	ndp.InvalidSizeError,
 	ndp.InvalidStepError,
 	ndp.InvalidTimeZoneChangeError,
+	ndp.IntegerOverflowError,
 	ndp.IrregularListError,
 	ndp.MissingDependencyError,
 	ndp.MissingTypeError,

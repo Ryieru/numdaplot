@@ -46,12 +46,19 @@ class ArrayReflectedArithmetic(ArrayData):
 		Self
 			A new Array.
 
+		Warns
+		-----
+		CalculationWarning
+			When values of decimals become NaN or an infinite value.
+
 		Raises
 		------
 		InvalidTypeError
 			When an argument is not of the type its annotation names.
 		IncompatibleTypesError
 			When the operation does not apply to the types, such as a number and a text.
+		IntegerOverflowError
+			When a result does not fit its integer type, which refuses to wrap around to a wrong number.
 
 		Examples
 		--------
@@ -81,12 +88,19 @@ class ArrayReflectedArithmetic(ArrayData):
 		Self
 			A new Array.
 
+		Warns
+		-----
+		CalculationWarning
+			When values of decimals become NaN or an infinite value.
+
 		Raises
 		------
 		InvalidTypeError
 			When an argument is not of the type its annotation names.
 		IncompatibleTypesError
 			When the operation does not apply to the types, such as a number and a text.
+		IntegerOverflowError
+			When a result does not fit its integer type, which refuses to wrap around to a wrong number.
 
 		Examples
 		--------
@@ -116,12 +130,19 @@ class ArrayReflectedArithmetic(ArrayData):
 		Self
 			A new Array.
 
+		Warns
+		-----
+		CalculationWarning
+			When values of decimals become NaN or an infinite value.
+
 		Raises
 		------
 		InvalidTypeError
 			When an argument is not of the type its annotation names.
 		IncompatibleTypesError
 			When the operation does not apply to the types, such as a number and a text.
+		IntegerOverflowError
+			When a result does not fit its integer type, which refuses to wrap around to a wrong number.
 
 		Examples
 		--------
@@ -150,6 +171,11 @@ class ArrayReflectedArithmetic(ArrayData):
 		-------
 		Self
 			A new Array.
+
+		Warns
+		-----
+		CalculationWarning
+			When values of decimals become NaN or an infinite value.
 
 		Raises
 		------
@@ -186,12 +212,21 @@ class ArrayReflectedArithmetic(ArrayData):
 		Self
 			A new Array.
 
+		Warns
+		-----
+		CalculationWarning
+			When values of decimals become NaN or an infinite value.
+
 		Raises
 		------
 		InvalidTypeError
 			When an argument is not of the type its annotation names.
 		IncompatibleTypesError
 			When the operation does not apply to the types, such as a number and a text.
+		OutOfDomainError
+			When integers are divided by 0: convert them to ``FLOAT64`` first.
+		IntegerOverflowError
+			When a result does not fit its integer type, which refuses to wrap around to a wrong number.
 
 		Examples
 		--------
@@ -221,12 +256,19 @@ class ArrayReflectedArithmetic(ArrayData):
 		Self
 			A new Array.
 
+		Warns
+		-----
+		CalculationWarning
+			When values of decimals become NaN or an infinite value.
+
 		Raises
 		------
 		InvalidTypeError
 			When an argument is not of the type its annotation names.
 		IncompatibleTypesError
 			When the operation does not apply to the types, such as a number and a text.
+		OutOfDomainError
+			When integers are divided by 0: convert them to ``FLOAT64`` first.
 
 		Examples
 		--------
@@ -256,12 +298,21 @@ class ArrayReflectedArithmetic(ArrayData):
 		Self
 			A new Array.
 
+		Warns
+		-----
+		CalculationWarning
+			When values of decimals become NaN or an infinite value.
+
 		Raises
 		------
 		InvalidTypeError
 			When an argument is not of the type its annotation names.
 		IncompatibleTypesError
 			When the operation does not apply to the types, such as a number and a text.
+		OutOfDomainError
+			When integers are raised to a negative power: convert them to ``FLOAT64`` first.
+		IntegerOverflowError
+			When a result does not fit its integer type, which refuses to wrap around to a wrong number.
 
 		Examples
 		--------

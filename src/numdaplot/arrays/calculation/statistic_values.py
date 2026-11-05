@@ -28,6 +28,8 @@ from numdaplot.arrays.calculation.location_statistics import (
 	compute_sum,
 )
 from numdaplot.arrays.creation.numpy_conversion import normalize_text
+from numdaplot.arrays.operations.float_errors import FloatErrorWarnings
+from numdaplot.arrays.operations.integer_rules import require_sum_fits
 from numdaplot.arrays.operations.type_requirements import require_family
 from numdaplot.arrays.selection.missing_mask import find_missing
 from numdaplot.data_types.value_family import ValueFamily
@@ -124,6 +126,13 @@ def compute_statistic(values: NDArray[Any], statistic: Statistic, axis: Axis | N
 		When the statistic needs a present value and a slice has none.
 	RefusedOperationError
 		When the statistic is not a statistic of numdaplot.
+	IntegerOverflowError
+		When the sum of integers does not fit their type.
+
+	Warns
+	-----
+	CalculationWarning
+		When a result on decimals becomes NaN or an infinite value.
 
 	Examples
 	--------
@@ -145,8 +154,13 @@ def compute_statistic(values: NDArray[Any], statistic: Statistic, axis: Axis | N
 	if calculation.needs_present_value:
 		require_present_values(values, numpy_axis, statistic_name)
 
-	result = calculation.function(values, numpy_axis, statistic)
+	with FloatErrorWarnings(statistic_name):
+		result = calculation.function(values, numpy_axis, statistic)
+
 	result_values = numpy.asarray(result)
+	if statistic_class == Sum:
+		require_sum_fits(values, numpy_axis, result_values, statistic_name)
+
 	if numpy_axis is None:
 		result_values = result_values.reshape(SINGLE_VALUE_DIMENSIONS)
 

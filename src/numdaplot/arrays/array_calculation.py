@@ -55,6 +55,13 @@ class ArrayCalculation(ArrayData):
 		EmptyArrayError
 			When the statistic needs a value, such as ``Mean``, and the whole Array, or a row or column,
 			has no present value.
+		IntegerOverflowError
+			When the ``Sum`` of integers does not fit their type.
+
+		Warns
+		-----
+		CalculationWarning
+			When a result on decimals becomes an infinite value or NaN.
 
 		Examples
 		--------
@@ -95,6 +102,11 @@ class ArrayCalculation(ArrayData):
 			When the function does not apply to the type of the values.
 		OutOfDomainError
 			When a value is outside the domain of a math function, such as the square root of -1.
+
+		Warns
+		-----
+		CalculationWarning
+			When a result of a math function becomes an infinite value or NaN.
 
 		Examples
 		--------

@@ -50,6 +50,7 @@ from numdaplot.dates.time_zone_change import TimeZoneChange
 from numdaplot.dates.time_zone_mode import TimeZoneMode
 from numdaplot.dates.to_duration import ToDuration
 from numdaplot.errors.broadcast_warning import BroadcastWarning
+from numdaplot.errors.calculation_warning import CalculationWarning
 from numdaplot.errors.cell_out_of_range_error import CellOutOfRangeError
 from numdaplot.errors.column_not_found_error import ColumnNotFoundError
 from numdaplot.errors.conflicting_settings_error import ConflictingSettingsError
@@ -67,6 +68,7 @@ from numdaplot.errors.file_exists_error import FileExistsError
 from numdaplot.errors.file_not_found_error import FileNotFoundError
 from numdaplot.errors.incompatible_charts_error import IncompatibleChartsError
 from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
+from numdaplot.errors.integer_overflow_error import IntegerOverflowError
 from numdaplot.errors.invalid_base_error import InvalidBaseError
 from numdaplot.errors.invalid_bin_width_error import InvalidBinWidthError
 from numdaplot.errors.invalid_bounds_error import InvalidBoundsError
@@ -235,6 +237,7 @@ __all__ = [
 	"Bounds",
 	"BoxChart",
 	"BroadcastWarning",
+	"CalculationWarning",
 	"Calculation",
 	"Case",
 	"Cell",
@@ -297,6 +300,7 @@ __all__ = [
 	"ImageOptions",
 	"IncompatibleChartsError",
 	"IncompatibleTypesError",
+	"IntegerOverflowError",
 	"Index",
 	"InvalidBaseError",
 	"InvalidBinWidthError",

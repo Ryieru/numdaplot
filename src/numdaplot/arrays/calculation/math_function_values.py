@@ -17,6 +17,8 @@ from numdaplot.arrays.math_functions.math_function import MathFunction
 from numdaplot.arrays.math_functions.round import Round
 from numdaplot.arrays.math_functions.sine import Sine
 from numdaplot.arrays.math_functions.square_root import SquareRoot
+from numdaplot.arrays.operations.float_errors import FloatErrorWarnings
+from numdaplot.arrays.operations.integer_rules import require_absolute_fits
 from numdaplot.arrays.operations.type_requirements import require_family
 from numdaplot.data_types.value_family import ValueFamily
 from numdaplot.errors.out_of_domain_error import OutOfDomainError
@@ -71,28 +73,30 @@ def apply_math_function(values: NDArray[Any], function: MathFunction) -> NDArray
 	function_name = function_class.__name__
 	require_family(values, NUMBER_FAMILIES, function_name)
 
-	match function:
-		case SquareRoot():
-			require_domain(values, numpy.less, function_name)
-			transformed_values = numpy.sqrt(values)
-		case Logarithm():
-			require_domain(values, numpy.less_equal, function_name)
-			transformed_values = compute_logarithm(values, function)
-		case Exponential():
-			transformed_values = numpy.exp(values)
-		case Absolute():
-			transformed_values = numpy.absolute(values)
-		case Round():
-			transformed_values = numpy.round(values, function.decimals)
-		case Sine():
-			transformed_values = numpy.sin(values)
-		case Cosine():
-			transformed_values = numpy.cos(values)
-		case _:
-			operation = UNKNOWN_FUNCTION_OPERATION.format(function_name=function_name)
-			raise RefusedOperationError(operation, UNKNOWN_FUNCTION_ALTERNATIVE)
+	with FloatErrorWarnings(function_name):
+		match function:
+			case SquareRoot():
+				require_domain(values, numpy.less, function_name)
+				transformed_values = numpy.sqrt(values)
+			case Logarithm():
+				require_domain(values, numpy.less_equal, function_name)
+				transformed_values = compute_logarithm(values, function)
+			case Exponential():
+				transformed_values = numpy.exp(values)
+			case Absolute():
+				require_absolute_fits(values, function_name)
+				transformed_values = numpy.absolute(values)
+			case Round():
+				transformed_values = numpy.round(values, function.decimals)
+			case Sine():
+				transformed_values = numpy.sin(values)
+			case Cosine():
+				transformed_values = numpy.cos(values)
+			case _:
+				operation = UNKNOWN_FUNCTION_OPERATION.format(function_name=function_name)
+				raise RefusedOperationError(operation, UNKNOWN_FUNCTION_ALTERNATIVE)
 
-	return transformed_values
+		return transformed_values
 
 
 def require_domain(values: NDArray[Any], is_outside: numpy.ufunc, function_name: str) -> None:

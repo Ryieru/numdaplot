@@ -10,10 +10,13 @@ from typing import Any
 import numpy
 from numpy.typing import NDArray
 
+from numdaplot.arrays.operations.float_errors import FloatErrorWarnings
+from numdaplot.arrays.operations.integer_rules import require_combination_fits, require_defined_integers
 from numdaplot.arrays.operations.operand import Operand, find_operand_type_names
 from numdaplot.arrays.operations.time_arithmetic import combine_time_values, involves_time
 from numdaplot.errors.broadcast_warning import BroadcastWarning
 from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
+from numdaplot.errors.integer_overflow_error import IntegerOverflowError
 from numdaplot.errors.shape_mismatch_error import ShapeMismatchError
 
 PYTHON_OBJECT_KIND = "O"
@@ -49,6 +52,8 @@ def combine_values(left: Operand, right: Operand, function: numpy.ufunc, symbol:
 	-----
 	BroadcastWarning
 		When both sides are Array values of different but compatible shapes.
+	CalculationWarning
+		When values of decimals become NaN or an infinite value.
 
 	Raises
 	------
@@ -56,6 +61,10 @@ def combine_values(left: Operand, right: Operand, function: numpy.ufunc, symbol:
 		When both sides are Array values whose shapes cannot be combined.
 	IncompatibleTypesError
 		When the function does not apply to the types of the operands.
+	OutOfDomainError
+		When integers are divided by 0 with ``//`` or ``%``, or raised to a negative power.
+	IntegerOverflowError
+		When a result does not fit its integer type.
 	RefusedOperationError, ValueConversionError
 		When a time operation is refused, as in ``combine_time_values``.
 
@@ -69,15 +78,23 @@ def combine_values(left: Operand, right: Operand, function: numpy.ufunc, symbol:
 	check_shapes(left, right)
 	has_time = involves_time(left, right)
 	if has_time:
-		time_values = combine_time_values(left, right, function, symbol)
+		with FloatErrorWarnings(symbol):
+			time_values = combine_time_values(left, right, function, symbol)
+
 		return time_values
 
+	require_defined_integers(left, right, function)
 	operands = list[Operand]([left, right])
 	try:
-		combined_values = function(left, right)
+		with FloatErrorWarnings(symbol):
+			combined_values = function(left, right)
+			require_combination_fits(operands, function, combined_values, symbol)
 	except TypeError as error:
 		type_names = find_operand_type_names(operands)
 		raise IncompatibleTypesError(symbol, type_names) from error
+	except OverflowError as error:
+		type_names = find_operand_type_names(operands)
+		raise IntegerOverflowError(symbol, type_names[0]) from error
 
 	if combined_values.dtype.kind == PYTHON_OBJECT_KIND:
 		type_names = find_operand_type_names(operands)

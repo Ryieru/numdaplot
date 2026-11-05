@@ -9,6 +9,7 @@ from typing import Self
 import numpy
 
 from numdaplot.arrays.array_data import ArrayData
+from numdaplot.arrays.operations.integer_rules import require_opposite_fits
 from numdaplot.arrays.operations.transformation import transform_values
 from numdaplot.rules.rule_values import ScalarValue
 from numdaplot.settings.argument_types import checked_arguments
@@ -51,6 +52,11 @@ class ArrayArithmetic(ArrayData):
 		Self
 			A new Array.
 
+		Warns
+		-----
+		CalculationWarning
+			When values of decimals become NaN or an infinite value.
+
 		Raises
 		------
 		InvalidTypeError
@@ -59,6 +65,8 @@ class ArrayArithmetic(ArrayData):
 			When the shapes of two Arrays cannot be combined.
 		IncompatibleTypesError
 			When the operation does not apply to the types, such as a number and a text.
+		IntegerOverflowError
+			When a result does not fit its integer type, which refuses to wrap around to a wrong number.
 
 		Examples
 		--------
@@ -91,6 +99,11 @@ class ArrayArithmetic(ArrayData):
 		Self
 			A new Array.
 
+		Warns
+		-----
+		CalculationWarning
+			When values of decimals become NaN or an infinite value.
+
 		Raises
 		------
 		InvalidTypeError
@@ -99,6 +112,8 @@ class ArrayArithmetic(ArrayData):
 			When the shapes of two Arrays cannot be combined.
 		IncompatibleTypesError
 			When the operation does not apply to the types, such as a number and a text.
+		IntegerOverflowError
+			When a result does not fit its integer type, which refuses to wrap around to a wrong number.
 
 		Examples
 		--------
@@ -131,6 +146,11 @@ class ArrayArithmetic(ArrayData):
 		Self
 			A new Array.
 
+		Warns
+		-----
+		CalculationWarning
+			When values of decimals become NaN or an infinite value.
+
 		Raises
 		------
 		InvalidTypeError
@@ -139,6 +159,8 @@ class ArrayArithmetic(ArrayData):
 			When the shapes of two Arrays cannot be combined.
 		IncompatibleTypesError
 			When the operation does not apply to the types, such as a number and a text.
+		IntegerOverflowError
+			When a result does not fit its integer type, which refuses to wrap around to a wrong number.
 
 		Examples
 		--------
@@ -170,6 +192,11 @@ class ArrayArithmetic(ArrayData):
 		-------
 		Self
 			A new Array.
+
+		Warns
+		-----
+		CalculationWarning
+			When values of decimals become NaN or an infinite value.
 
 		Raises
 		------
@@ -211,6 +238,11 @@ class ArrayArithmetic(ArrayData):
 		Self
 			A new Array.
 
+		Warns
+		-----
+		CalculationWarning
+			When values of decimals become NaN or an infinite value.
+
 		Raises
 		------
 		InvalidTypeError
@@ -219,6 +251,10 @@ class ArrayArithmetic(ArrayData):
 			When the shapes of two Arrays cannot be combined.
 		IncompatibleTypesError
 			When the operation does not apply to the types, such as a number and a text.
+		OutOfDomainError
+			When integers are divided by 0: convert them to ``FLOAT64`` first.
+		IntegerOverflowError
+			When a result does not fit its integer type, which refuses to wrap around to a wrong number.
 
 		Examples
 		--------
@@ -251,6 +287,11 @@ class ArrayArithmetic(ArrayData):
 		Self
 			A new Array.
 
+		Warns
+		-----
+		CalculationWarning
+			When values of decimals become NaN or an infinite value.
+
 		Raises
 		------
 		InvalidTypeError
@@ -259,6 +300,8 @@ class ArrayArithmetic(ArrayData):
 			When the shapes of two Arrays cannot be combined.
 		IncompatibleTypesError
 			When the operation does not apply to the types, such as a number and a text.
+		OutOfDomainError
+			When integers are divided by 0: convert them to ``FLOAT64`` first.
 
 		Examples
 		--------
@@ -291,6 +334,11 @@ class ArrayArithmetic(ArrayData):
 		Self
 			A new Array.
 
+		Warns
+		-----
+		CalculationWarning
+			When values of decimals become NaN or an infinite value.
+
 		Raises
 		------
 		InvalidTypeError
@@ -299,6 +347,10 @@ class ArrayArithmetic(ArrayData):
 			When the shapes of two Arrays cannot be combined.
 		IncompatibleTypesError
 			When the operation does not apply to the types, such as a number and a text.
+		OutOfDomainError
+			When integers are raised to a negative power: convert them to ``FLOAT64`` first.
+		IntegerOverflowError
+			When a result does not fit its integer type, which refuses to wrap around to a wrong number.
 
 		Examples
 		--------
@@ -326,6 +378,8 @@ class ArrayArithmetic(ArrayData):
 		------
 		IncompatibleTypesError
 			When the values have no opposite, such as texts or booleans.
+		IntegerOverflowError
+			When an integer has no opposite in its type, such as any positive ``UINT8``.
 
 		Examples
 		--------
@@ -333,6 +387,7 @@ class ArrayArithmetic(ArrayData):
 		>>> -ndp.Array.from_list([1, -2])
 		Array([-1,  2], dtype=INT64)
 		"""
+		require_opposite_fits(self._values, SUBTRACTION_SYMBOL)
 		negated_values = transform_values(self._values, numpy.negative, SUBTRACTION_SYMBOL)
 		negated_array = self._wrap(negated_values)
 

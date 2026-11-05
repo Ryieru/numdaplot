@@ -65,7 +65,7 @@ and numdaplot follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 - Math functions: `MathFunction`, `SquareRoot`, `Exponential`, `Logarithm`, `Absolute`, `Round`, `Sine`, `Cosine`.
 - Array errors: `DimensionError`, `EmptyArrayError`, `IncompatibleTypesError`, `InvalidBaseError`,
   `InvalidCountError`, `InvalidDeviationError`, `InvalidPositionError`, `InvalidSeedError`,
-  `InvalidShapeError`, `IrregularListError`, `MissingTypeError`, `NotSingleValueError`, `OutOfDomainError`,
+  `IntegerOverflowError`, `InvalidShapeError`, `IrregularListError`, `MissingTypeError`, `NotSingleValueError`, `OutOfDomainError`,
   `RefusedOperationError`, `ShapeMismatchError`, `UnsupportedMissingError`,
   `ValueConversionError`.
 - `Type` enum of value types and its conversion to numpy and pandas dtypes, and the `Library` enum read on
@@ -78,4 +78,4 @@ and numdaplot follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 - Sort settings: `Order` and `MissingPosition` enums.
 - Errors: `NumdaplotError`, `EmptyRegionError`, `EmptyTextError`, `EmptyValuesError`, `InvalidBoundsError`,
   `InvalidFractionError`, `InvalidTypeError`, `InvalidStepError`, `UnsupportedTypeError`, and the
-  `BroadcastWarning` warning.
+  `BroadcastWarning` and `CalculationWarning` warnings.
