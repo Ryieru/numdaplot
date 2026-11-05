@@ -44,12 +44,8 @@ class Plot:
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> days = ndp.Array.from_list([1, 2, 3, 4])
 	>>> prices = ndp.Array.from_list([12.0, 15.5, 14.0, 17.0])
-	>>> sales = ndp.Table.from_arrays({"day": days, "price": prices})
-	>>> chart = ndp.LineChart(x="day", y=["price"], marker=ndp.MarkerShape.CIRCLE)
-	>>> style = ndp.Style(title="Price per day")
-	>>> plot = ndp.plot_line(sales, chart, style)
+	>>> plot = ndp.plot_line(prices, ndp.LineChart())
 	>>> plot.show()
 	"""
 

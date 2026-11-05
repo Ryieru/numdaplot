@@ -270,6 +270,10 @@ class TableReading(TableData):
 		"""
 		Return a Table read from a SAS data file (``.sas7bdat``). numdaplot does not write this format.
 
+		The example reads
+		[airline.sas7bdat](https://github.com/Ryieru/Numdaplot/blob/main/tests/data/airline.sas7bdat),
+		a SAS data file of 32 rows.
+
 		.. versionadded:: 0.1.0
 
 		Parameters
@@ -292,11 +296,13 @@ class TableReading(TableData):
 		Examples
 		--------
 		>>> import numdaplot as ndp
-		>>> try:
-		... 	ndp.Table.from_sas("missing.sas7bdat")
-		... except ndp.FileNotFoundError as error:
-		... 	print(error)
-		No file found at missing.sas7bdat.
+		>>> airline = ndp.Table.from_sas("airline.sas7bdat")
+		>>> airline.preview(ndp.Preview(count=3))
+		     YEAR       Y       W       R       L       K
+		  FLOAT64 FLOAT64 FLOAT64 FLOAT64 FLOAT64 FLOAT64
+		0  1948.0   1.214   0.243  0.1454   1.415   0.612
+		1  1949.0   1.354   0.260  0.2181   1.384   0.559
+		2  1950.0   1.569   0.278  0.3157   1.388   0.573
 		"""
 		file_path = Path(path)
 		require_existing_file(file_path)
@@ -312,6 +318,10 @@ class TableReading(TableData):
 	def from_xpt(cls, path: FilePath, options: XptOptions | None = None) -> Self:
 		"""
 		Return a Table read from a SAS transport file (``.xpt``). numdaplot does not write this format.
+
+		The example reads
+		[paxraw_d_short.xpt](https://github.com/Ryieru/Numdaplot/blob/main/tests/data/paxraw_d_short.xpt),
+		a SAS transport file of 100 rows.
 
 		.. versionadded:: 0.1.0
 
@@ -335,11 +345,11 @@ class TableReading(TableData):
 		Examples
 		--------
 		>>> import numdaplot as ndp
-		>>> try:
-		... 	ndp.Table.from_xpt("missing.xpt")
-		... except ndp.FileNotFoundError as error:
-		... 	print(error)
-		No file found at missing.xpt.
+		>>> activity = ndp.Table.from_xpt("paxraw_d_short.xpt")
+		>>> activity.row_count
+		100
+		>>> activity.column_names
+		['SEQN', 'PAXSTAT', 'PAXCAL', 'PAXDAY', 'PAXN', 'PAXHOUR', 'PAXMINUT', 'PAXINTEN', 'PAXSTEP']
 		"""
 		file_path = Path(path)
 		require_existing_file(file_path)

@@ -40,11 +40,6 @@ class Logarithm(MathFunction):
 	>>> populations = ndp.Array.from_list([1, 100, 1000])
 	>>> populations.apply(ndp.Logarithm(base=10))
 	Array([0., 2., 3.], dtype=FLOAT64)
-	>>> try:
-	... 	populations.apply(ndp.Logarithm(base=1))
-	... except ndp.InvalidBaseError as error:
-	... 	print(error)
-	Expected a logarithm base greater than 0 and different from 1, got 1.
 	"""
 
 	base: float | None = None

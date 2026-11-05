@@ -53,7 +53,10 @@ class Array(
 	--------
 	>>> import numdaplot as ndp
 	>>> prices = ndp.Array.from_list([12.5, 8.0, 30.0])
-	>>> taxed_prices = prices * 1.2
-	>>> taxed_prices.select(ndp.Greater(10))
-	Array([15., 36.], dtype=FLOAT64)
+	>>> prices
+	Array([12.5,  8. , 30. ], dtype=FLOAT64)
+	>>> prices.shape
+	Shape(dimensions=(3,))
+	>>> prices.dtype
+	<Type.FLOAT64: 10>
 	"""

@@ -17,7 +17,7 @@ class Case(Enum):
 	--------
 	>>> import numdaplot as ndp
 	>>> cities = ndp.Array.from_list(["Paris", "PARIS", "Lyon"])
-	>>> cities.select(ndp.Contains("paris"))
+	>>> cities.select(ndp.Contains("paris", case=ndp.Case.SENSITIVE))
 	Array([], dtype=TEXT)
 	>>> cities.select(ndp.Contains("paris", case=ndp.Case.IGNORED))
 	Array(['Paris', 'PARIS'], dtype=TEXT)

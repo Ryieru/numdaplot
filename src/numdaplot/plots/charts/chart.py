@@ -30,9 +30,8 @@ class Chart:
 	--------
 	>>> import numdaplot as ndp
 	>>> prices = ndp.Array.from_list([12.0, 15.5, 14.0, 17.0])
-	>>> chart = ndp.BarChart()
-	>>> isinstance(chart, ndp.Chart)
-	True
-	>>> plot = ndp.plot_bar(prices, chart)
-	>>> plot.show()
+	>>> bar_plot = ndp.plot_bar(prices, ndp.BarChart())
+	>>> bar_plot.show()
+	>>> line_plot = ndp.plot_line(prices, ndp.LineChart())
+	>>> line_plot.show()
 	"""

@@ -16,6 +16,10 @@ class XptOptions:
 
 	These files are read only.
 
+	The example reads
+	[paxraw_d_short.xpt](https://github.com/Ryieru/Numdaplot/blob/main/tests/data/paxraw_d_short.xpt),
+	a SAS transport file of 100 rows.
+
 	.. versionadded:: 0.1.0
 
 	Parameters
@@ -26,11 +30,12 @@ class XptOptions:
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> try:
-	... 	ndp.Table.from_xpt("missing.xpt", ndp.XptOptions(encoding=ndp.Encoding.LATIN_1))
-	... except ndp.FileNotFoundError as error:
-	... 	print(error)
-	No file found at missing.xpt.
+	>>> latin_1 = ndp.XptOptions(encoding=ndp.Encoding.LATIN_1)
+	>>> activity = ndp.Table.from_xpt("paxraw_d_short.xpt", latin_1)
+	>>> activity.row_count
+	100
+	>>> activity.column_names
+	['SEQN', 'PAXSTAT', 'PAXCAL', 'PAXDAY', 'PAXN', 'PAXHOUR', 'PAXMINUT', 'PAXINTEN', 'PAXSTEP']
 	"""
 
 	encoding: Encoding = Encoding.UTF_8

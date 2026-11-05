@@ -43,15 +43,15 @@ class Condition:
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> cities = ndp.Array.from_list(["Paris", "Lyon", "Paris"])
-	>>> prices = ndp.Array.from_list([120.0, 80.0, 150.0])
-	>>> sales = ndp.Table.from_arrays({"city": cities, "price": prices})
-	>>> expensive = ndp.Condition(rule=ndp.Greater(100), columns=["price"])
-	>>> sales.filter(ndp.Filter(conditions=[expensive]))
-	    city   price
-	    TEXT FLOAT64
-	0  Paris   120.0
-	1  Paris   150.0
+	>>> prices = ndp.Array.from_list([120.0, 80.0, 90.0])
+	>>> costs = ndp.Array.from_list([70.0, 60.0, 110.0])
+	>>> sales = ndp.Table.from_arrays({"price": prices, "cost": costs})
+	>>> above_hundred = ndp.Condition(rule=ndp.Greater(100), columns=["price", "cost"])
+	>>> sales.filter(ndp.Filter(conditions=[above_hundred]))
+	    price    cost
+	  FLOAT64 FLOAT64
+	0   120.0    70.0
+	1    90.0   110.0
 	"""
 
 	rule: Rule
