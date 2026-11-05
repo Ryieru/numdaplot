@@ -34,8 +34,10 @@ class Conversion:
 		Its new type.
 	format
 		How dates are written as texts, when texts are read as dates or datetimes, or dates or datetimes are
-		written as texts. Texts are read as year, month and day separated by ``"-"`` when omitted, and
-		written the same way, with the time for datetimes.
+		written as texts. When omitted, texts are read as year, month and day. For ``DATETIME``, each text may
+		also have a time after a space or a ``"T"``, and a text without time counts as midnight. A format that is
+		given applies to every text: ``DateFormat.YEAR_MONTH_DAY_TIME`` refuses a text without time. When omitted,
+		dates are written as year, month and day separated by ``"-"``, with the time for datetimes.
 	timezone
 		A change of the time zone of a datetime column, the time zone unchanged when omitted.
 
@@ -60,6 +62,12 @@ class Conversion:
 	         day
 	        DATE
 	0 2026-12-31
+	>>> pickups = ndp.Table.from_arrays({"pickup": ndp.Array.from_list(["2026-12-31 20:21:09", "2026-12-31"])})
+	>>> pickups.convert(ndp.Conversion(column="pickup", dtype=ndp.Type.DATETIME))
+	               pickup
+	             DATETIME
+	0 2026-12-31 20:21:09
+	1 2026-12-31 00:00:00
 	"""
 
 	column: str

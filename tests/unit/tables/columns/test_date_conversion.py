@@ -15,10 +15,14 @@ from numdaplot.dates.custom_date_format import CustomDateFormat
 from numdaplot.dates.date_format import DateFormat
 from numdaplot.errors.value_conversion_error import ValueConversionError
 from numdaplot.tables.columns.date_conversion import (
+	YEAR_FIRST,
 	convert_moments,
+	find_format_name,
 	has_time,
 	parse_dates,
 	read_common_format,
+	read_date_pattern,
+	read_moments,
 	write_dates,
 	write_durations,
 )
@@ -43,6 +47,25 @@ EXPECTED_CUSTOM_TEXTS = ["31 Dec 2026"]
 EXPECTED_DURATION_TEXTS = ["1 days 12:00:00", None, "-1 days +12:00:00"]
 EXPECTED_MIDNIGHT = [pandas.Timestamp("2026-12-31")]
 REJECTED_TEXT = "31/02/2026"
+DAY_TEXT = "2026-12-31"
+DAY_TIME_TEXT = "2026-12-31 14:30"
+DAY_T_TIME_TEXT = "2026-12-31T14:30"
+DAY_SECONDS_TEXT = "2026-12-31 14:30:15"
+FIRST_DAY_NAME = "YEAR_MONTH_DAY"
+FIRST_TIME_NAME = "YEAR_MONTH_DAY_TIME"
+CUSTOM_PATTERN_TEXT = "%d %b %Y"
+EXPECTED_DEFAULT_DATE_MESSAGE = (
+	"Cannot read the TEXT value '2026-12-31 14:30' as DATE with the format YEAR_MONTH_DAY. "
+	"Give the format of the column with format=, using DateFormat or CustomDateFormat."
+)
+EXPECTED_DEFAULT_TIME_MESSAGE = (
+	"Cannot read the TEXT value '31/02/2026' as DATETIME with the format YEAR_MONTH_DAY_TIME. "
+	"Give the format of the column with format=, using DateFormat or CustomDateFormat."
+)
+EXPECTED_CUSTOM_MESSAGE = (
+	"Cannot read the TEXT value '31/02/2026' as DATE with the format %d %b %Y. "
+	"Give the format of the column with format=, using DateFormat or CustomDateFormat."
+)
 
 
 @dataclass(frozen=True)
@@ -311,3 +334,158 @@ def test_has_time_tells_the_formats_with_a_time(date_format: DateFormat | Custom
 	format_has_time = has_time(date_format)
 
 	assert format_has_time == expected
+
+
+def test_read_moments_without_format_reads_datetimes_with_or_without_time() -> None:
+	"""
+	Check that a datetime column without format reads each text with its own time, midnight without one.
+
+	.. versionadded:: 0.1.0
+	"""
+	texts = pandas.Series([DAY_SECONDS_TEXT, DAY_T_TIME_TEXT, DAY_TEXT], dtype=TEXT_DTYPE)
+
+	moments = read_moments(texts, Type.DATETIME, None)
+
+	moment_list = moments.tolist()
+	assert moment_list == [DECEMBER_LAST_SECONDS, DECEMBER_LAST_AFTERNOON, DECEMBER_LAST]
+
+
+def test_read_moments_without_format_leaves_the_time_out_of_dates() -> None:
+	"""
+	Check that a date column without format gives NaT for a text with a time.
+
+	.. versionadded:: 0.1.0
+	"""
+	texts = pandas.Series([DAY_TIME_TEXT], dtype=TEXT_DTYPE)
+
+	moments = read_moments(texts, Type.DATE, None)
+
+	assert moments.isna().all()
+
+
+def test_read_moments_with_a_time_format_needs_the_time() -> None:
+	"""
+	Check that a given format with time gives NaT for a text without time.
+
+	.. versionadded:: 0.1.0
+	"""
+	texts = pandas.Series([DAY_TEXT], dtype=TEXT_DTYPE)
+
+	moments = read_moments(texts, Type.DATETIME, DateFormat.YEAR_MONTH_DAY_TIME)
+
+	assert moments.isna().all()
+
+
+def test_read_moments_reads_a_custom_pattern() -> None:
+	"""
+	Check that a custom format is read with its pattern.
+
+	.. versionadded:: 0.1.0
+	"""
+	texts = pandas.Series(["31 Dec 2026"], dtype=TEXT_DTYPE)
+
+	moments = read_moments(texts, Type.DATE, DAY_MONTH_PATTERN)
+
+	moment_list = moments.tolist()
+	assert moment_list == EXPECTED_MIDNIGHT
+
+
+def test_read_date_pattern_counts_the_missing_clock_parts_as_zero() -> None:
+	"""
+	Check that a pattern without clock gives midnight, and NaT for a text it does not follow.
+
+	.. versionadded:: 0.1.0
+	"""
+	texts = pandas.Series([DAY_TEXT, REJECTED_TEXT], dtype=TEXT_DTYPE)
+
+	moments = read_date_pattern(texts, YEAR_FIRST)
+
+	first_moment = moments.iloc[0]
+	assert first_moment == DECEMBER_LAST
+	assert moments.isna().iloc[1]
+
+
+def test_find_format_name_gives_the_default_of_each_type() -> None:
+	"""
+	Check the name of the default format of dates and datetimes.
+
+	.. versionadded:: 0.1.0
+	"""
+	date_name = find_format_name(Type.DATE, None)
+	time_name = find_format_name(Type.DATETIME, None)
+
+	assert date_name == FIRST_DAY_NAME
+	assert time_name == FIRST_TIME_NAME
+
+
+def test_find_format_name_gives_the_given_format() -> None:
+	"""
+	Check that a common format gives its name and a custom format gives its pattern.
+
+	.. versionadded:: 0.1.0
+	"""
+	common_name = find_format_name(Type.DATETIME, DateFormat.DAY_MONTH_YEAR)
+	custom_name = find_format_name(Type.DATE, DAY_MONTH_PATTERN)
+
+	assert common_name == DateFormat.DAY_MONTH_YEAR.name
+	assert custom_name == CUSTOM_PATTERN_TEXT
+
+
+def test_parse_dates_keeps_a_missing_text_missing_without_format() -> None:
+	"""
+	Check that a missing text stays missing in a datetime column read without format.
+
+	.. versionadded:: 0.1.0
+	"""
+	texts = pandas.Series([DAY_TIME_TEXT, None], dtype=TEXT_DTYPE)
+
+	dates = parse_dates(texts, Type.DATETIME, None)
+
+	assert find_column_type(dates) == Type.DATETIME
+	assert dates.iloc[0] == DECEMBER_LAST_AFTERNOON
+	assert dates.isna().iloc[1]
+
+
+def test_parse_dates_refusal_of_a_time_as_date_names_the_default_format() -> None:
+	"""
+	Check the message when a date column read without format holds a time.
+
+	.. versionadded:: 0.1.0
+	"""
+	texts = pandas.Series([DAY_TIME_TEXT], dtype=TEXT_DTYPE)
+
+	with pytest.raises(ValueConversionError) as caught_error:
+		parse_dates(texts, Type.DATE, None)
+
+	error_text = str(caught_error.value)
+	assert error_text == EXPECTED_DEFAULT_DATE_MESSAGE
+
+
+def test_parse_dates_refusal_without_format_names_the_default_of_datetimes() -> None:
+	"""
+	Check the message when a datetime column read without format holds another way of writing dates.
+
+	.. versionadded:: 0.1.0
+	"""
+	texts = pandas.Series([REJECTED_TEXT], dtype=TEXT_DTYPE)
+
+	with pytest.raises(ValueConversionError) as caught_error:
+		parse_dates(texts, Type.DATETIME, None)
+
+	error_text = str(caught_error.value)
+	assert error_text == EXPECTED_DEFAULT_TIME_MESSAGE
+
+
+def test_parse_dates_refusal_with_a_custom_format_shows_its_pattern() -> None:
+	"""
+	Check that the message names the pattern of a custom format.
+
+	.. versionadded:: 0.1.0
+	"""
+	texts = pandas.Series([REJECTED_TEXT], dtype=TEXT_DTYPE)
+
+	with pytest.raises(ValueConversionError) as caught_error:
+		parse_dates(texts, Type.DATE, DAY_MONTH_PATTERN)
+
+	error_text = str(caught_error.value)
+	assert error_text == EXPECTED_CUSTOM_MESSAGE

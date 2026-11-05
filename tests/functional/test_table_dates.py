@@ -18,6 +18,13 @@ ISO_DAY_TEXTS = ["2026-12-31", "2026-02-01"]
 EXPECTED_DAYS = [date(2026, 12, 31), date(2026, 2, 1)]
 EXPECTED_WRITTEN_DAYS = ["31/12/2026", "01/02/2026"]
 IMPOSSIBLE_DAY = "31/02/2026"
+PICKUP_TEXTS = ["2019-03-23 20:21:09", "2019-03-24T08:15", "2019-03-25"]
+EXPECTED_PICKUPS = [datetime(2019, 3, 23, 20, 21, 9), datetime(2019, 3, 24, 8, 15), datetime(2019, 3, 25)]
+PICKUP_DAY = "2019-03-25"
+PICKUP_TIME = "2019-03-23 20:21:09"
+TRIPS_CSV_NAME = "trips.csv"
+MIDNIGHT_PICKUPS = [datetime(2019, 3, 23), datetime(2019, 3, 24)]
+VARIED_PICKUPS = [datetime(2019, 3, 23), datetime(2019, 3, 24, 8, 15)]
 VISIT_TIMES = [datetime(2026, 7, 1, 10, 30), datetime(2026, 7, 1, 12, 30)]
 SPRING_GAP = datetime(2026, 3, 29, 2, 30)
 PARIS = ndp.TimeZone("Europe/Paris")
@@ -412,3 +419,68 @@ def test_a_pandas_zone_column_becomes_a_datetime_column() -> None:
 	visits = ndp.Table.from_pandas(frame)
 
 	assert visits.column_time_zones == EXPECTED_PARIS_ZONES
+
+
+def test_datetime_texts_without_format_keep_their_time_or_become_midnight() -> None:
+	"""
+	Check that texts with and without time are read as datetimes when no format is given.
+
+	.. versionadded:: 0.1.0
+	"""
+	pickups = ndp.Array.from_list(PICKUP_TEXTS)
+	trips = ndp.Table.from_arrays({"pickup": pickups})
+
+	converted = trips.convert(ndp.Conversion(column="pickup", dtype=ndp.Type.DATETIME))
+
+	pickup_list = converted.column("pickup").to_list()
+	assert pickup_list == EXPECTED_PICKUPS
+
+
+def test_a_given_time_format_refuses_a_text_without_time() -> None:
+	"""
+	Check that a format given explicitly stays strict, and that the message cites the text and the format.
+
+	.. versionadded:: 0.1.0
+	"""
+	pickups = ndp.Array.from_list([PICKUP_DAY])
+	trips = ndp.Table.from_arrays({"pickup": pickups})
+	conversion = ndp.Conversion(column="pickup", dtype=ndp.Type.DATETIME, format=ndp.DateFormat.YEAR_MONTH_DAY_TIME)
+
+	with pytest.raises(ndp.ValueConversionError, match="YEAR_MONTH_DAY_TIME") as caught_error:
+		trips.convert(conversion)
+
+	assert caught_error.value.rejected_value == PICKUP_DAY
+
+
+def test_date_texts_with_a_time_are_refused_without_format() -> None:
+	"""
+	Check that reading a text with a time as a date is refused, since its time would be lost.
+
+	.. versionadded:: 0.1.0
+	"""
+	pickups = ndp.Array.from_list([PICKUP_TIME])
+	trips = ndp.Table.from_arrays({"pickup": pickups})
+
+	with pytest.raises(ndp.ValueConversionError, match="YEAR_MONTH_DAY") as caught_error:
+		trips.convert(ndp.Conversion(column="pickup", dtype=ndp.Type.DATE))
+
+	assert caught_error.value.rejected_value == PICKUP_TIME
+
+
+@pytest.mark.parametrize("pickups", [MIDNIGHT_PICKUPS, VARIED_PICKUPS])
+def test_datetimes_written_in_a_csv_file_are_read_back_without_format(tmp_path: Path, pickups: list[datetime]) -> None:
+	"""
+	Check that datetimes come back from a CSV file, whether every time is midnight or not.
+
+	.. versionadded:: 0.1.0
+	"""
+	csv_path = tmp_path / TRIPS_CSV_NAME
+	pickup_values = ndp.Array.from_list(pickups)
+	trips = ndp.Table.from_arrays({"pickup": pickup_values})
+	trips.to_csv(csv_path)
+
+	read_trips = ndp.Table.from_csv(csv_path)
+	converted = read_trips.convert(ndp.Conversion(column="pickup", dtype=ndp.Type.DATETIME))
+
+	pickup_list = converted.column("pickup").to_list()
+	assert pickup_list == pickups

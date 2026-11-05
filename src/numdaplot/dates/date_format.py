@@ -13,8 +13,8 @@ class DateFormat(Enum):
 
 	When reading, the day, the month and the year are separated by ``"/"``, ``"-"`` or ``"."``, the same one twice;
 	days and months may have one digit, years have four. A ``_TIME`` member also needs the time, as ``"14:30"``
-	or ``"14:30:15"``, after a space. When writing, ``"/"`` separates the day-month and month-day orders and ``"-"``
-	the year-month-day order, and the time is written ``"14:30:15"``.
+	or ``"14:30:15"``, after a space, or after a ``"T"`` for ``YEAR_MONTH_DAY_TIME``. When writing, ``"/"`` separates
+	the day-month and month-day orders and ``"-"`` the year-month-day order, and the time is written ``"14:30:15"``.
 
 	Use ``CustomDateFormat`` for any other way of writing dates.
 

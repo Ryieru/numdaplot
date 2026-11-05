@@ -6,7 +6,6 @@ Conversion of a Table column to another type.
 
 from numdaplot.data_types.type import Type
 from numdaplot.data_types.value_family import ValueFamily, find_family
-from numdaplot.dates.date_format import DateFormat
 from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
 from numdaplot.errors.invalid_conversion_error import InvalidConversionError
 from numdaplot.tables.columns.conversion import Conversion
@@ -29,7 +28,6 @@ WRITABLE_FAMILIES = frozenset({ValueFamily.NUMBER, ValueFamily.BOOL, ValueFamily
 WRITTEN_TYPES = frozenset({Type.TEXT, Type.CATEGORY})
 FORMAT_SETTING = "format"
 TIMEZONE_SETTING = "timezone"
-DEFAULT_READ_FORMAT = DateFormat.YEAR_MONTH_DAY
 
 
 def convert_column(column: Column, conversion: Conversion) -> Column:
@@ -182,11 +180,7 @@ def convert_time_column(column: Column, source_type: Type, conversion: Conversio
 	source_family = find_family(source_type)
 	target_family = find_family(target_type)
 	if source_family == ValueFamily.TEXT and target_family == ValueFamily.MOMENT:
-		read_format = DEFAULT_READ_FORMAT
-		if conversion.format is not None:
-			read_format = conversion.format
-
-		dates = parse_dates(column, target_type, read_format)
+		dates = parse_dates(column, target_type, conversion.format)
 		return dates
 
 	if source_family == ValueFamily.MOMENT and target_family == ValueFamily.MOMENT:

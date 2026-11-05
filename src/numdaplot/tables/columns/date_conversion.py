@@ -40,6 +40,11 @@ WRITE_PATTERNS = {
 	DateFormat.MONTH_DAY_YEAR_TIME: "%m/%d/%Y %H:%M:%S",
 	DateFormat.YEAR_MONTH_DAY_TIME: "%Y-%m-%d %H:%M:%S",
 }
+# Without a format, a datetime takes its time when it has one: to_csv leaves out a time of midnight on every row.
+DEFAULT_READ_PATTERNS = {
+	Type.DATE: YEAR_FIRST,
+	Type.DATETIME: YEAR_FIRST + "(?:[ T]" + CLOCK + ")?",
+}
 TIME_FORMATS = frozenset(
 	{DateFormat.DAY_MONTH_YEAR_TIME, DateFormat.MONTH_DAY_YEAR_TIME, DateFormat.YEAR_MONTH_DAY_TIME}
 )
@@ -92,7 +97,7 @@ def has_time(date_format: DateFormat | CustomDateFormat) -> bool:
 	return format_has_time
 
 
-def parse_dates(column: Column, target_type: Type, date_format: DateFormat | CustomDateFormat) -> Column:
+def parse_dates(column: Column, target_type: Type, date_format: DateFormat | CustomDateFormat | None) -> Column:
 	"""
 	Return a text column read as dates or datetimes.
 
@@ -105,7 +110,8 @@ def parse_dates(column: Column, target_type: Type, date_format: DateFormat | Cus
 	target_type
 		``DATE`` or ``DATETIME``.
 	date_format
-		How the texts are written. A format without time gives datetimes at midnight.
+		How the texts are written. A format without time gives datetimes at midnight. When omitted, texts are read
+		as year, month and day, and for datetimes each text may also have a time.
 
 	Returns
 	-------
@@ -125,15 +131,14 @@ def parse_dates(column: Column, target_type: Type, date_format: DateFormat | Cus
 	>>> texts = pandas.Series(["31/12/2026", None], dtype="string")
 	>>> parse_dates(texts, ndp.Type.DATE, ndp.DateFormat.DAY_MONTH_YEAR).tolist()
 	[Timestamp('2026-12-31 00:00:00'), NaT]
+	>>> times = pandas.Series(["2026-12-31", "2026-12-31 14:30"], dtype="string")
+	>>> parse_dates(times, ndp.Type.DATETIME, None).tolist()
+	[Timestamp('2026-12-31 00:00:00'), Timestamp('2026-12-31 14:30:00')]
 	"""
 	source_type = find_column_type(column)
 	text_column = convert_to_type(column, Type.TEXT)
 	stripped_texts = text_column.str.strip()
-	if isinstance(date_format, CustomDateFormat):
-		moments = pandas.to_datetime(stripped_texts, format=date_format.pattern, errors="coerce")
-	else:
-		moments = read_common_format(stripped_texts, date_format)
-
+	moments = read_moments(stripped_texts, target_type, date_format)
 	missing = find_column_missing(column)
 	unread_moments = moments.isna()
 	unread = unread_moments.to_numpy(dtype=numpy.bool_)
@@ -142,11 +147,94 @@ def parse_dates(column: Column, target_type: Type, date_format: DateFormat | Cus
 	if has_rejected:
 		rejected_texts = text_column[rejected]
 		first_rejected_text = rejected_texts.iloc[0]
-		raise ValueConversionError(source_type.name, target_type.name, first_rejected_text)
+		format_name = find_format_name(target_type, date_format)
+		raise ValueConversionError(source_type.name, target_type.name, first_rejected_text, format_name)
 
 	dates = convert_to_type(moments, target_type)
 
 	return dates
+
+
+def read_moments(texts: Column, target_type: Type, date_format: DateFormat | CustomDateFormat | None) -> Column:
+	"""
+	Return texts read as datetimes, NaT where a text does not follow the format.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	texts
+		A text column, without spaces around the texts.
+	target_type
+		``DATE`` or ``DATETIME``, which sets how texts are read without a format.
+	date_format
+		How the texts are written, the default of the type when omitted.
+
+	Returns
+	-------
+	Column
+		The datetimes, NaT for a missing text or a text that does not follow the format.
+
+	Examples
+	--------
+	>>> import pandas
+	>>> import numdaplot as ndp
+	>>> from numdaplot.tables.columns.date_conversion import read_moments
+	>>> texts = pandas.Series(["2026-12-31 14:30"], dtype="string")
+	>>> read_moments(texts, ndp.Type.DATE, None).tolist()
+	[NaT]
+	>>> read_moments(texts, ndp.Type.DATETIME, None).tolist()
+	[Timestamp('2026-12-31 14:30:00')]
+	"""
+	if isinstance(date_format, CustomDateFormat):
+		custom_moments = pandas.to_datetime(texts, format=date_format.pattern, errors="coerce")
+		return custom_moments
+
+	if date_format is None:
+		default_pattern = DEFAULT_READ_PATTERNS[target_type]
+		default_moments = read_date_pattern(texts, default_pattern)
+		return default_moments
+
+	common_moments = read_common_format(texts, date_format)
+
+	return common_moments
+
+
+def find_format_name(target_type: Type, date_format: DateFormat | CustomDateFormat | None) -> str:
+	"""
+	Return how an error names the format texts were read with.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	target_type
+		``DATE`` or ``DATETIME``, which sets the default format.
+	date_format
+		The format, the default of the type when omitted.
+
+	Returns
+	-------
+	str
+		The pattern of a custom format, or the name of the ``DateFormat`` member.
+
+	Examples
+	--------
+	>>> import numdaplot as ndp
+	>>> from numdaplot.tables.columns.date_conversion import find_format_name
+	>>> find_format_name(ndp.Type.DATETIME, None)
+	'YEAR_MONTH_DAY_TIME'
+	>>> find_format_name(ndp.Type.DATE, ndp.CustomDateFormat("%d %b %Y"))
+	'%d %b %Y'
+	"""
+	if isinstance(date_format, CustomDateFormat):
+		return date_format.pattern
+
+	common_format = date_format
+	if common_format is None:
+		common_format = DEFAULT_FORMATS[target_type]
+
+	return common_format.name
 
 
 def read_common_format(texts: Column, date_format: DateFormat) -> Column:
@@ -178,6 +266,38 @@ def read_common_format(texts: Column, date_format: DateFormat) -> Column:
 	[Timestamp('2026-12-31 14:30:00'), NaT]
 	"""
 	read_pattern = READ_PATTERNS[date_format]
+	moments = read_date_pattern(texts, read_pattern)
+
+	return moments
+
+
+def read_date_pattern(texts: Column, read_pattern: str) -> Column:
+	"""
+	Return texts read with a regular expression naming the parts of a date, NaT where a text does not follow it.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	texts
+		A text column, without spaces around the texts.
+	read_pattern
+		The regular expression, whose groups are named after ``DATE_PARTS``. A part it leaves out counts as 0.
+
+	Returns
+	-------
+	Column
+		The datetimes, NaT for a missing text, a text that does not follow the pattern, or an impossible date
+		or time such as ``"31/02/2026"`` or ``"25:00"``.
+
+	Examples
+	--------
+	>>> import pandas
+	>>> from numdaplot.tables.columns.date_conversion import YEAR_FIRST, read_date_pattern
+	>>> texts = pandas.Series(["2026-12-31", "31/12/2026"], dtype="string")
+	>>> read_date_pattern(texts, YEAR_FIRST).tolist()
+	[Timestamp('2026-12-31 00:00:00'), NaT]
+	"""
 	full_pattern = FULL_TEXT.format(pattern=read_pattern)
 	# Some versions of the pandas stubs leave the columns of the extracted parts unknown.
 	extracted_parts = cast(Any, texts.str.extract(full_pattern))
