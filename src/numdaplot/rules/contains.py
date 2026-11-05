@@ -9,6 +9,7 @@ from dataclasses import dataclass
 from numdaplot.errors.empty_text_error import EmptyTextError
 from numdaplot.rules.case import Case
 from numdaplot.rules.rule import Rule
+from numdaplot.settings.field_types import require_field_types
 
 
 @dataclass(frozen=True)
@@ -27,6 +28,8 @@ class Contains(Rule):
 
 	Raises
 	------
+	InvalidSettingTypeError
+		When a setting is not of the type its annotation names.
 	EmptyTextError
 		When ``text`` is empty.
 
@@ -49,8 +52,12 @@ class Contains(Rule):
 
 		Raises
 		------
+		InvalidSettingTypeError
+			When a setting is not of the type its annotation names.
 		EmptyTextError
 			When ``text`` is empty.
 		"""
+		require_field_types(self)
+
 		if self.text == "":
 			raise EmptyTextError()

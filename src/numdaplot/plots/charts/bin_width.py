@@ -7,6 +7,7 @@ Bins of a histogram given by their width.
 from dataclasses import dataclass
 
 from numdaplot.errors.invalid_bin_width_error import InvalidBinWidthError
+from numdaplot.settings.field_types import require_field_types
 
 
 @dataclass(frozen=True)
@@ -25,6 +26,8 @@ class BinWidth:
 
 	Raises
 	------
+	InvalidSettingTypeError
+		When a setting is not of the type its annotation names.
 	InvalidBinWidthError
 		When the width is 0 or negative.
 
@@ -47,8 +50,12 @@ class BinWidth:
 
 		Raises
 		------
+		InvalidSettingTypeError
+			When a setting is not of the type its annotation names.
 		InvalidBinWidthError
 			When the width is 0 or negative.
 		"""
+		require_field_types(self)
+
 		if self.width <= 0:
 			raise InvalidBinWidthError(self.width)

@@ -7,6 +7,7 @@ Quantile statistic.
 from dataclasses import dataclass
 
 from numdaplot.ratios.fraction import require_fraction
+from numdaplot.settings.field_types import require_field_types
 from numdaplot.statistics.statistic import Statistic
 
 
@@ -27,6 +28,8 @@ class Quantile(Statistic):
 
 	Raises
 	------
+	InvalidSettingTypeError
+		When a setting is not of the type its annotation names.
 	InvalidFractionError
 		When ``fraction`` is lower than 0, greater than 1 or NaN.
 
@@ -48,7 +51,11 @@ class Quantile(Statistic):
 
 		Raises
 		------
+		InvalidSettingTypeError
+			When a setting is not of the type its annotation names.
 		InvalidFractionError
 			When ``fraction`` is lower than 0, greater than 1 or NaN.
 		"""
+		require_field_types(self)
+
 		require_fraction(self.fraction)

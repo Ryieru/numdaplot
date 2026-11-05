@@ -90,6 +90,7 @@ src/numdaplot/
 	statistics/     Sum, Mean, Median, Quantile, StandardDeviation...
 	positions/      Region, Index, Range and Axis
 	ordering/       Order and MissingPosition
+	settings/       check of the settings against their annotations, InvalidSettingTypeError being raised
 tests/
 	unit/           one test file per source file, mirroring src/numdaplot
 	functional/     one test file per notion, using the library as ndp

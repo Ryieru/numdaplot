@@ -8,6 +8,7 @@ from dataclasses import dataclass
 
 from numdaplot.errors.invalid_count_error import InvalidCountError
 from numdaplot.rules.bounds import Bounds
+from numdaplot.settings.field_types import require_field_types
 
 LOWEST_COUNT_WITH_BOTH_BOUNDS = 2
 LOWEST_COUNT = 1
@@ -41,6 +42,8 @@ class Spacing:
 
 	Raises
 	------
+	InvalidSettingTypeError
+		When a setting is not of the type its annotation names.
 	InvalidCountError
 		When ``count`` is too low for the bounds.
 
@@ -66,9 +69,13 @@ class Spacing:
 
 		Raises
 		------
+		InvalidSettingTypeError
+			When a setting is not of the type its annotation names.
 		InvalidCountError
 			When ``count`` is too low for the bounds.
 		"""
+		require_field_types(self)
+
 		lowest_count = LOWEST_COUNT
 		if self.bounds == Bounds.INCLUDED:
 			lowest_count = LOWEST_COUNT_WITH_BOTH_BOUNDS

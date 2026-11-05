@@ -8,6 +8,7 @@ from dataclasses import dataclass
 
 from numdaplot.arrays.creation.distribution import Distribution
 from numdaplot.errors.invalid_deviation_error import InvalidDeviationError
+from numdaplot.settings.field_types import require_field_types
 
 LOWEST_DEVIATION = 0
 
@@ -30,6 +31,8 @@ class Normal(Distribution):
 
 	Raises
 	------
+	InvalidSettingTypeError
+		When a setting is not of the type its annotation names.
 	InvalidDeviationError
 		When ``deviation`` is lower than 0.
 
@@ -51,8 +54,12 @@ class Normal(Distribution):
 
 		Raises
 		------
+		InvalidSettingTypeError
+			When a setting is not of the type its annotation names.
 		InvalidDeviationError
 			When ``deviation`` is lower than 0.
 		"""
+		require_field_types(self)
+
 		if self.deviation < LOWEST_DEVIATION:
 			raise InvalidDeviationError(self.deviation)

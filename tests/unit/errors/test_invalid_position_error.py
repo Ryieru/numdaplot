@@ -12,9 +12,7 @@ SIZE = 3
 EXPECTED_MESSAGE = "Expected a whole position between -3 and 2, got 5."
 NEGATIVE_POSITION = -1
 FIRST_POSITION = 0
-DECIMAL_POSITION = 1.5
 EXPECTED_MINIMUM_MESSAGE = "Expected a whole position of at least 0, got -1."
-EXPECTED_WHOLE_MESSAGE = "Expected a whole position, got 1.5."
 
 
 def test_invalid_position_error_is_a_numdaplot_error() -> None:
@@ -60,15 +58,3 @@ def test_invalid_position_error_names_the_lowest_position_without_size() -> None
 
 	error_text = str(error)
 	assert error_text == EXPECTED_MINIMUM_MESSAGE
-
-
-def test_invalid_position_error_asks_for_a_whole_number_without_bounds() -> None:
-	"""
-	Check the message when neither the size nor the lowest position is known.
-
-	.. versionadded:: 0.1.0
-	"""
-	error = InvalidPositionError(DECIMAL_POSITION)
-
-	error_text = str(error)
-	assert error_text == EXPECTED_WHOLE_MESSAGE

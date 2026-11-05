@@ -12,6 +12,7 @@ from numdaplot.plots.charts.chart_settings import copy_colors
 from numdaplot.plots.charts.percentages import Percentages
 from numdaplot.plots.style.color import Color
 from numdaplot.plots.style.custom_color import CustomColor
+from numdaplot.settings.field_types import require_field_types
 from numdaplot.tables.columns.column_names import require_column_name
 
 
@@ -39,6 +40,8 @@ class PieChart(Chart):
 
 	Raises
 	------
+	InvalidSettingTypeError
+		When a setting is not of the type its annotation names.
 	InvalidColumnNameError
 		When ``labels`` or ``values`` is an empty text.
 	EmptyListError
@@ -68,11 +71,15 @@ class PieChart(Chart):
 
 		Raises
 		------
+		InvalidSettingTypeError
+			When a setting is not of the type its annotation names.
 		InvalidColumnNameError
 			When ``labels`` or ``values`` is an empty text.
 		EmptyListError
 			When ``colors`` is an empty list.
 		"""
+		require_field_types(self)
+
 		require_column_name(self.labels)
 		require_column_name(self.values)
 

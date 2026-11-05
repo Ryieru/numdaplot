@@ -33,7 +33,7 @@ EMPTY_NAME_CASES = [
 ]
 EXPECTED_EMPTY_NAME_MESSAGE = "Expected a column name as a non-empty text, got ''."
 EXPECTED_CELL_MESSAGE = "Expected a whole position of at least 0, got -1."
-EXPECTED_INDEX_MESSAGE = "Expected a whole position, got 1.5."
+EXPECTED_INDEX_MESSAGE = "Index position expects an int, got 1.5."
 EXPECTED_RANGE_MESSAGE = "Expected a step going from start to stop, got step 1 from 5 to 1."
 EXPECTED_STATISTIC_MESSAGE = "The statistic Sum() appears more than once."
 EXPECTED_SEED_MESSAGE = "Side.START does not accept seed."
@@ -77,7 +77,7 @@ def test_a_decimal_index_is_refused_before_it_is_used() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	with pytest.raises(ndp.InvalidPositionError) as error_info:
+	with pytest.raises(ndp.InvalidSettingTypeError) as error_info:
 		# The type checker refuses this call too, as it does in the editor of a user.
 		ndp.Index(1.5)  # pyright: ignore[reportArgumentType]
 

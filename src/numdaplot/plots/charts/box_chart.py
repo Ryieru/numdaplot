@@ -12,10 +12,8 @@ from numdaplot.plots.charts.chart_settings import copy_colors, copy_columns
 from numdaplot.plots.charts.outliers import Outliers
 from numdaplot.plots.style.color import Color
 from numdaplot.plots.style.custom_color import CustomColor
-from numdaplot.settings.setting_types import require_list_not_text
+from numdaplot.settings.field_types import require_field_types
 from numdaplot.tables.columns.column_names import require_optional_column_name
-
-COLUMNS_SETTING = "BoxChart columns"
 
 
 @dataclass(frozen=True)
@@ -45,10 +43,10 @@ class BoxChart(Chart):
 
 	Raises
 	------
+	InvalidSettingTypeError
+		When a setting is not of the type its annotation names.
 	InvalidColumnNameError
 		When ``group_by`` or a name in ``columns`` is an empty text.
-	InvalidSettingTypeError
-		When ``columns`` is a single text instead of a list.
 	EmptyListError
 		When ``columns`` or ``colors`` is an empty list.
 	DuplicateColumnError
@@ -79,18 +77,18 @@ class BoxChart(Chart):
 
 		Raises
 		------
+		InvalidSettingTypeError
+			When a setting is not of the type its annotation names.
 		InvalidColumnNameError
 			When ``group_by`` or a name in ``columns`` is an empty text.
-		InvalidSettingTypeError
-			When ``columns`` is a single text instead of a list.
 		EmptyListError
 			When ``columns`` or ``colors`` is an empty list.
 		DuplicateColumnError
 			When a column name appears twice in ``columns``.
 		"""
-		require_optional_column_name(self.group_by)
+		require_field_types(self)
 
-		require_list_not_text(COLUMNS_SETTING, self.columns)
+		require_optional_column_name(self.group_by)
 
 		columns_copy = copy_columns(self.columns)
 		colors_copy = copy_colors(self.colors)

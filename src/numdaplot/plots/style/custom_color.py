@@ -8,6 +8,7 @@ import re
 from dataclasses import dataclass
 
 from numdaplot.errors.invalid_color_error import InvalidColorError
+from numdaplot.settings.field_types import require_field_types
 
 COLOR_PATTERN = re.compile(r"#[0-9a-fA-F]{6}")
 
@@ -28,6 +29,8 @@ class CustomColor:
 
 	Raises
 	------
+	InvalidSettingTypeError
+		When a setting is not of the type its annotation names.
 	InvalidColorError
 		When the code is not ``#`` followed by six hexadecimal digits.
 
@@ -50,9 +53,13 @@ class CustomColor:
 
 		Raises
 		------
+		InvalidSettingTypeError
+			When a setting is not of the type its annotation names.
 		InvalidColorError
 			When the code is not ``#`` followed by six hexadecimal digits.
 		"""
+		require_field_types(self)
+
 		code_match = COLOR_PATTERN.fullmatch(self.code)
 		if code_match is None:
 			raise InvalidColorError(self.code)

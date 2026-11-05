@@ -6,6 +6,7 @@ A new name for one column of a Table.
 
 from dataclasses import dataclass
 
+from numdaplot.settings.field_types import require_field_types
 from numdaplot.tables.columns.column_names import require_column_name
 
 
@@ -25,6 +26,8 @@ class NameChange:
 
 	Raises
 	------
+	InvalidSettingTypeError
+		When a setting is not of the type its annotation names.
 	InvalidColumnNameError
 		When ``old_name`` or ``new_name`` is an empty text.
 
@@ -53,8 +56,12 @@ class NameChange:
 
 		Raises
 		------
+		InvalidSettingTypeError
+			When a setting is not of the type its annotation names.
 		InvalidColumnNameError
 			When ``old_name`` or ``new_name`` is an empty text.
 		"""
+		require_field_types(self)
+
 		require_column_name(self.old_name)
 		require_column_name(self.new_name)

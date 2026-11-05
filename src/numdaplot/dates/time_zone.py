@@ -8,6 +8,7 @@ from dataclasses import dataclass
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 from numdaplot.errors.unknown_time_zone_error import UnknownTimeZoneError
+from numdaplot.settings.field_types import require_field_types
 
 
 @dataclass(frozen=True)
@@ -27,6 +28,8 @@ class TimeZone:
 
 	Raises
 	------
+	InvalidSettingTypeError
+		When a setting is not of the type its annotation names.
 	UnknownTimeZoneError
 		When the name is not a known IANA name.
 
@@ -52,9 +55,13 @@ class TimeZone:
 
 		Raises
 		------
+		InvalidSettingTypeError
+			When a setting is not of the type its annotation names.
 		UnknownTimeZoneError
 			When the name is not a known IANA name.
 		"""
+		require_field_types(self)
+
 		try:
 			ZoneInfo(self.name)
 		except (ZoneInfoNotFoundError, ValueError) as error:

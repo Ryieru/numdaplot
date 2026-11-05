@@ -12,6 +12,7 @@ from numdaplot.plots.charts.chart import Chart
 from numdaplot.plots.charts.marker_shape import MarkerShape
 from numdaplot.plots.style.color import Color
 from numdaplot.plots.style.custom_color import CustomColor
+from numdaplot.settings.field_types import require_field_types
 from numdaplot.tables.columns.column_names import require_optional_column_name
 
 CHART_NAME = "ScatterChart"
@@ -51,6 +52,8 @@ class ScatterChart(Chart):
 
 	Raises
 	------
+	InvalidSettingTypeError
+		When a setting is not of the type its annotation names.
 	InvalidColumnNameError
 		When ``x``, ``y``, ``color_by`` or ``size_by`` is an empty text.
 	ConflictingSettingsError
@@ -85,6 +88,8 @@ class ScatterChart(Chart):
 
 		Raises
 		------
+		InvalidSettingTypeError
+			When a setting is not of the type its annotation names.
 		InvalidColumnNameError
 			When ``x``, ``y``, ``color_by`` or ``size_by`` is an empty text.
 		ConflictingSettingsError
@@ -92,6 +97,8 @@ class ScatterChart(Chart):
 		RefusedSettingError
 			When ``marker`` is ``MarkerShape.NONE``.
 		"""
+		require_field_types(self)
+
 		require_optional_column_name(self.x)
 		require_optional_column_name(self.y)
 		require_optional_column_name(self.color_by)

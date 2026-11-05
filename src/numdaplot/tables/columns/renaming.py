@@ -7,6 +7,7 @@ The new names of columns of a Table, applied at once.
 from dataclasses import dataclass
 
 from numdaplot.errors.empty_list_error import EmptyListError
+from numdaplot.settings.field_types import require_field_types
 from numdaplot.tables.columns.column_names import require_unique_names
 from numdaplot.tables.columns.name_change import NameChange
 
@@ -29,6 +30,8 @@ class Renaming:
 
 	Raises
 	------
+	InvalidSettingTypeError
+		When a setting is not of the type its annotation names.
 	EmptyListError
 		When ``changes`` is an empty list.
 	DuplicateColumnError
@@ -58,11 +61,15 @@ class Renaming:
 
 		Raises
 		------
+		InvalidSettingTypeError
+			When a setting is not of the type its annotation names.
 		EmptyListError
 			When ``changes`` is an empty list.
 		DuplicateColumnError
 			When a column is renamed twice, or two columns receive the same new name.
 		"""
+		require_field_types(self)
+
 		if self.changes == []:
 			raise EmptyListError(CHANGE_ITEM_NAME)
 

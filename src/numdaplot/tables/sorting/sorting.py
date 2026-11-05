@@ -7,6 +7,7 @@ Settings of the sort of the rows of a Table.
 from dataclasses import dataclass
 
 from numdaplot.errors.empty_list_error import EmptyListError
+from numdaplot.settings.field_types import require_field_types
 from numdaplot.tables.columns.column_names import require_unique_names
 from numdaplot.tables.sorting.sort_key import SortKey
 
@@ -30,6 +31,8 @@ class Sorting:
 
 	Raises
 	------
+	InvalidSettingTypeError
+		When a setting is not of the type its annotation names.
 	EmptyListError
 		When ``keys`` is empty.
 	DuplicateColumnError
@@ -61,11 +64,15 @@ class Sorting:
 
 		Raises
 		------
+		InvalidSettingTypeError
+			When a setting is not of the type its annotation names.
 		EmptyListError
 			When ``keys`` is empty.
 		DuplicateColumnError
 			When two keys sort the same column.
 		"""
+		require_field_types(self)
+
 		if self.keys == []:
 			raise EmptyListError(SORT_KEY_ITEM_NAME)
 

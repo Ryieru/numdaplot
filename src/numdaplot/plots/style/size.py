@@ -8,6 +8,7 @@ from dataclasses import dataclass
 
 from numdaplot.errors.invalid_size_error import InvalidSizeError
 from numdaplot.plots.style.size_unit import SizeUnit
+from numdaplot.settings.field_types import require_field_types
 
 DEFAULT_WIDTH = 6.4
 DEFAULT_HEIGHT = 4.8
@@ -31,6 +32,8 @@ class Size:
 
 	Raises
 	------
+	InvalidSettingTypeError
+		When a setting is not of the type its annotation names.
 	InvalidSizeError
 		When the width or the height is zero or negative.
 
@@ -55,9 +58,13 @@ class Size:
 
 		Raises
 		------
+		InvalidSettingTypeError
+			When a setting is not of the type its annotation names.
 		InvalidSizeError
 			When the width or the height is zero or negative.
 		"""
+		require_field_types(self)
+
 		is_positive = self.width > 0 and self.height > 0
 		if not is_positive:
 			raise InvalidSizeError(self.width, self.height)

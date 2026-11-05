@@ -9,14 +9,11 @@ from dataclasses import dataclass
 from numdaplot.arrays.creation.random_values import require_valid_seed
 from numdaplot.errors.invalid_count_error import InvalidCountError
 from numdaplot.errors.refused_setting_error import RefusedSettingError
-from numdaplot.settings.setting_types import require_setting_type
+from numdaplot.settings.field_types import require_field_types
 from numdaplot.tables.preview.side import Side
 
 DEFAULT_PREVIEW_COUNT = 5
 MINIMUM_PREVIEW_COUNT = 1
-SIDE_SETTING = "Preview side"
-SIDE_EXPECTED = "a Side such as Side.END"
-SIDE_TYPES = (Side,)
 SEED_SETTING = "seed"
 SIDE_OWNER = "Side.{side_name}"
 
@@ -42,7 +39,7 @@ class Preview:
 	Raises
 	------
 	InvalidSettingTypeError
-		When ``side`` is not a ``Side``, such as the text ``"end"``.
+		When a setting is not of the type its annotation names.
 	InvalidCountError
 		When ``count`` is lower than 1.
 	InvalidSeedError
@@ -76,7 +73,7 @@ class Preview:
 		Raises
 		------
 		InvalidSettingTypeError
-			When ``side`` is not a ``Side``.
+			When a setting is not of the type its annotation names.
 		InvalidCountError
 			When ``count`` is lower than 1.
 		InvalidSeedError
@@ -84,7 +81,7 @@ class Preview:
 		RefusedSettingError
 			When ``seed`` is given with ``Side.START`` or ``Side.END``.
 		"""
-		require_setting_type(SIDE_SETTING, SIDE_EXPECTED, self.side, SIDE_TYPES)
+		require_field_types(self)
 
 		if self.count < MINIMUM_PREVIEW_COUNT:
 			raise InvalidCountError(self.count, MINIMUM_PREVIEW_COUNT)

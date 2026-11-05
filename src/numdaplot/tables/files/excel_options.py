@@ -7,6 +7,7 @@ Settings of the Excel files a Table reads and writes.
 from dataclasses import dataclass
 
 from numdaplot.errors.invalid_sheet_name_error import InvalidSheetNameError
+from numdaplot.settings.field_types import require_field_types
 
 MAXIMUM_SHEET_LENGTH = 31
 FORBIDDEN_SHEET_CHARACTERS = "[]:*?/\\"
@@ -26,6 +27,8 @@ class ExcelOptions:
 
 	Raises
 	------
+	InvalidSettingTypeError
+		When a setting is not of the type its annotation names.
 	InvalidSheetNameError
 		When the name is empty, longer than 31 characters, or holds ``[ ] : * ? / \``, which Excel refuses.
 
@@ -54,9 +57,13 @@ class ExcelOptions:
 
 		Raises
 		------
+		InvalidSettingTypeError
+			When a setting is not of the type its annotation names.
 		InvalidSheetNameError
 			When the name is empty, longer than 31 characters, or holds a character Excel refuses.
 		"""
+		require_field_types(self)
+
 		if self.sheet is None:
 			return
 

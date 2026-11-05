@@ -8,6 +8,7 @@ from dataclasses import dataclass
 
 from numdaplot.arrays.math_functions.math_function import MathFunction
 from numdaplot.errors.invalid_base_error import InvalidBaseError
+from numdaplot.settings.field_types import require_field_types
 
 LOWEST_EXCLUDED_BASE = 0
 FORBIDDEN_BASE = 1
@@ -31,6 +32,8 @@ class Logarithm(MathFunction):
 
 	Raises
 	------
+	InvalidSettingTypeError
+		When a setting is not of the type its annotation names.
 	InvalidBaseError
 		When ``base`` is lower than or equal to 0, or equal to 1.
 
@@ -52,9 +55,13 @@ class Logarithm(MathFunction):
 
 		Raises
 		------
+		InvalidSettingTypeError
+			When a setting is not of the type its annotation names.
 		InvalidBaseError
 			When ``base`` is lower than or equal to 0, or equal to 1.
 		"""
+		require_field_types(self)
+
 		if self.base is None:
 			return
 

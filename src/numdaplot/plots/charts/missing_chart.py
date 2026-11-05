@@ -8,6 +8,7 @@ from dataclasses import dataclass
 
 from numdaplot.plots.charts.chart import Chart
 from numdaplot.ratios.measure import Measure
+from numdaplot.settings.field_types import require_field_types
 
 
 @dataclass(frozen=True)
@@ -25,6 +26,12 @@ class MissingChart(Chart):
 		``Measure.COUNT`` by default for the number of missing values of each column, ``Measure.RATIO`` for their
 		share, on an axis from 0 to 1.
 
+
+	Raises
+	------
+	InvalidSettingTypeError
+		When a setting is not of the type its annotation names.
+
 	Examples
 	--------
 	>>> import numdaplot as ndp
@@ -38,3 +45,16 @@ class MissingChart(Chart):
 	"""
 
 	measure: Measure = Measure.COUNT
+
+	def __post_init__(self) -> None:
+		"""
+		Check the type of every setting.
+
+		.. versionadded:: 0.1.0
+
+		Raises
+		------
+		InvalidSettingTypeError
+			When a setting is not of the type its annotation names.
+		"""
+		require_field_types(self)

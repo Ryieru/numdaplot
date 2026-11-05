@@ -9,6 +9,7 @@ from dataclasses import dataclass
 from numdaplot.arrays.creation.distribution import Distribution
 from numdaplot.errors.invalid_bounds_error import InvalidBoundsError
 from numdaplot.rules.bounds import HIGH_INCLUDED_BOUNDS, LOW_INCLUDED_BOUNDS, Bounds
+from numdaplot.settings.field_types import require_field_types
 
 
 @dataclass(frozen=True)
@@ -31,6 +32,8 @@ class RandomIntegers(Distribution):
 
 	Raises
 	------
+	InvalidSettingTypeError
+		When a setting is not of the type its annotation names.
 	InvalidBoundsError
 		When no whole number lies between the bounds, such as ``low`` greater than ``high``,
 		or ``low=3, high=4`` with both bounds excluded.
@@ -55,9 +58,13 @@ class RandomIntegers(Distribution):
 
 		Raises
 		------
+		InvalidSettingTypeError
+			When a setting is not of the type its annotation names.
 		InvalidBoundsError
 			When no whole number lies between the bounds.
 		"""
+		require_field_types(self)
+
 		lowest_value, value_limit = find_drawn_interval(self)
 		if lowest_value >= value_limit:
 			raise InvalidBoundsError(self.low, self.high)

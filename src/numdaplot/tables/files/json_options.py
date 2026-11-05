@@ -6,6 +6,7 @@ Settings of the JSON files a Table reads and writes.
 
 from dataclasses import dataclass
 
+from numdaplot.settings.field_types import require_field_types
 from numdaplot.tables.files.json_layout import JsonLayout
 
 
@@ -23,6 +24,12 @@ class JsonOptions:
 	layout
 		The layout of the rows, one list of objects by default.
 
+
+	Raises
+	------
+	InvalidSettingTypeError
+		When a setting is not of the type its annotation names.
+
 	Examples
 	--------
 	>>> import tempfile
@@ -39,3 +46,16 @@ class JsonOptions:
 	"""
 
 	layout: JsonLayout = JsonLayout.RECORDS
+
+	def __post_init__(self) -> None:
+		"""
+		Check the type of every setting.
+
+		.. versionadded:: 0.1.0
+
+		Raises
+		------
+		InvalidSettingTypeError
+			When a setting is not of the type its annotation names.
+		"""
+		require_field_types(self)

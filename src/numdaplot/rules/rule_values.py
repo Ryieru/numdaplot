@@ -6,13 +6,6 @@ Kinds of values that a rule compares against.
 
 from datetime import date, datetime, timedelta
 
-import numpy
-
-from numdaplot.settings.setting_types import require_setting_type
-
-SINGLE_VALUE_EXPECTED = 'a single value such as 10 or "Paris"'
-SINGLE_VALUE_TYPES = (bool, int, float, str, date, datetime, timedelta, numpy.bool_, numpy.integer, numpy.floating)
-
 type ScalarValue = bool | int | float | str | date | datetime | timedelta
 """
 A single value: a boolean, a number, a text, a date, a datetime or a duration.
@@ -48,34 +41,3 @@ Examples
 >>> prices.select(ndp.Greater(100))
 Array([120], dtype=INT64)
 """
-
-
-def require_single_value(setting_name: str, value: object) -> None:
-	"""
-	Check that a rule receives a single value: a boolean, a number, a text, a date, a datetime or a duration.
-
-	.. versionadded:: 0.1.0
-
-	Parameters
-	----------
-	setting_name
-		The setting and the rule owning it, such as ``"Greater value"``.
-	value
-		The received value.
-
-	Raises
-	------
-	InvalidSettingTypeError
-		When the value is not a single value, such as an Array, a list or None.
-
-	Examples
-	--------
-	>>> import numdaplot as ndp
-	>>> from numdaplot.rules.rule_values import require_single_value
-	>>> try:
-	... 	require_single_value("Greater value", [10, 20])
-	... except ndp.InvalidSettingTypeError as error:
-	... 	print(error)
-	Greater value expects a single value such as 10 or "Paris", got [10, 20].
-	"""
-	require_setting_type(setting_name, SINGLE_VALUE_EXPECTED, value, SINGLE_VALUE_TYPES)

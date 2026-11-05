@@ -9,6 +9,7 @@ from dataclasses import dataclass
 from numdaplot.dates.time_zone import TimeZone
 from numdaplot.dates.time_zone_mode import TimeZoneMode
 from numdaplot.errors.invalid_time_zone_change_error import InvalidTimeZoneChangeError
+from numdaplot.settings.field_types import require_field_types
 
 
 @dataclass(frozen=True)
@@ -29,6 +30,8 @@ class TimeZoneChange:
 
 	Raises
 	------
+	InvalidSettingTypeError
+		When a setting is not of the type its annotation names.
 	InvalidTimeZoneChangeError
 		When ``ATTRIBUTE`` or ``SHIFT`` has no zone, or ``REMOVE`` has one.
 
@@ -55,9 +58,13 @@ class TimeZoneChange:
 
 		Raises
 		------
+		InvalidSettingTypeError
+			When a setting is not of the type its annotation names.
 		InvalidTimeZoneChangeError
 			When ``ATTRIBUTE`` or ``SHIFT`` has no zone, or ``REMOVE`` has one.
 		"""
+		require_field_types(self)
+
 		needs_zone = self.mode != TimeZoneMode.REMOVE
 		has_zone = self.zone is not None
 		if needs_zone != has_zone:

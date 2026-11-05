@@ -7,7 +7,7 @@ Unit tests of ArrayConversion.
 # The tests create the objects from their stored values, with the creation reserved to numdaplot.
 # pyright: reportPrivateUsage=false
 
-from typing import Any, cast
+from typing import Any
 
 import numpy
 import pytest
@@ -20,6 +20,7 @@ from numdaplot.arrays.equality import Equality
 from numdaplot.arrays.type_match import TypeMatch
 from numdaplot.errors.not_single_value_error import NotSingleValueError
 from numdaplot.errors.unsupported_operand_error import UnsupportedOperandError
+from numdaplot.tables.table import Table
 
 ARE_EQUAL_NAME = "are_equal"
 FORMAT_ARRAY_NAME = "format_array"
@@ -28,7 +29,6 @@ SINGLE_GRID = [[7]]
 SINGLE_VALUE = 7
 DECIMALS = [1.0, 2.0]
 FAKE_TEXT = "fake text"
-NOT_AN_ARRAY = [1, 2]
 
 
 class EqualityRecorder:
@@ -164,7 +164,7 @@ def test_is_equal_rejects_a_value_that_is_not_an_array() -> None:
 	"""
 	values = numpy.array(GRID)
 	array = ArrayConversion._create(values)
-	not_an_array = cast(Array, NOT_AN_ARRAY)
+	not_an_array = Table.from_arrays({"count": Array.from_list([1, 2])})
 	equality = Equality(other=not_an_array)
 
 	with pytest.raises(UnsupportedOperandError):

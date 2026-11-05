@@ -8,6 +8,7 @@ from dataclasses import dataclass
 
 from numdaplot.dates.period_unit import PeriodUnit
 from numdaplot.dates.time_function import TimeFunction
+from numdaplot.settings.field_types import require_field_types
 
 
 @dataclass(frozen=True)
@@ -25,6 +26,12 @@ class DatePeriod(TimeFunction):
 	unit
 		The length of the periods. ``PeriodUnit.HOUR`` needs datetimes.
 
+
+	Raises
+	------
+	InvalidSettingTypeError
+		When a setting is not of the type its annotation names.
+
 	Examples
 	--------
 	>>> from datetime import date
@@ -35,3 +42,16 @@ class DatePeriod(TimeFunction):
 	"""
 
 	unit: PeriodUnit
+
+	def __post_init__(self) -> None:
+		"""
+		Check the type of every setting.
+
+		.. versionadded:: 0.1.0
+
+		Raises
+		------
+		InvalidSettingTypeError
+			When a setting is not of the type its annotation names.
+		"""
+		require_field_types(self)

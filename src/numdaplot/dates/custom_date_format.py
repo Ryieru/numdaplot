@@ -7,6 +7,7 @@ A pattern describing how dates are written as texts.
 from dataclasses import dataclass
 
 from numdaplot.errors.invalid_date_format_error import InvalidDateFormatError
+from numdaplot.settings.field_types import require_field_types
 
 DATE_CODES = ("%d", "%m", "%Y", "%y", "%b", "%B", "%j")
 TIME_ZONE_CODES = ("%z", "%Z")
@@ -31,6 +32,8 @@ class CustomDateFormat:
 
 	Raises
 	------
+	InvalidSettingTypeError
+		When a setting is not of the type its annotation names.
 	InvalidDateFormatError
 		When the pattern has no day, month or year code, or has a time zone code (``%z``, ``%Z``).
 
@@ -55,9 +58,13 @@ class CustomDateFormat:
 
 		Raises
 		------
+		InvalidSettingTypeError
+			When a setting is not of the type its annotation names.
 		InvalidDateFormatError
 			When the pattern has no day, month or year code, or has a time zone code.
 		"""
+		require_field_types(self)
+
 		has_date_code = any(date_code in self.pattern for date_code in DATE_CODES)
 		has_time_zone_code = any(zone_code in self.pattern for zone_code in TIME_ZONE_CODES)
 		is_rejected = has_time_zone_code or not has_date_code

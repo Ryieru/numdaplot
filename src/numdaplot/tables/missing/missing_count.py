@@ -7,6 +7,7 @@ Settings of the count of the missing values of a Table.
 from dataclasses import dataclass
 
 from numdaplot.ratios.measure import Measure
+from numdaplot.settings.field_types import require_field_types
 
 
 @dataclass(frozen=True)
@@ -23,6 +24,12 @@ class MissingCount:
 	measure
 		A number of missing values by default, or with ``Measure.RATIO`` their fraction of the values counted.
 
+
+	Raises
+	------
+	InvalidSettingTypeError
+		When a setting is not of the type its annotation names.
+
 	Examples
 	--------
 	>>> import numdaplot as ndp
@@ -37,3 +44,16 @@ class MissingCount:
 	"""
 
 	measure: Measure = Measure.COUNT
+
+	def __post_init__(self) -> None:
+		"""
+		Check the type of every setting.
+
+		.. versionadded:: 0.1.0
+
+		Raises
+		------
+		InvalidSettingTypeError
+			When a setting is not of the type its annotation names.
+		"""
+		require_field_types(self)

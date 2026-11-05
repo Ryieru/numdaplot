@@ -6,6 +6,7 @@ Settings of the SAS data files a Table reads.
 
 from dataclasses import dataclass
 
+from numdaplot.settings.field_types import require_field_types
 from numdaplot.tables.files.encoding import Encoding
 
 
@@ -27,6 +28,12 @@ class SasOptions:
 	encoding
 		The text encoding of the texts stored in the file, UTF-8 by default.
 
+
+	Raises
+	------
+	InvalidSettingTypeError
+		When a setting is not of the type its annotation names.
+
 	Examples
 	--------
 	>>> import numdaplot as ndp
@@ -41,3 +48,16 @@ class SasOptions:
 	"""
 
 	encoding: Encoding = Encoding.UTF_8
+
+	def __post_init__(self) -> None:
+		"""
+		Check the type of every setting.
+
+		.. versionadded:: 0.1.0
+
+		Raises
+		------
+		InvalidSettingTypeError
+			When a setting is not of the type its annotation names.
+		"""
+		require_field_types(self)

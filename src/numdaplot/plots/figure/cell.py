@@ -7,7 +7,8 @@ Place of a Plot in the grid of a Figure.
 from dataclasses import dataclass
 
 from numdaplot.errors.invalid_count_error import InvalidCountError
-from numdaplot.positions.whole_positions import require_whole_position
+from numdaplot.errors.invalid_position_error import InvalidPositionError
+from numdaplot.settings.field_types import require_field_types
 
 MINIMUM_SPAN = 1
 FIRST_POSITION = 0
@@ -35,8 +36,10 @@ class Cell:
 
 	Raises
 	------
+	InvalidSettingTypeError
+		When a setting is not of the type its annotation names.
 	InvalidPositionError
-		When ``row`` or ``column`` is not a whole number of at least 0.
+		When ``row`` or ``column`` is lower than 0.
 	InvalidCountError
 		When ``row_span`` or ``column_span`` is lower than 1.
 
@@ -70,13 +73,20 @@ class Cell:
 
 		Raises
 		------
+		InvalidSettingTypeError
+			When a setting is not of the type its annotation names.
 		InvalidPositionError
-			When ``row`` or ``column`` is not a whole number of at least 0.
+			When ``row`` or ``column`` is lower than 0.
 		InvalidCountError
 			When ``row_span`` or ``column_span`` is lower than 1.
 		"""
-		require_whole_position(self.row, FIRST_POSITION)
-		require_whole_position(self.column, FIRST_POSITION)
+		require_field_types(self)
+
+		if self.row < FIRST_POSITION:
+			raise InvalidPositionError(self.row)
+
+		if self.column < FIRST_POSITION:
+			raise InvalidPositionError(self.column)
 
 		if self.row_span < MINIMUM_SPAN:
 			raise InvalidCountError(self.row_span, MINIMUM_SPAN)

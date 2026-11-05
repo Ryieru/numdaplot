@@ -8,6 +8,7 @@ from dataclasses import dataclass
 
 from numdaplot.dates.date_part_unit import DatePartUnit
 from numdaplot.dates.time_function import TimeFunction
+from numdaplot.settings.field_types import require_field_types
 
 
 @dataclass(frozen=True)
@@ -25,6 +26,12 @@ class DatePart(TimeFunction):
 	unit
 		The part to read. ``DatePartUnit.HOUR``, ``DatePartUnit.MINUTE`` and ``DatePartUnit.SECOND`` need datetimes.
 
+
+	Raises
+	------
+	InvalidSettingTypeError
+		When a setting is not of the type its annotation names.
+
 	Examples
 	--------
 	>>> from datetime import date
@@ -37,3 +44,16 @@ class DatePart(TimeFunction):
 	"""
 
 	unit: DatePartUnit
+
+	def __post_init__(self) -> None:
+		"""
+		Check the type of every setting.
+
+		.. versionadded:: 0.1.0
+
+		Raises
+		------
+		InvalidSettingTypeError
+			When a setting is not of the type its annotation names.
+		"""
+		require_field_types(self)

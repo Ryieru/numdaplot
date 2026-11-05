@@ -8,6 +8,7 @@ from dataclasses import dataclass
 
 from numdaplot.errors.invalid_step_error import InvalidStepError
 from numdaplot.rules.bounds import Bounds
+from numdaplot.settings.field_types import require_field_types
 
 DEFAULT_STEP = 1
 FORBIDDEN_STEP = 0
@@ -36,6 +37,8 @@ class Range:
 
 	Raises
 	------
+	InvalidSettingTypeError
+		When a setting is not of the type its annotation names.
 	InvalidStepError
 		When ``step`` is zero, or goes away from ``stop``, such as a step of 1 from 5 to 1.
 
@@ -62,9 +65,13 @@ class Range:
 
 		Raises
 		------
+		InvalidSettingTypeError
+			When a setting is not of the type its annotation names.
 		InvalidStepError
 			When ``step`` is zero, or goes away from ``stop``.
 		"""
+		require_field_types(self)
+
 		if self.step == FORBIDDEN_STEP:
 			raise InvalidStepError(self.step)
 

@@ -7,12 +7,9 @@ Number of values along each dimension of an Array.
 from dataclasses import dataclass
 
 from numdaplot.errors.invalid_shape_error import InvalidShapeError
-from numdaplot.settings.setting_types import require_setting_type
+from numdaplot.settings.field_types import require_field_types
 
 LOWEST_DIMENSION = 0
-DIMENSIONS_SETTING = "Shape dimensions"
-DIMENSIONS_EXPECTED = "a list such as [3, 4]"
-DIMENSIONS_TYPES = (list,)
 
 
 @dataclass(frozen=True)
@@ -34,7 +31,7 @@ class Shape:
 	Raises
 	------
 	InvalidSettingTypeError
-		When ``dimensions`` is not a list, such as ``(3, 4)`` or ``3``.
+		When a setting is not of the type its annotation names.
 	InvalidShapeError
 		When ``dimensions`` is empty or holds a negative number.
 
@@ -59,11 +56,11 @@ class Shape:
 		Raises
 		------
 		InvalidSettingTypeError
-			When ``dimensions`` is not a list.
+			When a setting is not of the type its annotation names.
 		InvalidShapeError
 			When ``dimensions`` is empty or holds a negative number.
 		"""
-		require_setting_type(DIMENSIONS_SETTING, DIMENSIONS_EXPECTED, self.dimensions, DIMENSIONS_TYPES)
+		require_field_types(self)
 
 		dimension_count = len(self.dimensions)
 		if dimension_count == 0:

@@ -5,21 +5,14 @@ A rectangular part of an Array or a Table, chosen by position.
 """
 
 from dataclasses import dataclass
-from types import NoneType
 
 from numdaplot.errors.empty_list_error import EmptyListError
 from numdaplot.errors.empty_region_error import EmptyRegionError
 from numdaplot.positions.index import Index
 from numdaplot.positions.range import Range
-from numdaplot.settings.setting_types import require_list_not_text, require_setting_type
+from numdaplot.settings.field_types import require_field_types
 from numdaplot.tables.columns.column_names import require_column_names
 
-ROWS_SETTING = "Region rows"
-ROWS_EXPECTED = "an Index, a Range or None"
-ROW_TYPES = (Index, Range, NoneType)
-COLUMNS_SETTING = "Region columns"
-COLUMNS_EXPECTED = "an Index, a Range, a list of column names or None"
-COLUMN_TYPES = (Index, Range, list, NoneType)
 COLUMN_ITEM_NAME = "column"
 
 
@@ -42,7 +35,7 @@ class Region:
 	Raises
 	------
 	InvalidSettingTypeError
-		When ``rows`` or ``columns`` is of another kind, such as a number or a single text.
+		When a setting is not of the type its annotation names.
 	EmptyRegionError
 		When ``rows`` and ``columns`` are both omitted.
 	EmptyListError
@@ -72,7 +65,7 @@ class Region:
 		Raises
 		------
 		InvalidSettingTypeError
-			When ``rows`` or ``columns`` is of another kind, such as a number or a single text.
+			When a setting is not of the type its annotation names.
 		EmptyRegionError
 			When ``rows`` and ``columns`` are both omitted.
 		EmptyListError
@@ -82,9 +75,8 @@ class Region:
 		DuplicateColumnError
 			When a column name appears twice.
 		"""
-		require_setting_type(ROWS_SETTING, ROWS_EXPECTED, self.rows, ROW_TYPES)
-		require_list_not_text(COLUMNS_SETTING, self.columns)
-		require_setting_type(COLUMNS_SETTING, COLUMNS_EXPECTED, self.columns, COLUMN_TYPES)
+		require_field_types(self)
+
 		has_no_position = self.rows is None and self.columns is None
 		if has_no_position:
 			raise EmptyRegionError()

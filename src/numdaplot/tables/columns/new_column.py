@@ -9,6 +9,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
+from numdaplot.settings.field_types import require_field_types
 from numdaplot.tables.columns.column_names import require_column_name
 from numdaplot.tables.conflict import Conflict
 
@@ -36,6 +37,8 @@ class NewColumn:
 
 	Raises
 	------
+	InvalidSettingTypeError
+		When a setting is not of the type its annotation names.
 	InvalidColumnNameError
 		When ``name`` is empty.
 
@@ -66,7 +69,11 @@ class NewColumn:
 
 		Raises
 		------
+		InvalidSettingTypeError
+			When a setting is not of the type its annotation names.
 		InvalidColumnNameError
 			When ``name`` is empty.
 		"""
+		require_field_types(self)
+
 		require_column_name(self.name)

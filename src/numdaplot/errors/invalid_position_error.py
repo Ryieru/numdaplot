@@ -7,16 +7,16 @@ Error raised when a position is not a whole number inside its dimension.
 from numdaplot.errors.numdaplot_error import NumdaplotError
 
 INVALID_POSITION_MESSAGE = "Expected a whole position between {lowest} and {highest}, got {position}."
+DEFAULT_LOWEST_POSITION = 0
 MINIMUM_POSITION_MESSAGE = "Expected a whole position of at least {lowest}, got {position}."
-WHOLE_POSITION_MESSAGE = "Expected a whole position, got {position}."
 
 
 class InvalidPositionError(NumdaplotError):
 	"""
-	Raised when a position is not a whole number, or falls outside its dimension.
+	Raised when a position falls outside its dimension.
 
 	A dimension of size 5 accepts the positions from -5 to 4. Without a size, as when an ``Index`` or a ``Cell`` is
-	created, the message names the lowest accepted position, or only asks for a whole number.
+	created, the message names the lowest accepted position.
 
 	.. versionadded:: 0.1.0
 
@@ -27,7 +27,7 @@ class InvalidPositionError(NumdaplotError):
 	size
 		Size of the dimension. When omitted, the size is not known yet, as when an ``Index`` is created.
 	lowest
-		The lowest accepted position when the size is not known. When omitted, any whole number is accepted.
+		The lowest accepted position, named when the size is not known, 0 by default.
 
 	Attributes
 	----------
@@ -36,7 +36,7 @@ class InvalidPositionError(NumdaplotError):
 	size
 		Size of the dimension, or None.
 	lowest
-		The lowest accepted position, or None.
+		The lowest accepted position.
 
 	Examples
 	--------
@@ -49,7 +49,7 @@ class InvalidPositionError(NumdaplotError):
 	Expected a whole position between -3 and 2, got 5.
 	"""
 
-	def __init__(self, position: object, size: int | None = None, lowest: int | None = None) -> None:
+	def __init__(self, position: object, size: int | None = None, lowest: int = DEFAULT_LOWEST_POSITION) -> None:
 		"""
 		Build the error message from the position, and the size or the lowest accepted position.
 
@@ -62,7 +62,7 @@ class InvalidPositionError(NumdaplotError):
 		size
 			Size of the dimension. When omitted, the size is not known yet, as when an ``Index`` is created.
 		lowest
-			The lowest accepted position when the size is not known. When omitted, any whole number is accepted.
+			The lowest accepted position, named when the size is not known, 0 by default.
 		"""
 		message = build_position_message(position, size, lowest)
 		super().__init__(message)
@@ -72,7 +72,7 @@ class InvalidPositionError(NumdaplotError):
 		self.lowest = lowest
 
 
-def build_position_message(position: object, size: int | None, lowest: int | None) -> str:
+def build_position_message(position: object, size: int | None, lowest: int) -> str:
 	"""
 	Return the message of a rejected position, naming the accepted positions that are known.
 
@@ -85,12 +85,12 @@ def build_position_message(position: object, size: int | None, lowest: int | Non
 	size
 		Size of the dimension, or None.
 	lowest
-		The lowest accepted position, or None.
+		The lowest accepted position.
 
 	Returns
 	-------
 	str
-		The message naming the accepted interval, the lowest accepted position, or only a whole number.
+		The message naming the accepted interval, or the lowest accepted position.
 
 	Examples
 	--------
@@ -103,10 +103,4 @@ def build_position_message(position: object, size: int | None, lowest: int | Non
 		message = INVALID_POSITION_MESSAGE.format(lowest=-size, highest=highest_position, position=position)
 		return message
 
-	if lowest is not None:
-		message = MINIMUM_POSITION_MESSAGE.format(lowest=lowest, position=position)
-		return message
-
-	message = WHOLE_POSITION_MESSAGE.format(position=position)
-
-	return message
+	return MINIMUM_POSITION_MESSAGE.format(lowest=lowest, position=position)

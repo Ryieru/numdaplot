@@ -8,6 +8,7 @@ from dataclasses import dataclass
 
 from numdaplot.arrays.creation.distribution import Distribution
 from numdaplot.errors.invalid_bounds_error import InvalidBoundsError
+from numdaplot.settings.field_types import require_field_types
 
 
 @dataclass(frozen=True)
@@ -28,6 +29,8 @@ class Uniform(Distribution):
 
 	Raises
 	------
+	InvalidSettingTypeError
+		When a setting is not of the type its annotation names.
 	InvalidBoundsError
 		When ``low`` is greater than ``high``.
 
@@ -49,8 +52,12 @@ class Uniform(Distribution):
 
 		Raises
 		------
+		InvalidSettingTypeError
+			When a setting is not of the type its annotation names.
 		InvalidBoundsError
 			When ``low`` is greater than ``high``.
 		"""
+		require_field_types(self)
+
 		if self.low > self.high:
 			raise InvalidBoundsError(self.low, self.high)

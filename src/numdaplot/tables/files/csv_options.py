@@ -7,6 +7,7 @@ Settings of the CSV files a Table reads and writes.
 from dataclasses import dataclass
 
 from numdaplot.errors.invalid_separator_error import InvalidSeparatorError
+from numdaplot.settings.field_types import require_field_types
 from numdaplot.tables.files.encoding import Encoding
 
 DEFAULT_SEPARATOR = ","
@@ -29,6 +30,8 @@ class CsvOptions:
 
 	Raises
 	------
+	InvalidSettingTypeError
+		When a setting is not of the type its annotation names.
 	InvalidSeparatorError
 		When the separator is not exactly one character.
 
@@ -58,9 +61,13 @@ class CsvOptions:
 
 		Raises
 		------
+		InvalidSettingTypeError
+			When a setting is not of the type its annotation names.
 		InvalidSeparatorError
 			When the separator is not exactly one character.
 		"""
+		require_field_types(self)
+
 		separator_length = len(self.separator)
 		if separator_length != SEPARATOR_LENGTH:
 			raise InvalidSeparatorError(self.separator)

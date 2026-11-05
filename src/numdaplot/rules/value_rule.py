@@ -9,10 +9,9 @@ from typing import ClassVar, cast
 
 from numdaplot.errors.refused_operation_error import RefusedOperationError
 from numdaplot.rules.rule import Rule
-from numdaplot.rules.rule_values import require_single_value
+from numdaplot.settings.field_types import require_field_types
 
 MISSING_VALUE_OPERATION = "{rule_name}(None)"
-VALUE_SETTING = "{rule_name} value"
 
 
 @dataclass(frozen=True)
@@ -32,10 +31,10 @@ class ValueRule[ReferenceValue](Rule):
 
 	Raises
 	------
+	InvalidSettingTypeError
+		When a setting is not of the type its annotation names.
 	RefusedOperationError
 		When ``value`` is None for a rule with a rule of its own for missing values, such as ``Equal(None)``.
-	InvalidSettingTypeError
-		When ``value`` is not a single value, such as an Array, a list or None.
 
 	Examples
 	--------
@@ -54,23 +53,21 @@ class ValueRule[ReferenceValue](Rule):
 
 	def __post_init__(self) -> None:
 		"""
-		Check that the reference value is a single value.
+		Check the reference value.
 
 		.. versionadded:: 0.1.0
 
 		Raises
 		------
+		InvalidSettingTypeError
+			When a setting is not of the type its annotation names.
 		RefusedOperationError
 			When ``value`` is None for a rule with a rule of its own for missing values, such as ``Equal(None)``.
-		InvalidSettingTypeError
-			When ``value`` is not a single value.
 		"""
 		rule_class = type(self)
-		rule_name = rule_class.__name__
 		value = cast(object, self.value)
-		refuse_missing_value(rule_name, self.MISSING_VALUE_RULE, value)
-		setting_name = VALUE_SETTING.format(rule_name=rule_name)
-		require_single_value(setting_name, value)
+		refuse_missing_value(rule_class.__name__, self.MISSING_VALUE_RULE, value)
+		require_field_types(self)
 
 
 def refuse_missing_value(rule_name: str, missing_value_rule: str | None, value: object) -> None:

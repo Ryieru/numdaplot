@@ -10,6 +10,7 @@ from numdaplot.data_types.type import Type
 from numdaplot.dates.custom_date_format import CustomDateFormat
 from numdaplot.dates.date_format import DateFormat
 from numdaplot.dates.time_zone_change import TimeZoneChange
+from numdaplot.settings.field_types import require_field_types
 from numdaplot.tables.columns.column_names import require_column_name
 
 
@@ -40,6 +41,8 @@ class Conversion:
 
 	Raises
 	------
+	InvalidSettingTypeError
+		When a setting is not of the type its annotation names.
 	InvalidColumnNameError
 		When ``column`` is an empty text.
 
@@ -72,7 +75,11 @@ class Conversion:
 
 		Raises
 		------
+		InvalidSettingTypeError
+			When a setting is not of the type its annotation names.
 		InvalidColumnNameError
 			When ``column`` is an empty text.
 		"""
+		require_field_types(self)
+
 		require_column_name(self.column)

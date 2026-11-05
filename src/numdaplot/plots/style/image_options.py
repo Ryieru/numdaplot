@@ -7,6 +7,7 @@ Settings of a PNG image of a Plot.
 from dataclasses import dataclass
 
 from numdaplot.errors.invalid_resolution_error import InvalidResolutionError
+from numdaplot.settings.field_types import require_field_types
 
 DEFAULT_DPI = 100
 MINIMUM_DPI = 1
@@ -30,6 +31,8 @@ class ImageOptions:
 
 	Raises
 	------
+	InvalidSettingTypeError
+		When a setting is not of the type its annotation names.
 	InvalidResolutionError
 		When ``dpi`` is lower than 1.
 
@@ -57,8 +60,12 @@ class ImageOptions:
 
 		Raises
 		------
+		InvalidSettingTypeError
+			When a setting is not of the type its annotation names.
 		InvalidResolutionError
 			When ``dpi`` is lower than 1.
 		"""
+		require_field_types(self)
+
 		if self.dpi < MINIMUM_DPI:
 			raise InvalidResolutionError(self.dpi)

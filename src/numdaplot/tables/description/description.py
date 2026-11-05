@@ -8,7 +8,7 @@ from dataclasses import dataclass
 
 from numdaplot.errors.duplicate_statistic_error import DuplicateStatisticError
 from numdaplot.errors.empty_list_error import EmptyListError
-from numdaplot.settings.setting_types import require_list_not_text, require_object_not_class
+from numdaplot.settings.field_types import require_field_types
 from numdaplot.statistics.count import Count
 from numdaplot.statistics.maximum import Max
 from numdaplot.statistics.mean import Mean
@@ -33,9 +33,6 @@ DEFAULT_FUNCTIONS = (
 )
 FUNCTION_ITEM_NAME = "function"
 COLUMN_ITEM_NAME = "column"
-COLUMNS_SETTING = "Description columns"
-FUNCTION_SETTING = "Description functions"
-FUNCTION_EXPECTED = "a statistic such as ndp.Mean()"
 
 
 @dataclass(frozen=True)
@@ -57,8 +54,7 @@ class Description:
 	Raises
 	------
 	InvalidSettingTypeError
-		When ``columns`` is a single text instead of a list, or a function is a class written without its
-		parentheses.
+		When a setting is not of the type its annotation names.
 	EmptyListError
 		When ``functions`` or ``columns`` is an empty list.
 	InvalidColumnNameError
@@ -94,7 +90,7 @@ class Description:
 		Raises
 		------
 		InvalidSettingTypeError
-			When ``columns`` is a single text instead of a list, or a function is a class.
+			When a setting is not of the type its annotation names.
 		EmptyListError
 			When ``functions`` or ``columns`` is an empty list.
 		InvalidColumnNameError
@@ -104,7 +100,7 @@ class Description:
 		DuplicateStatisticError
 			When a statistic appears twice in ``functions``.
 		"""
-		require_list_not_text(COLUMNS_SETTING, self.columns)
+		require_field_types(self)
 
 		if self.functions == []:
 			raise EmptyListError(FUNCTION_ITEM_NAME)
@@ -125,7 +121,7 @@ class Description:
 
 def require_distinct_statistics(functions: list[Statistic]) -> None:
 	"""
-	Check that the statistics of a description are objects, each one given once.
+	Check that each statistic of a description is given once.
 
 	.. versionadded:: 0.1.0
 
@@ -136,8 +132,6 @@ def require_distinct_statistics(functions: list[Statistic]) -> None:
 
 	Raises
 	------
-	InvalidSettingTypeError
-		When a statistic is a class, written without its parentheses.
 	DuplicateStatisticError
 		When a statistic appears twice, with the same settings.
 
@@ -155,8 +149,6 @@ def require_distinct_statistics(functions: list[Statistic]) -> None:
 	seen_statistics = set[Statistic]()
 
 	for function in functions:
-		require_object_not_class(FUNCTION_SETTING, FUNCTION_EXPECTED, function)
-
 		if function in seen_statistics:
 			raise DuplicateStatisticError(function)
 

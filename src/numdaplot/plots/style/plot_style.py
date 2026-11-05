@@ -10,6 +10,7 @@ from numdaplot.errors.invalid_rotation_error import InvalidRotationError
 from numdaplot.plots.style.grid_lines import GridLines
 from numdaplot.plots.style.legend_position import LegendPosition
 from numdaplot.plots.style.size import Size
+from numdaplot.settings.field_types import require_field_types
 
 MINIMUM_ROTATION = -90
 MAXIMUM_ROTATION = 90
@@ -56,6 +57,8 @@ class PlotStyle:
 
 	Raises
 	------
+	InvalidSettingTypeError
+		When a setting is not of the type its annotation names.
 	InvalidRotationError
 		When ``x_tick_rotation`` or ``y_tick_rotation`` is outside -90 to 90 degrees.
 
@@ -99,9 +102,13 @@ class PlotStyle:
 
 		Raises
 		------
+		InvalidSettingTypeError
+			When a setting is not of the type its annotation names.
 		InvalidRotationError
 			When ``x_tick_rotation`` or ``y_tick_rotation`` is outside -90 to 90 degrees.
 		"""
+		require_field_types(self)
+
 		for rotation in (self.x_tick_rotation, self.y_tick_rotation):
 			if rotation is None:
 				continue

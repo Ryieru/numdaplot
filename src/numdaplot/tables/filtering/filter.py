@@ -7,6 +7,7 @@ Settings of the filter of the rows of a Table.
 from dataclasses import dataclass
 
 from numdaplot.errors.empty_list_error import EmptyListError
+from numdaplot.settings.field_types import require_field_types
 from numdaplot.tables.filtering.condition import Condition
 from numdaplot.tables.filtering.filter_mode import FilterMode
 
@@ -29,6 +30,8 @@ class Filter:
 
 	Raises
 	------
+	InvalidSettingTypeError
+		When a setting is not of the type its annotation names.
 	EmptyListError
 		When ``conditions`` is empty.
 
@@ -57,9 +60,13 @@ class Filter:
 
 		Raises
 		------
+		InvalidSettingTypeError
+			When a setting is not of the type its annotation names.
 		EmptyListError
 			When ``conditions`` is empty.
 		"""
+		require_field_types(self)
+
 		if self.conditions == []:
 			raise EmptyListError(CONDITION_ITEM_NAME)
 

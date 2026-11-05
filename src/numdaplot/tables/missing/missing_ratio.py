@@ -7,6 +7,7 @@ A ratio of missing values from which a row or a column is removed.
 from dataclasses import dataclass
 
 from numdaplot.ratios.fraction import require_fraction
+from numdaplot.settings.field_types import require_field_types
 from numdaplot.tables.missing.ratio_comparison import RatioComparison
 
 
@@ -29,6 +30,8 @@ class MissingRatio:
 
 	Raises
 	------
+	InvalidSettingTypeError
+		When a setting is not of the type its annotation names.
 	InvalidFractionError
 		When ``ratio`` is lower than 0, greater than 1 or NaN.
 
@@ -58,7 +61,11 @@ class MissingRatio:
 
 		Raises
 		------
+		InvalidSettingTypeError
+			When a setting is not of the type its annotation names.
 		InvalidFractionError
 			When ``ratio`` is lower than 0, greater than 1 or NaN.
 		"""
+		require_field_types(self)
+
 		require_fraction(self.ratio)

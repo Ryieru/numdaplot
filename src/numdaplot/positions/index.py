@@ -6,7 +6,7 @@ A single position in one dimension.
 
 from dataclasses import dataclass
 
-from numdaplot.positions.whole_positions import require_whole_position
+from numdaplot.settings.field_types import require_field_types
 
 
 @dataclass(frozen=True)
@@ -24,8 +24,8 @@ class Index:
 
 	Raises
 	------
-	InvalidPositionError
-		When ``position`` is not a whole number, such as ``1.5``.
+	InvalidSettingTypeError
+		When a setting is not of the type its annotation names.
 
 	Examples
 	--------
@@ -39,13 +39,13 @@ class Index:
 
 	def __post_init__(self) -> None:
 		"""
-		Check that the position is a whole number.
+		Check the type of the position.
 
 		.. versionadded:: 0.1.0
 
 		Raises
 		------
-		InvalidPositionError
-			When ``position`` is not a whole number.
+		InvalidSettingTypeError
+			When a setting is not of the type its annotation names.
 		"""
-		require_whole_position(self.position, None)
+		require_field_types(self)

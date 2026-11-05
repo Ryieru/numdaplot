@@ -7,6 +7,7 @@ Grid of cells of a Figure.
 from dataclasses import dataclass
 
 from numdaplot.errors.invalid_count_error import InvalidCountError
+from numdaplot.settings.field_types import require_field_types
 
 MINIMUM_LINE_COUNT = 1
 
@@ -27,6 +28,8 @@ class Layout:
 
 	Raises
 	------
+	InvalidSettingTypeError
+		When a setting is not of the type its annotation names.
 	InvalidCountError
 		When ``rows`` or ``columns`` is lower than 1.
 
@@ -54,9 +57,13 @@ class Layout:
 
 		Raises
 		------
+		InvalidSettingTypeError
+			When a setting is not of the type its annotation names.
 		InvalidCountError
 			When ``rows`` or ``columns`` is lower than 1.
 		"""
+		require_field_types(self)
+
 		if self.rows < MINIMUM_LINE_COUNT:
 			raise InvalidCountError(self.rows, MINIMUM_LINE_COUNT)
 

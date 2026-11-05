@@ -7,6 +7,7 @@ Rounding math function.
 from dataclasses import dataclass
 
 from numdaplot.arrays.math_functions.math_function import MathFunction
+from numdaplot.settings.field_types import require_field_types
 
 
 @dataclass(frozen=True)
@@ -25,6 +26,12 @@ class Round(MathFunction):
 		Number of decimals kept, 0 by default to round to whole numbers. A negative number rounds to
 		tens, hundreds...: -2 turns 1234 into 1200.
 
+
+	Raises
+	------
+	InvalidSettingTypeError
+		When a setting is not of the type its annotation names.
+
 	Examples
 	--------
 	>>> import numdaplot as ndp
@@ -36,3 +43,16 @@ class Round(MathFunction):
 	"""
 
 	decimals: int = 0
+
+	def __post_init__(self) -> None:
+		"""
+		Check the type of every setting.
+
+		.. versionadded:: 0.1.0
+
+		Raises
+		------
+		InvalidSettingTypeError
+			When a setting is not of the type its annotation names.
+		"""
+		require_field_types(self)
