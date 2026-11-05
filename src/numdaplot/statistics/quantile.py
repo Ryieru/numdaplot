@@ -28,7 +28,7 @@ class Quantile(Statistic):
 
 	Raises
 	------
-	InvalidSettingTypeError
+	InvalidTypeError
 		When a setting is not of the type its annotation names.
 	InvalidFractionError
 		When ``fraction`` is lower than 0, greater than 1 or NaN.
@@ -51,7 +51,7 @@ class Quantile(Statistic):
 
 		Raises
 		------
-		InvalidSettingTypeError
+		InvalidTypeError
 			When a setting is not of the type its annotation names.
 		InvalidFractionError
 			When ``fraction`` is lower than 0, greater than 1 or NaN.

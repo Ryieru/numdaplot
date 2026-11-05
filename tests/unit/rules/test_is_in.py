@@ -9,7 +9,7 @@ from typing import Any, TypeVar, cast
 import pytest
 
 from numdaplot.errors.empty_values_error import EmptyValuesError
-from numdaplot.errors.invalid_setting_type_error import InvalidSettingTypeError
+from numdaplot.errors.invalid_type_error import InvalidTypeError
 from numdaplot.rules.is_in import IsIn
 from numdaplot.rules.rule_values import ScalarValue
 
@@ -70,7 +70,7 @@ def test_is_in_type_parameter_holds_the_types_of_its_alias() -> None:
 @pytest.mark.parametrize("rejected_values", ["FR", [["FR"]]])
 def test_is_in_rejects_a_text_or_values_that_are_not_single(rejected_values: object) -> None:
 	"""
-	Check that a single text, or a list holding a list, raises InvalidSettingTypeError.
+	Check that a single text, or a list holding a list, raises InvalidTypeError.
 
 	.. versionadded:: 0.1.0
 
@@ -81,5 +81,5 @@ def test_is_in_rejects_a_text_or_values_that_are_not_single(rejected_values: obj
 	"""
 	untyped_is_in = cast(Any, IsIn)
 
-	with pytest.raises(InvalidSettingTypeError):
+	with pytest.raises(InvalidTypeError):
 		untyped_is_in(rejected_values)

@@ -9,7 +9,7 @@ from typing import Any, cast, get_type_hints
 
 import pytest
 
-from numdaplot.errors.invalid_setting_type_error import InvalidSettingTypeError
+from numdaplot.errors.invalid_type_error import InvalidTypeError
 from numdaplot.errors.refused_operation_error import RefusedOperationError
 from numdaplot.rules.equal import Equal
 from numdaplot.rules.greater import Greater
@@ -135,7 +135,7 @@ def test_value_rule_rejects_a_value_that_is_not_single(rejected_value: object) -
 	"""
 	untyped_greater = cast(Any, Greater)
 
-	with pytest.raises(InvalidSettingTypeError):
+	with pytest.raises(InvalidTypeError):
 		untyped_greater(rejected_value)
 
 

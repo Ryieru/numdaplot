@@ -26,7 +26,7 @@ class BinCount:
 
 	Raises
 	------
-	InvalidSettingTypeError
+	InvalidTypeError
 		When a setting is not of the type its annotation names.
 	InvalidCountError
 		When the count is lower than 1.
@@ -50,7 +50,7 @@ class BinCount:
 
 		Raises
 		------
-		InvalidSettingTypeError
+		InvalidTypeError
 			When a setting is not of the type its annotation names.
 		InvalidCountError
 			When the count is lower than 1.

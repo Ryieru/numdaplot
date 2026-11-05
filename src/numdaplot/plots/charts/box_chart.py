@@ -43,7 +43,7 @@ class BoxChart(Chart):
 
 	Raises
 	------
-	InvalidSettingTypeError
+	InvalidTypeError
 		When a setting is not of the type its annotation names.
 	InvalidColumnNameError
 		When ``group_by`` or a name in ``columns`` is an empty text.
@@ -77,7 +77,7 @@ class BoxChart(Chart):
 
 		Raises
 		------
-		InvalidSettingTypeError
+		InvalidTypeError
 			When a setting is not of the type its annotation names.
 		InvalidColumnNameError
 			When ``group_by`` or a name in ``columns`` is an empty text.

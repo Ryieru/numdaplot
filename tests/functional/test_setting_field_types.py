@@ -132,7 +132,7 @@ FIELD_CASE_IDS = [
 @pytest.mark.parametrize("case", FIELD_CASES, ids=FIELD_CASE_IDS)
 def test_every_field_refuses_a_value_of_the_wrong_type(case: FieldCase) -> None:
 	"""
-	Check that a value of the wrong type raises InvalidSettingTypeError when the setting object is created.
+	Check that a value of the wrong type raises InvalidTypeError when the setting object is created.
 
 	.. versionadded:: 0.1.0
 
@@ -145,7 +145,7 @@ def test_every_field_refuses_a_value_of_the_wrong_type(case: FieldCase) -> None:
 	required_settings = REQUIRED_SETTINGS.get(class_name, {})
 	settings = required_settings | {case.field_name: WrongValue()}
 
-	with pytest.raises(ndp.InvalidSettingTypeError):
+	with pytest.raises(ndp.InvalidTypeError):
 		case.setting_class(**settings)
 
 

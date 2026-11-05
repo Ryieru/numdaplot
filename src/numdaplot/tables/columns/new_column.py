@@ -37,7 +37,7 @@ class NewColumn:
 
 	Raises
 	------
-	InvalidSettingTypeError
+	InvalidTypeError
 		When a setting is not of the type its annotation names.
 	InvalidColumnNameError
 		When ``name`` is empty.
@@ -69,7 +69,7 @@ class NewColumn:
 
 		Raises
 		------
-		InvalidSettingTypeError
+		InvalidTypeError
 			When a setting is not of the type its annotation names.
 		InvalidColumnNameError
 			When ``name`` is empty.

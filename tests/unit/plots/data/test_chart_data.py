@@ -8,12 +8,10 @@ import pytest
 
 import numdaplot as ndp
 from numdaplot.errors.invalid_chart_data_error import InvalidChartDataError
-from numdaplot.errors.unsupported_data_error import UnsupportedDataError
 from numdaplot.plots.data.chart_data import (
 	read_chart_values,
 	require_column_setting,
 	require_no_column_settings,
-	require_table,
 )
 
 CHART_NAME = "BarChart"
@@ -99,24 +97,3 @@ def test_read_chart_values_rejects_a_table_without_y() -> None:
 	"""
 	with pytest.raises(InvalidChartDataError):
 		read_chart_values(SALES, None, None, CHART_NAME)
-
-
-def test_require_table_returns_a_table() -> None:
-	"""
-	Check that a Table passes and is returned.
-
-	.. versionadded:: 0.1.0
-	"""
-	table = require_table(SALES, CHART_NAME)
-
-	assert table is SALES
-
-
-def test_require_table_rejects_an_array() -> None:
-	"""
-	Check that an Array raises UnsupportedDataError naming what refuses it.
-
-	.. versionadded:: 0.1.0
-	"""
-	with pytest.raises(UnsupportedDataError, match="BarChart cannot draw an Array"):
-		require_table(PRICES, CHART_NAME)

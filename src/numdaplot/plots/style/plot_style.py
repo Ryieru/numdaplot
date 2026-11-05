@@ -57,7 +57,7 @@ class PlotStyle:
 
 	Raises
 	------
-	InvalidSettingTypeError
+	InvalidTypeError
 		When a setting is not of the type its annotation names.
 	InvalidRotationError
 		When ``x_tick_rotation`` or ``y_tick_rotation`` is outside -90 to 90 degrees.
@@ -102,7 +102,7 @@ class PlotStyle:
 
 		Raises
 		------
-		InvalidSettingTypeError
+		InvalidTypeError
 			When a setting is not of the type its annotation names.
 		InvalidRotationError
 			When ``x_tick_rotation`` or ``y_tick_rotation`` is outside -90 to 90 degrees.

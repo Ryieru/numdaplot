@@ -32,7 +32,7 @@ class CustomDateFormat:
 
 	Raises
 	------
-	InvalidSettingTypeError
+	InvalidTypeError
 		When a setting is not of the type its annotation names.
 	InvalidDateFormatError
 		When the pattern has no day, month or year code, or has a time zone code (``%z``, ``%Z``).
@@ -58,7 +58,7 @@ class CustomDateFormat:
 
 		Raises
 		------
-		InvalidSettingTypeError
+		InvalidTypeError
 			When a setting is not of the type its annotation names.
 		InvalidDateFormatError
 			When the pattern has no day, month or year code, or has a time zone code.

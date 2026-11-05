@@ -30,7 +30,7 @@ class Filter:
 
 	Raises
 	------
-	InvalidSettingTypeError
+	InvalidTypeError
 		When a setting is not of the type its annotation names.
 	EmptyListError
 		When ``conditions`` is empty.
@@ -60,7 +60,7 @@ class Filter:
 
 		Raises
 		------
-		InvalidSettingTypeError
+		InvalidTypeError
 			When a setting is not of the type its annotation names.
 		EmptyListError
 			When ``conditions`` is empty.

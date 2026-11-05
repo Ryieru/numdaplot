@@ -26,7 +26,7 @@ class NameChange:
 
 	Raises
 	------
-	InvalidSettingTypeError
+	InvalidTypeError
 		When a setting is not of the type its annotation names.
 	InvalidColumnNameError
 		When ``old_name`` or ``new_name`` is an empty text.
@@ -56,7 +56,7 @@ class NameChange:
 
 		Raises
 		------
-		InvalidSettingTypeError
+		InvalidTypeError
 			When a setting is not of the type its annotation names.
 		InvalidColumnNameError
 			When ``old_name`` or ``new_name`` is an empty text.

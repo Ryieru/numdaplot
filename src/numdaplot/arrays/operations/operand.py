@@ -4,7 +4,7 @@ Values an Array can be combined with.
 .. versionadded:: 0.1.0
 """
 
-from datetime import date, datetime, timedelta
+from datetime import date, timedelta
 from typing import Any
 
 import numpy
@@ -13,50 +13,13 @@ from numpy.typing import NDArray
 from numdaplot.data_types.numpy_mapping import from_numpy_dtype
 from numdaplot.data_types.type import Type
 from numdaplot.data_types.value_type import find_value_type
-from numdaplot.errors.unsupported_operand_error import UnsupportedOperandError
 from numdaplot.rules.rule_values import ScalarValue
-
-SINGLE_VALUE_TYPES = (bool, int, float, str, date, datetime, timedelta)
 
 type Operand = NDArray[Any] | ScalarValue
 """The values of an Array, or a single value, on one side of an operation.
 
 .. versionadded:: 0.1.0
 """
-
-
-def require_single_value(value: object) -> None:
-	"""
-	Check that a value is a single value an Array can be combined with.
-
-	.. versionadded:: 0.1.0
-
-	Parameters
-	----------
-	value
-		The value to check.
-
-	Raises
-	------
-	UnsupportedOperandError
-		When the value is not a boolean, a number, a text, a date, a datetime or a duration,
-		such as a list or a numpy array.
-
-	Examples
-	--------
-	>>> import numpy
-	>>> import numdaplot as ndp
-	>>> from numdaplot.arrays.operations.operand import require_single_value
-	>>> try:
-	... 	require_single_value([1, 2])
-	... except ndp.UnsupportedOperandError as error:
-	... 	print(error)
-	Expected an Array or a single value, got list.
-	"""
-	is_single_value = isinstance(value, SINGLE_VALUE_TYPES)
-	if not is_single_value:
-		value_class = type(value)
-		raise UnsupportedOperandError(value_class.__name__)
 
 
 def find_operand_type(operand: Operand) -> Type:

@@ -32,7 +32,7 @@ class Logarithm(MathFunction):
 
 	Raises
 	------
-	InvalidSettingTypeError
+	InvalidTypeError
 		When a setting is not of the type its annotation names.
 	InvalidBaseError
 		When ``base`` is lower than or equal to 0, or equal to 1.
@@ -55,7 +55,7 @@ class Logarithm(MathFunction):
 
 		Raises
 		------
-		InvalidSettingTypeError
+		InvalidTypeError
 			When a setting is not of the type its annotation names.
 		InvalidBaseError
 			When ``base`` is lower than or equal to 0, or equal to 1.

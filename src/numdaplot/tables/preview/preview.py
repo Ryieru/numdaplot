@@ -38,7 +38,7 @@ class Preview:
 
 	Raises
 	------
-	InvalidSettingTypeError
+	InvalidTypeError
 		When a setting is not of the type its annotation names.
 	InvalidCountError
 		When ``count`` is lower than 1.
@@ -72,7 +72,7 @@ class Preview:
 
 		Raises
 		------
-		InvalidSettingTypeError
+		InvalidTypeError
 			When a setting is not of the type its annotation names.
 		InvalidCountError
 			When ``count`` is lower than 1.

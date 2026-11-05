@@ -29,7 +29,7 @@ class CustomColor:
 
 	Raises
 	------
-	InvalidSettingTypeError
+	InvalidTypeError
 		When a setting is not of the type its annotation names.
 	InvalidColorError
 		When the code is not ``#`` followed by six hexadecimal digits.
@@ -53,7 +53,7 @@ class CustomColor:
 
 		Raises
 		------
-		InvalidSettingTypeError
+		InvalidTypeError
 			When a setting is not of the type its annotation names.
 		InvalidColorError
 			When the code is not ``#`` followed by six hexadecimal digits.

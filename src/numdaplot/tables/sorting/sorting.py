@@ -31,7 +31,7 @@ class Sorting:
 
 	Raises
 	------
-	InvalidSettingTypeError
+	InvalidTypeError
 		When a setting is not of the type its annotation names.
 	EmptyListError
 		When ``keys`` is empty.
@@ -64,7 +64,7 @@ class Sorting:
 
 		Raises
 		------
-		InvalidSettingTypeError
+		InvalidTypeError
 			When a setting is not of the type its annotation names.
 		EmptyListError
 			When ``keys`` is empty.

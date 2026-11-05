@@ -31,7 +31,7 @@ class ValueRule[ReferenceValue](Rule):
 
 	Raises
 	------
-	InvalidSettingTypeError
+	InvalidTypeError
 		When a setting is not of the type its annotation names.
 	RefusedOperationError
 		When ``value`` is None for a rule with a rule of its own for missing values, such as ``Equal(None)``.
@@ -59,7 +59,7 @@ class ValueRule[ReferenceValue](Rule):
 
 		Raises
 		------
-		InvalidSettingTypeError
+		InvalidTypeError
 			When a setting is not of the type its annotation names.
 		RefusedOperationError
 			When ``value`` is None for a rule with a rule of its own for missing values, such as ``Equal(None)``.

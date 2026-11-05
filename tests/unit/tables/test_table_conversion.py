@@ -17,9 +17,9 @@ from numdaplot.arrays.array import Array
 from numdaplot.arrays.equality import Equality
 from numdaplot.arrays.type_match import TypeMatch
 from numdaplot.data_types.type import Type
+from numdaplot.errors.invalid_type_error import InvalidTypeError
 from numdaplot.errors.not_single_value_error import NotSingleValueError
 from numdaplot.errors.time_zone_mismatch_error import TimeZoneMismatchError
-from numdaplot.errors.unsupported_operand_error import UnsupportedOperandError
 from numdaplot.tables import table_conversion
 from numdaplot.tables.table import Table
 from numdaplot.tables.table_conversion import TableConversion
@@ -227,14 +227,14 @@ def test_is_equal_compares_the_frames_with_the_type_setting(monkeypatch: pytest.
 
 def test_is_equal_rejects_an_array() -> None:
 	"""
-	Check that comparing a Table with an Array raises UnsupportedOperandError.
+	Check that comparing a Table with an Array raises InvalidTypeError.
 
 	.. versionadded:: 0.1.0
 	"""
 	table = TableConversion._create(FRAME)
 	equality = Equality(other=PRICES)
 
-	with pytest.raises(UnsupportedOperandError):
+	with pytest.raises(InvalidTypeError):
 		table.is_equal(equality)
 
 

@@ -44,7 +44,7 @@ class HistogramChart(Chart):
 
 	Raises
 	------
-	InvalidSettingTypeError
+	InvalidTypeError
 		When a setting is not of the type its annotation names.
 	InvalidColumnNameError
 		When a name in ``columns`` is an empty text.
@@ -77,7 +77,7 @@ class HistogramChart(Chart):
 
 		Raises
 		------
-		InvalidSettingTypeError
+		InvalidTypeError
 			When a setting is not of the type its annotation names.
 		InvalidColumnNameError
 			When a name in ``columns`` is an empty text.

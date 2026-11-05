@@ -4,6 +4,7 @@ Display of a few rows of a Table.
 .. versionadded:: 0.1.0
 """
 
+from numdaplot.settings.argument_types import checked_arguments
 from numdaplot.tables.preview.notebook_display import show_frame
 from numdaplot.tables.preview.preview import Preview
 from numdaplot.tables.preview.preview_rows import choose_preview_rows
@@ -17,6 +18,7 @@ class TableDisplay(TableData):
 	.. versionadded:: 0.1.0
 	"""
 
+	@checked_arguments
 	def preview(self, preview: Preview | None = None) -> None:
 		"""
 		Show a few rows, with their row numbers and the type of each column under its name.
@@ -29,6 +31,12 @@ class TableDisplay(TableData):
 		----------
 		preview
 			How many rows, and which ones: the first 5 when omitted.
+
+
+		Raises
+		------
+		InvalidTypeError
+			When an argument is not of the type its annotation names.
 
 		Examples
 		--------

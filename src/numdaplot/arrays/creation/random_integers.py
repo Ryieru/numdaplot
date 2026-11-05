@@ -32,7 +32,7 @@ class RandomIntegers(Distribution):
 
 	Raises
 	------
-	InvalidSettingTypeError
+	InvalidTypeError
 		When a setting is not of the type its annotation names.
 	InvalidBoundsError
 		When no whole number lies between the bounds, such as ``low`` greater than ``high``,
@@ -58,7 +58,7 @@ class RandomIntegers(Distribution):
 
 		Raises
 		------
-		InvalidSettingTypeError
+		InvalidTypeError
 			When a setting is not of the type its annotation names.
 		InvalidBoundsError
 			When no whole number lies between the bounds.

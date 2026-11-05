@@ -77,7 +77,7 @@ def test_a_decimal_index_is_refused_before_it_is_used() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	with pytest.raises(ndp.InvalidSettingTypeError) as error_info:
+	with pytest.raises(ndp.InvalidTypeError) as error_info:
 		# The type checker refuses this call too, as it does in the editor of a user.
 		ndp.Index(1.5)  # pyright: ignore[reportArgumentType]
 

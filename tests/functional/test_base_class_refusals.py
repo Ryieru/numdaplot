@@ -33,11 +33,9 @@ BASE_CLASS_MESSAGES = [
 	),
 	(ndp.Chart, "Creating a Chart with ndp.Chart() is not available, use a chart such as ndp.LineChart instead."),
 ]
-EXPECTED_DISTRIBUTION_MESSAGE = (
-	"The distribution CustomDistribution is not available, use a distribution of numdaplot instead."
-)
-EXPECTED_CUSTOM_CHART_MESSAGE = "The chart CustomChart with plot_bar is not available, use a BarChart instead."
-EXPECTED_LINE_CHART_MESSAGE = "The chart LineChart with add_bar is not available, use a BarChart instead."
+EXPECTED_DISTRIBUTION_MESSAGE = "Array.random distribution expects a Uniform, a Normal or a RandomIntegers, got "
+EXPECTED_CUSTOM_CHART_MESSAGE = "plot_bar chart expects a BarChart or None, got "
+EXPECTED_LINE_CHART_MESSAGE = "Plot.add_bar chart expects a BarChart or None, got "
 
 
 class CustomDistribution(ndp.Distribution):
@@ -85,12 +83,12 @@ def test_random_refuses_a_distribution_written_outside_numdaplot() -> None:
 	"""
 	distribution = CustomDistribution()
 
-	with pytest.raises(ndp.RefusedOperationError) as error_info:
+	with pytest.raises(ndp.InvalidTypeError) as error_info:
 		# The type checker refuses this call too, as it does in the editor of a user.
 		ndp.Array.random(distribution, shape=DRAW_SHAPE)  # pyright: ignore[reportArgumentType]
 
 	message = str(error_info.value)
-	assert message == EXPECTED_DISTRIBUTION_MESSAGE
+	assert message.startswith(EXPECTED_DISTRIBUTION_MESSAGE)
 
 
 def test_plot_function_refuses_a_chart_written_outside_numdaplot() -> None:
@@ -102,12 +100,12 @@ def test_plot_function_refuses_a_chart_written_outside_numdaplot() -> None:
 	prices = ndp.Array.from_list(PRICES)
 	chart = CustomChart()
 
-	with pytest.raises(ndp.RefusedOperationError) as error_info:
+	with pytest.raises(ndp.InvalidTypeError) as error_info:
 		# The type checker refuses this call too, as it does in the editor of a user.
 		ndp.plot_bar(prices, chart)  # pyright: ignore[reportArgumentType]
 
 	message = str(error_info.value)
-	assert message == EXPECTED_CUSTOM_CHART_MESSAGE
+	assert message.startswith(EXPECTED_CUSTOM_CHART_MESSAGE)
 
 
 def test_add_method_refuses_the_chart_of_another_method() -> None:
@@ -120,9 +118,9 @@ def test_add_method_refuses_the_chart_of_another_method() -> None:
 	plot = ndp.plot_bar(prices, ndp.BarChart())
 	line = ndp.LineChart()
 
-	with pytest.raises(ndp.RefusedOperationError) as error_info:
+	with pytest.raises(ndp.InvalidTypeError) as error_info:
 		# The type checker refuses this call too, as it does in the editor of a user.
 		plot.add_bar(prices, line)  # pyright: ignore[reportArgumentType]
 
 	message = str(error_info.value)
-	assert message == EXPECTED_LINE_CHART_MESSAGE
+	assert message.startswith(EXPECTED_LINE_CHART_MESSAGE)

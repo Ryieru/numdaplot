@@ -32,7 +32,7 @@ class Size:
 
 	Raises
 	------
-	InvalidSettingTypeError
+	InvalidTypeError
 		When a setting is not of the type its annotation names.
 	InvalidSizeError
 		When the width or the height is zero or negative.
@@ -58,7 +58,7 @@ class Size:
 
 		Raises
 		------
-		InvalidSettingTypeError
+		InvalidTypeError
 			When a setting is not of the type its annotation names.
 		InvalidSizeError
 			When the width or the height is zero or negative.

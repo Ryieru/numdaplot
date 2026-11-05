@@ -26,7 +26,7 @@ class BinWidth:
 
 	Raises
 	------
-	InvalidSettingTypeError
+	InvalidTypeError
 		When a setting is not of the type its annotation names.
 	InvalidBinWidthError
 		When the width is 0 or negative.
@@ -50,7 +50,7 @@ class BinWidth:
 
 		Raises
 		------
-		InvalidSettingTypeError
+		InvalidTypeError
 			When a setting is not of the type its annotation names.
 		InvalidBinWidthError
 			When the width is 0 or negative.

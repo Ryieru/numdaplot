@@ -37,7 +37,7 @@ class Range:
 
 	Raises
 	------
-	InvalidSettingTypeError
+	InvalidTypeError
 		When a setting is not of the type its annotation names.
 	InvalidStepError
 		When ``step`` is zero, or goes away from ``stop``, such as a step of 1 from 5 to 1.
@@ -65,7 +65,7 @@ class Range:
 
 		Raises
 		------
-		InvalidSettingTypeError
+		InvalidTypeError
 			When a setting is not of the type its annotation names.
 		InvalidStepError
 			When ``step`` is zero, or goes away from ``stop``.

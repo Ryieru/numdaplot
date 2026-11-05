@@ -6,7 +6,6 @@ Heatmaps of a Table or an Array.
 
 from numdaplot.arrays.array import Array
 from numdaplot.plots.chart_layer import ChartLayer
-from numdaplot.plots.charts.chart_requirement import require_chart_class
 from numdaplot.plots.charts.heatmap_chart import HeatmapChart
 from numdaplot.plots.data.array_values import read_array_values
 from numdaplot.plots.data.chart_data import require_column_setting, require_no_column_settings
@@ -15,6 +14,7 @@ from numdaplot.plots.data.table_values import read_table_values
 from numdaplot.plots.plot import Plot
 from numdaplot.plots.plot_creation import create_plot
 from numdaplot.plots.style.plot_style import PlotStyle
+from numdaplot.settings.argument_types import checked_arguments
 from numdaplot.tables.table import Table
 
 CHART_NAME = "HeatmapChart"
@@ -23,6 +23,7 @@ LABELS_SETTING = "labels"
 FUNCTION_NAME = "plot_heatmap"
 
 
+@checked_arguments
 def plot_heatmap(data: Table | Array, chart: HeatmapChart | None = None, style: PlotStyle | None = None) -> Plot:
 	"""
 	Return a Plot coloring each value of columns of numbers along a color scale.
@@ -50,6 +51,8 @@ def plot_heatmap(data: Table | Array, chart: HeatmapChart | None = None, style: 
 
 	Raises
 	------
+	InvalidTypeError
+		When an argument is not of the type its annotation names.
 	InvalidChartDataError
 		When a Table has no ``columns``, or an Array has ``columns`` or ``labels``.
 	ColumnNotFoundError
@@ -58,8 +61,6 @@ def plot_heatmap(data: Table | Array, chart: HeatmapChart | None = None, style: 
 		When ``labels`` holds booleans or durations, or a drawn column does not hold numbers.
 	DimensionError
 		When an Array has more than two dimensions.
-	RefusedOperationError
-		When ``chart`` is not a ``HeatmapChart``.
 
 	Examples
 	--------
@@ -77,7 +78,6 @@ def plot_heatmap(data: Table | Array, chart: HeatmapChart | None = None, style: 
 	if chart is None:
 		chart = HeatmapChart()
 
-	require_chart_class(chart, HeatmapChart, FUNCTION_NAME)
 	values = read_heatmap_values(data, chart)
 	layer = ChartLayer(chart, values)
 	plot = create_plot(layer, style)

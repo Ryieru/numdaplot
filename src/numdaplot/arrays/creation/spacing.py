@@ -42,7 +42,7 @@ class Spacing:
 
 	Raises
 	------
-	InvalidSettingTypeError
+	InvalidTypeError
 		When a setting is not of the type its annotation names.
 	InvalidCountError
 		When ``count`` is too low for the bounds.
@@ -69,7 +69,7 @@ class Spacing:
 
 		Raises
 		------
-		InvalidSettingTypeError
+		InvalidTypeError
 			When a setting is not of the type its annotation names.
 		InvalidCountError
 			When ``count`` is too low for the bounds.

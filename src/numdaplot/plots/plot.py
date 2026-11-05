@@ -13,7 +13,6 @@ from numdaplot.arrays.array import Array
 from numdaplot.errors.refused_operation_error import RefusedOperationError
 from numdaplot.plots.chart_layer import ChartLayer
 from numdaplot.plots.charts.bar_chart import BarChart
-from numdaplot.plots.charts.chart_requirement import require_chart_class
 from numdaplot.plots.charts.line_chart import LineChart
 from numdaplot.plots.charts.scatter_chart import ScatterChart
 from numdaplot.plots.charts.value_axis import ValueAxis
@@ -26,6 +25,7 @@ from numdaplot.plots.output.plot_display import show_drawing
 from numdaplot.plots.overlay_checks import require_overlay_base, require_same_positions, require_vertical_bars
 from numdaplot.plots.style.image_options import ImageOptions
 from numdaplot.plots.style.plot_style import PlotStyle
+from numdaplot.settings.argument_types import checked_arguments
 from numdaplot.tables.conflict import Conflict
 from numdaplot.tables.files.file_paths import FilePath
 from numdaplot.tables.table import Table
@@ -135,6 +135,7 @@ class Plot:
 
 		return figure
 
+	@checked_arguments
 	def save(self, path: FilePath, options: ImageOptions | None = None, on_conflict: Conflict = Conflict.ERROR) -> None:
 		"""
 		Save the Plot as an image, in the format named by the extension of the path.
@@ -156,6 +157,8 @@ class Plot:
 
 		Raises
 		------
+		InvalidTypeError
+			When an argument is not of the type its annotation names.
 		UnsupportedImageFormatError
 			When the path does not end with ``.png``, ``.svg`` or ``.pdf``.
 		RefusedSettingError
@@ -197,6 +200,7 @@ class Plot:
 		drawing = self._describe_drawing()
 		show_drawing(drawing)
 
+	@checked_arguments
 	def add_line(self, data: Table | Array, chart: LineChart | None = None, axis: ValueAxis = ValueAxis.LEFT) -> Self:
 		"""
 		Return a new Plot with lines added over the charts of this one.
@@ -224,6 +228,8 @@ class Plot:
 
 		Raises
 		------
+		InvalidTypeError
+			When an argument is not of the type its annotation names.
 		RefusedSettingError
 			When the Plot does not draw lines, vertical bars or points.
 		IncompatibleChartsError
@@ -234,8 +240,6 @@ class Plot:
 			When a Table has no ``y`` columns, or an Array has ``x`` or ``y`` columns.
 		InvalidColorCountError
 			When the colors of the chart are not one per line.
-		RefusedOperationError
-			When ``chart`` is not a ``LineChart``.
 
 		Examples
 		--------
@@ -252,12 +256,12 @@ class Plot:
 		if chart is None:
 			chart = LineChart()
 
-		require_chart_class(chart, LineChart, ADD_LINE_NAME)
 		layer = read_line_layer(data, chart)
 		added_plot = self._add_layer(layer, axis, ADD_LINE_NAME)
 
 		return added_plot
 
+	@checked_arguments
 	def add_bar(self, data: Table | Array, chart: BarChart | None = None, axis: ValueAxis = ValueAxis.LEFT) -> Self:
 		"""
 		Return a new Plot with vertical bars added over the charts of this one.
@@ -286,6 +290,8 @@ class Plot:
 
 		Raises
 		------
+		InvalidTypeError
+			When an argument is not of the type its annotation names.
 		RefusedSettingError
 			When the bars are horizontal, or the Plot does not draw lines, vertical bars or points.
 		IncompatibleChartsError
@@ -296,8 +302,6 @@ class Plot:
 			When a Table has no ``y`` columns, or an Array has ``x`` or ``y`` columns.
 		InvalidColorCountError
 			When the colors of the chart are not one per series.
-		RefusedOperationError
-			When ``chart`` is not a ``BarChart``.
 
 		Examples
 		--------
@@ -314,13 +318,13 @@ class Plot:
 		if chart is None:
 			chart = BarChart()
 
-		require_chart_class(chart, BarChart, ADD_BAR_NAME)
 		require_vertical_bars(chart, ADD_BAR_NAME)
 		layer = read_bar_layer(data, chart)
 		added_plot = self._add_layer(layer, axis, ADD_BAR_NAME)
 
 		return added_plot
 
+	@checked_arguments
 	def add_scatter(
 		self, data: Table | Array, chart: ScatterChart | None = None, axis: ValueAxis = ValueAxis.LEFT
 	) -> Self:
@@ -350,6 +354,8 @@ class Plot:
 
 		Raises
 		------
+		InvalidTypeError
+			When an argument is not of the type its annotation names.
 		RefusedSettingError
 			When the Plot does not draw lines, vertical bars or points.
 		IncompatibleChartsError
@@ -360,8 +366,6 @@ class Plot:
 			When a Table has no ``y`` column, or an Array has a column setting.
 		InvalidColorCountError
 			When ``color`` is given for an Array of several columns.
-		RefusedOperationError
-			When ``chart`` is not a ``ScatterChart``.
 
 		Examples
 		--------
@@ -378,7 +382,6 @@ class Plot:
 		if chart is None:
 			chart = ScatterChart()
 
-		require_chart_class(chart, ScatterChart, ADD_SCATTER_NAME)
 		layer = read_scatter_layer(data, chart)
 		added_plot = self._add_layer(layer, axis, ADD_SCATTER_NAME)
 

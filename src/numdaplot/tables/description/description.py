@@ -53,7 +53,7 @@ class Description:
 
 	Raises
 	------
-	InvalidSettingTypeError
+	InvalidTypeError
 		When a setting is not of the type its annotation names.
 	EmptyListError
 		When ``functions`` or ``columns`` is an empty list.
@@ -89,7 +89,7 @@ class Description:
 
 		Raises
 		------
-		InvalidSettingTypeError
+		InvalidTypeError
 			When a setting is not of the type its annotation names.
 		EmptyListError
 			When ``functions`` or ``columns`` is an empty list.

@@ -6,6 +6,7 @@ Column operations of a Table: choice, renaming, conversion and addition.
 
 from typing import Self
 
+from numdaplot.settings.argument_types import checked_arguments
 from numdaplot.tables.columns.added_column import add_frame_column
 from numdaplot.tables.columns.chosen_columns import choose_frame_columns
 from numdaplot.tables.columns.column_choice import ColumnChoice
@@ -24,6 +25,7 @@ class TableColumns(TableData):
 	.. versionadded:: 0.1.0
 	"""
 
+	@checked_arguments
 	def choose_columns(self, choice: ColumnChoice) -> Self:
 		"""
 		Return the Table with only some columns, or without some columns.
@@ -42,6 +44,8 @@ class TableColumns(TableData):
 
 		Raises
 		------
+		InvalidTypeError
+			When an argument is not of the type its annotation names.
 		ColumnNotFoundError
 			When a named column does not exist.
 
@@ -59,6 +63,7 @@ class TableColumns(TableData):
 
 		return chosen_table
 
+	@checked_arguments
 	def rename(self, renaming: Renaming) -> Self:
 		"""
 		Return the Table with renamed columns, every renaming applied at once.
@@ -79,6 +84,8 @@ class TableColumns(TableData):
 
 		Raises
 		------
+		InvalidTypeError
+			When an argument is not of the type its annotation names.
 		ColumnNotFoundError
 			When a renamed column does not exist.
 		DuplicateColumnError
@@ -96,6 +103,7 @@ class TableColumns(TableData):
 
 		return renamed_table
 
+	@checked_arguments
 	def convert(self, conversion: Conversion) -> Self:
 		"""
 		Return the Table with a column converted to another type, missing values staying missing.
@@ -117,6 +125,8 @@ class TableColumns(TableData):
 
 		Raises
 		------
+		InvalidTypeError
+			When an argument is not of the type its annotation names.
 		ColumnNotFoundError
 			When the column does not exist.
 		IncompatibleTypesError
@@ -147,6 +157,7 @@ class TableColumns(TableData):
 
 		return converted_table
 
+	@checked_arguments
 	def add_column(self, new_column: NewColumn) -> Self:
 		"""
 		Return the Table with one more column, or with a column replaced.
@@ -165,6 +176,8 @@ class TableColumns(TableData):
 
 		Raises
 		------
+		InvalidTypeError
+			When an argument is not of the type its annotation names.
 		DimensionError
 			When the Array does not have one dimension.
 		ShapeMismatchError

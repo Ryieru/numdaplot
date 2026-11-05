@@ -24,6 +24,7 @@ from numdaplot.arrays.shape import Shape
 from numdaplot.data_types.type import Type
 from numdaplot.positions.range import Range
 from numdaplot.rules.rule_values import ScalarValue
+from numdaplot.settings.argument_types import checked_arguments
 
 type ListValue = ScalarValue | None
 """
@@ -68,6 +69,7 @@ class ArrayCreation(ArrayData):
 	"""
 
 	@classmethod
+	@checked_arguments
 	def from_list(cls, values: NestedValues, dtype: Type | None = None) -> Self:
 		"""
 		Create an Array from a Python list, or from nested lists for several dimensions.
@@ -93,6 +95,8 @@ class ArrayCreation(ArrayData):
 
 		Raises
 		------
+		InvalidTypeError
+			When an argument is not of the type its annotation names.
 		IrregularListError
 			When nested lists do not form a regular block.
 		IncompatibleTypesError
@@ -120,6 +124,7 @@ class ArrayCreation(ArrayData):
 		return created_array
 
 	@classmethod
+	@checked_arguments
 	def from_numpy(cls, values: numpy.typing.NDArray[Any]) -> Self:
 		"""
 		Create an Array from a copy of a numpy array; changing the numpy array never changes the Array.
@@ -138,6 +143,8 @@ class ArrayCreation(ArrayData):
 
 		Raises
 		------
+		InvalidTypeError
+			When an argument is not of the type its annotation names.
 		UnsupportedTypeError
 			When numdaplot has no equivalent type, for example complex numbers or Python objects.
 
@@ -154,6 +161,7 @@ class ArrayCreation(ArrayData):
 		return created_array
 
 	@classmethod
+	@checked_arguments
 	def filled(cls, shape: Shape, value: ScalarValue, dtype: Type | None = None) -> Self:
 		"""
 		Create an Array of a shape, with the same value everywhere.
@@ -176,6 +184,8 @@ class ArrayCreation(ArrayData):
 
 		Raises
 		------
+		InvalidTypeError
+			When an argument is not of the type its annotation names.
 		ValueConversionError
 			When the value cannot be stored as ``dtype`` without losing information.
 
@@ -192,6 +202,7 @@ class ArrayCreation(ArrayData):
 		return created_array
 
 	@classmethod
+	@checked_arguments
 	def from_range(cls, sequence: Range) -> Self:
 		"""
 		Create a one-dimensional Array of the numbers of a regular sequence.
@@ -211,6 +222,12 @@ class ArrayCreation(ArrayData):
 		Self
 			A new Array of integers when the start and the step are integers, of decimals otherwise.
 
+
+		Raises
+		------
+		InvalidTypeError
+			When an argument is not of the type its annotation names.
+
 		Examples
 		--------
 		>>> import numdaplot as ndp
@@ -223,6 +240,7 @@ class ArrayCreation(ArrayData):
 		return created_array
 
 	@classmethod
+	@checked_arguments
 	def from_spacing(cls, spacing: Spacing) -> Self:
 		"""
 		Create a one-dimensional Array of evenly spaced decimals.
@@ -239,6 +257,12 @@ class ArrayCreation(ArrayData):
 		Self
 			A new ``FLOAT64`` Array of ``count`` values.
 
+
+		Raises
+		------
+		InvalidTypeError
+			When an argument is not of the type its annotation names.
+
 		Examples
 		--------
 		>>> import numdaplot as ndp
@@ -251,6 +275,7 @@ class ArrayCreation(ArrayData):
 		return created_array
 
 	@classmethod
+	@checked_arguments
 	def random(cls, distribution: Uniform | Normal | RandomIntegers, shape: Shape, seed: int | None = None) -> Self:
 		"""
 		Create an Array of values drawn at random from a distribution.
@@ -274,6 +299,8 @@ class ArrayCreation(ArrayData):
 
 		Raises
 		------
+		InvalidTypeError
+			When an argument is not of the type its annotation names.
 		InvalidSeedError
 			When ``seed`` is lower than 0.
 

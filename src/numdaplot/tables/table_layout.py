@@ -6,6 +6,7 @@ Order and uniqueness of the rows of a Table.
 
 from typing import Self
 
+from numdaplot.settings.argument_types import checked_arguments
 from numdaplot.tables.duplicates.deduplicated_frame import drop_duplicate_rows
 from numdaplot.tables.duplicates.deduplication import Deduplication
 from numdaplot.tables.sorting.sorted_frame import sort_frame
@@ -20,6 +21,7 @@ class TableLayout(TableData):
 	.. versionadded:: 0.1.0
 	"""
 
+	@checked_arguments
 	def sort(self, sorting: Sorting) -> Self:
 		"""
 		Return the rows sorted by one or several columns.
@@ -38,6 +40,8 @@ class TableLayout(TableData):
 
 		Raises
 		------
+		InvalidTypeError
+			When an argument is not of the type its annotation names.
 		ColumnNotFoundError
 			When a key names a column the Table does not have.
 
@@ -57,6 +61,7 @@ class TableLayout(TableData):
 
 		return sorted_table
 
+	@checked_arguments
 	def drop_duplicates(self, deduplication: Deduplication | None = None) -> Self:
 		"""
 		Return the Table without its duplicated rows.
@@ -76,6 +81,8 @@ class TableLayout(TableData):
 
 		Raises
 		------
+		InvalidTypeError
+			When an argument is not of the type its annotation names.
 		ColumnNotFoundError
 			When a compared column does not exist.
 

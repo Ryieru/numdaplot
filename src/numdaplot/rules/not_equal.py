@@ -29,7 +29,7 @@ class NotEqual(ValueRule[ScalarValue]):
 	------
 	RefusedOperationError
 		When ``value`` is None: ``IsPresent`` tests the missing values.
-	InvalidSettingTypeError
+	InvalidTypeError
 		When ``value`` is not a single value, such as an Array or a list.
 
 	Examples

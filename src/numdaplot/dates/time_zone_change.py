@@ -30,7 +30,7 @@ class TimeZoneChange:
 
 	Raises
 	------
-	InvalidSettingTypeError
+	InvalidTypeError
 		When a setting is not of the type its annotation names.
 	InvalidTimeZoneChangeError
 		When ``ATTRIBUTE`` or ``SHIFT`` has no zone, or ``REMOVE`` has one.
@@ -58,7 +58,7 @@ class TimeZoneChange:
 
 		Raises
 		------
-		InvalidSettingTypeError
+		InvalidTypeError
 			When a setting is not of the type its annotation names.
 		InvalidTimeZoneChangeError
 			When ``ATTRIBUTE`` or ``SHIFT`` has no zone, or ``REMOVE`` has one.

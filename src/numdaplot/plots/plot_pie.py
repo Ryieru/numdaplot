@@ -6,13 +6,13 @@ Pie plots of a Table.
 
 from numdaplot.errors.refused_setting_error import RefusedSettingError
 from numdaplot.plots.chart_layer import ChartLayer
-from numdaplot.plots.charts.chart_requirement import require_chart_class
 from numdaplot.plots.charts.pie_chart import PieChart
 from numdaplot.plots.data.pie_values import read_pie_values
 from numdaplot.plots.drawing.series_colors import require_color_count
 from numdaplot.plots.plot import Plot
 from numdaplot.plots.plot_creation import create_plot
 from numdaplot.plots.style.plot_style import PlotStyle
+from numdaplot.settings.argument_types import checked_arguments
 from numdaplot.tables.table import Table
 
 CHART_NAME = "PieChart"
@@ -24,6 +24,7 @@ Y_TICK_ROTATION_SETTING = "y_tick_rotation"
 FUNCTION_NAME = "plot_pie"
 
 
+@checked_arguments
 def plot_pie(table: Table, chart: PieChart, style: PlotStyle | None = None) -> Plot:
 	"""
 	Return a Plot sharing out the values of a column of a Table as slices of a disc.
@@ -49,8 +50,8 @@ def plot_pie(table: Table, chart: PieChart, style: PlotStyle | None = None) -> P
 
 	Raises
 	------
-	UnsupportedDataError
-		When ``table`` is an Array.
+	InvalidTypeError
+		When an argument is not of the type its annotation names.
 	ColumnNotFoundError
 		When a column does not exist.
 	IncompatibleTypesError
@@ -73,8 +74,6 @@ def plot_pie(table: Table, chart: PieChart, style: PlotStyle | None = None) -> P
 	-----
 	ReadabilityWarning
 		When there are more than 5 slices.
-	RefusedOperationError
-		When ``chart`` is not a ``PieChart``.
 
 	Examples
 	--------
@@ -87,7 +86,6 @@ def plot_pie(table: Table, chart: PieChart, style: PlotStyle | None = None) -> P
 	>>> plot = ndp.plot_pie(traffic, chart, style)
 	>>> plot.show()
 	"""
-	require_chart_class(chart, PieChart, FUNCTION_NAME)
 	values = read_pie_values(table, chart)
 	slice_count = len(values.rows)
 	require_color_count(chart.colors, slice_count)

@@ -30,7 +30,7 @@ class Renaming:
 
 	Raises
 	------
-	InvalidSettingTypeError
+	InvalidTypeError
 		When a setting is not of the type its annotation names.
 	EmptyListError
 		When ``changes`` is an empty list.
@@ -61,7 +61,7 @@ class Renaming:
 
 		Raises
 		------
-		InvalidSettingTypeError
+		InvalidTypeError
 			When a setting is not of the type its annotation names.
 		EmptyListError
 			When ``changes`` is an empty list.

@@ -12,7 +12,7 @@ import pytest
 
 from numdaplot.errors.invalid_count_error import InvalidCountError
 from numdaplot.errors.invalid_seed_error import InvalidSeedError
-from numdaplot.errors.invalid_setting_type_error import InvalidSettingTypeError
+from numdaplot.errors.invalid_type_error import InvalidTypeError
 from numdaplot.errors.refused_setting_error import RefusedSettingError
 from numdaplot.tables.preview import notebook_display
 from numdaplot.tables.preview.notebook_display import is_notebook, show_frame, show_pandas_frame
@@ -387,13 +387,13 @@ def test_is_notebook_checks_for_a_jupyter_kernel(
 
 def test_preview_rejects_a_side_written_as_text() -> None:
 	"""
-	Check that a text in place of a Side raises InvalidSettingTypeError.
+	Check that a text in place of a Side raises InvalidTypeError.
 
 	.. versionadded:: 0.1.0
 	"""
 	untyped_preview = cast(Any, Preview)
 
-	with pytest.raises(InvalidSettingTypeError):
+	with pytest.raises(InvalidTypeError):
 		untyped_preview(side="end")
 
 

@@ -44,7 +44,7 @@ class BarChart(Chart):
 
 	Raises
 	------
-	InvalidSettingTypeError
+	InvalidTypeError
 		When a setting is not of the type its annotation names.
 	InvalidColumnNameError
 		When ``x`` or a name in ``y`` is an empty text.
@@ -79,7 +79,7 @@ class BarChart(Chart):
 
 		Raises
 		------
-		InvalidSettingTypeError
+		InvalidTypeError
 			When a setting is not of the type its annotation names.
 		InvalidColumnNameError
 			When ``x`` or a name in ``y`` is an empty text.

@@ -6,16 +6,17 @@ Bar plots of a Table or an Array.
 
 from numdaplot.arrays.array import Array
 from numdaplot.plots.charts.bar_chart import BarChart
-from numdaplot.plots.charts.chart_requirement import require_chart_class
 from numdaplot.plots.layer_reading import read_bar_layer
 from numdaplot.plots.plot import Plot
 from numdaplot.plots.plot_creation import create_plot
 from numdaplot.plots.style.plot_style import PlotStyle
+from numdaplot.settings.argument_types import checked_arguments
 from numdaplot.tables.table import Table
 
 FUNCTION_NAME = "plot_bar"
 
 
+@checked_arguments
 def plot_bar(data: Table | Array, chart: BarChart | None = None, style: PlotStyle | None = None) -> Plot:
 	"""
 	Return a Plot drawing columns of numbers as bars.
@@ -42,6 +43,8 @@ def plot_bar(data: Table | Array, chart: BarChart | None = None, style: PlotStyl
 
 	Raises
 	------
+	InvalidTypeError
+		When an argument is not of the type its annotation names.
 	InvalidChartDataError
 		When a Table has no ``y`` columns, or an Array has ``x`` or ``y`` columns.
 	ColumnNotFoundError
@@ -52,8 +55,6 @@ def plot_bar(data: Table | Array, chart: BarChart | None = None, style: PlotStyl
 		When an Array has more than two dimensions.
 	InvalidColorCountError
 		When the colors of the chart are not one per series.
-	RefusedOperationError
-		When ``chart`` is not a ``BarChart``.
 
 	Examples
 	--------
@@ -70,7 +71,6 @@ def plot_bar(data: Table | Array, chart: BarChart | None = None, style: PlotStyl
 	if chart is None:
 		chart = BarChart()
 
-	require_chart_class(chart, BarChart, FUNCTION_NAME)
 	layer = read_bar_layer(data, chart)
 	plot = create_plot(layer, style)
 

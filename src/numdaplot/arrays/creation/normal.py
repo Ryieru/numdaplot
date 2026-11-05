@@ -31,7 +31,7 @@ class Normal(Distribution):
 
 	Raises
 	------
-	InvalidSettingTypeError
+	InvalidTypeError
 		When a setting is not of the type its annotation names.
 	InvalidDeviationError
 		When ``deviation`` is lower than 0.
@@ -54,7 +54,7 @@ class Normal(Distribution):
 
 		Raises
 		------
-		InvalidSettingTypeError
+		InvalidTypeError
 			When a setting is not of the type its annotation names.
 		InvalidDeviationError
 			When ``deviation`` is lower than 0.

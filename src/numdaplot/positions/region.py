@@ -34,7 +34,7 @@ class Region:
 
 	Raises
 	------
-	InvalidSettingTypeError
+	InvalidTypeError
 		When a setting is not of the type its annotation names.
 	EmptyRegionError
 		When ``rows`` and ``columns`` are both omitted.
@@ -64,7 +64,7 @@ class Region:
 
 		Raises
 		------
-		InvalidSettingTypeError
+		InvalidTypeError
 			When a setting is not of the type its annotation names.
 		EmptyRegionError
 			When ``rows`` and ``columns`` are both omitted.

@@ -37,7 +37,7 @@ class Condition:
 
 	Raises
 	------
-	InvalidSettingTypeError
+	InvalidTypeError
 		When a setting is not of the type its annotation names.
 	EmptyListError
 		When ``columns`` is an empty list.
@@ -72,7 +72,7 @@ class Condition:
 
 		Raises
 		------
-		InvalidSettingTypeError
+		InvalidTypeError
 			When a setting is not of the type its annotation names.
 		EmptyListError
 			When ``columns`` is an empty list.

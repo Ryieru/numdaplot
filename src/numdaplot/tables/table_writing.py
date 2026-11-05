@@ -6,6 +6,7 @@ Writing of a Table in a file.
 
 from pathlib import Path
 
+from numdaplot.settings.argument_types import checked_arguments
 from numdaplot.tables.conflict import Conflict
 from numdaplot.tables.files.csv_file import write_csv_file
 from numdaplot.tables.files.csv_options import CsvOptions
@@ -28,6 +29,7 @@ class TableWriting(TableData):
 	.. versionadded:: 0.1.0
 	"""
 
+	@checked_arguments
 	def to_csv(self, path: FilePath, options: CsvOptions | None = None, on_conflict: Conflict = Conflict.ERROR) -> None:
 		"""
 		Write the Table in a CSV file, column names on the first row, without row numbers.
@@ -47,6 +49,8 @@ class TableWriting(TableData):
 
 		Raises
 		------
+		InvalidTypeError
+			When an argument is not of the type its annotation names.
 		FileExistsError
 			When a file exists at the path and ``on_conflict`` is ``ERROR``.
 
@@ -71,6 +75,7 @@ class TableWriting(TableData):
 
 		write_csv_file(self._frame, file_path, options)
 
+	@checked_arguments
 	def to_json(
 		self, path: FilePath, options: JsonOptions | None = None, on_conflict: Conflict = Conflict.ERROR
 	) -> None:
@@ -92,6 +97,8 @@ class TableWriting(TableData):
 
 		Raises
 		------
+		InvalidTypeError
+			When an argument is not of the type its annotation names.
 		FileExistsError
 			When a file exists at the path and ``on_conflict`` is ``ERROR``.
 
@@ -112,6 +119,7 @@ class TableWriting(TableData):
 
 		write_json_file(self._frame, file_path, options)
 
+	@checked_arguments
 	def to_excel(
 		self, path: FilePath, options: ExcelOptions | None = None, on_conflict: Conflict = Conflict.ERROR
 	) -> None:
@@ -133,6 +141,8 @@ class TableWriting(TableData):
 
 		Raises
 		------
+		InvalidTypeError
+			When an argument is not of the type its annotation names.
 		FileExistsError
 			When a file exists at the path and ``on_conflict`` is ``ERROR``.
 		MissingDependencyError
@@ -156,6 +166,7 @@ class TableWriting(TableData):
 
 		write_excel_file(self._frame, file_path, options)
 
+	@checked_arguments
 	def to_parquet(self, path: FilePath, on_conflict: Conflict = Conflict.ERROR) -> None:
 		"""
 		Write the Table in a Parquet file, which keeps the type of each column.
@@ -173,6 +184,8 @@ class TableWriting(TableData):
 
 		Raises
 		------
+		InvalidTypeError
+			When an argument is not of the type its annotation names.
 		FileExistsError
 			When a file exists at the path and ``on_conflict`` is ``ERROR``.
 		MissingDependencyError
@@ -192,6 +205,7 @@ class TableWriting(TableData):
 		require_free_path(file_path, on_conflict)
 		write_parquet_file(self._frame, file_path)
 
+	@checked_arguments
 	def to_stata(self, path: FilePath, on_conflict: Conflict = Conflict.ERROR) -> None:
 		"""
 		Write the Table in a Stata file (``.dta``).
@@ -211,6 +225,8 @@ class TableWriting(TableData):
 
 		Raises
 		------
+		InvalidTypeError
+			When an argument is not of the type its annotation names.
 		FileExistsError
 			When a file exists at the path and ``on_conflict`` is ``ERROR``.
 

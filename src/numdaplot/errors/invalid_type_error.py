@@ -1,18 +1,18 @@
 """
-Error raised when a setting receives a value of the wrong kind.
+Error raised when a setting or an argument receives a value of the wrong type.
 
 .. versionadded:: 0.1.0
 """
 
 from numdaplot.errors.numdaplot_error import NumdaplotError
 
-SETTING_TYPE_MESSAGE = "{setting_name} expects {expected}, got {given!r}."
+TYPE_MESSAGE = "{target_name} expects {expected}, got {given!r}."
 CLASS_GIVEN_MESSAGE = "ndp.{class_name} is a class, use ndp.{class_name}() instead."
 
 
-class InvalidSettingTypeError(NumdaplotError):
+class InvalidTypeError(NumdaplotError):
 	"""
-	Raised when a setting receives a value of the wrong kind, such as a number for the rows of a ``Region``.
+	Raised when a setting or an argument receives a value of the wrong type, such as a number for ``Region`` rows.
 
 	A class given in place of an object, such as ``ndp.Sum`` in place of ``ndp.Sum()``, gets a message naming the
 	parentheses.
@@ -21,19 +21,19 @@ class InvalidSettingTypeError(NumdaplotError):
 
 	Parameters
 	----------
-	setting_name
-		The setting and what owns it, such as ``"Region rows"``.
+	target_name
+		What received the value, such as ``"Region rows"``.
 	expected
-		What the setting accepts, such as ``"an Index, a Range or None"``.
+		What it accepts, such as ``"an Index, a Range or None"``.
 	given
 		The rejected value.
 
 	Attributes
 	----------
-	setting_name
-		The setting and what owns it.
+	target_name
+		What received the value.
 	expected
-		What the setting accepts.
+		What it accepts.
 	given
 		The rejected value.
 
@@ -42,38 +42,38 @@ class InvalidSettingTypeError(NumdaplotError):
 	>>> import numdaplot as ndp
 	>>> try:
 	... 	ndp.Region(rows=0)
-	... except ndp.InvalidSettingTypeError as error:
+	... except ndp.InvalidTypeError as error:
 	... 	print(error)
 	Region rows expects an Index, a Range or None, got 0.
 	>>> try:
 	... 	ndp.Array.from_list([1, 2]).compute(ndp.Sum)
-	... except ndp.InvalidSettingTypeError as error:
+	... except ndp.InvalidTypeError as error:
 	... 	print(error)
 	ndp.Sum is a class, use ndp.Sum() instead.
 	"""
 
-	def __init__(self, setting_name: str, expected: str, given: object) -> None:
+	def __init__(self, target_name: str, expected: str, given: object) -> None:
 		"""
-		Build the error message from the setting, what it accepts and the rejected value.
+		Build the error message from what received the value, what it accepts and the rejected value.
 
 		.. versionadded:: 0.1.0
 
 		Parameters
 		----------
-		setting_name
-			The setting and what owns it.
+		target_name
+			What received the value.
 		expected
-			What the setting accepts.
+			What it accepts.
 		given
 			The rejected value.
 		"""
 		if isinstance(given, type):
 			message = CLASS_GIVEN_MESSAGE.format(class_name=given.__name__)
 		else:
-			message = SETTING_TYPE_MESSAGE.format(setting_name=setting_name, expected=expected, given=given)
+			message = TYPE_MESSAGE.format(target_name=target_name, expected=expected, given=given)
 
 		super().__init__(message)
 
-		self.setting_name = setting_name
+		self.target_name = target_name
 		self.expected = expected
 		self.given = given

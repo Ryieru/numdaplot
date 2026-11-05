@@ -27,7 +27,7 @@ class ExcelOptions:
 
 	Raises
 	------
-	InvalidSettingTypeError
+	InvalidTypeError
 		When a setting is not of the type its annotation names.
 	InvalidSheetNameError
 		When the name is empty, longer than 31 characters, or holds ``[ ] : * ? / \``, which Excel refuses.
@@ -57,7 +57,7 @@ class ExcelOptions:
 
 		Raises
 		------
-		InvalidSettingTypeError
+		InvalidTypeError
 			When a setting is not of the type its annotation names.
 		InvalidSheetNameError
 			When the name is empty, longer than 31 characters, or holds a character Excel refuses.

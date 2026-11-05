@@ -7,16 +7,13 @@ Unit tests of the operands an Array can be combined with.
 from datetime import date, timedelta
 
 import numpy
-import pytest
 
 from numdaplot.arrays.operations.operand import (
 	convert_time_value,
 	find_operand_type,
 	find_operand_type_names,
-	require_single_value,
 )
 from numdaplot.data_types.type import Type
-from numdaplot.errors.unsupported_operand_error import UnsupportedOperandError
 
 SINGLE_VALUES = [True, 3, 2.5, "Paris", date(2026, 1, 31), timedelta(hours=1)]
 REJECTED_OPERANDS = [[1, 2], (1, 2), numpy.array([1, 2]), None]
@@ -27,37 +24,6 @@ DAY = date(2026, 1, 31)
 EXPECTED_DAY = numpy.datetime64("2026-01-31")
 ONE_HOUR = timedelta(hours=1)
 NUMBER = 3
-
-
-@pytest.mark.parametrize("value", SINGLE_VALUES)
-def test_require_single_value_accepts_each_kind_of_single_value(value: object) -> None:
-	"""
-	Check that booleans, numbers, texts, dates and durations are accepted.
-
-	.. versionadded:: 0.1.0
-
-	Parameters
-	----------
-	value
-		A single value.
-	"""
-	require_single_value(value)
-
-
-@pytest.mark.parametrize("operand", REJECTED_OPERANDS)
-def test_require_single_value_rejects_containers_and_none(operand: object) -> None:
-	"""
-	Check that lists, tuples, numpy arrays and None are rejected.
-
-	.. versionadded:: 0.1.0
-
-	Parameters
-	----------
-	operand
-		A rejected operand.
-	"""
-	with pytest.raises(UnsupportedOperandError):
-		require_single_value(operand)
 
 
 def test_find_operand_type_reads_the_type_of_array_values() -> None:

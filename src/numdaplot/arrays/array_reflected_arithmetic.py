@@ -19,6 +19,7 @@ from numdaplot.arrays.array_arithmetic import (
 )
 from numdaplot.arrays.array_data import ArrayData
 from numdaplot.rules.rule_values import ScalarValue
+from numdaplot.settings.argument_types import checked_arguments
 
 
 class ArrayReflectedArithmetic(ArrayData):
@@ -28,6 +29,7 @@ class ArrayReflectedArithmetic(ArrayData):
 	.. versionadded:: 0.1.0
 	"""
 
+	@checked_arguments
 	def __radd__(self, other: ScalarValue) -> Self:
 		"""
 		Return the sum of a single value and each value, written ``value + array``.
@@ -46,8 +48,8 @@ class ArrayReflectedArithmetic(ArrayData):
 
 		Raises
 		------
-		UnsupportedOperandError
-			When ``other`` is not a single value, such as a list.
+		InvalidTypeError
+			When an argument is not of the type its annotation names.
 		IncompatibleTypesError
 			When the operation does not apply to the types, such as a number and a text.
 
@@ -62,6 +64,7 @@ class ArrayReflectedArithmetic(ArrayData):
 
 		return combined_array
 
+	@checked_arguments
 	def __rsub__(self, other: ScalarValue) -> Self:
 		"""
 		Return the difference of a single value and each value, written ``value - array``.
@@ -80,8 +83,8 @@ class ArrayReflectedArithmetic(ArrayData):
 
 		Raises
 		------
-		UnsupportedOperandError
-			When ``other`` is not a single value, such as a list.
+		InvalidTypeError
+			When an argument is not of the type its annotation names.
 		IncompatibleTypesError
 			When the operation does not apply to the types, such as a number and a text.
 
@@ -96,6 +99,7 @@ class ArrayReflectedArithmetic(ArrayData):
 
 		return combined_array
 
+	@checked_arguments
 	def __rmul__(self, other: ScalarValue) -> Self:
 		"""
 		Return the product of a single value and each value, written ``value * array``.
@@ -114,8 +118,8 @@ class ArrayReflectedArithmetic(ArrayData):
 
 		Raises
 		------
-		UnsupportedOperandError
-			When ``other`` is not a single value, such as a list.
+		InvalidTypeError
+			When an argument is not of the type its annotation names.
 		IncompatibleTypesError
 			When the operation does not apply to the types, such as a number and a text.
 
@@ -130,6 +134,7 @@ class ArrayReflectedArithmetic(ArrayData):
 
 		return combined_array
 
+	@checked_arguments
 	def __rtruediv__(self, other: ScalarValue) -> Self:
 		"""
 		Return the quotient of a single value and each value, written ``value / array``.
@@ -148,8 +153,8 @@ class ArrayReflectedArithmetic(ArrayData):
 
 		Raises
 		------
-		UnsupportedOperandError
-			When ``other`` is not a single value, such as a list.
+		InvalidTypeError
+			When an argument is not of the type its annotation names.
 		IncompatibleTypesError
 			When the operation does not apply to the types, such as a number and a text.
 
@@ -164,6 +169,7 @@ class ArrayReflectedArithmetic(ArrayData):
 
 		return combined_array
 
+	@checked_arguments
 	def __rfloordiv__(self, other: ScalarValue) -> Self:
 		"""
 		Return the whole quotient of a single value and each value, written ``value // array``.
@@ -182,8 +188,8 @@ class ArrayReflectedArithmetic(ArrayData):
 
 		Raises
 		------
-		UnsupportedOperandError
-			When ``other`` is not a single value, such as a list.
+		InvalidTypeError
+			When an argument is not of the type its annotation names.
 		IncompatibleTypesError
 			When the operation does not apply to the types, such as a number and a text.
 
@@ -198,6 +204,7 @@ class ArrayReflectedArithmetic(ArrayData):
 
 		return combined_array
 
+	@checked_arguments
 	def __rmod__(self, other: ScalarValue) -> Self:
 		"""
 		Return the remainder of a single value and each value, written ``value % array``.
@@ -216,8 +223,8 @@ class ArrayReflectedArithmetic(ArrayData):
 
 		Raises
 		------
-		UnsupportedOperandError
-			When ``other`` is not a single value, such as a list.
+		InvalidTypeError
+			When an argument is not of the type its annotation names.
 		IncompatibleTypesError
 			When the operation does not apply to the types, such as a number and a text.
 
@@ -232,6 +239,7 @@ class ArrayReflectedArithmetic(ArrayData):
 
 		return combined_array
 
+	@checked_arguments
 	def __rpow__(self, other: ScalarValue) -> Self:
 		"""
 		Return the power of a single value and each value, written ``value ** array``.
@@ -250,8 +258,8 @@ class ArrayReflectedArithmetic(ArrayData):
 
 		Raises
 		------
-		UnsupportedOperandError
-			When ``other`` is not a single value, such as a list.
+		InvalidTypeError
+			When an argument is not of the type its annotation names.
 		IncompatibleTypesError
 			When the operation does not apply to the types, such as a number and a text.
 

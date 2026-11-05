@@ -14,6 +14,7 @@ from numdaplot.arrays.layout.unique_values import find_unique_values
 from numdaplot.arrays.shape import Shape
 from numdaplot.errors.shape_mismatch_error import ShapeMismatchError
 from numdaplot.positions.axis import Axis
+from numdaplot.settings.argument_types import checked_arguments
 
 FLAT_DIMENSIONS = (-1,)
 
@@ -25,6 +26,7 @@ class ArrayLayout(ArrayData):
 	.. versionadded:: 0.1.0
 	"""
 
+	@checked_arguments
 	def reshape(self, shape: Shape) -> Self:
 		"""
 		Return the same values arranged in another shape, in reading order.
@@ -43,6 +45,8 @@ class ArrayLayout(ArrayData):
 
 		Raises
 		------
+		InvalidTypeError
+			When an argument is not of the type its annotation names.
 		ShapeMismatchError
 			When the new shape holds another number of values.
 
@@ -110,6 +114,7 @@ class ArrayLayout(ArrayData):
 
 		return flat_array
 
+	@checked_arguments
 	def sort(self, sorting: ArraySorting | None = None, axis: Axis | None = None) -> Self:
 		"""
 		Return the values sorted inside each row, or inside each column.
@@ -132,6 +137,8 @@ class ArrayLayout(ArrayData):
 
 		Raises
 		------
+		InvalidTypeError
+			When an argument is not of the type its annotation names.
 		DimensionError
 			When an axis is given for an Array that is not two-dimensional.
 

@@ -7,6 +7,7 @@ Creation of a Table from a file.
 from pathlib import Path
 from typing import Self
 
+from numdaplot.settings.argument_types import checked_arguments
 from numdaplot.tables.files.csv_file import read_csv_file
 from numdaplot.tables.files.csv_options import CsvOptions
 from numdaplot.tables.files.excel_file import read_excel_file
@@ -34,6 +35,7 @@ class TableReading(TableData):
 	"""
 
 	@classmethod
+	@checked_arguments
 	def from_csv(cls, path: FilePath, options: CsvOptions | None = None) -> Self:
 		r"""
 		Return a Table read from a CSV file whose first row holds the column names.
@@ -54,6 +56,8 @@ class TableReading(TableData):
 
 		Raises
 		------
+		InvalidTypeError
+			When an argument is not of the type its annotation names.
 		FileNotFoundError
 			When there is no file at the path.
 		InvalidColumnNameError, DuplicateColumnError
@@ -83,6 +87,7 @@ class TableReading(TableData):
 		return table
 
 	@classmethod
+	@checked_arguments
 	def from_json(cls, path: FilePath, options: JsonOptions | None = None) -> Self:
 		r"""
 		Return a Table read from a JSON file in UTF-8 holding one object per row.
@@ -105,6 +110,8 @@ class TableReading(TableData):
 
 		Raises
 		------
+		InvalidTypeError
+			When an argument is not of the type its annotation names.
 		FileNotFoundError
 			When there is no file at the path.
 		InvalidColumnNameError
@@ -134,6 +141,7 @@ class TableReading(TableData):
 		return table
 
 	@classmethod
+	@checked_arguments
 	def from_excel(cls, path: FilePath, options: ExcelOptions | None = None) -> Self:
 		"""
 		Return a Table read from a sheet of an Excel file whose first row holds the column names.
@@ -156,6 +164,8 @@ class TableReading(TableData):
 
 		Raises
 		------
+		InvalidTypeError
+			When an argument is not of the type its annotation names.
 		FileNotFoundError
 			When there is no file at the path.
 		MissingDependencyError
@@ -184,6 +194,7 @@ class TableReading(TableData):
 		return table
 
 	@classmethod
+	@checked_arguments
 	def from_parquet(cls, path: FilePath) -> Self:
 		"""
 		Return a Table read from a Parquet file.
@@ -204,6 +215,8 @@ class TableReading(TableData):
 
 		Raises
 		------
+		InvalidTypeError
+			When an argument is not of the type its annotation names.
 		FileNotFoundError
 			When there is no file at the path.
 		MissingDependencyError
@@ -227,6 +240,7 @@ class TableReading(TableData):
 		return table
 
 	@classmethod
+	@checked_arguments
 	def from_stata(cls, path: FilePath) -> Self:
 		"""
 		Return a Table read from a Stata file (``.dta``).
@@ -245,6 +259,8 @@ class TableReading(TableData):
 
 		Raises
 		------
+		InvalidTypeError
+			When an argument is not of the type its annotation names.
 		FileNotFoundError
 			When there is no file at the path.
 
@@ -266,6 +282,7 @@ class TableReading(TableData):
 		return table
 
 	@classmethod
+	@checked_arguments
 	def from_sas(cls, path: FilePath, options: SasOptions | None = None) -> Self:
 		"""
 		Return a Table read from a SAS data file (``.sas7bdat``). numdaplot does not write this format.
@@ -290,6 +307,8 @@ class TableReading(TableData):
 
 		Raises
 		------
+		InvalidTypeError
+			When an argument is not of the type its annotation names.
 		FileNotFoundError
 			When there is no file at the path.
 
@@ -315,6 +334,7 @@ class TableReading(TableData):
 		return table
 
 	@classmethod
+	@checked_arguments
 	def from_xpt(cls, path: FilePath, options: XptOptions | None = None) -> Self:
 		"""
 		Return a Table read from a SAS transport file (``.xpt``). numdaplot does not write this format.
@@ -339,6 +359,8 @@ class TableReading(TableData):
 
 		Raises
 		------
+		InvalidTypeError
+			When an argument is not of the type its annotation names.
 		FileNotFoundError
 			When there is no file at the path.
 

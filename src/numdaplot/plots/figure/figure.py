@@ -19,6 +19,7 @@ from numdaplot.plots.output.image_saving import write_image
 from numdaplot.plots.output.plot_display import show_drawing
 from numdaplot.plots.plot import Plot
 from numdaplot.plots.style.image_options import ImageOptions
+from numdaplot.settings.argument_types import checked_arguments
 from numdaplot.tables.conflict import Conflict
 from numdaplot.tables.files.file_paths import FilePath
 
@@ -54,6 +55,7 @@ class Figure:
 	>>> figure.show()
 	"""
 
+	@checked_arguments
 	def __init__(self, layout: Layout, style: FigureStyle | None = None) -> None:
 		"""
 		Keep the grid and the style of an empty Figure.
@@ -66,6 +68,11 @@ class Figure:
 			The grid of cells.
 		style
 			The title and the size of the Figure, the default ``FigureStyle`` when omitted.
+
+		Raises
+		------
+		InvalidTypeError
+			When an argument is not of the type its annotation names.
 		"""
 		if style is None:
 			style = FigureStyle()
@@ -74,6 +81,7 @@ class Figure:
 		self._style = style
 		self._placements = list[Placement]()
 
+	@checked_arguments
 	def place(self, plot: Plot, cell: Cell) -> Self:
 		"""
 		Return a new Figure with a Plot placed on a cell, and on the cells it spans.
@@ -94,6 +102,8 @@ class Figure:
 
 		Raises
 		------
+		InvalidTypeError
+			When an argument is not of the type its annotation names.
 		CellOutOfRangeError
 			When a cell covered is outside the Layout.
 		OccupiedCellError
@@ -144,6 +154,7 @@ class Figure:
 
 		return matplotlib_figure
 
+	@checked_arguments
 	def save(self, path: FilePath, options: ImageOptions | None = None, on_conflict: Conflict = Conflict.ERROR) -> None:
 		"""
 		Save the Figure as an image, in the format named by the extension of the path.
@@ -165,6 +176,8 @@ class Figure:
 
 		Raises
 		------
+		InvalidTypeError
+			When an argument is not of the type its annotation names.
 		UnsupportedImageFormatError
 			When the path does not end with ``.png``, ``.svg`` or ``.pdf``.
 		RefusedSettingError

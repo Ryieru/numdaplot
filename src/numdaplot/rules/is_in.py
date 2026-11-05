@@ -29,7 +29,7 @@ class IsIn[ScalarValue: (bool, int, float, str, date, datetime, timedelta)](Rule
 
 	Raises
 	------
-	InvalidSettingTypeError
+	InvalidTypeError
 		When a setting is not of the type its annotation names.
 	EmptyValuesError
 		When ``values`` is empty.
@@ -52,7 +52,7 @@ class IsIn[ScalarValue: (bool, int, float, str, date, datetime, timedelta)](Rule
 
 		Raises
 		------
-		InvalidSettingTypeError
+		InvalidTypeError
 			When a setting is not of the type its annotation names.
 		EmptyValuesError
 			When ``values`` is empty.

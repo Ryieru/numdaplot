@@ -30,7 +30,7 @@ class ColumnChoice:
 
 	Raises
 	------
-	InvalidSettingTypeError
+	InvalidTypeError
 		When a setting is not of the type its annotation names.
 	EmptyListError
 		When ``columns`` is empty with ``KEEP``, which would keep nothing.
@@ -64,7 +64,7 @@ class ColumnChoice:
 
 		Raises
 		------
-		InvalidSettingTypeError
+		InvalidTypeError
 			When a setting is not of the type its annotation names.
 		EmptyListError
 			When ``columns`` is empty with ``KEEP``.

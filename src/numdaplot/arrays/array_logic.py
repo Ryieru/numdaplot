@@ -11,6 +11,7 @@ import numpy
 from numdaplot.arrays.array_data import ArrayData
 from numdaplot.arrays.operations.boolean_operands import require_booleans
 from numdaplot.arrays.operations.transformation import transform_values
+from numdaplot.settings.argument_types import checked_arguments
 
 AND_SYMBOL = "&"
 OR_SYMBOL = "|"
@@ -26,6 +27,7 @@ class ArrayLogic(ArrayData):
 	.. versionadded:: 0.1.0
 	"""
 
+	@checked_arguments
 	def __and__(self, other: Self | bool) -> Self:
 		"""
 		Return True where both operands are True, written ``array & other``.
@@ -44,6 +46,8 @@ class ArrayLogic(ArrayData):
 
 		Raises
 		------
+		InvalidTypeError
+			When an argument is not of the type its annotation names.
 		IncompatibleTypesError
 			When an operand is not a boolean.
 
@@ -58,6 +62,7 @@ class ArrayLogic(ArrayData):
 
 		return combined_array
 
+	@checked_arguments
 	def __rand__(self, other: bool) -> Self:
 		"""
 		Return True where both operands are True, written ``value & array``.
@@ -76,6 +81,8 @@ class ArrayLogic(ArrayData):
 
 		Raises
 		------
+		InvalidTypeError
+			When an argument is not of the type its annotation names.
 		IncompatibleTypesError
 			When an operand is not a boolean.
 
@@ -89,6 +96,7 @@ class ArrayLogic(ArrayData):
 
 		return combined_array
 
+	@checked_arguments
 	def __or__(self, other: Self | bool) -> Self:
 		"""
 		Return True where at least one operand is True, written ``array | other``.
@@ -107,6 +115,8 @@ class ArrayLogic(ArrayData):
 
 		Raises
 		------
+		InvalidTypeError
+			When an argument is not of the type its annotation names.
 		IncompatibleTypesError
 			When an operand is not a boolean.
 
@@ -121,6 +131,7 @@ class ArrayLogic(ArrayData):
 
 		return combined_array
 
+	@checked_arguments
 	def __ror__(self, other: bool) -> Self:
 		"""
 		Return True where at least one operand is True, written ``value | array``.
@@ -139,6 +150,8 @@ class ArrayLogic(ArrayData):
 
 		Raises
 		------
+		InvalidTypeError
+			When an argument is not of the type its annotation names.
 		IncompatibleTypesError
 			When an operand is not a boolean.
 
@@ -204,8 +217,6 @@ class ArrayLogic(ArrayData):
 
 		Raises
 		------
-		UnsupportedOperandError
-			When ``other`` is neither an Array nor a single value.
 		IncompatibleTypesError
 			When an operand is not a boolean.
 		"""

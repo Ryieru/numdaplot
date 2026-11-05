@@ -28,7 +28,7 @@ class Contains(Rule):
 
 	Raises
 	------
-	InvalidSettingTypeError
+	InvalidTypeError
 		When a setting is not of the type its annotation names.
 	EmptyTextError
 		When ``text`` is empty.
@@ -52,7 +52,7 @@ class Contains(Rule):
 
 		Raises
 		------
-		InvalidSettingTypeError
+		InvalidTypeError
 			When a setting is not of the type its annotation names.
 		EmptyTextError
 			When ``text`` is empty.

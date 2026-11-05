@@ -6,16 +6,15 @@ Map of the missing values of a Table.
 
 from numdaplot.plots.chart_layer import ChartLayer
 from numdaplot.plots.charts.missing_map_chart import MissingMapChart
-from numdaplot.plots.data.chart_data import require_table
 from numdaplot.plots.data.missing_cells import read_missing_cells
 from numdaplot.plots.plot import Plot
 from numdaplot.plots.plot_creation import create_plot
 from numdaplot.plots.style.plot_style import PlotStyle
+from numdaplot.settings.argument_types import checked_arguments
 from numdaplot.tables.table import Table
 
-FUNCTION_NAME = "plot_missing_map"
 
-
+@checked_arguments
 def plot_missing_map(table: Table, style: PlotStyle | None = None) -> Plot:
 	"""
 	Return a Plot drawing each value of a Table as a cell, light gray when present and dark when missing.
@@ -39,8 +38,8 @@ def plot_missing_map(table: Table, style: PlotStyle | None = None) -> Plot:
 
 	Raises
 	------
-	UnsupportedDataError
-		When the data is an Array.
+	InvalidTypeError
+		When an argument is not of the type its annotation names.
 
 	Examples
 	--------
@@ -53,8 +52,7 @@ def plot_missing_map(table: Table, style: PlotStyle | None = None) -> Plot:
 	>>> plot = ndp.plot_missing_map(flats, style)
 	>>> plot.show()
 	"""
-	checked_table = require_table(table, FUNCTION_NAME)
-	values = read_missing_cells(checked_table)
+	values = read_missing_cells(table)
 	layer = ChartLayer(MissingMapChart(), values)
 	plot = create_plot(layer, style)
 

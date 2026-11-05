@@ -27,7 +27,7 @@ class MissingCount:
 
 	Raises
 	------
-	InvalidSettingTypeError
+	InvalidTypeError
 		When a setting is not of the type its annotation names.
 
 	Examples
@@ -53,7 +53,7 @@ class MissingCount:
 
 		Raises
 		------
-		InvalidSettingTypeError
+		InvalidTypeError
 			When a setting is not of the type its annotation names.
 		"""
 		require_field_types(self)

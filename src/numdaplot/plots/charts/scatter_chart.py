@@ -52,7 +52,7 @@ class ScatterChart(Chart):
 
 	Raises
 	------
-	InvalidSettingTypeError
+	InvalidTypeError
 		When a setting is not of the type its annotation names.
 	InvalidColumnNameError
 		When ``x``, ``y``, ``color_by`` or ``size_by`` is an empty text.
@@ -88,7 +88,7 @@ class ScatterChart(Chart):
 
 		Raises
 		------
-		InvalidSettingTypeError
+		InvalidTypeError
 			When a setting is not of the type its annotation names.
 		InvalidColumnNameError
 			When ``x``, ``y``, ``color_by`` or ``size_by`` is an empty text.

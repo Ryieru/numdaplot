@@ -7,6 +7,7 @@ Missing values of a Table: count, summary and removal.
 from typing import Self
 
 from numdaplot.positions.axis import Axis
+from numdaplot.settings.argument_types import checked_arguments
 from numdaplot.tables.missing.missing_count import MissingCount
 from numdaplot.tables.missing.missing_counts import count_frame_missing
 from numdaplot.tables.missing.missing_drop import MissingDrop
@@ -23,6 +24,7 @@ class TableMissing(TableData):
 	.. versionadded:: 0.1.0
 	"""
 
+	@checked_arguments
 	def count_missing(self, missing_count: MissingCount | None = None, axis: Axis | None = None) -> Self:
 		"""
 		Return the number or the ratio of missing values, for the whole Table, each row or each column.
@@ -43,6 +45,12 @@ class TableMissing(TableData):
 			A new Table with a ``missing_count`` column, or ``missing_ratio`` for ``Measure.RATIO``:
 			one row for the whole Table, read with ``to_value``, one row per row, or one row per column after
 			a ``column`` column naming it. A ratio is missing when there is no value to count.
+
+
+		Raises
+		------
+		InvalidTypeError
+			When an argument is not of the type its annotation names.
 
 		Examples
 		--------
@@ -90,6 +98,7 @@ class TableMissing(TableData):
 		summary = summarize_missing(self._frame)
 		show_pandas_frame(summary)
 
+	@checked_arguments
 	def drop_missing(self, missing_drop: MissingDrop | None = None, axis: Axis = Axis.EACH_ROW) -> Self:
 		"""
 		Return the Table without its rows, or its columns, holding missing values.
@@ -111,6 +120,8 @@ class TableMissing(TableData):
 
 		Raises
 		------
+		InvalidTypeError
+			When an argument is not of the type its annotation names.
 		ColumnNotFoundError
 			When a looked at column does not exist.
 

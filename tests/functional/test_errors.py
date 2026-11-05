@@ -57,11 +57,9 @@ PRECISE_ERRORS = [
 	ndp.ShapeMismatchError,
 	ndp.TimeZoneMismatchError,
 	ndp.UnknownTimeZoneError,
-	ndp.UnsupportedDataError,
 	ndp.UnsupportedImageFormatError,
 	ndp.UnsupportedIndexError,
 	ndp.UnsupportedMissingError,
-	ndp.UnsupportedOperandError,
 	ndp.UnsupportedTypeError,
 	ndp.ValueConversionError,
 ]

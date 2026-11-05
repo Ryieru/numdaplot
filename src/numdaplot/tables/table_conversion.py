@@ -12,8 +12,9 @@ import pandas
 
 from numdaplot.arrays.array import Array
 from numdaplot.arrays.conversion.python_values import to_python_list
+from numdaplot.errors.invalid_type_error import InvalidTypeError
 from numdaplot.errors.not_single_value_error import NotSingleValueError
-from numdaplot.errors.unsupported_operand_error import UnsupportedOperandError
+from numdaplot.settings.argument_types import checked_arguments
 from numdaplot.tables.frames.array_frame import build_array_frame
 from numdaplot.tables.frames.column_values import convert_column_values, find_column_missing, read_array_values
 from numdaplot.tables.frames.frame_equality import are_frames_equal
@@ -26,6 +27,8 @@ if TYPE_CHECKING:
 
 SINGLE_VALUE_COUNT = 1
 FIRST_POSITION = 0
+EQUALITY_TARGET = "Table.is_equal other"
+EQUALITY_EXPECTED = "a Table"
 
 
 class TableConversion(TableData):
@@ -36,6 +39,7 @@ class TableConversion(TableData):
 	"""
 
 	@classmethod
+	@checked_arguments
 	def from_pandas(cls, frame: pandas.DataFrame) -> Self:
 		"""
 		Return a Table holding a copy of a pandas DataFrame; changing the DataFrame never changes the Table.
@@ -55,6 +59,8 @@ class TableConversion(TableData):
 
 		Raises
 		------
+		InvalidTypeError
+			When an argument is not of the type its annotation names.
 		UnsupportedIndexError
 			When the index holds other values: call ``reset_index()`` first to keep them as a column.
 		InvalidColumnNameError, DuplicateColumnError
@@ -78,6 +84,7 @@ class TableConversion(TableData):
 		return table
 
 	@classmethod
+	@checked_arguments
 	def from_arrays(cls, columns: dict[str, Array]) -> Self:
 		"""
 		Return a Table whose columns hold the values of one-dimensional Arrays.
@@ -96,6 +103,8 @@ class TableConversion(TableData):
 
 		Raises
 		------
+		InvalidTypeError
+			When an argument is not of the type its annotation names.
 		EmptyListError
 			When there is no column.
 		InvalidColumnNameError
@@ -144,6 +153,7 @@ class TableConversion(TableData):
 
 		return frame_copy
 
+	@checked_arguments
 	def column(self, column_name: str) -> Array:
 		"""
 		Return the values of a column as an Array.
@@ -162,6 +172,8 @@ class TableConversion(TableData):
 
 		Raises
 		------
+		InvalidTypeError
+			When an argument is not of the type its annotation names.
 		ColumnNotFoundError
 			When no column has this name.
 		UnsupportedMissingError
@@ -231,6 +243,7 @@ class TableConversion(TableData):
 
 		return single_value
 
+	@checked_arguments
 	def is_equal(self, equality: Equality) -> bool:
 		"""
 		Return whether this Table and another one have the same columns, in the same order, with the same values.
@@ -252,8 +265,8 @@ class TableConversion(TableData):
 
 		Raises
 		------
-		UnsupportedOperandError
-			When the compared value is not a Table.
+		InvalidTypeError
+			When an argument is not of the type its annotation names.
 
 		Examples
 		--------
@@ -265,8 +278,7 @@ class TableConversion(TableData):
 		"""
 		other = cast(object, equality.other)
 		if not isinstance(other, TableData):
-			other_class = type(other)
-			raise UnsupportedOperandError(other_class.__name__)
+			raise InvalidTypeError(EQUALITY_TARGET, EQUALITY_EXPECTED, other)
 
 		other_frame = other._frame
 		is_equal = are_frames_equal(self._frame, other_frame, equality.types)

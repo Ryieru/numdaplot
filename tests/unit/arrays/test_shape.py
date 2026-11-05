@@ -9,8 +9,8 @@ from typing import Any, cast
 import pytest
 
 from numdaplot.arrays.shape import Shape
-from numdaplot.errors.invalid_setting_type_error import InvalidSettingTypeError
 from numdaplot.errors.invalid_shape_error import InvalidShapeError
+from numdaplot.errors.invalid_type_error import InvalidTypeError
 
 GRID_DIMENSIONS = [3, 4]
 EMPTY_DIMENSIONS = [0, 3]
@@ -63,7 +63,7 @@ def test_shape_rejects_a_negative_dimension() -> None:
 @pytest.mark.parametrize("dimensions", [(3, 4), 3])
 def test_shape_rejects_dimensions_that_are_not_a_list(dimensions: object) -> None:
 	"""
-	Check that a tuple or a number raises InvalidSettingTypeError.
+	Check that a tuple or a number raises InvalidTypeError.
 
 	.. versionadded:: 0.1.0
 
@@ -74,7 +74,7 @@ def test_shape_rejects_dimensions_that_are_not_a_list(dimensions: object) -> Non
 	"""
 	untyped_shape = cast(Any, Shape)
 
-	with pytest.raises(InvalidSettingTypeError):
+	with pytest.raises(InvalidTypeError):
 		untyped_shape(dimensions)
 
 

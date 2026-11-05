@@ -12,14 +12,17 @@ from numdaplot.arrays.array_data import ArrayData
 from numdaplot.arrays.conversion.array_text import format_array
 from numdaplot.arrays.conversion.equality_check import are_equal
 from numdaplot.arrays.conversion.python_values import to_python_list
+from numdaplot.errors.invalid_type_error import InvalidTypeError
 from numdaplot.errors.not_single_value_error import NotSingleValueError
-from numdaplot.errors.unsupported_operand_error import UnsupportedOperandError
+from numdaplot.settings.argument_types import checked_arguments
 
 if TYPE_CHECKING:
 	from numdaplot.arrays.equality import Equality
 
 SINGLE_VALUE_COUNT = 1
 FLAT_DIMENSIONS = (-1,)
+EQUALITY_TARGET = "Array.is_equal other"
+EQUALITY_EXPECTED = "an Array"
 
 
 class ArrayConversion(ArrayData):
@@ -83,6 +86,7 @@ class ArrayConversion(ArrayData):
 
 		return single_value
 
+	@checked_arguments
 	def is_equal(self, equality: Equality) -> bool:
 		"""
 		Return whether this Array and another one have the same shape and the same values.
@@ -103,8 +107,8 @@ class ArrayConversion(ArrayData):
 
 		Raises
 		------
-		UnsupportedOperandError
-			When the compared value is not an Array.
+		InvalidTypeError
+			When an argument is not of the type its annotation names.
 
 		Examples
 		--------
@@ -116,8 +120,7 @@ class ArrayConversion(ArrayData):
 		"""
 		other = cast(object, equality.other)
 		if not isinstance(other, ArrayData):
-			other_class = type(other)
-			raise UnsupportedOperandError(other_class.__name__)
+			raise InvalidTypeError(EQUALITY_TARGET, EQUALITY_EXPECTED, other)
 
 		other_values = other._values
 		is_equal = are_equal(self._values, other_values, equality.types)

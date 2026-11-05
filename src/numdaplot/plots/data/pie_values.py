@@ -11,13 +11,11 @@ import numpy
 import pandas
 from numpy.typing import NDArray
 
-from numdaplot.arrays.array import Array
 from numdaplot.errors.empty_total_error import EmptyTotalError
 from numdaplot.errors.missing_value_error import MissingValueError
 from numdaplot.errors.out_of_domain_error import OutOfDomainError
 from numdaplot.errors.readability_warning import ReadabilityWarning
 from numdaplot.plots.charts.pie_chart import PieChart
-from numdaplot.plots.data.chart_data import require_table
 from numdaplot.plots.data.chart_values import ChartValues, Positions, Series
 from numdaplot.plots.data.column_reading import read_numbers, read_texts
 from numdaplot.plots.data.position_kind import PositionKind
@@ -30,11 +28,11 @@ MAXIMUM_READABLE_SLICES = 5
 READABILITY_START = "A PieChart with {slice_count} slices is hard to read."
 READABILITY_ADVICE = "Try ndp.plot_bar with a BarChart, it may compare them better."
 READABILITY_MESSAGE = f"{READABILITY_START} {READABILITY_ADVICE}"
-# The warning points at the line calling plot_pie, above warn_slice_count, read_pie_values and plot_pie.
-READABILITY_STACK_LEVEL = 4
+# The warning points at the line calling plot_pie, above warn_slice_count, read_pie_values, plot_pie and its check.
+READABILITY_STACK_LEVEL = 5
 
 
-def read_pie_values(data: Table | Array, chart: PieChart) -> ChartValues:
+def read_pie_values(table: Table, chart: PieChart) -> ChartValues:
 	"""
 	Return the labels and the values of the slices of a PieChart, after checking that they can be shared out.
 
@@ -42,7 +40,7 @@ def read_pie_values(data: Table | Array, chart: PieChart) -> ChartValues:
 
 	Parameters
 	----------
-	data
+	table
 		The Table drawn.
 	chart
 		The ``labels`` and ``values`` columns.
@@ -54,8 +52,6 @@ def read_pie_values(data: Table | Array, chart: PieChart) -> ChartValues:
 
 	Raises
 	------
-	UnsupportedDataError
-		When the data is an Array.
 	ColumnNotFoundError
 		When a column does not exist.
 	IncompatibleTypesError
@@ -84,7 +80,6 @@ def read_pie_values(data: Table | Array, chart: PieChart) -> ChartValues:
 	>>> read_pie_values(shares, ndp.PieChart(labels="city", values="sales")).series[0].values
 	array([120.,  80.])
 	"""
-	table = require_table(data, CHART_NAME)
 	labels_name = chart.labels
 	values_name = chart.values
 	frame = table.to_pandas()

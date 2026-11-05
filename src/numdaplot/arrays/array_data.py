@@ -10,7 +10,7 @@ import numpy
 import numpy.typing
 
 from numdaplot.arrays.operations.combination import combine_values
-from numdaplot.arrays.operations.operand import Operand, require_single_value
+from numdaplot.arrays.operations.operand import Operand
 from numdaplot.arrays.shape import Shape
 from numdaplot.data_types.numpy_mapping import from_numpy_dtype
 from numdaplot.data_types.type import Type
@@ -171,16 +171,10 @@ class ArrayData:
 		-------
 		Operand
 			The numpy values of the Array, or the single value itself.
-
-		Raises
-		------
-		UnsupportedOperandError
-			When ``other`` is neither an Array nor a single value.
 		"""
 		if isinstance(other, ArrayData):
 			return other._values
 
-		require_single_value(other)
 		single_value = cast(ScalarValue, other)
 
 		return single_value
@@ -207,7 +201,7 @@ class ArrayData:
 
 		Raises
 		------
-		UnsupportedOperandError, ShapeMismatchError, IncompatibleTypesError
+		ShapeMismatchError, IncompatibleTypesError
 			When the operand is not accepted, as in ``combine_values``.
 		"""
 		right_values = self._read_operand(other)
@@ -238,7 +232,7 @@ class ArrayData:
 
 		Raises
 		------
-		UnsupportedOperandError, IncompatibleTypesError
+		IncompatibleTypesError
 			When the operand is not accepted, as in ``combine_values``.
 		"""
 		left_values = self._read_operand(other)

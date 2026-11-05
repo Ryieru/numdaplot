@@ -40,7 +40,7 @@ class PieChart(Chart):
 
 	Raises
 	------
-	InvalidSettingTypeError
+	InvalidTypeError
 		When a setting is not of the type its annotation names.
 	InvalidColumnNameError
 		When ``labels`` or ``values`` is an empty text.
@@ -71,7 +71,7 @@ class PieChart(Chart):
 
 		Raises
 		------
-		InvalidSettingTypeError
+		InvalidTypeError
 			When a setting is not of the type its annotation names.
 		InvalidColumnNameError
 			When ``labels`` or ``values`` is an empty text.

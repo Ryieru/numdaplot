@@ -19,7 +19,6 @@ from numdaplot.arrays.operations.operand import Operand
 from numdaplot.arrays.shape import Shape
 from numdaplot.data_types.type import Type
 from numdaplot.errors.refused_operation_error import RefusedOperationError
-from numdaplot.errors.unsupported_operand_error import UnsupportedOperandError
 
 GRID = [[1, 2, 3], [4, 5, 6]]
 GRID_SHAPE = Shape([2, 3])
@@ -235,19 +234,6 @@ def test_array_data_reads_the_values_of_another_array_as_operand() -> None:
 	operand = data.read_operand(other)
 
 	assert operand is other_values
-
-
-def test_array_data_rejects_a_list_as_operand() -> None:
-	"""
-	Check that a list operand raises UnsupportedOperandError.
-
-	.. versionadded:: 0.1.0
-	"""
-	values = numpy.array(GRID)
-	data = ExposedArrayData._create(values)
-
-	with pytest.raises(UnsupportedOperandError):
-		data.read_operand(REJECTED_OPERAND)
 
 
 def test_array_data_combines_with_itself_on_the_left(monkeypatch: pytest.MonkeyPatch) -> None:

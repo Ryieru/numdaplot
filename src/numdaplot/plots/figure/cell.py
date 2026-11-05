@@ -36,7 +36,7 @@ class Cell:
 
 	Raises
 	------
-	InvalidSettingTypeError
+	InvalidTypeError
 		When a setting is not of the type its annotation names.
 	InvalidPositionError
 		When ``row`` or ``column`` is lower than 0.
@@ -73,7 +73,7 @@ class Cell:
 
 		Raises
 		------
-		InvalidSettingTypeError
+		InvalidTypeError
 			When a setting is not of the type its annotation names.
 		InvalidPositionError
 			When ``row`` or ``column`` is lower than 0.

@@ -30,7 +30,7 @@ class CsvOptions:
 
 	Raises
 	------
-	InvalidSettingTypeError
+	InvalidTypeError
 		When a setting is not of the type its annotation names.
 	InvalidSeparatorError
 		When the separator is not exactly one character.
@@ -61,7 +61,7 @@ class CsvOptions:
 
 		Raises
 		------
-		InvalidSettingTypeError
+		InvalidTypeError
 			When a setting is not of the type its annotation names.
 		InvalidSeparatorError
 			When the separator is not exactly one character.

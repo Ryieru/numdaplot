@@ -18,7 +18,6 @@ from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
 from numdaplot.errors.missing_value_error import MissingValueError
 from numdaplot.errors.out_of_domain_error import OutOfDomainError
 from numdaplot.errors.readability_warning import ReadabilityWarning
-from numdaplot.errors.unsupported_data_error import UnsupportedDataError
 from numdaplot.plots.data.pie_values import (
 	read_pie_values,
 	require_present_values,
@@ -56,16 +55,6 @@ def test_read_pie_values_reads_the_labels_and_the_values() -> None:
 	assert pie_values.positions.values.tolist() == EXPECTED_LABELS
 	assert pie_values.series[0].values.tolist() == EXPECTED_VALUES
 	assert pie_values.value_name == "sales"
-
-
-def test_read_pie_values_rejects_an_array() -> None:
-	"""
-	Check that an Array raises UnsupportedDataError.
-
-	.. versionadded:: 0.1.0
-	"""
-	with pytest.raises(UnsupportedDataError):
-		read_pie_values(SALES, CHART)
 
 
 def test_read_pie_values_rejects_labels_that_are_not_texts() -> None:

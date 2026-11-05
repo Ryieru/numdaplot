@@ -83,12 +83,12 @@ from numdaplot.errors.invalid_resolution_error import InvalidResolutionError
 from numdaplot.errors.invalid_rotation_error import InvalidRotationError
 from numdaplot.errors.invalid_seed_error import InvalidSeedError
 from numdaplot.errors.invalid_separator_error import InvalidSeparatorError
-from numdaplot.errors.invalid_setting_type_error import InvalidSettingTypeError
 from numdaplot.errors.invalid_shape_error import InvalidShapeError
 from numdaplot.errors.invalid_sheet_name_error import InvalidSheetNameError
 from numdaplot.errors.invalid_size_error import InvalidSizeError
 from numdaplot.errors.invalid_step_error import InvalidStepError
 from numdaplot.errors.invalid_time_zone_change_error import InvalidTimeZoneChangeError
+from numdaplot.errors.invalid_type_error import InvalidTypeError
 from numdaplot.errors.irregular_list_error import IrregularListError
 from numdaplot.errors.missing_dependency_error import MissingDependencyError
 from numdaplot.errors.missing_type_error import MissingTypeError
@@ -103,11 +103,9 @@ from numdaplot.errors.refused_setting_error import RefusedSettingError
 from numdaplot.errors.shape_mismatch_error import ShapeMismatchError
 from numdaplot.errors.time_zone_mismatch_error import TimeZoneMismatchError
 from numdaplot.errors.unknown_time_zone_error import UnknownTimeZoneError
-from numdaplot.errors.unsupported_data_error import UnsupportedDataError
 from numdaplot.errors.unsupported_image_format_error import UnsupportedImageFormatError
 from numdaplot.errors.unsupported_index_error import UnsupportedIndexError
 from numdaplot.errors.unsupported_missing_error import UnsupportedMissingError
-from numdaplot.errors.unsupported_operand_error import UnsupportedOperandError
 from numdaplot.errors.unsupported_type_error import UnsupportedTypeError
 from numdaplot.errors.value_conversion_error import ValueConversionError
 from numdaplot.ordering.missing_position import MissingPosition
@@ -312,7 +310,7 @@ __all__ = [
 	"InvalidRotationError",
 	"InvalidSeedError",
 	"InvalidSeparatorError",
-	"InvalidSettingTypeError",
+	"InvalidTypeError",
 	"InvalidShapeError",
 	"InvalidSheetNameError",
 	"InvalidSizeError",
@@ -405,11 +403,9 @@ __all__ = [
 	"TypeMatch",
 	"Uniform",
 	"UnknownTimeZoneError",
-	"UnsupportedDataError",
 	"UnsupportedImageFormatError",
 	"UnsupportedIndexError",
 	"UnsupportedMissingError",
-	"UnsupportedOperandError",
 	"UnsupportedTypeError",
 	"ValueAxis",
 	"ValueConversionError",

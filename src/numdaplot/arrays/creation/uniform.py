@@ -29,7 +29,7 @@ class Uniform(Distribution):
 
 	Raises
 	------
-	InvalidSettingTypeError
+	InvalidTypeError
 		When a setting is not of the type its annotation names.
 	InvalidBoundsError
 		When ``low`` is greater than ``high``.
@@ -52,7 +52,7 @@ class Uniform(Distribution):
 
 		Raises
 		------
-		InvalidSettingTypeError
+		InvalidTypeError
 			When a setting is not of the type its annotation names.
 		InvalidBoundsError
 			When ``low`` is greater than ``high``.

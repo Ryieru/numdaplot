@@ -5,17 +5,18 @@ Line plots of a Table or an Array.
 """
 
 from numdaplot.arrays.array import Array
-from numdaplot.plots.charts.chart_requirement import require_chart_class
 from numdaplot.plots.charts.line_chart import LineChart
 from numdaplot.plots.layer_reading import read_line_layer
 from numdaplot.plots.plot import Plot
 from numdaplot.plots.plot_creation import create_plot
 from numdaplot.plots.style.plot_style import PlotStyle
+from numdaplot.settings.argument_types import checked_arguments
 from numdaplot.tables.table import Table
 
 FUNCTION_NAME = "plot_line"
 
 
+@checked_arguments
 def plot_line(data: Table | Array, chart: LineChart | None = None, style: PlotStyle | None = None) -> Plot:
 	"""
 	Return a Plot drawing columns of numbers as lines.
@@ -42,6 +43,8 @@ def plot_line(data: Table | Array, chart: LineChart | None = None, style: PlotSt
 
 	Raises
 	------
+	InvalidTypeError
+		When an argument is not of the type its annotation names.
 	InvalidChartDataError
 		When a Table has no ``y`` columns, or an Array has ``x`` or ``y`` columns.
 	ColumnNotFoundError
@@ -52,8 +55,6 @@ def plot_line(data: Table | Array, chart: LineChart | None = None, style: PlotSt
 		When an Array has more than two dimensions.
 	InvalidColorCountError
 		When the colors of the chart are not one per line.
-	RefusedOperationError
-		When ``chart`` is not a ``LineChart``.
 
 	Examples
 	--------
@@ -70,7 +71,6 @@ def plot_line(data: Table | Array, chart: LineChart | None = None, style: PlotSt
 	if chart is None:
 		chart = LineChart()
 
-	require_chart_class(chart, LineChart, FUNCTION_NAME)
 	layer = read_line_layer(data, chart)
 	plot = create_plot(layer, style)
 

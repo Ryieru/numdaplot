@@ -170,13 +170,13 @@ def test_plot_box_rejects_colors_not_one_per_column_when_created() -> None:
 
 def test_plot_pie_rejects_an_array() -> None:
 	"""
-	Check that an Array raises UnsupportedDataError, even untyped.
+	Check that an Array raises InvalidTypeError, even untyped.
 
 	.. versionadded:: 0.1.0
 	"""
 	untyped_plot_pie = cast(Any, plot_pie)
 
-	with pytest.raises(ndp.UnsupportedDataError):
+	with pytest.raises(ndp.InvalidTypeError):
 		untyped_plot_pie(PRICES, ndp.PieChart(labels="city", values="price"))
 
 
@@ -296,25 +296,25 @@ def test_plot_heatmap_draws_with_the_default_style() -> None:
 
 def test_plot_missing_by_column_rejects_an_array() -> None:
 	"""
-	Check that an Array raises UnsupportedDataError naming the function.
+	Check that an Array raises InvalidTypeError naming the function.
 
 	.. versionadded:: 0.1.0
 	"""
 	untyped_plot = cast(Any, plot_missing_by_column)
 
-	with pytest.raises(ndp.UnsupportedDataError, match="plot_missing_by_column"):
+	with pytest.raises(ndp.InvalidTypeError, match="plot_missing_by_column"):
 		untyped_plot(PRICES, ndp.MissingChart())
 
 
 def test_plot_missing_map_rejects_an_array() -> None:
 	"""
-	Check that an Array raises UnsupportedDataError naming the function.
+	Check that an Array raises InvalidTypeError naming the function.
 
 	.. versionadded:: 0.1.0
 	"""
 	untyped_plot = cast(Any, plot_missing_map)
 
-	with pytest.raises(ndp.UnsupportedDataError, match="plot_missing_map"):
+	with pytest.raises(ndp.InvalidTypeError, match="plot_missing_map"):
 		untyped_plot(PRICES)
 
 

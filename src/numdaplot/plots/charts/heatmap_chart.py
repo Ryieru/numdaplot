@@ -39,7 +39,7 @@ class HeatmapChart(Chart):
 
 	Raises
 	------
-	InvalidSettingTypeError
+	InvalidTypeError
 		When a setting is not of the type its annotation names.
 	InvalidColumnNameError
 		When ``labels`` or a name in ``columns`` is an empty text.
@@ -74,7 +74,7 @@ class HeatmapChart(Chart):
 
 		Raises
 		------
-		InvalidSettingTypeError
+		InvalidTypeError
 			When a setting is not of the type its annotation names.
 		InvalidColumnNameError
 			When ``labels`` or a name in ``columns`` is an empty text.

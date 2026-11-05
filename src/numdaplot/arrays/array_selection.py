@@ -14,6 +14,7 @@ from numdaplot.arrays.selection.replaced_values import replace_region
 from numdaplot.arrays.selection.rule_mask import build_rule_mask
 from numdaplot.positions.region import Region
 from numdaplot.rules.rule import Rule
+from numdaplot.settings.argument_types import checked_arguments
 
 if TYPE_CHECKING:
 	from numdaplot.arrays.replacement import Replacement
@@ -28,6 +29,7 @@ class ArraySelection(ArrayData):
 	.. versionadded:: 0.1.0
 	"""
 
+	@checked_arguments
 	def select(self, rule: Rule) -> Self:
 		"""
 		Return the values satisfying a rule, in one dimension.
@@ -47,6 +49,8 @@ class ArraySelection(ArrayData):
 
 		Raises
 		------
+		InvalidTypeError
+			When an argument is not of the type its annotation names.
 		IncompatibleTypesError
 			When the rule does not apply to the type of the values.
 
@@ -63,6 +67,7 @@ class ArraySelection(ArrayData):
 
 		return selected_array
 
+	@checked_arguments
 	def check(self, rule: Rule) -> Self:
 		"""
 		Return whether each value satisfies a rule, keeping the shape.
@@ -84,6 +89,8 @@ class ArraySelection(ArrayData):
 
 		Raises
 		------
+		InvalidTypeError
+			When an argument is not of the type its annotation names.
 		IncompatibleTypesError
 			When the rule does not apply to the type of the values.
 
@@ -99,6 +106,7 @@ class ArraySelection(ArrayData):
 
 		return mask_array
 
+	@checked_arguments
 	def take(self, region: Region) -> Self:
 		"""
 		Return the values of a region of a one- or two-dimensional Array.
@@ -121,6 +129,8 @@ class ArraySelection(ArrayData):
 
 		Raises
 		------
+		InvalidTypeError
+			When an argument is not of the type its annotation names.
 		DimensionError
 			When the Array has more than two dimensions, or columns are given for a one-dimensional Array.
 		RefusedOperationError
@@ -141,6 +151,7 @@ class ArraySelection(ArrayData):
 
 		return region_array
 
+	@checked_arguments
 	def replace(self, replacement: Replacement) -> Self:
 		"""
 		Return a new Array whose region is replaced; this Array does not change.
@@ -159,8 +170,8 @@ class ArraySelection(ArrayData):
 
 		Raises
 		------
-		UnsupportedOperandError
-			When the new value is neither an Array nor a single value.
+		InvalidTypeError
+			When an argument is not of the type its annotation names.
 		ShapeMismatchError
 			When an Array of new values does not have the shape of the region.
 		ValueConversionError

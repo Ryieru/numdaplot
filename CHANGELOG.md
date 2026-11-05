@@ -32,7 +32,7 @@ and numdaplot follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
   `CellValues`, `LegendPosition`, `GridLines` and `SizeUnit` enums.
 - Plot errors and warning: `ConflictingSettingsError`, `DuplicateLabelError`, `EmptyTotalError`,
   `InvalidBinWidthError`, `InvalidChartDataError`, `InvalidColorCountError`, `InvalidColorError`,
-  `InvalidResolutionError`, `InvalidRotationError`, `InvalidSizeError`, `MissingValueError`, `RefusedSettingError`, `UnsupportedDataError`,
+  `InvalidResolutionError`, `InvalidRotationError`, `InvalidSizeError`, `MissingValueError`, `RefusedSettingError`,
   `UnsupportedImageFormatError`, `IncompatibleChartsError`, `OccupiedCellError`, `CellOutOfRangeError` and
   `ReadabilityWarning`.
 - Date errors: `InvalidConversionError`, `InvalidDateFormatError`, `InvalidTimeZoneChangeError`,
@@ -47,7 +47,8 @@ and numdaplot follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
   `Table.column_names`, `Table.column_types`, `Table.preview`, `Table.preview_missing` and `print`.
 - `Array`, `Table` and `Plot`, and the base classes `Rule`, `Statistic`, `MathFunction`, `TimeFunction`,
   `Distribution` and `Chart`, refuse their constructor with `RefusedOperationError`, which names what to use instead.
-  The plot functions and `Plot.add_*` refuse a chart of another class the same way.
+  Settings, methods, functions and arithmetic operators check their values against their annotations and raise
+  `InvalidTypeError`, which names what they accept.
 - Settings that work as they are may be omitted: `Array.sort`, `Table.preview`, `Table.describe`,
   `Table.drop_duplicates`, `Table.drop_missing` and `Table.count_missing` use their default settings, and the plot
   functions and `Plot.add_*`, except `plot_pie`, their default chart.
@@ -65,7 +66,7 @@ and numdaplot follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 - Array errors: `DimensionError`, `EmptyArrayError`, `IncompatibleTypesError`, `InvalidBaseError`,
   `InvalidCountError`, `InvalidDeviationError`, `InvalidPositionError`, `InvalidSeedError`,
   `InvalidShapeError`, `IrregularListError`, `MissingTypeError`, `NotSingleValueError`, `OutOfDomainError`,
-  `RefusedOperationError`, `ShapeMismatchError`, `UnsupportedMissingError`, `UnsupportedOperandError`,
+  `RefusedOperationError`, `ShapeMismatchError`, `UnsupportedMissingError`,
   `ValueConversionError`.
 - `Type` enum of value types and its conversion to numpy and pandas dtypes.
 - Rules: `Equal`, `NotEqual`, `Greater`, `GreaterOrEqual`, `Less`, `LessOrEqual`, `Between`, `IsIn`,
@@ -75,5 +76,5 @@ and numdaplot follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 - Positions: `Region`, `Index`, `Range` and the `Axis` enum.
 - Sort settings: `Order` and `MissingPosition` enums.
 - Errors: `NumdaplotError`, `EmptyRegionError`, `EmptyTextError`, `EmptyValuesError`, `InvalidBoundsError`,
-  `InvalidFractionError`, `InvalidSettingTypeError`, `InvalidStepError`, `UnsupportedTypeError`, and the
+  `InvalidFractionError`, `InvalidTypeError`, `InvalidStepError`, `UnsupportedTypeError`, and the
   `BroadcastWarning` warning.

@@ -8,6 +8,7 @@ from typing import Self
 
 from numdaplot.positions.region import Region
 from numdaplot.rules.rule import Rule
+from numdaplot.settings.argument_types import checked_arguments
 from numdaplot.tables.filtering.checked_frame import check_frame
 from numdaplot.tables.filtering.filter import Filter
 from numdaplot.tables.filtering.row_mask import build_filter_mask
@@ -22,6 +23,7 @@ class TableSelection(TableData):
 	.. versionadded:: 0.1.0
 	"""
 
+	@checked_arguments
 	def check(self, rule: Rule) -> Self:
 		"""
 		Return which values satisfy a rule, in every column.
@@ -44,6 +46,8 @@ class TableSelection(TableData):
 
 		Raises
 		------
+		InvalidTypeError
+			When an argument is not of the type its annotation names.
 		IncompatibleTypesError
 			When the rule does not apply to the type of one of the columns.
 
@@ -65,6 +69,7 @@ class TableSelection(TableData):
 
 		return checked_table
 
+	@checked_arguments
 	def filter(self, row_filter: Filter) -> Self:
 		"""
 		Return the rows satisfying a filter.
@@ -83,6 +88,8 @@ class TableSelection(TableData):
 
 		Raises
 		------
+		InvalidTypeError
+			When an argument is not of the type its annotation names.
 		ColumnNotFoundError
 			When a condition names a column the Table does not have.
 		IncompatibleTypesError
@@ -108,6 +115,7 @@ class TableSelection(TableData):
 
 		return filtered_table
 
+	@checked_arguments
 	def take(self, region: Region) -> Self:
 		"""
 		Return the rows and the columns of a region.
@@ -129,6 +137,8 @@ class TableSelection(TableData):
 
 		Raises
 		------
+		InvalidTypeError
+			When an argument is not of the type its annotation names.
 		InvalidPositionError
 			When a position is not a whole number inside its dimension.
 		ColumnNotFoundError

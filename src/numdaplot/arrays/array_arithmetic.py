@@ -11,6 +11,7 @@ import numpy
 from numdaplot.arrays.array_data import ArrayData
 from numdaplot.arrays.operations.transformation import transform_values
 from numdaplot.rules.rule_values import ScalarValue
+from numdaplot.settings.argument_types import checked_arguments
 
 ADDITION_SYMBOL = "+"
 SUBTRACTION_SYMBOL = "-"
@@ -30,6 +31,7 @@ class ArrayArithmetic(ArrayData):
 	.. versionadded:: 0.1.0
 	"""
 
+	@checked_arguments
 	def __add__(self, other: Self | ScalarValue) -> Self:
 		"""
 		Return the sum of each value and another operand, written ``array + other``.
@@ -51,8 +53,8 @@ class ArrayArithmetic(ArrayData):
 
 		Raises
 		------
-		UnsupportedOperandError
-			When ``other`` is neither an Array nor a single value, such as a list or a numpy array.
+		InvalidTypeError
+			When an argument is not of the type its annotation names.
 		ShapeMismatchError
 			When the shapes of two Arrays cannot be combined.
 		IncompatibleTypesError
@@ -69,6 +71,7 @@ class ArrayArithmetic(ArrayData):
 
 		return combined_array
 
+	@checked_arguments
 	def __sub__(self, other: Self | ScalarValue) -> Self:
 		"""
 		Return the difference of each value and another operand, written ``array - other``.
@@ -90,8 +93,8 @@ class ArrayArithmetic(ArrayData):
 
 		Raises
 		------
-		UnsupportedOperandError
-			When ``other`` is neither an Array nor a single value, such as a list or a numpy array.
+		InvalidTypeError
+			When an argument is not of the type its annotation names.
 		ShapeMismatchError
 			When the shapes of two Arrays cannot be combined.
 		IncompatibleTypesError
@@ -108,6 +111,7 @@ class ArrayArithmetic(ArrayData):
 
 		return combined_array
 
+	@checked_arguments
 	def __mul__(self, other: Self | ScalarValue) -> Self:
 		"""
 		Return the product of each value and another operand, written ``array * other``.
@@ -129,8 +133,8 @@ class ArrayArithmetic(ArrayData):
 
 		Raises
 		------
-		UnsupportedOperandError
-			When ``other`` is neither an Array nor a single value, such as a list or a numpy array.
+		InvalidTypeError
+			When an argument is not of the type its annotation names.
 		ShapeMismatchError
 			When the shapes of two Arrays cannot be combined.
 		IncompatibleTypesError
@@ -147,6 +151,7 @@ class ArrayArithmetic(ArrayData):
 
 		return combined_array
 
+	@checked_arguments
 	def __truediv__(self, other: Self | ScalarValue) -> Self:
 		"""
 		Return the quotient of each value and another operand, written ``array / other``.
@@ -168,8 +173,8 @@ class ArrayArithmetic(ArrayData):
 
 		Raises
 		------
-		UnsupportedOperandError
-			When ``other`` is neither an Array nor a single value, such as a list or a numpy array.
+		InvalidTypeError
+			When an argument is not of the type its annotation names.
 		ShapeMismatchError
 			When the shapes of two Arrays cannot be combined.
 		IncompatibleTypesError
@@ -186,6 +191,7 @@ class ArrayArithmetic(ArrayData):
 
 		return combined_array
 
+	@checked_arguments
 	def __floordiv__(self, other: Self | ScalarValue) -> Self:
 		"""
 		Return the whole quotient of each value and another operand, written ``array // other``.
@@ -207,8 +213,8 @@ class ArrayArithmetic(ArrayData):
 
 		Raises
 		------
-		UnsupportedOperandError
-			When ``other`` is neither an Array nor a single value, such as a list or a numpy array.
+		InvalidTypeError
+			When an argument is not of the type its annotation names.
 		ShapeMismatchError
 			When the shapes of two Arrays cannot be combined.
 		IncompatibleTypesError
@@ -225,6 +231,7 @@ class ArrayArithmetic(ArrayData):
 
 		return combined_array
 
+	@checked_arguments
 	def __mod__(self, other: Self | ScalarValue) -> Self:
 		"""
 		Return the remainder of each value and another operand, written ``array % other``.
@@ -246,8 +253,8 @@ class ArrayArithmetic(ArrayData):
 
 		Raises
 		------
-		UnsupportedOperandError
-			When ``other`` is neither an Array nor a single value, such as a list or a numpy array.
+		InvalidTypeError
+			When an argument is not of the type its annotation names.
 		ShapeMismatchError
 			When the shapes of two Arrays cannot be combined.
 		IncompatibleTypesError
@@ -264,6 +271,7 @@ class ArrayArithmetic(ArrayData):
 
 		return combined_array
 
+	@checked_arguments
 	def __pow__(self, other: Self | ScalarValue) -> Self:
 		"""
 		Return the power of each value and another operand, written ``array ** other``.
@@ -285,8 +293,8 @@ class ArrayArithmetic(ArrayData):
 
 		Raises
 		------
-		UnsupportedOperandError
-			When ``other`` is neither an Array nor a single value, such as a list or a numpy array.
+		InvalidTypeError
+			When an argument is not of the type its annotation names.
 		ShapeMismatchError
 			When the shapes of two Arrays cannot be combined.
 		IncompatibleTypesError

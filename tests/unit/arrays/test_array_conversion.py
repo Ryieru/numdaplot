@@ -18,8 +18,8 @@ from numdaplot.arrays.array import Array
 from numdaplot.arrays.array_conversion import ArrayConversion
 from numdaplot.arrays.equality import Equality
 from numdaplot.arrays.type_match import TypeMatch
+from numdaplot.errors.invalid_type_error import InvalidTypeError
 from numdaplot.errors.not_single_value_error import NotSingleValueError
-from numdaplot.errors.unsupported_operand_error import UnsupportedOperandError
 from numdaplot.tables.table import Table
 
 ARE_EQUAL_NAME = "are_equal"
@@ -158,7 +158,7 @@ def test_is_equal_gives_the_type_setting_to_the_comparison(monkeypatch: pytest.M
 
 def test_is_equal_rejects_a_value_that_is_not_an_array() -> None:
 	"""
-	Check that comparing with a list raises UnsupportedOperandError.
+	Check that comparing with a list raises InvalidTypeError.
 
 	.. versionadded:: 0.1.0
 	"""
@@ -167,7 +167,7 @@ def test_is_equal_rejects_a_value_that_is_not_an_array() -> None:
 	not_an_array = Table.from_arrays({"count": Array.from_list([1, 2])})
 	equality = Equality(other=not_an_array)
 
-	with pytest.raises(UnsupportedOperandError):
+	with pytest.raises(InvalidTypeError):
 		array.is_equal(equality)
 
 

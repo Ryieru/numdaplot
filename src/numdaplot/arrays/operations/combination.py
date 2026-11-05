@@ -18,8 +18,8 @@ from numdaplot.errors.shape_mismatch_error import ShapeMismatchError
 
 PYTHON_OBJECT_KIND = "O"
 BROADCAST_MESSAGE = "Shapes {left_dimensions} and {right_dimensions} differ, values are repeated to match."
-# The warning points at the user line: check_shapes, combine_values, the Array helper, the operator, the user.
-BROADCAST_STACK_LEVEL = 5
+# The warning points at the user line: check_shapes, combine_values, the Array helper, the operator, its check.
+BROADCAST_STACK_LEVEL = 6
 
 
 def combine_values(left: Operand, right: Operand, function: numpy.ufunc, symbol: str) -> NDArray[Any]:

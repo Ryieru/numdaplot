@@ -123,7 +123,7 @@ def test_a_numpy_array_cannot_be_combined_with_an_array() -> None:
 	prices = ndp.Array.from_list(PRICES)
 	numpy_quantities = numpy.array(QUANTITIES)
 
-	with pytest.raises(ndp.UnsupportedOperandError):
+	with pytest.raises(ndp.InvalidTypeError):
 		_ = numpy_quantities * prices
 
 

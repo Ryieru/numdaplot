@@ -5,18 +5,16 @@ Bars of the missing values of each column of a Table.
 """
 
 from numdaplot.plots.chart_layer import ChartLayer
-from numdaplot.plots.charts.chart_requirement import require_chart_class
 from numdaplot.plots.charts.missing_chart import MissingChart
-from numdaplot.plots.data.chart_data import require_table
 from numdaplot.plots.data.missing_cells import read_missing_counts
 from numdaplot.plots.plot import Plot
 from numdaplot.plots.plot_creation import create_plot
 from numdaplot.plots.style.plot_style import PlotStyle
+from numdaplot.settings.argument_types import checked_arguments
 from numdaplot.tables.table import Table
 
-FUNCTION_NAME = "plot_missing_by_column"
 
-
+@checked_arguments
 def plot_missing_by_column(table: Table, chart: MissingChart | None = None, style: PlotStyle | None = None) -> Plot:
 	"""
 	Return a Plot drawing one bar per column of a Table, as high as its missing values.
@@ -39,10 +37,8 @@ def plot_missing_by_column(table: Table, chart: MissingChart | None = None, styl
 
 	Raises
 	------
-	UnsupportedDataError
-		When the data is an Array.
-	RefusedOperationError
-		When ``chart`` is not a ``MissingChart``.
+	InvalidTypeError
+		When an argument is not of the type its annotation names.
 
 	Examples
 	--------
@@ -58,9 +54,7 @@ def plot_missing_by_column(table: Table, chart: MissingChart | None = None, styl
 	if chart is None:
 		chart = MissingChart()
 
-	require_chart_class(chart, MissingChart, FUNCTION_NAME)
-	checked_table = require_table(table, FUNCTION_NAME)
-	values = read_missing_counts(checked_table, chart.measure)
+	values = read_missing_counts(table, chart.measure)
 	layer = ChartLayer(chart, values)
 	plot = create_plot(layer, style)
 

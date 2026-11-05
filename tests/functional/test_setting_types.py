@@ -74,7 +74,7 @@ def test_a_text_in_place_of_a_list_shows_the_list_to_write(create: Callable[[], 
 	expected_message
 		The message showing the text inside a list.
 	"""
-	with pytest.raises(ndp.InvalidSettingTypeError) as error_info:
+	with pytest.raises(ndp.InvalidTypeError) as error_info:
 		create()
 
 	message = str(error_info.value)
@@ -95,7 +95,7 @@ def test_a_class_in_place_of_an_object_shows_the_parentheses(use: Callable[[], o
 	expected_message
 		The message adding the parentheses.
 	"""
-	with pytest.raises(ndp.InvalidSettingTypeError) as error_info:
+	with pytest.raises(ndp.InvalidTypeError) as error_info:
 		use()
 
 	message = str(error_info.value)
@@ -108,7 +108,7 @@ def test_a_region_with_a_number_names_the_accepted_positions() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	with pytest.raises(ndp.InvalidSettingTypeError) as error_info:
+	with pytest.raises(ndp.InvalidTypeError) as error_info:
 		ndp.Region(rows=0)
 
 	message = str(error_info.value)
@@ -121,7 +121,7 @@ def test_a_preview_side_written_as_text_names_side() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	with pytest.raises(ndp.InvalidSettingTypeError) as error_info:
+	with pytest.raises(ndp.InvalidTypeError) as error_info:
 		ndp.Preview(side="end")
 
 	message = str(error_info.value)
@@ -147,7 +147,7 @@ def test_a_rule_with_an_array_names_a_single_value() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	with pytest.raises(ndp.InvalidSettingTypeError):
+	with pytest.raises(ndp.InvalidTypeError):
 		ndp.Greater(PRICES)
 
 
@@ -167,7 +167,7 @@ def test_a_shape_written_as_a_tuple_names_the_list_to_write() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	with pytest.raises(ndp.InvalidSettingTypeError) as error_info:
+	with pytest.raises(ndp.InvalidTypeError) as error_info:
 		ndp.Shape((3, 4))
 
 	message = str(error_info.value)

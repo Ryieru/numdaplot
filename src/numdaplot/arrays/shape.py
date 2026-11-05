@@ -30,7 +30,7 @@ class Shape:
 
 	Raises
 	------
-	InvalidSettingTypeError
+	InvalidTypeError
 		When a setting is not of the type its annotation names.
 	InvalidShapeError
 		When ``dimensions`` is empty or holds a negative number.
@@ -55,7 +55,7 @@ class Shape:
 
 		Raises
 		------
-		InvalidSettingTypeError
+		InvalidTypeError
 			When a setting is not of the type its annotation names.
 		InvalidShapeError
 			When ``dimensions`` is empty or holds a negative number.

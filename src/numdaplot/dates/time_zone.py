@@ -28,7 +28,7 @@ class TimeZone:
 
 	Raises
 	------
-	InvalidSettingTypeError
+	InvalidTypeError
 		When a setting is not of the type its annotation names.
 	UnknownTimeZoneError
 		When the name is not a known IANA name.
@@ -55,7 +55,7 @@ class TimeZone:
 
 		Raises
 		------
-		InvalidSettingTypeError
+		InvalidTypeError
 			When a setting is not of the type its annotation names.
 		UnknownTimeZoneError
 			When the name is not a known IANA name.

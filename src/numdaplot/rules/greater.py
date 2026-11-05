@@ -25,7 +25,7 @@ class Greater(ValueRule[OrderedValue]):
 
 	Raises
 	------
-	InvalidSettingTypeError
+	InvalidTypeError
 		When ``value`` is not a single value, such as an Array or a list.
 
 	Examples

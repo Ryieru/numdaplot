@@ -28,7 +28,7 @@ class Layout:
 
 	Raises
 	------
-	InvalidSettingTypeError
+	InvalidTypeError
 		When a setting is not of the type its annotation names.
 	InvalidCountError
 		When ``rows`` or ``columns`` is lower than 1.
@@ -57,7 +57,7 @@ class Layout:
 
 		Raises
 		------
-		InvalidSettingTypeError
+		InvalidTypeError
 			When a setting is not of the type its annotation names.
 		InvalidCountError
 			When ``rows`` or ``columns`` is lower than 1.

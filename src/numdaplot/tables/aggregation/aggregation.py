@@ -32,7 +32,7 @@ class Aggregation:
 
 	Raises
 	------
-	InvalidSettingTypeError
+	InvalidTypeError
 		When a setting is not of the type its annotation names.
 	EmptyListError
 		When ``calculations`` or ``group_by`` is an empty list.
@@ -66,7 +66,7 @@ class Aggregation:
 
 		Raises
 		------
-		InvalidSettingTypeError
+		InvalidTypeError
 			When a setting is not of the type its annotation names.
 		EmptyListError
 			When ``calculations`` or ``group_by`` is an empty list.

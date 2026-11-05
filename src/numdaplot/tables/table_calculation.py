@@ -6,6 +6,7 @@ Statistics of a Table: aggregation and description.
 
 from typing import Self
 
+from numdaplot.settings.argument_types import checked_arguments
 from numdaplot.tables.aggregation.aggregated_frame import aggregate_frame
 from numdaplot.tables.aggregation.aggregation import Aggregation
 from numdaplot.tables.description.described_frame import describe_frame
@@ -20,6 +21,7 @@ class TableCalculation(TableData):
 	.. versionadded:: 0.1.0
 	"""
 
+	@checked_arguments
 	def aggregate(self, aggregation: Aggregation) -> Self:
 		"""
 		Return statistics of the whole Table, or of each group of rows.
@@ -40,6 +42,8 @@ class TableCalculation(TableData):
 
 		Raises
 		------
+		InvalidTypeError
+			When an argument is not of the type its annotation names.
 		ColumnNotFoundError
 			When a calculation or a group names a column the Table does not have.
 		IncompatibleTypesError
@@ -63,6 +67,7 @@ class TableCalculation(TableData):
 
 		return aggregated_table
 
+	@checked_arguments
 	def describe(self, description: Description | None = None) -> Self:
 		"""
 		Return statistics describing columns, one row per statistic and one column per described column.
@@ -83,6 +88,8 @@ class TableCalculation(TableData):
 
 		Raises
 		------
+		InvalidTypeError
+			When an argument is not of the type its annotation names.
 		ColumnNotFoundError
 			When a described column does not exist.
 		DuplicateColumnError

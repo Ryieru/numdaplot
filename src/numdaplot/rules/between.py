@@ -34,7 +34,7 @@ class Between[OrderedValue: (int, float, str, date, datetime, timedelta)](Rule):
 
 	Raises
 	------
-	InvalidSettingTypeError
+	InvalidTypeError
 		When a setting is not of the type its annotation names.
 	InvalidBoundsError
 		When ``low`` is greater than ``high``, or when they cannot be compared,
@@ -62,7 +62,7 @@ class Between[OrderedValue: (int, float, str, date, datetime, timedelta)](Rule):
 
 		Raises
 		------
-		InvalidSettingTypeError
+		InvalidTypeError
 			When a setting is not of the type its annotation names.
 		InvalidBoundsError
 			When ``low`` is greater than ``high``, or when they cannot be compared.

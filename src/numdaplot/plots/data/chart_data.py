@@ -6,7 +6,6 @@ Checks of the column settings of a chart against the data it draws.
 
 from numdaplot.arrays.array import Array
 from numdaplot.errors.invalid_chart_data_error import InvalidChartDataError
-from numdaplot.errors.unsupported_data_error import UnsupportedDataError
 from numdaplot.plots.data.array_values import read_array_values
 from numdaplot.plots.data.chart_values import ChartValues
 from numdaplot.plots.data.table_values import read_table_values
@@ -142,43 +141,3 @@ def read_chart_values(
 	table_values = read_table_values(data, x_name, required_y_names, chart_name)
 
 	return table_values
-
-
-def require_table(data: Table | Array, owner_name: str) -> Table:
-	"""
-	Check that a chart or a plot function that reads columns by name draws a Table, and return it.
-
-	.. versionadded:: 0.1.0
-
-	Parameters
-	----------
-	data
-		The Table or the Array given.
-	owner_name
-		Name of the chart class or of the plot function, shown in the error message.
-
-	Returns
-	-------
-	Table
-		The data, known to be a Table.
-
-	Raises
-	------
-	UnsupportedDataError
-		When the data is an Array.
-
-	Examples
-	--------
-	>>> import numdaplot as ndp
-	>>> from numdaplot.plots.data.chart_data import require_table
-	>>> sales = ndp.Array.from_list([120.0, 80.0])
-	>>> try:
-	... 	require_table(sales, "PieChart")
-	... except ndp.UnsupportedDataError as error:
-	... 	print(error)
-	PieChart cannot draw an Array, use a Table.
-	"""
-	if isinstance(data, Array):
-		raise UnsupportedDataError(owner_name, ARRAY_NAME)
-
-	return data

@@ -10,7 +10,7 @@ import numpy
 import pytest
 
 import numdaplot as ndp
-from numdaplot.errors.invalid_setting_type_error import InvalidSettingTypeError
+from numdaplot.errors.invalid_type_error import InvalidTypeError
 from numdaplot.rules.rule_values import ScalarValue
 from numdaplot.settings.field_types import (
 	accepts_value,
@@ -75,7 +75,7 @@ class ProbeSetting:
 
 		Raises
 		------
-		InvalidSettingTypeError
+		InvalidTypeError
 			When ``count`` is not an int.
 		"""
 		require_field_types(self)
@@ -110,7 +110,7 @@ def test_require_field_types_names_the_field_and_its_type() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	with pytest.raises(InvalidSettingTypeError) as error_info:
+	with pytest.raises(InvalidTypeError) as error_info:
 		ProbeSetting(count="2")  # pyright: ignore[reportArgumentType]
 
 	message = str(error_info.value)
@@ -221,6 +221,7 @@ def test_add_article_chooses_a_or_an() -> None:
 	"""
 	assert add_article("Index") == "an Index"
 	assert add_article("Range") == "a Range"
+	assert add_article("Uniform") == "a Uniform"
 
 
 def test_join_names_keeps_a_single_name() -> None:
