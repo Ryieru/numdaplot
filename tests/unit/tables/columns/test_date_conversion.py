@@ -288,7 +288,12 @@ def test_convert_moments_gives_dates_at_midnight() -> None:
 
 @pytest.mark.parametrize(
 	("date_format", "expected"),
-	[(DateFormat.DAY_MONTH_YEAR, False), (DateFormat.YEAR_MONTH_DAY_TIME, True), (DAY_TIME_PATTERN, True)],
+	[
+		(DateFormat.DAY_MONTH_YEAR, False),
+		(DateFormat.YEAR_MONTH_DAY_TIME, True),
+		(DAY_TIME_PATTERN, True),
+		(DAY_MONTH_PATTERN, False),
+	],
 )
 def test_has_time_tells_the_formats_with_a_time(date_format: DateFormat | CustomDateFormat, expected: bool) -> None:
 	"""

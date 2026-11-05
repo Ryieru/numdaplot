@@ -11,7 +11,7 @@ import pandas
 
 from numdaplot.arrays.conversion.time_text import format_durations
 from numdaplot.data_types.type import Type
-from numdaplot.dates.custom_date_format import CustomDateFormat
+from numdaplot.dates.custom_date_format import TIME_CODES, CustomDateFormat
 from numdaplot.dates.date_format import DateFormat
 from numdaplot.errors.value_conversion_error import ValueConversionError
 from numdaplot.tables.frames.column import Column
@@ -73,7 +73,8 @@ def has_time(date_format: DateFormat | CustomDateFormat) -> bool:
 	Returns
 	-------
 	bool
-		True for the ``_TIME`` members of ``DateFormat`` and the patterns with a time code.
+		True for the ``_TIME`` members of ``DateFormat``, and the patterns with an hour, minute, second or
+		AM/PM code.
 
 	Examples
 	--------
@@ -83,7 +84,8 @@ def has_time(date_format: DateFormat | CustomDateFormat) -> bool:
 	False
 	"""
 	if isinstance(date_format, CustomDateFormat):
-		return date_format.has_time
+		pattern_has_time = any(time_code in date_format.pattern for time_code in TIME_CODES)
+		return pattern_has_time
 
 	format_has_time = date_format in TIME_FORMATS
 

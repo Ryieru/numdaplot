@@ -63,25 +63,3 @@ class CustomDateFormat:
 		is_rejected = has_time_zone_code or not has_date_code
 		if is_rejected:
 			raise InvalidDateFormatError(self.pattern)
-
-	@property
-	def has_time(self) -> bool:
-		"""
-		Whether the pattern reads or writes a time.
-
-		.. versionadded:: 0.1.0
-
-		Returns
-		-------
-		bool
-			True when the pattern has an hour, minute, second or AM/PM code.
-
-		Examples
-		--------
-		>>> import numdaplot as ndp
-		>>> ndp.CustomDateFormat("%d %b %Y %H:%M").has_time
-		True
-		"""
-		has_time_code = any(time_code in self.pattern for time_code in TIME_CODES)
-
-		return has_time_code

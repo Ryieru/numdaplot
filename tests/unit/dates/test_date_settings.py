@@ -23,7 +23,6 @@ from numdaplot.errors.invalid_time_zone_change_error import InvalidTimeZoneChang
 from numdaplot.errors.unknown_time_zone_error import UnknownTimeZoneError
 
 DATE_PATTERN = "%d %b %Y"
-DATE_AND_TIME_PATTERN = "%d/%m/%Y %H:%M"
 REJECTED_PATTERNS = ["%H:%M", "%Y-%m-%d %z", "day"]
 ZONE_NAMES = ["Europe/Paris", "UTC", "America/New_York"]
 REJECTED_ZONE_NAMES = ["Paris", "+01:00", ""]
@@ -61,19 +60,6 @@ def test_custom_date_format_rejects_a_pattern_without_date_or_with_a_zone(patter
 	"""
 	with pytest.raises(InvalidDateFormatError):
 		CustomDateFormat(pattern)
-
-
-def test_custom_date_format_tells_whether_it_has_a_time() -> None:
-	"""
-	Check has_time with and without a time code.
-
-	.. versionadded:: 0.1.0
-	"""
-	date_only = CustomDateFormat(DATE_PATTERN)
-	date_and_time = CustomDateFormat(DATE_AND_TIME_PATTERN)
-
-	assert not date_only.has_time
-	assert date_and_time.has_time
 
 
 @pytest.mark.parametrize("zone_name", ZONE_NAMES)
