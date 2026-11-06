@@ -10,6 +10,7 @@ import numpy
 import pandas
 from numpy.typing import NDArray
 
+from numdaplot.arrays.operations.time_bounds import require_decimal_durations_fit, require_whole_durations_fit
 from numdaplot.arrays.operations.type_requirements import require_family
 from numdaplot.data_types.numpy_mapping import from_numpy_dtype, to_numpy_dtype
 from numdaplot.data_types.type import Type
@@ -331,6 +332,8 @@ def build_durations(values: NDArray[Any], unit: DurationUnit, function_name: str
 	------
 	IncompatibleTypesError
 		When the values are not numbers.
+	TimeOverflowError
+		When a duration is outside the range of nanoseconds, about 292 years.
 
 	Examples
 	--------
@@ -344,9 +347,11 @@ def build_durations(values: NDArray[Any], unit: DurationUnit, function_name: str
 	unit_code = DURATION_UNIT_CODES[unit]
 	one_unit = numpy.timedelta64(1, unit_code)
 	one_nanosecond = numpy.timedelta64(1, NANOSECOND_CODE)
-	nanoseconds_per_unit = one_unit // one_nanosecond
+	unit_ratio = one_unit // one_nanosecond
+	nanoseconds_per_unit = int(unit_ratio)
 	duration_dtype = to_numpy_dtype(Type.DURATION)
 	if values.dtype.kind in WHOLE_NUMBER_KINDS:
+		require_whole_durations_fit(values, nanoseconds_per_unit, function_name)
 		whole_values = values.astype(numpy.int64)
 		whole_nanoseconds = whole_values * nanoseconds_per_unit
 		whole_durations = whole_nanoseconds.astype(duration_dtype)
@@ -354,6 +359,7 @@ def build_durations(values: NDArray[Any], unit: DurationUnit, function_name: str
 
 	missing = numpy.isnan(values)
 	decimal_nanoseconds = values * nanoseconds_per_unit
+	require_decimal_durations_fit(decimal_nanoseconds, function_name)
 	rounded_nanoseconds = numpy.round(decimal_nanoseconds)
 	present_nanoseconds = numpy.where(missing, 0, rounded_nanoseconds)
 	nanosecond_counts = present_nanoseconds.astype(numpy.int64)

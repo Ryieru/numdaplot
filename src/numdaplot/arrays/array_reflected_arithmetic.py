@@ -59,6 +59,8 @@ class ArrayReflectedArithmetic(ArrayData):
 			When the operation does not apply to the types, such as a number and a text.
 		IntegerOverflowError
 			When a result does not fit its integer type, which refuses to wrap around to a wrong number.
+		TimeOverflowError
+			When a date or a datetime leaves 1677 to 2262, or a duration exceeds about 292 years.
 
 		Examples
 		--------
@@ -101,6 +103,8 @@ class ArrayReflectedArithmetic(ArrayData):
 			When the operation does not apply to the types, such as a number and a text.
 		IntegerOverflowError
 			When a result does not fit its integer type, which refuses to wrap around to a wrong number.
+		TimeOverflowError
+			When a date or a datetime leaves 1677 to 2262, or a duration exceeds about 292 years.
 
 		Examples
 		--------
@@ -143,6 +147,8 @@ class ArrayReflectedArithmetic(ArrayData):
 			When the operation does not apply to the types, such as a number and a text.
 		IntegerOverflowError
 			When a result does not fit its integer type, which refuses to wrap around to a wrong number.
+		TimeOverflowError
+			When a date or a datetime leaves 1677 to 2262, or a duration exceeds about 292 years.
 
 		Examples
 		--------

@@ -68,7 +68,7 @@ and numdaplot follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 - Array errors: `DimensionError`, `EmptyArrayError`, `IncompatibleTypesError`, `InvalidBaseError`,
   `InvalidCountError`, `InvalidDeviationError`, `InvalidPositionError`, `InvalidSeedError`,
   `IntegerOverflowError`, `InvalidShapeError`, `IrregularListError`, `MissingTypeError`, `NotSingleValueError`, `OutOfDomainError`,
-  `RefusedOperationError`, `ShapeMismatchError`, `UnsupportedMissingError`,
+  `RefusedOperationError`, `ShapeMismatchError`, `TimeOverflowError`, `UnsupportedMissingError`,
   `ValueConversionError`.
 - `Type` enum of value types and its conversion to numpy and pandas dtypes, and the `Library` enum read on
   `UnsupportedTypeError`.

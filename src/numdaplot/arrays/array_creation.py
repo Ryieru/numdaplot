@@ -107,6 +107,8 @@ class ArrayCreation(ArrayData):
 			When a value is missing and the type cannot hold missing values.
 		ValueConversionError
 			When the values cannot be stored as ``dtype`` without losing information.
+		TimeOverflowError
+			When a datetime is outside 1677 to 2262, or a duration beyond about 292 years.
 		UnsupportedTypeError
 			When a value has no numdaplot type, or ``dtype`` is ``CATEGORY``.
 
@@ -188,6 +190,8 @@ class ArrayCreation(ArrayData):
 			When an argument is not of the type its annotation names.
 		ValueConversionError
 			When the value cannot be stored as ``dtype`` without losing information.
+		TimeOverflowError
+			When a datetime is outside 1677 to 2262, or a duration beyond about 292 years.
 
 		Examples
 		--------

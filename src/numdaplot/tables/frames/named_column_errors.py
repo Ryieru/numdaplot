@@ -7,6 +7,7 @@ Name of the Table column in the type errors of a block.
 from types import TracebackType
 
 from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
+from numdaplot.errors.time_overflow_error import TimeOverflowError
 from numdaplot.errors.value_conversion_error import ValueConversionError
 from numdaplot.tables.frames.column import Column
 
@@ -79,6 +80,6 @@ class NamedColumnErrors:
 		if column_name is None:
 			return
 
-		if isinstance(error, IncompatibleTypesError | ValueConversionError):
+		if isinstance(error, IncompatibleTypesError | TimeOverflowError | ValueConversionError):
 			column_text = str(column_name)
 			error.name_column(column_text)

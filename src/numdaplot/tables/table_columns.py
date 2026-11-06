@@ -137,6 +137,8 @@ class TableColumns(TableData):
 		ValueConversionError
 			At the first value that cannot be stored in the new type, such as ``"abc"`` read as a number,
 			2.5 stored as an integer, or ``"31/02/2026"`` read as a date.
+		TimeOverflowError
+			When a value converted to ``DATETIME`` is outside 1677 to 2262.
 		TimeZoneMismatchError
 			When the time zone change does not apply to whether the datetimes have a zone.
 

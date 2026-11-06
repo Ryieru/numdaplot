@@ -25,6 +25,12 @@ FLOAT_ERROR_MESSAGES = {
 	"divide by zero": "The operation {operation_name} divides by zero: these values became inf.",
 	"overflow": "The operation {operation_name} has values too large for their type: they became inf.",
 }
+# A duration too large is refused before it is computed, so a calculation on times only meets these two errors.
+TIME_ERROR_MESSAGES = {
+	"invalid value": "The operation {operation_name} has values without a defined result, such as 0 / 0: "
+	"they became missing.",
+	"divide by zero": "The operation {operation_name} divides by zero: these values became missing.",
+}
 
 
 class FloatErrorWarnings:
@@ -53,6 +59,8 @@ class FloatErrorWarnings:
 	>>> print(caught_warnings[0].message)
 	The operation / divides by zero: these values became inf.
 	"""
+
+	messages = FLOAT_ERROR_MESSAGES
 
 	def __init__(self, operation_name: str) -> None:
 		"""
@@ -127,7 +135,36 @@ class FloatErrorWarnings:
 		if error_type is not None:
 			return
 
-		for error_name, message_format in FLOAT_ERROR_MESSAGES.items():
+		for error_name, message_format in self.messages.items():
 			if error_name in self.met_errors:
 				message = message_format.format(operation_name=self.operation_name)
 				warnings.warn(message, CalculationWarning, skip_file_prefixes=INTERNAL_FILES)
+
+
+class TimeErrorWarnings(FloatErrorWarnings):
+	"""
+	Context giving the numpy floating point errors of a calculation on times, whose values become missing.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	operation_name
+		The operator shown in the message, such as ``/``.
+
+	Examples
+	--------
+	>>> import numpy
+	>>> import warnings
+	>>> from numdaplot.arrays.operations.float_errors import TimeErrorWarnings
+	>>> durations = numpy.array([1], dtype="timedelta64[ns]")
+	>>> with warnings.catch_warnings(record=True) as caught_warnings:
+	... 	warnings.simplefilter("always")
+	... 	with TimeErrorWarnings("/"):
+	... 		durations / numpy.array([0.0])
+	array(['NaT'], dtype='timedelta64[ns]')
+	>>> print(caught_warnings[0].message)
+	The operation / divides by zero: these values became missing.
+	"""
+
+	messages = TIME_ERROR_MESSAGES

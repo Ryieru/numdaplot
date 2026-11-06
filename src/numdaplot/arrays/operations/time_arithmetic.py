@@ -11,11 +11,17 @@ from numpy.typing import NDArray
 
 from numdaplot.arrays.conversion.time_text import format_durations
 from numdaplot.arrays.operations.operand import Operand, convert_time_value, find_operand_type
+from numdaplot.arrays.operations.time_bounds import (
+	require_nanoseconds_fit,
+	require_time_result_fits,
+	widen_large_integers,
+)
 from numdaplot.data_types.numpy_mapping import to_numpy_dtype
 from numdaplot.data_types.type import Type
 from numdaplot.data_types.value_family import ValueFamily, find_family
 from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
 from numdaplot.errors.refused_operation_error import RefusedOperationError
+from numdaplot.errors.time_overflow_error import TimeOverflowError
 from numdaplot.errors.value_conversion_error import ValueConversionError
 
 TIME_FAMILIES = frozenset({ValueFamily.MOMENT, ValueFamily.DURATION})
@@ -116,6 +122,9 @@ def combine_time_values(left: Operand, right: Operand, function: numpy.ufunc, sy
 		When a duration added to or subtracted from dates is not a whole number of days.
 	IncompatibleTypesError
 		When the operation does not apply to these types, such as a date plus a number.
+	TimeOverflowError
+		When an operand or a result is outside the range of nanoseconds, about 1677 to 2262 for dates and
+		datetimes, and about 292 years for durations.
 
 	Examples
 	--------
@@ -134,12 +143,23 @@ def combine_time_values(left: Operand, right: Operand, function: numpy.ufunc, sy
 	if operation_key not in TIME_RESULTS:
 		raise IncompatibleTypesError(symbol, [left_type.name, right_type.name])
 
-	left_values = to_nanoseconds(left, left_family)
-	right_values = to_nanoseconds(right, right_family)
-	combined_values = function(left_values, right_values)
 	combines_date = Type.DATE in (left_type, right_type)
 	result_family = TIME_RESULTS[operation_key]
 	keeps_date = combines_date and result_family == ValueFamily.MOMENT
+	result_type = find_time_result_type(result_family, keeps_date)
+	require_nanoseconds_fit(left, left_type, symbol)
+	require_nanoseconds_fit(right, right_type, symbol)
+	left_values = to_nanoseconds(left, left_family)
+	right_values = to_nanoseconds(right, right_family)
+	try:
+		left_numbers = widen_large_integers(left_values)
+		right_numbers = widen_large_integers(right_values)
+		operands = [left_numbers, right_numbers]
+		require_time_result_fits(operands, function, result_type, symbol)
+		combined_values = function(left_numbers, right_numbers)
+	except OverflowError as error:
+		raise TimeOverflowError(symbol, result_type.name) from error
+
 	if not keeps_date:
 		return combined_values
 
@@ -152,6 +172,40 @@ def combine_time_values(left: Operand, right: Operand, function: numpy.ufunc, sy
 	shifted_dates = combined_values.astype(date_dtype)
 
 	return shifted_dates
+
+
+def find_time_result_type(result_family: ValueFamily, keeps_date: bool) -> Type:
+	"""
+	Return the type of the result of an accepted operation on times.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	result_family
+		The family of the result, ``MOMENT`` or ``DURATION``.
+	keeps_date
+		Whether the result stays a date.
+
+	Returns
+	-------
+	Type
+		``DURATION``, ``DATE`` or ``DATETIME``.
+
+	Examples
+	--------
+	>>> from numdaplot.arrays.operations.time_arithmetic import find_time_result_type
+	>>> from numdaplot.data_types.value_family import ValueFamily
+	>>> find_time_result_type(ValueFamily.MOMENT, True)
+	<Type.DATE: 14>
+	"""
+	if result_family == ValueFamily.DURATION:
+		return Type.DURATION
+
+	if keeps_date:
+		return Type.DATE
+
+	return Type.DATETIME
 
 
 def require_time_operation(left: Operand, right: Operand, operation_key: TimeOperation) -> None:

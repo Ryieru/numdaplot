@@ -10,6 +10,7 @@ import numpy
 from numpy.typing import NDArray
 
 from numdaplot.arrays.operations.operand import Operand, find_operand_type
+from numdaplot.arrays.operations.time_bounds import NANOSECOND_TYPES, require_nanoseconds_fit
 from numdaplot.arrays.selection.region_index import build_region_index
 from numdaplot.data_types.numpy_mapping import from_numpy_dtype, to_numpy_dtype
 from numdaplot.errors.shape_mismatch_error import ShapeMismatchError
@@ -17,6 +18,7 @@ from numdaplot.errors.value_conversion_error import ValueConversionError
 from numdaplot.positions.region import Region
 
 SAFE_CASTING = "same_kind"
+REPLACE_OPERATION = "replace"
 
 
 def replace_region(values: NDArray[Any], region: Region, new_values: Operand) -> NDArray[Any]:
@@ -93,6 +95,8 @@ def require_storable(new_values: Operand, values: NDArray[Any]) -> None:
 	------
 	ValueConversionError
 		When a decimal would become an integer, or a text a number, for example.
+	TimeOverflowError
+		When a value stored as ``DATETIME`` or ``DURATION`` is outside the range of nanoseconds.
 
 	Examples
 	--------
@@ -111,3 +115,6 @@ def require_storable(new_values: Operand, values: NDArray[Any]) -> None:
 	is_safe = numpy.can_cast(new_dtype, values.dtype, casting=SAFE_CASTING)
 	if not is_safe:
 		raise ValueConversionError(new_type.name, values_type.name)
+
+	if values_type in NANOSECOND_TYPES:
+		require_nanoseconds_fit(new_values, values_type, REPLACE_OPERATION)

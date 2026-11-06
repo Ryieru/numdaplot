@@ -107,6 +107,7 @@ from numdaplot.errors.readability_warning import ReadabilityWarning
 from numdaplot.errors.refused_operation_error import RefusedOperationError
 from numdaplot.errors.refused_setting_error import RefusedSettingError
 from numdaplot.errors.shape_mismatch_error import ShapeMismatchError
+from numdaplot.errors.time_overflow_error import TimeOverflowError
 from numdaplot.errors.time_zone_mismatch_error import TimeZoneMismatchError
 from numdaplot.errors.unknown_time_zone_error import UnknownTimeZoneError
 from numdaplot.errors.unsupported_image_format_error import UnsupportedImageFormatError
@@ -415,6 +416,7 @@ __all__ = [
 	"Sum",
 	"Table",
 	"TimeFunction",
+	"TimeOverflowError",
 	"TimeZone",
 	"TimeZoneChange",
 	"TimeZoneMismatchError",

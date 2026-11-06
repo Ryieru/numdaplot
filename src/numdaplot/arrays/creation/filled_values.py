@@ -39,6 +39,8 @@ def build_filled_values(shape: Shape, value: ScalarValue, dtype: Type | None) ->
 	------
 	ValueConversionError
 		When the value cannot be stored as ``dtype`` without losing information.
+	TimeOverflowError
+		When a value stored as ``DATETIME`` or ``DURATION`` is outside the range of nanoseconds.
 
 	Examples
 	--------

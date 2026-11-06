@@ -10,6 +10,7 @@ import numpy
 from numpy.typing import NDArray
 
 from numdaplot.arrays.creation.list_shape import find_list_shape, flatten_list
+from numdaplot.arrays.operations.time_bounds import require_stored_times_fit
 from numdaplot.data_types.numpy_mapping import to_numpy_dtype
 from numdaplot.data_types.type import Type
 from numdaplot.data_types.value_type import find_common_type, find_value_type
@@ -62,6 +63,8 @@ def convert_list(values: list[object], dtype: Type | None) -> NDArray[Any]:
 		When a value is missing and the type cannot hold missing values.
 	ValueConversionError
 		When the values cannot be stored as ``dtype`` without losing information.
+	TimeOverflowError
+		When a value stored as ``DATETIME`` or ``DURATION`` is outside the range of nanoseconds.
 
 	Examples
 	--------
@@ -74,6 +77,7 @@ def convert_list(values: list[object], dtype: Type | None) -> NDArray[Any]:
 	single_values = flatten_list(values)
 	guessed_type = guess_list_type(single_values)
 	stored_type = choose_stored_type(guessed_type, dtype)
+	require_stored_times_fit(single_values, stored_type, FROM_LIST_OPERATION)
 	marked_values = mark_missing_values(single_values, stored_type)
 	stored_values = store_values(marked_values, guessed_type, stored_type)
 	shaped_values = stored_values.reshape(dimensions)

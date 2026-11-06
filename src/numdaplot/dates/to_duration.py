@@ -31,6 +31,8 @@ class ToDuration(TimeFunction):
 	------
 	InvalidTypeError
 		When a setting is not of the type its annotation names.
+	TimeOverflowError
+		When ``Array.apply`` meets a number that gives a duration beyond about 292 years.
 
 	Examples
 	--------

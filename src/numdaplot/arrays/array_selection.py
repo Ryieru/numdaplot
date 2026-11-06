@@ -176,6 +176,8 @@ class ArraySelection(ArrayData):
 			When an Array of new values does not have the shape of the region.
 		ValueConversionError
 			When the new values cannot be stored in the type of the Array without losing information.
+		TimeOverflowError
+			When a datetime is outside 1677 to 2262, or a duration beyond about 292 years.
 		DimensionError, RefusedOperationError, InvalidPositionError
 			When the region does not fit the Array, as in ``take``.
 

@@ -174,7 +174,7 @@ class Type(Enum):
 
 	DATE = auto()
 	"""
-	A day, without time.
+	A day, without time. Stored in days, but a calculation on it stays within 1677 to 2262, as ``DATETIME``.
 
 	Examples
 	--------
@@ -186,7 +186,7 @@ class Type(Enum):
 
 	DATETIME = auto()
 	"""
-	A day and a time, with or without time zone.
+	A day and a time, with or without time zone, from 1677 to 2262.
 
 	Examples
 	--------
@@ -198,7 +198,7 @@ class Type(Enum):
 
 	DURATION = auto()
 	"""
-	A gap between two dates or datetimes.
+	A gap between two dates or datetimes, of about 292 years at most, before or after zero.
 
 	Examples
 	--------

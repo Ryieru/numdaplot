@@ -13,7 +13,9 @@ from numdaplot.arrays.conversion.time_text import format_durations
 from numdaplot.data_types.type import Type
 from numdaplot.dates.custom_date_format import TIME_CODES, CustomDateFormat
 from numdaplot.dates.date_format import DateFormat
+from numdaplot.errors.time_overflow_error import TimeOverflowError
 from numdaplot.errors.value_conversion_error import ValueConversionError
+from numdaplot.tables.columns.date_range import is_text_out_of_range
 from numdaplot.tables.frames.column import Column
 from numdaplot.tables.frames.column_values import find_column_missing, find_column_type
 from numdaplot.tables.frames.frame_normalization import convert_to_type
@@ -62,6 +64,7 @@ OFFSET_CODE = "%z"
 COMPACT_OFFSET = r"([+-]\d{2})(\d{2})$"
 SEPARATED_OFFSET = r"\1:\2"
 NANOSECOND_DTYPE = "timedelta64[ns]"
+CONVERT_OPERATION = "convert"
 
 
 def has_time(date_format: DateFormat | CustomDateFormat) -> bool:
@@ -122,6 +125,8 @@ def parse_dates(column: Column, target_type: Type, date_format: DateFormat | Cus
 	------
 	ValueConversionError
 		At the first text that does not follow the format or is not a real date, such as ``"31/02/2026"``.
+	TimeOverflowError
+		When the version of pandas in use reads no date for a text holding a real date out of range.
 
 	Examples
 	--------
@@ -147,6 +152,11 @@ def parse_dates(column: Column, target_type: Type, date_format: DateFormat | Cus
 	if has_rejected:
 		rejected_texts = text_column[rejected]
 		first_rejected_text = rejected_texts.iloc[0]
+		read_format = find_read_format(target_type, date_format)
+		is_out_of_range = is_text_out_of_range(first_rejected_text, read_format)
+		if is_out_of_range:
+			raise TimeOverflowError(CONVERT_OPERATION, target_type.name)
+
 		format_name = find_format_name(target_type, date_format)
 		raise ValueConversionError(source_type.name, target_type.name, first_rejected_text, format_name)
 
@@ -198,6 +208,43 @@ def read_moments(texts: Column, target_type: Type, date_format: DateFormat | Cus
 	common_moments = read_common_format(texts, date_format)
 
 	return common_moments
+
+
+def find_read_format(target_type: Type, date_format: DateFormat | CustomDateFormat | None) -> str | CustomDateFormat:
+	"""
+	Return what texts are read with: a custom format, or the regular expression of a common or default format.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	target_type
+		``DATE`` or ``DATETIME``, which sets how texts are read without a format.
+	date_format
+		How the texts are written, the default of the type when omitted.
+
+	Returns
+	-------
+	str or CustomDateFormat
+		The custom format, or the regular expression.
+
+	Examples
+	--------
+	>>> import numdaplot as ndp
+	>>> from numdaplot.tables.columns.date_conversion import YEAR_FIRST, find_read_format
+	>>> find_read_format(ndp.Type.DATE, None) == YEAR_FIRST
+	True
+	"""
+	if isinstance(date_format, CustomDateFormat):
+		return date_format
+
+	if date_format is None:
+		default_pattern = DEFAULT_READ_PATTERNS[target_type]
+		return default_pattern
+
+	common_pattern = READ_PATTERNS[date_format]
+
+	return common_pattern
 
 
 def find_format_name(target_type: Type, date_format: DateFormat | CustomDateFormat | None) -> str:

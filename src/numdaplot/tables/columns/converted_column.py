@@ -4,10 +4,13 @@ Conversion of a Table column to another type.
 .. versionadded:: 0.1.0
 """
 
+import pandas
+
 from numdaplot.data_types.type import Type
 from numdaplot.data_types.value_family import ValueFamily, find_family
 from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
 from numdaplot.errors.invalid_conversion_error import InvalidConversionError
+from numdaplot.errors.time_overflow_error import TimeOverflowError
 from numdaplot.tables.columns.conversion import Conversion
 from numdaplot.tables.columns.date_conversion import (
 	convert_moments,
@@ -58,6 +61,8 @@ def convert_column(column: Column, conversion: Conversion) -> Column:
 		When the conversion is not accepted, such as a boolean to a number, or a number to a date.
 	ValueConversionError
 		When a value cannot be stored in the new type without losing information.
+	TimeOverflowError
+		When a date read or converted is outside what the new type can hold.
 	TimeZoneMismatchError
 		When the time zone change does not apply to whether the datetimes have a zone.
 
@@ -80,7 +85,11 @@ def convert_column(column: Column, conversion: Conversion) -> Column:
 		column_copy = column.copy()
 		return column_copy
 
-	time_column = convert_time_column(column, source_type, conversion)
+	try:
+		time_column = convert_time_column(column, source_type, conversion)
+	except pandas.errors.OutOfBoundsDatetime as error:
+		raise TimeOverflowError(CONVERT_OPERATION, conversion.dtype.name) from error
+
 	if time_column is not None:
 		return time_column
 
@@ -172,6 +181,10 @@ def convert_time_column(column: Column, source_type: Type, conversion: Conversio
 	------
 	ValueConversionError
 		At the first text that is not a date in the format.
+	TimeOverflowError
+		When a text holds a real date that the version of pandas in use cannot read.
+	OutOfBoundsDatetime
+		When pandas cannot store a date as ``DATETIME``, outside the range of nanoseconds.
 
 	Examples
 	--------

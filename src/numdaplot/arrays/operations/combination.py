@@ -10,7 +10,7 @@ from typing import Any
 import numpy
 from numpy.typing import NDArray
 
-from numdaplot.arrays.operations.float_errors import FloatErrorWarnings
+from numdaplot.arrays.operations.float_errors import FloatErrorWarnings, TimeErrorWarnings
 from numdaplot.arrays.operations.integer_rules import require_combination_fits, require_defined_integers
 from numdaplot.arrays.operations.operand import Operand, find_operand_type_names
 from numdaplot.arrays.operations.time_arithmetic import combine_time_values, involves_time
@@ -53,7 +53,7 @@ def combine_values(left: Operand, right: Operand, function: numpy.ufunc, symbol:
 	BroadcastWarning
 		When both sides are Array values of different but compatible shapes.
 	CalculationWarning
-		When values of decimals become NaN or an infinite value.
+		When values of decimals become NaN or an infinite value, or durations become missing values.
 
 	Raises
 	------
@@ -65,6 +65,8 @@ def combine_values(left: Operand, right: Operand, function: numpy.ufunc, symbol:
 		When integers are divided by 0 with ``//`` or ``%``, or raised to a negative power.
 	IntegerOverflowError
 		When a result does not fit its integer type.
+	TimeOverflowError
+		When a date, a datetime or a duration is outside the range of nanoseconds.
 	RefusedOperationError, ValueConversionError
 		When a time operation is refused, as in ``combine_time_values``.
 
@@ -78,7 +80,7 @@ def combine_values(left: Operand, right: Operand, function: numpy.ufunc, symbol:
 	check_shapes(left, right)
 	has_time = involves_time(left, right)
 	if has_time:
-		with FloatErrorWarnings(symbol):
+		with TimeErrorWarnings(symbol):
 			time_values = combine_time_values(left, right, function, symbol)
 
 		return time_values
