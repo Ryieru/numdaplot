@@ -20,6 +20,7 @@ from numdaplot.tables.frames.column_values import (
 	find_column_type,
 	read_present_values,
 )
+from numdaplot.tables.frames.pandas_decimals import restore_exact_decimals
 
 DECIMAL_KIND = "f"
 FAILED_PARSE = "coerce"
@@ -105,12 +106,13 @@ def parse_numbers(column: Column, target_type: Type) -> Column:
 	texts = read_present_values(column)
 	object_texts = texts.astype(PYTHON_OBJECT_DTYPE)
 	parsed_values = pandas.to_numeric(object_texts, errors=FAILED_PARSE)
-	numbers = numpy.asarray(parsed_values)
+	read_numbers = numpy.asarray(parsed_values)
 	failed = numpy.zeros(texts.shape, dtype=numpy.bool_)
-	if numbers.dtype.kind == DECIMAL_KIND:
-		failed = numpy.isnan(numbers)
+	if read_numbers.dtype.kind == DECIMAL_KIND:
+		failed = numpy.isnan(read_numbers)
 
 	require_no_failed_value(texts, failed, source_type, target_type)
+	numbers = restore_exact_decimals(object_texts, read_numbers)
 	converted_values = store_numbers(numbers, target_type)
 	lost = find_lost_values(numbers, converted_values)
 	require_no_failed_value(texts, lost, source_type, target_type)

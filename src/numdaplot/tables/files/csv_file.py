@@ -14,6 +14,7 @@ from numdaplot.errors.refused_setting_error import RefusedSettingError
 from numdaplot.tables.columns.column_names import require_column_names
 from numdaplot.tables.files.csv_options import CsvOptions
 from numdaplot.tables.files.pandas_backend import NULLABLE_DTYPE_BACKEND
+from numdaplot.tables.frames.pandas_decimals import find_exact_csv_settings
 
 CSV_NEWLINE = ""
 DECIMAL_FORMAT = "%.{decimals}f"
@@ -53,7 +54,7 @@ def require_read_options(options: CsvOptions) -> None:
 
 def read_csv_file(path: Path, options: CsvOptions) -> pandas.DataFrame:
 	r"""
-	Return the columns of a CSV file whose first row holds the column names.
+	Return the columns of a CSV file whose first row holds the column names, with the exact value of each decimal.
 
 	.. versionadded:: 0.1.0
 
@@ -97,11 +98,13 @@ def read_csv_file(path: Path, options: CsvOptions) -> pandas.DataFrame:
 	require_column_names(header)
 	# Some versions of the pandas stubs leave the parameter types of read_csv unknown.
 	csv_pandas = cast(Any, pandas)
+	exact_settings = find_exact_csv_settings()
 	raw_frame = csv_pandas.read_csv(
 		path,
 		sep=options.separator,
 		encoding=options.encoding.value,
 		dtype_backend=NULLABLE_DTYPE_BACKEND,
+		**exact_settings,
 	)
 	frame = cast(pandas.DataFrame, raw_frame)
 
