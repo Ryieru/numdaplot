@@ -153,7 +153,7 @@ MEMBER_SECTIONS = {
 		),
 		("Writing files", ("to_csv", "to_json", "to_excel", "to_parquet", "to_stata")),
 		("Conversion and comparison", ("from_pandas", "from_arrays", "to_pandas", "column", "to_value", "is_equal")),
-		("Information", ("row_count", "column_names", "column_types", "column_time_zones")),
+		("Information", ("row_count", "column_count", "column_names", "column_types", "column_time_zones")),
 		("Selection", ("filter", "take", "check")),
 		("Columns", ("choose_columns", "rename", "convert", "add_column")),
 		("Statistics", ("aggregate", "describe")),

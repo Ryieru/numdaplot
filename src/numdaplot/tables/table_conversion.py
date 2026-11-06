@@ -225,8 +225,7 @@ class TableConversion(TableData):
 		>>> table.aggregate(ndp.Aggregation(calculations=[highest_price])).to_value()
 		8.0
 		"""
-		column_count = len(self._frame.columns)
-		value_count = self.row_count * column_count
+		value_count = self.row_count * self.column_count
 		if value_count != SINGLE_VALUE_COUNT:
 			raise NotSingleValueError(value_count)
 

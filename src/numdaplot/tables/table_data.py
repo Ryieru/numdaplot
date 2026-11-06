@@ -93,6 +93,23 @@ class TableData:
 		return row_count
 
 	@property
+	def column_count(self) -> int:
+		"""
+		Number of columns.
+
+		.. versionadded:: 0.1.0
+
+		Examples
+		--------
+		>>> import numdaplot as ndp
+		>>> ndp.Table.from_arrays({"price": ndp.Array.from_list([1.5, 8.0])}).column_count
+		1
+		"""
+		column_count = len(self._frame.columns)
+
+		return column_count
+
+	@property
 	def column_names(self) -> list[str]:
 		"""
 		Names of the columns, in order. Changing the returned list never changes the Table.

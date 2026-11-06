@@ -48,7 +48,8 @@ and numdaplot follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
   `Table.convert`, `Table.add_column`, `Table.aggregate`, `Table.describe`, `Table.sort`,
   `Table.drop_duplicates` and `Table.drop_missing`; read with `Table.column`, `Table.check`,
   `Table.count_missing`, `Table.to_value`, `Table.to_pandas`, `Table.is_equal`, `Table.row_count`,
-  `Table.column_names`, `Table.column_types`, `Table.preview`, `Table.preview_missing` and `print`.
+  `Table.column_count`, `Table.column_names`, `Table.column_types`, `Table.preview`, `Table.preview_missing`
+  and `print`.
 - `Array`, `Table` and `Plot`, and the base classes `Rule`, `Statistic`, `MathFunction`, `TimeFunction`,
   `Distribution` and `Chart`, refuse their constructor with `RefusedOperationError`, which names what to use instead.
   Settings, methods, functions and arithmetic operators check their values against their annotations and raise

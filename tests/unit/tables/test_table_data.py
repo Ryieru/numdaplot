@@ -18,7 +18,9 @@ from numdaplot.tables.frames.column import Column
 from numdaplot.tables.table_data import TableData
 
 FRAME = pandas.DataFrame({"city": pandas.Series(["Pau", "Lyon"], dtype="string"), "price": [1.5, 8.0]})
+NO_COLUMN_FRAME = pandas.DataFrame()
 EXPECTED_ROW_COUNT = 2
+EXPECTED_COLUMN_COUNT = 2
 EXPECTED_COLUMN_NAMES = ["city", "price"]
 EXPECTED_COLUMN_TYPES = {"city": Type.TEXT, "price": Type.FLOAT64}
 RAW_FRAME = pandas.DataFrame({"count": [1, 2]})
@@ -144,6 +146,28 @@ def test_table_data_counts_its_rows() -> None:
 	table = TableData._create(FRAME)
 
 	assert table.row_count == EXPECTED_ROW_COUNT
+
+
+def test_table_data_counts_its_columns() -> None:
+	"""
+	Check the number of columns.
+
+	.. versionadded:: 0.1.0
+	"""
+	table = TableData._create(FRAME)
+
+	assert table.column_count == EXPECTED_COLUMN_COUNT
+
+
+def test_table_data_counts_zero_columns_when_it_has_none() -> None:
+	"""
+	Check that a table without columns counts zero columns.
+
+	.. versionadded:: 0.1.0
+	"""
+	table = TableData._create(NO_COLUMN_FRAME)
+
+	assert table.column_count == 0
 
 
 def test_table_data_gives_a_copy_of_its_column_names() -> None:

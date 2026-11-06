@@ -18,6 +18,9 @@ EXPECTED_PRICE_TOTAL = 200.0
 COUNTS_WITH_HOLE = pandas.Series([2, None], dtype="Int64")
 CATEGORIES = ["b", "a"]
 EXPECTED_COLUMN_NAMES = ["city", "price"]
+EXPECTED_COLUMN_COUNT = 2
+PRICE_COLUMN_ONLY = ["price"]
+EXPECTED_KEPT_COLUMN_COUNT = 1
 SINGLE_PRICE = [9.5]
 INTEGER_COUNTS = [1, 2]
 DECIMAL_COUNTS = [1.0, 2.0]
@@ -38,6 +41,22 @@ def test_a_dataframe_with_a_meaningful_index_is_refused() -> None:
 
 	sales = ndp.Table.from_pandas(reset_frame)
 	assert sales.column_names == EXPECTED_COLUMN_NAMES
+
+
+def test_a_table_counts_its_columns_as_they_change() -> None:
+	"""
+	Check that column_count follows the columns kept by choose_columns.
+
+	.. versionadded:: 0.1.0
+	"""
+	frame = pandas.DataFrame({"city": CITY_INDEX, "price": PRICES})
+	sales = ndp.Table.from_pandas(frame)
+	price_choice = ndp.ColumnChoice(columns=PRICE_COLUMN_ONLY)
+
+	prices_only = sales.choose_columns(price_choice)
+
+	assert sales.column_count == EXPECTED_COLUMN_COUNT
+	assert prices_only.column_count == EXPECTED_KEPT_COLUMN_COUNT
 
 
 def test_python_objects_of_a_dataframe_get_their_type() -> None:
