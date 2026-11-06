@@ -5,23 +5,18 @@ Refusal of dates, datetimes and durations that a count of nanoseconds cannot hol
 """
 
 from datetime import date, datetime, time, timedelta
-from typing import Any, cast
+from typing import Any
 
 import numpy
 from numpy.typing import NDArray
 
 from numdaplot.arrays.operations.integer_bounds import find_value_bounds
-from numdaplot.arrays.operations.integer_rules import require_combination_fits
 from numdaplot.arrays.operations.operand import Operand
 from numdaplot.data_types.type import Type
-from numdaplot.errors.integer_overflow_error import IntegerOverflowError
 from numdaplot.errors.time_overflow_error import TimeOverflowError
 
 NANOSECOND_TYPES = frozenset({Type.DATETIME, Type.DURATION})
 TIME_KINDS = frozenset({"M", "m"})
-DECIMAL_KIND = "f"
-UNSIGNED_KIND = "u"
-IGNORE_MODE = "ignore"
 NANOSECOND_DTYPES = frozenset({numpy.dtype("datetime64[ns]"), numpy.dtype("timedelta64[ns]")})
 SECOND_DTYPE_FORMAT = "{kind}8[s]"
 COUNT_DTYPE = numpy.dtype(numpy.int64)
@@ -161,220 +156,66 @@ def require_nanoseconds_fit(operand: Operand, data_type: Type, operation_name: s
 	if operand.dtype.kind not in TIME_KINDS or operand.dtype in NANOSECOND_DTYPES:
 		return
 
-	present_values = operand[~numpy.isnat(operand)]
-	if present_values.size == 0:
+	count_bounds = find_present_bounds(operand)
+	if count_bounds is None:
 		return
 
 	second_dtype = SECOND_DTYPE_FORMAT.format(kind=operand.dtype.kind)
-	seconds = present_values.astype(second_dtype)
-	second_counts = seconds.astype(COUNT_DTYPE)
+	bound_counts = numpy.array(count_bounds, dtype=COUNT_DTYPE)
+	bound_times = bound_counts.astype(operand.dtype)
+	bound_seconds = bound_times.astype(second_dtype)
+	second_counts = bound_seconds.astype(COUNT_DTYPE)
 	low_seconds, high_seconds = find_value_bounds(second_counts)
 	if low_seconds < LOWEST_SECONDS or high_seconds > HIGHEST_SECONDS:
 		raise TimeOverflowError(operation_name, data_type.name)
 
 
-def to_counts(values: Any) -> NDArray[Any]:
+def find_present_bounds(values: Any) -> tuple[int, int] | None:
 	"""
-	Return values of a calculation with their times as integers, a missing time counting as 0.
+	Return the lowest and the highest values of a calculation, times being counted in their unit.
 
 	.. versionadded:: 0.1.0
 
 	Parameters
 	----------
 	values
-		Times in nanoseconds or numbers, an array or a single value.
+		Times or integers, an array or a single value.
 
 	Returns
 	-------
-	NDArray
-		The counts of nanoseconds, or the numbers.
+	tuple[int, int] or None
+		The bounds of the present values, or ``None`` when no value is present.
 
 	Examples
 	--------
 	>>> import numpy
-	>>> from numdaplot.arrays.operations.time_bounds import to_counts
-	>>> to_counts(numpy.array([5, "NaT"], dtype="timedelta64[ns]"))
-	array([5, 0])
+	>>> from numdaplot.arrays.operations.time_bounds import find_present_bounds
+	>>> find_present_bounds(numpy.array([5, "NaT", 2], dtype="timedelta64[ns]"))
+	(2, 5)
+	>>> find_present_bounds(3)
+	(3, 3)
 	"""
 	array = numpy.asarray(values)
+	if array.size == 0:
+		return None
+
 	if array.dtype.kind not in TIME_KINDS:
-		return array
+		number_bounds = find_value_bounds(array)
+		return number_bounds
 
-	counts = array.astype(COUNT_DTYPE)
-	missing = numpy.isnat(array)
-	present_counts = numpy.where(missing, 0, counts)
+	counts = array.view(COUNT_DTYPE)
+	low_count, high_count = find_value_bounds(counts)
+	if low_count != COUNT_LIMITS.min:
+		return low_count, high_count
 
-	return present_counts
+	is_present = counts != COUNT_LIMITS.min
+	present_counts = counts[is_present]
+	if present_counts.size == 0:
+		return None
 
+	present_bounds = find_value_bounds(present_counts)
 
-def widen_large_integers(values: Any) -> Any:
-	"""
-	Return numbers beside a duration as decimals when they do not fit a signed count of nanoseconds.
-
-	.. versionadded:: 0.1.0
-
-	Parameters
-	----------
-	values
-		Times in nanoseconds or numbers, an array or a single value.
-
-	Returns
-	-------
-	Any
-		Decimals for integers too large, signed integers for ``UINT64`` that fit, the values themselves otherwise.
-
-	Raises
-	------
-	OverflowError
-		When a Python integer is too large for a decimal.
-
-	Examples
-	--------
-	>>> import numpy
-	>>> from numdaplot.arrays.operations.time_bounds import widen_large_integers
-	>>> widen_large_integers(2**70)
-	1.1805916207174113e+21
-	>>> widen_large_integers(numpy.array([2], dtype="uint64"))
-	array([2])
-	"""
-	if isinstance(values, int):
-		if LOWEST_NANOSECONDS <= values <= HIGHEST_NANOSECONDS:
-			return values
-
-		return float(values)
-
-	if not isinstance(values, numpy.ndarray):
-		return values
-
-	# isinstance leaves the array type unknown, because the values are typed Any.
-	array = cast(NDArray[Any], values)
-	if array.dtype.kind != UNSIGNED_KIND or array.size == 0:
-		return array
-
-	_, highest_value = find_value_bounds(array)
-	if highest_value > HIGHEST_NANOSECONDS:
-		large_decimals = array.astype(numpy.float64)
-		return large_decimals
-
-	signed_values = array.astype(COUNT_DTYPE)
-
-	return signed_values
-
-
-def require_decimal_factor_fits(operands: list[Any], function: numpy.ufunc, result_type: Type, symbol: str) -> None:
-	"""
-	Check that a duration multiplied or divided by decimals fits a count of nanoseconds.
-
-	A factor that is NaN or infinite and a divisor of 0 have no result to refuse: they give missing values.
-
-	.. versionadded:: 0.1.0
-
-	Parameters
-	----------
-	operands
-		The counts of the left and the right operands, one of them holding the decimals.
-	function
-		``numpy.multiply`` or ``numpy.true_divide``.
-	result_type
-		The type named by the error message.
-	symbol
-		The operator shown in the error message.
-
-	Raises
-	------
-	TimeOverflowError
-		When a result is out of range.
-
-	Examples
-	--------
-	>>> import numpy
-	>>> import numdaplot as ndp
-	>>> from numdaplot.arrays.operations.time_bounds import require_decimal_factor_fits
-	>>> operands = [numpy.array([2**62]), numpy.array([4.0])]
-	>>> try:
-	... 	require_decimal_factor_fits(operands, numpy.multiply, ndp.Type.DURATION, "*")
-	... except ndp.TimeOverflowError as error:
-	... 	print(error)
-	The operation * gives values outside the range of DURATION, about 292 years before or after zero.
-	"""
-	left_counts, right_counts = operands
-	factors = right_counts
-	if left_counts.dtype.kind == DECIMAL_KIND:
-		factors = left_counts
-
-	left_decimals = left_counts.astype(numpy.float64)
-	right_decimals = right_counts.astype(numpy.float64)
-	with numpy.errstate(all=IGNORE_MODE):
-		estimates = function(left_decimals, right_decimals)
-
-	has_result = numpy.isfinite(factors)
-	if function == numpy.true_divide:
-		has_result = has_result & (factors != 0)
-
-	magnitudes = numpy.abs(estimates)
-	is_too_large = (magnitudes >= FIRST_COUNT_TOO_LARGE) & has_result
-	has_too_large = bool(numpy.any(is_too_large))
-	if has_too_large:
-		raise TimeOverflowError(symbol, result_type.name)
-
-
-def require_time_result_fits(operands: list[Any], function: numpy.ufunc, result_type: Type, symbol: str) -> None:
-	"""
-	Check that the results of a calculation on times fit a count of nanoseconds, before computing them.
-
-	.. versionadded:: 0.1.0
-
-	Parameters
-	----------
-	operands
-		The left and the right operands, with their times in nanoseconds.
-	function
-		The numpy function about to be applied.
-	result_type
-		The type named by the error message.
-	symbol
-		The operator shown in the error message.
-
-	Raises
-	------
-	TimeOverflowError
-		When a result is out of range.
-
-	Examples
-	--------
-	>>> import numpy
-	>>> import numdaplot as ndp
-	>>> from numdaplot.arrays.operations.time_bounds import require_time_result_fits
-	>>> durations = numpy.array([1], dtype="timedelta64[D]").astype("timedelta64[ns]")
-	>>> try:
-	... 	require_time_result_fits([durations, 200000], numpy.multiply, ndp.Type.DURATION, "*")
-	... except ndp.TimeOverflowError as error:
-	... 	print(error)
-	The operation * gives values outside the range of DURATION, about 292 years before or after zero.
-	"""
-	left_operand, right_operand = operands
-	left_counts = to_counts(left_operand)
-	right_counts = to_counts(right_operand)
-	count_operands = list[Operand]([left_counts, right_counts])
-	has_decimal = DECIMAL_KIND in (left_counts.dtype.kind, right_counts.dtype.kind)
-	if has_decimal:
-		require_decimal_factor_fits(count_operands, function, result_type, symbol)
-		return
-
-	# Dividing by an integer never moves a count away from zero.
-	if function == numpy.true_divide:
-		return
-
-	wrapped_counts = function(left_counts, right_counts)
-	try:
-		require_combination_fits(count_operands, function, wrapped_counts, symbol)
-	except IntegerOverflowError as error:
-		raise TimeOverflowError(symbol, result_type.name) from error
-
-	reaches_missing_marker = wrapped_counts == COUNT_LIMITS.min
-	has_marker = bool(numpy.any(reaches_missing_marker))
-	if has_marker:
-		raise TimeOverflowError(symbol, result_type.name)
+	return present_bounds
 
 
 def require_whole_durations_fit(values: NDArray[Any], nanoseconds_per_unit: int, function_name: str) -> None:

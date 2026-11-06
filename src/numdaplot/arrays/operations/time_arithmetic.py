@@ -11,11 +11,8 @@ from numpy.typing import NDArray
 
 from numdaplot.arrays.conversion.time_text import format_durations
 from numdaplot.arrays.operations.operand import Operand, convert_time_value, find_operand_type
-from numdaplot.arrays.operations.time_bounds import (
-	require_nanoseconds_fit,
-	require_time_result_fits,
-	widen_large_integers,
-)
+from numdaplot.arrays.operations.time_bounds import require_nanoseconds_fit
+from numdaplot.arrays.operations.time_result_bounds import require_time_result_fits, widen_large_integers
 from numdaplot.data_types.numpy_mapping import to_numpy_dtype
 from numdaplot.data_types.type import Type
 from numdaplot.data_types.value_family import ValueFamily, find_family

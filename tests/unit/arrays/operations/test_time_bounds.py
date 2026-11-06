@@ -8,7 +8,6 @@ from datetime import UTC, date, datetime, timedelta
 
 import numpy
 import pytest
-from numpy.typing import NDArray
 
 from numdaplot.arrays.operations.time_bounds import (
 	FIRST_COUNT_TOO_LARGE,
@@ -16,15 +15,12 @@ from numdaplot.arrays.operations.time_bounds import (
 	HIGHEST_NANOSECONDS,
 	LONGEST_DURATION,
 	LOWEST_DATETIME,
+	find_present_bounds,
 	is_python_time_in_range,
 	require_decimal_durations_fit,
-	require_decimal_factor_fits,
 	require_nanoseconds_fit,
 	require_stored_times_fit,
-	require_time_result_fits,
 	require_whole_durations_fit,
-	to_counts,
-	widen_large_integers,
 )
 from numdaplot.data_types.type import Type
 from numdaplot.errors.time_overflow_error import TimeOverflowError
@@ -33,17 +29,12 @@ OPERATION_NAME = "+"
 ONE_MICROSECOND = timedelta(microseconds=1)
 FAR_DATETIME = datetime(3000, 1, 1)
 FAR_DATE = date(3000, 1, 1)
-FAR_DURATION = timedelta(days=200000)
 CLOSE_DATE = date(2026, 1, 31)
 NANOSECOND_DURATION_DTYPE = "timedelta64[ns]"
-NANOSECOND_DATETIME_DTYPE = "datetime64[ns]"
 DAY_DTYPE = "datetime64[D]"
 SECOND_DTYPE = "datetime64[s]"
-UNSIGNED_DTYPE = "uint64"
-LARGE_INTEGER = 2**70
 NANOSECONDS_PER_DAY = 86400 * 10**9
 DAYS_BEYOND_RANGE = 200000
-DAYS_OF_LAST_WHOLE_RANGE = 106751
 HIGHEST_NATIVE_TEXT = HIGHEST_DATETIME.isoformat()
 LOWEST_NATIVE_TEXT = LOWEST_DATETIME.isoformat()
 NANOSECOND_UNIT = "ns"
@@ -189,187 +180,6 @@ def test_require_nanoseconds_fit_accepts_only_missing_values() -> None:
 	require_nanoseconds_fit(values, Type.DATE, OPERATION_NAME)
 
 
-def test_to_counts_gives_zero_for_a_missing_time() -> None:
-	"""
-	Check that NaT does not count as the lowest integer.
-
-	.. versionadded:: 0.1.0
-	"""
-	values = numpy.array([5, "NaT"], dtype=NANOSECOND_DURATION_DTYPE)
-
-	counts = to_counts(values)
-
-	count_list = counts.tolist()
-	assert count_list == [5, 0]
-
-
-def test_to_counts_keeps_numbers() -> None:
-	"""
-	Check that numbers are not changed.
-
-	.. versionadded:: 0.1.0
-	"""
-	counts = to_counts(2.5)
-
-	single_count = counts.item()
-	assert single_count == 2.5
-
-
-def test_widen_large_integers_turns_a_large_integer_into_a_decimal() -> None:
-	"""
-	Check a Python integer that fits no signed count.
-
-	.. versionadded:: 0.1.0
-	"""
-	widened = widen_large_integers(LARGE_INTEGER)
-
-	assert widened == float(LARGE_INTEGER)
-
-
-def test_widen_large_integers_keeps_an_integer_that_fits() -> None:
-	"""
-	Check a small Python integer.
-
-	.. versionadded:: 0.1.0
-	"""
-	widened = widen_large_integers(2)
-
-	assert widened == 2
-
-
-def test_widen_large_integers_keeps_unsigned_integers_exact_when_they_fit() -> None:
-	"""
-	Check ``UINT64`` values that fit a signed count.
-
-	.. versionadded:: 0.1.0
-	"""
-	values = numpy.array([2], dtype=UNSIGNED_DTYPE)
-
-	widened = widen_large_integers(values)
-
-	assert widened.dtype.kind == "i"
-
-
-def test_widen_large_integers_turns_large_unsigned_integers_into_decimals() -> None:
-	"""
-	Check ``UINT64`` values above the signed counts.
-
-	.. versionadded:: 0.1.0
-	"""
-	values = numpy.array([2**63], dtype=UNSIGNED_DTYPE)
-
-	widened = widen_large_integers(values)
-
-	assert widened.dtype.kind == "f"
-
-
-def test_widen_large_integers_keeps_an_empty_unsigned_array() -> None:
-	"""
-	Check an Array without value, which has no bounds.
-
-	.. versionadded:: 0.1.0
-	"""
-	values = numpy.array([], dtype=UNSIGNED_DTYPE)
-
-	widened = widen_large_integers(values)
-
-	assert widened.size == 0
-
-
-def test_require_decimal_factor_fits_accepts_a_divisor_of_zero() -> None:
-	"""
-	Check that a division by 0 gives a missing value and not a refusal.
-
-	.. versionadded:: 0.1.0
-	"""
-	operands = [numpy.array([NANOSECONDS_PER_DAY]), numpy.array([0.0])]
-
-	require_decimal_factor_fits(operands, numpy.true_divide, Type.DURATION, OPERATION_NAME)
-
-
-def test_require_decimal_factor_fits_refuses_a_decimal_on_the_left() -> None:
-	"""
-	Check the factor found on either side.
-
-	.. versionadded:: 0.1.0
-	"""
-	operands = [numpy.array([1e300]), numpy.array([NANOSECONDS_PER_DAY])]
-
-	with pytest.raises(TimeOverflowError):
-		require_decimal_factor_fits(operands, numpy.multiply, Type.DURATION, OPERATION_NAME)
-
-
-def build_durations(day_count: int) -> NDArray[numpy.timedelta64]:
-	"""
-	Return one duration in nanoseconds.
-
-	.. versionadded:: 0.1.0
-
-	Parameters
-	----------
-	day_count
-		The number of days.
-
-	Returns
-	-------
-	NDArray[numpy.timedelta64]
-		The duration.
-	"""
-	days = numpy.array([day_count], dtype="timedelta64[D]")
-	durations = days.astype(NANOSECOND_DURATION_DTYPE)
-
-	return durations
-
-
-def test_require_time_result_fits_refuses_a_sum_too_large() -> None:
-	"""
-	Check a sum beyond the range.
-
-	.. versionadded:: 0.1.0
-	"""
-	durations = build_durations(DAYS_OF_LAST_WHOLE_RANGE)
-
-	with pytest.raises(TimeOverflowError):
-		require_time_result_fits([durations, durations], numpy.add, Type.DURATION, OPERATION_NAME)
-
-
-def test_require_time_result_fits_accepts_an_integer_division() -> None:
-	"""
-	Check that a division by an integer cannot move away from zero.
-
-	.. versionadded:: 0.1.0
-	"""
-	durations = build_durations(DAYS_OF_LAST_WHOLE_RANGE)
-
-	require_time_result_fits([durations, 0], numpy.true_divide, Type.DURATION, OPERATION_NAME)
-
-
-def test_require_time_result_fits_refuses_the_count_kept_for_missing_values() -> None:
-	"""
-	Check that a result cannot become a missing value by reaching the lowest count.
-
-	.. versionadded:: 0.1.0
-	"""
-	lowest_duration = numpy.array([-HIGHEST_NANOSECONDS], dtype=NANOSECOND_DURATION_DTYPE)
-	one_nanosecond = numpy.array([1], dtype=NANOSECOND_DURATION_DTYPE)
-	operands = [lowest_duration, one_nanosecond]
-
-	with pytest.raises(TimeOverflowError):
-		require_time_result_fits(operands, numpy.subtract, Type.DURATION, OPERATION_NAME)
-
-
-def test_require_time_result_fits_accepts_a_missing_value_with_a_large_value() -> None:
-	"""
-	Check that a missing value counts as nothing.
-
-	.. versionadded:: 0.1.0
-	"""
-	durations = numpy.array([HIGHEST_NANOSECONDS], dtype=NANOSECOND_DURATION_DTYPE)
-	missing = numpy.array(["NaT"], dtype=NANOSECOND_DURATION_DTYPE)
-
-	require_time_result_fits([durations, missing], numpy.add, Type.DURATION, OPERATION_NAME)
-
-
 def test_require_whole_durations_fit_refuses_a_large_integer() -> None:
 	"""
 	Check integers read as durations.
@@ -414,3 +224,53 @@ def test_require_decimal_durations_fit_accepts_a_missing_value() -> None:
 	nanoseconds = numpy.array([numpy.nan])
 
 	require_decimal_durations_fit(nanoseconds, OPERATION_NAME)
+
+
+def test_find_present_bounds_skips_missing_values() -> None:
+	"""
+	Check that NaT does not count as the lowest value.
+
+	.. versionadded:: 0.1.0
+	"""
+	values = numpy.array([5, "NaT", 2], dtype=NANOSECOND_DURATION_DTYPE)
+
+	bounds = find_present_bounds(values)
+
+	assert bounds == (2, 5)
+
+
+def test_find_present_bounds_gives_none_without_present_value() -> None:
+	"""
+	Check an Array holding only missing values.
+
+	.. versionadded:: 0.1.0
+	"""
+	values = numpy.array(["NaT"], dtype=NANOSECOND_DURATION_DTYPE)
+
+	bounds = find_present_bounds(values)
+
+	assert bounds is None
+
+
+def test_find_present_bounds_gives_none_for_an_empty_array() -> None:
+	"""
+	Check an Array without value.
+
+	.. versionadded:: 0.1.0
+	"""
+	values = numpy.array([], dtype=NANOSECOND_DURATION_DTYPE)
+
+	bounds = find_present_bounds(values)
+
+	assert bounds is None
+
+
+def test_find_present_bounds_reads_a_single_number() -> None:
+	"""
+	Check a single integer.
+
+	.. versionadded:: 0.1.0
+	"""
+	bounds = find_present_bounds(3)
+
+	assert bounds == (3, 3)
