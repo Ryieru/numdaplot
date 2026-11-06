@@ -20,6 +20,7 @@ class Range:
 	A regular sequence of numbers from ``start`` to ``stop``, every ``step``.
 
 	It selects positions in ``Region`` and creates values in ``Array.from_range``.
+	In a ``Region``, ``start`` and ``step`` must be ``int``, since a position is a whole number.
 	Unlike the Python ``range``, the end is included by default, as in ``Between``.
 
 	.. versionadded:: 0.1.0
