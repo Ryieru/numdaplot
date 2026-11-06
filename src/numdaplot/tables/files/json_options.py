@@ -6,6 +6,7 @@ Settings of the JSON files a Table reads and writes.
 
 from dataclasses import dataclass
 
+from numdaplot.errors.invalid_count_error import InvalidCountError
 from numdaplot.settings.field_types import require_field_types
 from numdaplot.tables.files.json_layout import JsonLayout
 
@@ -23,12 +24,17 @@ class JsonOptions:
 	----------
 	layout
 		The layout of the rows, one list of objects by default.
-
+	decimals
+		The number of decimals written for every decimal column, 0 or more, ``Table.to_json`` only. Each value is
+		rounded and keeps its zeros, such as ``1.50``, so the file no longer holds the exact values. When omitted, a
+		decimal is written with every digit of its value.
 
 	Raises
 	------
 	InvalidTypeError
 		When a setting is not of the type its annotation names.
+	InvalidCountError
+		When ``decimals`` is negative.
 
 	Examples
 	--------
@@ -46,10 +52,11 @@ class JsonOptions:
 	"""
 
 	layout: JsonLayout = JsonLayout.RECORDS
+	decimals: int | None = None
 
 	def __post_init__(self) -> None:
 		"""
-		Check the type of every setting.
+		Check the type of every setting, and that ``decimals`` is not negative.
 
 		.. versionadded:: 0.1.0
 
@@ -57,5 +64,10 @@ class JsonOptions:
 		------
 		InvalidTypeError
 			When a setting is not of the type its annotation names.
+		InvalidCountError
+			When ``decimals`` is negative.
 		"""
 		require_field_types(self)
+
+		if self.decimals is not None and self.decimals < 0:
+			raise InvalidCountError(self.decimals, 0)

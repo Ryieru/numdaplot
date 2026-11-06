@@ -35,7 +35,7 @@ class ValueConversionError(NumdaplotError):
 	source_type_name
 		Name of the ``ndp.Type`` member of the given values.
 	target_type_name
-		Name of the ``ndp.Type`` member they should be stored as.
+		Name of the ``ndp.Type`` member they should be stored as, or ``JSON`` for a value JSON cannot write.
 	rejected_value
 		The first value that cannot be stored. When omitted, the message names no value.
 	date_format_name

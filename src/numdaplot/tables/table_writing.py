@@ -86,7 +86,8 @@ class TableWriting(TableData):
 		"""
 		Write the Table in a JSON file in UTF-8, one object per row.
 
-		Missing values are written as ``null``, dates and durations in the ISO 8601 format.
+		Missing values are written as ``null``, dates and durations in the ISO 8601 format, and decimals with every
+		digit of their value unless ``options`` gives their number.
 
 		.. versionadded:: 0.1.0
 
@@ -95,7 +96,7 @@ class TableWriting(TableData):
 		path
 			The path of the file, a ``FilePath`` such as ``"sales.json"`` or ``Path("data/sales.json")``.
 		options
-			The layout of the rows, one list of objects when omitted.
+			The layout of the rows and the number of decimals, one list of objects with every digit when omitted.
 		on_conflict
 			``ERROR`` by default, refusing to overwrite an existing file, or ``REPLACE`` to overwrite it.
 
@@ -107,6 +108,8 @@ class TableWriting(TableData):
 			When a file exists at the path and ``on_conflict`` is ``ERROR``.
 		FileAccessError
 			When the file system refuses the file: missing folder, missing permission and so on.
+		ValueConversionError
+			At the first infinite value of a decimal column, which JSON cannot write: replace it first.
 
 		Examples
 		--------

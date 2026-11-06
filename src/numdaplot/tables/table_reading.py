@@ -14,7 +14,7 @@ from numdaplot.tables.files.excel_file import read_excel_file
 from numdaplot.tables.files.excel_options import ExcelOptions
 from numdaplot.tables.files.file_access import READ_OPERATION, FileAccessErrors
 from numdaplot.tables.files.file_paths import FilePath, require_existing_file
-from numdaplot.tables.files.json_file import read_json_file
+from numdaplot.tables.files.json_file import read_json_file, require_json_read_options
 from numdaplot.tables.files.json_options import JsonOptions
 from numdaplot.tables.files.parquet_file import read_parquet_file
 from numdaplot.tables.files.sas_file import read_sas_file, read_xpt_file
@@ -124,6 +124,8 @@ class TableReading(TableData):
 			When there is no file at the path.
 		FileAccessError
 			When the file system refuses the file, for a missing permission for example.
+		RefusedSettingError
+			When ``options`` gives ``decimals``, which only applies to the writing.
 		InvalidColumnNameError
 			When a column name is empty.
 
@@ -145,6 +147,7 @@ class TableReading(TableData):
 		if options is None:
 			options = JsonOptions()
 
+		require_json_read_options(options)
 		with FileAccessErrors(READ_OPERATION, file_path):
 			frame = read_json_file(file_path, options)
 
