@@ -23,6 +23,7 @@ from numdaplot.plots.data.chart_values import ChartValues, Series
 from numdaplot.plots.data.point_values import PointValues
 from numdaplot.plots.drawing.color_bar import add_color_bar
 from numdaplot.plots.drawing.color_scale_values import find_point_colors, find_scale_limits
+from numdaplot.plots.drawing.default_labels import find_position_label
 from numdaplot.plots.drawing.drawn_chart import DrawnChart
 from numdaplot.plots.drawing.grid_axes import GridAxes
 from numdaplot.plots.drawing.marker_codes import MARKER_CODES
@@ -124,7 +125,8 @@ def draw_scatter_chart(axes: Axes, layer: ChartLayer) -> DrawnChart:
 	marker_code = MARKER_CODES[chart.marker]
 	scale = DEFAULT_COLOR_SCALE if chart.scale is None else chart.scale
 	point_look = PointLook(coordinates, areas, marker_code, chart.opacity, scale)
-	no_legend_chart = DrawnChart(values.positions.name, values.value_name, False, GridAxes.BOTH, None)
+	x_label = find_position_label(values.positions)
+	no_legend_chart = DrawnChart(x_label, values.value_name, False, GridAxes.BOTH, None)
 	if points.colors is None:
 		draw_colored_series(axes, chart.color, values.series, point_look)
 		return no_legend_chart
@@ -137,7 +139,7 @@ def draw_scatter_chart(axes: Axes, layer: ChartLayer) -> DrawnChart:
 		return no_legend_chart
 
 	draw_color_groups(axes, first_series, points.colors, point_look)
-	group_chart = DrawnChart(values.positions.name, values.value_name, False, GridAxes.BOTH, color_name)
+	group_chart = DrawnChart(x_label, values.value_name, False, GridAxes.BOTH, color_name)
 
 	return group_chart
 

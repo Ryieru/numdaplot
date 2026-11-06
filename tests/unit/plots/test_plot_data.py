@@ -47,14 +47,14 @@ def test_plot_keeps_its_own_copy_of_the_layers() -> None:
 
 def test_create_from_layer_uses_the_default_style_without_style() -> None:
 	"""
-	Check that no style gives the default one, without title.
+	Check that no style gives the default one, with the default title.
 
 	.. versionadded:: 0.1.0
 	"""
 	plot = Plot._create_from_layer(LAYER, None)
 
 	figure = plot.to_matplotlib()
-	assert figure.axes[0].get_title() == ""
+	assert figure.axes[0].get_title() == "Value by Row"
 
 
 def test_create_from_layer_uses_the_given_style() -> None:

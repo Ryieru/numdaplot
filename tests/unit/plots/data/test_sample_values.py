@@ -45,7 +45,7 @@ def test_read_sample_values_reads_each_column_of_a_table() -> None:
 	assert names == TWO_COLUMNS
 	assert price_missing == [False, False, True]
 	assert samples.groups is None
-	assert samples.value_name is None
+	assert samples.value_name == "price, rooms"
 
 
 def test_read_sample_values_names_the_axis_after_a_single_column() -> None:
@@ -83,7 +83,7 @@ def test_read_sample_values_reads_each_column_of_an_array() -> None:
 
 	names = [series.name for series in samples.series]
 	assert names == EXPECTED_ARRAY_NAMES
-	assert samples.value_name is None
+	assert samples.value_name == "Value"
 
 
 def test_read_sample_values_rejects_a_table_without_columns() -> None:

@@ -34,6 +34,7 @@ PERCENTAGE_FORMAT = "{share:.1%}"
 PERCENTAGE_DISTANCE = 0.65
 HALF = 0.5
 CENTERED = "center"
+PIE_TITLE = "{value_name} by {labels_name}"
 
 
 def draw_pie_chart(axes: Axes, layer: ChartLayer) -> DrawnChart:
@@ -99,7 +100,8 @@ def draw_pie_chart(axes: Axes, layer: ChartLayer) -> DrawnChart:
 	if chart.percentages == Percentages.SHOWN:
 		write_percentages(axes, slices, numbers)
 
-	drawn_chart = DrawnChart(None, None, False, GridAxes.NONE, None)
+	pie_title = PIE_TITLE.format(value_name=values.value_name, labels_name=values.positions.name)
+	drawn_chart = DrawnChart(None, None, False, GridAxes.NONE, None, title=pie_title)
 
 	return drawn_chart
 

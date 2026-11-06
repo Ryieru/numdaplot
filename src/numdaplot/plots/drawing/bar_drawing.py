@@ -19,6 +19,7 @@ from numdaplot.plots.charts.bar_chart import BarChart
 from numdaplot.plots.charts.bar_layout import BarLayout
 from numdaplot.plots.charts.orientation import Orientation
 from numdaplot.plots.data.chart_values import ChartValues
+from numdaplot.plots.drawing.default_labels import find_position_label
 from numdaplot.plots.drawing.drawn_chart import DrawnChart
 from numdaplot.plots.drawing.grid_axes import GridAxes
 from numdaplot.plots.drawing.position_axis import place_categories
@@ -179,7 +180,8 @@ def draw_bar_chart(axes: Axes, layer: ChartLayer) -> DrawnChart:
 	if is_horizontal:
 		axes.invert_yaxis()
 
-	drawn_chart = DrawnChart(values.positions.name, values.value_name, is_horizontal, GridAxes.VALUES, None)
+	x_label = find_position_label(values.positions)
+	drawn_chart = DrawnChart(x_label, values.value_name, is_horizontal, GridAxes.VALUES, None)
 
 	return drawn_chart
 

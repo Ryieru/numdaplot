@@ -28,6 +28,7 @@ MEASURE_LABELS = {
 }
 FLOAT_DTYPE = numpy.dtype(numpy.float64)
 COLUMN_SUM_AXIS = 0
+COLUMN_AXIS_NAME = "Column"
 TEXT_DTYPE = numpy.dtype(object)
 
 
@@ -107,7 +108,7 @@ def read_missing_counts(table: Table, measure: Measure) -> MissingCounts:
 	row_count = len(frame)
 	column_count = len(column_names)
 	rows = numpy.arange(column_count)
-	positions = Positions(PositionKind.TEXTS, column_names, None)
+	positions = Positions(PositionKind.TEXTS, column_names, COLUMN_AXIS_NAME)
 	count_series = Series(count_name, shown_values)
 	measure_label = MEASURE_LABELS[measure]
 	count_values = MissingCounts(positions, [count_series], rows, measure_label, counts, row_count)

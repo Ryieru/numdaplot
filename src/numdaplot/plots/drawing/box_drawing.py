@@ -22,6 +22,7 @@ from numdaplot.plots.data.chart_values import Positions, Series
 from numdaplot.plots.data.position_kind import PositionKind
 from numdaplot.plots.data.sample_values import SampleValues, drop_missing_numbers
 from numdaplot.plots.drawing.bar_drawing import GROUP_WIDTH, find_group_coordinates
+from numdaplot.plots.drawing.default_labels import COLUMN_LABEL
 from numdaplot.plots.drawing.drawn_chart import DrawnChart
 from numdaplot.plots.drawing.grid_axes import GridAxes
 from numdaplot.plots.drawing.plot_theme import BACKGROUND_COLOR
@@ -122,7 +123,11 @@ def draw_box_chart(axes: Axes, layer: ChartLayer) -> DrawnChart:
 
 	last_edge = position_count - HALF_POSITION
 	axes.set_xlim(-HALF_POSITION, last_edge)
-	drawn_chart = DrawnChart(values.group_name, values.value_name, False, GridAxes.VALUES, None)
+	x_label = COLUMN_LABEL
+	if values.group_name is not None:
+		x_label = values.group_name
+
+	drawn_chart = DrawnChart(x_label, values.value_name, False, GridAxes.VALUES, None)
 
 	return drawn_chart
 

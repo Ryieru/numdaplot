@@ -21,6 +21,7 @@ from numdaplot.plots.charts.heatmap_chart import HeatmapChart
 from numdaplot.plots.data.chart_values import ChartValues, Series
 from numdaplot.plots.drawing.color_bar import add_color_bar
 from numdaplot.plots.drawing.color_scale_values import SCALE_NAMES, find_scale_limits
+from numdaplot.plots.drawing.default_labels import COLUMN_LABEL, find_position_label
 from numdaplot.plots.drawing.drawn_chart import DrawnChart
 from numdaplot.plots.drawing.grid_axes import GridAxes
 from numdaplot.plots.drawing.plot_theme import GRID_COLOR
@@ -91,7 +92,8 @@ def draw_heatmap_chart(axes: Axes, layer: ChartLayer) -> DrawnChart:
 	if chart.values == CellValues.SHOWN:
 		write_cell_values(axes, image, grid)
 
-	drawn_chart = DrawnChart(None, values.positions.name, False, GridAxes.NONE, None)
+	y_label = find_position_label(values.positions)
+	drawn_chart = DrawnChart(COLUMN_LABEL, y_label, False, GridAxes.NONE, None)
 
 	return drawn_chart
 

@@ -28,6 +28,8 @@ class DrawnChart:
 		The axes crossed by the grid lines, when the PlotStyle shows them.
 	legend_title
 		The title of the legend, such as the ``color_by`` column of a ScatterChart, or None.
+	title
+		The default title when it is not the ``y`` label by the ``x`` label, or None.
 	legend_outside
 		True when ``LegendPosition.BEST`` places the legend past the axes, the chart filling them.
 
@@ -44,4 +46,5 @@ class DrawnChart:
 	x_on_vertical_axis: bool
 	grid_axes: GridAxes
 	legend_title: str | None
+	title: str | None = None
 	legend_outside: bool = False

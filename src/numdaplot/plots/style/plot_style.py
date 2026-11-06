@@ -28,17 +28,18 @@ class PlotStyle:
 	Parameters
 	----------
 	title
-		The title above the axes, no title when omitted.
+		The title above the axes: when omitted, the ``y`` label by the ``x`` label such as ``sales by month``, and for a
+		map of missing values ``Map of missing values``. An empty text draws no title.
 	x_label
-		The label of the axis of the ``x`` values, the name of the ``x`` column when omitted. An empty text draws no
-		label.
+		The label of the axis of the ``x`` values: when omitted, the name of the ``x`` column, else ``Row``, or
+		``Column`` for a box or a heatmap without group. An empty text draws no label.
 	y_label
-		The label of the axis of the ``y`` values: when omitted, the name of the ``y`` column when the chart draws a
-		single one, no label otherwise, the legend naming the series. An empty text draws no label.
+		The label of the axis of the ``y`` values: when omitted, the names of the ``y`` columns one after the other, the
+		first 3 and the number of the others beyond 3, or ``Value`` for an Array. An empty text draws no label.
 	right_label
-		The label of the axis on the right, drawn when a chart is added with ``ValueAxis.RIGHT``: when omitted, the name
-		of the column of the first chart on the right when it draws a single one. An empty text draws no label. It has
-		no effect while no chart is on the right.
+		The label of the axis on the right, drawn when a chart is added with ``ValueAxis.RIGHT``: when omitted, written
+		as ``y_label`` for the first chart on the right. An empty text draws no label. It has no effect while no chart
+		is on the right.
 	x_tick_rotation
 		The angle of the labels of the ``x`` values, in degrees from -90 to 90. When omitted, 45 degrees for texts,
 		dates, datetimes and numbers without enough room, and no rotation for other numbers and for the texts on the

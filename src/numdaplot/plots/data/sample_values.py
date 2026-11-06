@@ -15,7 +15,7 @@ from numdaplot.plots.data.array_values import read_array_values
 from numdaplot.plots.data.chart_data import require_column_setting, require_no_column_settings
 from numdaplot.plots.data.chart_values import Series
 from numdaplot.plots.data.column_reading import read_texts
-from numdaplot.plots.data.table_values import name_single_column, read_series
+from numdaplot.plots.data.table_values import name_columns, read_series
 from numdaplot.tables.columns.column_names import require_known_columns
 from numdaplot.tables.table import Table
 
@@ -105,7 +105,7 @@ def read_sample_values(
 		column_settings = dict[str, object]({COLUMNS_SETTING: column_names, GROUP_SETTING: group_name})
 		require_no_column_settings(chart_name, column_settings)
 		array_values = read_array_values(data, chart_name)
-		array_samples = SampleValues(array_values.series, None, None, None)
+		array_samples = SampleValues(array_values.series, None, None, array_values.value_name)
 		return array_samples
 
 	required_names = require_column_setting(chart_name, COLUMNS_SETTING, column_names)
@@ -113,7 +113,7 @@ def read_sample_values(
 	known_names = frame.columns.tolist()
 	require_known_columns(required_names, known_names)
 	series = read_series(frame, required_names, chart_name)
-	value_name = name_single_column(required_names)
+	value_name = name_columns(required_names)
 	groups = None
 	if group_name is not None:
 		require_known_columns([group_name], known_names)

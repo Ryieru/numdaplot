@@ -14,6 +14,10 @@ from numdaplot.plots.data.position_kind import PositionKind
 from numdaplot.tables.columns.column_names import require_known_columns
 from numdaplot.tables.table import Table
 
+MAXIMUM_NAMED_COLUMNS = 3
+NAME_SEPARATOR = ", "
+SHORTENED_NAMES = "{joined_names} and {other_count} more"
+
 
 def read_table_values(table: Table, x_name: str | None, y_names: list[str], chart_name: str) -> ChartValues:
 	"""
@@ -78,7 +82,7 @@ def read_table_values(table: Table, x_name: str | None, y_names: list[str], char
 		kept_series = Series(one_series.name, kept_numbers)
 		series.append(kept_series)
 
-	value_name = name_single_column(y_names)
+	value_name = name_columns(y_names)
 	chart_values = ChartValues(kept_positions, series, rows, value_name)
 
 	return chart_values
@@ -205,32 +209,36 @@ def read_series(frame: pandas.DataFrame, column_names: list[str], chart_name: st
 	return series
 
 
-def name_single_column(column_names: list[str]) -> str | None:
+def name_columns(column_names: list[str]) -> str:
 	"""
-	Return the name of the only column a chart draws, the default label of the axis of its values.
+	Return the names of the columns a chart draws, the default label of the axis of its values.
 
 	.. versionadded:: 0.1.0
 
 	Parameters
 	----------
 	column_names
-		The columns drawn.
+		The columns drawn, at least one.
 
 	Returns
 	-------
-	str or None
-		The name of the column when there is one, None when there are several.
+	str
+		The names one after the other. Beyond 3 columns, the first 3 and the number of the others.
 
 	Examples
 	--------
-	>>> from numdaplot.plots.data.table_values import name_single_column
-	>>> name_single_column(["price"]), name_single_column(["price", "cost"])
-	('price', None)
+	>>> from numdaplot.plots.data.table_values import name_columns
+	>>> name_columns(["price"]), name_columns(["price", "cost"])
+	('price', 'price, cost')
+	>>> name_columns(["price", "cost", "tax", "tip"])
+	'price, cost, tax and 1 more'
 	"""
-	column_count = len(column_names)
-	if column_count != 1:
-		return None
+	named_columns = column_names[:MAXIMUM_NAMED_COLUMNS]
+	joined_names = NAME_SEPARATOR.join(named_columns)
+	other_count = len(column_names) - MAXIMUM_NAMED_COLUMNS
+	if other_count <= 0:
+		return joined_names
 
-	single_name = column_names[0]
+	shortened_names = SHORTENED_NAMES.format(joined_names=joined_names, other_count=other_count)
 
-	return single_name
+	return shortened_names

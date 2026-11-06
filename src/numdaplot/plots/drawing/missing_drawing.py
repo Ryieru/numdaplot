@@ -23,6 +23,7 @@ from numdaplot.plots.data.chart_values import ChartValues
 from numdaplot.plots.data.missing_cells import MissingCounts
 from numdaplot.plots.drawing.bar_drawing import draw_bar_chart
 from numdaplot.plots.drawing.cell_merging import find_band_count, merge_cells
+from numdaplot.plots.drawing.default_labels import COLUMN_LABEL, ROW_LABEL
 from numdaplot.plots.drawing.drawn_chart import DrawnChart
 from numdaplot.plots.drawing.grid_axes import GridAxes
 from numdaplot.plots.drawing.heatmap_drawing import (
@@ -40,7 +41,7 @@ MISSING_COLOR = "#33415c"
 PRESENT_COLOR = GRID_COLOR
 MISSING_TOTAL_LABEL = "Missing ({missing_total})"
 PRESENT_LABEL = "Present"
-ROW_LABEL = "Row"
+MAP_TITLE = "Map of missing values"
 LOWEST_RATIO = 0.0
 HIGHEST_RATIO = 1.0
 RATIO_TICK_COUNT = 6
@@ -284,7 +285,7 @@ def draw_missing_map(axes: Axes, layer: ChartLayer) -> DrawnChart:
 	Returns
 	-------
 	DrawnChart
-		``Row`` as label of the vertical axis, no grid lines, and the legend past the axes.
+		``Column`` and ``Row`` as labels, the title of the map, no grid lines, and the legend past the axes.
 
 	Examples
 	--------
@@ -323,7 +324,7 @@ def draw_missing_map(axes: Axes, layer: ChartLayer) -> DrawnChart:
 	missing_label = MISSING_TOTAL_LABEL.format(missing_total=missing_total)
 	add_legend_swatch(axes, MISSING_COLOR, missing_label)
 	add_legend_swatch(axes, PRESENT_COLOR, PRESENT_LABEL)
-	drawn_chart = DrawnChart(None, ROW_LABEL, False, GridAxes.NONE, None, legend_outside=True)
+	drawn_chart = DrawnChart(COLUMN_LABEL, ROW_LABEL, False, GridAxes.NONE, None, title=MAP_TITLE, legend_outside=True)
 
 	return drawn_chart
 

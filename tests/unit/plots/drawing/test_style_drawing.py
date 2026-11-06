@@ -18,7 +18,6 @@ from numdaplot.plots.drawing.plot_axes import PlotAxes
 from numdaplot.plots.drawing.style_drawing import (
 	LEGEND_POINT_AREA,
 	apply_style,
-	choose_label,
 	draw_grid_lines,
 	find_first_shape_id,
 	find_transform_past_right_axis,
@@ -34,9 +33,9 @@ GROUPS = DrawnChart("surface", "price", False, GridAxes.BOTH, "city")
 HEATMAP = DrawnChart(None, "city", False, GridAxes.NONE, None)
 
 
-def test_apply_style_writes_no_title_by_default() -> None:
+def test_apply_style_writes_the_y_label_by_the_x_label_by_default() -> None:
 	"""
-	Check that a default PlotStyle draws no title.
+	Check that a default PlotStyle draws the title built from the labels.
 
 	.. versionadded:: 0.1.0
 	"""
@@ -44,7 +43,7 @@ def test_apply_style_writes_no_title_by_default() -> None:
 
 	apply_style(PlotAxes(axes, None, None), LINE_CHART, ndp.PlotStyle())
 
-	assert axes.get_title() == ""
+	assert axes.get_title() == "price by day"
 
 
 def test_write_axis_labels_puts_the_x_label_on_the_vertical_axis_for_horizontal_bars() -> None:
@@ -59,17 +58,6 @@ def test_write_axis_labels_puts_the_x_label_on_the_vertical_axis_for_horizontal_
 
 	assert axes.get_ylabel() == "City"
 	assert axes.get_xlabel() == ""
-
-
-def test_choose_label_prefers_an_empty_style_label_to_the_default() -> None:
-	"""
-	Check that an empty label in the style removes the default one.
-
-	.. versionadded:: 0.1.0
-	"""
-	label = choose_label("", "price")
-
-	assert label == ""
 
 
 def test_draw_grid_lines_crosses_both_axes_for_lines() -> None:

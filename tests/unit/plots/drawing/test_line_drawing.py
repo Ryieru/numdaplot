@@ -30,6 +30,7 @@ CHART = ndp.LineChart(
 VALUES = read_table_values(SALES, "day", ["price", "cost"], "LineChart")
 LAYER = ChartLayer(CHART, VALUES)
 EXPECTED_COLORS = ["#d62728", "#ff8800"]
+EXPECTED_Y_LABEL = "price, cost"
 
 
 def test_draw_line_chart_draws_one_line_per_series_with_its_name() -> None:
@@ -80,7 +81,7 @@ def test_draw_line_chart_breaks_the_line_at_a_missing_value() -> None:
 
 def test_draw_line_chart_gives_the_default_labels() -> None:
 	"""
-	Check that the x column names the axis of the positions, and several series give no value label.
+	Check that the x column names the axis of the positions, and that several series all name the values.
 
 	.. versionadded:: 0.1.0
 	"""
@@ -89,6 +90,6 @@ def test_draw_line_chart_gives_the_default_labels() -> None:
 	drawn_chart = draw_line_chart(axes, LAYER)
 
 	assert drawn_chart.x_label == "day"
-	assert drawn_chart.y_label is None
+	assert drawn_chart.y_label == EXPECTED_Y_LABEL
 	assert drawn_chart.grid_axes == GridAxes.BOTH
 	assert not drawn_chart.x_on_vertical_axis

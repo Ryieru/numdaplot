@@ -32,7 +32,7 @@ def test_read_array_values_draws_a_one_dimensional_array_as_one_series() -> None
 	series_count = len(chart_values.series)
 	assert positions == EXPECTED_ROW_NUMBERS
 	assert series_count == 1
-	assert chart_values.value_name is None
+	assert chart_values.value_name == "Value"
 
 
 def test_read_array_values_draws_each_column_as_a_series_named_by_its_number() -> None:

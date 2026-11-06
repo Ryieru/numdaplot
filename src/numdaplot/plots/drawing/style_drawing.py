@@ -17,6 +17,7 @@ from matplotlib.container import Container
 from matplotlib.figure import Figure
 from matplotlib.transforms import ScaledTranslation, Transform
 
+from numdaplot.plots.drawing.chart_texts import choose_label, choose_title
 from numdaplot.plots.drawing.drawn_chart import DrawnChart
 from numdaplot.plots.drawing.grid_axes import GridAxes
 from numdaplot.plots.drawing.plot_axes import PlotAxes
@@ -79,9 +80,8 @@ def apply_style(plot_axes: PlotAxes, drawn_chart: DrawnChart, style: PlotStyle) 
 	('Sales', 'day', 'price')
 	"""
 	axes = plot_axes.left
-	if style.title is not None:
-		axes.set_title(style.title)
-
+	title = choose_title(drawn_chart, style)
+	axes.set_title(title)
 	write_axis_labels(axes, drawn_chart, style)
 	write_right_label(plot_axes, style)
 	rotate_x_labels(axes, drawn_chart, style.x_tick_rotation)
@@ -130,39 +130,6 @@ def write_axis_labels(axes: Axes, drawn_chart: DrawnChart, style: PlotStyle) -> 
 
 	axes.set_xlabel(x_label)
 	axes.set_ylabel(y_label)
-
-
-def choose_label(style_label: str | None, default_label: str | None) -> str:
-	"""
-	Return the label of an axis.
-
-	.. versionadded:: 0.1.0
-
-	Parameters
-	----------
-	style_label
-		The label chosen in the style, None for the default.
-	default_label
-		The default label of the chart, None for no label.
-
-	Returns
-	-------
-	str
-		The chosen label, else the default one, else an empty text.
-
-	Examples
-	--------
-	>>> from numdaplot.plots.drawing.style_drawing import choose_label
-	>>> choose_label(None, "price")
-	'price'
-	"""
-	if style_label is not None:
-		return style_label
-
-	if default_label is not None:
-		return default_label
-
-	return ""
 
 
 def draw_grid_lines(axes: Axes, drawn_chart: DrawnChart) -> None:

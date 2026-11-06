@@ -17,6 +17,7 @@ NUMBER_FAMILIES = frozenset({ValueFamily.NUMBER})
 ONE_DIMENSION = 1
 TWO_DIMENSIONS = 2
 FLOAT_DTYPE = numpy.dtype(numpy.float64)
+VALUE_LABEL = "Value"
 
 
 def read_array_values(array: Array, chart_name: str) -> ChartValues:
@@ -77,6 +78,6 @@ def read_array_values(array: Array, chart_name: str) -> ChartValues:
 		column_series = Series(column_name, column_numbers)
 		series.append(column_series)
 
-	chart_values = ChartValues(positions, series, rows, None)
+	chart_values = ChartValues(positions, series, rows, VALUE_LABEL)
 
 	return chart_values

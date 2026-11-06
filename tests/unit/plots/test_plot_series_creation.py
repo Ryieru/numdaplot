@@ -21,7 +21,7 @@ TWO_COLORS = [ndp.Color.RED, ndp.Color.BLUE]
 
 def test_plot_line_uses_the_default_style_when_omitted() -> None:
 	"""
-	Check that a Plot without style has no title and the default size.
+	Check that a Plot without style has its default title and size.
 
 	.. versionadded:: 0.1.0
 	"""
@@ -29,7 +29,7 @@ def test_plot_line_uses_the_default_style_when_omitted() -> None:
 
 	figure = plot.to_matplotlib()
 	inches = figure.get_size_inches().tolist()
-	assert figure.axes[0].get_title() == ""
+	assert figure.axes[0].get_title() == "price by day"
 	assert inches == [6.4, 4.8]
 
 

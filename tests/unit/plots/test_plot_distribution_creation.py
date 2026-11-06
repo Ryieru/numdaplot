@@ -51,14 +51,14 @@ def test_plot_histogram_rejects_colors_not_one_per_column_when_created() -> None
 
 def test_plot_histogram_draws_with_the_default_style() -> None:
 	"""
-	Check that a histogram without style has no title.
+	Check that a histogram without style has its default title.
 
 	.. versionadded:: 0.1.0
 	"""
 	plot = ndp.Plot.histogram(SALES, ndp.HistogramChart(columns=["price"]))
 
 	figure = plot.to_matplotlib()
-	assert figure.axes[0].get_title() == ""
+	assert figure.axes[0].get_title() == "Count by price"
 
 
 def test_plot_box_rejects_group_by_for_an_array() -> None:

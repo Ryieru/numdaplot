@@ -12,7 +12,7 @@ import numdaplot as ndp
 from numdaplot.errors.column_not_found_error import ColumnNotFoundError
 from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
 from numdaplot.plots.data.position_kind import PositionKind
-from numdaplot.plots.data.table_values import name_single_column, read_series, read_table_values
+from numdaplot.plots.data.table_values import name_columns, read_series, read_table_values
 
 CHART_NAME = "LineChart"
 SALES_FRAME = pandas.DataFrame(
@@ -59,16 +59,16 @@ def test_read_table_values_names_a_single_series_as_value_name() -> None:
 	assert chart_values.value_name == "price"
 
 
-def test_read_table_values_gives_no_value_name_for_several_series() -> None:
+def test_read_table_values_names_several_series_in_the_value_name() -> None:
 	"""
-	Check that several y columns give no default label of the values.
+	Check that several y columns all name the default label of the values.
 
 	.. versionadded:: 0.1.0
 	"""
 	chart_values = read_table_values(SALES, None, ["price", "cost"], CHART_NAME)
 
 	series_names = [series.name for series in chart_values.series]
-	assert chart_values.value_name is None
+	assert chart_values.value_name == "price, cost"
 	assert series_names == ["price", "cost"]
 
 
@@ -155,23 +155,34 @@ def test_read_series_rejects_a_column_without_numbers() -> None:
 		read_series(SALES_COLUMNS, ["open"], CHART_NAME)
 
 
-def test_name_single_column_returns_the_only_column() -> None:
+def test_name_columns_gives_the_only_column() -> None:
 	"""
 	Check that a single column names the axis of the values.
 
 	.. versionadded:: 0.1.0
 	"""
-	single_name = name_single_column(SINGLE_NAME)
+	single_name = name_columns(SINGLE_NAME)
 
 	assert single_name == "price"
 
 
-def test_name_single_column_returns_none_for_several_columns() -> None:
+def test_name_columns_writes_several_columns_one_after_the_other() -> None:
 	"""
-	Check that several columns leave the axis of the values without default label.
+	Check that up to 3 columns are all named.
 
 	.. versionadded:: 0.1.0
 	"""
-	single_name = name_single_column(SERIES_NAMES)
+	joined_names = name_columns(SERIES_NAMES)
 
-	assert single_name is None
+	assert joined_names == "price, cost"
+
+
+def test_name_columns_counts_the_columns_beyond_three() -> None:
+	"""
+	Check that the first 3 columns are named, then the number of the others.
+
+	.. versionadded:: 0.1.0
+	"""
+	shortened_names = name_columns(["price", "cost", "tax", "tip", "fee"])
+
+	assert shortened_names == "price, cost, tax and 2 more"
