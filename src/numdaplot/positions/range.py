@@ -50,6 +50,13 @@ class Range:
 	>>> scores = ndp.Array.from_list([10, 20, 30, 40])
 	>>> scores.take(ndp.Region(rows=ndp.Range(start=1, stop=2)))
 	Array([20, 30], dtype=INT64)
+
+	The first 3 rows, without counting the last position: ``stop`` is left out with ``Bounds.LOW_ONLY``.
+
+	>>> first_count = 3
+	>>> first_rows = ndp.Range(start=0, stop=first_count, bounds=ndp.Bounds.LOW_ONLY)
+	>>> scores.take(ndp.Region(rows=first_rows))
+	Array([10, 20, 30], dtype=INT64)
 	"""
 
 	start: int | float
