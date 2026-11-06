@@ -12,6 +12,7 @@ from numdaplot.tables.files.csv_file import write_csv_file
 from numdaplot.tables.files.csv_options import CsvOptions
 from numdaplot.tables.files.excel_file import write_excel_file
 from numdaplot.tables.files.excel_options import ExcelOptions
+from numdaplot.tables.files.file_access import WRITE_OPERATION, FileAccessErrors
 from numdaplot.tables.files.file_paths import FilePath, require_free_path
 from numdaplot.tables.files.json_file import write_json_file
 from numdaplot.tables.files.json_options import JsonOptions
@@ -53,6 +54,8 @@ class TableWriting(TableData):
 			When an argument is not of the type its annotation names.
 		FileExistsError
 			When a file exists at the path and ``on_conflict`` is ``ERROR``.
+		FileAccessError
+			When the file system refuses the file: missing folder, missing permission and so on.
 
 		Examples
 		--------
@@ -73,7 +76,8 @@ class TableWriting(TableData):
 		if options is None:
 			options = CsvOptions()
 
-		write_csv_file(self._frame, file_path, options)
+		with FileAccessErrors(WRITE_OPERATION, file_path):
+			write_csv_file(self._frame, file_path, options)
 
 	@checked_arguments
 	def to_json(
@@ -101,6 +105,8 @@ class TableWriting(TableData):
 			When an argument is not of the type its annotation names.
 		FileExistsError
 			When a file exists at the path and ``on_conflict`` is ``ERROR``.
+		FileAccessError
+			When the file system refuses the file: missing folder, missing permission and so on.
 
 		Examples
 		--------
@@ -117,7 +123,8 @@ class TableWriting(TableData):
 		if options is None:
 			options = JsonOptions()
 
-		write_json_file(self._frame, file_path, options)
+		with FileAccessErrors(WRITE_OPERATION, file_path):
+			write_json_file(self._frame, file_path, options)
 
 	@checked_arguments
 	def to_excel(
@@ -145,6 +152,8 @@ class TableWriting(TableData):
 			When an argument is not of the type its annotation names.
 		FileExistsError
 			When a file exists at the path and ``on_conflict`` is ``ERROR``.
+		FileAccessError
+			When the file system refuses the file: missing folder, missing permission and so on.
 		MissingDependencyError
 			When the ``excel`` extra is not installed.
 
@@ -164,7 +173,8 @@ class TableWriting(TableData):
 		if options is None:
 			options = ExcelOptions()
 
-		write_excel_file(self._frame, file_path, options)
+		with FileAccessErrors(WRITE_OPERATION, file_path):
+			write_excel_file(self._frame, file_path, options)
 
 	@checked_arguments
 	def to_parquet(self, path: FilePath, on_conflict: Conflict = Conflict.ERROR) -> None:
@@ -188,6 +198,8 @@ class TableWriting(TableData):
 			When an argument is not of the type its annotation names.
 		FileExistsError
 			When a file exists at the path and ``on_conflict`` is ``ERROR``.
+		FileAccessError
+			When the file system refuses the file: missing folder, missing permission and so on.
 		MissingDependencyError
 			When the ``parquet`` extra is not installed.
 
@@ -203,7 +215,8 @@ class TableWriting(TableData):
 		"""
 		file_path = Path(path)
 		require_free_path(file_path, on_conflict)
-		write_parquet_file(self._frame, file_path)
+		with FileAccessErrors(WRITE_OPERATION, file_path):
+			write_parquet_file(self._frame, file_path)
 
 	@checked_arguments
 	def to_stata(self, path: FilePath, on_conflict: Conflict = Conflict.ERROR) -> None:
@@ -229,6 +242,8 @@ class TableWriting(TableData):
 			When an argument is not of the type its annotation names.
 		FileExistsError
 			When a file exists at the path and ``on_conflict`` is ``ERROR``.
+		FileAccessError
+			When the file system refuses the file: missing folder, missing permission and so on.
 
 		Examples
 		--------
@@ -242,4 +257,5 @@ class TableWriting(TableData):
 		"""
 		file_path = Path(path)
 		require_free_path(file_path, on_conflict)
-		write_stata_file(self._frame, file_path)
+		with FileAccessErrors(WRITE_OPERATION, file_path):
+			write_stata_file(self._frame, file_path)

@@ -64,6 +64,7 @@ from numdaplot.errors.empty_region_error import EmptyRegionError
 from numdaplot.errors.empty_text_error import EmptyTextError
 from numdaplot.errors.empty_total_error import EmptyTotalError
 from numdaplot.errors.empty_values_error import EmptyValuesError
+from numdaplot.errors.file_access_error import FileAccessError
 from numdaplot.errors.file_exists_error import FileExistsError
 from numdaplot.errors.file_not_found_error import FileNotFoundError
 from numdaplot.errors.incompatible_charts_error import IncompatibleChartsError
@@ -290,6 +291,7 @@ __all__ = [
 	"Exponential",
 	"Figure",
 	"FigureStyle",
+	"FileAccessError",
 	"FileExistsError",
 	"FileNotFoundError",
 	"Filter",

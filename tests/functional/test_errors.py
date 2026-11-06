@@ -20,6 +20,7 @@ PRECISE_ERRORS = [
 	ndp.EmptyTextError,
 	ndp.EmptyTotalError,
 	ndp.EmptyValuesError,
+	ndp.FileAccessError,
 	ndp.FileExistsError,
 	ndp.FileNotFoundError,
 	ndp.IncompatibleChartsError,

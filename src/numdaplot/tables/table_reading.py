@@ -12,6 +12,7 @@ from numdaplot.tables.files.csv_file import read_csv_file
 from numdaplot.tables.files.csv_options import CsvOptions
 from numdaplot.tables.files.excel_file import read_excel_file
 from numdaplot.tables.files.excel_options import ExcelOptions
+from numdaplot.tables.files.file_access import READ_OPERATION, FileAccessErrors
 from numdaplot.tables.files.file_paths import FilePath, require_existing_file
 from numdaplot.tables.files.json_file import read_json_file
 from numdaplot.tables.files.json_options import JsonOptions
@@ -60,6 +61,8 @@ class TableReading(TableData):
 			When an argument is not of the type its annotation names.
 		FileNotFoundError
 			When there is no file at the path.
+		FileAccessError
+			When the file system refuses the file, for a missing permission for example.
 		InvalidColumnNameError, DuplicateColumnError
 			When a column name is empty or appears twice.
 
@@ -81,7 +84,9 @@ class TableReading(TableData):
 		if options is None:
 			options = CsvOptions()
 
-		frame = read_csv_file(file_path, options)
+		with FileAccessErrors(READ_OPERATION, file_path):
+			frame = read_csv_file(file_path, options)
+
 		table = cls._from_frame(frame)
 
 		return table
@@ -114,6 +119,8 @@ class TableReading(TableData):
 			When an argument is not of the type its annotation names.
 		FileNotFoundError
 			When there is no file at the path.
+		FileAccessError
+			When the file system refuses the file, for a missing permission for example.
 		InvalidColumnNameError
 			When a column name is empty.
 
@@ -135,7 +142,9 @@ class TableReading(TableData):
 		if options is None:
 			options = JsonOptions()
 
-		frame = read_json_file(file_path, options)
+		with FileAccessErrors(READ_OPERATION, file_path):
+			frame = read_json_file(file_path, options)
+
 		table = cls._from_frame(frame)
 
 		return table
@@ -168,6 +177,8 @@ class TableReading(TableData):
 			When an argument is not of the type its annotation names.
 		FileNotFoundError
 			When there is no file at the path.
+		FileAccessError
+			When the file system refuses the file, for a missing permission for example.
 		MissingDependencyError
 			When the ``excel`` extra is not installed.
 		InvalidColumnNameError, DuplicateColumnError
@@ -188,7 +199,9 @@ class TableReading(TableData):
 		if options is None:
 			options = ExcelOptions()
 
-		frame = read_excel_file(file_path, options)
+		with FileAccessErrors(READ_OPERATION, file_path):
+			frame = read_excel_file(file_path, options)
+
 		table = cls._from_frame(frame)
 
 		return table
@@ -219,6 +232,8 @@ class TableReading(TableData):
 			When an argument is not of the type its annotation names.
 		FileNotFoundError
 			When there is no file at the path.
+		FileAccessError
+			When the file system refuses the file, for a missing permission for example.
 		MissingDependencyError
 			When the ``parquet`` extra is not installed.
 
@@ -234,7 +249,9 @@ class TableReading(TableData):
 		"""
 		file_path = Path(path)
 		require_existing_file(file_path)
-		frame = read_parquet_file(file_path)
+		with FileAccessErrors(READ_OPERATION, file_path):
+			frame = read_parquet_file(file_path)
+
 		table = cls._from_frame(frame)
 
 		return table
@@ -263,6 +280,8 @@ class TableReading(TableData):
 			When an argument is not of the type its annotation names.
 		FileNotFoundError
 			When there is no file at the path.
+		FileAccessError
+			When the file system refuses the file, for a missing permission for example.
 
 		Examples
 		--------
@@ -276,7 +295,9 @@ class TableReading(TableData):
 		"""
 		file_path = Path(path)
 		require_existing_file(file_path)
-		frame = read_stata_file(file_path)
+		with FileAccessErrors(READ_OPERATION, file_path):
+			frame = read_stata_file(file_path)
+
 		table = cls._from_frame(frame)
 
 		return table
@@ -311,6 +332,8 @@ class TableReading(TableData):
 			When an argument is not of the type its annotation names.
 		FileNotFoundError
 			When there is no file at the path.
+		FileAccessError
+			When the file system refuses the file, for a missing permission for example.
 
 		Examples
 		--------
@@ -328,7 +351,9 @@ class TableReading(TableData):
 		if options is None:
 			options = SasOptions()
 
-		frame = read_sas_file(file_path, options)
+		with FileAccessErrors(READ_OPERATION, file_path):
+			frame = read_sas_file(file_path, options)
+
 		table = cls._from_frame(frame)
 
 		return table
@@ -363,6 +388,8 @@ class TableReading(TableData):
 			When an argument is not of the type its annotation names.
 		FileNotFoundError
 			When there is no file at the path.
+		FileAccessError
+			When the file system refuses the file, for a missing permission for example.
 
 		Examples
 		--------
@@ -378,7 +405,9 @@ class TableReading(TableData):
 		if options is None:
 			options = XptOptions()
 
-		frame = read_xpt_file(file_path, options)
+		with FileAccessErrors(READ_OPERATION, file_path):
+			frame = read_xpt_file(file_path, options)
+
 		table = cls._from_frame(frame)
 
 		return table

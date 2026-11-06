@@ -59,9 +59,9 @@ and numdaplot follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
   `JsonLayout`, `Conflict`, `FilterMode`, `ColumnMatch`, `ColumnMode`, `Keep`, `Side`, `ShownColumns`, `MissingMode`,
   `RatioComparison` and `Measure` enums. `Equality` compares two Tables as well as two Arrays.
 - Table errors: `ColumnNotFoundError`, `DuplicateColumnError`, `DuplicateStatisticError`, `EmptyListError`,
-  `FileExistsError`, `FileNotFoundError`, `InvalidColumnNameError`, `InvalidSeparatorError`,
+  `FileAccessError`, `FileExistsError`, `FileNotFoundError`, `InvalidColumnNameError`, `InvalidSeparatorError`,
   `InvalidSheetNameError`, `MissingDependencyError` and `UnsupportedIndexError`. `FileNotFoundError` and
-  `FileExistsError` are also the Python errors of the same name.
+  `FileExistsError` are also the Python errors of the same name, and `FileAccessError` is also an `OSError`.
 - Distributions: `Distribution`, `Uniform`, `Normal`, `RandomIntegers`.
 - Math functions: `MathFunction`, `SquareRoot`, `Exponential`, `Logarithm`, `Absolute`, `Round`, `Sine`, `Cosine`.
 - Array errors: `DimensionError`, `EmptyArrayError`, `IncompatibleTypesError`, `InvalidBaseError`,

@@ -16,6 +16,7 @@ from numdaplot.errors.unsupported_image_format_error import UnsupportedImageForm
 from numdaplot.plots.drawing.plot_drawing import FigureDrawing, build_figure
 from numdaplot.plots.style.image_options import DEFAULT_DPI, ImageOptions
 from numdaplot.tables.conflict import Conflict
+from numdaplot.tables.files.file_access import WRITE_OPERATION, FileAccessErrors
 from numdaplot.tables.files.file_paths import FilePath, require_free_path
 
 IMAGE_FORMATS = {".png": "png", ".svg": "svg", ".pdf": "pdf"}
@@ -134,7 +135,8 @@ def save_figure(figure: Figure, path: Path, image_format: str, resolution: int) 
 	>>> path.read_bytes()[:4]
 	b'%PDF'
 	"""
-	figure.savefig(path, format=image_format, dpi=resolution)
+	with FileAccessErrors(WRITE_OPERATION, path):
+		figure.savefig(path, format=image_format, dpi=resolution)
 
 
 def write_image(drawing: FigureDrawing, path: FilePath, options: ImageOptions | None, on_conflict: Conflict) -> None:
@@ -162,6 +164,8 @@ def write_image(drawing: FigureDrawing, path: FilePath, options: ImageOptions | 
 		When options are given for an SVG or PDF image.
 	FileExistsError
 		When a file exists at the path and ``on_conflict`` is ``ERROR``.
+	FileAccessError
+		When the file system refuses the file: missing folder, missing permission and so on.
 
 	Examples
 	--------

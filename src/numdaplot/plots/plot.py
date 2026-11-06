@@ -165,6 +165,8 @@ class Plot:
 			When options are given for an SVG or PDF image.
 		FileExistsError
 			When a file exists at the path and ``on_conflict`` is ``ERROR``.
+		FileAccessError
+			When the file system refuses the file: missing folder, missing permission and so on.
 
 		Examples
 		--------
