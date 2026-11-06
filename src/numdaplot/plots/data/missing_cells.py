@@ -4,7 +4,10 @@ Missing values of a Table, read to be drawn.
 .. versionadded:: 0.1.0
 """
 
+from dataclasses import dataclass
+
 import numpy
+from numpy.typing import NDArray
 
 from numdaplot.plots.data.chart_values import ChartValues, Positions, Series
 from numdaplot.plots.data.position_kind import PositionKind
@@ -24,10 +27,47 @@ MEASURE_LABELS = {
 	Measure.RATIO: "Missing ratio",
 }
 FLOAT_DTYPE = numpy.dtype(numpy.float64)
+COLUMN_SUM_AXIS = 0
 TEXT_DTYPE = numpy.dtype(object)
 
 
-def read_missing_counts(table: Table, measure: Measure) -> ChartValues:
+@dataclass(frozen=True, eq=False)
+class MissingCounts(ChartValues):
+	"""
+	The bars of the missing values of each column, with what their labels show.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	positions
+		The column names.
+	series
+		The single series of bars, in the chosen measure.
+	rows
+		The number of each column.
+	value_name
+		The label of the axis of the values.
+	counts
+		The number of missing values of each column.
+	row_count
+		The number of rows of the Table.
+
+	Examples
+	--------
+	>>> import numdaplot as ndp
+	>>> from numdaplot.plots.data.missing_cells import read_missing_counts
+	>>> prices = ndp.Array.from_list([12.0, None])
+	>>> flats = ndp.Table.from_arrays({"price": prices})
+	>>> read_missing_counts(flats, ndp.Measure.RATIO).counts
+	array([1.])
+	"""
+
+	counts: NDArray[numpy.float64]
+	row_count: int
+
+
+def read_missing_counts(table: Table, measure: Measure) -> MissingCounts:
 	"""
 	Return the number or the share of missing values of each column of a Table, as one series of bars.
 
@@ -42,9 +82,9 @@ def read_missing_counts(table: Table, measure: Measure) -> ChartValues:
 
 	Returns
 	-------
-	ChartValues
-		The column names as text positions, the counts as a single series, and ``"Missing count"`` or
-		``"Missing ratio"`` as label of the axis of the values.
+	MissingCounts
+		The column names as text positions, the chosen measure as a single series, ``"Missing count"`` or
+		``"Missing ratio"`` as label of the axis of the values, and the counts for the labels of the bars.
 
 	Examples
 	--------
@@ -61,13 +101,16 @@ def read_missing_counts(table: Table, measure: Measure) -> ChartValues:
 	counts_frame = count_frame_missing(frame, missing_count, Axis.EACH_COLUMN)
 	count_name = MEASURE_COLUMN_NAMES[measure]
 	column_names = counts_frame[COLUMN_NAMES_COLUMN].to_numpy(dtype=TEXT_DTYPE)
-	counts = counts_frame[count_name].to_numpy(dtype=FLOAT_DTYPE, na_value=numpy.nan)
+	shown_values = counts_frame[count_name].to_numpy(dtype=FLOAT_DTYPE, na_value=numpy.nan)
+	missing_grid = find_frame_missing(frame)
+	counts = missing_grid.sum(axis=COLUMN_SUM_AXIS, dtype=FLOAT_DTYPE)
+	row_count = len(frame)
 	column_count = len(column_names)
 	rows = numpy.arange(column_count)
 	positions = Positions(PositionKind.TEXTS, column_names, None)
-	count_series = Series(count_name, counts)
+	count_series = Series(count_name, shown_values)
 	measure_label = MEASURE_LABELS[measure]
-	count_values = ChartValues(positions, [count_series], rows, measure_label)
+	count_values = MissingCounts(positions, [count_series], rows, measure_label, counts, row_count)
 
 	return count_values
 

@@ -13,6 +13,7 @@ from typing import Any, cast
 import numpy
 import pandas
 from matplotlib.patches import Rectangle
+from numpy.typing import NDArray
 
 import numdaplot as ndp
 
@@ -27,11 +28,15 @@ FLATS = ndp.Table.from_pandas(FLATS_FRAME)
 EXPECTED_COLUMNS = ["city", "price", "rooms"]
 EXPECTED_RATIOS = [0.25, 0.5, 0.0]
 EXPECTED_MAP = [[0.0, 0.0, 0.0], [1.0, 1.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 0.0]]
+EXPECTED_MISSING_LEGEND = "Missing (3)"
+LONG_TABLE_ROWS = 6000
+LONG_TABLE_MISSING_STEP = 500
+EXPECTED_LONG_TABLE_MISSING = 12
 
 
 def test_missing_values_by_column_are_drawn_as_ratios() -> None:
 	"""
-	Check one bar per column, as high as its share of missing values, on an axis from 0 to 1.
+	Check one bar per column, as high as its share of missing values, with ticks up to 1.
 
 	.. versionadded:: 0.1.0
 	"""
@@ -41,10 +46,11 @@ def test_missing_values_by_column_are_drawn_as_ratios() -> None:
 	bars = [patch for patch in axes.patches if isinstance(patch, Rectangle)]
 	heights = [float(bar.get_height()) for bar in bars]
 	column_labels = [label.get_text() for label in axes.get_xticklabels()]
-	limits = [float(limit) for limit in axes.get_ylim()]
+	# Some versions of the matplotlib stubs leave the ticks untyped.
+	ticks = cast(NDArray[numpy.float64], axes.get_yticks())
 	assert heights == EXPECTED_RATIOS
 	assert column_labels == EXPECTED_COLUMNS
-	assert limits == [0.0, 1.0]
+	assert float(ticks[-1]) == 1.0
 	assert axes.get_ylabel() == "Missing ratio"
 
 
@@ -77,7 +83,7 @@ def test_the_missing_map_marks_each_missing_value_with_a_legend() -> None:
 	assert column_labels == EXPECTED_COLUMNS
 	assert legend is not None
 	legend_texts = [text.get_text() for text in legend.get_texts()]
-	assert legend_texts == ["Missing", "Present"]
+	assert legend_texts == [EXPECTED_MISSING_LEGEND, "Present"]
 
 
 def test_the_missing_map_is_saved_as_a_pdf(tmp_path: Path) -> None:
@@ -93,3 +99,36 @@ def test_the_missing_map_is_saved_as_a_pdf(tmp_path: Path) -> None:
 
 	image_start = image_path.read_bytes()[:4]
 	assert image_start == b"%PDF"
+
+
+def test_the_missing_map_of_a_long_table_loses_no_missing_value() -> None:
+	"""
+	Check that each missing value spread over more rows than the image has pixels keeps its own band.
+
+	.. versionadded:: 0.1.0
+	"""
+	prices = numpy.ones(LONG_TABLE_ROWS)
+	prices[::LONG_TABLE_MISSING_STEP] = numpy.nan
+	frame = pandas.DataFrame({"price": prices})
+	table = ndp.Table.from_pandas(frame)
+
+	axes = ndp.Plot.missing_map(table).to_matplotlib().axes[0]
+
+	# Some versions of the matplotlib stubs leave the cells of an image untyped.
+	cells = cast(numpy.ma.MaskedArray[Any, Any], axes.images[0].get_array())
+	assert cells.shape[0] < LONG_TABLE_ROWS
+	assert int(cells.sum()) == EXPECTED_LONG_TABLE_MISSING
+
+
+def test_the_missing_map_places_its_legend_past_the_axes_by_default() -> None:
+	"""
+	Check that the legend is anchored on the right of the axes, so it hides no cell.
+
+	.. versionadded:: 0.1.0
+	"""
+	axes = ndp.Plot.missing_map(FLATS).to_matplotlib().axes[0]
+
+	legend = axes.get_legend()
+	assert legend is not None
+	anchor = legend.get_bbox_to_anchor().transformed(axes.transAxes.inverted())
+	assert anchor.x0 > 1.0

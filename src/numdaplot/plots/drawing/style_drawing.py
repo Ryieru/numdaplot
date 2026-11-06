@@ -238,7 +238,8 @@ def place_legend(plot_axes: PlotAxes, drawn_chart: DrawnChart, legend_position: 
 
 	The series are named in the order they are drawn, the ones of the left axes first. The legend is drawn over
 	the axes on the right if any, so their charts never hide it. With these axes, ``BEST`` and ``OUTSIDE_RIGHT`` place
-	it past their axis: ``BEST`` would only avoid their charts, not the ones of the left axes. Points sized by
+	it past their axis: ``BEST`` would only avoid their charts, not the ones of the left axes. ``BEST`` also places
+	it past the axes when the chart asks for it, as a chart filling them does. Points sized by
 	``size_by`` are all shown with the same size in the legend, which names their colors.
 
 	.. versionadded:: 0.1.0
@@ -248,7 +249,7 @@ def place_legend(plot_axes: PlotAxes, drawn_chart: DrawnChart, legend_position: 
 	plot_axes
 		The matplotlib axes of the Plot.
 	drawn_chart
-		The title of the legend, if any.
+		The title of the legend, if any, and whether ``BEST`` places it past the axes.
 	legend_position
 		Where the legend is placed, other than ``HIDDEN``.
 
@@ -285,7 +286,8 @@ def place_legend(plot_axes: PlotAxes, drawn_chart: DrawnChart, legend_position: 
 	anchor = None
 	anchor_transform = None
 	has_right_axes = plot_axes.right is not None
-	best_goes_outside = has_right_axes and legend_position == LegendPosition.BEST
+	needs_outside = has_right_axes or drawn_chart.legend_outside
+	best_goes_outside = needs_outside and legend_position == LegendPosition.BEST
 	is_outside = best_goes_outside or legend_position == LegendPosition.OUTSIDE_RIGHT
 	if is_outside:
 		location = LEGEND_LOCATIONS[LegendPosition.OUTSIDE_RIGHT]

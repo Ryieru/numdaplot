@@ -96,6 +96,9 @@ class PlotOverviewCreation(PlotData):
 		"""
 		Return a Plot drawing one bar per column of a Table, as high as its missing values.
 
+		Above each bar are its number of missing values and their share of the rows, written on one line going upwards
+		when the bars are too narrow, and left out when they are too narrow for that.
+
 		.. versionadded:: 0.1.0
 
 		Parameters
@@ -144,7 +147,9 @@ class PlotOverviewCreation(PlotData):
 		Return a Plot drawing each value of a Table as a cell, light gray when present and dark when missing.
 
 		The columns are side by side and the rows go down from the first one, which shows whether the missing
-		values gather in some rows or columns.
+		values gather in some rows or columns. When there are more rows or columns than the image can show, each mark
+		stands for at least one missing value among the cells it covers, so no missing value is lost. The legend gives
+		the total of missing values.
 
 		.. versionadded:: 0.1.0
 

@@ -48,9 +48,9 @@ class PlotStyle:
 		The angle of the labels of the ``y`` values, in degrees from -90 to 90, no rotation when omitted. The values of
 		the axis on the right keep no rotation. Labels without enough room are left out as for ``x_tick_rotation``.
 	legend
-		Where the legend is placed, ``LegendPosition.BEST`` by default. It is only drawn for several series, so never on
-		a pie or a heatmap. It names each series after its column: to change a name, use ``result_name`` in a
-		``Calculation`` or ``Table.rename`` before drawing.
+		Where the legend is placed, ``LegendPosition.BEST`` by default, past the axes for a map of missing values. It is
+		only drawn for several series, so never on a pie or a heatmap. It names each series after its column: to change
+		a name, use ``result_name`` in a ``Calculation`` or ``Table.rename`` before drawing.
 	grid_lines
 		Whether light grid lines are drawn behind the values, ``GridLines.SHOWN`` by default. A pie and a heatmap have
 		none.
