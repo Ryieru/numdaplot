@@ -116,8 +116,9 @@ def test_the_missing_map_of_a_long_table_loses_no_missing_value() -> None:
 
 	# Some versions of the matplotlib stubs leave the cells of an image untyped.
 	cells = cast(numpy.ma.MaskedArray[Any, Any], axes.images[0].get_array())
+	cell_total = cast(float, cells.sum())
 	assert cells.shape[0] < LONG_TABLE_ROWS
-	assert int(cells.sum()) == EXPECTED_LONG_TABLE_MISSING
+	assert cell_total == EXPECTED_LONG_TABLE_MISSING
 
 
 def test_the_missing_map_places_its_legend_past_the_axes_by_default() -> None:
