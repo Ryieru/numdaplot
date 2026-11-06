@@ -9,9 +9,9 @@ from typing import Any
 import numpy
 from numpy.typing import NDArray
 
-from numdaplot.arrays.operations.operand import convert_time_value
 from numdaplot.arrays.operations.type_requirements import require_comparable
 from numdaplot.arrays.selection.missing_mask import find_missing
+from numdaplot.arrays.selection.time_reference import compare_with_reference
 from numdaplot.rules.between import Between
 from numdaplot.rules.bounds import HIGH_INCLUDED_BOUNDS, LOW_INCLUDED_BOUNDS
 from numdaplot.rules.equal import Equal
@@ -39,7 +39,8 @@ def build_comparison_mask(values: NDArray[Any], rule: ValueRule[Any]) -> NDArray
 	"""
 	Return which values satisfy a rule comparing them with a single reference value.
 
-	A missing value never satisfies the rule, not even ``NotEqual``.
+	A missing value never satisfies the rule, not even ``NotEqual``. A date, a datetime or a duration that nanoseconds
+	cannot hold lies beyond every datetime or duration: ``Less`` accepts them all for a reference in the year 3000.
 
 	.. versionadded:: 0.1.0
 
@@ -72,8 +73,7 @@ def build_comparison_mask(values: NDArray[Any], rule: ValueRule[Any]) -> NDArray
 	require_comparable(values, rule.value, rule_class.__name__)
 
 	compare = COMPARISON_FUNCTIONS[rule_class]
-	reference = convert_time_value(rule.value)
-	matches = compare(values, reference)
+	matches = compare_with_reference(values, rule.value, compare)
 	missing = find_missing(values)
 	present = ~missing
 	mask = matches & present
@@ -122,10 +122,8 @@ def build_between_mask(values: NDArray[Any], rule: Between[Any]) -> NDArray[nump
 	if rule.bounds in HIGH_INCLUDED_BOUNDS:
 		compare_with_high = numpy.less_equal
 
-	low = convert_time_value(rule.low)
-	high = convert_time_value(rule.high)
-	above_low = compare_with_low(values, low)
-	below_high = compare_with_high(values, high)
+	above_low = compare_with_reference(values, rule.low, compare_with_low)
+	below_high = compare_with_reference(values, rule.high, compare_with_high)
 	missing = find_missing(values)
 	present = ~missing
 	mask = above_low & below_high & present

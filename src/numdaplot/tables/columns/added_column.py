@@ -12,6 +12,7 @@ from numdaplot.errors.shape_mismatch_error import ShapeMismatchError
 from numdaplot.tables.columns.new_column import NewColumn
 from numdaplot.tables.conflict import Conflict
 from numdaplot.tables.frames.column_values import build_column
+from numdaplot.tables.frames.time_range_errors import TimeRangeErrors
 
 ADD_COLUMN_OPERATION = "add_column"
 ONE_DIMENSION = 1
@@ -44,6 +45,8 @@ def add_frame_column(frame: pandas.DataFrame, new_column: NewColumn) -> pandas.D
 		When the Array does not have one value per row of the Table.
 	DuplicateColumnError
 		When the name exists and ``on_conflict`` is ``ERROR``.
+	TimeOverflowError
+		When the Array holds a datetime or a duration that nanoseconds cannot hold.
 
 	Examples
 	--------
@@ -73,7 +76,9 @@ def add_frame_column(frame: pandas.DataFrame, new_column: NewColumn) -> pandas.D
 	if refuses_existing_name:
 		raise DuplicateColumnError(new_column.name)
 
-	column = build_column(values)
+	with TimeRangeErrors(ADD_COLUMN_OPERATION, new_column.name):
+		column = build_column(values)
+
 	extended_frame = frame.copy(deep=False)
 	if not has_columns:
 		row_numbers = pandas.RangeIndex(value_count)

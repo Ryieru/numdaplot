@@ -16,6 +16,7 @@ from numdaplot.data_types.type import Type
 from numdaplot.errors.unsupported_index_error import UnsupportedIndexError
 from numdaplot.tables.columns.column_names import require_column_names
 from numdaplot.tables.frames.column import Column
+from numdaplot.tables.frames.time_range_errors import TimeRangeErrors
 from numdaplot.tables.frames.time_zones import normalize_time_zone_column
 
 INFERRED_TYPES = {
@@ -34,6 +35,7 @@ TEXT_INFERRED_KINDS = frozenset({"string", "empty"})
 DATETIME_DTYPE = "datetime64[ns]"
 DURATION_DTYPE = "timedelta64[ns]"
 PYTHON_OBJECT_DTYPE = numpy.dtype(object)
+TABLE_CREATION_OPERATION = "Table creation"
 
 
 def normalize_frame(frame: pandas.DataFrame) -> pandas.DataFrame:
@@ -78,7 +80,9 @@ def normalize_frame(frame: pandas.DataFrame) -> pandas.DataFrame:
 
 	for column_name in column_names:
 		column = frame[column_name]
-		normalized_column = normalize_column(column)
+		with TimeRangeErrors(TABLE_CREATION_OPERATION, column_name):
+			normalized_column = normalize_column(column)
+
 		normalized_columns[column_name] = normalized_column
 
 	row_count = len(frame)

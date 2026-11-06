@@ -68,6 +68,8 @@ class TableConversion(TableData):
 		UnsupportedTypeError
 			When a column has a type numdaplot does not support, such as complex numbers
 			or datetimes with a time zone.
+		TimeOverflowError
+			When a column holds a datetime outside 1677 to 2262, or a duration beyond about 292 years.
 
 		Examples
 		--------
@@ -113,6 +115,8 @@ class TableConversion(TableData):
 			When an Array does not have one dimension.
 		ShapeMismatchError
 			When the Arrays do not have the same length.
+		TimeOverflowError
+			When a column holds a datetime outside 1677 to 2262, or a duration beyond about 292 years.
 
 		Examples
 		--------

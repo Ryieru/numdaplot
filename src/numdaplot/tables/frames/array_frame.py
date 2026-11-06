@@ -16,6 +16,7 @@ from numdaplot.errors.shape_mismatch_error import ShapeMismatchError
 from numdaplot.tables.columns.column_names import require_column_names
 from numdaplot.tables.frames.column import Column
 from numdaplot.tables.frames.column_values import build_column
+from numdaplot.tables.frames.time_range_errors import TimeRangeErrors
 
 if TYPE_CHECKING:
 	from numdaplot.arrays.array import Array
@@ -51,6 +52,8 @@ def build_array_frame(columns: dict[str, Array]) -> pandas.DataFrame:
 		When an Array does not have one dimension.
 	ShapeMismatchError
 		When the Arrays do not have the same length.
+	TimeOverflowError
+		When an Array holds a datetime or a duration that nanoseconds cannot hold.
 
 	Examples
 	--------
@@ -73,7 +76,9 @@ def build_array_frame(columns: dict[str, Array]) -> pandas.DataFrame:
 		if values.ndim != ONE_DIMENSION:
 			raise DimensionError(FROM_ARRAYS_OPERATION, values.ndim)
 
-		column = build_column(values)
+		with TimeRangeErrors(FROM_ARRAYS_OPERATION, column_name):
+			column = build_column(values)
+
 		built_columns[column_name] = column
 		value_counts.append(values.size)
 

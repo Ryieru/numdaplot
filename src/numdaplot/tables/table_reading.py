@@ -189,6 +189,8 @@ class TableReading(TableData):
 			When the ``excel`` extra is not installed.
 		InvalidColumnNameError, DuplicateColumnError
 			When a cell of the first row is empty, is not a text, or repeats another one.
+		TimeOverflowError
+			When a column holds a datetime outside 1677 to 2262, or a duration beyond about 292 years.
 
 		Examples
 		--------
@@ -242,6 +244,8 @@ class TableReading(TableData):
 			When the file system refuses the file, for a missing permission for example.
 		MissingDependencyError
 			When the ``parquet`` extra is not installed.
+		TimeOverflowError
+			When a column holds a datetime outside 1677 to 2262, or a duration beyond about 292 years.
 
 		Examples
 		--------
@@ -288,6 +292,8 @@ class TableReading(TableData):
 			When there is no file at the path.
 		FileAccessError
 			When the file system refuses the file, for a missing permission for example.
+		TimeOverflowError
+			When a column holds a datetime outside 1677 to 2262, or a duration beyond about 292 years.
 
 		Examples
 		--------
@@ -340,6 +346,8 @@ class TableReading(TableData):
 			When there is no file at the path.
 		FileAccessError
 			When the file system refuses the file, for a missing permission for example.
+		TimeOverflowError
+			When a column holds a datetime outside 1677 to 2262, or a duration beyond about 292 years.
 
 		Examples
 		--------
@@ -396,6 +404,8 @@ class TableReading(TableData):
 			When there is no file at the path.
 		FileAccessError
 			When the file system refuses the file, for a missing permission for example.
+		TimeOverflowError
+			When a column holds a datetime outside 1677 to 2262, or a duration beyond about 292 years.
 
 		Examples
 		--------

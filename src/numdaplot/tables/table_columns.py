@@ -189,6 +189,8 @@ class TableColumns(TableData):
 			When the Array does not have one value per row.
 		DuplicateColumnError
 			When the name exists and ``on_conflict`` is ``Conflict.ERROR``.
+		TimeOverflowError
+			When a column holds a datetime outside 1677 to 2262, or a duration beyond about 292 years.
 
 		Examples
 		--------
