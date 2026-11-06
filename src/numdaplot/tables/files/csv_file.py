@@ -10,11 +10,45 @@ from typing import Any, cast
 
 import pandas
 
+from numdaplot.errors.refused_setting_error import RefusedSettingError
 from numdaplot.tables.columns.column_names import require_column_names
 from numdaplot.tables.files.csv_options import CsvOptions
 from numdaplot.tables.files.pandas_backend import NULLABLE_DTYPE_BACKEND
 
 CSV_NEWLINE = ""
+DECIMAL_FORMAT = "%.{decimals}f"
+DECIMALS_SETTING = "decimals"
+FROM_CSV_NAME = "Table.from_csv"
+
+
+def require_read_options(options: CsvOptions) -> None:
+	"""
+	Check that the settings of a CSV file apply to its reading.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	options
+		The settings of the file.
+
+	Raises
+	------
+	RefusedSettingError
+		When ``decimals`` is given, which only applies to the writing.
+
+	Examples
+	--------
+	>>> import numdaplot as ndp
+	>>> from numdaplot.tables.files.csv_file import require_read_options
+	>>> try:
+	... 	require_read_options(ndp.CsvOptions(decimals=2))
+	... except ndp.RefusedSettingError as error:
+	... 	print(error)
+	Table.from_csv does not accept decimals.
+	"""
+	if options.decimals is not None:
+		raise RefusedSettingError(DECIMALS_SETTING, FROM_CSV_NAME)
 
 
 def read_csv_file(path: Path, options: CsvOptions) -> pandas.DataFrame:
@@ -142,4 +176,14 @@ def write_csv_file(frame: pandas.DataFrame, path: Path, options: CsvOptions) -> 
 	1.5
 	<BLANKLINE>
 	"""
-	frame.to_csv(path, sep=options.separator, encoding=options.encoding.value, index=False)
+	decimal_format = None
+	if options.decimals is not None:
+		decimal_format = DECIMAL_FORMAT.format(decimals=options.decimals)
+
+	frame.to_csv(
+		path,
+		sep=options.separator,
+		encoding=options.encoding.value,
+		index=False,
+		float_format=decimal_format,
+	)

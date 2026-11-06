@@ -8,7 +8,7 @@ from pathlib import Path
 from typing import Self
 
 from numdaplot.settings.argument_types import checked_arguments
-from numdaplot.tables.files.csv_file import read_csv_file
+from numdaplot.tables.files.csv_file import read_csv_file, require_read_options
 from numdaplot.tables.files.csv_options import CsvOptions
 from numdaplot.tables.files.excel_file import read_excel_file
 from numdaplot.tables.files.excel_options import ExcelOptions
@@ -59,6 +59,8 @@ class TableReading(TableData):
 		------
 		InvalidTypeError
 			When an argument is not of the type its annotation names.
+		RefusedSettingError
+			When ``options`` has ``decimals``, which only applies to ``to_csv``.
 		FileNotFoundError
 			When there is no file at the path.
 		FileAccessError
@@ -79,11 +81,12 @@ class TableReading(TableData):
 		0  Paris     1.5
 		1   Lyon     NaN
 		"""
-		file_path = Path(path)
-		require_existing_file(file_path)
 		if options is None:
 			options = CsvOptions()
 
+		require_read_options(options)
+		file_path = Path(path)
+		require_existing_file(file_path)
 		with FileAccessErrors(READ_OPERATION, file_path):
 			frame = read_csv_file(file_path, options)
 

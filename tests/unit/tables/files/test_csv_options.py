@@ -6,6 +6,7 @@ Unit tests of CsvOptions.
 
 import pytest
 
+from numdaplot.errors.invalid_count_error import InvalidCountError
 from numdaplot.errors.invalid_separator_error import InvalidSeparatorError
 from numdaplot.tables.files.csv_options import CsvOptions
 from numdaplot.tables.files.encoding import Encoding
@@ -53,3 +54,41 @@ def test_csv_options_reject_a_separator_that_is_not_one_character(separator: str
 	"""
 	with pytest.raises(InvalidSeparatorError):
 		CsvOptions(separator=separator)
+
+
+def test_csv_options_keep_every_digit_by_default() -> None:
+	"""
+	Check that no rounding is asked by default.
+
+	.. versionadded:: 0.1.0
+	"""
+	options = CsvOptions()
+
+	assert options.decimals is None
+
+
+@pytest.mark.parametrize("decimals", [0, 2])
+def test_csv_options_accept_decimals_from_zero(decimals: int) -> None:
+	"""
+	Check the accepted numbers of decimals.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	decimals
+		The number of decimals.
+	"""
+	options = CsvOptions(decimals=decimals)
+
+	assert options.decimals == decimals
+
+
+def test_csv_options_reject_negative_decimals() -> None:
+	"""
+	Check the refusal of a negative number of decimals.
+
+	.. versionadded:: 0.1.0
+	"""
+	with pytest.raises(InvalidCountError):
+		CsvOptions(decimals=-1)

@@ -6,6 +6,7 @@ Settings of the CSV files a Table reads and writes.
 
 from dataclasses import dataclass
 
+from numdaplot.errors.invalid_count_error import InvalidCountError
 from numdaplot.errors.invalid_separator_error import InvalidSeparatorError
 from numdaplot.settings.field_types import require_field_types
 from numdaplot.tables.files.encoding import Encoding
@@ -27,6 +28,10 @@ class CsvOptions:
 		The character between two values of a row, ``","`` by default.
 	encoding
 		The text encoding of the file, UTF-8 by default.
+	decimals
+		The number of decimals written for every decimal column, 0 or more, ``Table.to_csv`` only. Each value is
+		rounded and keeps its zeros, such as ``1.50``, so the file no longer holds the exact values. When omitted, a
+		decimal is written with every digit of its value.
 
 	Raises
 	------
@@ -34,6 +39,8 @@ class CsvOptions:
 		When a setting is not of the type its annotation names.
 	InvalidSeparatorError
 		When the separator is not exactly one character.
+	InvalidCountError
+		When ``decimals`` is negative.
 
 	Examples
 	--------
@@ -52,10 +59,11 @@ class CsvOptions:
 
 	separator: str = DEFAULT_SEPARATOR
 	encoding: Encoding = Encoding.UTF_8
+	decimals: int | None = None
 
 	def __post_init__(self) -> None:
 		"""
-		Check that the separator is exactly one character.
+		Check that the separator is exactly one character and that ``decimals`` is not negative.
 
 		.. versionadded:: 0.1.0
 
@@ -65,9 +73,14 @@ class CsvOptions:
 			When a setting is not of the type its annotation names.
 		InvalidSeparatorError
 			When the separator is not exactly one character.
+		InvalidCountError
+			When ``decimals`` is negative.
 		"""
 		require_field_types(self)
 
 		separator_length = len(self.separator)
 		if separator_length != SEPARATOR_LENGTH:
 			raise InvalidSeparatorError(self.separator)
+
+		if self.decimals is not None and self.decimals < 0:
+			raise InvalidCountError(self.decimals, 0)
