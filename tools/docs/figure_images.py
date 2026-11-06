@@ -25,7 +25,7 @@ from matplotlib.figure import Figure
 from numdaplot.plots.drawing.plot_drawing import FigureDrawing, build_figure
 
 SHOW_CALL = ".show()"
-SHOWN_FUNCTION_PATHS = ("numdaplot.plots.plot.show_drawing", "numdaplot.plots.figure.figure.show_drawing")
+SHOWN_FUNCTION_PATHS = ("numdaplot.plots.plot_output.show_drawing", "numdaplot.plots.figure.figure.show_drawing")
 SVG_FORMAT = "svg"
 TEXT_ENCODING = "utf-8"
 EXAMPLE_FILE_NAME = "<plot example>"
@@ -206,7 +206,7 @@ def insert_plot_images(docstring_text: str) -> str:
 	Examples
 	--------
 	>>> from figure_images import insert_plot_images
-	>>> text = ">>> import numdaplot as ndp\n>>> ndp.plot_line(ndp.Array.from_list([1.0]), ndp.LineChart()).show()"
+	>>> text = ">>> import numdaplot as ndp\n>>> ndp.Plot.line(ndp.Array.from_list([1.0]), ndp.LineChart()).show()"
 	>>> insert_plot_images(text).splitlines()[3].startswith("![Plot drawn by the example]")
 	True
 	"""

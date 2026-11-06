@@ -18,7 +18,7 @@ class GridLines(Enum):
 	>>> import numdaplot as ndp
 	>>> prices = ndp.Array.from_list([12.0, 15.5, 14.0, 17.0])
 	>>> style = ndp.PlotStyle(grid_lines=ndp.GridLines.HIDDEN)
-	>>> plot = ndp.plot_line(prices, style=style)
+	>>> plot = ndp.Plot.line(prices, style=style)
 	>>> plot.show()
 	"""
 
@@ -31,7 +31,7 @@ class GridLines(Enum):
 	>>> import numdaplot as ndp
 	>>> prices = ndp.Array.from_list([12.0, 15.5, 14.0, 17.0])
 	>>> style = ndp.PlotStyle(grid_lines=ndp.GridLines.SHOWN)
-	>>> plot = ndp.plot_line(prices, style=style)
+	>>> plot = ndp.Plot.line(prices, style=style)
 	>>> plot.show()
 	"""
 
@@ -44,6 +44,6 @@ class GridLines(Enum):
 	>>> import numdaplot as ndp
 	>>> prices = ndp.Array.from_list([12.0, 15.5, 14.0, 17.0])
 	>>> style = ndp.PlotStyle(grid_lines=ndp.GridLines.HIDDEN)
-	>>> plot = ndp.plot_line(prices, style=style)
+	>>> plot = ndp.Plot.line(prices, style=style)
 	>>> plot.show()
 	"""

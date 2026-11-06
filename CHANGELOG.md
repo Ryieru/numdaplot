@@ -21,8 +21,8 @@ and numdaplot follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
   `Array.apply` (`TimeFunction`, `DatePart`, `DatePeriod`, `DurationIn`, `ToDuration`, with the `DatePartUnit`,
   `PeriodUnit` and `DurationUnit` enums), date formats and time zones for `Table.convert` (`DateFormat` enum,
   `CustomDateFormat`, `TimeZone`, `TimeZoneChange` and the `TimeZoneMode` enum), and `Table.column_time_zones`.
-- Plots: `plot_line`, `plot_bar`, `plot_scatter`, `plot_histogram`, `plot_box`, `plot_pie`, `plot_heatmap`,
-  `plot_missing_by_column` and `plot_missing_map` return a `Plot`, shown with `Plot.show`, saved as a PNG, SVG
+- Plots: `Plot.line`, `Plot.bar`, `Plot.scatter`, `Plot.histogram`, `Plot.box`, `Plot.pie`, `Plot.heatmap`,
+  `Plot.missing_by_column` and `Plot.missing_map` create a `Plot`, shown with `Plot.show`, saved as a PNG, SVG
   or PDF image with `Plot.save` and turned into a matplotlib figure with `Plot.to_matplotlib`. `Plot.add_line`,
   `Plot.add_bar` and `Plot.add_scatter` draw other charts over a Plot, on its axis or on a second axis on the
   right with the `ValueAxis` enum.
@@ -53,11 +53,11 @@ and numdaplot follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
   and `print`.
 - `Array`, `Table` and `Plot`, and the base classes `Rule`, `Statistic`, `MathFunction`, `TimeFunction`,
   `Distribution` and `Chart`, refuse their constructor with `RefusedOperationError`, which names what to use instead.
-  Settings, methods, functions and arithmetic operators check their values against their annotations and raise
+  Settings, methods and arithmetic operators check their values against their annotations and raise
   `InvalidTypeError`, which names what they accept.
 - Settings that work as they are may be omitted: `Array.sort`, `Table.preview`, `Table.describe`,
-  `Table.drop_duplicates`, `Table.drop_missing` and `Table.count_missing` use their default settings, and the plot
-  functions and `Plot.add_*`, except `plot_pie`, their default chart.
+  `Table.drop_duplicates`, `Table.drop_missing` and `Table.count_missing` use their default settings, and the Plot
+  creation methods and `Plot.add_*`, except `Plot.pie`, their default chart.
 - Table settings: `CsvOptions`, `JsonOptions`, `ExcelOptions`, `SasOptions`, `XptOptions`, `Filter`, `Condition`,
   `Aggregation`, `Calculation`, `PivotTable`, `Description`, `ColumnChoice`, `Renaming`, `NameChange`, `Conversion`, `NewColumn`,
   `Sorting`, `SortKey`, `Deduplication`, `Preview`, `MissingCount`, `MissingDrop`, `MissingRatio`, and the `Encoding`,

@@ -49,7 +49,7 @@ def test_a_line_over_bars_shares_their_labels_and_adds_its_own() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	plot = ndp.plot_bar(SHOP, SALES_BARS)
+	plot = ndp.Plot.bar(SHOP, SALES_BARS)
 	line = ndp.LineChart(x="month", y=["target"])
 
 	both = plot.add_line(TARGETS, line)
@@ -74,7 +74,7 @@ def test_a_line_on_the_right_axis_has_its_own_scale_and_label() -> None:
 	.. versionadded:: 0.1.0
 	"""
 	style = ndp.PlotStyle(y_label="Sales", right_label="Price (euros)")
-	plot = ndp.plot_bar(SHOP, SALES_BARS, style)
+	plot = ndp.Plot.bar(SHOP, SALES_BARS, style)
 	line = ndp.LineChart(x="month", y=["price"])
 
 	both = plot.add_line(SHOP, line, axis=ndp.ValueAxis.RIGHT)
@@ -95,7 +95,7 @@ def test_charts_can_be_added_one_after_the_other() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	plot = ndp.plot_bar(SHOP, SALES_BARS)
+	plot = ndp.Plot.bar(SHOP, SALES_BARS)
 	with_line = plot.add_line(SHOP, ndp.LineChart(x="month", y=["price"]), axis=ndp.ValueAxis.RIGHT)
 
 	with_points = with_line.add_scatter(SHOP, ndp.ScatterChart(x="month", y="price"), axis=ndp.ValueAxis.RIGHT)
@@ -113,7 +113,7 @@ def test_a_chart_of_dates_cannot_be_added_over_months() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	plot = ndp.plot_bar(SHOP, SALES_BARS)
+	plot = ndp.Plot.bar(SHOP, SALES_BARS)
 	line = ndp.LineChart(x="day", y=["sales"])
 
 	with pytest.raises(ndp.NumdaplotError, match="dates"):
@@ -132,7 +132,7 @@ def test_an_overlaid_plot_is_saved_as_an_image(tmp_path: Path) -> None:
 		A temporary folder.
 	"""
 	image_path = tmp_path / "shop.png"
-	plot = ndp.plot_bar(SHOP, SALES_BARS)
+	plot = ndp.Plot.bar(SHOP, SALES_BARS)
 	both = plot.add_line(SHOP, ndp.LineChart(x="month", y=["price"]), axis=ndp.ValueAxis.RIGHT)
 
 	both.save(image_path)
@@ -159,7 +159,7 @@ def test_a_date_axis_labels_the_period_of_the_charts_on_both_sides() -> None:
 			"price": ndp.Array.from_list([3.0, 4.0]),
 		}
 	)
-	plot = ndp.plot_line(march_sales, ndp.LineChart(x="day", y=["sales"]))
+	plot = ndp.Plot.line(march_sales, ndp.LineChart(x="day", y=["sales"]))
 	both = plot.add_line(may_prices, ndp.LineChart(x="day", y=["price"]), axis=ndp.ValueAxis.RIGHT)
 
 	figure = both.to_matplotlib()
@@ -187,7 +187,7 @@ def build_combined_plot(style: ndp.PlotStyle) -> Figure:
 	Figure
 		The drawn figure.
 	"""
-	bars = ndp.plot_bar(SHOP, SALES_BARS, style)
+	bars = ndp.Plot.bar(SHOP, SALES_BARS, style)
 	both = bars.add_line(SHOP, ndp.LineChart(x="month", y=["price"]), axis=ndp.ValueAxis.RIGHT)
 	figure = both.to_matplotlib()
 	figure.draw_without_rendering()
@@ -253,7 +253,7 @@ def test_best_stays_inside_without_an_axis_on_the_right() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	bars = ndp.plot_bar(SHOP, SALES_BARS)
+	bars = ndp.Plot.bar(SHOP, SALES_BARS)
 	both = bars.add_line(SHOP, ndp.LineChart(x="month", y=["price"]))
 
 	figure = both.to_matplotlib()
@@ -290,7 +290,7 @@ def test_a_legend_names_a_renamed_series() -> None:
 	"""
 	changes = [ndp.NameChange(old_name="price", new_name="Mean price")]
 	shop = SHOP.rename(ndp.Renaming(changes=changes))
-	bars = ndp.plot_bar(shop, SALES_BARS)
+	bars = ndp.Plot.bar(shop, SALES_BARS)
 
 	both = bars.add_line(shop, ndp.LineChart(x="month", y=["Mean price"]), axis=ndp.ValueAxis.RIGHT)
 

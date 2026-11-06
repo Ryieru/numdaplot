@@ -31,7 +31,7 @@ SCALE_WITHOUT_COLOR_BY = "scale without color_by"
 @dataclass(frozen=True)
 class ScatterChart(Chart):
 	"""
-	Chart drawing each row as a point, used by ``plot_scatter``.
+	Chart drawing each row as a point, used by ``Plot.scatter``.
 
 	A row with a missing value in one of the columns used is not drawn. In a dense cloud, a low ``opacity`` shows where
 	the points gather, and a small ``point_size`` separates them. The last group drawn stays on top of the others.
@@ -89,7 +89,7 @@ class ScatterChart(Chart):
 	>>> cities = ndp.Array.from_list(["Paris", "Paris", "Lyon", "Lyon", "Pau"])
 	>>> flats = ndp.Table.from_arrays({"surface": surfaces, "price": prices, "city": cities})
 	>>> chart = ndp.ScatterChart(x="surface", y="price", color_by="city", size_by="surface")
-	>>> plot = ndp.plot_scatter(flats, chart)
+	>>> plot = ndp.Plot.scatter(flats, chart)
 	>>> plot.show()
 	"""
 

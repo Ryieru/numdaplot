@@ -42,7 +42,7 @@ def test_a_heatmap_colors_each_value_with_the_row_labels_and_column_names() -> N
 	"""
 	chart = ndp.HeatmapChart(columns=SLOTS, labels="day", values=ndp.CellValues.SHOWN)
 
-	plot = ndp.plot_heatmap(ORDERS, chart)
+	plot = ndp.Plot.heatmap(ORDERS, chart)
 
 	figure = plot.to_matplotlib()
 	axes = figure.axes[0]
@@ -67,7 +67,7 @@ def test_a_red_blue_heatmap_is_centered_on_zero() -> None:
 	"""
 	chart = ndp.HeatmapChart(columns=SLOTS, labels="day", scale=ndp.ColorScale.RED_BLUE)
 
-	plot = ndp.plot_heatmap(ORDERS, chart)
+	plot = ndp.Plot.heatmap(ORDERS, chart)
 
 	axes = plot.to_matplotlib().axes[0]
 	lowest, highest = axes.images[0].get_clim()
@@ -80,7 +80,7 @@ def test_a_heatmap_of_an_array_numbers_its_rows_and_columns() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	plot = ndp.plot_heatmap(GRID, ndp.HeatmapChart())
+	plot = ndp.Plot.heatmap(GRID, ndp.HeatmapChart())
 
 	axes = plot.to_matplotlib().axes[0]
 	row_labels = [label.get_text() for label in axes.get_yticklabels()]
@@ -97,7 +97,7 @@ def test_a_heatmap_labels_its_rows_with_dates() -> None:
 	"""
 	chart = ndp.HeatmapChart(columns=["temperature"], labels="day")
 
-	plot = ndp.plot_heatmap(WEATHER, chart)
+	plot = ndp.Plot.heatmap(WEATHER, chart)
 
 	axes = plot.to_matplotlib().axes[0]
 	row_labels = [label.get_text() for label in axes.get_yticklabels()]

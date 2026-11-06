@@ -28,39 +28,39 @@ MEAN_ZONE = ndp.Calculation(column="zone", function=ndp.Mean())
 	("calculate", "expected_message"),
 	[
 		(
-			lambda: ndp.plot_bar(TRIPS, ndp.BarChart(x="zone", y=["day"])),
+			lambda: ndp.Plot.bar(TRIPS, ndp.BarChart(x="zone", y=["day"])),
 			"Cannot apply BarChart to the DATETIME column 'day'.",
 		),
 		(
-			lambda: ndp.plot_bar(TRIPS, ndp.BarChart(x="fare", y=["paid"])),
+			lambda: ndp.Plot.bar(TRIPS, ndp.BarChart(x="fare", y=["paid"])),
 			"Cannot apply BarChart to the BOOL column 'paid'.",
 		),
 		(
-			lambda: ndp.plot_line(TRIPS, ndp.LineChart(x="fare", y=["zone"])),
+			lambda: ndp.Plot.line(TRIPS, ndp.LineChart(x="fare", y=["zone"])),
 			"Cannot apply LineChart to the TEXT column 'zone'.",
 		),
 		(
-			lambda: ndp.plot_scatter(TRIPS, ndp.ScatterChart(x="fare", y="paid")),
+			lambda: ndp.Plot.scatter(TRIPS, ndp.ScatterChart(x="fare", y="paid")),
 			"Cannot apply ScatterChart to the BOOL column 'paid'.",
 		),
 		(
-			lambda: ndp.plot_scatter(TRIPS, ndp.ScatterChart(x="fare", y="fare", size_by="zone")),
+			lambda: ndp.Plot.scatter(TRIPS, ndp.ScatterChart(x="fare", y="fare", size_by="zone")),
 			"Cannot apply ScatterChart to the TEXT column 'zone'.",
 		),
 		(
-			lambda: ndp.plot_box(TRIPS, ndp.BoxChart(columns=["paid"])),
+			lambda: ndp.Plot.box(TRIPS, ndp.BoxChart(columns=["paid"])),
 			"Cannot apply BoxChart to the BOOL column 'paid'.",
 		),
 		(
-			lambda: ndp.plot_histogram(TRIPS, ndp.HistogramChart(columns=["zone"])),
+			lambda: ndp.Plot.histogram(TRIPS, ndp.HistogramChart(columns=["zone"])),
 			"Cannot apply HistogramChart to the TEXT column 'zone'.",
 		),
 		(
-			lambda: ndp.plot_pie(TRIPS, ndp.PieChart(labels="fare", values="fare")),
+			lambda: ndp.Plot.pie(TRIPS, ndp.PieChart(labels="fare", values="fare")),
 			"Cannot apply PieChart to the FLOAT64 column 'fare'.",
 		),
 		(
-			lambda: ndp.plot_heatmap(TRIPS, ndp.HeatmapChart(columns=["zone"])),
+			lambda: ndp.Plot.heatmap(TRIPS, ndp.HeatmapChart(columns=["zone"])),
 			"Cannot apply HeatmapChart to the TEXT column 'zone'.",
 		),
 	],

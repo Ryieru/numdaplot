@@ -1,8 +1,8 @@
 """
-MkDocs hook generating one API page per public class or function of numdaplot, and the navigation between them.
+MkDocs hook generating one API page per public class of numdaplot, and the navigation between them.
 
 Every name of ``ndp.__all__`` gets a page made at build time, so no page is written by hand and a new
-public class or function appears in the documentation on its own. The pages of ``Array`` and ``Table`` list their
+public class appears in the documentation on its own. The pages of ``Array`` and ``Table`` list their
 methods in sections, such as "Creation". The navigation groups the pages by section, such as "Rules",
 then by settings family, such as "File settings", and is placed after the home page.
 
@@ -51,7 +51,7 @@ FIRST_CLASSES = frozenset(
 @dataclass(frozen=True)
 class Section:
 	"""
-	Where the classes and functions of a module family are placed in the navigation.
+	Where the classes of a module family are placed in the navigation.
 
 	.. versionadded:: 0.1.0
 
@@ -76,7 +76,7 @@ class Section:
 @dataclass(frozen=True)
 class PublicObject:
 	"""
-	A public class or function of numdaplot and the page documenting it.
+	A public class of numdaplot and the page documenting it.
 
 	.. versionadded:: 0.1.0
 
@@ -146,6 +146,14 @@ MEMBER_SECTIONS = {
 			("__eq__", "__lt__", "__getitem__", "__iter__", "__contains__", "__len__", "__bool__", "__matmul__"),
 		),
 	),
+	"Plot": (
+		(
+			"Creation",
+			("line", "bar", "scatter", "histogram", "box", "pie", "heatmap", "missing_by_column", "missing_map"),
+		),
+		("Charts over a Plot", ("add_line", "add_bar", "add_scatter")),
+		("Output", ("show", "save", "to_matplotlib")),
+	),
 	"Table": (
 		(
 			"Reading files",
@@ -167,14 +175,14 @@ MEMBER_SECTIONS = {
 
 def find_section(module_name: str) -> Section:
 	"""
-	Return the section of the navigation where the classes and functions of a module are placed.
+	Return the section of the navigation where the classes of a module are placed.
 
 	.. versionadded:: 0.1.0
 
 	Parameters
 	----------
 	module_name
-		The module defining a public class or function, such as ``numdaplot.rules.greater``.
+		The module defining a public class, such as ``numdaplot.rules.greater``.
 
 	Returns
 	-------
@@ -204,7 +212,7 @@ def find_section(module_name: str) -> Section:
 
 def find_public_objects() -> list[PublicObject]:
 	"""
-	Return every public class and function of numdaplot, each with its section, in the order of the navigation.
+	Return every public class of numdaplot, each with its section, in the order of the navigation.
 
 	.. versionadded:: 0.1.0
 
@@ -224,8 +232,7 @@ def find_public_objects() -> list[PublicObject]:
 
 	for name in numdaplot.__all__:
 		exported_object = getattr(numdaplot, name)
-		is_documented = inspect.isclass(exported_object) or inspect.isfunction(exported_object)
-		if not is_documented:
+		if not inspect.isclass(exported_object):
 			continue
 
 		module_name = exported_object.__module__
@@ -241,14 +248,14 @@ def find_public_objects() -> list[PublicObject]:
 
 def order_public_object(public_object: PublicObject) -> tuple[int, int, bool, str]:
 	"""
-	Return the sort key of a public class or function in the navigation.
+	Return the sort key of a public class in the navigation.
 
 	.. versionadded:: 0.1.0
 
 	Parameters
 	----------
 	public_object
-		A public class or function.
+		A public class.
 
 	Returns
 	-------
@@ -273,14 +280,14 @@ def order_public_object(public_object: PublicObject) -> tuple[int, int, bool, st
 
 def find_page_path(public_object: PublicObject) -> str:
 	"""
-	Return the path of the generated page of a public class or function.
+	Return the path of the generated page of a public class.
 
 	.. versionadded:: 0.1.0
 
 	Parameters
 	----------
 	public_object
-		A public class or function.
+		A public class.
 
 	Returns
 	-------
@@ -305,19 +312,19 @@ def find_page_path(public_object: PublicObject) -> str:
 
 def build_page_content(public_object: PublicObject) -> str:
 	"""
-	Return the Markdown of the page of a public class or function.
+	Return the Markdown of the page of a public class.
 
 	.. versionadded:: 0.1.0
 
 	Parameters
 	----------
 	public_object
-		A public class or function.
+		A public class.
 
 	Returns
 	-------
 	str
-		The object as the title of the page. ``Array`` and ``Table`` then list their members in sections,
+		The object as the title of the page. ``Array``, ``Table`` and ``Plot`` then list their members in sections,
 		attributes with their type.
 
 	Examples
@@ -397,7 +404,7 @@ def build_api_nav(public_objects: list[PublicObject]) -> list[Any]:
 	Parameters
 	----------
 	public_objects
-		The public classes and functions, in the order of the navigation.
+		The public classes, in the order of the navigation.
 
 	Returns
 	-------
@@ -480,7 +487,7 @@ def on_files(files: Files, config: Any, **kwargs: Any) -> Files:
 	Returns
 	-------
 	Files
-		The files with one generated page per public class or function, and the page of the value types.
+		The files with one generated page per public class, and the page of the value types.
 	"""
 	public_objects = find_public_objects()
 

@@ -19,7 +19,8 @@ EXPECTED_TABLE_MESSAGE = (
 	"or a file method such as from_csv instead."
 )
 EXPECTED_PLOT_MESSAGE = (
-	"Creating a Plot with ndp.Plot(...) is not available, use a plot_* function such as ndp.plot_line instead."
+	"Creating a Plot with ndp.Plot(...) is not available, use ndp.Plot.line, bar, scatter, histogram, box, pie, "
+	"heatmap, missing_by_column or missing_map instead."
 )
 
 
@@ -55,9 +56,9 @@ def test_table_constructor_points_to_the_from_methods() -> None:
 	assert message == EXPECTED_TABLE_MESSAGE
 
 
-def test_plot_constructor_points_to_the_plot_functions() -> None:
+def test_plot_constructor_points_to_the_creation_methods() -> None:
 	"""
-	Check that ndp.Plot called without a plot_* function names those functions.
+	Check that ndp.Plot called directly names the creation methods.
 
 	.. versionadded:: 0.1.0
 	"""

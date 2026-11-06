@@ -22,7 +22,7 @@ class CellValues(Enum):
 	>>> march = ndp.Array.from_list([9.5, 8.0, 11.5])
 	>>> temperatures = ndp.Table.from_arrays({"city": cities, "jan": january, "feb": february, "mar": march})
 	>>> chart = ndp.HeatmapChart(columns=["jan", "feb", "mar"], labels="city", values=ndp.CellValues.SHOWN)
-	>>> plot = ndp.plot_heatmap(temperatures, chart)
+	>>> plot = ndp.Plot.heatmap(temperatures, chart)
 	>>> plot.show()
 	"""
 
@@ -39,7 +39,7 @@ class CellValues(Enum):
 	>>> march = ndp.Array.from_list([9.5, 8.0, 11.5])
 	>>> temperatures = ndp.Table.from_arrays({"city": cities, "jan": january, "feb": february, "mar": march})
 	>>> chart = ndp.HeatmapChart(columns=["jan", "feb", "mar"], labels="city", values=ndp.CellValues.SHOWN)
-	>>> plot = ndp.plot_heatmap(temperatures, chart)
+	>>> plot = ndp.Plot.heatmap(temperatures, chart)
 	>>> plot.show()
 	"""
 
@@ -56,6 +56,6 @@ class CellValues(Enum):
 	>>> march = ndp.Array.from_list([9.5, 8.0, 11.5])
 	>>> temperatures = ndp.Table.from_arrays({"city": cities, "jan": january, "feb": february, "mar": march})
 	>>> chart = ndp.HeatmapChart(columns=["jan", "feb", "mar"], labels="city", values=ndp.CellValues.HIDDEN)
-	>>> plot = ndp.plot_heatmap(temperatures, chart)
+	>>> plot = ndp.Plot.heatmap(temperatures, chart)
 	>>> plot.show()
 	"""

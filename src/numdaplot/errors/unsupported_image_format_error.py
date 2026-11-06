@@ -32,7 +32,7 @@ class UnsupportedImageFormatError(NumdaplotError):
 	>>> import numdaplot as ndp
 	>>> path = Path(tempfile.mkdtemp()) / "prices.jpg"
 	>>> prices = ndp.Array.from_list([12.0, 15.5])
-	>>> plot = ndp.plot_line(prices)
+	>>> plot = ndp.Plot.line(prices)
 	>>> try:
 	... 	plot.save(path)
 	... except ndp.UnsupportedImageFormatError as error:

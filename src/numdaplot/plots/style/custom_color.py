@@ -39,7 +39,7 @@ class CustomColor:
 	>>> import numdaplot as ndp
 	>>> prices = ndp.Array.from_list([12.0, 15.5, 14.0, 17.0])
 	>>> chart = ndp.LineChart(colors=[ndp.CustomColor("#ff8800")])
-	>>> plot = ndp.plot_line(prices, chart)
+	>>> plot = ndp.Plot.line(prices, chart)
 	>>> plot.show()
 	"""
 

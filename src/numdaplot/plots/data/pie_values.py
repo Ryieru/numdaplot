@@ -26,9 +26,9 @@ from numdaplot.tables.table import Table
 CHART_NAME = "PieChart"
 MAXIMUM_READABLE_SLICES = 5
 READABILITY_START = "A PieChart with {slice_count} slices is hard to read."
-READABILITY_ADVICE = "Try ndp.plot_bar with a BarChart, it may compare them better."
+READABILITY_ADVICE = "Try ndp.Plot.bar with a BarChart, it may compare them better."
 READABILITY_MESSAGE = f"{READABILITY_START} {READABILITY_ADVICE}"
-# The warning points at the line calling plot_pie, above warn_slice_count, read_pie_values, plot_pie and its check.
+# The warning points at the line calling Plot.pie, above warn_slice_count, read_pie_values, Plot.pie and its check.
 READABILITY_STACK_LEVEL = 5
 
 
@@ -202,7 +202,7 @@ def warn_slice_count(slice_count: int) -> None:
 	... 	warnings.simplefilter("always")
 	... 	warn_slice_count(6)
 	>>> print(caught_warnings[0].message)
-	A PieChart with 6 slices is hard to read. Try ndp.plot_bar with a BarChart, it may compare them better.
+	A PieChart with 6 slices is hard to read. Try ndp.Plot.bar with a BarChart, it may compare them better.
 	"""
 	if slice_count <= MAXIMUM_READABLE_SLICES:
 		return

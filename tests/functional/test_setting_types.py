@@ -53,7 +53,7 @@ CLASS_CASES = [
 		lambda: ndp.Array.random(ndp.Uniform, shape=ndp.Shape([2])),
 		"ndp.Uniform is a class, use ndp.Uniform() instead.",
 	),
-	(lambda: ndp.plot_line(PRICES, ndp.LineChart), "ndp.LineChart is a class, use ndp.LineChart() instead."),
+	(lambda: ndp.Plot.line(PRICES, ndp.LineChart), "ndp.LineChart is a class, use ndp.LineChart() instead."),
 	(lambda: ndp.Calculation(column="price", function=ndp.Mean), "ndp.Mean is a class, use ndp.Mean() instead."),
 	(lambda: ndp.Condition(rule=ndp.IsPresent), "ndp.IsPresent is a class, use ndp.IsPresent() instead."),
 	(lambda: ndp.Description(functions=[ndp.Max]), "ndp.Max is a class, use ndp.Max() instead."),

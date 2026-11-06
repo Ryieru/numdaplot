@@ -47,8 +47,8 @@ class Figure:
 	>>> sales = ndp.Array.from_list([120.0, 150.0, 90.0, 170.0])
 	>>> visits = ndp.Array.from_list([900.0, 1100.0, 800.0, 1300.0])
 	>>> shop = ndp.Table.from_arrays({"month": months, "sales": sales, "visits": visits})
-	>>> sales_plot = ndp.plot_bar(shop, ndp.BarChart(x="month", y=["sales"]))
-	>>> visits_plot = ndp.plot_line(shop, ndp.LineChart(x="month", y=["visits"]))
+	>>> sales_plot = ndp.Plot.bar(shop, ndp.BarChart(x="month", y=["sales"]))
+	>>> visits_plot = ndp.Plot.line(shop, ndp.LineChart(x="month", y=["visits"]))
 	>>> figure = ndp.Figure(ndp.Layout(rows=1, columns=2), ndp.FigureStyle(title="Shop"))
 	>>> figure = figure.place(sales_plot, ndp.Cell(row=0, column=0))
 	>>> figure = figure.place(visits_plot, ndp.Cell(row=0, column=1))
@@ -113,7 +113,7 @@ class Figure:
 		--------
 		>>> import numdaplot as ndp
 		>>> prices = ndp.Array.from_list([12.0, 15.5, 14.0, 17.0])
-		>>> plot = ndp.plot_line(prices, style=ndp.PlotStyle(title="Prices"))
+		>>> plot = ndp.Plot.line(prices, style=ndp.PlotStyle(title="Prices"))
 		>>> figure = ndp.Figure(ndp.Layout(rows=1, columns=2))
 		>>> placed_figure = figure.place(plot, ndp.Cell(row=0, column=1))
 		>>> placed_figure.show()
@@ -143,7 +143,7 @@ class Figure:
 		Examples
 		--------
 		>>> import numdaplot as ndp
-		>>> plot = ndp.plot_line(ndp.Array.from_list([12.0, 15.5]))
+		>>> plot = ndp.Plot.line(ndp.Array.from_list([12.0, 15.5]))
 		>>> figure = ndp.Figure(ndp.Layout(rows=2, columns=2)).place(plot, ndp.Cell(row=1, column=1))
 		>>> matplotlib_figure = figure.to_matplotlib()
 		>>> len(matplotlib_figure.subfigs), matplotlib_figure.get_size_inches().tolist()
@@ -193,7 +193,7 @@ class Figure:
 		>>> from pathlib import Path
 		>>> import numdaplot as ndp
 		>>> path = Path(tempfile.mkdtemp()) / "shop.pdf"
-		>>> plot = ndp.plot_line(ndp.Array.from_list([12.0, 15.5]))
+		>>> plot = ndp.Plot.line(ndp.Array.from_list([12.0, 15.5]))
 		>>> figure = ndp.Figure(ndp.Layout(rows=1, columns=2)).place(plot, ndp.Cell(row=0, column=0))
 		>>> figure.save(path)
 		>>> path.read_bytes()[:4]
@@ -215,8 +215,8 @@ class Figure:
 		--------
 		>>> import numdaplot as ndp
 		>>> prices = ndp.Array.from_list([12.0, 15.5, 14.0, 17.0])
-		>>> line_plot = ndp.plot_line(prices, style=ndp.PlotStyle(title="Line"))
-		>>> bar_plot = ndp.plot_bar(prices, style=ndp.PlotStyle(title="Bars"))
+		>>> line_plot = ndp.Plot.line(prices, style=ndp.PlotStyle(title="Line"))
+		>>> bar_plot = ndp.Plot.bar(prices, style=ndp.PlotStyle(title="Bars"))
 		>>> figure = ndp.Figure(ndp.Layout(rows=1, columns=2), ndp.FigureStyle(title="Prices"))
 		>>> figure = figure.place(line_plot, ndp.Cell(row=0, column=0))
 		>>> figure = figure.place(bar_plot, ndp.Cell(row=0, column=1))

@@ -30,7 +30,7 @@ PLOT_LINES = [
 	"",
 	">>> import numdaplot as ndp",
 	">>> prices = ndp.Array.from_list([12.0, 15.5])",
-	">>> plot = ndp.plot_line(prices, ndp.LineChart())",
+	">>> plot = ndp.Plot.line(prices, ndp.LineChart())",
 	">>> plot.show()",
 	">>> print('done')",
 	"done",
@@ -45,7 +45,7 @@ PRINTING_EXAMPLE = ">>> print('hidden')\nhidden\n"
 SVG_TEXT = "<svg/>"
 FIGURE_LINES = [
 	">>> import numdaplot as ndp",
-	">>> plot = ndp.plot_line(ndp.Array.from_list([12.0, 15.5]), ndp.LineChart())",
+	">>> plot = ndp.Plot.line(ndp.Array.from_list([12.0, 15.5]), ndp.LineChart())",
 	">>> figure = ndp.Figure(ndp.Layout(rows=1, columns=1)).place(plot, ndp.Cell(row=0, column=0))",
 	">>> figure.show()",
 ]

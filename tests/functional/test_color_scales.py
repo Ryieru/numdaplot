@@ -53,7 +53,7 @@ def draw_scaled_points(chart: ndp.ScatterChart) -> PathCollection:
 	PathCollection
 		The drawn points.
 	"""
-	figure = ndp.plot_scatter(FLATS, chart).to_matplotlib()
+	figure = ndp.Plot.scatter(FLATS, chart).to_matplotlib()
 	points = cast(PathCollection, figure.axes[0].collections[0])
 
 	return points
@@ -73,7 +73,7 @@ def test_a_heatmap_uses_every_scale(scale: ndp.ColorScale, scale_name: str) -> N
 	scale_name
 		Its matplotlib name.
 	"""
-	plot = ndp.plot_heatmap(FLATS, ndp.HeatmapChart(columns=["rooms"], scale=scale))
+	plot = ndp.Plot.heatmap(FLATS, ndp.HeatmapChart(columns=["rooms"], scale=scale))
 
 	image = plot.to_matplotlib().axes[0].images[0]
 
@@ -134,7 +134,7 @@ def test_the_color_bar_follows_the_scale_of_points() -> None:
 	"""
 	chart = ndp.ScatterChart(x="surface", y="surface", color_by="rooms", scale=ndp.ColorScale.GRAYS)
 
-	figure = ndp.plot_scatter(FLATS, chart).to_matplotlib()
+	figure = ndp.Plot.scatter(FLATS, chart).to_matplotlib()
 
 	color_bar_collections = figure.axes[1].collections
 	color_bar_solids = [collection for collection in color_bar_collections if isinstance(collection, QuadMesh)]
@@ -169,7 +169,7 @@ def test_a_scale_on_texts_or_booleans_is_refused(column: str) -> None:
 	chart = ndp.ScatterChart(x="surface", y="surface", color_by=column, scale=ndp.ColorScale.BLUES)
 
 	with pytest.raises(ndp.RefusedSettingError) as error_info:
-		ndp.plot_scatter(FLATS, chart)
+		ndp.Plot.scatter(FLATS, chart)
 
 	error_text = str(error_info.value)
 	assert error_text == REFUSED_TEXT_MESSAGE
@@ -181,7 +181,7 @@ def test_add_scatter_refuses_a_scale_on_texts() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	line_plot = ndp.plot_line(FLATS, ndp.LineChart(x="surface", y=["rooms"]))
+	line_plot = ndp.Plot.line(FLATS, ndp.LineChart(x="surface", y=["rooms"]))
 	chart = ndp.ScatterChart(x="surface", y="rooms", color_by="city", scale=ndp.ColorScale.BLUES)
 
 	with pytest.raises(ndp.RefusedSettingError):
@@ -205,7 +205,7 @@ def test_points_of_the_smallest_value_stay_visible(scale: ndp.ColorScale) -> Non
 	"""
 	chart = ndp.ScatterChart(x="surface", y="surface", color_by="rooms", scale=scale)
 
-	figure = ndp.plot_scatter(FLATS, chart).to_matplotlib()
+	figure = ndp.Plot.scatter(FLATS, chart).to_matplotlib()
 
 	points = cast(PathCollection, figure.axes[0].collections[0])
 	first_color = points.get_cmap()(0.0)
@@ -222,7 +222,7 @@ def test_a_heatmap_keeps_the_white_of_its_scale() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	plot = ndp.plot_heatmap(FLATS, ndp.HeatmapChart(columns=["rooms"], scale=ndp.ColorScale.BLUES))
+	plot = ndp.Plot.heatmap(FLATS, ndp.HeatmapChart(columns=["rooms"], scale=ndp.ColorScale.BLUES))
 
 	image = plot.to_matplotlib().axes[0].images[0]
 

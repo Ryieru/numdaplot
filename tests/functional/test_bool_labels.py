@@ -53,7 +53,7 @@ def test_box_groups_are_named_after_booleans() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	plot = ndp.plot_box(TRIPS, ndp.BoxChart(columns=["fare"], group_by="weekend"))
+	plot = ndp.Plot.box(TRIPS, ndp.BoxChart(columns=["fare"], group_by="weekend"))
 
 	label_texts = read_x_labels(plot)
 
@@ -66,7 +66,7 @@ def test_points_are_colored_by_booleans_named_in_the_legend() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	plot = ndp.plot_scatter(TRIPS, ndp.ScatterChart(x="fare", y="fare", color_by="weekend"))
+	plot = ndp.Plot.scatter(TRIPS, ndp.ScatterChart(x="fare", y="fare", color_by="weekend"))
 
 	legend = plot.to_matplotlib().axes[0].get_legend()
 
@@ -85,7 +85,7 @@ def test_bars_are_labeled_with_booleans() -> None:
 		ndp.Aggregation(calculations=[ndp.Calculation(column="fare", function=ndp.Sum())], group_by=["weekend"])
 	)
 
-	plot = ndp.plot_bar(totals, ndp.BarChart(x="weekend", y=["fare_sum"]))
+	plot = ndp.Plot.bar(totals, ndp.BarChart(x="weekend", y=["fare_sum"]))
 
 	label_texts = read_x_labels(plot)
 	assert label_texts == EXPECTED_LABELS
@@ -101,7 +101,7 @@ def test_slices_are_named_after_booleans() -> None:
 		ndp.Aggregation(calculations=[ndp.Calculation(column="fare", function=ndp.Sum())], group_by=["weekend"])
 	)
 
-	plot = ndp.plot_pie(totals, ndp.PieChart(labels="weekend", values="fare_sum"))
+	plot = ndp.Plot.pie(totals, ndp.PieChart(labels="weekend", values="fare_sum"))
 
 	slice_names = {text.get_text() for text in plot.to_matplotlib().axes[0].texts}
 	assert set(EXPECTED_LABELS) <= slice_names
@@ -113,7 +113,7 @@ def test_heatmap_rows_are_labeled_with_booleans() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	plot = ndp.plot_heatmap(TRIPS, ndp.HeatmapChart(columns=["fare"], labels="weekend"))
+	plot = ndp.Plot.heatmap(TRIPS, ndp.HeatmapChart(columns=["fare"], labels="weekend"))
 
 	labels = plot.to_matplotlib().axes[0].get_yticklabels()
 	label_texts = [label.get_text() for label in labels]
@@ -123,8 +123,8 @@ def test_heatmap_rows_are_labeled_with_booleans() -> None:
 @pytest.mark.parametrize(
 	"draw",
 	[
-		lambda: ndp.plot_line(TRIPS, ndp.LineChart(x="weekend", y=["fare"])),
-		lambda: ndp.plot_scatter(TRIPS, ndp.ScatterChart(x="weekend", y="fare")),
+		lambda: ndp.Plot.line(TRIPS, ndp.LineChart(x="weekend", y=["fare"])),
+		lambda: ndp.Plot.scatter(TRIPS, ndp.ScatterChart(x="weekend", y="fare")),
 	],
 )
 def test_lines_and_points_are_placed_on_booleans(draw: Callable[[], ndp.Plot]) -> None:
@@ -158,7 +158,7 @@ def test_a_row_with_a_missing_boolean_is_left_out_of_the_groups() -> None:
 	)
 	with_missing = ndp.Table.from_pandas(frame)
 
-	plot = ndp.plot_box(with_missing, ndp.BoxChart(columns=["fare"], group_by="weekend"))
+	plot = ndp.Plot.box(with_missing, ndp.BoxChart(columns=["fare"], group_by="weekend"))
 
 	label_texts = read_x_labels(plot)
 	assert label_texts == EXPECTED_LABELS
@@ -167,14 +167,14 @@ def test_a_row_with_a_missing_boolean_is_left_out_of_the_groups() -> None:
 @pytest.mark.parametrize(
 	("draw", "chart_name"),
 	[
-		(lambda: ndp.plot_line(TRIPS, ndp.LineChart(x="fare", y=["weekend"])), "LineChart"),
-		(lambda: ndp.plot_bar(TRIPS, ndp.BarChart(x="fare", y=["weekend"])), "BarChart"),
-		(lambda: ndp.plot_scatter(TRIPS, ndp.ScatterChart(x="fare", y="weekend")), "ScatterChart"),
-		(lambda: ndp.plot_scatter(TRIPS, ndp.ScatterChart(x="fare", y="fare", size_by="weekend")), "ScatterChart"),
-		(lambda: ndp.plot_histogram(TRIPS, ndp.HistogramChart(columns=["weekend"])), "HistogramChart"),
-		(lambda: ndp.plot_box(TRIPS, ndp.BoxChart(columns=["weekend"])), "BoxChart"),
-		(lambda: ndp.plot_pie(TRIPS, ndp.PieChart(labels="weekend", values="weekend")), "PieChart"),
-		(lambda: ndp.plot_heatmap(TRIPS, ndp.HeatmapChart(columns=["weekend"])), "HeatmapChart"),
+		(lambda: ndp.Plot.line(TRIPS, ndp.LineChart(x="fare", y=["weekend"])), "LineChart"),
+		(lambda: ndp.Plot.bar(TRIPS, ndp.BarChart(x="fare", y=["weekend"])), "BarChart"),
+		(lambda: ndp.Plot.scatter(TRIPS, ndp.ScatterChart(x="fare", y="weekend")), "ScatterChart"),
+		(lambda: ndp.Plot.scatter(TRIPS, ndp.ScatterChart(x="fare", y="fare", size_by="weekend")), "ScatterChart"),
+		(lambda: ndp.Plot.histogram(TRIPS, ndp.HistogramChart(columns=["weekend"])), "HistogramChart"),
+		(lambda: ndp.Plot.box(TRIPS, ndp.BoxChart(columns=["weekend"])), "BoxChart"),
+		(lambda: ndp.Plot.pie(TRIPS, ndp.PieChart(labels="weekend", values="weekend")), "PieChart"),
+		(lambda: ndp.Plot.heatmap(TRIPS, ndp.HeatmapChart(columns=["weekend"])), "HeatmapChart"),
 	],
 )
 def test_booleans_stay_refused_as_measured_values(draw: Callable[[], Any], chart_name: str) -> None:
@@ -208,4 +208,4 @@ def test_integers_stay_refused_as_box_groups() -> None:
 	table = ndp.Table.from_arrays({"hour": ndp.Array.from_list([1, 2]), "fare": ndp.Array.from_list([1.0, 2.0])})
 
 	with pytest.raises(ndp.IncompatibleTypesError):
-		ndp.plot_box(table, ndp.BoxChart(columns=["fare"], group_by="hour"))
+		ndp.Plot.box(table, ndp.BoxChart(columns=["fare"], group_by="hour"))

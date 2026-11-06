@@ -34,7 +34,7 @@ MESSAGE_CASES = [
 	(lambda: SALES.to_csv(5), "Table.to_csv path expects a str or a Path, got 5."),
 	(lambda: ndp.Figure(5), "Figure layout expects a Layout, got 5."),
 	(lambda: ndp.Array.from_list((1, 2)), "Array.from_list values expects a list, got (1, 2)."),
-	(lambda: ndp.plot_missing_map(PRICES), None),
+	(lambda: ndp.Plot.missing_map(PRICES), None),
 	(lambda: PRICES.select(ndp.Sum), "ndp.Sum is a class, use ndp.Sum() instead."),
 	(lambda: PRICES.is_equal(ndp.Equality(other=SALES)), None),
 	(lambda: PRICES + [1, 2], None),
@@ -54,11 +54,6 @@ def list_public_callables() -> list[tuple[str, Callable[..., object]]]:
 		The name and the function of each one, the refusing operators left out.
 	"""
 	found = list[tuple[str, Callable[..., object]]]()
-
-	for name in ndp.__all__:
-		exported = getattr(ndp, name)
-		if inspect.isfunction(exported):
-			found.append((name, exported))
 
 	operator_names = (*OPERATOR_NAMES, *MORE_OPERATOR_NAMES, *LOGIC_OPERATOR_NAMES)
 

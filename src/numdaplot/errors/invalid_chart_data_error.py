@@ -46,7 +46,7 @@ class InvalidChartDataError(NumdaplotError):
 	>>> prices = ndp.Array.from_list([12.0, 15.5])
 	>>> chart = ndp.LineChart(y=["price"])
 	>>> try:
-	... 	ndp.plot_line(prices, chart)
+	... 	ndp.Plot.line(prices, chart)
 	... except ndp.InvalidChartDataError as error:
 	... 	print(error)
 	LineChart takes no y for an Array.

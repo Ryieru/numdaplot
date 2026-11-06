@@ -146,9 +146,9 @@ def test_warn_slice_count_is_silent_up_to_five_slices() -> None:
 
 def test_warn_slice_count_suggests_a_bar_chart_beyond_five_slices() -> None:
 	"""
-	Check that 6 slices emit a ReadabilityWarning suggesting plot_bar.
+	Check that 6 slices emit a ReadabilityWarning suggesting Plot.bar.
 
 	.. versionadded:: 0.1.0
 	"""
-	with pytest.warns(ReadabilityWarning, match="Try ndp.plot_bar with a BarChart"):
+	with pytest.warns(ReadabilityWarning, match="Try ndp.Plot.bar with a BarChart"):
 		warn_slice_count(UNREADABLE_SLICE_COUNT)

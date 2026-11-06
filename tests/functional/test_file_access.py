@@ -23,7 +23,7 @@ TABLE = ndp.Table.from_arrays(
 		"price": ndp.Array.from_list([3.0, 4.0]),
 	}
 )
-PLOT = ndp.plot_line(TABLE, ndp.LineChart(x="day", y=["price"]))
+PLOT = ndp.Plot.line(TABLE, ndp.LineChart(x="day", y=["price"]))
 FIGURE = ndp.Figure(ndp.Layout(rows=1, columns=1)).place(PLOT, ndp.Cell(row=0, column=0))
 WRITERS = [
 	pytest.param(PLOT.save, "chart.png", id="plot"),

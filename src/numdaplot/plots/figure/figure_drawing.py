@@ -42,7 +42,7 @@ def draw_figure(target: FigureBase, layout: Layout, placements: list[Placement],
 	>>> from matplotlib.figure import Figure
 	>>> from numdaplot.plots.figure.figure_drawing import draw_figure
 	>>> from numdaplot.plots.figure.placement import Placement
-	>>> plot = ndp.plot_line(ndp.Array.from_list([12.0, 15.5]))
+	>>> plot = ndp.Plot.line(ndp.Array.from_list([12.0, 15.5]))
 	>>> figure = Figure()
 	>>> draw_figure(figure, ndp.Layout(rows=1, columns=2), [Placement(plot, ndp.Cell(row=0, column=1))], "Sales")
 	>>> len(figure.subfigs), figure.get_suptitle()

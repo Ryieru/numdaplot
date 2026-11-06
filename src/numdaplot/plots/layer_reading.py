@@ -1,7 +1,7 @@
 """
 Reading of the charts a Plot draws on its axes: lines, bars and points.
 
-``plot_line``, ``plot_bar`` and ``plot_scatter`` read their first chart with these functions, and
+``Plot.line``, ``Plot.bar`` and ``Plot.scatter`` read their first chart with these functions, and
 ``Plot.add_line``, ``Plot.add_bar`` and ``Plot.add_scatter`` the charts they add.
 
 .. versionadded:: 0.1.0

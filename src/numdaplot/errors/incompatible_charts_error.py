@@ -41,7 +41,7 @@ class IncompatibleChartsError(NumdaplotError):
 	>>> days = ndp.Array.from_list([date(2026, 1, 1), date(2026, 1, 2)])
 	>>> sales = ndp.Array.from_list([120.0, 80.0])
 	>>> shops = ndp.Table.from_arrays({"city": cities, "day": days, "sales": sales})
-	>>> plot = ndp.plot_bar(shops, ndp.BarChart(x="city", y=["sales"]))
+	>>> plot = ndp.Plot.bar(shops, ndp.BarChart(x="city", y=["sales"]))
 	>>> line = ndp.LineChart(x="day", y=["sales"])
 	>>> try:
 	... 	plot.add_line(shops, line)

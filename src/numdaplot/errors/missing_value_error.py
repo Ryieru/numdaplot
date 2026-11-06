@@ -37,7 +37,7 @@ class MissingValueError(NumdaplotError):
 	>>> shares = ndp.Table.from_arrays({"city": cities, "sales": sales})
 	>>> chart = ndp.PieChart(labels="city", values="sales")
 	>>> try:
-	... 	ndp.plot_pie(shares, chart)
+	... 	ndp.Plot.pie(shares, chart)
 	... except ndp.MissingValueError as error:
 	... 	print(error)
 	PieChart cannot draw a missing value, found one in 'sales'.

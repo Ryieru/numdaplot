@@ -37,8 +37,8 @@ class Layout:
 	--------
 	>>> import numdaplot as ndp
 	>>> prices = ndp.Array.from_list([12.0, 15.5, 14.0, 17.0])
-	>>> line_plot = ndp.plot_line(prices)
-	>>> bar_plot = ndp.plot_bar(prices)
+	>>> line_plot = ndp.Plot.line(prices)
+	>>> bar_plot = ndp.Plot.bar(prices)
 	>>> layout = ndp.Layout(rows=2, columns=1)
 	>>> figure = ndp.Figure(layout)
 	>>> figure = figure.place(line_plot, ndp.Cell(row=0, column=0))

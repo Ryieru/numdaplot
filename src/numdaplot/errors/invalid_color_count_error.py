@@ -38,7 +38,7 @@ class InvalidColorCountError(NumdaplotError):
 	>>> sales = ndp.Table.from_arrays({"day": days, "price": prices, "cost": costs})
 	>>> chart = ndp.LineChart(x="day", y=["price", "cost"], colors=[ndp.Color.BLUE])
 	>>> try:
-	... 	ndp.plot_line(sales, chart)
+	... 	ndp.Plot.line(sales, chart)
 	... except ndp.InvalidColorCountError as error:
 	... 	print(error)
 	Expected one color per series, 2 series and 1 color(s) given.

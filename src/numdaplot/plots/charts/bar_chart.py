@@ -20,7 +20,7 @@ from numdaplot.tables.columns.column_names import require_optional_column_name
 @dataclass(frozen=True)
 class BarChart(Chart):
 	"""
-	Chart drawing each value as a bar, used by ``plot_bar``.
+	Chart drawing each value as a bar, used by ``Plot.bar``.
 
 	Each ``x`` value gets its own position, labeled with that value, in the order of the rows. A missing value
 	draws no bar, and a row whose ``x`` text is missing is left out.
@@ -61,7 +61,7 @@ class BarChart(Chart):
 	>>> sales_2026 = ndp.Array.from_list([150.0, 95.0, 40.0])
 	>>> sales = ndp.Table.from_arrays({"city": cities, "2025": sales_2025, "2026": sales_2026})
 	>>> chart = ndp.BarChart(x="city", y=["2025", "2026"])
-	>>> plot = ndp.plot_bar(sales, chart)
+	>>> plot = ndp.Plot.bar(sales, chart)
 	>>> plot.show()
 	"""
 

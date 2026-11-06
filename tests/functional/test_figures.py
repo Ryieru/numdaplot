@@ -15,9 +15,9 @@ import pytest
 import numdaplot as ndp
 
 PRICES = ndp.Array.from_list([12.0, 15.5, 14.0, 17.0])
-LINE_PLOT = ndp.plot_line(PRICES, ndp.LineChart(), ndp.PlotStyle(title="Line"))
-BAR_PLOT = ndp.plot_bar(PRICES, ndp.BarChart(), ndp.PlotStyle(title="Bars"))
-BOX_PLOT = ndp.plot_box(PRICES, ndp.BoxChart(), ndp.PlotStyle(title="Box"))
+LINE_PLOT = ndp.Plot.line(PRICES, ndp.LineChart(), ndp.PlotStyle(title="Line"))
+BAR_PLOT = ndp.Plot.bar(PRICES, ndp.BarChart(), ndp.PlotStyle(title="Bars"))
+BOX_PLOT = ndp.Plot.box(PRICES, ndp.BoxChart(), ndp.PlotStyle(title="Box"))
 LAYOUT = ndp.Layout(rows=2, columns=2)
 PNG_SIZE_START = 16
 PNG_SIZE_END = 24

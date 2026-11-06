@@ -7,6 +7,7 @@ Functional tests of the names shown by the package.
 import numdaplot as ndp
 
 INTERNAL_NAMES = {"arrays", "errors", "find_package_version", "package_version", "tables"}
+FUNCTION_STYLE_PLOT_NAME = "plot_line"
 VERSION_NAME = "__version__"
 
 
@@ -57,3 +58,14 @@ def test_changing_the_result_of_dir_changes_nothing() -> None:
 	shown_names.clear()
 
 	assert len(ndp.__all__) == public_name_count
+
+
+def test_plots_are_only_created_from_the_plot_class() -> None:
+	"""
+	Check that the package has no plot creation of its own besides ``ndp.Plot``.
+
+	.. versionadded:: 0.1.0
+	"""
+	has_function_style_name = hasattr(ndp, FUNCTION_STYLE_PLOT_NAME)
+
+	assert not has_function_style_name

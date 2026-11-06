@@ -74,7 +74,7 @@ class PlotStyle:
 	>>> sales = ndp.Table.from_arrays({"day": days, "price": prices, "cost": costs})
 	>>> chart = ndp.LineChart(x="day", y=["price", "cost"])
 	>>> style = ndp.PlotStyle(title="Sales", x_label="Day", y_label="Euros", legend=ndp.LegendPosition.OUTSIDE_RIGHT)
-	>>> plot = ndp.plot_line(sales, chart, style)
+	>>> plot = ndp.Plot.line(sales, chart, style)
 	>>> plot.show()
 
 	The labels of the ``x`` values can take another angle.
@@ -83,7 +83,7 @@ class PlotStyle:
 	>>> totals = ndp.Array.from_list([120.0, 80.0, 95.0])
 	>>> city_sales = ndp.Table.from_arrays({"city": cities, "total": totals})
 	>>> city_chart = ndp.BarChart(x="city", y=["total"])
-	>>> city_plot = ndp.plot_bar(city_sales, city_chart, ndp.PlotStyle(x_tick_rotation=90))
+	>>> city_plot = ndp.Plot.bar(city_sales, city_chart, ndp.PlotStyle(x_tick_rotation=90))
 	>>> city_plot.show()
 	"""
 

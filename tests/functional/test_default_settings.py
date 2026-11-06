@@ -90,15 +90,15 @@ def test_sort_without_settings_sorts_in_ascending_order() -> None:
 	assert is_same
 
 
-def test_plot_functions_without_chart_draw_an_array() -> None:
+def test_plot_creations_without_chart_draw_an_array() -> None:
 	"""
-	Check that plot_line and add_bar draw an Array without chart.
+	Check that Plot.line and add_bar draw an Array without chart.
 
 	.. versionadded:: 0.1.0
 	"""
 	prices = ndp.Array.from_list([12.0, 15.5, 14.0])
 
-	line_plot = ndp.plot_line(prices)
+	line_plot = ndp.Plot.line(prices)
 	plot = line_plot.add_bar(prices)
 
 	figure = plot.to_matplotlib()

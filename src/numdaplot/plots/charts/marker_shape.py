@@ -20,7 +20,7 @@ class MarkerShape(Enum):
 	>>> prices = ndp.Array.from_list([150.0, 210.0, 260.0, 330.0])
 	>>> flats = ndp.Table.from_arrays({"surface": surfaces, "price": prices})
 	>>> chart = ndp.ScatterChart(x="surface", y="price", marker=ndp.MarkerShape.SQUARE)
-	>>> plot = ndp.plot_scatter(flats, chart)
+	>>> plot = ndp.Plot.scatter(flats, chart)
 	>>> plot.show()
 	"""
 
@@ -33,7 +33,7 @@ class MarkerShape(Enum):
 	>>> import numdaplot as ndp
 	>>> prices = ndp.Array.from_list([12.0, 15.5, 14.0, 17.0])
 	>>> chart = ndp.LineChart(marker=ndp.MarkerShape.NONE)
-	>>> plot = ndp.plot_line(prices, chart)
+	>>> plot = ndp.Plot.line(prices, chart)
 	>>> plot.show()
 	"""
 
@@ -48,7 +48,7 @@ class MarkerShape(Enum):
 	>>> prices = ndp.Array.from_list([150.0, 210.0, 260.0, 330.0])
 	>>> flats = ndp.Table.from_arrays({"surface": surfaces, "price": prices})
 	>>> chart = ndp.ScatterChart(x="surface", y="price", marker=ndp.MarkerShape.CIRCLE)
-	>>> plot = ndp.plot_scatter(flats, chart)
+	>>> plot = ndp.Plot.scatter(flats, chart)
 	>>> plot.show()
 	"""
 
@@ -63,7 +63,7 @@ class MarkerShape(Enum):
 	>>> prices = ndp.Array.from_list([150.0, 210.0, 260.0, 330.0])
 	>>> flats = ndp.Table.from_arrays({"surface": surfaces, "price": prices})
 	>>> chart = ndp.ScatterChart(x="surface", y="price", marker=ndp.MarkerShape.SQUARE)
-	>>> plot = ndp.plot_scatter(flats, chart)
+	>>> plot = ndp.Plot.scatter(flats, chart)
 	>>> plot.show()
 	"""
 
@@ -78,7 +78,7 @@ class MarkerShape(Enum):
 	>>> prices = ndp.Array.from_list([150.0, 210.0, 260.0, 330.0])
 	>>> flats = ndp.Table.from_arrays({"surface": surfaces, "price": prices})
 	>>> chart = ndp.ScatterChart(x="surface", y="price", marker=ndp.MarkerShape.TRIANGLE)
-	>>> plot = ndp.plot_scatter(flats, chart)
+	>>> plot = ndp.Plot.scatter(flats, chart)
 	>>> plot.show()
 	"""
 
@@ -93,7 +93,7 @@ class MarkerShape(Enum):
 	>>> prices = ndp.Array.from_list([150.0, 210.0, 260.0, 330.0])
 	>>> flats = ndp.Table.from_arrays({"surface": surfaces, "price": prices})
 	>>> chart = ndp.ScatterChart(x="surface", y="price", marker=ndp.MarkerShape.CROSS)
-	>>> plot = ndp.plot_scatter(flats, chart)
+	>>> plot = ndp.Plot.scatter(flats, chart)
 	>>> plot.show()
 	"""
 
@@ -108,6 +108,6 @@ class MarkerShape(Enum):
 	>>> prices = ndp.Array.from_list([150.0, 210.0, 260.0, 330.0])
 	>>> flats = ndp.Table.from_arrays({"surface": surfaces, "price": prices})
 	>>> chart = ndp.ScatterChart(x="surface", y="price", marker=ndp.MarkerShape.DIAMOND)
-	>>> plot = ndp.plot_scatter(flats, chart)
+	>>> plot = ndp.Plot.scatter(flats, chart)
 	>>> plot.show()
 	"""

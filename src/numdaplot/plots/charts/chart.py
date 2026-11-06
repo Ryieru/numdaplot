@@ -18,18 +18,18 @@ class Chart:
 
 	Only its subclasses are created: calling ``ndp.Chart()`` raises ``RefusedOperationError``.
 
-	Every chart, each passed to its own plot function:
+	Every chart, each passed to its own creation method of ``Plot``:
 
 	|Chart|What it draws|Example|
 	|---|---|---|
-	|``LineChart``|Each series as a line, with ``plot_line``|``ndp.LineChart(x="month", y=["sales"])``|
-	|``BarChart``|Each value as a bar, with ``plot_bar``|``ndp.BarChart(x="city", y=["sales"])``|
-	|``ScatterChart``|Each row as a point, with ``plot_scatter``|``ndp.ScatterChart(x="price", y="stock")``|
-	|``HistogramChart``|The values per bin, with ``plot_histogram``|``ndp.HistogramChart(columns=["price"])``|
-	|``BoxChart``|The spread of each column as a box, with ``plot_box``|``ndp.BoxChart(columns=["price"])``|
-	|``PieChart``|Each row as a slice of a pie, with ``plot_pie``|``ndp.PieChart(labels="city", values="sales")``|
-	|``HeatmapChart``|Each value as a colored cell, with ``plot_heatmap``|``ndp.HeatmapChart()``|
-	|``MissingChart``|The missing values per column, with ``plot_missing_by_column``|``ndp.MissingChart()``|
+	|``LineChart``|Each series as a line, with ``Plot.line``|``ndp.LineChart(x="month", y=["sales"])``|
+	|``BarChart``|Each value as a bar, with ``Plot.bar``|``ndp.BarChart(x="city", y=["sales"])``|
+	|``ScatterChart``|Each row as a point, with ``Plot.scatter``|``ndp.ScatterChart(x="price", y="stock")``|
+	|``HistogramChart``|The values per bin, with ``Plot.histogram``|``ndp.HistogramChart(columns=["price"])``|
+	|``BoxChart``|The spread of each column as a box, with ``Plot.box``|``ndp.BoxChart(columns=["price"])``|
+	|``PieChart``|Each row as a slice of a pie, with ``Plot.pie``|``ndp.PieChart(labels="city", values="sales")``|
+	|``HeatmapChart``|Each value as a colored cell, with ``Plot.heatmap``|``ndp.HeatmapChart()``|
+	|``MissingChart``|The missing values per column, with ``Plot.missing_by_column``|``ndp.MissingChart()``|
 
 	.. versionadded:: 0.1.0
 
@@ -37,9 +37,9 @@ class Chart:
 	--------
 	>>> import numdaplot as ndp
 	>>> prices = ndp.Array.from_list([12.0, 15.5, 14.0, 17.0])
-	>>> bar_plot = ndp.plot_bar(prices, ndp.BarChart(orientation=ndp.Orientation.HORIZONTAL))
+	>>> bar_plot = ndp.Plot.bar(prices, ndp.BarChart(orientation=ndp.Orientation.HORIZONTAL))
 	>>> bar_plot.show()
-	>>> line_plot = ndp.plot_line(prices, ndp.LineChart(marker=ndp.MarkerShape.CIRCLE))
+	>>> line_plot = ndp.Plot.line(prices, ndp.LineChart(marker=ndp.MarkerShape.CIRCLE))
 	>>> line_plot.show()
 	"""
 

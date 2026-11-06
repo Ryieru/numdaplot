@@ -18,7 +18,7 @@ class LineType(Enum):
 	>>> import numdaplot as ndp
 	>>> prices = ndp.Array.from_list([12.0, 15.5, 14.0, 17.0])
 	>>> chart = ndp.LineChart(line=ndp.LineType.DASHED)
-	>>> plot = ndp.plot_line(prices, chart)
+	>>> plot = ndp.Plot.line(prices, chart)
 	>>> plot.show()
 	"""
 
@@ -31,7 +31,7 @@ class LineType(Enum):
 	>>> import numdaplot as ndp
 	>>> prices = ndp.Array.from_list([12.0, 15.5, 14.0, 17.0])
 	>>> chart = ndp.LineChart(line=ndp.LineType.SOLID)
-	>>> plot = ndp.plot_line(prices, chart)
+	>>> plot = ndp.Plot.line(prices, chart)
 	>>> plot.show()
 	"""
 
@@ -44,7 +44,7 @@ class LineType(Enum):
 	>>> import numdaplot as ndp
 	>>> prices = ndp.Array.from_list([12.0, 15.5, 14.0, 17.0])
 	>>> chart = ndp.LineChart(line=ndp.LineType.DASHED)
-	>>> plot = ndp.plot_line(prices, chart)
+	>>> plot = ndp.Plot.line(prices, chart)
 	>>> plot.show()
 	"""
 
@@ -57,7 +57,7 @@ class LineType(Enum):
 	>>> import numdaplot as ndp
 	>>> prices = ndp.Array.from_list([12.0, 15.5, 14.0, 17.0])
 	>>> chart = ndp.LineChart(line=ndp.LineType.DOTTED)
-	>>> plot = ndp.plot_line(prices, chart)
+	>>> plot = ndp.Plot.line(prices, chart)
 	>>> plot.show()
 	"""
 
@@ -70,6 +70,6 @@ class LineType(Enum):
 	>>> import numdaplot as ndp
 	>>> prices = ndp.Array.from_list([12.0, 15.5, 14.0, 17.0])
 	>>> chart = ndp.LineChart(line=ndp.LineType.DASH_DOT)
-	>>> plot = ndp.plot_line(prices, chart)
+	>>> plot = ndp.Plot.line(prices, chart)
 	>>> plot.show()
 	"""

@@ -20,7 +20,7 @@ class Color(Enum):
 	>>> import numdaplot as ndp
 	>>> prices = ndp.Array.from_list([12.0, 15.5, 14.0, 17.0])
 	>>> chart = ndp.LineChart(colors=[ndp.Color.GREEN])
-	>>> plot = ndp.plot_line(prices, chart)
+	>>> plot = ndp.Plot.line(prices, chart)
 	>>> plot.show()
 	"""
 
@@ -33,7 +33,7 @@ class Color(Enum):
 	>>> import numdaplot as ndp
 	>>> prices = ndp.Array.from_list([12.0, 15.5, 14.0, 17.0])
 	>>> chart = ndp.LineChart(colors=[ndp.Color.BLUE])
-	>>> plot = ndp.plot_line(prices, chart)
+	>>> plot = ndp.Plot.line(prices, chart)
 	>>> plot.show()
 	"""
 
@@ -46,7 +46,7 @@ class Color(Enum):
 	>>> import numdaplot as ndp
 	>>> prices = ndp.Array.from_list([12.0, 15.5, 14.0, 17.0])
 	>>> chart = ndp.LineChart(colors=[ndp.Color.ORANGE])
-	>>> plot = ndp.plot_line(prices, chart)
+	>>> plot = ndp.Plot.line(prices, chart)
 	>>> plot.show()
 	"""
 
@@ -59,7 +59,7 @@ class Color(Enum):
 	>>> import numdaplot as ndp
 	>>> prices = ndp.Array.from_list([12.0, 15.5, 14.0, 17.0])
 	>>> chart = ndp.LineChart(colors=[ndp.Color.GREEN])
-	>>> plot = ndp.plot_line(prices, chart)
+	>>> plot = ndp.Plot.line(prices, chart)
 	>>> plot.show()
 	"""
 
@@ -72,7 +72,7 @@ class Color(Enum):
 	>>> import numdaplot as ndp
 	>>> prices = ndp.Array.from_list([12.0, 15.5, 14.0, 17.0])
 	>>> chart = ndp.LineChart(colors=[ndp.Color.RED])
-	>>> plot = ndp.plot_line(prices, chart)
+	>>> plot = ndp.Plot.line(prices, chart)
 	>>> plot.show()
 	"""
 
@@ -85,7 +85,7 @@ class Color(Enum):
 	>>> import numdaplot as ndp
 	>>> prices = ndp.Array.from_list([12.0, 15.5, 14.0, 17.0])
 	>>> chart = ndp.LineChart(colors=[ndp.Color.PURPLE])
-	>>> plot = ndp.plot_line(prices, chart)
+	>>> plot = ndp.Plot.line(prices, chart)
 	>>> plot.show()
 	"""
 
@@ -98,7 +98,7 @@ class Color(Enum):
 	>>> import numdaplot as ndp
 	>>> prices = ndp.Array.from_list([12.0, 15.5, 14.0, 17.0])
 	>>> chart = ndp.LineChart(colors=[ndp.Color.BROWN])
-	>>> plot = ndp.plot_line(prices, chart)
+	>>> plot = ndp.Plot.line(prices, chart)
 	>>> plot.show()
 	"""
 
@@ -111,7 +111,7 @@ class Color(Enum):
 	>>> import numdaplot as ndp
 	>>> prices = ndp.Array.from_list([12.0, 15.5, 14.0, 17.0])
 	>>> chart = ndp.LineChart(colors=[ndp.Color.PINK])
-	>>> plot = ndp.plot_line(prices, chart)
+	>>> plot = ndp.Plot.line(prices, chart)
 	>>> plot.show()
 	"""
 
@@ -124,7 +124,7 @@ class Color(Enum):
 	>>> import numdaplot as ndp
 	>>> prices = ndp.Array.from_list([12.0, 15.5, 14.0, 17.0])
 	>>> chart = ndp.LineChart(colors=[ndp.Color.GRAY])
-	>>> plot = ndp.plot_line(prices, chart)
+	>>> plot = ndp.Plot.line(prices, chart)
 	>>> plot.show()
 	"""
 
@@ -137,7 +137,7 @@ class Color(Enum):
 	>>> import numdaplot as ndp
 	>>> prices = ndp.Array.from_list([12.0, 15.5, 14.0, 17.0])
 	>>> chart = ndp.LineChart(colors=[ndp.Color.OLIVE])
-	>>> plot = ndp.plot_line(prices, chart)
+	>>> plot = ndp.Plot.line(prices, chart)
 	>>> plot.show()
 	"""
 
@@ -150,7 +150,7 @@ class Color(Enum):
 	>>> import numdaplot as ndp
 	>>> prices = ndp.Array.from_list([12.0, 15.5, 14.0, 17.0])
 	>>> chart = ndp.LineChart(colors=[ndp.Color.CYAN])
-	>>> plot = ndp.plot_line(prices, chart)
+	>>> plot = ndp.Plot.line(prices, chart)
 	>>> plot.show()
 	"""
 
@@ -163,6 +163,6 @@ class Color(Enum):
 	>>> import numdaplot as ndp
 	>>> prices = ndp.Array.from_list([12.0, 15.5, 14.0, 17.0])
 	>>> chart = ndp.LineChart(colors=[ndp.Color.BLACK])
-	>>> plot = ndp.plot_line(prices, chart)
+	>>> plot = ndp.Plot.line(prices, chart)
 	>>> plot.show()
 	"""

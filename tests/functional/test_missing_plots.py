@@ -35,7 +35,7 @@ def test_missing_values_by_column_are_drawn_as_ratios() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	plot = ndp.plot_missing_by_column(FLATS, ndp.MissingChart(measure=ndp.Measure.RATIO))
+	plot = ndp.Plot.missing_by_column(FLATS, ndp.MissingChart(measure=ndp.Measure.RATIO))
 
 	axes = plot.to_matplotlib().axes[0]
 	bars = [patch for patch in axes.patches if isinstance(patch, Rectangle)]
@@ -54,7 +54,7 @@ def test_missing_values_by_column_are_drawn_as_counts_by_default() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	plot = ndp.plot_missing_by_column(FLATS)
+	plot = ndp.Plot.missing_by_column(FLATS)
 
 	axes = plot.to_matplotlib().axes[0]
 	assert axes.get_ylabel() == "Missing count"
@@ -66,7 +66,7 @@ def test_the_missing_map_marks_each_missing_value_with_a_legend() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	plot = ndp.plot_missing_map(FLATS)
+	plot = ndp.Plot.missing_map(FLATS)
 
 	axes = plot.to_matplotlib().axes[0]
 	# Some versions of the matplotlib stubs leave the cells of an image untyped.
@@ -87,7 +87,7 @@ def test_the_missing_map_is_saved_as_a_pdf(tmp_path: Path) -> None:
 	.. versionadded:: 0.1.0
 	"""
 	image_path = tmp_path / "missing.pdf"
-	plot = ndp.plot_missing_map(FLATS)
+	plot = ndp.Plot.missing_map(FLATS)
 
 	plot.save(image_path)
 

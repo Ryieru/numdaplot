@@ -14,7 +14,7 @@ from numdaplot.settings.field_types import require_field_types
 @dataclass(frozen=True)
 class MissingChart(Chart):
 	"""
-	Chart drawing one bar per column of a Table, as high as its missing values, used by ``plot_missing_by_column``.
+	Chart drawing one bar per column of a Table, as high as its missing values, used by ``Plot.missing_by_column``.
 
 	Every column has its bar, even without missing value.
 
@@ -40,7 +40,7 @@ class MissingChart(Chart):
 	>>> rooms = ndp.Array.from_list([2, 3, 1, 4])
 	>>> flats = ndp.Table.from_arrays({"city": cities, "price": prices, "rooms": rooms})
 	>>> chart = ndp.MissingChart(measure=ndp.Measure.RATIO)
-	>>> plot = ndp.plot_missing_by_column(flats, chart)
+	>>> plot = ndp.Plot.missing_by_column(flats, chart)
 	>>> plot.show()
 	"""
 

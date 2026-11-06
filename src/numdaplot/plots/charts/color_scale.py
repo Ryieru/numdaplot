@@ -22,7 +22,7 @@ class ColorScale(Enum):
 	>>> march = ndp.Array.from_list([9.5, 8.0, 11.5])
 	>>> temperatures = ndp.Table.from_arrays({"city": cities, "jan": january, "feb": february, "mar": march})
 	>>> chart = ndp.HeatmapChart(columns=["jan", "feb", "mar"], labels="city", scale=ndp.ColorScale.BLUES)
-	>>> plot = ndp.plot_heatmap(temperatures, chart)
+	>>> plot = ndp.Plot.heatmap(temperatures, chart)
 	>>> plot.show()
 	"""
 
@@ -39,7 +39,7 @@ class ColorScale(Enum):
 	>>> march = ndp.Array.from_list([9.5, 8.0, 11.5])
 	>>> temperatures = ndp.Table.from_arrays({"city": cities, "jan": january, "feb": february, "mar": march})
 	>>> chart = ndp.HeatmapChart(columns=["jan", "feb", "mar"], labels="city", scale=ndp.ColorScale.VIRIDIS)
-	>>> plot = ndp.plot_heatmap(temperatures, chart)
+	>>> plot = ndp.Plot.heatmap(temperatures, chart)
 	>>> plot.show()
 	"""
 
@@ -56,7 +56,7 @@ class ColorScale(Enum):
 	>>> march = ndp.Array.from_list([9.5, 8.0, 11.5])
 	>>> temperatures = ndp.Table.from_arrays({"city": cities, "jan": january, "feb": february, "mar": march})
 	>>> chart = ndp.HeatmapChart(columns=["jan", "feb", "mar"], labels="city", scale=ndp.ColorScale.BLUES)
-	>>> plot = ndp.plot_heatmap(temperatures, chart)
+	>>> plot = ndp.Plot.heatmap(temperatures, chart)
 	>>> plot.show()
 	"""
 
@@ -73,7 +73,7 @@ class ColorScale(Enum):
 	>>> march = ndp.Array.from_list([9.5, 8.0, 11.5])
 	>>> temperatures = ndp.Table.from_arrays({"city": cities, "jan": january, "feb": february, "mar": march})
 	>>> chart = ndp.HeatmapChart(columns=["jan", "feb", "mar"], labels="city", scale=ndp.ColorScale.REDS)
-	>>> plot = ndp.plot_heatmap(temperatures, chart)
+	>>> plot = ndp.Plot.heatmap(temperatures, chart)
 	>>> plot.show()
 	"""
 
@@ -91,7 +91,7 @@ class ColorScale(Enum):
 	>>> march = ndp.Array.from_list([-3.0, 0.5, 1.0])
 	>>> temperatures = ndp.Table.from_arrays({"city": cities, "jan": january, "feb": february, "mar": march})
 	>>> chart = ndp.HeatmapChart(columns=["jan", "feb", "mar"], labels="city", scale=ndp.ColorScale.RED_BLUE)
-	>>> plot = ndp.plot_heatmap(temperatures, chart)
+	>>> plot = ndp.Plot.heatmap(temperatures, chart)
 	>>> plot.show()
 	"""
 
@@ -108,7 +108,7 @@ class ColorScale(Enum):
 	>>> march = ndp.Array.from_list([9.5, 8.0, 11.5])
 	>>> temperatures = ndp.Table.from_arrays({"city": cities, "jan": january, "feb": february, "mar": march})
 	>>> chart = ndp.HeatmapChart(columns=["jan", "feb", "mar"], labels="city", scale=ndp.ColorScale.GREENS)
-	>>> plot = ndp.plot_heatmap(temperatures, chart)
+	>>> plot = ndp.Plot.heatmap(temperatures, chart)
 	>>> plot.show()
 	"""
 
@@ -125,7 +125,7 @@ class ColorScale(Enum):
 	>>> march = ndp.Array.from_list([9.5, 8.0, 11.5])
 	>>> temperatures = ndp.Table.from_arrays({"city": cities, "jan": january, "feb": february, "mar": march})
 	>>> chart = ndp.HeatmapChart(columns=["jan", "feb", "mar"], labels="city", scale=ndp.ColorScale.GRAYS)
-	>>> plot = ndp.plot_heatmap(temperatures, chart)
+	>>> plot = ndp.Plot.heatmap(temperatures, chart)
 	>>> plot.show()
 	"""
 
@@ -142,6 +142,6 @@ class ColorScale(Enum):
 	>>> march = ndp.Array.from_list([9.5, 8.0, 11.5])
 	>>> temperatures = ndp.Table.from_arrays({"city": cities, "jan": january, "feb": february, "mar": march})
 	>>> chart = ndp.HeatmapChart(columns=["jan", "feb", "mar"], labels="city", scale=ndp.ColorScale.CIVIDIS)
-	>>> plot = ndp.plot_heatmap(temperatures, chart)
+	>>> plot = ndp.Plot.heatmap(temperatures, chart)
 	>>> plot.show()
 	"""

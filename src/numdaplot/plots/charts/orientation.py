@@ -21,7 +21,7 @@ class Orientation(Enum):
 	>>> costs = ndp.Array.from_list([8.0, 9.5, 9.0, 10.0])
 	>>> sales = ndp.Table.from_arrays({"day": days, "price": prices, "cost": costs})
 	>>> chart = ndp.BarChart(x="day", y=["price", "cost"], orientation=ndp.Orientation.HORIZONTAL)
-	>>> plot = ndp.plot_bar(sales, chart)
+	>>> plot = ndp.Plot.bar(sales, chart)
 	>>> plot.show()
 	"""
 
@@ -37,7 +37,7 @@ class Orientation(Enum):
 	>>> costs = ndp.Array.from_list([8.0, 9.5, 9.0, 10.0])
 	>>> sales = ndp.Table.from_arrays({"day": days, "price": prices, "cost": costs})
 	>>> chart = ndp.BarChart(x="day", y=["price", "cost"], orientation=ndp.Orientation.VERTICAL)
-	>>> plot = ndp.plot_bar(sales, chart)
+	>>> plot = ndp.Plot.bar(sales, chart)
 	>>> plot.show()
 	"""
 
@@ -53,6 +53,6 @@ class Orientation(Enum):
 	>>> costs = ndp.Array.from_list([8.0, 9.5, 9.0, 10.0])
 	>>> sales = ndp.Table.from_arrays({"day": days, "price": prices, "cost": costs})
 	>>> chart = ndp.BarChart(x="day", y=["price", "cost"], orientation=ndp.Orientation.HORIZONTAL)
-	>>> plot = ndp.plot_bar(sales, chart)
+	>>> plot = ndp.Plot.bar(sales, chart)
 	>>> plot.show()
 	"""

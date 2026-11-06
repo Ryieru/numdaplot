@@ -181,7 +181,7 @@ def find_argument_kinds(function: Callable[..., object], owner: type | None) -> 
 	--------
 	>>> import numdaplot as ndp
 	>>> from numdaplot.settings.argument_types import find_argument_kinds
-	>>> find_argument_kinds(ndp.plot_missing_map, None)["table"].names
+	>>> find_argument_kinds(ndp.Plot.missing_map, None)["table"].names
 	('Table',)
 	"""
 	annotations = read_annotations(function)
@@ -267,10 +267,10 @@ def require_argument_type(
 	>>> from numdaplot.settings.argument_types import require_argument_type
 	>>> from numdaplot.settings.field_types import read_accepted_kinds
 	>>> try:
-	... 	require_argument_type(ndp.plot_line, None, read_accepted_kinds(str), ("chart", 5))
+	... 	require_argument_type(ndp.Plot.line, ndp.Plot, read_accepted_kinds(str), ("chart", 5))
 	... except ndp.InvalidTypeError as error:
 	... 	print(error)
-	plot_line chart expects a str, got 5.
+	Plot.line chart expects a str, got 5.
 	"""
 	if kinds is None:
 		return
@@ -303,7 +303,7 @@ def name_callable(function: Callable[..., object], owner: type | None) -> str:
 	Returns
 	-------
 	str
-		``plot_line``, ``Table.filter``, ``Array +``, or ``Figure`` for a constructor.
+		``Plot.line``, ``Table.filter``, ``Array +``, or ``Figure`` for a constructor.
 
 	Examples
 	--------

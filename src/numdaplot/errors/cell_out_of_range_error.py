@@ -41,7 +41,7 @@ class CellOutOfRangeError(NumdaplotError):
 	--------
 	>>> import numdaplot as ndp
 	>>> prices = ndp.Array.from_list([12.0, 15.5, 14.0])
-	>>> plot = ndp.plot_line(prices)
+	>>> plot = ndp.Plot.line(prices)
 	>>> figure = ndp.Figure(ndp.Layout(rows=2, columns=2))
 	>>> try:
 	... 	figure.place(plot, ndp.Cell(row=2, column=0))

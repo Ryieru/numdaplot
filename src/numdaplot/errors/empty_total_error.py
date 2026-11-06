@@ -37,7 +37,7 @@ class EmptyTotalError(NumdaplotError):
 	>>> shares = ndp.Table.from_arrays({"city": cities, "sales": sales})
 	>>> chart = ndp.PieChart(labels="city", values="sales")
 	>>> try:
-	... 	ndp.plot_pie(shares, chart)
+	... 	ndp.Plot.pie(shares, chart)
 	... except ndp.EmptyTotalError as error:
 	... 	print(error)
 	PieChart needs a positive total, the values of 'sales' add up to 0.

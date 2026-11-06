@@ -26,7 +26,7 @@ class ReadabilityWarning(UserWarning):
 	>>> chart = ndp.PieChart(labels="fruit", values="sales")
 	>>> with warnings.catch_warnings(record=True) as caught_warnings:
 	... 	warnings.simplefilter("always")
-	... 	plot = ndp.plot_pie(shares, chart)
+	... 	plot = ndp.Plot.pie(shares, chart)
 	>>> print(caught_warnings[0].message)
-	A PieChart with 6 slices is hard to read. Try ndp.plot_bar with a BarChart, it may compare them better.
+	A PieChart with 6 slices is hard to read. Try ndp.Plot.bar with a BarChart, it may compare them better.
 	"""

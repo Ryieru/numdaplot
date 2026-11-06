@@ -36,7 +36,7 @@ def test_a_pie_plot_shares_out_the_values_with_their_labels_and_percentages() ->
 	"""
 	style = ndp.PlotStyle(title="Visits per device")
 
-	plot = ndp.plot_pie(TRAFFIC, CHART, style)
+	plot = ndp.Plot.pie(TRAFFIC, CHART, style)
 
 	axes = plot.to_matplotlib().axes[0]
 	slices = [patch for patch in axes.patches if isinstance(patch, Wedge)]
@@ -57,7 +57,7 @@ def test_a_pie_plot_of_many_slices_suggests_a_bar_plot() -> None:
 	chart = ndp.PieChart(labels="fruit", values="sales")
 
 	with pytest.warns(ndp.ReadabilityWarning, match="6 slices"):
-		plot = ndp.plot_pie(FRUIT_SHARES, chart)
+		plot = ndp.Plot.pie(FRUIT_SHARES, chart)
 
 	axes = plot.to_matplotlib().axes[0]
 	slices = [patch for patch in axes.patches if isinstance(patch, Wedge)]
@@ -71,7 +71,7 @@ def test_a_pie_plot_rejects_a_negative_value() -> None:
 	.. versionadded:: 0.1.0
 	"""
 	with pytest.raises(ndp.NumdaplotError, match="-10.0"):
-		ndp.plot_pie(NEGATIVE_TRAFFIC, CHART)
+		ndp.Plot.pie(NEGATIVE_TRAFFIC, CHART)
 
 
 def test_a_pie_plot_is_saved_as_an_svg_image(tmp_path: Path) -> None:
@@ -81,7 +81,7 @@ def test_a_pie_plot_is_saved_as_an_svg_image(tmp_path: Path) -> None:
 	.. versionadded:: 0.1.0
 	"""
 	image_path = tmp_path / "traffic.svg"
-	plot = ndp.plot_pie(TRAFFIC, CHART)
+	plot = ndp.Plot.pie(TRAFFIC, CHART)
 
 	plot.save(image_path)
 
@@ -98,7 +98,7 @@ def test_pie_refuses_a_rotation_of_the_axis_values() -> None:
 	style = ndp.PlotStyle(x_tick_rotation=45)
 
 	with pytest.raises(ndp.RefusedSettingError) as error_info:
-		ndp.plot_pie(TRAFFIC, CHART, style)
+		ndp.Plot.pie(TRAFFIC, CHART, style)
 
 	message = str(error_info.value)
 	assert message == EXPECTED_ROTATION_MESSAGE

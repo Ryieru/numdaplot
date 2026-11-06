@@ -15,7 +15,7 @@ import numdaplot as ndp
 from numdaplot.plots.drawing.plot_drawing import FigureDrawing, build_figure
 from numdaplot.plots.figure import figure as figure_module
 
-PLOT = ndp.plot_line(ndp.Array.from_list([12.0, 15.5]), ndp.LineChart(), ndp.PlotStyle(title="Prices"))
+PLOT = ndp.Plot.line(ndp.Array.from_list([12.0, 15.5]), ndp.LineChart(), ndp.PlotStyle(title="Prices"))
 LAYOUT = ndp.Layout(rows=1, columns=2)
 LEFT = ndp.Cell(row=0, column=0)
 RIGHT = ndp.Cell(row=0, column=1)

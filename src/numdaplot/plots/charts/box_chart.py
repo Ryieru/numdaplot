@@ -19,7 +19,7 @@ from numdaplot.tables.columns.column_names import require_optional_column_name
 @dataclass(frozen=True)
 class BoxChart(Chart):
 	"""
-	Chart summing up the spread of the values of each column as a box, used by ``plot_box``.
+	Chart summing up the spread of the values of each column as a box, used by ``Plot.box``.
 
 	The box goes from the first to the third quartile, with a line at the median. The whiskers reach the
 	furthest values within 1.5 box heights of the box, and the values beyond them are outliers. Missing values
@@ -60,7 +60,7 @@ class BoxChart(Chart):
 	>>> prices_2026 = ndp.Array.from_list([14.0, 10.5, 16.0, 11.0, 15.5, 9.0, 17.0, 12.5])
 	>>> prices = ndp.Table.from_arrays({"city": cities, "2025": prices_2025, "2026": prices_2026})
 	>>> chart = ndp.BoxChart(columns=["2025", "2026"], group_by="city")
-	>>> plot = ndp.plot_box(prices, chart)
+	>>> plot = ndp.Plot.box(prices, chart)
 	>>> plot.show()
 	"""
 

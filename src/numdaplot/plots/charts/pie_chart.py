@@ -19,7 +19,7 @@ from numdaplot.tables.columns.column_names import require_column_name
 @dataclass(frozen=True)
 class PieChart(Chart):
 	"""
-	Chart drawing each row of a Table as a slice of a disc, sized by its share of the total, used by ``plot_pie``.
+	Chart drawing each row of a Table as a slice of a disc, sized by its share of the total, used by ``Plot.pie``.
 
 	The slices start at the top and follow each other clockwise, in the order of the rows, each labeled with
 	its text. Every value must be present and positive or 0, and every label must be different. Beyond 5 slices,
@@ -54,7 +54,7 @@ class PieChart(Chart):
 	>>> sales = ndp.Array.from_list([120.0, 80.0, 45.0])
 	>>> shares = ndp.Table.from_arrays({"city": cities, "sales": sales})
 	>>> chart = ndp.PieChart(labels="city", values="sales")
-	>>> plot = ndp.plot_pie(shares, chart)
+	>>> plot = ndp.Plot.pie(shares, chart)
 	>>> plot.show()
 	"""
 

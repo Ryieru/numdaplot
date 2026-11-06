@@ -119,13 +119,13 @@ def test_a_column_holding_missing_values_is_refused_until_they_are_removed() -> 
 
 def test_a_pivot_table_is_drawn_as_a_heatmap() -> None:
 	"""
-	Check that the result of a pivot table goes straight to plot_heatmap.
+	Check that the result of a pivot table goes straight to Plot.heatmap.
 
 	.. versionadded:: 0.1.0
 	"""
 	pivoted = TRIPS.pivot_table(ndp.PivotTable(rows=["hour"], columns="day", calculation=EVERY_ROW))
 	chart = ndp.HeatmapChart(columns=["Mon", "Tue"], labels="hour")
 
-	plot = ndp.plot_heatmap(pivoted, chart)
+	plot = ndp.Plot.heatmap(pivoted, chart)
 
 	assert isinstance(plot, ndp.Plot)

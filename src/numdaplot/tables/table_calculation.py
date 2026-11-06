@@ -75,7 +75,7 @@ class TableCalculation(TableData):
 		Return one statistic for each combination of groups of rows and values of a column, as a wide Table.
 
 		``aggregate`` gives one row per combination: ``pivot_table`` gives one column per value of a column, as
-		``plot_heatmap`` draws them.
+		``Plot.heatmap`` draws them.
 
 		.. versionadded:: 0.1.0
 

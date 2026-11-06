@@ -38,7 +38,7 @@ def test_a_histogram_counts_the_values_of_each_bin_of_the_given_width() -> None:
 	"""
 	chart = ndp.HistogramChart(columns=["2026"], bins=ndp.BinWidth(5.0))
 
-	plot = ndp.plot_histogram(PRICES, chart, STYLE)
+	plot = ndp.Plot.histogram(PRICES, chart, STYLE)
 
 	axes = plot.to_matplotlib().axes[0]
 	bars = [patch for patch in axes.patches if isinstance(patch, Rectangle)]
@@ -59,7 +59,7 @@ def test_a_histogram_of_ratios_adds_up_to_one_per_column() -> None:
 	"""
 	chart = ndp.HistogramChart(columns=YEARS, bins=ndp.BinCount(4), measure=ndp.Measure.RATIO)
 
-	plot = ndp.plot_histogram(PRICES, chart)
+	plot = ndp.Plot.histogram(PRICES, chart)
 
 	axes = plot.to_matplotlib().axes[0]
 	bars = [patch for patch in axes.patches if isinstance(patch, Rectangle)]
@@ -80,7 +80,7 @@ def test_a_box_plot_draws_the_years_side_by_side_in_each_city() -> None:
 	"""
 	chart = ndp.BoxChart(columns=YEARS, group_by="city")
 
-	plot = ndp.plot_box(PRICES, chart)
+	plot = ndp.Plot.box(PRICES, chart)
 
 	figure = plot.to_matplotlib()
 	axes = figure.axes[0]
@@ -99,7 +99,7 @@ def test_a_box_plot_of_an_array_draws_a_box_per_column_without_legend() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	plot = ndp.plot_box(GRID, ndp.BoxChart())
+	plot = ndp.Plot.box(GRID, ndp.BoxChart())
 
 	axes = plot.to_matplotlib().axes[0]
 	column_labels = [label.get_text() for label in axes.get_xticklabels()]
@@ -114,7 +114,7 @@ def test_a_box_plot_is_saved_as_an_image(tmp_path: Path) -> None:
 	.. versionadded:: 0.1.0
 	"""
 	image_path = tmp_path / "prices.png"
-	plot = ndp.plot_box(PRICES, ndp.BoxChart(columns=YEARS))
+	plot = ndp.Plot.box(PRICES, ndp.BoxChart(columns=YEARS))
 
 	plot.save(image_path)
 
@@ -131,4 +131,4 @@ def test_a_box_plot_rejects_groups_of_numbers() -> None:
 	chart = ndp.BoxChart(columns=["2025"], group_by="2026")
 
 	with pytest.raises(ndp.IncompatibleTypesError):
-		ndp.plot_box(PRICES, chart)
+		ndp.Plot.box(PRICES, chart)

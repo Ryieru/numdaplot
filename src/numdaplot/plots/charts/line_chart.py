@@ -20,7 +20,7 @@ from numdaplot.tables.columns.column_names import require_optional_column_name
 @dataclass(frozen=True)
 class LineChart(Chart):
 	"""
-	Chart drawing each series as a line joining its values, used by ``plot_line``.
+	Chart drawing each series as a line joining its values, used by ``Plot.line``.
 
 	A missing value breaks the line, which starts again at the next present value.
 
@@ -61,7 +61,7 @@ class LineChart(Chart):
 	>>> sales = ndp.Table.from_arrays({"day": days, "price": prices, "cost": costs})
 	>>> colors = [ndp.Color.BLUE, ndp.CustomColor("#ff8800")]
 	>>> chart = ndp.LineChart(x="day", y=["price", "cost"], colors=colors, marker=ndp.MarkerShape.CIRCLE)
-	>>> plot = ndp.plot_line(sales, chart)
+	>>> plot = ndp.Plot.line(sales, chart)
 	>>> plot.show()
 	"""
 

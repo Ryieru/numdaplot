@@ -111,7 +111,7 @@ def test_many_texts_show_the_labels_that_fit_with_a_warning() -> None:
 	.. versionadded:: 0.1.0
 	"""
 	table = build_texts(MANY_VALUES)
-	plot = ndp.plot_bar(table, VERTICAL_BARS)
+	plot = ndp.Plot.bar(table, VERTICAL_BARS)
 
 	with pytest.warns(ndp.ReadabilityWarning) as caught_warnings:
 		figure = plot.to_matplotlib()
@@ -132,7 +132,7 @@ def test_a_warning_points_at_the_line_of_the_user() -> None:
 	.. versionadded:: 0.1.0
 	"""
 	table = build_texts(MANY_VALUES)
-	plot = ndp.plot_bar(table, VERTICAL_BARS)
+	plot = ndp.Plot.bar(table, VERTICAL_BARS)
 
 	with pytest.warns(ndp.ReadabilityWarning) as caught_warnings:
 		plot.to_matplotlib()
@@ -148,7 +148,7 @@ def test_a_few_texts_show_each_label_without_warning() -> None:
 	.. versionadded:: 0.1.0
 	"""
 	table = build_texts(FEW_VALUES)
-	plot = ndp.plot_bar(table, VERTICAL_BARS)
+	plot = ndp.Plot.bar(table, VERTICAL_BARS)
 
 	with warnings.catch_warnings(record=True) as caught_warnings:
 		warnings.simplefilter("always")
@@ -166,7 +166,7 @@ def test_a_wider_size_shows_each_label() -> None:
 	"""
 	table = build_texts(MANY_VALUES)
 	style = ndp.PlotStyle(size=WIDE_SIZE)
-	plot = ndp.plot_bar(table, VERTICAL_BARS, style)
+	plot = ndp.Plot.bar(table, VERTICAL_BARS, style)
 
 	with warnings.catch_warnings(record=True) as caught_warnings:
 		warnings.simplefilter("always")
@@ -184,7 +184,7 @@ def test_many_numbers_show_the_labels_that_fit_without_warning() -> None:
 	"""
 	values = [FIRST_YEAR + value for value in range(MANY_VALUES)]
 	table = build_table(values)
-	plot = ndp.plot_bar(table, VERTICAL_BARS)
+	plot = ndp.Plot.bar(table, VERTICAL_BARS)
 
 	with warnings.catch_warnings(record=True) as caught_warnings:
 		warnings.simplefilter("always")
@@ -202,7 +202,7 @@ def test_many_dates_show_the_labels_that_fit_without_warning() -> None:
 	"""
 	days = [FIRST_DAY + timedelta(days=value) for value in range(MANY_VALUES)]
 	table = build_table(days)
-	plot = ndp.plot_bar(table, VERTICAL_BARS)
+	plot = ndp.Plot.bar(table, VERTICAL_BARS)
 
 	with warnings.catch_warnings(record=True) as caught_warnings:
 		warnings.simplefilter("always")
@@ -221,7 +221,7 @@ def test_a_chosen_angle_changes_the_labels_that_fit(rotation: float, expected_co
 	"""
 	table = build_texts(MANY_VALUES)
 	style = ndp.PlotStyle(x_tick_rotation=rotation)
-	plot = ndp.plot_bar(table, VERTICAL_BARS, style)
+	plot = ndp.Plot.bar(table, VERTICAL_BARS, style)
 
 	with pytest.warns(ndp.ReadabilityWarning):
 		shown_count = count_shown_labels(plot)
@@ -236,7 +236,7 @@ def test_labels_kept_take_the_chosen_angle() -> None:
 	.. versionadded:: 0.1.0
 	"""
 	table = build_texts(MANY_VALUES)
-	plot = ndp.plot_bar(table, VERTICAL_BARS)
+	plot = ndp.Plot.bar(table, VERTICAL_BARS)
 
 	with pytest.warns(ndp.ReadabilityWarning):
 		figure = plot.to_matplotlib()
@@ -253,7 +253,7 @@ def test_horizontal_bars_show_the_labels_that_fit_with_a_taller_advice() -> None
 	.. versionadded:: 0.1.0
 	"""
 	table = build_texts(MANY_VALUES)
-	plot = ndp.plot_bar(table, HORIZONTAL_BARS)
+	plot = ndp.Plot.bar(table, HORIZONTAL_BARS)
 
 	with pytest.warns(ndp.ReadabilityWarning) as caught_warnings:
 		shown_count = count_shown_labels(plot, True)
@@ -271,7 +271,7 @@ def test_a_taller_size_shows_each_label_of_horizontal_bars() -> None:
 	"""
 	table = build_texts(MANY_VALUES)
 	style = ndp.PlotStyle(size=TALL_SIZE)
-	plot = ndp.plot_bar(table, HORIZONTAL_BARS, style)
+	plot = ndp.Plot.bar(table, HORIZONTAL_BARS, style)
 
 	shown_count = count_shown_labels(plot, True)
 
@@ -305,7 +305,7 @@ def build_heatmap(row_count: int, column_count: int) -> ndp.Plot:
 
 	table = ndp.Table.from_arrays(columns)
 	chart = ndp.HeatmapChart(labels="name", columns=column_names)
-	plot = ndp.plot_heatmap(table, chart)
+	plot = ndp.Plot.heatmap(table, chart)
 
 	return plot
 
@@ -346,7 +346,7 @@ def test_a_line_keeps_the_dates_chosen_by_matplotlib() -> None:
 	"""
 	days = [FIRST_DAY + timedelta(days=value) for value in range(MANY_VALUES)]
 	table = build_table(days)
-	plot = ndp.plot_line(table, ndp.LineChart(x="x", y=["y"]))
+	plot = ndp.Plot.line(table, ndp.LineChart(x="x", y=["y"]))
 
 	with warnings.catch_warnings(record=True) as caught_warnings:
 		warnings.simplefilter("always")
@@ -363,7 +363,7 @@ def test_a_plot_in_a_figure_shows_the_labels_that_fit_its_cell() -> None:
 	.. versionadded:: 0.1.0
 	"""
 	table = build_texts(FEW_VALUES)
-	plot = ndp.plot_bar(table, VERTICAL_BARS)
+	plot = ndp.Plot.bar(table, VERTICAL_BARS)
 	layout = ndp.Layout(rows=1, columns=2)
 	figure = ndp.Figure(layout)
 	figure = figure.place(plot, ndp.Cell(row=0, column=0))

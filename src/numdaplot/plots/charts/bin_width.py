@@ -36,7 +36,7 @@ class BinWidth:
 	>>> import numdaplot as ndp
 	>>> prices = ndp.Array.from_list([12.0, 15.5, 14.0, 17.0, 13.5, 16.0, 14.5, 21.0])
 	>>> chart = ndp.HistogramChart(bins=ndp.BinWidth(2.5))
-	>>> plot = ndp.plot_histogram(prices, chart)
+	>>> plot = ndp.Plot.histogram(prices, chart)
 	>>> plot.show()
 	"""
 

@@ -33,7 +33,7 @@ class DuplicateLabelError(NumdaplotError):
 	>>> shares = ndp.Table.from_arrays({"city": cities, "sales": sales})
 	>>> chart = ndp.PieChart(labels="city", values="sales")
 	>>> try:
-	... 	ndp.plot_pie(shares, chart)
+	... 	ndp.Plot.pie(shares, chart)
 	... except ndp.DuplicateLabelError as error:
 	... 	print(error)
 	The label 'Paris' appears more than once.

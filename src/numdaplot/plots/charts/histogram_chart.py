@@ -22,7 +22,7 @@ DEFAULT_BIN_COUNT = 10
 @dataclass(frozen=True)
 class HistogramChart(Chart):
 	"""
-	Chart drawing how many values of each column fall in each bin, used by ``plot_histogram``.
+	Chart drawing how many values of each column fall in each bin, used by ``Plot.histogram``.
 
 	Several columns share the same bins and are drawn over each other, half transparent. Missing values are
 	left out.
@@ -60,7 +60,7 @@ class HistogramChart(Chart):
 	>>> prices_2026 = ndp.Array.from_list([14.0, 17.5, 16.0, 19.0, 15.5, 18.0, 16.5, 17.0])
 	>>> prices = ndp.Table.from_arrays({"2025": prices_2025, "2026": prices_2026})
 	>>> chart = ndp.HistogramChart(columns=["2025", "2026"], bins=ndp.BinWidth(1.0))
-	>>> plot = ndp.plot_histogram(prices, chart)
+	>>> plot = ndp.Plot.histogram(prices, chart)
 	>>> plot.show()
 	"""
 

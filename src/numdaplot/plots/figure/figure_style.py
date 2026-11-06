@@ -36,7 +36,7 @@ class FigureStyle:
 	--------
 	>>> import numdaplot as ndp
 	>>> prices = ndp.Array.from_list([12.0, 15.5, 14.0, 17.0])
-	>>> plot = ndp.plot_line(prices)
+	>>> plot = ndp.Plot.line(prices)
 	>>> style = ndp.FigureStyle(title="Prices", size=ndp.Size(width=8, height=3))
 	>>> figure = ndp.Figure(ndp.Layout(rows=1, columns=1), style)
 	>>> figure = figure.place(plot, ndp.Cell(row=0, column=0))

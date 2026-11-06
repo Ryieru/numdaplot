@@ -17,7 +17,7 @@ from numdaplot.tables.columns.column_names import require_optional_column_name
 @dataclass(frozen=True)
 class HeatmapChart(Chart):
 	"""
-	Chart drawing each value as a cell colored along a color scale, used by ``plot_heatmap``.
+	Chart drawing each value as a cell colored along a color scale, used by ``Plot.heatmap``.
 
 	The columns are side by side and the rows go down from the first one. A color bar next to the cells shows
 	the scale. A missing value leaves its cell light gray.
@@ -57,7 +57,7 @@ class HeatmapChart(Chart):
 	>>> march = ndp.Array.from_list([9.5, 8.0, 11.5])
 	>>> temperatures = ndp.Table.from_arrays({"city": cities, "jan": january, "feb": february, "mar": march})
 	>>> chart = ndp.HeatmapChart(columns=["jan", "feb", "mar"], labels="city", values=ndp.CellValues.SHOWN)
-	>>> plot = ndp.plot_heatmap(temperatures, chart)
+	>>> plot = ndp.Plot.heatmap(temperatures, chart)
 	>>> plot.show()
 	"""
 

@@ -186,7 +186,8 @@ def test_require_argument_type_refuses_another_type() -> None:
 @pytest.mark.parametrize(
 	("function", "owner", "expected"),
 	[
-		(ndp.plot_line, None, "plot_line"),
+		(double, None, "double"),
+		(ndp.Plot.line, ndp.Plot, "Plot.line"),
 		(ndp.Table.filter, ndp.Table, "Table.filter"),
 		(ndp.Array.__add__, ndp.Array, "Array +"),
 		(ndp.Figure.__init__, ndp.Figure, "Figure"),

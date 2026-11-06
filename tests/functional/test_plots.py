@@ -74,7 +74,7 @@ def test_a_line_plot_of_a_table_draws_each_column_with_the_style() -> None:
 	.. versionadded:: 0.1.0
 	"""
 	chart = ndp.LineChart(x="day", y=["price", "cost"])
-	plot = ndp.plot_line(SALES, chart, STYLE)
+	plot = ndp.Plot.line(SALES, chart, STYLE)
 
 	axes = plot.to_matplotlib().axes[0]
 
@@ -93,7 +93,7 @@ def test_a_line_plot_breaks_its_line_at_a_missing_value() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	plot = ndp.plot_line(SALES, ndp.LineChart(x="day", y=["cost"]))
+	plot = ndp.Plot.line(SALES, ndp.LineChart(x="day", y=["cost"]))
 
 	axes = plot.to_matplotlib().axes[0]
 
@@ -109,7 +109,7 @@ def test_a_line_plot_of_an_array_draws_each_column_at_the_row_numbers() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	plot = ndp.plot_line(GRID, ndp.LineChart())
+	plot = ndp.Plot.line(GRID, ndp.LineChart())
 
 	axes = plot.to_matplotlib().axes[0]
 
@@ -126,7 +126,7 @@ def test_a_bar_plot_labels_each_bar_with_its_city_and_leaves_out_a_missing_city(
 	.. versionadded:: 0.1.0
 	"""
 	chart = ndp.BarChart(x="city", y=["2025", "2026"])
-	plot = ndp.plot_bar(CITY_SALES, chart)
+	plot = ndp.Plot.bar(CITY_SALES, chart)
 
 	axes = plot.to_matplotlib().axes[0]
 
@@ -143,7 +143,7 @@ def test_a_scatter_plot_colors_each_city_and_names_it_in_the_legend() -> None:
 	.. versionadded:: 0.1.0
 	"""
 	chart = ndp.ScatterChart(x="surface", y="price", color_by="city")
-	plot = ndp.plot_scatter(FLATS, chart)
+	plot = ndp.Plot.scatter(FLATS, chart)
 
 	axes = plot.to_matplotlib().axes[0]
 
@@ -161,7 +161,7 @@ def test_a_hidden_legend_and_hidden_grid_lines_are_not_drawn() -> None:
 	.. versionadded:: 0.1.0
 	"""
 	style = ndp.PlotStyle(legend=ndp.LegendPosition.HIDDEN, grid_lines=ndp.GridLines.HIDDEN)
-	plot = ndp.plot_line(GRID, ndp.LineChart(), style)
+	plot = ndp.Plot.line(GRID, ndp.LineChart(), style)
 
 	axes = plot.to_matplotlib().axes[0]
 
@@ -185,7 +185,7 @@ def test_a_plot_is_saved_in_the_format_of_its_extension(tmp_path: Path, image_na
 		The name of the image.
 	"""
 	path = tmp_path / image_name
-	plot = ndp.plot_bar(PRICES, ndp.BarChart())
+	plot = ndp.Plot.bar(PRICES, ndp.BarChart())
 
 	plot.save(path)
 
@@ -207,7 +207,7 @@ def test_a_plot_sized_in_pixels_gives_an_image_of_that_size(tmp_path: Path) -> N
 	"""
 	path = tmp_path / IMAGE_NAMES[0]
 	size = ndp.Size(width=600, height=300, unit=ndp.SizeUnit.PIXEL)
-	plot = ndp.plot_line(PRICES, ndp.LineChart(), ndp.PlotStyle(size=size))
+	plot = ndp.Plot.line(PRICES, ndp.LineChart(), ndp.PlotStyle(size=size))
 
 	plot.save(path)
 
@@ -227,7 +227,7 @@ def test_a_plot_saved_with_more_dots_per_inch_has_more_pixels(tmp_path: Path) ->
 		A temporary folder.
 	"""
 	path = tmp_path / IMAGE_NAMES[0]
-	plot = ndp.plot_line(PRICES, ndp.LineChart())
+	plot = ndp.Plot.line(PRICES, ndp.LineChart())
 
 	plot.save(path, ndp.ImageOptions(dpi=200))
 
@@ -243,7 +243,7 @@ def test_a_plot_keeps_its_values_when_the_data_changes_afterwards() -> None:
 	"""
 	frame = pandas.DataFrame({"price": [12.0, 15.5]})
 	table = ndp.Table.from_pandas(frame)
-	plot = ndp.plot_line(table, ndp.LineChart(y=["price"]))
+	plot = ndp.Plot.line(table, ndp.LineChart(y=["price"]))
 
 	frame.loc[0, "price"] = 99.0
 
@@ -261,7 +261,7 @@ def test_a_plot_rejects_durations_on_its_x_axis() -> None:
 	table = ndp.Table.from_arrays({"wait": durations, "price": ndp.Array.from_list([1.0, 2.0])})
 
 	with pytest.raises(ndp.IncompatibleTypesError):
-		ndp.plot_line(table, ndp.LineChart(x="wait", y=["price"]))
+		ndp.Plot.line(table, ndp.LineChart(x="wait", y=["price"]))
 
 
 def read_first_x_rotation(plot: ndp.Plot) -> float:
@@ -313,7 +313,7 @@ def test_bar_plot_tilts_its_text_labels_by_default() -> None:
 	"""
 	chart = ndp.BarChart(x="city", y=["total"])
 
-	plot = ndp.plot_bar(build_city_sales(), chart)
+	plot = ndp.Plot.bar(build_city_sales(), chart)
 
 	assert read_first_x_rotation(plot) == DEFAULT_TEXT_ROTATION
 
@@ -327,7 +327,7 @@ def test_bar_plot_follows_the_rotation_of_the_style() -> None:
 	chart = ndp.BarChart(x="city", y=["total"])
 	style = ndp.PlotStyle(x_tick_rotation=CHOSEN_ROTATION)
 
-	plot = ndp.plot_bar(build_city_sales(), chart, style)
+	plot = ndp.Plot.bar(build_city_sales(), chart, style)
 
 	assert read_first_x_rotation(plot) == CHOSEN_ROTATION
 
@@ -338,7 +338,7 @@ def test_missing_plot_tilts_the_column_names_by_default() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	plot = ndp.plot_missing_by_column(build_city_sales(), ndp.MissingChart())
+	plot = ndp.Plot.missing_by_column(build_city_sales(), ndp.MissingChart())
 
 	assert read_first_x_rotation(plot) == DEFAULT_TEXT_ROTATION
 
@@ -351,7 +351,7 @@ def test_line_plot_keeps_its_numbers_flat_by_default() -> None:
 	"""
 	prices = ndp.Array.from_list([12.0, 15.5])
 
-	plot = ndp.plot_line(prices, ndp.LineChart())
+	plot = ndp.Plot.line(prices, ndp.LineChart())
 
 	assert read_first_x_rotation(plot) == NO_ROTATION
 
@@ -364,7 +364,7 @@ def test_array_bar_plot_keeps_its_row_numbers_flat_by_default() -> None:
 	"""
 	prices = ndp.Array.from_list([12.0, 15.5])
 
-	plot = ndp.plot_bar(prices, ndp.BarChart())
+	plot = ndp.Plot.bar(prices, ndp.BarChart())
 
 	assert read_first_x_rotation(plot) == NO_ROTATION
 
@@ -378,7 +378,7 @@ def test_line_plot_follows_the_y_rotation_of_the_style() -> None:
 	prices = ndp.Array.from_list([12.0, 15.5])
 	style = ndp.PlotStyle(y_tick_rotation=CHOSEN_ROTATION)
 
-	plot = ndp.plot_line(prices, ndp.LineChart(), style)
+	plot = ndp.Plot.line(prices, ndp.LineChart(), style)
 
 	figure = plot.to_matplotlib()
 	assert figure.axes[0].get_yticklabels()[0].get_rotation() == CHOSEN_ROTATION
@@ -393,7 +393,7 @@ def test_horizontal_bar_plot_applies_the_y_rotation_to_its_values() -> None:
 	chart = ndp.BarChart(x="city", y=["total"], orientation=ndp.Orientation.HORIZONTAL)
 	style = ndp.PlotStyle(y_tick_rotation=CHOSEN_ROTATION)
 
-	plot = ndp.plot_bar(build_city_sales(), chart, style)
+	plot = ndp.Plot.bar(build_city_sales(), chart, style)
 
 	assert read_first_x_rotation(plot) == CHOSEN_ROTATION
 
@@ -411,7 +411,7 @@ def test_a_date_axis_does_not_name_a_month_past_the_values() -> None:
 		}
 	)
 
-	plot = ndp.plot_line(march_table, ndp.LineChart(x="day", y=["trips"]))
+	plot = ndp.Plot.line(march_table, ndp.LineChart(x="day", y=["trips"]))
 
 	figure = plot.to_matplotlib()
 	figure.draw_without_rendering()

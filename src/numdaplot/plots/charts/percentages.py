@@ -20,7 +20,7 @@ class Percentages(Enum):
 	>>> sales = ndp.Array.from_list([120.0, 80.0, 45.0])
 	>>> shares = ndp.Table.from_arrays({"city": cities, "sales": sales})
 	>>> chart = ndp.PieChart(labels="city", values="sales", percentages=ndp.Percentages.HIDDEN)
-	>>> plot = ndp.plot_pie(shares, chart)
+	>>> plot = ndp.Plot.pie(shares, chart)
 	>>> plot.show()
 	"""
 
@@ -35,7 +35,7 @@ class Percentages(Enum):
 	>>> sales = ndp.Array.from_list([120.0, 80.0, 45.0])
 	>>> shares = ndp.Table.from_arrays({"city": cities, "sales": sales})
 	>>> chart = ndp.PieChart(labels="city", values="sales", percentages=ndp.Percentages.SHOWN)
-	>>> plot = ndp.plot_pie(shares, chart)
+	>>> plot = ndp.Plot.pie(shares, chart)
 	>>> plot.show()
 	"""
 
@@ -50,6 +50,6 @@ class Percentages(Enum):
 	>>> sales = ndp.Array.from_list([120.0, 80.0, 45.0])
 	>>> shares = ndp.Table.from_arrays({"city": cities, "sales": sales})
 	>>> chart = ndp.PieChart(labels="city", values="sales", percentages=ndp.Percentages.HIDDEN)
-	>>> plot = ndp.plot_pie(shares, chart)
+	>>> plot = ndp.Plot.pie(shares, chart)
 	>>> plot.show()
 	"""

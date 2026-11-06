@@ -46,7 +46,7 @@ def draw_points(chart: ndp.ScatterChart) -> Figure:
 	Figure
 		The drawn figure.
 	"""
-	plot = ndp.plot_scatter(FLATS, chart)
+	plot = ndp.Plot.scatter(FLATS, chart)
 	figure = plot.to_matplotlib()
 	figure.draw_without_rendering()
 
@@ -148,7 +148,7 @@ def test_add_scatter_uses_the_settings() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	line_plot = ndp.plot_line(FLATS, ndp.LineChart(x="surface", y=["price"]))
+	line_plot = ndp.Plot.line(FLATS, ndp.LineChart(x="surface", y=["price"]))
 	chart = ndp.ScatterChart(x="surface", y="price", opacity=OPACITY, point_size=POINT_SIZE)
 
 	both = line_plot.add_scatter(FLATS, chart)

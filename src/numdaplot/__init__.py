@@ -143,15 +143,6 @@ from numdaplot.plots.figure.figure import Figure
 from numdaplot.plots.figure.figure_style import FigureStyle
 from numdaplot.plots.figure.layout import Layout
 from numdaplot.plots.plot import Plot
-from numdaplot.plots.plot_bar import plot_bar
-from numdaplot.plots.plot_box import plot_box
-from numdaplot.plots.plot_heatmap import plot_heatmap
-from numdaplot.plots.plot_histogram import plot_histogram
-from numdaplot.plots.plot_line import plot_line
-from numdaplot.plots.plot_missing_by_column import plot_missing_by_column
-from numdaplot.plots.plot_missing_map import plot_missing_map
-from numdaplot.plots.plot_pie import plot_pie
-from numdaplot.plots.plot_scatter import plot_scatter
 from numdaplot.plots.style.color import Color
 from numdaplot.plots.style.custom_color import CustomColor
 from numdaplot.plots.style.grid_lines import GridLines
@@ -433,15 +424,6 @@ __all__ = [
 	"ValueAxis",
 	"ValueConversionError",
 	"XptOptions",
-	"plot_bar",
-	"plot_box",
-	"plot_heatmap",
-	"plot_histogram",
-	"plot_line",
-	"plot_missing_by_column",
-	"plot_missing_map",
-	"plot_pie",
-	"plot_scatter",
 ]
 
 
