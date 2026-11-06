@@ -7,6 +7,7 @@ Functional tests of the rules whose reference is a date, a datetime or a duratio
 from dataclasses import dataclass
 from datetime import date, datetime, timedelta
 
+import numpy
 import pytest
 
 import numdaplot as ndp
@@ -184,3 +185,47 @@ def test_dates_stored_in_days_compare_with_a_far_date() -> None:
 
 	mask_list = mask.to_list()
 	assert mask_list == [False, True]
+
+
+@pytest.mark.parametrize("dtype", ["timedelta64[us]", "timedelta64[ms]", "timedelta64[s]", "timedelta64[D]"])
+@pytest.mark.parametrize(
+	"case",
+	[
+		RuleCase(ndp.Greater(value=timedelta.max), False),
+		RuleCase(ndp.Less(value=timedelta.max), True),
+		RuleCase(ndp.Greater(value=timedelta.min), True),
+		RuleCase(ndp.Less(value=timedelta.min), False),
+		RuleCase(ndp.Equal(value=timedelta.max), False),
+		RuleCase(ndp.IsIn(values=[timedelta.max]), False),
+		RuleCase(ndp.Less(value=timedelta(days=109500000)), True),
+	],
+)
+def test_a_very_long_duration_compares_with_durations_of_any_unit(dtype: str, case: RuleCase) -> None:
+	"""
+	Check durations beyond what microseconds can count, against durations of numpy in other units.
+
+	.. versionadded:: 0.1.0
+	"""
+	values = numpy.array([5], dtype=dtype)
+	durations = ndp.Array.from_numpy(values)
+
+	mask = durations.check(case.rule)
+
+	mask_list = mask.to_list()
+	assert mask_list == [case.expected]
+
+
+def test_a_very_long_duration_compares_with_an_equally_long_duration() -> None:
+	"""
+	Check that durations in seconds beyond microseconds are not treated as shorter than the reference.
+
+	.. versionadded:: 0.1.0
+	"""
+	long_days = 200000000
+	values = numpy.array([long_days], dtype="timedelta64[D]")
+	durations = ndp.Array.from_numpy(values)
+
+	mask = durations.check(ndp.Equal(value=timedelta(days=long_days)))
+
+	mask_list = mask.to_list()
+	assert mask_list == [True]

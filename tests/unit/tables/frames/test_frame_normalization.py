@@ -4,6 +4,7 @@ Unit tests of the normalization of DataFrames into Table columns.
 .. versionadded:: 0.1.0
 """
 
+from datetime import UTC, date, datetime
 from typing import Any, cast
 
 import numpy
@@ -21,6 +22,7 @@ from numdaplot.tables.frames.frame_normalization import (
 	convert_decimals,
 	convert_numpy_column,
 	convert_to_type,
+	find_moment_type,
 	infer_object_column,
 	normalize_categories,
 	normalize_column,
@@ -316,3 +318,42 @@ def test_convert_to_type_uses_the_pandas_dtype_of_the_type() -> None:
 
 	dtype_name = str(column.dtype)
 	assert dtype_name == TEXT_DTYPE_NAME
+
+
+def test_find_moment_type_gives_date_for_dates_only() -> None:
+	"""
+	Check a column of dates with a missing value.
+
+	.. versionadded:: 0.1.0
+	"""
+	column = pandas.Series([date(2026, 1, 31), None], dtype=object)
+
+	moment_type = find_moment_type(column)
+
+	assert moment_type == Type.DATE
+
+
+def test_find_moment_type_gives_datetime_for_a_mixture() -> None:
+	"""
+	Check dates beside a datetime.
+
+	.. versionadded:: 0.1.0
+	"""
+	column = pandas.Series([date(2026, 1, 31), datetime(2026, 1, 31, 8)], dtype=object)
+
+	moment_type = find_moment_type(column)
+
+	assert moment_type == Type.DATETIME
+
+
+def test_find_moment_type_gives_text_for_a_time_zone() -> None:
+	"""
+	Check a datetime with a zone after one without.
+
+	.. versionadded:: 0.1.0
+	"""
+	column = pandas.Series([datetime(2026, 1, 31), datetime(2026, 1, 31, tzinfo=UTC)], dtype=object)
+
+	moment_type = find_moment_type(column)
+
+	assert moment_type == Type.TEXT

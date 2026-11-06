@@ -15,6 +15,11 @@ from numdaplot.data_types.type import Type
 from numdaplot.data_types.value_type import find_value_type
 from numdaplot.rules.rule_values import ScalarValue
 
+MICROSECONDS_IN_COUNT = 2**63 - 1
+LONGEST_MICROSECOND_DURATION = timedelta(microseconds=MICROSECONDS_IN_COUNT)
+ONE_SECOND = timedelta(seconds=1)
+SECOND_CODE = "s"
+
 type Operand = NDArray[Any] | ScalarValue
 """The values of an Array, or a single value, on one side of an operation.
 
@@ -99,8 +104,8 @@ def convert_time_value(value: ScalarValue) -> Any:
 	Returns
 	-------
 	Any
-		A ``numpy.datetime64`` for a date or a datetime, a ``numpy.timedelta64`` for a duration,
-		the value itself otherwise.
+		A ``numpy.datetime64`` for a date or a datetime, a ``numpy.timedelta64`` for a duration, in seconds when
+		microseconds cannot count it, the value itself otherwise.
 
 	Examples
 	--------
@@ -114,6 +119,12 @@ def convert_time_value(value: ScalarValue) -> Any:
 		return moment
 
 	if isinstance(value, timedelta):
+		is_too_long_for_microseconds = abs(value) > LONGEST_MICROSECOND_DURATION
+		if is_too_long_for_microseconds:
+			whole_seconds = value // ONE_SECOND
+			second_duration = numpy.timedelta64(whole_seconds, SECOND_CODE)
+			return second_duration
+
 		duration = numpy.timedelta64(value)
 		return duration
 

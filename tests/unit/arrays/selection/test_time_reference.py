@@ -125,3 +125,42 @@ def test_remove_far_references_keeps_the_order_of_the_others() -> None:
 	near_references = remove_far_references(MOMENTS, references)
 
 	assert near_references == [NEAR_MOMENT]
+
+
+def test_is_far_reference_finds_a_duration_too_long_for_microseconds() -> None:
+	"""
+	Check durations stored in microseconds.
+
+	.. versionadded:: 0.1.0
+	"""
+	durations = numpy.array([5], dtype="timedelta64[us]")
+
+	is_far = is_far_reference(durations, timedelta.max)
+
+	assert is_far is True
+
+
+def test_is_far_reference_leaves_a_duration_microseconds_can_count() -> None:
+	"""
+	Check a duration beyond nanoseconds but within microseconds.
+
+	.. versionadded:: 0.1.0
+	"""
+	durations = numpy.array([5], dtype="timedelta64[us]")
+
+	is_far = is_far_reference(durations, FAR_DURATION)
+
+	assert is_far is False
+
+
+def test_is_far_reference_leaves_a_duration_of_a_coarser_unit() -> None:
+	"""
+	Check durations in seconds, which can hold the longest Python duration.
+
+	.. versionadded:: 0.1.0
+	"""
+	durations = numpy.array([5], dtype="timedelta64[s]")
+
+	is_far = is_far_reference(durations, timedelta.max)
+
+	assert is_far is False

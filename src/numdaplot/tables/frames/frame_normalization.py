@@ -4,6 +4,7 @@ Normalization of a pandas DataFrame into the storage of a Table.
 .. versionadded:: 0.1.0
 """
 
+from datetime import datetime
 from typing import Any, cast
 
 import numpy
@@ -25,7 +26,9 @@ INFERRED_TYPES = {
 	"mixed-integer-float": Type.FLOAT64,
 	"decimal": Type.FLOAT64,
 	"boolean": Type.BOOL,
+	"timedelta": Type.DURATION,
 }
+MOMENT_KINDS = frozenset({"date", "datetime"})
 INTEGER_KINDS = frozenset({"i", "u"})
 BOOLEAN_KIND = "b"
 DECIMAL_KIND = "f"
@@ -316,7 +319,8 @@ def infer_object_column(column: Column) -> Column:
 	-------
 	pandas.Series
 		``INT64`` when every present value is an integer, ``FLOAT64`` for decimals or integers and decimals,
-		``BOOL`` for booleans, and ``TEXT`` for anything else, each value then written as a text.
+		``BOOL`` for booleans, ``DATE`` for dates, ``DATETIME`` for datetimes or dates and datetimes, ``DURATION``
+		for durations, and ``TEXT`` for anything else, each value then written as a text.
 
 	Examples
 	--------
@@ -327,9 +331,52 @@ def infer_object_column(column: Column) -> Column:
 	"""
 	inferred_kind = infer_dtype(column, skipna=True)
 	target_type = INFERRED_TYPES.get(inferred_kind, Type.TEXT)
+	if inferred_kind in MOMENT_KINDS:
+		target_type = find_moment_type(column)
+
 	converted_column = convert_to_type(column, target_type)
 
 	return converted_column
+
+
+def find_moment_type(column: Column) -> Type:
+	"""
+	Return the type of a column of Python dates and datetimes.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	column
+		A column of Python objects, each present value being a date or a datetime.
+
+	Returns
+	-------
+	Type
+		``DATE`` for dates only, ``DATETIME`` as soon as a value is a datetime, a date then counting as midnight,
+		and ``TEXT`` as soon as a datetime has a time zone, as a column holds a single zone.
+
+	Examples
+	--------
+	>>> from datetime import date, datetime
+	>>> import pandas
+	>>> from numdaplot.tables.frames.frame_normalization import find_moment_type
+	>>> find_moment_type(pandas.Series([date(2026, 1, 31)], dtype=object))
+	<Type.DATE: 14>
+	>>> find_moment_type(pandas.Series([date(2026, 1, 31), datetime(2026, 1, 31, 8)], dtype=object))
+	<Type.DATETIME: 15>
+	"""
+	present_column = column.dropna()
+	moments = present_column.tolist()
+	moment_type = Type.DATE
+
+	for moment in moments:
+		if isinstance(moment, datetime):
+			moment_type = Type.DATETIME
+			if moment.tzinfo is not None:
+				return Type.TEXT
+
+	return moment_type
 
 
 def normalize_categories(column: Column) -> Column:

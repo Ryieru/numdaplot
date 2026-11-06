@@ -13,9 +13,10 @@ from typing import Any
 import numpy
 from numpy.typing import NDArray
 
-from numdaplot.arrays.operations.operand import convert_time_value
+from numdaplot.arrays.operations.operand import LONGEST_MICROSECOND_DURATION, convert_time_value
 from numdaplot.arrays.operations.time_bounds import NANOSECOND_DTYPES, is_python_time_in_range
 
+MICROSECOND_DURATION_DTYPE = numpy.dtype("timedelta64[us]")
 AFTER_EVERY_VALUE = 1
 BEFORE_EVERY_VALUE = -1
 ANY_STORED_VALUE = 0
@@ -39,7 +40,8 @@ def is_far_reference(values: NDArray[Any], reference: object) -> bool:
 	Returns
 	-------
 	bool
-		True for a date, a datetime or a duration out of range, beside values stored in nanoseconds.
+		True for a date, a datetime or a duration out of range, beside values stored in nanoseconds, and for a duration
+		that microseconds cannot count, beside durations stored in microseconds.
 
 	Examples
 	--------
@@ -50,6 +52,10 @@ def is_far_reference(values: NDArray[Any], reference: object) -> bool:
 	>>> is_far_reference(moments, datetime(3000, 1, 1)), is_far_reference(moments, datetime(2026, 1, 1))
 	(True, False)
 	"""
+	if values.dtype == MICROSECOND_DURATION_DTYPE and isinstance(reference, timedelta):
+		is_too_long = abs(reference) > LONGEST_MICROSECOND_DURATION
+		return is_too_long
+
 	if values.dtype not in NANOSECOND_DTYPES:
 		return False
 

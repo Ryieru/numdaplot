@@ -79,3 +79,31 @@ def test_convert_time_value_keeps_other_values() -> None:
 	converted_value = convert_time_value(NUMBER)
 
 	assert converted_value == NUMBER
+
+
+def test_convert_time_value_counts_a_very_long_duration_in_seconds() -> None:
+	"""
+	Check a duration that microseconds cannot count, which numpy would write as a wrong value.
+
+	.. versionadded:: 0.1.0
+	"""
+	very_long_duration = timedelta(days=200000000)
+
+	converted_duration = convert_time_value(very_long_duration)
+
+	expected_duration = numpy.timedelta64(200000000, "D")
+	assert converted_duration == expected_duration
+
+
+def test_convert_time_value_keeps_microseconds_of_a_usual_duration() -> None:
+	"""
+	Check a duration microseconds can count.
+
+	.. versionadded:: 0.1.0
+	"""
+	usual_duration = timedelta(microseconds=1)
+
+	converted_duration = convert_time_value(usual_duration)
+
+	expected_duration = numpy.timedelta64(1, "us")
+	assert converted_duration == expected_duration
