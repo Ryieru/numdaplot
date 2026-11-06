@@ -12,6 +12,8 @@ import pandas
 from numpy.typing import NDArray
 
 from numdaplot.data_types.value_family import ValueFamily
+from numdaplot.errors.refused_setting_error import RefusedSettingError
+from numdaplot.plots.charts.color_scale import ColorScale
 from numdaplot.plots.data.chart_values import ChartValues, Series
 from numdaplot.plots.data.column_reading import read_numbers, read_texts, require_column_family
 from numdaplot.tables.columns.column_names import require_known_columns
@@ -19,6 +21,8 @@ from numdaplot.tables.frames.column import Column
 from numdaplot.tables.table import Table
 
 CHART_NAME = "ScatterChart"
+NUMBER_COLORS_DTYPE = numpy.dtype(numpy.float64)
+SCALE_ON_TEXTS = "scale without a color_by column of numbers"
 COLOR_FAMILIES = frozenset({ValueFamily.NUMBER, ValueFamily.TEXT, ValueFamily.BOOL})
 
 
@@ -113,6 +117,43 @@ def read_point_values(
 	point_values = PointValues(color_name, colors, size_name, sizes)
 
 	return point_values
+
+
+def require_scale_on_numbers(scale: ColorScale | None, colors: NDArray[Any] | None) -> None:
+	"""
+	Check that a color scale colors numbers.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	scale
+		The ``scale`` of a ScatterChart, or None.
+	colors
+		The values of its ``color_by`` column, float64 numbers or texts.
+
+	Raises
+	------
+	RefusedSettingError
+		When a scale is given for texts or booleans, which take one color per value.
+
+	Examples
+	--------
+	>>> import numpy
+	>>> import numdaplot as ndp
+	>>> from numdaplot.plots.data.point_values import require_scale_on_numbers
+	>>> require_scale_on_numbers(ndp.ColorScale.BLUES, numpy.array([1.5]))
+	>>> try:
+	... 	require_scale_on_numbers(ndp.ColorScale.BLUES, numpy.array(["Paris"], dtype=object))
+	... except ndp.RefusedSettingError as error:
+	... 	print(error)
+	ScatterChart does not accept scale without a color_by column of numbers.
+	"""
+	if scale is None or colors is None:
+		return
+
+	if colors.dtype != NUMBER_COLORS_DTYPE:
+		raise RefusedSettingError(SCALE_ON_TEXTS, CHART_NAME)
 
 
 def read_colors(column: Column) -> NDArray[Any]:

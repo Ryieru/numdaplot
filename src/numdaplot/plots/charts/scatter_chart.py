@@ -12,6 +12,7 @@ from numdaplot.errors.invalid_opacity_error import InvalidOpacityError
 from numdaplot.errors.invalid_point_size_error import InvalidPointSizeError
 from numdaplot.errors.refused_setting_error import RefusedSettingError
 from numdaplot.plots.charts.chart import Chart
+from numdaplot.plots.charts.color_scale import ColorScale
 from numdaplot.plots.charts.marker_shape import MarkerShape
 from numdaplot.plots.style.color import Color
 from numdaplot.plots.style.custom_color import CustomColor
@@ -24,6 +25,7 @@ COLOR_BY_SETTING = "color_by"
 NO_MARKER_NAME = "MarkerShape.NONE"
 POINT_SIZE_SETTING = "point_size"
 SIZE_BY_SETTING = "size_by"
+SCALE_WITHOUT_COLOR_BY = "scale without color_by"
 
 
 @dataclass(frozen=True)
@@ -59,6 +61,10 @@ class ScatterChart(Chart):
 		How opaque the points are, above 0 and up to 1, ``1.0`` by default. The legend and the color scale stay opaque.
 	point_size
 		The diameter of every point, in typographic points, 6 when omitted.
+	scale
+		The colors of a ``color_by`` column of numbers, ``ColorScale.VIRIDIS`` when omitted. It needs such a column.
+		``BLUES``, ``REDS``, ``GREENS`` and ``GRAYS`` skip their lightest colors, so that every point stays visible.
+		``RED_BLUE`` keeps white for 0, so the points close to 0 stay pale.
 
 	Raises
 	------
@@ -69,7 +75,7 @@ class ScatterChart(Chart):
 	ConflictingSettingsError
 		When ``color`` and ``color_by`` are both given, or ``point_size`` and ``size_by``.
 	RefusedSettingError
-		When ``marker`` is ``MarkerShape.NONE``, which would draw nothing.
+		When ``marker`` is ``MarkerShape.NONE``, which would draw nothing, or ``scale`` is given without ``color_by``.
 	InvalidOpacityError
 		When ``opacity`` is 0 or lower, greater than 1, or not a number.
 	InvalidPointSizeError
@@ -95,6 +101,7 @@ class ScatterChart(Chart):
 	marker: MarkerShape = MarkerShape.CIRCLE
 	opacity: float = 1.0
 	point_size: float | None = None
+	scale: ColorScale | None = None
 
 	def __post_init__(self) -> None:
 		"""
@@ -111,7 +118,7 @@ class ScatterChart(Chart):
 		ConflictingSettingsError
 			When ``color`` and ``color_by`` are both given, or ``point_size`` and ``size_by``.
 		RefusedSettingError
-			When ``marker`` is ``MarkerShape.NONE``.
+			When ``marker`` is ``MarkerShape.NONE``, or ``scale`` is given without ``color_by``.
 		InvalidOpacityError
 			When ``opacity`` is 0 or lower, greater than 1, or not a number.
 		InvalidPointSizeError
@@ -130,6 +137,10 @@ class ScatterChart(Chart):
 
 		if self.marker == MarkerShape.NONE:
 			raise RefusedSettingError(NO_MARKER_NAME, CHART_NAME)
+
+		has_scale_alone = self.scale is not None and self.color_by is None
+		if has_scale_alone:
+			raise RefusedSettingError(SCALE_WITHOUT_COLOR_BY, CHART_NAME)
 
 		has_both_sizes = self.point_size is not None and self.size_by is not None
 		if has_both_sizes:

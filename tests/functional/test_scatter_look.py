@@ -11,7 +11,7 @@ import math
 from typing import cast
 
 import pytest
-from matplotlib.collections import PathCollection
+from matplotlib.collections import PathCollection, QuadMesh
 from matplotlib.figure import Figure
 
 import numdaplot as ndp
@@ -122,9 +122,9 @@ def test_a_color_scale_keeps_an_opaque_bar() -> None:
 
 	points = cast(PathCollection, figure.axes[0].collections[0])
 	color_bar_axes = figure.axes[1]
-	color_bar_solids = color_bar_axes.collections[0]
+	color_bar_solids = [collection for collection in color_bar_axes.collections if isinstance(collection, QuadMesh)]
 	assert points.get_alpha() == OPACITY
-	assert color_bar_solids.get_alpha() is None
+	assert color_bar_solids[0].get_alpha() is None
 
 
 def test_size_by_keeps_its_sizes_with_an_opacity() -> None:

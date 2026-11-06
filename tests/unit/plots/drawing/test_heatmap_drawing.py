@@ -18,10 +18,10 @@ import numdaplot as ndp
 from numdaplot.plots.chart_layer import ChartLayer
 from numdaplot.plots.data.chart_values import Series
 from numdaplot.plots.data.table_values import read_table_values
+from numdaplot.plots.drawing.color_scale_values import find_scale_limits
 from numdaplot.plots.drawing.grid_axes import GridAxes
 from numdaplot.plots.drawing.heatmap_drawing import (
 	draw_heatmap_chart,
-	find_scale_limits,
 	format_cell_value,
 	hide_frame,
 	place_column_names,

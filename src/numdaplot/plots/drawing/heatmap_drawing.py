@@ -17,27 +17,20 @@ from numpy.typing import NDArray
 
 from numdaplot.plots.chart_layer import ChartLayer
 from numdaplot.plots.charts.cell_values import CellValues
-from numdaplot.plots.charts.color_scale import ColorScale
 from numdaplot.plots.charts.heatmap_chart import HeatmapChart
 from numdaplot.plots.data.chart_values import ChartValues, Series
 from numdaplot.plots.drawing.color_bar import add_color_bar
+from numdaplot.plots.drawing.color_scale_values import SCALE_NAMES, find_scale_limits
 from numdaplot.plots.drawing.drawn_chart import DrawnChart
 from numdaplot.plots.drawing.grid_axes import GridAxes
 from numdaplot.plots.drawing.plot_theme import GRID_COLOR
 from numdaplot.plots.drawing.position_axis import TRIMMED_ZEROS, place_categories
 from numdaplot.plots.drawing.text_contrast import choose_text_color
 
-SCALE_NAMES = {
-	ColorScale.VIRIDIS: "viridis",
-	ColorScale.BLUES: "Blues",
-	ColorScale.REDS: "Reds",
-	ColorScale.RED_BLUE: "RdBu_r",
-}
 CELL_DECIMALS = 2
 CELL_ASPECT = "auto"
 CELL_INTERPOLATION = "nearest"
 CENTERED = "center"
-NO_LIMITS = (None, None)
 
 
 def draw_heatmap_chart(axes: Axes, layer: ChartLayer) -> DrawnChart:
@@ -131,56 +124,6 @@ def stack_columns(series_list: list[Series]) -> NDArray[numpy.float64]:
 	grid = numpy.column_stack(columns)
 
 	return grid
-
-
-def find_scale_limits(grid: NDArray[numpy.float64], color_scale: ColorScale) -> tuple[float | None, float | None]:
-	"""
-	Return the values of the two ends of a color scale, centered on 0 for ``RED_BLUE`` around 0.
-
-	.. versionadded:: 0.1.0
-
-	Parameters
-	----------
-	grid
-		The numbers colored, NaN where a value is missing.
-	color_scale
-		The color scale.
-
-	Returns
-	-------
-	tuple[float | None, float | None]
-		Opposite limits for ``RED_BLUE`` when the numbers are on both sides of 0, so white means 0, and None
-		otherwise, for limits on the smallest and the largest number.
-
-	Examples
-	--------
-	>>> import numdaplot as ndp
-	>>> import numpy
-	>>> from numdaplot.plots.drawing.heatmap_drawing import find_scale_limits
-	>>> find_scale_limits(numpy.array([[-1.0, 4.0]]), ndp.ColorScale.RED_BLUE)
-	(-4.0, 4.0)
-	"""
-	if color_scale != ColorScale.RED_BLUE:
-		return NO_LIMITS
-
-	present = ~numpy.isnan(grid)
-	present_numbers = grid[present]
-	present_count = len(present_numbers)
-	if present_count == 0:
-		return NO_LIMITS
-
-	smallest_number = float(present_numbers.min())
-	largest_number = float(present_numbers.max())
-	is_below_zero = smallest_number < 0
-	is_above_zero = largest_number > 0
-	spans_zero = is_below_zero and is_above_zero
-	if not spans_zero:
-		return NO_LIMITS
-
-	smallest_distance = abs(smallest_number)
-	limit = max(smallest_distance, largest_number)
-
-	return -limit, limit
 
 
 def place_column_names(axes: Axes, series_list: list[Series]) -> None:

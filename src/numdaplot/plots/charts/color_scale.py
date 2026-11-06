@@ -1,5 +1,5 @@
 """
-Color scales of a HeatmapChart.
+Color scales of a HeatmapChart and of a ScatterChart.
 
 .. versionadded:: 0.1.0
 """
@@ -9,7 +9,7 @@ from enum import Enum, auto
 
 class ColorScale(Enum):
 	"""
-	Color scales of a ``HeatmapChart``, from the color of the smallest value to the color of the largest one.
+	Color scales of a ``HeatmapChart`` and of a ``ScatterChart``, from the smallest value to the largest one.
 
 	.. versionadded:: 0.1.0
 
@@ -91,6 +91,57 @@ class ColorScale(Enum):
 	>>> march = ndp.Array.from_list([-3.0, 0.5, 1.0])
 	>>> temperatures = ndp.Table.from_arrays({"city": cities, "jan": january, "feb": february, "mar": march})
 	>>> chart = ndp.HeatmapChart(columns=["jan", "feb", "mar"], labels="city", scale=ndp.ColorScale.RED_BLUE)
+	>>> plot = ndp.plot_heatmap(temperatures, chart)
+	>>> plot.show()
+	"""
+
+	GREENS = auto()
+	"""
+	From white for the smallest values to dark green for the largest.
+
+	Examples
+	--------
+	>>> import numdaplot as ndp
+	>>> cities = ndp.Array.from_list(["Paris", "Lyon", "Pau"])
+	>>> january = ndp.Array.from_list([5.5, 3.0, 8.0])
+	>>> february = ndp.Array.from_list([6.0, 4.5, 9.0])
+	>>> march = ndp.Array.from_list([9.5, 8.0, 11.5])
+	>>> temperatures = ndp.Table.from_arrays({"city": cities, "jan": january, "feb": february, "mar": march})
+	>>> chart = ndp.HeatmapChart(columns=["jan", "feb", "mar"], labels="city", scale=ndp.ColorScale.GREENS)
+	>>> plot = ndp.plot_heatmap(temperatures, chart)
+	>>> plot.show()
+	"""
+
+	GRAYS = auto()
+	"""
+	From white for the smallest values to black for the largest, for a printing in black and white.
+
+	Examples
+	--------
+	>>> import numdaplot as ndp
+	>>> cities = ndp.Array.from_list(["Paris", "Lyon", "Pau"])
+	>>> january = ndp.Array.from_list([5.5, 3.0, 8.0])
+	>>> february = ndp.Array.from_list([6.0, 4.5, 9.0])
+	>>> march = ndp.Array.from_list([9.5, 8.0, 11.5])
+	>>> temperatures = ndp.Table.from_arrays({"city": cities, "jan": january, "feb": february, "mar": march})
+	>>> chart = ndp.HeatmapChart(columns=["jan", "feb", "mar"], labels="city", scale=ndp.ColorScale.GRAYS)
+	>>> plot = ndp.plot_heatmap(temperatures, chart)
+	>>> plot.show()
+	"""
+
+	CIVIDIS = auto()
+	"""
+	From dark blue for the smallest values to yellow for the largest, readable with most forms of color blindness.
+
+	Examples
+	--------
+	>>> import numdaplot as ndp
+	>>> cities = ndp.Array.from_list(["Paris", "Lyon", "Pau"])
+	>>> january = ndp.Array.from_list([5.5, 3.0, 8.0])
+	>>> february = ndp.Array.from_list([6.0, 4.5, 9.0])
+	>>> march = ndp.Array.from_list([9.5, 8.0, 11.5])
+	>>> temperatures = ndp.Table.from_arrays({"city": cities, "jan": january, "feb": february, "mar": march})
+	>>> chart = ndp.HeatmapChart(columns=["jan", "feb", "mar"], labels="city", scale=ndp.ColorScale.CIVIDIS)
 	>>> plot = ndp.plot_heatmap(temperatures, chart)
 	>>> plot.show()
 	"""
