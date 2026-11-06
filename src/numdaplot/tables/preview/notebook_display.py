@@ -9,13 +9,14 @@ from importlib.util import find_spec
 
 import pandas
 
-from numdaplot.tables.frames.table_text import build_typed_frame, format_table
+from numdaplot.tables.frames.table_text import build_typed_frame, format_table, write_empty_table_note
 from numdaplot.tables.preview.shown_columns import ShownColumns
 
 IPYTHON_PACKAGE = "IPython"
 IPYTHON_DISPLAY_MODULE = "IPython.display"
 NOTEBOOK_KERNEL = "IPKernelApp"
 COMPACT_NOTEBOOK_COLUMN_COUNT = 10
+NOTE_HTML = "<p>{note}</p>"
 
 
 def show_frame(frame: pandas.DataFrame, shown_columns: ShownColumns) -> None:
@@ -49,12 +50,22 @@ def show_frame(frame: pandas.DataFrame, shown_columns: ShownColumns) -> None:
 		print(table_text)
 		return
 
+	note = write_empty_table_note(frame)
+	column_count = len(frame.columns)
+	if column_count == 0:
+		note_html = NOTE_HTML.format(note=note)
+		display_html(note_html)
+		return
+
 	typed_frame = build_typed_frame(frame)
 	column_limit = None
 	if shown_columns == ShownColumns.COMPACT:
 		column_limit = COMPACT_NOTEBOOK_COLUMN_COUNT
 
 	frame_html = typed_frame.to_html(max_cols=column_limit)
+	if note is not None:
+		frame_html += NOTE_HTML.format(note=note)
+
 	display_html(frame_html)
 
 

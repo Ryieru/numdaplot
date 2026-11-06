@@ -144,3 +144,106 @@ def test_format_table_ignores_the_pandas_settings_of_the_user() -> None:
 		table_text = format_table(WIDE_FRAME)
 
 	assert table_text.count(LONG_NAME) == WIDE_COLUMN_COUNT
+
+
+def test_format_table_keeps_the_header_of_a_table_without_rows() -> None:
+	"""
+	Check the names, the types and the note of a Table without rows, without any pandas word.
+
+	.. versionadded:: 0.1.0
+	"""
+	frame = pandas.DataFrame({"price": pandas.Series(dtype="float64"), "city": pandas.Series(dtype="string")})
+
+	table_text = format_table(frame)
+
+	lines = table_text.splitlines()
+	assert lines[0].split() == ["price", "city"]
+	assert lines[1].split() == ["FLOAT64", "TEXT"]
+	assert lines[2] == "(0 rows)"
+	assert len(lines) == 3
+
+
+def test_format_table_notes_a_table_without_columns() -> None:
+	"""
+	Check the single line of a Table without columns.
+
+	.. versionadded:: 0.1.0
+	"""
+	frame = pandas.DataFrame(index=[0, 1])
+
+	table_text = format_table(frame)
+
+	assert table_text == "(no columns, 2 rows)"
+
+
+def test_format_table_writes_one_row_without_columns() -> None:
+	"""
+	Check the singular of the note.
+
+	.. versionadded:: 0.1.0
+	"""
+	frame = pandas.DataFrame(index=[0])
+
+	table_text = format_table(frame)
+
+	assert table_text == "(no columns, 1 row)"
+
+
+def test_format_table_keeps_a_table_with_rows_unchanged() -> None:
+	"""
+	Check that a Table with values has no note.
+
+	.. versionadded:: 0.1.0
+	"""
+	frame = pandas.DataFrame({"price": [1.5]})
+
+	table_text = format_table(frame)
+
+	assert "rows)" not in table_text
+
+
+def test_format_table_wraps_the_wide_header_of_a_table_without_rows(monkeypatch: pytest.MonkeyPatch) -> None:
+	"""
+	Check that every name stays visible, and no blank row remains, when the header goes on after a line break.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	monkeypatch
+		Sets the width of the terminal.
+	"""
+	monkeypatch.setenv("COLUMNS", "40")
+	names = [f"long_column_name_{number}" for number in range(6)]
+	frame = pandas.DataFrame({name: pandas.Series(dtype="float64") for name in names})
+
+	table_text = format_table(frame)
+
+	for name in names:
+		assert name in table_text
+
+	lines = table_text.splitlines()
+	assert lines[-1] == "(0 rows)"
+	assert not any(line.startswith("0") for line in lines)
+
+
+def test_format_table_compacts_the_wide_header_without_dimensions(monkeypatch: pytest.MonkeyPatch) -> None:
+	"""
+	Check the compact header of a Table without rows, which gives no count of a blank row.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	monkeypatch
+		Sets the width of the terminal.
+	"""
+	monkeypatch.setenv("COLUMNS", "40")
+	names = [f"long_column_name_{number}" for number in range(6)]
+	frame = pandas.DataFrame({name: pandas.Series(dtype="float64") for name in names})
+
+	table_text = format_table(frame, ShownColumns.COMPACT)
+
+	assert "..." in table_text
+	assert "1 rows" not in table_text
+	assert table_text.splitlines()[-1] == "(0 rows)"

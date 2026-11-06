@@ -92,3 +92,48 @@ def test_a_compact_preview_replaces_the_columns_that_do_not_fit(capsys: pytest.C
 	assert DOTS in printed_text
 	assert LAST_COLUMN_NAME in printed_text
 	assert HIDDEN_COLUMN_NAME not in printed_text
+
+
+def test_an_empty_filter_result_shows_its_columns_and_no_pandas_word(capsys: pytest.CaptureFixture[str]) -> None:
+	"""
+	Check print and preview of a Table without rows.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	capsys
+		Reads what is printed.
+	"""
+	prices = ndp.Table.from_arrays({"price": ndp.Array.from_list([1.5, 8.0])})
+	condition = ndp.Condition(rule=ndp.Greater(100.0), columns=["price"])
+	empty = prices.filter(ndp.Filter(conditions=[condition]))
+
+	print(empty)
+	empty.preview()
+
+	printed_text = capsys.readouterr().out
+	assert printed_text.count("(0 rows)") == 2
+	assert printed_text.count("FLOAT64") == 2
+	assert "DataFrame" not in printed_text
+	assert "Index" not in printed_text
+
+
+def test_a_table_without_columns_gives_its_row_count(capsys: pytest.CaptureFixture[str]) -> None:
+	"""
+	Check print of a Table whose columns were all removed.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	capsys
+		Reads what is printed.
+	"""
+	prices = ndp.Table.from_arrays({"price": ndp.Array.from_list([1.5, 8.0])})
+	no_columns = prices.choose_columns(ndp.ColumnChoice(columns=["price"], mode=ndp.ColumnMode.DROP))
+
+	print(no_columns)
+
+	printed_text = capsys.readouterr().out
+	assert printed_text == "(no columns, 2 rows)\n"

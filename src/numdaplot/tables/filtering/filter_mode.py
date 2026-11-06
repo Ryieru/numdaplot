@@ -41,9 +41,9 @@ class FilterMode(Enum):
 	>>> expensive = ndp.Condition(rule=ndp.Greater(100), columns=["price"])
 	>>> in_lyon = ndp.Condition(rule=ndp.Equal("Lyon"), columns=["city"])
 	>>> sales.filter(ndp.Filter(conditions=[expensive, in_lyon], mode=ndp.FilterMode.ALL))
-	Empty DataFrame
-	Columns: [(city, TEXT), (price, FLOAT64)]
-	Index: []
+	   city   price
+	   TEXT FLOAT64
+	(0 rows)
 	"""
 
 	ANY = auto()

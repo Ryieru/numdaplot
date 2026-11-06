@@ -91,3 +91,70 @@ def test_show_frame_gives_a_compact_table_to_a_notebook(monkeypatch: pytest.Monk
 
 	assert shown_html.count(LONG_NAME) < COLUMN_COUNT
 	assert COMPACT_MARK in shown_html
+
+
+def show_html(monkeypatch: pytest.MonkeyPatch, frame: pandas.DataFrame) -> str:
+	"""
+	Return the HTML a notebook receives for a frame.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	monkeypatch
+		Replaces the notebook check and the display.
+	frame
+		The frame.
+
+	Returns
+	-------
+	str
+		The HTML.
+	"""
+	shown_html = list[str]()
+	monkeypatch.setattr(notebook_display, IS_NOTEBOOK_NAME, answer_true)
+	monkeypatch.setattr(notebook_display, DISPLAY_HTML_NAME, shown_html.append)
+
+	show_frame(frame, ShownColumns.ALL)
+
+	return shown_html[0]
+
+
+def test_show_frame_gives_a_notebook_the_header_and_the_note_of_a_table_without_rows(
+	monkeypatch: pytest.MonkeyPatch,
+) -> None:
+	"""
+	Check the HTML of a Table without rows.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	monkeypatch
+		Replaces the notebook check and the display.
+	"""
+	frame = pandas.DataFrame({"price": pandas.Series(dtype="float64")})
+
+	shown_html = show_html(monkeypatch, frame)
+
+	assert "price" in shown_html
+	assert "FLOAT64" in shown_html
+	assert "<p>(0 rows)</p>" in shown_html
+
+
+def test_show_frame_gives_a_notebook_only_the_note_of_a_table_without_columns(monkeypatch: pytest.MonkeyPatch) -> None:
+	"""
+	Check the HTML of a Table without columns.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	monkeypatch
+		Replaces the notebook check and the display.
+	"""
+	frame = pandas.DataFrame(index=[0, 1])
+
+	shown_html = show_html(monkeypatch, frame)
+
+	assert shown_html == "<p>(no columns, 2 rows)</p>"

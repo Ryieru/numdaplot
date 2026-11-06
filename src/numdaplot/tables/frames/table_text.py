@@ -15,6 +15,14 @@ from numdaplot.tables.preview.shown_columns import ShownColumns
 MAX_COLUMNS_OPTION = "display.max_columns"
 WIDTH_OPTION = "display.width"
 # In pandas, no limit shows every column, and a limit of 0 only shows those fitting in the width.
+NO_ROWS_NOTE = "(0 rows)"
+NO_COLUMNS_NOTE = "(no columns, {rows_text})"
+ONE_ROW_TEXT = "1 row"
+ROWS_TEXT = "{row_count} rows"
+BLANK_CELL = ""
+BLANK_ROW_START = "0"
+LINE_BREAK = "\n"
+SHOW_DIMENSIONS_OPTION = "display.show_dimensions"
 COLUMN_LIMITS = {
 	ShownColumns.ALL: None,
 	ShownColumns.COMPACT: 0,
@@ -93,6 +101,10 @@ def format_table(frame: pandas.DataFrame, shown_columns: ShownColumns = ShownCol
 	0     1.5
 	1     8.0
 	"""
+	empty_table_text = format_empty_table(frame, shown_columns)
+	if empty_table_text is not None:
+		return empty_table_text
+
 	typed_frame = build_typed_frame(frame)
 	column_limit = COLUMN_LIMITS[shown_columns]
 	terminal_size = get_terminal_size()
@@ -100,3 +112,105 @@ def format_table(frame: pandas.DataFrame, shown_columns: ShownColumns = ShownCol
 		table_text = repr(typed_frame)
 
 	return table_text
+
+
+def write_empty_table_note(frame: pandas.DataFrame) -> str | None:
+	"""
+	Return the note replacing the rows of a Table without rows or without columns.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	frame
+		The columns of a Table.
+
+	Returns
+	-------
+	str or None
+		``(0 rows)``, ``(no columns, 2 rows)``, or None for a Table with values.
+
+	Examples
+	--------
+	>>> import pandas
+	>>> from numdaplot.tables.frames.table_text import write_empty_table_note
+	>>> write_empty_table_note(pandas.DataFrame({"price": [1.5]})) is None
+	True
+	>>> write_empty_table_note(pandas.DataFrame(index=[0, 1]))
+	'(no columns, 2 rows)'
+	>>> write_empty_table_note(pandas.DataFrame(index=[0]))
+	'(no columns, 1 row)'
+	"""
+	row_count = len(frame.index)
+	column_count = len(frame.columns)
+	if column_count == 0:
+		rows_text = ONE_ROW_TEXT if row_count == 1 else ROWS_TEXT.format(row_count=row_count)
+		no_columns_note = NO_COLUMNS_NOTE.format(rows_text=rows_text)
+		return no_columns_note
+
+	if row_count == 0:
+		return NO_ROWS_NOTE
+
+	return None
+
+
+def format_empty_table(frame: pandas.DataFrame, shown_columns: ShownColumns) -> str | None:
+	"""
+	Return the text of a Table without rows or without columns: its header if any, then a note.
+
+	pandas writes such a Table with its own words, so the header comes from a Table of one blank row.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	frame
+		The columns of a Table.
+	shown_columns
+		``ShownColumns.ALL`` for every column, or ``ShownColumns.COMPACT`` to replace those that do not fit by ``...``.
+
+	Returns
+	-------
+	str or None
+		The text, or None for a Table with values.
+
+	Examples
+	--------
+	>>> import pandas
+	>>> from numdaplot.tables.frames.table_text import format_empty_table
+	>>> from numdaplot.tables.preview.shown_columns import ShownColumns
+	>>> prices = pandas.DataFrame({"price": pandas.Series(dtype="float64")})
+	>>> print(format_empty_table(prices, ShownColumns.ALL))
+	    price
+	  FLOAT64
+	(0 rows)
+	"""
+	note = write_empty_table_note(frame)
+	if note is None:
+		return None
+
+	column_count = len(frame.columns)
+	if column_count == 0:
+		return note
+
+	typed_frame = build_typed_frame(frame)
+	blank_row = [[BLANK_CELL] * column_count]
+	blank_frame = pandas.DataFrame(blank_row, columns=typed_frame.columns)
+	column_limit = COLUMN_LIMITS[shown_columns]
+	terminal_size = get_terminal_size()
+	with pandas.option_context(
+		MAX_COLUMNS_OPTION,
+		column_limit,
+		WIDTH_OPTION,
+		terminal_size.columns,
+		SHOW_DIMENSIONS_OPTION,
+		False,
+	):
+		blank_text = repr(blank_frame)
+
+	lines = blank_text.splitlines()
+	header_lines = [line for line in lines if not line.startswith(BLANK_ROW_START)]
+	empty_table_lines = [*header_lines, note]
+	empty_table_text = LINE_BREAK.join(empty_table_lines)
+
+	return empty_table_text
