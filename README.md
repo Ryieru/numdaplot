@@ -27,7 +27,8 @@ plot.save("prices.png")
 
 ## Status
 
-Version 0.1.0 is in development. The shared foundations (types, rules, statistics, positions,
+Version 0.1.0 is in development, and `ndp.__version__` gives the installed version.
+The shared foundations (types, rules, statistics, positions,
 sort settings, errors), `Array`, `Table`, the tools for missing values and dates (formats, time zones,
 parts, periods and durations), line, bar, scatter, histogram, box, pie, heatmap and missing value plots,
 charts overlaid on a plot, and figures placing plots on a grid are available.

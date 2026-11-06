@@ -116,6 +116,7 @@ from numdaplot.errors.unsupported_type_error import UnsupportedTypeError
 from numdaplot.errors.value_conversion_error import ValueConversionError
 from numdaplot.ordering.missing_position import MissingPosition
 from numdaplot.ordering.order import Order
+from numdaplot.package_version import find_package_version
 from numdaplot.plots.charts.bar_chart import BarChart
 from numdaplot.plots.charts.bar_layout import BarLayout
 from numdaplot.plots.charts.bin_count import BinCount
@@ -225,6 +226,8 @@ from numdaplot.tables.preview.side import Side
 from numdaplot.tables.sorting.sort_key import SortKey
 from numdaplot.tables.sorting.sorting import Sorting
 from numdaplot.tables.table import Table
+
+__version__ = find_package_version()
 
 __all__ = [
 	"Absolute",
