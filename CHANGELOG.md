@@ -31,6 +31,8 @@ and numdaplot follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
   `HeatmapChart`, `MissingChart`, `BinCount`, `BinWidth`, `PlotStyle`, `Size`, `CustomColor`, `ImageOptions`, and the
   `Color`, `LineType`, `MarkerShape`, `Orientation`, `BarLayout`, `Outliers`, `Percentages`, `ColorScale`,
   `CellValues`, `LegendPosition`, `GridLines` and `SizeUnit` enums.
+- Plots: the labels of an axis without enough room are left out, one out of as many as needed from the first one,
+  with a `ReadabilityWarning` when they may be texts.
 - Plot errors and warning: `ConflictingSettingsError`, `DuplicateLabelError`, `EmptyTotalError`,
   `InvalidBinWidthError`, `InvalidChartDataError`, `InvalidColorCountError`, `InvalidColorError`,
   `InvalidOpacityError`, `InvalidPointSizeError`, `InvalidResolutionError`, `InvalidRotationError`,

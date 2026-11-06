@@ -9,7 +9,8 @@ class ReadabilityWarning(UserWarning):
 	"""
 	Emitted when a chart is likely to be hard to read, such as a ``PieChart`` of more than 5 slices.
 
-	The Plot is still created. The warning suggests a chart that shows the same values more clearly.
+	The Plot is still created. The warning suggests a chart that shows the same values more clearly, or a larger
+	size when only some of the labels naming the values of a chart can be shown.
 
 	Silence it with the standard ``warnings`` module, for one block of code or for a whole script.
 

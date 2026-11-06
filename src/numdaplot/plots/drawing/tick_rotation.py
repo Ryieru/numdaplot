@@ -7,22 +7,27 @@ Rotation of the labels of the ``x`` and ``y`` values of a Plot.
 # The matplotlib stubs leave the keyword arguments of most drawing methods untyped.
 # pyright: reportUnknownMemberType=false
 
-from typing import Literal, cast
+from typing import Literal
 
-import numpy
 from matplotlib.axes import Axes
 from matplotlib.axis import Axis
 from matplotlib.dates import ConciseDateFormatter
-from matplotlib.figure import Figure
 from matplotlib.ticker import ScalarFormatter
 
 from numdaplot.plots.drawing.drawn_chart import DrawnChart
+from numdaplot.plots.drawing.label_thinning import (
+	LABEL_GAP_RATIO,
+	MINIMUM_TICKS,
+	find_current_length,
+	find_font_pixels,
+	find_tick_locations,
+	find_tick_room,
+	find_widest_label,
+	thin_labels,
+)
 from numdaplot.plots.drawing.position_axis import find_axis
 
 TEXT_ROTATION = 45.0
-MINIMUM_TOUCHING_LABELS = 2
-LABEL_GAP_RATIO = 0.5
-POINTS_PER_INCH = 72.0
 NO_ROTATION = 0.0
 ANCHOR_ROTATION_MODE = "anchor"
 MINUS_SIGN = "\N{MINUS SIGN}"
@@ -31,7 +36,7 @@ HYPHEN_MINUS = "-"
 
 def rotate_x_labels(axes: Axes, drawn_chart: DrawnChart, rotation: float | None) -> None:
 	"""
-	Rotate the labels of the ``x`` values, wherever the chart places them.
+	Rotate the labels of the ``x`` values, wherever the chart places them, keeping those that stay readable.
 
 	.. versionadded:: 0.1.0
 
@@ -44,6 +49,11 @@ def rotate_x_labels(axes: Axes, drawn_chart: DrawnChart, rotation: float | None)
 	rotation
 		The angle in degrees. When None, 45 degrees for texts, moments and numbers without enough room, and no
 		rotation for other numbers and for labels on the vertical axis.
+
+	Warns
+	-----
+	ReadabilityWarning
+		When labels left out may be texts.
 
 	Examples
 	--------
@@ -60,16 +70,18 @@ def rotate_x_labels(axes: Axes, drawn_chart: DrawnChart, rotation: float | None)
 	"""
 	if drawn_chart.x_on_vertical_axis:
 		vertical_rotation = NO_ROTATION if rotation is None else rotation
+		thin_labels(axes.yaxis, True, vertical_rotation)
 		apply_rotation(axes, True, vertical_rotation)
 		return
 
 	horizontal_rotation = choose_rotation(axes.xaxis, rotation)
+	thin_labels(axes.xaxis, False, horizontal_rotation)
 	apply_rotation(axes, False, horizontal_rotation)
 
 
 def rotate_y_labels(axes: Axes, drawn_chart: DrawnChart, rotation: float | None) -> None:
 	"""
-	Rotate the labels of the ``y`` values, wherever the chart places them.
+	Rotate the labels of the ``y`` values, wherever the chart places them, keeping those that stay readable.
 
 	.. versionadded:: 0.1.0
 
@@ -82,6 +94,11 @@ def rotate_y_labels(axes: Axes, drawn_chart: DrawnChart, rotation: float | None)
 	rotation
 		The angle in degrees. When None, the labels stay horizontal.
 
+	Warns
+	-----
+	ReadabilityWarning
+		When labels left out may be texts.
+
 	Examples
 	--------
 	>>> from matplotlib.figure import Figure
@@ -93,10 +110,13 @@ def rotate_y_labels(axes: Axes, drawn_chart: DrawnChart, rotation: float | None)
 	>>> axes.get_yticklabels()[0].get_rotation()
 	30.0
 	"""
+	y_on_vertical_axis = not drawn_chart.x_on_vertical_axis
+	y_axis = find_axis(axes, y_on_vertical_axis)
+	thinning_rotation = NO_ROTATION if rotation is None else rotation
+	thin_labels(y_axis, y_on_vertical_axis, thinning_rotation)
 	if rotation is None:
 		return
 
-	y_on_vertical_axis = not drawn_chart.x_on_vertical_axis
 	apply_rotation(axes, y_on_vertical_axis, rotation)
 
 
@@ -209,26 +229,16 @@ def do_labels_touch(axis: Axis) -> bool:
 	if isinstance(formatter, ScalarFormatter):
 		return False
 
-	ticks = numpy.asarray(axis.get_ticklocs(), dtype=numpy.float64)
-	tick_count = len(ticks)
-	if tick_count < MINIMUM_TOUCHING_LABELS:
+	tick_locations = find_tick_locations(axis)
+	tick_count = len(tick_locations)
+	if tick_count < MINIMUM_TICKS:
 		return False
 
-	axes_box = axis.axes.get_window_extent()
-	view_start, view_stop = axis.axes.get_xbound()
-	pixels_per_unit = axes_box.width / (view_stop - view_start)
-	sorted_ticks = numpy.sort(ticks)
-	tick_gaps = numpy.diff(sorted_ticks)
-	smallest_tick_gap = tick_gaps.min()
-	room = smallest_tick_gap * pixels_per_unit
-	labels = axis.get_ticklabels()
-	label_boxes = [label.get_window_extent() for label in labels]
-	label_widths = [label_box.width for label_box in label_boxes]
-	widest_label = max(label_widths)
-	font_size = cast(float, labels[0].get_fontsize())
-	figure = cast(Figure, axis.axes.get_figure(root=True))
-	gap = font_size * LABEL_GAP_RATIO * figure.dpi / POINTS_PER_INCH
-	needed_room = widest_label + gap
+	current_length = find_current_length(axis, False)
+	room = find_tick_room(axis, False, current_length)
+	widest_label = find_widest_label(axis)
+	font_pixels = find_font_pixels(axis)
+	needed_room = widest_label + font_pixels * LABEL_GAP_RATIO
 	labels_touch = bool(needed_room > room)
 
 	return labels_touch

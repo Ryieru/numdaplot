@@ -42,10 +42,11 @@ class PlotStyle:
 	x_tick_rotation
 		The angle of the labels of the ``x`` values, in degrees from -90 to 90. When omitted, 45 degrees for texts,
 		dates, datetimes and numbers without enough room, and no rotation for other numbers and for the texts on the
-		left of horizontal bars.
+		left of horizontal bars. Labels without enough room at this angle are left out, one out of as many as needed
+		from the first one, with a ``ReadabilityWarning`` when they may be texts.
 	y_tick_rotation
 		The angle of the labels of the ``y`` values, in degrees from -90 to 90, no rotation when omitted. The values of
-		the axis on the right keep no rotation.
+		the axis on the right keep no rotation. Labels without enough room are left out as for ``x_tick_rotation``.
 	legend
 		Where the legend is placed, ``LegendPosition.BEST`` by default. It is only drawn for several series, so never on
 		a pie or a heatmap. It names each series after its column: to change a name, use ``result_name`` in a
