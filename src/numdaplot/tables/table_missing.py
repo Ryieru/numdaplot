@@ -90,10 +90,10 @@ class TableMissing(TableData):
 		>>> prices = ndp.Array.from_list([120.0, None, 150.0])
 		>>> table = ndp.Table.from_arrays({"city": cities, "price": prices})
 		>>> table.preview_missing()
-		  column     type  missing_count missing_ratio
-		0   city     TEXT              0         0.0 %
-		1  price  FLOAT64              1        33.3 %
-		2  total                       1        16.7 %
+		          column     type  missing_count missing_ratio
+		0           city     TEXT              0         0.0 %
+		1          price  FLOAT64              1        33.3 %
+		2  (all columns)                       1        16.7 %
 		"""
 		summary = summarize_missing(self._frame)
 		show_pandas_frame(summary)

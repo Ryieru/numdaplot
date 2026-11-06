@@ -22,7 +22,7 @@ FRAME = pandas.DataFrame(
 )
 EMPTY_FRAME = pandas.DataFrame({"price": pandas.Series(dtype="float64")})
 EXPECTED_SUMMARY_COLUMNS = ["column", "type", "missing_count", "missing_ratio"]
-EXPECTED_NAMES = ["city", "price", "total"]
+EXPECTED_NAMES = ["city", "price", "(all columns)"]
 EXPECTED_TYPES = ["TEXT", "FLOAT64", ""]
 EXPECTED_COUNTS = [1, 2, 3]
 EXPECTED_RATIOS = ["33.3 %", "66.7 %", "50.0 %"]

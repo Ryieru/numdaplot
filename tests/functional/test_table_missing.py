@@ -27,11 +27,11 @@ EXPECTED_COLUMNS_WITHOUT_MISSING = ["visit"]
 EXPECTED_COLUMNS_UNDER_HALF = ["city", "visit"]
 HALF_RATIO = 0.5
 EXPECTED_SUMMARY_LINES = [
-	"  column     type  missing_count missing_ratio",
-	"0   city     TEXT              1        25.0 %",
-	"1  price  FLOAT64              2        50.0 %",
-	"2  visit    INT64              0         0.0 %",
-	"3  total                       3        25.0 %",
+	"          column     type  missing_count missing_ratio",
+	"0           city     TEXT              1        25.0 %",
+	"1          price  FLOAT64              2        50.0 %",
+	"2          visit    INT64              0         0.0 %",
+	"3  (all columns)                       3        25.0 %",
 ]
 UNKNOWN_NAMES = ["discount"]
 PERCENTAGE_RATIO = 30
@@ -234,3 +234,24 @@ def test_missing_ratio_rejects_a_percentage() -> None:
 	"""
 	with pytest.raises(ndp.InvalidFractionError):
 		ndp.MissingRatio(PERCENTAGE_RATIO)
+
+
+def test_preview_missing_tells_a_column_named_total_from_the_last_row(capsys: pytest.CaptureFixture[str]) -> None:
+	"""
+	Check that a column named total keeps a line different from the summary of all columns.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	capsys
+		Reads what is printed.
+	"""
+	amounts = ndp.Array.from_list([1.0, None])
+	table = ndp.Table.from_arrays({"total": amounts})
+
+	table.preview_missing()
+
+	printed_lines = capsys.readouterr().out.splitlines()
+	assert printed_lines[1].split()[1] == "total"
+	assert printed_lines[2].split()[1:3] == ["(all", "columns)"]

@@ -15,7 +15,7 @@ COLUMN_NAMES_COLUMN = "column"
 TYPE_NAMES_COLUMN = "type"
 COUNTS_COLUMN = "missing_count"
 RATIOS_COLUMN = "missing_ratio"
-TOTAL_LABEL = "total"
+TOTAL_LABEL = "(all columns)"
 TOTAL_TYPE_NAME = ""
 SUMMARY_TEXT_DTYPE = "string"
 PERCENT_FORMAT = "{percent:.1f} %"
@@ -36,7 +36,7 @@ def summarize_missing(frame: pandas.DataFrame) -> pandas.DataFrame:
 	Returns
 	-------
 	pandas.DataFrame
-		One row per column, in order, then a ``total`` row, with the columns ``column``, ``type``,
+		One row per column, in order, then an ``(all columns)`` row, with the columns ``column``, ``type``,
 		``missing_count`` and ``missing_ratio``. The ratios are texts such as ``"12.5 %"``,
 		missing when there is no value.
 
@@ -45,10 +45,10 @@ def summarize_missing(frame: pandas.DataFrame) -> pandas.DataFrame:
 	>>> import pandas
 	>>> from numdaplot.tables.missing.missing_summary import summarize_missing
 	>>> summarize_missing(pandas.DataFrame({"price": [1.5, None, 3.0], "stock": [2.0, 4.0, 1.0]}))
-	  column     type  missing_count missing_ratio
-	0  price  FLOAT64              1        33.3 %
-	1  stock  FLOAT64              0         0.0 %
-	2  total                       1        16.7 %
+	          column     type  missing_count missing_ratio
+	0          price  FLOAT64              1        33.3 %
+	1          stock  FLOAT64              0         0.0 %
+	2  (all columns)                       1        16.7 %
 	"""
 	missing_grid = find_frame_missing(frame)
 	row_count = len(frame)
@@ -77,7 +77,7 @@ def summarize_missing(frame: pandas.DataFrame) -> pandas.DataFrame:
 
 def list_summary_names(frame: pandas.DataFrame) -> list[str]:
 	"""
-	Return the labels of the rows of a summary: the names of the columns, then ``total``.
+	Return the labels of the rows of a summary: the names of the columns, then ``(all columns)``.
 
 	.. versionadded:: 0.1.0
 
@@ -96,7 +96,7 @@ def list_summary_names(frame: pandas.DataFrame) -> list[str]:
 	>>> import pandas
 	>>> from numdaplot.tables.missing.missing_summary import list_summary_names
 	>>> list_summary_names(pandas.DataFrame({"price": [1.5]}))
-	['price', 'total']
+	['price', '(all columns)']
 	"""
 	column_names = [str(column_name) for column_name in frame.columns]
 	summary_names = [*column_names, TOTAL_LABEL]
