@@ -10,6 +10,7 @@ and numdaplot follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 ### Added
 
 - `numdaplot.__version__` gives the version of the installed package.
+- `dir(numdaplot)` and the completion of notebooks show only the public names and `__version__`.
 - `Array`: values of one type in one or several dimensions, created with `Array.from_list`, `Array.from_numpy`,
   `Array.filled`, `Array.from_range`, `Array.from_spacing` and `Array.random`; combined with `+`, `-`, `*`, `/`,
   `//`, `%`, `**` and, for booleans, `&`, `|`, `~`; read with `Array.select`, `Array.check`, `Array.take`,

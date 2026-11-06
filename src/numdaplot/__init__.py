@@ -443,3 +443,30 @@ __all__ = [
 	"plot_pie",
 	"plot_scatter",
 ]
+
+
+def __dir__() -> list[str]:
+	"""
+	Return the names shown by ``dir`` and by the completion of notebooks.
+
+	The modules loaded by the imports of this file stay out, since they are not part of the API.
+
+	.. versionadded:: 0.1.0
+
+	Returns
+	-------
+	list[str]
+		The public names and ``__version__``.
+
+	Examples
+	--------
+	>>> import numdaplot as ndp
+	>>> "Array" in dir(ndp)
+	True
+	>>> "arrays" in dir(ndp)
+	False
+	"""
+	version_name = "__version__"
+	shown_names = [*__all__, version_name]
+
+	return shown_names
