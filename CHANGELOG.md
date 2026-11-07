@@ -90,6 +90,10 @@ and numdaplot follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
   `InvalidSheetNameError`, `MissingDependencyError` and `UnsupportedIndexError`. `FileNotFoundError` and
   `FileExistsError` are also the Python errors of the same name, and `FileAccessError` is also an `OSError`.
 - Distributions: `Distribution`, `Uniform`, `Normal`, `RandomIntegers`.
+- Number brackets: `Conversion(dtype=Type.CATEGORY, format=Brackets(limits, bounds, labels, first, last, others))`
+  cuts a number column into categories kept in the order of the brackets, named after the values they hold, such as
+  `0 to 9` or `65 or more`, with the `BracketEnd` enum and the `InvalidLimitsError` and `InvalidLabelCountError`
+  errors; `UnmatchedValueError` also names a value in no bracket.
 - Value mapping: `Array.apply(ValueMapping(changes=[ValueChange(old_value, new_value)], others=Unmatched.ERROR))`
   replaces listed values by new ones, such as codes by labels, with `DuplicateValueError` for an old value given twice
   and `UnmatchedValueError` for a value without new value; `Unmatched.MISSING` makes those values missing.

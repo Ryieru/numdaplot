@@ -23,6 +23,7 @@ REQUIRED_SETTINGS = dict[str, dict[str, object]](
 		"Between": {"low": 1, "high": 2},
 		"BinCount": {"count": 1},
 		"BinWidth": {"width": 1.0},
+		"Brackets": {"limits": [0, 1]},
 		"Calculation": {"column": "a", "function": ndp.Sum()},
 		"Cell": {"row": 0, "column": 0},
 		"ColumnChoice": {"columns": ["a"]},

@@ -12,6 +12,7 @@ from numdaplot.dates.date_format import DateFormat
 from numdaplot.dates.time_zone_change import TimeZoneChange
 from numdaplot.settings.field_types import require_field_types
 from numdaplot.tables.columns.boolean_rule import BooleanRule
+from numdaplot.tables.columns.brackets import Brackets
 from numdaplot.tables.columns.column_names import require_column_name
 
 
@@ -38,7 +39,8 @@ class Conversion:
 		written as texts. When omitted, texts are read as year, month and day. For ``DATETIME``, each text may
 		also have a time after a space or a ``"T"``, and a text without time counts as midnight. A format that is
 		given applies to every text: ``DateFormat.YEAR_MONTH_DAY_TIME`` refuses a text without time. When omitted,
-		dates are written as year, month and day separated by ``"-"``, with the time for datetimes.
+		dates are written as year, month and day separated by ``"-"``, with the time for datetimes. For a conversion of
+		numbers to ``CATEGORY``, ``Brackets`` cut the numbers into ordered categories, such as ages into ``0 to 9``.
 	timezone
 		A change of the time zone of a datetime column, the time zone unchanged when omitted.
 	booleans
@@ -76,7 +78,7 @@ class Conversion:
 
 	column: str
 	dtype: Type
-	format: DateFormat | CustomDateFormat | None = None
+	format: DateFormat | CustomDateFormat | Brackets | None = None
 	timezone: TimeZoneChange | None = None
 	booleans: BooleanRule | None = None
 

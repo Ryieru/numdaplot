@@ -134,6 +134,10 @@ class TableColumns(TableData):
 			When the conversion is not accepted.
 		InvalidConversionError
 			When the format, the time zone change or the boolean rule does not apply to the conversion.
+		InvalidLimitsError
+			When ``Brackets`` cut integers and a bracket between two limits holds no integer.
+		UnmatchedValueError
+			When a number is in no bracket of ``Brackets`` whose ``others`` is ``Unmatched.ERROR``.
 		ValueConversionError
 			At the first value that cannot be stored in the new type, such as ``"abc"`` read as a number,
 			2.5 stored as an integer, 3 read as a boolean with ``ZERO_ONE``, or ``"31/02/2026"`` read as a date.

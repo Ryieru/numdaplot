@@ -17,6 +17,7 @@ from numdaplot.tables.columns.boolean_rule import BooleanRule
 from numdaplot.tables.columns.conversion import Conversion
 from numdaplot.tables.columns.converted_column import (
 	require_booleans_setting,
+	require_brackets_setting,
 	require_conversion_settings,
 	require_format_setting,
 	require_time_zone_setting,
@@ -249,3 +250,30 @@ def test_require_format_setting_rejects_a_format_between_numbers() -> None:
 
 	with pytest.raises(InvalidConversionError):
 		require_format_setting(Type.FLOAT64, day_first)
+
+
+def test_require_brackets_setting_accepts_numbers_to_categories() -> None:
+	"""
+	Check that brackets given to a conversion of numbers to CATEGORY raise nothing.
+
+	.. versionadded:: 0.1.0
+	"""
+	require_brackets_setting(Type.FLOAT64, Type.CATEGORY)
+
+
+@pytest.mark.parametrize(("source_type", "target_type"), [(Type.TEXT, Type.CATEGORY), (Type.INT64, Type.TEXT)])
+def test_require_brackets_setting_rejects_another_conversion(source_type: Type, target_type: Type) -> None:
+	"""
+	Check that brackets given to texts, or to another type than CATEGORY, raise InvalidConversionError.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	source_type
+		The type of the column.
+	target_type
+		The new type.
+	"""
+	with pytest.raises(InvalidConversionError):
+		require_brackets_setting(source_type, target_type)

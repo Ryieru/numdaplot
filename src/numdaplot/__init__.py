@@ -86,6 +86,8 @@ from numdaplot.errors.invalid_count_error import InvalidCountError
 from numdaplot.errors.invalid_date_format_error import InvalidDateFormatError
 from numdaplot.errors.invalid_deviation_error import InvalidDeviationError
 from numdaplot.errors.invalid_fraction_error import InvalidFractionError
+from numdaplot.errors.invalid_label_count_error import InvalidLabelCountError
+from numdaplot.errors.invalid_limits_error import InvalidLimitsError
 from numdaplot.errors.invalid_opacity_error import InvalidOpacityError
 from numdaplot.errors.invalid_point_size_error import InvalidPointSizeError
 from numdaplot.errors.invalid_position_error import InvalidPositionError
@@ -192,6 +194,8 @@ from numdaplot.statistics.sum import Sum
 from numdaplot.tables.aggregation.aggregation import Aggregation
 from numdaplot.tables.aggregation.calculation import Calculation
 from numdaplot.tables.columns.boolean_rule import BooleanRule
+from numdaplot.tables.columns.bracket_end import BracketEnd
+from numdaplot.tables.columns.brackets import Brackets
 from numdaplot.tables.columns.column_choice import ColumnChoice
 from numdaplot.tables.columns.column_mode import ColumnMode
 from numdaplot.tables.columns.conversion import Conversion
@@ -248,6 +252,8 @@ __all__ = [
 	"BooleanRule",
 	"Bounds",
 	"BoxChart",
+	"BracketEnd",
+	"Brackets",
 	"BroadcastWarning",
 	"Calculation",
 	"CalculationWarning",
@@ -331,6 +337,8 @@ __all__ = [
 	"InvalidDateFormatError",
 	"InvalidDeviationError",
 	"InvalidFractionError",
+	"InvalidLabelCountError",
+	"InvalidLimitsError",
 	"InvalidOpacityError",
 	"InvalidPointSizeError",
 	"InvalidPositionError",

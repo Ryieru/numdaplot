@@ -8,11 +8,15 @@ import pandas
 
 from numdaplot.data_types.type import Type
 from numdaplot.data_types.value_family import ValueFamily, find_family
+from numdaplot.dates.custom_date_format import CustomDateFormat
+from numdaplot.dates.date_format import DateFormat
 from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
 from numdaplot.errors.invalid_conversion_error import InvalidConversionError
 from numdaplot.errors.time_overflow_error import TimeOverflowError
 from numdaplot.tables.columns.boolean_conversion import convert_booleans_to_numbers, convert_numbers_to_booleans
 from numdaplot.tables.columns.boolean_rule import BooleanRule
+from numdaplot.tables.columns.bracketed_column import cut_column
+from numdaplot.tables.columns.brackets import Brackets
 from numdaplot.tables.columns.conversion import Conversion
 from numdaplot.tables.columns.date_conversion import (
 	convert_moments,
@@ -66,6 +70,10 @@ def convert_column(column: Column, conversion: Conversion) -> Column:
 	------
 	InvalidConversionError
 		When the format, the time zone change or the boolean rule does not apply to the conversion.
+	InvalidLimitsError
+		When brackets cut integers and a bracket between two limits holds no integer.
+	UnmatchedValueError
+		When a number is in no bracket and the brackets keep ``others=Unmatched.ERROR``.
 	IncompatibleTypesError
 		When the conversion is not accepted, such as a boolean to a date, or a number to a date.
 	ValueConversionError
@@ -90,12 +98,16 @@ def convert_column(column: Column, conversion: Conversion) -> Column:
 		zone_column = change_time_zone(column, conversion.timezone)
 		return zone_column
 
+	if isinstance(conversion.format, Brackets):
+		bracketed_column = cut_column(column, conversion.format)
+		return bracketed_column
+
 	if source_type == conversion.dtype:
 		column_copy = column.copy()
 		return column_copy
 
 	try:
-		time_column = convert_time_column(column, source_type, conversion)
+		time_column = convert_time_column(column, source_type, conversion.dtype, conversion.format)
 	except pandas.errors.OutOfBoundsDatetime as error:
 		raise TimeOverflowError(CONVERT_OPERATION, conversion.dtype.name) from error
 
@@ -216,6 +228,10 @@ def require_format_setting(source_type: Type, conversion: Conversion) -> None:
 	if conversion.format is None:
 		return
 
+	if isinstance(conversion.format, Brackets):
+		require_brackets_setting(source_type, conversion.dtype)
+		return
+
 	target_type = conversion.dtype
 	source_family = find_family(source_type)
 	target_family = find_family(target_type)
@@ -234,6 +250,40 @@ def require_format_setting(source_type: Type, conversion: Conversion) -> None:
 	if misses_time:
 		format_name = find_format_name(target_type, conversion.format)
 		raise InvalidConversionError(FORMAT_SETTING, source_type.name, target_type.name, format_name)
+
+
+def require_brackets_setting(source_type: Type, target_type: Type) -> None:
+	"""
+	Check that brackets are given to a conversion of numbers to categories.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	source_type
+		The type of the converted column.
+	target_type
+		The new type.
+
+	Raises
+	------
+	InvalidConversionError
+		When the column does not hold numbers, or the new type is not ``CATEGORY``.
+
+	Examples
+	--------
+	>>> import numdaplot as ndp
+	>>> from numdaplot.tables.columns.converted_column import require_brackets_setting
+	>>> try:
+	... 	require_brackets_setting(ndp.Type.TEXT, ndp.Type.CATEGORY)
+	... except ndp.InvalidConversionError as error:
+	... 	print(error)
+	The setting format does not apply to a conversion from TEXT to CATEGORY.
+	"""
+	source_family = find_family(source_type)
+	cuts_numbers = source_family == ValueFamily.NUMBER and target_type == Type.CATEGORY
+	if not cuts_numbers:
+		raise InvalidConversionError(FORMAT_SETTING, source_type.name, target_type.name)
 
 
 def require_booleans_setting(source_type: Type, conversion: Conversion) -> None:
@@ -275,7 +325,9 @@ def require_booleans_setting(source_type: Type, conversion: Conversion) -> None:
 		raise InvalidConversionError(BOOLEANS_SETTING, source_type.name, target_type.name)
 
 
-def convert_time_column(column: Column, source_type: Type, conversion: Conversion) -> Column | None:
+def convert_time_column(
+	column: Column, source_type: Type, target_type: Type, date_format: DateFormat | CustomDateFormat | None
+) -> Column | None:
 	"""
 	Return a column converted between texts, dates, datetimes and durations.
 
@@ -287,8 +339,10 @@ def convert_time_column(column: Column, source_type: Type, conversion: Conversio
 		A Table column of another type than the target.
 	source_type
 		The type of the column.
-	conversion
-		The new type and the date format.
+	target_type
+		The new type.
+	date_format
+		How dates are written as texts, the default format when None.
 
 	Returns
 	-------
@@ -310,14 +364,13 @@ def convert_time_column(column: Column, source_type: Type, conversion: Conversio
 	>>> import numdaplot as ndp
 	>>> from numdaplot.tables.columns.converted_column import convert_time_column
 	>>> texts = pandas.Series(["2026-12-31"], dtype="string")
-	>>> convert_time_column(texts, ndp.Type.TEXT, ndp.Conversion(column="day", dtype=ndp.Type.DATE)).tolist()
+	>>> convert_time_column(texts, ndp.Type.TEXT, ndp.Type.DATE, None).tolist()
 	[Timestamp('2026-12-31 00:00:00')]
 	"""
-	target_type = conversion.dtype
 	source_family = find_family(source_type)
 	target_family = find_family(target_type)
 	if source_family == ValueFamily.TEXT and target_family == ValueFamily.MOMENT:
-		dates = parse_dates(column, target_type, conversion.format)
+		dates = parse_dates(column, target_type, date_format)
 		return dates
 
 	if source_family == ValueFamily.MOMENT and target_family == ValueFamily.MOMENT:
@@ -329,7 +382,7 @@ def convert_time_column(column: Column, source_type: Type, conversion: Conversio
 		return None
 
 	if source_family == ValueFamily.MOMENT:
-		date_texts = write_dates(column, conversion.format)
+		date_texts = write_dates(column, date_format)
 		written_dates = convert_to_type(date_texts, target_type)
 		return written_dates
 
