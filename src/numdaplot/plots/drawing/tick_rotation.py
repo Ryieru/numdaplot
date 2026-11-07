@@ -15,16 +15,16 @@ from matplotlib.dates import ConciseDateFormatter
 from matplotlib.ticker import ScalarFormatter
 
 from numdaplot.plots.drawing.drawn_chart import DrawnChart
-from numdaplot.plots.drawing.label_thinning import (
+from numdaplot.plots.drawing.label_room import (
 	LABEL_GAP_RATIO,
-	MINIMUM_TICKS,
 	find_current_length,
 	find_font_pixels,
 	find_tick_locations,
 	find_tick_room,
 	find_widest_label,
-	thin_labels,
+	read_label_texts,
 )
+from numdaplot.plots.drawing.label_thinning import MINIMUM_TICKS, thin_labels
 from numdaplot.plots.drawing.position_axis import find_axis
 
 TEXT_ROTATION = 45.0
@@ -279,10 +279,9 @@ def has_text_labels(axis: Axis) -> bool:
 	if isinstance(formatter, ConciseDateFormatter):
 		return True
 
-	labels = axis.get_ticklabels()
+	label_texts = read_label_texts(axis)
 
-	for label in labels:
-		label_text = label.get_text()
+	for label_text in label_texts:
 		is_number = is_number_text(label_text)
 		if not is_number:
 			return True

@@ -13,6 +13,7 @@ import numpy
 from matplotlib.axes import Axes
 from matplotlib.axis import Axis
 from matplotlib.dates import AutoDateLocator
+from matplotlib.ticker import FixedFormatter, FixedLocator
 from numpy.typing import NDArray
 
 from numdaplot.arrays.conversion.time_text import format_datetimes
@@ -118,9 +119,43 @@ def place_categories(axes: Axes, positions: Positions, on_vertical_axis: bool) -
 	coordinates = numpy.arange(position_count, dtype=numpy.float64)
 	labels = write_position_labels(positions)
 	position_axis = find_axis(axes, on_vertical_axis)
-	position_axis.set_ticks(coordinates, labels)
+	set_fixed_labels(position_axis, coordinates, labels)
 
 	return coordinates
+
+
+def set_fixed_labels(axis: Axis, coordinates: NDArray[numpy.float64], labels: list[str]) -> None:
+	"""
+	Place a label at each coordinate of an axis, without creating the matplotlib ticks yet.
+
+	``Axis.set_ticks`` creates one tick per label, about 3 milliseconds each, when only the labels that fit stay.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	axis
+		The axis.
+	coordinates
+		The coordinate of each label.
+	labels
+		The text of each label.
+
+	Examples
+	--------
+	>>> import numpy
+	>>> from matplotlib.figure import Figure
+	>>> from numdaplot.plots.drawing.position_axis import set_fixed_labels
+	>>> axes = Figure().add_subplot()
+	>>> set_fixed_labels(axes.xaxis, numpy.array([0.0, 1.0]), ["Paris", "Lyon"])
+	>>> [label.get_text() for label in axes.get_xticklabels()]
+	['Paris', 'Lyon']
+	"""
+	label_places = cast(list[float], coordinates.tolist())
+	label_locator = FixedLocator(label_places)
+	label_formatter = FixedFormatter(labels)
+	axis.set_major_locator(label_locator)
+	axis.set_major_formatter(label_formatter)
 
 
 def find_axis(axes: Axes, on_vertical_axis: bool) -> Axis:

@@ -27,7 +27,6 @@ from numdaplot.plots.drawing.missing_drawing import (
 	draw_missing_chart,
 	draw_missing_map,
 	find_axis_top,
-	fit_cells_to_axes,
 	format_bar_labels,
 )
 
@@ -52,8 +51,6 @@ EXPECTED_EMPTY_TABLE_LABELS = ["0 (0.0 %)"]
 EXPECTED_RATIO_TOP_TICK = 1.0
 MANY_COLUMN_NAMES = [f"column_{i}" for i in range(50)]
 TOO_MANY_COLUMN_NAMES = [f"column_{i}" for i in range(200)]
-TALL_MAP_ROWS = 6000
-TALL_MAP_MARKED_ROW = 4321
 AXES_HEIGHT = 400.0
 BAR_TOP = 30.0
 LABEL_HEIGHT = 40.0
@@ -230,22 +227,6 @@ def test_find_axis_top_keeps_half_of_the_axes_for_the_bars() -> None:
 	axis_top = find_axis_top(BAR_TOP, TALLER_THAN_AXES_LABEL, AXES_HEIGHT)
 
 	assert axis_top == HIGHEST_AXIS_TOP
-
-
-def test_fit_cells_to_axes_keeps_a_lone_missing_value_of_a_tall_map() -> None:
-	"""
-	Check that merging the rows keeps a band marked for the only missing value.
-
-	.. versionadded:: 0.1.0
-	"""
-	axes = Figure().add_subplot()
-	grid = numpy.zeros((TALL_MAP_ROWS, 2))
-	grid[TALL_MAP_MARKED_ROW, 1] = 1.0
-
-	shown_cells = fit_cells_to_axes(grid, axes)
-
-	assert shown_cells.shape[0] < TALL_MAP_ROWS
-	assert shown_cells.sum() == 1.0
 
 
 def test_draw_missing_chart_places_counts_on_whole_ticks() -> None:

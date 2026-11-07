@@ -14,7 +14,6 @@ from matplotlib.axes import Axes
 from matplotlib.colors import ListedColormap
 from matplotlib.container import BarContainer
 from matplotlib.patches import Rectangle
-from numpy.typing import NDArray
 
 from numdaplot.plots.chart_layer import ChartLayer
 from numdaplot.plots.charts.bar_chart import BarChart
@@ -22,7 +21,7 @@ from numdaplot.plots.charts.missing_chart import MissingChart
 from numdaplot.plots.data.chart_values import ChartValues
 from numdaplot.plots.data.missing_cells import MissingCounts
 from numdaplot.plots.drawing.bar_drawing import draw_bar_chart
-from numdaplot.plots.drawing.cell_merging import find_band_count, merge_cells
+from numdaplot.plots.drawing.cell_merging import find_cell_limits, fit_cells_to_axes, merge_cells
 from numdaplot.plots.drawing.default_labels import COLUMN_LABEL, ROW_LABEL
 from numdaplot.plots.drawing.drawn_chart import DrawnChart
 from numdaplot.plots.drawing.grid_axes import GridAxes
@@ -49,9 +48,6 @@ RATIO_TICK_COUNT = 6
 LEGEND_SWATCH_CORNER = (numpy.nan, numpy.nan)
 LEGEND_SWATCH_SIZE = 0.0
 LEGEND_SWATCH_EDGE_WIDTH = 0.5
-ROW_AXIS = 0
-COLUMN_AXIS = 1
-HALF_CELL = 0.5
 PERCENT_FACTOR = 100.0
 STACKED_BAR_LABEL = "{count}\n{percent:.1f} %"
 ONE_LINE_BAR_LABEL = "{count} ({percent:.1f} %)"
@@ -304,10 +300,9 @@ def draw_missing_map(axes: Axes, layer: ChartLayer) -> DrawnChart:
 	"""
 	values = cast(ChartValues, layer.values)
 	grid = stack_columns(values.series)
-	shown_cells = fit_cells_to_axes(grid, axes)
-	row_count, column_count = grid.shape
+	shown_cells = fit_cells_to_axes(grid, axes, merge_cells)
 	cell_colors = ListedColormap([PRESENT_COLOR, MISSING_COLOR])
-	cell_limits = (-HALF_CELL, column_count - HALF_CELL, row_count - HALF_CELL, -HALF_CELL)
+	cell_limits = find_cell_limits(grid)
 	axes.imshow(
 		shown_cells,
 		cmap=cell_colors,
@@ -327,41 +322,6 @@ def draw_missing_map(axes: Axes, layer: ChartLayer) -> DrawnChart:
 	drawn_chart = DrawnChart(COLUMN_LABEL, ROW_LABEL, False, GridAxes.NONE, None, title=MAP_TITLE, legend_outside=True)
 
 	return drawn_chart
-
-
-def fit_cells_to_axes(grid: NDArray[numpy.float64], axes: Axes) -> NDArray[numpy.float64]:
-	"""
-	Return the cells of a map merged into as many bands as the axes can show, along both directions.
-
-	.. versionadded:: 0.1.0
-
-	Parameters
-	----------
-	grid
-		The cells of the map, 1 for a missing value and 0 for a present one.
-	axes
-		The matplotlib axes drawn on.
-
-	Returns
-	-------
-	NDArray[numpy.float64]
-		The cells to draw, 1 where a band holds a missing value.
-
-	Examples
-	--------
-	>>> import numpy
-	>>> from matplotlib.figure import Figure
-	>>> from numdaplot.plots.drawing.missing_drawing import fit_cells_to_axes
-	>>> axes = Figure().add_subplot()
-	>>> fit_cells_to_axes(numpy.zeros((1000, 2)), axes).shape
-	(184, 2)
-	"""
-	row_band_count = find_band_count(axes.bbox.height)
-	column_band_count = find_band_count(axes.bbox.width)
-	merged_rows = merge_cells(grid, row_band_count, ROW_AXIS)
-	shown_cells = merge_cells(merged_rows, column_band_count, COLUMN_AXIS)
-
-	return shown_cells
 
 
 def add_legend_swatch(axes: Axes, color_code: str, label: str) -> None:

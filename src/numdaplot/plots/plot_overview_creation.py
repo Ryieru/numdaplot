@@ -37,6 +37,8 @@ class PlotOverviewCreation(PlotData):
 		For a Table, ``HeatmapChart.columns`` names the columns drawn and ``HeatmapChart.labels`` the column labeling
 		the rows.
 		For an Array of one or two dimensions, each column is drawn and each row is labeled with its number.
+		When there are more rows or columns than the image can show, each band shows the mean of its cells, without
+		their values written, with a ``ReadabilityWarning``.
 
 		.. versionadded:: 0.1.0
 
@@ -67,6 +69,11 @@ class PlotOverviewCreation(PlotData):
 			When ``labels`` holds booleans or durations, or a drawn column does not hold numbers.
 		DimensionError
 			When an Array has more than two dimensions.
+
+		Warns
+		-----
+		ReadabilityWarning
+			When the cells are merged into bands.
 
 		Examples
 		--------

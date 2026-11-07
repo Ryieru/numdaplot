@@ -30,6 +30,10 @@ and numdaplot follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
   `Plot.missing_map` keeps a mark for every missing value of a long Table, with its total in a legend past the axes.
 - Plot titles and axis labels are written by default: the title is the `y` label by the `x` label, such as
   `sales by month`, and `PlotStyle` replaces them or removes them with an empty text.
+- Plots with many text labels, such as bars, heatmaps and boxes, only create the labels that fit, so they stay fast
+  on long Tables.
+- `Plot.heatmap` shows the mean of the cells in each band when they do not fit in the image, with a
+  `ReadabilityWarning`, instead of leaving most of them out.
 - Figures: `Figure` places Plots on the cells of a `Layout` with `Figure.place` and `Cell`, takes its title and its
   size from a `FigureStyle`, and has `show`, `save` and `to_matplotlib` like a Plot.
 - Plot settings: `Chart`, `LineChart`, `BarChart`, `ScatterChart`, `HistogramChart`, `BoxChart`, `PieChart`,
