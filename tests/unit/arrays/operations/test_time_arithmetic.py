@@ -13,10 +13,14 @@ import pytest
 
 from numdaplot.arrays.operations.operand import Operand
 from numdaplot.arrays.operations.time_arithmetic import (
+	combine_nanoseconds,
 	combine_time_values,
+	find_time_result_type,
 	involves_time,
+	require_date_next_to_time,
 	require_time_operation,
 	require_whole_days,
+	store_time_result,
 	to_nanoseconds,
 )
 from numdaplot.data_types.numpy_mapping import from_numpy_dtype
@@ -24,6 +28,7 @@ from numdaplot.data_types.type import Type
 from numdaplot.data_types.value_family import ValueFamily
 from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
 from numdaplot.errors.refused_operation_error import RefusedOperationError
+from numdaplot.errors.time_overflow_error import TimeOverflowError
 from numdaplot.errors.value_conversion_error import ValueConversionError
 
 DATES = numpy.array(["2026-01-31", "NaT"], dtype="datetime64[D]")
@@ -45,6 +50,19 @@ NANOSECOND_DATETIME_DTYPE = numpy.dtype("datetime64[ns]")
 NANOSECOND_DURATION_DTYPE = numpy.dtype("timedelta64[ns]")
 MISSING_DURATION = numpy.timedelta64("NaT", "ns")
 STORED_TIMES = numpy.array([60000000], dtype="timedelta64[us]")
+LATE_TIMES = numpy.array([82800000000, 29700000000, "NaT"], dtype="timedelta64[us]")
+ONE_HOUR = timedelta(hours=1)
+MORNING_TIMES = numpy.array([29700000000, "NaT"], dtype="timedelta64[us]")
+TWO_HOURS = timedelta(hours=2)
+NINE_HOURS = timedelta(hours=9)
+TIME_NAME = "TIME"
+DURATION_NAME = "DURATION"
+DATETIME_NAME = "DATETIME"
+BASTILLE_DAYS = numpy.array(["2025-07-14", "2025-07-14", "2025-07-14"], dtype="datetime64[D]")
+EXPECTED_MOMENTS = numpy.array(["2025-07-14T23:00", "2025-07-14T08:15", "NaT"], dtype="datetime64[ns]")
+MORNING_DATETIMES = numpy.array(["2025-07-14T10:00"], dtype="datetime64[ns]")
+ONE_TIME = numpy.array([60000000], dtype="timedelta64[us]")
+HOUR_IN_NANOSECONDS = numpy.array([3600000000000, -1, 86400000000000, "NaT"], dtype="timedelta64[ns]")
 
 
 @dataclass(frozen=True)
@@ -249,11 +267,173 @@ def test_require_whole_days_accepts_whole_days_and_missing_durations() -> None:
 	require_whole_days(MISSING_DURATION)
 
 
-def test_combine_time_values_refuses_times_of_day_for_now() -> None:
+def read_type_name(values: Any) -> str:
 	"""
-	Check that a subtraction of times of day raises IncompatibleTypesError.
+	Return the name of the numdaplot type of numpy values.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	values
+		Values computed by an operation.
+
+	Returns
+	-------
+	str
+		The name of their type.
+	"""
+	values_type = from_numpy_dtype(values.dtype)
+	type_name = values_type.name
+
+	return type_name
+
+
+def test_combine_time_values_subtracts_times_into_durations() -> None:
+	"""
+	Check that two times of day give a duration, NaT kept.
 
 	.. versionadded:: 0.1.0
 	"""
+	durations = combine_time_values(LATE_TIMES, LATE_TIMES, numpy.subtract, "-")
+
+	assert read_type_name(durations) == DURATION_NAME
+	assert bool(numpy.isnat(durations[-1]))
+
+
+@pytest.mark.parametrize(
+	("left", "right", "function"),
+	[
+		(MORNING_TIMES, ONE_HOUR, numpy.add),
+		(ONE_HOUR, MORNING_TIMES, numpy.add),
+		(MORNING_TIMES, ONE_HOUR, numpy.subtract),
+	],
+)
+def test_combine_time_values_moves_times_by_a_duration(left: Operand, right: Operand, function: numpy.ufunc) -> None:
+	"""
+	Check that a duration added on either side, or subtracted, gives times of day.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	left
+		The left operand.
+	right
+		The right operand.
+	function
+		The operation.
+	"""
+	times = combine_time_values(left, right, function, "+")
+
+	assert read_type_name(times) == TIME_NAME
+
+
+@pytest.mark.parametrize(("duration", "function"), [(TWO_HOURS, numpy.add), (NINE_HOURS, numpy.subtract)])
+def test_combine_time_values_refuses_times_past_midnight(duration: timedelta, function: numpy.ufunc) -> None:
+	"""
+	Check that 23:00 plus 2 hours, or 08:15 minus 9 hours, raise TimeOverflowError.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	duration
+		The duration moving the times.
+	function
+		The operation.
+	"""
+	with pytest.raises(TimeOverflowError):
+		combine_time_values(LATE_TIMES, duration, function, "+")
+
+
+@pytest.mark.parametrize(("left", "right"), [(BASTILLE_DAYS, LATE_TIMES), (LATE_TIMES, BASTILLE_DAYS)])
+def test_combine_time_values_adds_times_to_dates(left: Operand, right: Operand) -> None:
+	"""
+	Check that a date plus a time, in either order, gives datetimes, NaT kept.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	left
+		The left operand.
+	right
+		The right operand.
+	"""
+	moments = combine_time_values(left, right, numpy.add, "+")
+
+	assert read_type_name(moments) == DATETIME_NAME
+	assert numpy.array_equal(moments, EXPECTED_MOMENTS, equal_nan=True)
+
+
+@pytest.mark.parametrize(("left", "right"), [(MORNING_DATETIMES, ONE_TIME), (ONE_TIME, ONE_TIME)])
+def test_combine_time_values_refuses_times_with_datetimes_or_times(left: Operand, right: Operand) -> None:
+	"""
+	Check that a datetime plus a time, and a time plus a time, raise IncompatibleTypesError.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	left
+		The left operand.
+	right
+		The right operand.
+	"""
 	with pytest.raises(IncompatibleTypesError):
-		combine_time_values(STORED_TIMES, STORED_TIMES, numpy.subtract, "-")
+		combine_time_values(left, right, numpy.add, "+")
+
+
+def test_combine_nanoseconds_counts_durations_in_nanoseconds() -> None:
+	"""
+	Check the dtype of a sum of a time and a duration before it becomes a time again.
+
+	.. versionadded:: 0.1.0
+	"""
+	durations = combine_nanoseconds([ONE_TIME, ONE_HOUR], numpy.add, Type.TIME, "+")
+
+	assert read_type_name(durations) == DURATION_NAME
+
+
+def test_store_time_result_refuses_times_outside_the_day() -> None:
+	"""
+	Check that before midnight and from the next midnight raise TimeOverflowError.
+
+	.. versionadded:: 0.1.0
+	"""
+	with pytest.raises(TimeOverflowError):
+		store_time_result(HOUR_IN_NANOSECONDS, "+")
+
+
+def test_store_time_result_gives_microseconds() -> None:
+	"""
+	Check that durations within the day become times of day.
+
+	.. versionadded:: 0.1.0
+	"""
+	within_day = HOUR_IN_NANOSECONDS[[0, 3]]
+
+	times = store_time_result(within_day, "+")
+
+	assert read_type_name(times) == TIME_NAME
+
+
+def test_require_date_next_to_time_accepts_dates() -> None:
+	"""
+	Check that a date next to a time raises nothing.
+
+	.. versionadded:: 0.1.0
+	"""
+	require_date_next_to_time(Type.DATE, Type.TIME, "+")
+
+
+def test_find_time_result_type_gives_time_for_the_time_family() -> None:
+	"""
+	Check the type of a time moved by a duration.
+
+	.. versionadded:: 0.1.0
+	"""
+	result_type = find_time_result_type(ValueFamily.TIME, False)
+
+	assert result_type == Type.TIME

@@ -212,6 +212,9 @@ class Type(Enum):
 	"""
 	A time of day, from 00:00 to 23:59:59.999999, without date nor time zone. Stored as the time since midnight.
 
+	Two times give a ``DURATION`` when subtracted, a duration moves a time within its day, and a time added to a
+	``DATE`` gives a ``DATETIME``. Its hour, minute and second are read with ``DatePart``.
+
 	Examples
 	--------
 	>>> from datetime import time

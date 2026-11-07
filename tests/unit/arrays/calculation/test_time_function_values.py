@@ -16,6 +16,7 @@ from numdaplot.arrays.calculation.time_function_values import (
 	count_durations,
 	find_date_periods,
 	read_date_parts,
+	read_time_parts,
 	require_moments,
 )
 from numdaplot.dates.date_part import DatePart
@@ -46,6 +47,7 @@ EXPECTED_WHOLE_DURATIONS = numpy.array([3, 10], dtype="timedelta64[D]").astype("
 EXPECTED_DECIMAL_DURATION = numpy.timedelta64(36, "h")
 EXPECTED_HOUR_START = numpy.datetime64("2026-12-31T14:00:00", "ns")
 EXPECTED_GRID_PERIODS = numpy.array([["2026-01-01"], ["2026-02-01"]], dtype="datetime64[D]")
+STORED_TIMES = numpy.array([[83109000000, "NaT"]], dtype="timedelta64[us]")
 
 
 @dataclass(frozen=True)
@@ -286,3 +288,47 @@ def test_apply_time_function_refuses_an_unknown_function() -> None:
 	"""
 	with pytest.raises(RefusedOperationError):
 		apply_time_function(DATES, UnknownTimeFunction())
+
+
+@pytest.mark.parametrize(
+	("unit", "expected_part"), [(DatePartUnit.HOUR, 23.0), (DatePartUnit.MINUTE, 5.0), (DatePartUnit.SECOND, 9.0)]
+)
+def test_read_time_parts_reads_each_part_of_a_time(unit: DatePartUnit, expected_part: float) -> None:
+	"""
+	Check the hour, the minute and the second of 23:05:09, NaN for a missing time, in the same shape.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	unit
+		The part read.
+	expected_part
+		Its value.
+	"""
+	parts = read_time_parts(STORED_TIMES, unit)
+
+	assert parts.shape == STORED_TIMES.shape
+	assert parts[0, 0] == expected_part
+	assert bool(numpy.isnan(parts[0, 1]))
+
+
+def test_read_date_parts_reads_the_hour_of_times() -> None:
+	"""
+	Check that DatePart goes to the times of day for an hour.
+
+	.. versionadded:: 0.1.0
+	"""
+	hours = read_date_parts(STORED_TIMES, DatePartUnit.HOUR, "DatePart")
+
+	assert hours[0, 0] == 23.0
+
+
+def test_read_date_parts_refuses_a_day_of_times() -> None:
+	"""
+	Check that a time of day has no day.
+
+	.. versionadded:: 0.1.0
+	"""
+	with pytest.raises(IncompatibleTypesError):
+		read_date_parts(STORED_TIMES, DatePartUnit.DAY, "DatePart")

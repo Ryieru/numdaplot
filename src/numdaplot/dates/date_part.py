@@ -14,7 +14,7 @@ from numdaplot.settings.field_types import require_field_types
 @dataclass(frozen=True)
 class DatePart(TimeFunction):
 	"""
-	A part of each date or datetime, as a number: its month, its day of the week...
+	A part of each date, datetime or time of day, as a number: its month, its day of the week, its hour...
 
 	The result is a ``FLOAT64`` Array, so a missing date gives a missing part. Every January of every year
 	gives 1: use ``DatePeriod`` to tell January 2026 from January 2027.
@@ -24,8 +24,8 @@ class DatePart(TimeFunction):
 	Parameters
 	----------
 	unit
-		The part to read. ``DatePartUnit.HOUR``, ``DatePartUnit.MINUTE`` and ``DatePartUnit.SECOND`` need datetimes.
-
+		The part to read. ``DatePartUnit.HOUR``, ``DatePartUnit.MINUTE`` and ``DatePartUnit.SECOND`` need datetimes
+		or times of day, the only parts a time of day has.
 
 	Raises
 	------

@@ -30,6 +30,13 @@ MOMENT_FAMILIES = frozenset({ValueFamily.MOMENT})
 DURATION_FAMILIES = frozenset({ValueFamily.DURATION})
 NUMBER_FAMILIES = frozenset({ValueFamily.NUMBER})
 TIME_OF_DAY_PARTS = frozenset({DatePartUnit.HOUR, DatePartUnit.MINUTE, DatePartUnit.SECOND})
+# The microseconds in one unit of each part of a time of day, and the number of such units in the next larger part.
+TIME_PART_SIZES = {
+	DatePartUnit.HOUR: (3_600_000_000, 24),
+	DatePartUnit.MINUTE: (60_000_000, 60),
+	DatePartUnit.SECOND: (1_000_000, 60),
+}
+WHOLE_DTYPE = numpy.int64
 PART_ATTRIBUTES = {
 	DatePartUnit.YEAR: "year",
 	DatePartUnit.QUARTER: "quarter",
@@ -194,6 +201,11 @@ def read_date_parts(values: NDArray[Any], unit: DatePartUnit, function_name: str
 	array([53., nan])
 	"""
 	needs_time_of_day = unit in TIME_OF_DAY_PARTS
+	values_type = from_numpy_dtype(values.dtype)
+	if values_type == Type.TIME and needs_time_of_day:
+		time_parts = read_time_parts(values, unit)
+		return time_parts
+
 	require_moments(values, needs_time_of_day, function_name)
 	flat_values = values.ravel()
 	moments = pandas.DatetimeIndex(flat_values)
@@ -214,6 +226,44 @@ def read_date_parts(values: NDArray[Any], unit: DatePartUnit, function_name: str
 	date_parts = cast(NDArray[numpy.float64], shaped_parts)
 
 	return date_parts
+
+
+def read_time_parts(values: NDArray[Any], unit: DatePartUnit) -> NDArray[numpy.float64]:
+	"""
+	Return the hour, the minute or the second of times of day stored as the time since midnight.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	values
+		Times of day in ``timedelta64[us]``.
+	unit
+		``HOUR``, ``MINUTE`` or ``SECOND``.
+
+	Returns
+	-------
+	NDArray[numpy.float64]
+		The parts, in the shape of the values, NaN where a time is missing.
+
+	Examples
+	--------
+	>>> import numpy
+	>>> import numdaplot as ndp
+	>>> from numdaplot.arrays.calculation.time_function_values import read_time_parts
+	>>> times = numpy.array([56130000000, "NaT"], dtype="timedelta64[us]")
+	>>> read_time_parts(times, ndp.DatePartUnit.MINUTE)
+	array([35., nan])
+	"""
+	missing = numpy.isnat(values)
+	microseconds = values.astype(WHOLE_DTYPE)
+	unit_size, unit_count = TIME_PART_SIZES[unit]
+	whole_units = microseconds // unit_size
+	parts = whole_units % unit_count
+	decimal_parts = parts.astype(numpy.float64)
+	time_parts = numpy.where(missing, numpy.nan, decimal_parts)
+
+	return time_parts
 
 
 def find_date_periods(values: NDArray[Any], unit: PeriodUnit, function_name: str) -> NDArray[Any]:

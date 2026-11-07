@@ -35,6 +35,12 @@ TIME_RESULTS = dict[TimeOperation, ValueFamily](
 		(numpy.multiply, ValueFamily.DURATION, ValueFamily.NUMBER): ValueFamily.DURATION,
 		(numpy.multiply, ValueFamily.NUMBER, ValueFamily.DURATION): ValueFamily.DURATION,
 		(numpy.true_divide, ValueFamily.DURATION, ValueFamily.NUMBER): ValueFamily.DURATION,
+		(numpy.add, ValueFamily.TIME, ValueFamily.DURATION): ValueFamily.TIME,
+		(numpy.add, ValueFamily.DURATION, ValueFamily.TIME): ValueFamily.TIME,
+		(numpy.subtract, ValueFamily.TIME, ValueFamily.DURATION): ValueFamily.TIME,
+		(numpy.subtract, ValueFamily.TIME, ValueFamily.TIME): ValueFamily.DURATION,
+		(numpy.add, ValueFamily.MOMENT, ValueFamily.TIME): ValueFamily.MOMENT,
+		(numpy.add, ValueFamily.TIME, ValueFamily.MOMENT): ValueFamily.MOMENT,
 	}
 )
 DURATION_DIVISION = (numpy.true_divide, ValueFamily.DURATION, ValueFamily.DURATION)
@@ -45,6 +51,7 @@ TIMEDELTA_PRODUCT_ALTERNATIVE = "apply(ndp.ToDuration(unit=...))"
 NANOSECOND_DTYPES = {
 	ValueFamily.MOMENT: to_numpy_dtype(Type.DATETIME),
 	ValueFamily.DURATION: to_numpy_dtype(Type.DURATION),
+	ValueFamily.TIME: to_numpy_dtype(Type.DURATION),
 }
 ONE_DAY = numpy.timedelta64(1, "D")
 NO_DURATION = numpy.timedelta64(0, "ns")
@@ -91,7 +98,8 @@ def combine_time_values(left: Operand, right: Operand, function: numpy.ufunc, sy
 
 	Dates and datetimes give durations when subtracted; a duration added to or subtracted from a date gives
 	a date, and from a datetime a datetime; durations add, subtract, and multiply or divide by numbers.
-	A date counts as midnight next to a datetime.
+	A date counts as midnight next to a datetime. Times of day give durations when subtracted, move by a
+	duration within the same day, and give a datetime when added to a date.
 
 	.. versionadded:: 0.1.0
 
@@ -118,10 +126,11 @@ def combine_time_values(left: Operand, right: Operand, function: numpy.ufunc, sy
 	ValueConversionError
 		When a duration added to or subtracted from dates is not a whole number of days.
 	IncompatibleTypesError
-		When the operation does not apply to these types, such as a date plus a number.
+		When the operation does not apply to these types, such as a date plus a number, or a datetime plus a time of
+		day.
 	TimeOverflowError
 		When an operand or a result is outside the range of nanoseconds, about 1677 to 2262 for dates and
-		datetimes, and about 292 years for durations.
+		datetimes, and about 292 years for durations, or a time of day moves past midnight.
 
 	Examples
 	--------
@@ -140,35 +149,169 @@ def combine_time_values(left: Operand, right: Operand, function: numpy.ufunc, sy
 	if operation_key not in TIME_RESULTS:
 		raise IncompatibleTypesError(symbol, [left_type.name, right_type.name])
 
-	combines_date = Type.DATE in (left_type, right_type)
+	require_date_next_to_time(left_type, right_type, symbol)
 	result_family = TIME_RESULTS[operation_key]
-	keeps_date = combines_date and result_family == ValueFamily.MOMENT
+	shifts_date = Type.DATE in (left_type, right_type) and ValueFamily.DURATION in (left_family, right_family)
+	keeps_date = shifts_date and result_family == ValueFamily.MOMENT
 	result_type = find_time_result_type(result_family, keeps_date)
-	require_nanoseconds_fit(left, left_type, symbol)
-	require_nanoseconds_fit(right, right_type, symbol)
-	left_values = to_nanoseconds(left, left_family)
-	right_values = to_nanoseconds(right, right_family)
-	try:
-		left_numbers = widen_large_integers(left_values)
-		right_numbers = widen_large_integers(right_values)
-		operands = [left_numbers, right_numbers]
-		require_time_result_fits(operands, function, result_type, symbol)
-		combined_values = function(left_numbers, right_numbers)
-	except OverflowError as error:
-		raise TimeOverflowError(symbol, result_type.name) from error
+	operands = [left, right]
+	combined_values = combine_nanoseconds(operands, function, result_type, symbol)
+	if result_type == Type.TIME:
+		times = store_time_result(combined_values, symbol)
+		return times
 
 	if not keeps_date:
 		return combined_values
 
-	date_shift = right_values
+	date_shift = to_nanoseconds(right, right_family)
 	if left_family == ValueFamily.DURATION:
-		date_shift = left_values
+		date_shift = to_nanoseconds(left, left_family)
 
 	require_whole_days(date_shift)
 	date_dtype = to_numpy_dtype(Type.DATE)
 	shifted_dates = combined_values.astype(date_dtype)
 
 	return shifted_dates
+
+
+def combine_nanoseconds(operands: list[Operand], function: numpy.ufunc, result_type: Type, symbol: str) -> NDArray[Any]:
+	"""
+	Return an arithmetic function applied to operands counted in nanoseconds, refusing results that do not fit.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	operands
+		The left and the right operand, values of Arrays or single values.
+	function
+		The numpy function, such as ``numpy.add``.
+	result_type
+		The type of the result, named by the errors.
+	symbol
+		The operator shown in error messages, such as ``"+"``.
+
+	Returns
+	-------
+	NDArray
+		The result, dates and datetimes in ``datetime64[ns]`` and durations in ``timedelta64[ns]``.
+
+	Raises
+	------
+	TimeOverflowError
+		When an operand or the result is outside the range of nanoseconds.
+
+	Examples
+	--------
+	>>> from datetime import timedelta
+	>>> import numpy
+	>>> import numdaplot as ndp
+	>>> from numdaplot.arrays.operations.time_arithmetic import combine_nanoseconds
+	>>> durations = numpy.array([1], dtype="timedelta64[s]")
+	>>> combine_nanoseconds([durations, timedelta(seconds=1)], numpy.add, ndp.Type.DURATION, "+")
+	array([2000000000], dtype='timedelta64[ns]')
+	"""
+	left, right = operands
+	left_type = find_operand_type(left)
+	right_type = find_operand_type(right)
+	require_nanoseconds_fit(left, left_type, symbol)
+	require_nanoseconds_fit(right, right_type, symbol)
+	left_family = find_family(left_type)
+	right_family = find_family(right_type)
+	left_values = to_nanoseconds(left, left_family)
+	right_values = to_nanoseconds(right, right_family)
+	# A time of day moved by a duration is first computed as a duration, then checked against midnight.
+	fitted_type = Type.DURATION if result_type == Type.TIME else result_type
+	try:
+		left_numbers = widen_large_integers(left_values)
+		right_numbers = widen_large_integers(right_values)
+		number_operands = [left_numbers, right_numbers]
+		require_time_result_fits(number_operands, function, fitted_type, symbol)
+		combined_values = function(left_numbers, right_numbers)
+	except OverflowError as error:
+		raise TimeOverflowError(symbol, fitted_type.name) from error
+
+	return combined_values
+
+
+def store_time_result(durations: NDArray[Any], symbol: str) -> NDArray[numpy.timedelta64]:
+	"""
+	Return times of day computed as durations since midnight, refusing those past midnight.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	durations
+		The times since midnight in ``timedelta64[ns]``, NaT where missing.
+	symbol
+		The operator shown in error messages, such as ``"+"``.
+
+	Returns
+	-------
+	NDArray[numpy.timedelta64]
+		The times of day in ``timedelta64[us]``.
+
+	Raises
+	------
+	TimeOverflowError
+		When a time is before midnight or from the next midnight on.
+
+	Examples
+	--------
+	>>> import numpy
+	>>> from numdaplot.arrays.operations.time_arithmetic import store_time_result
+	>>> store_time_result(numpy.array([3600000000000], dtype="timedelta64[ns]"), "+")
+	array([3600000000], dtype='timedelta64[us]')
+	"""
+	is_missing = numpy.isnat(durations)
+	is_before_midnight = durations < NO_DURATION
+	is_next_day = durations >= ONE_DAY
+	is_outside_day = (is_before_midnight | is_next_day) & ~is_missing
+	has_outside_day = bool(is_outside_day.any())
+	if has_outside_day:
+		raise TimeOverflowError(symbol, Type.TIME.name)
+
+	time_dtype = to_numpy_dtype(Type.TIME)
+	times = durations.astype(time_dtype)
+
+	return times
+
+
+def require_date_next_to_time(left_type: Type, right_type: Type, symbol: str) -> None:
+	"""
+	Check that a time of day is only added to dates, never to datetimes, which already have a time.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	left_type
+		The type of the left operand.
+	right_type
+		The type of the right operand.
+	symbol
+		The operator shown in error messages, such as ``"+"``.
+
+	Raises
+	------
+	IncompatibleTypesError
+		When a time of day is combined with datetimes.
+
+	Examples
+	--------
+	>>> import numdaplot as ndp
+	>>> from numdaplot.arrays.operations.time_arithmetic import require_date_next_to_time
+	>>> try:
+	... 	require_date_next_to_time(ndp.Type.DATETIME, ndp.Type.TIME, "+")
+	... except ndp.IncompatibleTypesError as error:
+	... 	print(error)
+	Cannot apply + to DATETIME and TIME.
+	"""
+	operand_types = (left_type, right_type)
+	combines_datetime_with_time = Type.TIME in operand_types and Type.DATETIME in operand_types
+	if combines_datetime_with_time:
+		raise IncompatibleTypesError(symbol, [left_type.name, right_type.name])
 
 
 def find_time_result_type(result_family: ValueFamily, keeps_date: bool) -> Type:
@@ -187,7 +330,7 @@ def find_time_result_type(result_family: ValueFamily, keeps_date: bool) -> Type:
 	Returns
 	-------
 	Type
-		``DURATION``, ``DATE`` or ``DATETIME``.
+		``DURATION``, ``TIME``, ``DATE`` or ``DATETIME``.
 
 	Examples
 	--------
@@ -198,6 +341,9 @@ def find_time_result_type(result_family: ValueFamily, keeps_date: bool) -> Type:
 	"""
 	if result_family == ValueFamily.DURATION:
 		return Type.DURATION
+
+	if result_family == ValueFamily.TIME:
+		return Type.TIME
 
 	if keeps_date:
 		return Type.DATE

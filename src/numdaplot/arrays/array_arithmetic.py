@@ -68,7 +68,8 @@ class ArrayArithmetic(ArrayData):
 		IntegerOverflowError
 			When a result does not fit its integer type, which refuses to wrap around to a wrong number.
 		TimeOverflowError
-			When a date or a datetime leaves 1677 to 2262, or a duration exceeds about 292 years.
+			When a date or a datetime leaves 1677 to 2262, a duration exceeds about 292 years, or a time of day moves
+			past midnight.
 
 		Examples
 		--------
@@ -117,7 +118,8 @@ class ArrayArithmetic(ArrayData):
 		IntegerOverflowError
 			When a result does not fit its integer type, which refuses to wrap around to a wrong number.
 		TimeOverflowError
-			When a date or a datetime leaves 1677 to 2262, or a duration exceeds about 292 years.
+			When a date or a datetime leaves 1677 to 2262, a duration exceeds about 292 years, or a time of day moves
+			past midnight.
 
 		Examples
 		--------

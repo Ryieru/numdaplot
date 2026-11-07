@@ -115,7 +115,7 @@ class DatePartUnit(Enum):
 
 	HOUR = auto()
 	"""
-	The hour, from 0 to 23. Datetimes only.
+	The hour, from 0 to 23. Datetimes and times of day only.
 
 	Examples
 	--------
@@ -128,7 +128,7 @@ class DatePartUnit(Enum):
 
 	MINUTE = auto()
 	"""
-	The minute, from 0 to 59. Datetimes only.
+	The minute, from 0 to 59. Datetimes and times of day only.
 
 	Examples
 	--------
@@ -141,7 +141,7 @@ class DatePartUnit(Enum):
 
 	SECOND = auto()
 	"""
-	The second, from 0 to 59. Datetimes only.
+	The second, from 0 to 59. Datetimes and times of day only.
 
 	Examples
 	--------

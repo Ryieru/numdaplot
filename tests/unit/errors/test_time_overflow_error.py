@@ -20,6 +20,7 @@ NAMED_MESSAGE = (
 	"The operation * gives values of the column 'when' outside the range of DURATION, "
 	"about 292 years before or after zero."
 )
+EXPECTED_TIME_MESSAGE = "The operation + gives values outside the range of TIME, from 00:00 to 23:59:59.999999."
 
 
 def test_time_overflow_error_is_a_numdaplot_error() -> None:
@@ -87,3 +88,15 @@ def test_name_column_keeps_the_first_column() -> None:
 	error.name_column(OTHER_COLUMN_NAME)
 
 	assert error.column_name == COLUMN_NAME
+
+
+def test_time_overflow_error_gives_the_range_of_times() -> None:
+	"""
+	Check the message of a time of day moved past midnight.
+
+	.. versionadded:: 0.1.0
+	"""
+	error = TimeOverflowError("+", "TIME")
+
+	error_text = str(error)
+	assert error_text == EXPECTED_TIME_MESSAGE

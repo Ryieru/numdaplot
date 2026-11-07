@@ -5,7 +5,7 @@ Functional tests of the times of day of Arrays and Tables.
 """
 
 from collections.abc import Sequence
-from datetime import UTC, time, timedelta
+from datetime import UTC, datetime, time, timedelta
 
 import numpy
 import pandas
@@ -37,6 +37,14 @@ EXPECTED_WRONG_HOUR_MESSAGE = (
 	"the column with format=, using a CustomDateFormat of a time only."
 )
 EXPECTED_HOUR_TEXTS = ["15h35", "08h00", None, "23h59"]
+BAAC_DAYS = [14, 1]
+BAAC_MONTHS = [7, 1]
+BAAC_YEARS = [2025, 2025]
+BAAC_TIMES = [time(15, 35), time(0, 5)]
+EXPECTED_MOMENTS = [datetime(2025, 7, 14, 15, 35), datetime(2025, 1, 1, 0, 5)]
+EXPECTED_HOURS = [15.0, 8.0, 23.0]
+LATE_EVENING = time(23, 30)
+LAST_TIME = time(23, 59, 59, 999999)
 
 
 def build_accident_times() -> ndp.Array:
@@ -268,3 +276,72 @@ def test_times_are_never_converted_to_datetimes() -> None:
 
 	with pytest.raises(ndp.IncompatibleTypesError):
 		accidents.convert(ndp.Conversion(column="hrmn", dtype=ndp.Type.DATETIME))
+
+
+def test_baac_day_parts_and_hours_become_moments() -> None:
+	"""
+	Check the BAAC use: jour, mois and an give a DATE, and the DATE plus hrmn gives a DATETIME.
+
+	.. versionadded:: 0.1.0
+	"""
+	days = ndp.Array.from_list(BAAC_DAYS)
+	months = ndp.Array.from_list(BAAC_MONTHS)
+	years = ndp.Array.from_list(BAAC_YEARS)
+	dates = ndp.Array.from_date_parts(ndp.DateParts(year=years, month=months, day=days))
+	hours = ndp.Array.from_list(BAAC_TIMES)
+
+	moments = dates + hours
+
+	moment_list = moments.to_list()
+	assert moments.dtype == ndp.Type.DATETIME
+	assert moment_list == EXPECTED_MOMENTS
+
+
+def test_the_hour_of_each_accident_is_read() -> None:
+	"""
+	Check DatePart HOUR on times of day.
+
+	.. versionadded:: 0.1.0
+	"""
+	times = build_accident_times()
+
+	hours = times.apply(ndp.DatePart(unit=ndp.DatePartUnit.HOUR))
+
+	present_hours = hours.select(ndp.IsPresent())
+	hour_list = present_hours.to_list()
+	assert hour_list == EXPECTED_HOURS
+
+
+def test_a_time_moved_past_midnight_is_refused() -> None:
+	"""
+	Check that 23:30 plus one hour raises TimeOverflowError.
+
+	.. versionadded:: 0.1.0
+	"""
+	late = ndp.Array.from_list([LATE_EVENING])
+
+	with pytest.raises(ndp.TimeOverflowError):
+		_ = late + ONE_HOUR
+
+
+def test_the_earliest_and_latest_times_are_computed_per_group() -> None:
+	"""
+	Check Min and Max of times of day in an aggregation.
+
+	.. versionadded:: 0.1.0
+	"""
+	times = build_accident_times()
+	accidents = ndp.Table.from_arrays({"hrmn": times})
+	calculations = [
+		ndp.Calculation(column="hrmn", function=ndp.Min()),
+		ndp.Calculation(column="hrmn", function=ndp.Max()),
+	]
+
+	extremes = accidents.aggregate(ndp.Aggregation(calculations=calculations))
+
+	earliest_column = extremes.column("hrmn_min")
+	latest_column = extremes.column("hrmn_max")
+	earliest = earliest_column.to_value()
+	latest = latest_column.to_value()
+	assert earliest == MORNING
+	assert latest == LAST_TIME

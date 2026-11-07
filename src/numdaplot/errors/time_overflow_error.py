@@ -13,6 +13,7 @@ TYPE_RANGES = {
 	"DATE": "DATE, from 1677 to 2262 in a calculation",
 	"DATETIME": "DATETIME, from 1677 to 2262",
 	"DURATION": "DURATION, about 292 years before or after zero",
+	"TIME": "TIME, from 00:00 to 23:59:59.999999",
 }
 
 
@@ -30,7 +31,7 @@ class TimeOverflowError(NumdaplotError):
 	operation_name
 		The operator or the function, such as ``*``, ``from_list`` or ``ToDuration``.
 	type_name
-		Name of the ``ndp.Type`` member that cannot hold the result: ``DATE``, ``DATETIME`` or ``DURATION``.
+		Name of the ``ndp.Type`` member that cannot hold the result: ``DATE``, ``DATETIME``, ``DURATION`` or ``TIME``.
 
 	Attributes
 	----------
