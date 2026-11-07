@@ -36,7 +36,7 @@ PRICE_RENAMING = ndp.Renaming(changes=[ndp.NameChange(old_name="price", new_name
 EXPECTED_SERIES_NAMES = ["Price", "cost"]
 EXPECTED_VALUE_NAME = "Price, cost"
 PRICE_SERIES = Series("price", numpy.array([12.0]))
-SAMPLES = SampleValues([PRICE_SERIES], None, "day", "price")
+SAMPLES = SampleValues([PRICE_SERIES], None, "day", "price", ndp.Type.FLOAT64)
 EXPECTED_MISSING_POSITIONS = ["Day", "Price", "cost"]
 POINTS = PointValues("zone", None, "size", None)
 ARRAY_VALUES = read_array_values(ndp.Array.from_list([12.0]), "LineChart")

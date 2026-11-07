@@ -7,6 +7,8 @@ Unit tests of the drawing of a BoxChart.
 # The matplotlib stubs leave the keyword arguments of most drawing methods untyped.
 # pyright: reportUnknownMemberType=false
 
+from datetime import time
+
 import numpy
 import pandas
 from matplotlib.colors import to_rgba
@@ -39,6 +41,9 @@ SINGLE_COORDINATE = numpy.array([0.0])
 RED_RGBA = to_rgba(COLOR_CODES[ndp.Color.RED])
 GREEN_RGBA = to_rgba(COLOR_CODES[ndp.Color.GREEN])
 GROUPS_WITH_GAPS = numpy.array(["Pau", None, "Lyon", "Pau"], dtype=object)
+BOX_HOURS = ndp.Array.from_list([time(8), time(12), time(18)])
+BOX_HALF_PAST_EIGHT = 8.5
+EXPECTED_BOX_HOUR_LABEL = "08:30"
 
 
 def build_layer(chart: ndp.BoxChart) -> ChartLayer:
@@ -233,3 +238,21 @@ def test_sort_groups_gives_each_group_once_in_alphabetical_order() -> None:
 	group_names = sort_groups(GROUPS_WITH_GAPS)
 
 	assert group_names.tolist() == EXPECTED_GROUPS
+
+
+def test_draw_box_chart_labels_the_axis_of_times_hh_mm() -> None:
+	"""
+	Check that boxes of times of day label their vertical axis HH:MM.
+
+	.. versionadded:: 0.1.0
+	"""
+	figure = Figure()
+	axes = figure.add_subplot()
+	samples = read_sample_values(BOX_HOURS, None, None, CHART_NAME)
+	layer = ChartLayer(ndp.BoxChart(), samples)
+
+	draw_box_chart(axes, layer)
+
+	formatter = axes.yaxis.get_major_formatter()
+	hour_label = formatter(BOX_HALF_PAST_EIGHT)
+	assert hour_label == EXPECTED_BOX_HOUR_LABEL

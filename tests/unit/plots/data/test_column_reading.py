@@ -8,13 +8,19 @@ import numpy
 import pandas
 import pytest
 
+from numdaplot.data_types.type import Type
+from numdaplot.data_types.value_family import ValueFamily
 from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
 from numdaplot.plots.data.column_reading import (
+	count_hours,
+	find_value_families,
 	read_hours,
 	read_moments,
 	read_numbers,
 	read_positions,
 	read_texts,
+	read_values,
+	require_same_family,
 	write_hour_labels,
 )
 from numdaplot.plots.data.position_kind import PositionKind
@@ -36,6 +42,13 @@ REFUSED_POSITIONS = [DURATIONS]
 STORED_HOURS = pandas.Series(numpy.array([55800000000, "NaT"], dtype="timedelta64[us]"))
 EXPECTED_HOUR_LABELS = ["15:30", None]
 HALF_PAST_THREE_HOURS = 15.5
+TIME_VALUE_CHART_NAME = "BoxChart"
+NUMBER_VALUE_CHART_NAME = "BarChart"
+EXPECTED_TIME_VALUE_FAMILIES = frozenset({ValueFamily.NUMBER, ValueFamily.TIME})
+EXPECTED_NUMBER_VALUE_FAMILIES = frozenset({ValueFamily.NUMBER})
+NAMED_COUNTS = pandas.Series([3.0], name="count")
+STORED_HOUR_GRID = numpy.array([[55800000000, "NaT"]], dtype="timedelta64[us]")
+EXPECTED_HOUR_GRID_SHAPE = (1, 2)
 
 
 def test_read_numbers_gives_nan_at_missing_integers() -> None:
@@ -223,3 +236,105 @@ def test_read_positions_places_times_on_a_day() -> None:
 
 	assert kind == PositionKind.TIMES
 	assert values[0] == HALF_PAST_THREE_HOURS
+
+
+@pytest.mark.parametrize(
+	("chart_name", "expected_families"),
+	[(TIME_VALUE_CHART_NAME, EXPECTED_TIME_VALUE_FAMILIES), (NUMBER_VALUE_CHART_NAME, EXPECTED_NUMBER_VALUE_FAMILIES)],
+)
+def test_find_value_families_adds_times_for_the_charts_measuring_them(
+	chart_name: str, expected_families: frozenset[ValueFamily]
+) -> None:
+	"""
+	Check that a box chart draws numbers and times of day, and a bar chart numbers only.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	chart_name
+		Name of the chart class.
+	expected_families
+		The families it draws.
+	"""
+	value_families = find_value_families(chart_name)
+
+	assert value_families == expected_families
+
+
+def test_read_values_counts_times_in_hours() -> None:
+	"""
+	Check that times of day drawn as values become their hours since midnight.
+
+	.. versionadded:: 0.1.0
+	"""
+	values = read_values(STORED_HOURS, TIME_VALUE_CHART_NAME)
+
+	first_value = values[0]
+	second_value = values[1]
+	second_missing = numpy.isnan(second_value)
+	is_second_missing = bool(second_missing)
+	assert first_value == HALF_PAST_THREE_HOURS
+	assert is_second_missing
+
+
+def test_read_values_reads_numbers_as_decimals() -> None:
+	"""
+	Check that numbers drawn as values become float64 numbers.
+
+	.. versionadded:: 0.1.0
+	"""
+	values = read_values(INTEGERS, NUMBER_VALUE_CHART_NAME)
+
+	missing_values = numpy.isnan(values)
+	present_values = values[~missing_values]
+	value_list = present_values.tolist()
+	assert value_list == EXPECTED_NUMBERS
+
+
+def test_read_values_rejects_times_for_a_chart_of_numbers() -> None:
+	"""
+	Check that times of day drawn as bars raise IncompatibleTypesError.
+
+	.. versionadded:: 0.1.0
+	"""
+	with pytest.raises(IncompatibleTypesError):
+		read_values(STORED_HOURS, NUMBER_VALUE_CHART_NAME)
+
+
+def test_require_same_family_accepts_numbers_of_another_type() -> None:
+	"""
+	Check that integers next to decimals are accepted.
+
+	.. versionadded:: 0.1.0
+	"""
+	require_same_family(INTEGERS, Type.FLOAT64, TIME_VALUE_CHART_NAME)
+
+
+def test_require_same_family_rejects_numbers_next_to_times() -> None:
+	"""
+	Check that numbers next to times of day raise IncompatibleTypesError naming the column.
+
+	.. versionadded:: 0.1.0
+	"""
+	with pytest.raises(IncompatibleTypesError) as error_info:
+		require_same_family(NAMED_COUNTS, Type.TIME, TIME_VALUE_CHART_NAME)
+
+	assert error_info.value.column_name == NAMED_COUNTS.name
+
+
+def test_count_hours_keeps_the_shape_of_the_times() -> None:
+	"""
+	Check that a grid of times gives a grid of hours, NaN where a time is missing.
+
+	.. versionadded:: 0.1.0
+	"""
+	hours = count_hours(STORED_HOUR_GRID)
+
+	first_hour = hours[0, 0]
+	missing_hour = hours[0, 1]
+	hour_missing = numpy.isnan(missing_hour)
+	is_missing = bool(hour_missing)
+	assert hours.shape == EXPECTED_HOUR_GRID_SHAPE
+	assert first_hour == HALF_PAST_THREE_HOURS
+	assert is_missing

@@ -113,5 +113,8 @@ def test_hide_missing_points_hides_rows_missing_a_color_or_a_size() -> None:
 
 	shown_values = hide_missing_points(chart_values, point_values)
 
-	hidden = numpy.isnan(shown_values.series[0].values).tolist()
+	shown_series = shown_values.series[0]
+	hidden_values = numpy.isnan(shown_series.values)
+	hidden = hidden_values.tolist()
 	assert hidden == [False, True, True]
+	assert shown_values.value_type == chart_values.value_type

@@ -33,8 +33,9 @@ class LineChart(Chart):
 		booleans, the row numbers when omitted. An Array takes none, its rows being numbered. Times of day are placed
 		on an axis of one day labeled ``HH:MM``.
 	y
-		For a Table, the columns drawn, holding numbers, one line each. A Table needs it, even for a single column. An
-		Array takes none: when omitted, each of its columns is a line.
+		For a Table, the columns drawn, holding numbers or times of day, not both, one line each. A Table needs it,
+		even for a single column. An Array takes none: when omitted, each of its columns is a line. Times of day are
+		measured on an axis labeled ``HH:MM``.
 	colors
 		One color per line, the colors of the default cycle when omitted. The chart keeps its own list.
 	line

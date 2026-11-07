@@ -13,6 +13,7 @@ from numdaplot.plots.charts.histogram_chart import HistogramChart
 from numdaplot.plots.charts.pie_chart import PieChart
 from numdaplot.plots.data.pie_values import read_pie_values
 from numdaplot.plots.data.sample_values import read_sample_values
+from numdaplot.plots.drawing.histogram_drawing import require_bins_on_values
 from numdaplot.plots.drawing.series_colors import require_color_count
 from numdaplot.plots.plot_data import PlotData
 from numdaplot.plots.style.axis_settings import require_no_axis_settings
@@ -39,7 +40,7 @@ class PlotDistributionCreation(PlotData):
 		cls, data: Table | Array, chart: HistogramChart | None = None, style: PlotStyle | None = None
 	) -> Self:
 		"""
-		Return a Plot drawing how many values of columns of numbers fall in each bin.
+		Return a Plot drawing how many values of columns of numbers or times of day fall in each bin.
 
 		For a Table, ``HistogramChart.columns`` names the columns drawn. For an Array of one or two dimensions, each
 		column is drawn. Several columns share the same bins.
@@ -70,7 +71,8 @@ class PlotDistributionCreation(PlotData):
 		ColumnNotFoundError
 			When a column does not exist.
 		IncompatibleTypesError
-			When a drawn column does not hold numbers.
+			When a drawn column holds neither numbers nor times of day, the columns mix them, or the width of the bins
+			is a number for times of day or a duration for numbers.
 		DimensionError
 			When an Array has more than two dimensions.
 		InvalidColorCountError
@@ -90,6 +92,7 @@ class PlotDistributionCreation(PlotData):
 			chart = HistogramChart()
 
 		values = read_sample_values(data, chart.columns, None, HISTOGRAM_CHART_NAME)
+		require_bins_on_values(chart.bins, values.value_type)
 		series_count = len(values.series)
 		require_color_count(chart.colors, series_count)
 		layer = ChartLayer(chart, values)
@@ -101,7 +104,7 @@ class PlotDistributionCreation(PlotData):
 	@checked_arguments
 	def box(cls, data: Table | Array, chart: BoxChart | None = None, style: PlotStyle | None = None) -> Self:
 		"""
-		Return a Plot summing up the spread of columns of numbers as boxes.
+		Return a Plot summing up the spread of columns of numbers or times of day as boxes.
 
 		For a Table, ``BoxChart.columns`` names the columns drawn, and ``BoxChart.group_by`` may split their rows into
 		groups. For an Array of one or two dimensions, each column is a box.
@@ -132,7 +135,8 @@ class PlotDistributionCreation(PlotData):
 		ColumnNotFoundError
 			When a column does not exist.
 		IncompatibleTypesError
-			When a drawn column does not hold numbers, or ``group_by`` does not hold texts.
+			When a drawn column holds neither numbers nor times of day, the columns mix them, or ``group_by`` holds
+			neither texts, booleans nor times of day.
 		DimensionError
 			When an Array has more than two dimensions.
 		InvalidColorCountError

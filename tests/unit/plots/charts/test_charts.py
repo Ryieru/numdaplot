@@ -12,7 +12,6 @@ from numdaplot.errors.empty_list_error import EmptyListError
 from numdaplot.errors.refused_setting_error import RefusedSettingError
 from numdaplot.plots.charts.bar_chart import BarChart
 from numdaplot.plots.charts.bar_layout import BarLayout
-from numdaplot.plots.charts.bin_count import BinCount
 from numdaplot.plots.charts.box_chart import BoxChart
 from numdaplot.plots.charts.cell_values import CellValues
 from numdaplot.plots.charts.chart import Chart
@@ -48,7 +47,6 @@ CHARTS = [
 	MissingMapChart(),
 ]
 DUPLICATE_COLUMNS = ["price", "price"]
-DEFAULT_BIN_COUNT = 10
 
 
 @pytest.mark.parametrize("chart", CHARTS)
@@ -157,7 +155,7 @@ def test_scatter_chart_rejects_points_without_marker() -> None:
 		ScatterChart(marker=MarkerShape.NONE)
 
 
-def test_histogram_chart_defaults_count_values_in_ten_bins() -> None:
+def test_histogram_chart_defaults_leave_the_bins_to_the_values() -> None:
 	"""
 	Check the defaults of a HistogramChart.
 
@@ -166,7 +164,7 @@ def test_histogram_chart_defaults_count_values_in_ten_bins() -> None:
 	chart = HistogramChart()
 
 	assert chart.columns is None
-	assert chart.bins == BinCount(DEFAULT_BIN_COUNT)
+	assert chart.bins is None
 	assert chart.measure == Measure.COUNT
 	assert chart.colors is None
 

@@ -1,14 +1,16 @@
 """
-Functional tests of the Plots of Tables holding times of day.
+Functional tests of the Plots of times of day, as positions, labels and values.
 
 .. versionadded:: 0.1.0
 """
 
 from collections.abc import Sequence
-from datetime import time
+from datetime import time, timedelta
 
 import numpy
+import pytest
 from matplotlib.axes import Axes
+from matplotlib.patches import Rectangle
 from matplotlib.text import Text
 
 import numdaplot as ndp
@@ -22,6 +24,16 @@ EXPECTED_HOUR_LABELS = ["08:00", "12:30", "18:15", "23:00"]
 EXPECTED_DAY_LABELS = ["06:00", "09:00", "12:00", "15:00", "18:00", "21:00", "24:00"]
 DATE_LABEL_ROTATION = 45.0
 SINGLE_LINE_COUNT = 1
+HOUR_COLUMNS = ["hour"]
+MIXED_COLUMNS = ["hour", "count"]
+DAY_BIN_COUNT = 24
+HALF_HOUR_BINS = ndp.BinWidth(timedelta(minutes=30))
+HALF_HOUR_WIDTH = 0.5
+EXPECTED_HALF_HOUR_BIN_COUNT = 30
+SIX_BINS = ndp.BinCount(6)
+NUMBER_WIDTH = ndp.BinWidth(2.0)
+HOUR_WIDTH = ndp.BinWidth(timedelta(hours=1))
+EXPECTED_VALUE_LABELS = ["06:00", "09:00", "12:00", "15:00", "18:00", "21:00", "24:00"]
 
 
 def draw_axes(plot: ndp.Plot) -> Axes:
@@ -221,3 +233,194 @@ def test_a_box_plot_grouped_by_time_of_day_names_each_box_with_its_time() -> Non
 	tick_labels = axes.get_xticklabels()
 	labels = read_texts(tick_labels)
 	assert labels == EXPECTED_HOUR_LABELS
+
+
+def test_a_histogram_of_times_counts_each_hour_of_the_day_by_default() -> None:
+	"""
+	Check that a histogram of times of day has one bin per hour from 00:00 to 24:00.
+
+	.. versionadded:: 0.1.0
+	"""
+	chart = ndp.HistogramChart(columns=HOUR_COLUMNS)
+	plot = ndp.Plot.histogram(ACCIDENTS, chart)
+
+	axes = draw_axes(plot)
+
+	bin_count = len(axes.patches)
+	assert bin_count == DAY_BIN_COUNT
+
+
+def test_a_histogram_of_times_takes_a_duration_as_bin_width() -> None:
+	"""
+	Check that half-hour bins cover the times from 08:00 to 23:00.
+
+	.. versionadded:: 0.1.0
+	"""
+	chart = ndp.HistogramChart(columns=HOUR_COLUMNS, bins=HALF_HOUR_BINS)
+	plot = ndp.Plot.histogram(ACCIDENTS, chart)
+
+	axes = draw_axes(plot)
+
+	bin_count = len(axes.patches)
+	bins = [patch for patch in axes.patches if isinstance(patch, Rectangle)]
+	first_bin = bins[0]
+	first_width = first_bin.get_width()
+	assert bin_count == EXPECTED_HALF_HOUR_BIN_COUNT
+	assert first_width == HALF_HOUR_WIDTH
+
+
+def test_a_histogram_of_times_takes_a_number_of_bins() -> None:
+	"""
+	Check that a number of bins splits the span of the times, under labels HH:MM.
+
+	.. versionadded:: 0.1.0
+	"""
+	chart = ndp.HistogramChart(columns=HOUR_COLUMNS, bins=SIX_BINS)
+	plot = ndp.Plot.histogram(ACCIDENTS, chart)
+
+	axes = draw_axes(plot)
+
+	bin_count = len(axes.patches)
+	tick_labels = axes.get_xticklabels()
+	labels = read_texts(tick_labels)
+	assert bin_count == SIX_BINS.count
+	assert labels == EXPECTED_VALUE_LABELS
+
+
+def test_a_histogram_of_times_rejects_a_number_as_bin_width() -> None:
+	"""
+	Check that a number as width of bins of times of day raises IncompatibleTypesError.
+
+	.. versionadded:: 0.1.0
+	"""
+	chart = ndp.HistogramChart(columns=HOUR_COLUMNS, bins=NUMBER_WIDTH)
+
+	with pytest.raises(ndp.IncompatibleTypesError):
+		ndp.Plot.histogram(ACCIDENTS, chart)
+
+
+def test_a_histogram_of_numbers_rejects_a_duration_as_bin_width() -> None:
+	"""
+	Check that a duration as width of bins of numbers raises IncompatibleTypesError.
+
+	.. versionadded:: 0.1.0
+	"""
+	chart = ndp.HistogramChart(columns=COUNT_COLUMNS, bins=HOUR_WIDTH)
+
+	with pytest.raises(ndp.IncompatibleTypesError):
+		ndp.Plot.histogram(ACCIDENTS, chart)
+
+
+def test_a_box_plot_of_times_labels_its_axis_hh_mm() -> None:
+	"""
+	Check that boxes of times of day are measured on an axis labeled HH:MM.
+
+	.. versionadded:: 0.1.0
+	"""
+	chart = ndp.BoxChart(columns=HOUR_COLUMNS)
+	plot = ndp.Plot.box(ACCIDENTS, chart)
+
+	axes = draw_axes(plot)
+
+	tick_labels = axes.get_yticklabels()
+	labels = read_texts(tick_labels)
+	assert labels == EXPECTED_VALUE_LABELS
+
+
+def test_a_scatter_plot_places_each_point_at_the_hour_of_its_value() -> None:
+	"""
+	Check that times of day as y values are placed at their hours, under labels HH:MM.
+
+	.. versionadded:: 0.1.0
+	"""
+	chart = ndp.ScatterChart(x="count", y="hour")
+	plot = ndp.Plot.scatter(ACCIDENTS, chart)
+
+	axes = draw_axes(plot)
+
+	points = axes.collections[0]
+	offsets = points.get_offsets()
+	point_positions = numpy.asarray(offsets, dtype=numpy.float64)
+	y_positions = point_positions[:, 1]
+	y_position_list = y_positions.tolist()
+	tick_labels = axes.get_yticklabels()
+	labels = read_texts(tick_labels)
+	assert y_position_list == EXPECTED_HOURS
+	assert labels == EXPECTED_VALUE_LABELS
+
+
+def test_a_line_plot_of_an_array_of_times_labels_its_axis_hh_mm() -> None:
+	"""
+	Check that an Array of times of day drawn as a line is measured on an axis labeled HH:MM.
+
+	.. versionadded:: 0.1.0
+	"""
+	plot = ndp.Plot.line(HOURS)
+
+	axes = draw_axes(plot)
+
+	tick_labels = axes.get_yticklabels()
+	labels = read_texts(tick_labels)
+	assert labels == EXPECTED_VALUE_LABELS
+
+
+def test_a_line_of_times_is_added_on_the_right_of_bars_of_numbers() -> None:
+	"""
+	Check that a line of times of day measured on the right labels that axis HH:MM.
+
+	.. versionadded:: 0.1.0
+	"""
+	bars = ndp.BarChart(y=COUNT_COLUMNS)
+	line = ndp.LineChart(y=HOUR_COLUMNS)
+	bar_plot = ndp.Plot.bar(ACCIDENTS, bars)
+	plot = bar_plot.add_line(ACCIDENTS, line, ndp.ValueAxis.RIGHT)
+
+	figure = plot.to_matplotlib()
+	figure.draw_without_rendering()
+
+	right_axes = figure.axes[1]
+	tick_labels = right_axes.get_yticklabels()
+	labels = read_texts(tick_labels)
+	assert labels == EXPECTED_VALUE_LABELS
+
+
+def test_a_line_of_times_is_refused_on_the_axis_of_numbers() -> None:
+	"""
+	Check that a line of times of day added on the axis of a line of numbers raises IncompatibleChartsError.
+
+	.. versionadded:: 0.1.0
+	"""
+	count_line = ndp.LineChart(y=COUNT_COLUMNS)
+	hour_line = ndp.LineChart(y=HOUR_COLUMNS)
+	plot = ndp.Plot.line(ACCIDENTS, count_line)
+
+	with pytest.raises(ndp.IncompatibleChartsError):
+		plot.add_line(ACCIDENTS, hour_line)
+
+
+def test_a_plot_rejects_numbers_and_times_in_the_same_chart() -> None:
+	"""
+	Check that a histogram of a column of times and a column of numbers raises IncompatibleTypesError.
+
+	.. versionadded:: 0.1.0
+	"""
+	chart = ndp.HistogramChart(columns=MIXED_COLUMNS)
+
+	with pytest.raises(ndp.IncompatibleTypesError):
+		ndp.Plot.histogram(ACCIDENTS, chart)
+
+
+def test_bars_and_heatmaps_refuse_times_as_values() -> None:
+	"""
+	Check that bars and heatmap cells of times of day raise IncompatibleTypesError.
+
+	.. versionadded:: 0.1.0
+	"""
+	bars = ndp.BarChart(y=HOUR_COLUMNS)
+	heatmap = ndp.HeatmapChart(columns=HOUR_COLUMNS)
+
+	with pytest.raises(ndp.IncompatibleTypesError):
+		ndp.Plot.bar(ACCIDENTS, bars)
+
+	with pytest.raises(ndp.IncompatibleTypesError):
+		ndp.Plot.heatmap(ACCIDENTS, heatmap)

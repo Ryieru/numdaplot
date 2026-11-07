@@ -10,6 +10,7 @@ from typing import Any
 import numpy
 from numpy.typing import NDArray
 
+from numdaplot.data_types.type import Type
 from numdaplot.plots.data.position_kind import PositionKind
 
 
@@ -23,9 +24,10 @@ class Positions:
 	Parameters
 	----------
 	kind
-		Numbers, moments or texts.
+		Numbers, moments, texts or times of day.
 	values
-		One value per row: float64 numbers with NaN, datetime64[ns] clock times with NaT, or texts.
+		One value per row: float64 numbers with NaN, datetime64[ns] clock times with NaT, texts, or float64 hours
+		since midnight with NaN.
 	name
 		The name of the ``x`` column, or None for row numbers.
 
@@ -46,7 +48,7 @@ class Positions:
 @dataclass(frozen=True, eq=False)
 class Series:
 	"""
-	One series of numbers drawn by a chart.
+	One series of values drawn by a chart, as numbers.
 
 	.. versionadded:: 0.1.0
 
@@ -55,7 +57,8 @@ class Series:
 	name
 		The name shown in the legend: the column name, or the column number of an Array.
 	values
-		One float64 number per row, NaN where the value is missing or not drawn.
+		One float64 number per row, NaN where the value is missing or not drawn. A time of day is its hours since
+		midnight, such as 15.5 for 15:30.
 
 	Examples
 	--------
@@ -87,6 +90,8 @@ class ChartValues:
 	value_name
 		The default label of the axis of the series: the name of the single ``y`` column of a Table, None
 		otherwise.
+	value_type
+		The type of the first series, of the family of every series: numbers or times of day.
 
 	Examples
 	--------
@@ -101,3 +106,4 @@ class ChartValues:
 	series: list[Series]
 	rows: NDArray[numpy.intp]
 	value_name: str | None
+	value_type: Type

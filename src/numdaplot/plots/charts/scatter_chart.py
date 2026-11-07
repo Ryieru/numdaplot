@@ -45,8 +45,9 @@ class ScatterChart(Chart):
 		booleans, the row numbers when omitted. An Array takes none, its rows being numbered. Times of day are placed
 		on an axis of one day labeled ``HH:MM``.
 	y
-		For a Table, the column of the vertical positions, holding numbers. A Table needs it. An Array takes none: when
-		omitted, each of its columns is a series of points.
+		For a Table, the column of the vertical positions, holding numbers or times of day, the latter on an axis
+		labeled ``HH:MM``. A Table needs it. An Array takes none: when omitted, each of its columns is a series of
+		points.
 	color
 		The color of every point, the first color of the default cycle when omitted. With an Array of
 		several columns, the series take the colors of the default cycle and ``color`` is refused.

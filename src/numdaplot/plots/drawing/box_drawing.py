@@ -28,6 +28,7 @@ from numdaplot.plots.drawing.grid_axes import GridAxes
 from numdaplot.plots.drawing.plot_theme import BACKGROUND_COLOR
 from numdaplot.plots.drawing.position_axis import place_categories
 from numdaplot.plots.drawing.series_colors import choose_series_colors
+from numdaplot.plots.drawing.time_axis import measures_times, place_hour_ticks
 
 # Share of its place a box fills, leaving a gap between two boxes side by side.
 BOX_SHARE = 0.8
@@ -90,7 +91,7 @@ def draw_box_chart(axes: Axes, layer: ChartLayer) -> DrawnChart:
 	-------
 	DrawnChart
 		The ``group_by`` column and the single column as default labels, and grid lines across the axis of the
-		values only.
+		values only, labeled ``HH:MM`` for times of day.
 
 	Raises
 	------
@@ -123,6 +124,13 @@ def draw_box_chart(axes: Axes, layer: ChartLayer) -> DrawnChart:
 
 	last_edge = position_count - HALF_POSITION
 	axes.set_xlim(-HALF_POSITION, last_edge)
+
+	is_time = measures_times(values.value_type)
+	if is_time:
+		series_values = [series.values for series in values.series]
+		hours = numpy.concatenate(series_values)
+		place_hour_ticks(axes.yaxis, hours)
+
 	x_label = COLUMN_LABEL
 	if values.group_name is not None:
 		x_label = values.group_name

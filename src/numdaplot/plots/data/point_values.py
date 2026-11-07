@@ -4,7 +4,7 @@ Values coloring and sizing the points of a ScatterChart.
 .. versionadded:: 0.1.0
 """
 
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from typing import Any
 
 import numpy
@@ -216,11 +216,13 @@ def hide_missing_points(chart_values: ChartValues, point_values: PointValues) ->
 	Examples
 	--------
 	>>> import numpy
+	>>> import numdaplot as ndp
 	>>> from numdaplot.plots.data.chart_values import ChartValues, Positions, Series
 	>>> from numdaplot.plots.data.point_values import PointValues, hide_missing_points
 	>>> from numdaplot.plots.data.position_kind import PositionKind
 	>>> positions = Positions(PositionKind.NUMBERS, numpy.array([0.0, 1.0]), None)
-	>>> chart_values = ChartValues(positions, [Series("price", numpy.array([1.0, 2.0]))], numpy.arange(2), "price")
+	>>> price_series = Series("price", numpy.array([1.0, 2.0]))
+	>>> chart_values = ChartValues(positions, [price_series], numpy.arange(2), "price", ndp.Type.FLOAT64)
 	>>> point_values = PointValues(None, None, "surface", numpy.array([30.0, numpy.nan]))
 	>>> hide_missing_points(chart_values, point_values).series[0].values
 	array([ 1., nan])
@@ -242,6 +244,6 @@ def hide_missing_points(chart_values: ChartValues, point_values: PointValues) ->
 		series_copy = Series(series.name, shown_numbers)
 		shown_series.append(series_copy)
 
-	shown_values = ChartValues(chart_values.positions, shown_series, chart_values.rows, chart_values.value_name)
+	shown_values = replace(chart_values, series=shown_series)
 
 	return shown_values

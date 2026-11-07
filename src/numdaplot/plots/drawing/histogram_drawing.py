@@ -8,12 +8,15 @@ Drawing of a HistogramChart.
 # pyright: reportUnknownMemberType=false
 
 import math
+from datetime import timedelta
 from typing import cast
 
 import numpy
 from matplotlib.axes import Axes
 from numpy.typing import NDArray
 
+from numdaplot.data_types.type import Type
+from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
 from numdaplot.plots.chart_layer import ChartLayer
 from numdaplot.plots.charts.bin_count import BinCount
 from numdaplot.plots.charts.bin_width import BinWidth
@@ -23,6 +26,7 @@ from numdaplot.plots.drawing.drawn_chart import DrawnChart
 from numdaplot.plots.drawing.grid_axes import GridAxes
 from numdaplot.plots.drawing.plot_theme import BACKGROUND_COLOR
 from numdaplot.plots.drawing.series_colors import choose_series_colors
+from numdaplot.plots.drawing.time_axis import measures_times, place_hour_ticks
 from numdaplot.plots.drawing.whole_numbers import place_whole_ticks
 from numdaplot.ratios.measure import Measure
 
@@ -35,6 +39,13 @@ OVERLAID_OPACITY = 0.5
 BIN_EDGE_WIDTH = 0.8
 # Each bar starts at the left edge of its bin.
 BIN_ALIGNMENT = "edge"
+DEFAULT_BIN_COUNT = 10
+HOURS_PER_DAY = 24
+DAY_EDGE_COUNT = HOURS_PER_DAY + 1
+ONE_HOUR = timedelta(hours=1)
+NUMBER_WIDTH_TYPE = Type.FLOAT64
+DURATION_WIDTH_TYPE = Type.DURATION
+WIDTH_OPERATION = "BinWidth"
 
 
 def draw_histogram_chart(axes: Axes, layer: ChartLayer) -> DrawnChart:
@@ -84,7 +95,7 @@ def draw_histogram_chart(axes: Axes, layer: ChartLayer) -> DrawnChart:
 	color_codes = choose_series_colors(chart.colors, series_count)
 	samples = [drop_missing_numbers(series.values) for series in values.series]
 	all_numbers = numpy.concatenate(samples)
-	bin_edges = find_bin_edges(all_numbers, chart.bins)
+	bin_edges = find_bin_edges(all_numbers, chart.bins, values.value_type)
 	bin_starts = bin_edges[:-1]
 	bin_widths = numpy.diff(bin_edges)
 	opacity = SINGLE_OPACITY
@@ -112,13 +123,64 @@ def draw_histogram_chart(axes: Axes, layer: ChartLayer) -> DrawnChart:
 
 	all_counts = numpy.concatenate(bin_counts)
 	place_whole_ticks(axes.yaxis, all_counts)
+
+	is_time = measures_times(values.value_type)
+	if is_time:
+		place_hour_ticks(axes.xaxis, bin_edges)
+
 	measure_label = MEASURE_LABELS[chart.measure]
 	drawn_chart = DrawnChart(values.value_name, measure_label, False, GridAxes.VALUES, None)
 
 	return drawn_chart
 
 
-def find_bin_edges(numbers: NDArray[numpy.float64], bins: BinCount | BinWidth) -> NDArray[numpy.float64]:
+def require_bins_on_values(bins: BinCount | BinWidth | None, value_type: Type) -> None:
+	"""
+	Check that the width of the bins of a histogram is a number for numbers and a duration for times of day.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	bins
+		The bins of the HistogramChart, None for the default ones.
+	value_type
+		The type of the values drawn.
+
+	Raises
+	------
+	IncompatibleTypesError
+		When a number gives the width of bins of times of day, or a duration the width of bins of numbers.
+
+	Examples
+	--------
+	>>> from datetime import timedelta
+	>>> import numdaplot as ndp
+	>>> from numdaplot.plots.drawing.histogram_drawing import require_bins_on_values
+	>>> try:
+	... 	require_bins_on_values(ndp.BinWidth(timedelta(hours=1)), ndp.Type.FLOAT64)
+	... except ndp.IncompatibleTypesError as error:
+	... 	print(error)
+	Cannot apply BinWidth to DURATION and FLOAT64.
+	"""
+	if not isinstance(bins, BinWidth):
+		return
+
+	is_time = measures_times(value_type)
+	is_duration = isinstance(bins.width, timedelta)
+	if is_duration == is_time:
+		return
+
+	width_type = NUMBER_WIDTH_TYPE
+	if is_duration:
+		width_type = DURATION_WIDTH_TYPE
+
+	raise IncompatibleTypesError(WIDTH_OPERATION, [width_type.name, value_type.name])
+
+
+def find_bin_edges(
+	numbers: NDArray[numpy.float64], bins: BinCount | BinWidth | None, value_type: Type
+) -> NDArray[numpy.float64]:
 	"""
 	Return the edges of the bins of a histogram.
 
@@ -127,30 +189,76 @@ def find_bin_edges(numbers: NDArray[numpy.float64], bins: BinCount | BinWidth) -
 	Parameters
 	----------
 	numbers
-		Every number drawn, of every column, none missing.
+		Every number drawn, of every column, none missing, a time of day being its hours since midnight.
 	bins
-		The number of bins, spread from the smallest to the largest number, or their width.
+		The number of bins, spread from the smallest to the largest number, or their width, checked against the
+		values. None gives 10 bins for numbers and one bin per hour from 00:00 to 24:00 for times of day.
+	value_type
+		The type of the values drawn.
 
 	Returns
 	-------
 	NDArray[numpy.float64]
-		One edge more than there are bins.
+		One edge more than there are bins, in hours for times of day.
 
 	Examples
 	--------
 	>>> import numdaplot as ndp
 	>>> import numpy
 	>>> from numdaplot.plots.drawing.histogram_drawing import find_bin_edges
-	>>> find_bin_edges(numpy.array([12.0, 20.0]), ndp.BinCount(4))
+	>>> find_bin_edges(numpy.array([12.0, 20.0]), ndp.BinCount(4), ndp.Type.FLOAT64)
 	array([12., 14., 16., 18., 20.])
+	>>> len(find_bin_edges(numpy.array([8.5]), None, ndp.Type.TIME))
+	25
 	"""
+	is_time = measures_times(value_type)
+	uses_day_edges = bins is None and is_time
+	if uses_day_edges:
+		day_edges = numpy.arange(DAY_EDGE_COUNT, dtype=numpy.float64)
+		return day_edges
+
+	if bins is None:
+		bins = BinCount(DEFAULT_BIN_COUNT)
+
 	if isinstance(bins, BinWidth):
-		width_edges = find_width_edges(numbers, bins.width)
+		width = read_width_hours(bins)
+		width_edges = find_width_edges(numbers, width)
 		return width_edges
 
 	count_edges = numpy.histogram_bin_edges(numbers, bins=bins.count)
 
 	return count_edges
+
+
+def read_width_hours(bins: BinWidth) -> float:
+	"""
+	Return the width of bins as a number, a duration being counted in hours.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	bins
+		The width of the bins.
+
+	Returns
+	-------
+	float
+		The width of bins of numbers, or the hours of a duration.
+
+	Examples
+	--------
+	>>> from datetime import timedelta
+	>>> import numdaplot as ndp
+	>>> from numdaplot.plots.drawing.histogram_drawing import read_width_hours
+	>>> read_width_hours(ndp.BinWidth(timedelta(minutes=30))), read_width_hours(ndp.BinWidth(2.5))
+	(0.5, 2.5)
+	"""
+	if isinstance(bins.width, timedelta):
+		width_hours = bins.width / ONE_HOUR
+		return width_hours
+
+	return bins.width
 
 
 def find_width_edges(numbers: NDArray[numpy.float64], width: float) -> NDArray[numpy.float64]:

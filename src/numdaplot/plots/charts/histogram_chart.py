@@ -16,8 +16,6 @@ from numdaplot.plots.style.custom_color import CustomColor
 from numdaplot.ratios.measure import Measure
 from numdaplot.settings.field_types import require_field_types
 
-DEFAULT_BIN_COUNT = 10
-
 
 @dataclass(frozen=True)
 class HistogramChart(Chart):
@@ -32,10 +30,11 @@ class HistogramChart(Chart):
 	Parameters
 	----------
 	columns
-		For a Table, the columns drawn, holding numbers. A Table needs it, even for a single column. An Array takes
-		none: when omitted, each of its columns is drawn.
+		For a Table, the columns drawn, holding numbers or times of day, not both. A Table needs it, even for a
+		single column. An Array takes none: when omitted, each of its columns is drawn.
 	bins
-		The bins, ``BinCount(10)`` by default, or ``BinWidth`` for bins of a given width.
+		The bins, ``BinCount(10)`` for numbers and one bin per hour from 00:00 to 24:00 for times of day when
+		omitted, or ``BinWidth`` for bins of a given width: a number for numbers, a duration for times of day.
 	measure
 		``Measure.COUNT`` by default for the number of values of each bin, ``Measure.RATIO`` for their share
 		of the values of the column.
@@ -65,7 +64,7 @@ class HistogramChart(Chart):
 	"""
 
 	columns: list[str] | None = None
-	bins: BinCount | BinWidth = BinCount(DEFAULT_BIN_COUNT)
+	bins: BinCount | BinWidth | None = None
 	measure: Measure = Measure.COUNT
 	colors: Sequence[Color | CustomColor] | None = None
 

@@ -63,3 +63,25 @@ def test_read_missing_cells_marks_each_missing_value() -> None:
 	assert names == EXPECTED_COLUMNS
 	assert cell_values.series[1].values.tolist() == EXPECTED_PRICE_CELLS
 	assert cell_values.positions.values.tolist() == EXPECTED_ROW_NUMBERS
+
+
+def test_read_missing_counts_are_decimals() -> None:
+	"""
+	Check that the counts of missing values have the FLOAT64 type.
+
+	.. versionadded:: 0.1.0
+	"""
+	counts = read_missing_counts(FLATS, ndp.Measure.COUNT)
+
+	assert counts.value_type == ndp.Type.FLOAT64
+
+
+def test_read_missing_cells_are_decimals() -> None:
+	"""
+	Check that the missing cells have the FLOAT64 type.
+
+	.. versionadded:: 0.1.0
+	"""
+	cells = read_missing_cells(FLATS)
+
+	assert cells.value_type == ndp.Type.FLOAT64

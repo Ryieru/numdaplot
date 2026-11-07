@@ -6,6 +6,7 @@ Checks of a chart added to a Plot with ``add_line``, ``add_bar`` or ``add_scatte
 
 from typing import cast
 
+from numdaplot.data_types.value_family import ValueFamily, find_family
 from numdaplot.errors.incompatible_charts_error import IncompatibleChartsError
 from numdaplot.errors.refused_setting_error import RefusedSettingError
 from numdaplot.plots.chart_layer import ChartLayer
@@ -14,6 +15,7 @@ from numdaplot.plots.charts.chart import Chart
 from numdaplot.plots.charts.line_chart import LineChart
 from numdaplot.plots.charts.orientation import Orientation
 from numdaplot.plots.charts.scatter_chart import ScatterChart
+from numdaplot.plots.charts.value_axis import ValueAxis
 from numdaplot.plots.data.chart_values import ChartValues
 from numdaplot.plots.data.position_kind import PositionKind
 
@@ -24,6 +26,15 @@ POSITION_NAMES = {
 	PositionKind.TEXTS: "texts",
 	PositionKind.TIMES: "times of day",
 }
+VALUE_NAMES = {
+	ValueFamily.NUMBER: "numbers",
+	ValueFamily.TIME: "times of day",
+}
+AXIS_NAMES = {
+	ValueAxis.LEFT: "left",
+	ValueAxis.RIGHT: "right",
+}
+VALUE_DESCRIPTION = "{value_name} on the {axis_name} axis"
 PLOT_NAME = "a Plot of {chart_name}"
 HORIZONTAL_BARS_NAME = "a Plot of horizontal bars"
 HORIZONTAL_SETTING = "Orientation.HORIZONTAL"
@@ -143,6 +154,64 @@ def require_same_positions(first_layer: ChartLayer, added_layer: ChartLayer) -> 
 	added_name = POSITION_NAMES[added_kind]
 	plot_name = POSITION_NAMES[plot_kind]
 	raise IncompatibleChartsError(added_class.__name__, added_name, plot_name)
+
+
+def require_same_values(layers: list[ChartLayer], added_layer: ChartLayer, axis: ValueAxis) -> None:
+	"""
+	Check that a chart added to a Plot measures the same kind of values as the charts already on its axis.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	layers
+		The charts of the Plot and their values.
+	added_layer
+		The chart added and its values.
+	axis
+		The vertical axis the added chart is measured on.
+
+	Raises
+	------
+	IncompatibleChartsError
+		When one measures numbers and the other times of day on the same axis.
+
+	Examples
+	--------
+	>>> from datetime import time
+	>>> import numdaplot as ndp
+	>>> from numdaplot.plots.chart_layer import ChartLayer
+	>>> from numdaplot.plots.data.array_values import read_array_values
+	>>> from numdaplot.plots.overlay_checks import require_same_values
+	>>> counts = ndp.Array.from_list([3.0, 5.0])
+	>>> hours = ndp.Array.from_list([time(8), time(9)])
+	>>> count_line = ChartLayer(ndp.LineChart(), read_array_values(counts, "LineChart"))
+	>>> hour_line = ChartLayer(ndp.LineChart(), read_array_values(hours, "LineChart"))
+	>>> try:
+	... 	require_same_values([count_line], hour_line, ndp.ValueAxis.LEFT)
+	... except ndp.IncompatibleChartsError as error:
+	... 	print(error)
+	A LineChart with times of day on the left axis cannot be added to a Plot with numbers on the left axis.
+	"""
+	added_values = cast(ChartValues, added_layer.values)
+	added_family = find_family(added_values.value_type)
+	axis_name = AXIS_NAMES[axis]
+
+	for layer in layers:
+		if layer.value_axis != axis:
+			continue
+
+		values = cast(ChartValues, layer.values)
+		plot_family = find_family(values.value_type)
+		if plot_family == added_family:
+			return
+
+		added_class = type(added_layer.chart)
+		added_value_name = VALUE_NAMES[added_family]
+		plot_value_name = VALUE_NAMES[plot_family]
+		added_name = VALUE_DESCRIPTION.format(value_name=added_value_name, axis_name=axis_name)
+		plot_name = VALUE_DESCRIPTION.format(value_name=plot_value_name, axis_name=axis_name)
+		raise IncompatibleChartsError(added_class.__name__, added_name, plot_name)
 
 
 def is_horizontal_bar_chart(chart: Chart) -> bool:

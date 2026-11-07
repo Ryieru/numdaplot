@@ -9,6 +9,7 @@ from dataclasses import dataclass
 import numpy
 from numpy.typing import NDArray
 
+from numdaplot.data_types.type import Type
 from numdaplot.plots.data.chart_values import ChartValues, Positions, Series
 from numdaplot.plots.data.position_kind import PositionKind
 from numdaplot.positions.axis import Axis
@@ -50,6 +51,8 @@ class MissingCounts(ChartValues):
 		The number of each column.
 	value_name
 		The label of the axis of the values.
+	value_type
+		``FLOAT64``, the type of the counts and the shares.
 	counts
 		The number of missing values of each column.
 	row_count
@@ -112,7 +115,7 @@ def read_missing_counts(table: Table, measure: Measure) -> MissingCounts:
 	positions = Positions(PositionKind.TEXTS, column_names, COLUMN_AXIS_NAME)
 	count_series = Series(count_name, shown_values)
 	measure_label = MEASURE_LABELS[measure]
-	count_values = MissingCounts(positions, [count_series], rows, measure_label, counts, row_count)
+	count_values = MissingCounts(positions, [count_series], rows, measure_label, Type.FLOAT64, counts, row_count)
 
 	return count_values
 
@@ -157,6 +160,6 @@ def read_missing_cells(table: Table) -> ChartValues:
 		column_series = Series(column_name, column_cells)
 		series.append(column_series)
 
-	cell_values = ChartValues(positions, series, rows, None)
+	cell_values = ChartValues(positions, series, rows, None, Type.FLOAT64)
 
 	return cell_values

@@ -119,6 +119,9 @@ and numdaplot follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
   and as Parquet times read back as `TIME`.
 - Plots place `TIME` columns at their hours on the x axis of line, bar and scatter charts, labeled `HH:MM`, and
   name heatmap rows, pie slices, `color_by` groups and box `group_by` groups with `HH:MM` labels.
+- Plots measure `TIME` values on an axis labeled `HH:MM`: `y` of line and scatter charts, box charts, histograms
+  and Arrays of times of day. A histogram of times has one bin per hour from 00:00 to 24:00 by default, and
+  `BinWidth` takes a duration of at most a day for times of day.
 - `Type` enum of value types and its conversion to numpy and pandas dtypes, and the `Library` enum read on
   `UnsupportedTypeError`.
 - Rules: `Equal`, `NotEqual`, `Greater`, `GreaterOrEqual`, `Less`, `LessOrEqual`, `Between`, `IsIn`,

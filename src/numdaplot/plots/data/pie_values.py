@@ -21,6 +21,7 @@ from numdaplot.plots.data.column_reading import read_numbers, read_texts
 from numdaplot.plots.data.position_kind import PositionKind
 from numdaplot.plots.data.unique_labels import require_unique_labels
 from numdaplot.tables.columns.column_names import require_known_columns
+from numdaplot.tables.frames.column_values import find_column_type
 from numdaplot.tables.table import Table
 from numdaplot.tables.table_data import read_stored_frame
 
@@ -97,7 +98,9 @@ def read_pie_values(table: Table, chart: PieChart) -> ChartValues:
 	rows = numpy.arange(slice_count)
 	positions = Positions(PositionKind.TEXTS, labels, labels_name)
 	values_series = Series(values_name, numbers)
-	pie_values = ChartValues(positions, [values_series], rows, values_name)
+	values_column = frame[values_name]
+	values_type = find_column_type(values_column)
+	pie_values = ChartValues(positions, [values_series], rows, values_name, values_type)
 
 	return pie_values
 

@@ -11,7 +11,10 @@ INCOMPATIBLE_CHARTS_MESSAGE = "A {chart_name} with {chart_positions} cannot be a
 
 class IncompatibleChartsError(NumdaplotError):
 	"""
-	Raised when a chart added to a Plot places its ``x`` values on another kind of axis: numbers, dates or texts.
+	Raised when a chart added to a Plot does not have the kind of values of an axis it shares with the Plot.
+
+	Its ``x`` values are numbers, dates, texts or times of day while the Plot has another kind, or it measures numbers
+	on an axis of times of day, or the reverse.
 
 	.. versionadded:: 0.1.0
 
@@ -20,18 +23,20 @@ class IncompatibleChartsError(NumdaplotError):
 	chart_name
 		Name of the chart class added, such as ``LineChart``.
 	chart_positions
-		What the added chart has as ``x`` values: ``numbers``, ``dates`` or ``texts``.
+		What the added chart has on the shared axis: ``numbers``, ``dates``, ``texts`` or ``times of day`` as ``x``
+		values, or ``numbers on the left axis`` or ``times of day on the left axis`` as values.
 	plot_positions
-		What the Plot has as ``x`` values.
+		What the Plot has on the shared axis.
 
 	Attributes
 	----------
 	chart_name
 		Name of the chart class added, such as ``LineChart``.
 	chart_positions
-		What the added chart has as ``x`` values: ``numbers``, ``dates`` or ``texts``.
+		What the added chart has on the shared axis: ``numbers``, ``dates``, ``texts`` or ``times of day`` as ``x``
+		values, or ``numbers on the left axis`` or ``times of day on the left axis`` as values.
 	plot_positions
-		What the Plot has as ``x`` values.
+		What the Plot has on the shared axis.
 
 	Examples
 	--------
@@ -52,7 +57,7 @@ class IncompatibleChartsError(NumdaplotError):
 
 	def __init__(self, chart_name: str, chart_positions: str, plot_positions: str) -> None:
 		"""
-		Build the error message from the chart and the two kinds of ``x`` values.
+		Build the error message from the chart and what each one has on the shared axis.
 
 		.. versionadded:: 0.1.0
 
@@ -61,9 +66,10 @@ class IncompatibleChartsError(NumdaplotError):
 		chart_name
 			Name of the chart class added, such as ``LineChart``.
 		chart_positions
-			What the added chart has as ``x`` values: ``numbers``, ``dates`` or ``texts``.
+			What the added chart has on the shared axis: ``numbers``, ``dates``, ``texts`` or ``times of day`` as ``x``
+			values, or ``numbers on the left axis`` or ``times of day on the left axis`` as values.
 		plot_positions
-			What the Plot has as ``x`` values.
+			What the Plot has on the shared axis.
 		"""
 		message = INCOMPATIBLE_CHARTS_MESSAGE.format(
 			chart_name=chart_name, chart_positions=chart_positions, plot_positions=plot_positions

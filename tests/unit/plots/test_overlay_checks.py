@@ -4,7 +4,7 @@ Unit tests of the checks of a chart added to a Plot.
 .. versionadded:: 0.1.0
 """
 
-from datetime import date
+from datetime import date, time
 
 import pytest
 
@@ -17,6 +17,7 @@ from numdaplot.plots.overlay_checks import (
 	is_horizontal_bar_chart,
 	require_overlay_base,
 	require_same_positions,
+	require_same_values,
 	require_vertical_bars,
 )
 
@@ -37,6 +38,14 @@ SHOPS = ndp.Table.from_arrays(
 CITY_BARS = ChartLayer(ndp.BarChart(), read_table_values(SHOPS, "city", ["sales"], "BarChart"))
 DATES_OVER_TEXTS_MESSAGE = "A LineChart with dates cannot be added to a Plot with texts"
 DAY_LINE = ChartLayer(ndp.LineChart(), read_table_values(SHOPS, "day", ["sales"], "LineChart"))
+OVERLAY_HOURS = ndp.Array.from_list([time(8), time(9)])
+HOUR_VALUES = read_array_values(OVERLAY_HOURS, "LineChart")
+HOUR_LINE = ChartLayer(ndp.LineChart(), HOUR_VALUES)
+RIGHT_PRICE_VALUES = read_array_values(PRICES, "LineChart")
+RIGHT_LINE = ChartLayer(ndp.LineChart(), RIGHT_PRICE_VALUES, value_axis=ndp.ValueAxis.RIGHT)
+TIMES_OVER_NUMBERS_MESSAGE = (
+	"A LineChart with times of day on the left axis cannot be added to a Plot with numbers on the left axis."
+)
 
 
 @pytest.mark.parametrize("first_layer", [LINE, VERTICAL_BARS, POINTS])
@@ -125,3 +134,34 @@ def test_is_horizontal_bar_chart_is_false_for_other_charts() -> None:
 
 	assert not vertical_answer
 	assert not line_answer
+
+
+def test_require_same_values_accepts_numbers_on_an_axis_of_numbers() -> None:
+	"""
+	Check that a line of numbers is accepted over bars of numbers.
+
+	.. versionadded:: 0.1.0
+	"""
+	require_same_values([VERTICAL_BARS], LINE, ndp.ValueAxis.LEFT)
+
+
+def test_require_same_values_accepts_times_on_the_other_axis() -> None:
+	"""
+	Check that times of day are accepted on the left when the numbers are on the right.
+
+	.. versionadded:: 0.1.0
+	"""
+	require_same_values([RIGHT_LINE], HOUR_LINE, ndp.ValueAxis.LEFT)
+
+
+def test_require_same_values_rejects_times_on_an_axis_of_numbers() -> None:
+	"""
+	Check that a line of times of day on the axis of numbers raises IncompatibleChartsError.
+
+	.. versionadded:: 0.1.0
+	"""
+	with pytest.raises(ndp.IncompatibleChartsError) as error_info:
+		require_same_values([VERTICAL_BARS], HOUR_LINE, ndp.ValueAxis.LEFT)
+
+	message = str(error_info.value)
+	assert message == TIMES_OVER_NUMBERS_MESSAGE

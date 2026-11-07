@@ -4,6 +4,8 @@ Unit tests of the values a histogram or a box chart sums up.
 .. versionadded:: 0.1.0
 """
 
+from datetime import time
+
 import numpy
 import pandas
 import pytest
@@ -30,6 +32,9 @@ EXPECTED_GROUPS = ["Paris", None, "Lyon"]
 EXPECTED_ARRAY_NAMES = ["0", "1"]
 NUMBERS_WITH_GAPS = numpy.array([numpy.nan, 3.0, numpy.nan, 1.0])
 EXPECTED_PRESENT_NUMBERS = [3.0, 1.0]
+HOUR_SAMPLES = ndp.Array.from_list([time(8), time(20)])
+HOUR_TABLE = ndp.Table.from_arrays({"hour": HOUR_SAMPLES})
+HOUR_COLUMN = ["hour"]
 
 
 def test_read_sample_values_reads_each_column_of_a_table() -> None:
@@ -135,3 +140,25 @@ def test_drop_missing_numbers_keeps_the_present_numbers_in_order() -> None:
 	present_numbers = drop_missing_numbers(NUMBERS_WITH_GAPS)
 
 	assert present_numbers.tolist() == EXPECTED_PRESENT_NUMBERS
+
+
+def test_read_sample_values_gives_the_type_of_the_columns() -> None:
+	"""
+	Check that a Table of times of day gives the TIME type.
+
+	.. versionadded:: 0.1.0
+	"""
+	samples = read_sample_values(HOUR_TABLE, HOUR_COLUMN, None, CHART_NAME)
+
+	assert samples.value_type == ndp.Type.TIME
+
+
+def test_read_sample_values_gives_the_type_of_an_array() -> None:
+	"""
+	Check that an Array of times of day gives the TIME type.
+
+	.. versionadded:: 0.1.0
+	"""
+	samples = read_sample_values(HOUR_SAMPLES, None, None, CHART_NAME)
+
+	assert samples.value_type == ndp.Type.TIME

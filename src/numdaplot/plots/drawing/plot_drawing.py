@@ -43,6 +43,7 @@ from numdaplot.plots.drawing.plot_axes import PlotAxes
 from numdaplot.plots.drawing.plot_theme import BACKGROUND_COLOR, THEME
 from numdaplot.plots.drawing.scatter_drawing import draw_scatter_chart
 from numdaplot.plots.drawing.style_drawing import apply_style
+from numdaplot.plots.drawing.time_axis import place_value_hours
 from numdaplot.plots.style.image_options import DEFAULT_DPI
 from numdaplot.plots.style.plot_style import PlotStyle
 
@@ -181,6 +182,8 @@ def draw_layers(left_axes: Axes, layers: list[ChartLayer]) -> tuple[PlotAxes, Dr
 	"""
 	Draw each chart of a Plot in order, on the left axes or on axes measured on the right.
 
+	The axis of the values of each axes is labeled ``HH:MM`` when its lines or points measure times of day.
+
 	.. versionadded:: 0.1.0
 
 	Parameters
@@ -217,22 +220,29 @@ def draw_layers(left_axes: Axes, layers: list[ChartLayer]) -> tuple[PlotAxes, Dr
 	right_axes = None
 	left_charts = list[DrawnChart]()
 	right_charts = list[DrawnChart]()
+	left_layers = list[ChartLayer]()
+	right_layers = list[ChartLayer]()
 
 	for layer in layers:
 		target_axes = left_axes
 		target_charts = left_charts
+		target_layers = left_layers
 		if layer.value_axis == ValueAxis.RIGHT:
 			right_axes = find_right_axes(left_axes, right_axes)
 			target_axes = right_axes
 			target_charts = right_charts
+			target_layers = right_layers
 
 		chart_class = type(layer.chart)
 		draw_chart = CHART_DRAWERS[chart_class]
 		drawn_chart = draw_chart(target_axes, layer)
 		target_charts.append(drawn_chart)
+		target_layers.append(layer)
 
+	place_value_hours(left_axes, left_layers)
 	right_label = None
-	if right_charts != []:
+	if right_axes is not None:
+		place_value_hours(right_axes, right_layers)
 		right_label = right_charts[0].y_label
 
 	plot_axes = PlotAxes(left_axes, right_axes, right_label)

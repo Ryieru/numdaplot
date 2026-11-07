@@ -7,12 +7,15 @@ Unit tests of the drawing of a HistogramChart.
 # The matplotlib stubs leave the keyword arguments of most drawing methods untyped.
 # pyright: reportUnknownMemberType=false
 
+from datetime import time, timedelta
+
 import numpy
 import pytest
 from matplotlib.figure import Figure
 from matplotlib.patches import Rectangle
 
 import numdaplot as ndp
+from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
 from numdaplot.errors.invalid_color_count_error import InvalidColorCountError
 from numdaplot.plots.chart_layer import ChartLayer
 from numdaplot.plots.data.sample_values import read_sample_values
@@ -23,12 +26,16 @@ from numdaplot.plots.drawing.histogram_drawing import (
 	find_bin_edges,
 	find_bin_weights,
 	find_width_edges,
+	read_width_hours,
+	require_bins_on_values,
 )
 
 CHART_NAME = "HistogramChart"
 PRICES = ndp.Array.from_list([12.0, 13.0, 17.0, None])
 TWO_COLUMNS = ndp.Array.from_list([[1.0, 2.0], [3.0, 4.0]])
 FIVE_WIDTH = ndp.BinWidth(5.0)
+FOUR_BINS = ndp.BinCount(4)
+WIDE_NUMBERS = numpy.array([12.0, 21.0])
 EXPECTED_COUNTS = [2.0, 1.0]
 EXPECTED_RATIOS = [2 / 3, 1 / 3]
 SPREAD_NUMBERS = numpy.array([12.0, 20.0])
@@ -42,6 +49,16 @@ NO_NUMBERS = numpy.array([], dtype=numpy.float64)
 EXPECTED_EMPTY_EDGES = [0.0, 5.0]
 FOUR_NUMBERS = numpy.array([3.0, 5.0, 8.0, 9.0])
 WIDTH = 5.0
+HALF_HOUR_WIDTH = ndp.BinWidth(timedelta(minutes=30))
+HALF_HOUR = 0.5
+DAY_EDGE_COUNT = 25
+DEFAULT_NUMBER_EDGE_COUNT = 11
+MORNING_NUMBERS = numpy.array([8.25, 9.75])
+EXPECTED_HALF_HOUR_EDGES = [8.0, 8.5, 9.0, 9.5, 10.0]
+EXPECTED_MORNING_COUNT_EDGES = [8.25, 8.625, 9.0, 9.375, 9.75]
+HISTOGRAM_HOURS = ndp.Array.from_list([time(8), time(9, 30)])
+HISTOGRAM_HALF_PAST_EIGHT = 8.5
+EXPECTED_HISTOGRAM_HOUR_LABEL = "08:30"
 
 
 def build_layer(chart: ndp.HistogramChart, data: ndp.Array) -> ChartLayer:
@@ -162,9 +179,10 @@ def test_find_bin_edges_spreads_a_bin_count_over_the_values() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	edges = find_bin_edges(SPREAD_NUMBERS, ndp.BinCount(4))
+	edges = find_bin_edges(SPREAD_NUMBERS, FOUR_BINS, ndp.Type.FLOAT64)
 
-	assert edges.tolist() == EXPECTED_COUNT_EDGES
+	edge_list = edges.tolist()
+	assert edge_list == EXPECTED_COUNT_EDGES
 
 
 def test_find_bin_edges_uses_the_width_of_bin_width() -> None:
@@ -173,9 +191,10 @@ def test_find_bin_edges_uses_the_width_of_bin_width() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	edges = find_bin_edges(numpy.array([12.0, 21.0]), FIVE_WIDTH)
+	edges = find_bin_edges(WIDE_NUMBERS, FIVE_WIDTH, ndp.Type.FLOAT64)
 
-	assert edges.tolist() == EXPECTED_WIDTH_EDGES
+	edge_list = edges.tolist()
+	assert edge_list == EXPECTED_WIDTH_EDGES
 
 
 def test_find_width_edges_starts_below_negative_numbers() -> None:
@@ -243,3 +262,137 @@ def test_find_bin_weights_needs_no_weight_without_numbers() -> None:
 	weights = find_bin_weights(NO_NUMBERS, ndp.Measure.RATIO)
 
 	assert weights is None
+
+
+@pytest.mark.parametrize(
+	("bins", "value_type"),
+	[
+		(None, ndp.Type.TIME),
+		(FOUR_BINS, ndp.Type.TIME),
+		(FIVE_WIDTH, ndp.Type.INT64),
+		(HALF_HOUR_WIDTH, ndp.Type.TIME),
+	],
+)
+def test_require_bins_on_values_accepts_a_width_of_the_kind_of_the_values(
+	bins: ndp.BinCount | ndp.BinWidth | None, value_type: ndp.Type
+) -> None:
+	"""
+	Check that default bins, a number of bins, a number for numbers and a duration for times are accepted.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	bins
+		The bins of the chart.
+	value_type
+		The type of the values.
+	"""
+	require_bins_on_values(bins, value_type)
+
+
+@pytest.mark.parametrize(("bins", "value_type"), [(FIVE_WIDTH, ndp.Type.TIME), (HALF_HOUR_WIDTH, ndp.Type.FLOAT64)])
+def test_require_bins_on_values_rejects_a_width_of_another_kind(bins: ndp.BinWidth, value_type: ndp.Type) -> None:
+	"""
+	Check that a number for times of day and a duration for numbers raise IncompatibleTypesError.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	bins
+		The width of the bins.
+	value_type
+		The type of the values.
+	"""
+	with pytest.raises(IncompatibleTypesError):
+		require_bins_on_values(bins, value_type)
+
+
+def test_find_bin_edges_splits_the_day_in_hours_by_default_for_times() -> None:
+	"""
+	Check that times of day without bins give one bin per hour from 00:00 to 24:00.
+
+	.. versionadded:: 0.1.0
+	"""
+	edges = find_bin_edges(MORNING_NUMBERS, None, ndp.Type.TIME)
+
+	edge_count = len(edges)
+	first_edge = edges[0]
+	last_edge = edges[-1]
+	assert edge_count == DAY_EDGE_COUNT
+	assert first_edge == 0.0
+	assert last_edge == DAY_EDGE_COUNT - 1
+
+
+def test_find_bin_edges_gives_ten_bins_by_default_for_numbers() -> None:
+	"""
+	Check that numbers without bins give ten bins.
+
+	.. versionadded:: 0.1.0
+	"""
+	edges = find_bin_edges(SPREAD_NUMBERS, None, ndp.Type.FLOAT64)
+
+	edge_count = len(edges)
+	assert edge_count == DEFAULT_NUMBER_EDGE_COUNT
+
+
+def test_find_bin_edges_uses_a_duration_from_the_smallest_to_the_largest_time() -> None:
+	"""
+	Check that a duration gives edges on its multiples, from the smallest to the largest time.
+
+	.. versionadded:: 0.1.0
+	"""
+	edges = find_bin_edges(MORNING_NUMBERS, HALF_HOUR_WIDTH, ndp.Type.TIME)
+
+	edge_list = edges.tolist()
+	assert edge_list == EXPECTED_HALF_HOUR_EDGES
+
+
+def test_find_bin_edges_spreads_a_bin_count_over_the_times() -> None:
+	"""
+	Check that a number of bins splits the span of the times evenly.
+
+	.. versionadded:: 0.1.0
+	"""
+	edges = find_bin_edges(MORNING_NUMBERS, FOUR_BINS, ndp.Type.TIME)
+
+	edge_list = edges.tolist()
+	assert edge_list == EXPECTED_MORNING_COUNT_EDGES
+
+
+@pytest.mark.parametrize(("bins", "expected_width"), [(HALF_HOUR_WIDTH, HALF_HOUR), (FIVE_WIDTH, WIDTH)])
+def test_read_width_hours_counts_a_duration_in_hours(bins: ndp.BinWidth, expected_width: float) -> None:
+	"""
+	Check that a duration gives its hours and a number stays as it is.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	bins
+		The width of the bins.
+	expected_width
+		The width as a number.
+	"""
+	width = read_width_hours(bins)
+
+	assert width == expected_width
+
+
+def test_draw_histogram_chart_labels_the_axis_of_times_hh_mm() -> None:
+	"""
+	Check that a histogram of times of day labels its horizontal axis HH:MM.
+
+	.. versionadded:: 0.1.0
+	"""
+	figure = Figure()
+	axes = figure.add_subplot()
+	samples = read_sample_values(HISTOGRAM_HOURS, None, None, CHART_NAME)
+	layer = ChartLayer(ndp.HistogramChart(), samples)
+
+	draw_histogram_chart(axes, layer)
+
+	formatter = axes.xaxis.get_major_formatter()
+	hour_label = formatter(HISTOGRAM_HALF_PAST_EIGHT)
+	assert hour_label == EXPECTED_HISTOGRAM_HOUR_LABEL

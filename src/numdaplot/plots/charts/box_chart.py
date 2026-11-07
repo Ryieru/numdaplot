@@ -30,8 +30,9 @@ class BoxChart(Chart):
 	Parameters
 	----------
 	columns
-		For a Table, the columns drawn, holding numbers. A Table needs it, even for a single column. An Array takes
-		none: when omitted, each of its columns is drawn.
+		For a Table, the columns drawn, holding numbers or times of day, not both. A Table needs it, even for a
+		single column. An Array takes none: when omitted, each of its columns is drawn. Times of day are measured on
+		an axis labeled ``HH:MM``.
 	group_by
 		For a Table, a column of texts, categories, booleans or times of day (written ``HH:MM``) splitting the rows into
 		groups, each drawn at its own position in alphabetical order, with the boxes of the columns side by side. A row

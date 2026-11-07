@@ -30,7 +30,7 @@ class PlotSeriesCreation(PlotData):
 	@checked_arguments
 	def line(cls, data: Table | Array, chart: LineChart | None = None, style: PlotStyle | None = None) -> Self:
 		"""
-		Return a Plot drawing columns of numbers as lines.
+		Return a Plot drawing columns of numbers or times of day as lines.
 
 		For a Table, ``LineChart.y`` names the columns drawn and ``LineChart.x`` the column of the positions. For an
 		Array of one or two dimensions, each column is a line and each row is placed at its number.
@@ -61,7 +61,8 @@ class PlotSeriesCreation(PlotData):
 		ColumnNotFoundError
 			When a column does not exist.
 		IncompatibleTypesError
-			When ``x`` holds booleans or durations, or a drawn column does not hold numbers.
+			When ``x`` holds booleans or durations, or a drawn column holds neither numbers nor times of day, or the
+			drawn columns mix them.
 		DimensionError
 			When an Array has more than two dimensions.
 		InvalidColorCountError
@@ -184,8 +185,8 @@ class PlotSeriesCreation(PlotData):
 		ColumnNotFoundError
 			When a column does not exist.
 		IncompatibleTypesError
-			When ``x`` holds booleans or durations, ``y`` or ``size_by`` does not hold numbers, or ``color_by``
-			holds neither numbers nor texts.
+			When ``x`` holds booleans or durations, ``y`` holds neither numbers nor times of day, ``size_by`` does
+			not hold numbers, or ``color_by`` holds neither numbers, texts, booleans nor times of day.
 		DimensionError
 			When an Array has more than two dimensions.
 		InvalidColorCountError

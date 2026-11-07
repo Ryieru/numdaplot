@@ -4,6 +4,8 @@ Unit tests of the values a chart draws from a Table.
 .. versionadded:: 0.1.0
 """
 
+from datetime import time
+
 import numpy
 import pandas
 import pytest
@@ -13,6 +15,7 @@ from numdaplot.errors.column_not_found_error import ColumnNotFoundError
 from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
 from numdaplot.plots.data.position_kind import PositionKind
 from numdaplot.plots.data.table_values import name_columns, read_series, read_table_values
+from numdaplot.tables.table_data import read_stored_frame
 
 CHART_NAME = "LineChart"
 SALES_FRAME = pandas.DataFrame(
@@ -32,6 +35,14 @@ SERIES_NAMES = ["price", "cost"]
 SALES_COLUMNS = SALES.to_pandas()
 SINGLE_NAME = ["price"]
 EXPECTED_CITY_PRICES = [12.0, 14.0]
+HOUR_CHART_NAME = "ScatterChart"
+ACCIDENT_HOURS = ndp.Array.from_list([time(8, 30), time(17, 45)])
+ACCIDENT_COUNTS = ndp.Array.from_list([3.0, 5.0])
+ACCIDENTS = ndp.Table.from_arrays({"hour": ACCIDENT_HOURS, "count": ACCIDENT_COUNTS})
+ACCIDENT_FRAME = read_stored_frame(ACCIDENTS)
+HOUR_COLUMNS = ["hour"]
+MIXED_COLUMNS = ["hour", "count"]
+EXPECTED_ACCIDENT_HOURS = [8.5, 17.75]
 
 
 def test_read_table_values_numbers_the_rows_without_x() -> None:
@@ -137,10 +148,12 @@ def test_read_series_names_each_series_after_its_column() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	series = read_series(SALES_COLUMNS, SERIES_NAMES, CHART_NAME)
+	series, _ = read_series(SALES_COLUMNS, SERIES_NAMES, CHART_NAME)
 
 	names = [one_series.name for one_series in series]
-	cost_missing = numpy.isnan(series[1].values).tolist()
+	cost_series = series[1]
+	missing_costs = numpy.isnan(cost_series.values)
+	cost_missing = missing_costs.tolist()
 	assert names == SERIES_NAMES
 	assert cost_missing == [False, False, True]
 
@@ -186,3 +199,40 @@ def test_name_columns_counts_the_columns_beyond_three() -> None:
 	shortened_names = name_columns(["price", "cost", "tax", "tip", "fee"])
 
 	assert shortened_names == "price, cost, tax and 2 more"
+
+
+def test_read_table_values_draws_times_in_hours_with_their_type() -> None:
+	"""
+	Check that a column of times of day drawn as values gives hours and the TIME type.
+
+	.. versionadded:: 0.1.0
+	"""
+	chart_values = read_table_values(ACCIDENTS, None, HOUR_COLUMNS, HOUR_CHART_NAME)
+
+	hour_series = chart_values.series[0]
+	hour_list = hour_series.values.tolist()
+	assert hour_list == EXPECTED_ACCIDENT_HOURS
+	assert chart_values.value_type == ndp.Type.TIME
+
+
+def test_read_series_gives_the_type_of_the_first_column() -> None:
+	"""
+	Check the type returned with the series of decimals.
+
+	.. versionadded:: 0.1.0
+	"""
+	_, value_type = read_series(SALES_COLUMNS, SERIES_NAMES, CHART_NAME)
+
+	assert value_type == ndp.Type.FLOAT64
+
+
+def test_read_series_rejects_times_next_to_numbers() -> None:
+	"""
+	Check that a column of numbers after a column of times of day raises IncompatibleTypesError naming it.
+
+	.. versionadded:: 0.1.0
+	"""
+	with pytest.raises(IncompatibleTypesError) as error_info:
+		read_series(ACCIDENT_FRAME, MIXED_COLUMNS, HOUR_CHART_NAME)
+
+	assert error_info.value.column_name == MIXED_COLUMNS[1]

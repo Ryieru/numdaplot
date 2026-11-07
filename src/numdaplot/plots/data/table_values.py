@@ -8,10 +8,12 @@ import numpy
 import pandas
 from numpy.typing import NDArray
 
+from numdaplot.data_types.type import Type
 from numdaplot.plots.data.chart_values import ChartValues, Positions, Series
-from numdaplot.plots.data.column_reading import read_numbers, read_positions
+from numdaplot.plots.data.column_reading import read_positions, read_values, require_same_family
 from numdaplot.plots.data.position_kind import PositionKind
 from numdaplot.tables.columns.column_names import require_known_columns
+from numdaplot.tables.frames.column_values import find_column_type
 from numdaplot.tables.table import Table
 from numdaplot.tables.table_data import read_stored_frame
 
@@ -36,7 +38,7 @@ def read_table_values(table: Table, x_name: str | None, y_names: list[str], char
 	x_name
 		The column of the positions, or None for the row numbers.
 	y_names
-		The columns of numbers drawn, one series each.
+		The columns drawn, one series each: numbers, or times of day for a chart measuring them.
 	chart_name
 		Name of the chart class, shown in error messages.
 
@@ -50,7 +52,8 @@ def read_table_values(table: Table, x_name: str | None, y_names: list[str], char
 	ColumnNotFoundError
 		When a column does not exist.
 	IncompatibleTypesError
-		When ``x`` holds booleans or durations, or a ``y`` column does not hold numbers.
+		When ``x`` holds booleans or durations, a ``y`` column holds neither numbers nor times of day for a chart
+		measuring them, or the ``y`` columns mix numbers and times of day.
 
 	Examples
 	--------
@@ -74,7 +77,7 @@ def read_table_values(table: Table, x_name: str | None, y_names: list[str], char
 		rows = numpy.arange(len(frame))
 
 	kept_positions = Positions(positions.kind, positions.values[rows], positions.name)
-	column_series = read_series(frame, y_names, chart_name)
+	column_series, value_type = read_series(frame, y_names, chart_name)
 	series = list[Series]()
 
 	for one_series in column_series:
@@ -84,7 +87,7 @@ def read_table_values(table: Table, x_name: str | None, y_names: list[str], char
 		series.append(kept_series)
 
 	value_name = name_columns(y_names)
-	chart_values = ChartValues(kept_positions, series, rows, value_name)
+	chart_values = ChartValues(kept_positions, series, rows, value_name, value_type)
 
 	return chart_values
 
@@ -167,9 +170,9 @@ def find_missing_positions(positions: Positions) -> NDArray[numpy.bool_]:
 	return missing_values
 
 
-def read_series(frame: pandas.DataFrame, column_names: list[str], chart_name: str) -> list[Series]:
+def read_series(frame: pandas.DataFrame, column_names: list[str], chart_name: str) -> tuple[list[Series], Type]:
 	"""
-	Return each column of numbers of a Table as a series named after it.
+	Return each column of values of a Table as a series named after it, with the type of the first column.
 
 	.. versionadded:: 0.1.0
 
@@ -178,36 +181,44 @@ def read_series(frame: pandas.DataFrame, column_names: list[str], chart_name: st
 	frame
 		The columns of the Table.
 	column_names
-		The columns read, known to exist.
+		The columns read, at least one, known to exist.
 	chart_name
 		Name of the chart class, shown in the error message.
 
 	Returns
 	-------
-	list[Series]
-		One series per column, NaN where a value is missing.
+	tuple[list[Series], Type]
+		One series per column, NaN where a value is missing, a time of day being its hours since midnight, and
+		the type of the first column.
 
 	Raises
 	------
 	IncompatibleTypesError
-		When a column does not hold numbers.
+		When a column holds neither numbers nor times of day for a chart measuring them, or the columns mix
+		numbers and times of day.
 
 	Examples
 	--------
 	>>> import pandas
 	>>> from numdaplot.plots.data.table_values import read_series
 	>>> frame = pandas.DataFrame({"price": [12.0, None]})
-	>>> read_series(frame, ["price"], "BoxChart")[0].values
-	array([12., nan])
+	>>> series, value_type = read_series(frame, ["price"], "BoxChart")
+	>>> series[0].values, value_type
+	(array([12., nan]), <Type.FLOAT64: 10>)
 	"""
 	series = list[Series]()
+	first_name = column_names[0]
+	first_column = frame[first_name]
+	value_type = find_column_type(first_column)
 
 	for column_name in column_names:
-		numbers = read_numbers(frame[column_name], chart_name)
-		column_series = Series(column_name, numbers)
+		column = frame[column_name]
+		values = read_values(column, chart_name)
+		require_same_family(column, value_type, chart_name)
+		column_series = Series(column_name, values)
 		series.append(column_series)
 
-	return series
+	return series, value_type
 
 
 def name_columns(column_names: list[str]) -> str:

@@ -76,11 +76,12 @@ def find_value_columns(values: ChartValues | SampleValues) -> list[str]:
 	Examples
 	--------
 	>>> import numpy
+	>>> import numdaplot as ndp
 	>>> from numdaplot.plots.data.chart_values import Series
 	>>> from numdaplot.plots.data.sample_values import SampleValues
 	>>> from numdaplot.plots.data.shown_columns import find_value_columns
 	>>> prices = Series("price", numpy.array([12.0]))
-	>>> find_value_columns(SampleValues([prices], None, "city", "price"))
+	>>> find_value_columns(SampleValues([prices], None, "city", "price", ndp.Type.FLOAT64))
 	['price', 'city']
 	"""
 	if isinstance(values, MissingCounts):

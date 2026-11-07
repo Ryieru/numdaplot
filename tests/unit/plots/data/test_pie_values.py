@@ -152,3 +152,14 @@ def test_warn_slice_count_suggests_a_bar_chart_beyond_five_slices() -> None:
 	"""
 	with pytest.warns(ReadabilityWarning, match="Try ndp.Plot.bar with a BarChart"):
 		warn_slice_count(UNREADABLE_SLICE_COUNT)
+
+
+def test_read_pie_values_gives_the_type_of_the_values() -> None:
+	"""
+	Check that the pie values keep the type of the column of values.
+
+	.. versionadded:: 0.1.0
+	"""
+	pie_values = read_pie_values(SHARES, CHART)
+
+	assert pie_values.value_type == ndp.Type.FLOAT64

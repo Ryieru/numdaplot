@@ -15,7 +15,12 @@ from numdaplot.plots.charts.scatter_chart import ScatterChart
 from numdaplot.plots.charts.value_axis import ValueAxis
 from numdaplot.plots.drawing.layer_alignment import align_layers
 from numdaplot.plots.layer_reading import read_bar_layer, read_line_layer, read_scatter_layer
-from numdaplot.plots.overlay_checks import require_overlay_base, require_same_positions, require_vertical_bars
+from numdaplot.plots.overlay_checks import (
+	require_overlay_base,
+	require_same_positions,
+	require_same_values,
+	require_vertical_bars,
+)
 from numdaplot.plots.plot_data import PlotData
 from numdaplot.settings.argument_types import checked_arguments
 from numdaplot.tables.table import Table
@@ -67,7 +72,8 @@ class PlotOverlays(PlotData):
 		RefusedSettingError
 			When the Plot does not draw lines, vertical bars or points.
 		IncompatibleChartsError
-			When the ``x`` values are not of the kind of the ones of the Plot: numbers, dates or texts.
+			When the ``x`` values are not of the kind of the ones of the Plot: numbers, dates, texts or times of day;
+			or when one measures numbers and the other times of day on the same axis.
 		DuplicateLabelError
 			When a label appears twice in the ``x`` values of one chart placed on labels.
 		InvalidChartDataError
@@ -129,7 +135,8 @@ class PlotOverlays(PlotData):
 		RefusedSettingError
 			When the bars are horizontal, or the Plot does not draw lines, vertical bars or points.
 		IncompatibleChartsError
-			When the ``x`` values are not of the kind of the ones of the Plot: numbers, dates or texts.
+			When the ``x`` values are not of the kind of the ones of the Plot: numbers, dates, texts or times of day;
+			or when one measures numbers and the other times of day on the same axis.
 		DuplicateLabelError
 			When a label appears twice in the ``x`` values of one chart.
 		InvalidChartDataError
@@ -193,7 +200,8 @@ class PlotOverlays(PlotData):
 		RefusedSettingError
 			When the Plot does not draw lines, vertical bars or points.
 		IncompatibleChartsError
-			When the ``x`` values are not of the kind of the ones of the Plot: numbers, dates or texts.
+			When the ``x`` values are not of the kind of the ones of the Plot: numbers, dates, texts or times of day;
+			or when one measures numbers and the other times of day on the same axis.
 		DuplicateLabelError
 			When a label appears twice in the ``x`` values of one chart placed on labels.
 		InvalidChartDataError
@@ -246,13 +254,15 @@ class PlotOverlays(PlotData):
 		RefusedSettingError
 			When the Plot does not draw lines, vertical bars or points.
 		IncompatibleChartsError
-			When the ``x`` values are not of the kind of the ones of the Plot.
+			When the ``x`` values are not of the kind of the ones of the Plot, or when one measures numbers and the
+			other times of day on the same axis.
 		DuplicateLabelError
 			When a label appears twice in the ``x`` values of one chart placed on labels.
 		"""
 		first_layer = self._layers[0]
 		require_overlay_base(first_layer, method_name)
 		require_same_positions(first_layer, layer)
+		require_same_values(self._layers, layer, axis)
 		axis_layer = replace(layer, value_axis=axis)
 		layers = [*self._layers, axis_layer]
 		# Aligning the charts on their labels checks them, so a wrong chart is refused when it is added.

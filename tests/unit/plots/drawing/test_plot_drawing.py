@@ -8,6 +8,7 @@ Unit tests of the drawing of a Plot on a matplotlib figure.
 # pyright: reportUnknownMemberType=false
 
 from dataclasses import replace
+from datetime import time
 
 import matplotlib
 import pytest
@@ -45,6 +46,13 @@ BARS = ChartLayer(ndp.BarChart(), read_table_values(SALES, "city", ["sales"], "B
 PRICE_LINE = ChartLayer(ndp.LineChart(), read_table_values(SALES, "city", ["price"], "LineChart"))
 RIGHT_PRICE_LINE = replace(PRICE_LINE, value_axis=ndp.ValueAxis.RIGHT)
 ORANGE_CODE = COLOR_CODES[ndp.Color.ORANGE]
+RIGHT_HOURS = ndp.Array.from_list([time(8), time(9), time(10)])
+RIGHT_HOUR_VALUES = read_array_values(RIGHT_HOURS, "LineChart")
+RIGHT_HOUR_LINE = ChartLayer(ndp.LineChart(), RIGHT_HOUR_VALUES, value_axis=ndp.ValueAxis.RIGHT)
+NUMBER_BAR_VALUES = read_array_values(PRICES, "BarChart")
+NUMBER_BARS = ChartLayer(ndp.BarChart(), NUMBER_BAR_VALUES)
+RIGHT_HALF_PAST_EIGHT = 8.5
+EXPECTED_RIGHT_HOUR_LABEL = "08:30"
 
 
 def draw_title(target: FigureBase) -> None:
@@ -240,3 +248,20 @@ def test_draw_plot_draws_the_shown_names() -> None:
 	axes = figure.axes[0]
 	line_labels = [line.get_label() for line in axes.lines]
 	assert SHOWN_PRICE in line_labels
+
+
+def test_draw_layers_labels_the_right_axis_of_times_hh_mm() -> None:
+	"""
+	Check that a line of times of day measured on the right labels that axis HH:MM.
+
+	.. versionadded:: 0.1.0
+	"""
+	figure = Figure()
+	left_axes = figure.add_subplot()
+
+	plot_axes, _ = draw_layers(left_axes, [NUMBER_BARS, RIGHT_HOUR_LINE])
+
+	assert plot_axes.right is not None
+	formatter = plot_axes.right.yaxis.get_major_formatter()
+	hour_label = formatter(RIGHT_HALF_PAST_EIGHT)
+	assert hour_label == EXPECTED_RIGHT_HOUR_LABEL

@@ -10,8 +10,13 @@ import numpy
 from numpy.typing import NDArray
 
 from numdaplot.data_types.time_of_day import read_times
+from numdaplot.data_types.type import Type
 from numdaplot.data_types.value_family import ValueFamily, find_family
 from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
+from numdaplot.plots.charts.box_chart import BoxChart
+from numdaplot.plots.charts.histogram_chart import HistogramChart
+from numdaplot.plots.charts.line_chart import LineChart
+from numdaplot.plots.charts.scatter_chart import ScatterChart
 from numdaplot.plots.data.position_kind import PositionKind
 from numdaplot.tables.frames.column import Column
 from numdaplot.tables.frames.column_values import find_column_missing, find_column_type
@@ -26,6 +31,8 @@ POSITION_KINDS = {
 	ValueFamily.TIME: PositionKind.TIMES,
 }
 NUMBER_FAMILIES = frozenset({ValueFamily.NUMBER})
+VALUE_FAMILIES = frozenset({ValueFamily.NUMBER, ValueFamily.TIME})
+TIME_VALUE_CHARTS = frozenset({LineChart.__name__, ScatterChart.__name__, HistogramChart.__name__, BoxChart.__name__})
 LABEL_FAMILIES = frozenset({ValueFamily.TEXT, ValueFamily.BOOL, ValueFamily.TIME})
 HOUR_LABEL_PATTERN = "%H:%M"
 MICROSECONDS_PER_HOUR = 3_600_000_000
@@ -114,6 +121,120 @@ def read_numbers(column: Column, chart_name: str) -> NDArray[numpy.float64]:
 	numbers = column.to_numpy(dtype=numpy.float64, na_value=numpy.nan)
 
 	return numbers
+
+
+def find_value_families(chart_name: str) -> frozenset[ValueFamily]:
+	"""
+	Return the families of the values a chart draws: numbers, and times of day for the charts measuring them.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	chart_name
+		Name of the chart class.
+
+	Returns
+	-------
+	frozenset[ValueFamily]
+		Numbers and times of day for a LineChart, a ScatterChart, a HistogramChart or a BoxChart, numbers only
+		otherwise.
+
+	Examples
+	--------
+	>>> from numdaplot.plots.data.column_reading import find_value_families
+	>>> sorted(family.name for family in find_value_families("BoxChart"))
+	['NUMBER', 'TIME']
+	>>> sorted(family.name for family in find_value_families("BarChart"))
+	['NUMBER']
+	"""
+	if chart_name in TIME_VALUE_CHARTS:
+		return VALUE_FAMILIES
+
+	return NUMBER_FAMILIES
+
+
+def read_values(column: Column, chart_name: str) -> NDArray[numpy.float64]:
+	"""
+	Return a column of values a chart draws as float64 numbers, a time of day being its hours since midnight.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	column
+		A Table column.
+	chart_name
+		Name of the chart class, shown in the error message.
+
+	Returns
+	-------
+	NDArray[numpy.float64]
+		One number per row, NaN where a value is missing.
+
+	Raises
+	------
+	IncompatibleTypesError
+		When the column does not hold numbers, or times of day for a chart measuring them.
+
+	Examples
+	--------
+	>>> import numpy
+	>>> import pandas
+	>>> from numdaplot.plots.data.column_reading import read_values
+	>>> read_values(pandas.Series(numpy.array([55800000000], dtype="timedelta64[us]")), "BoxChart")
+	array([15.5])
+	"""
+	value_families = find_value_families(chart_name)
+	family = require_column_family(column, value_families, chart_name)
+	if family == ValueFamily.TIME:
+		hours = read_hours(column)
+		return hours
+
+	numbers = read_numbers(column, chart_name)
+
+	return numbers
+
+
+def require_same_family(column: Column, value_type: Type, chart_name: str) -> None:
+	"""
+	Check that a column holds values of the family of the first column a chart draws on the same axis.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	column
+		A Table column.
+	value_type
+		The type of the first column.
+	chart_name
+		Name of the chart class, shown in the error message.
+
+	Raises
+	------
+	IncompatibleTypesError
+		When one holds numbers and the other times of day.
+
+	Examples
+	--------
+	>>> import numpy
+	>>> import pandas
+	>>> import numdaplot as ndp
+	>>> from numdaplot.plots.data.column_reading import require_same_family
+	>>> counts = pandas.Series([3.0], name="count")
+	>>> try:
+	... 	require_same_family(counts, ndp.Type.TIME, "BoxChart")
+	... except ndp.IncompatibleTypesError as error:
+	... 	print(error)
+	Cannot apply BoxChart to the FLOAT64 column 'count' and TIME.
+	"""
+	column_type = find_column_type(column)
+	column_family = find_family(column_type)
+	value_family = find_family(value_type)
+	if column_family != value_family:
+		with NamedColumnErrors(column):
+			raise IncompatibleTypesError(chart_name, [column_type.name, value_type.name])
 
 
 def read_texts(column: Column, chart_name: str) -> NDArray[Any]:
@@ -272,6 +393,34 @@ def read_hours(column: Column) -> NDArray[numpy.float64]:
 	array([15.5,  nan])
 	"""
 	stored_times = column.to_numpy(dtype=TIME_DTYPE)
+	hours = count_hours(stored_times)
+
+	return hours
+
+
+def count_hours(stored_times: NDArray[numpy.timedelta64]) -> NDArray[numpy.float64]:
+	"""
+	Return stored times of day as the hours since midnight, NaN where a time is missing.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	stored_times
+		Times of day as ``timedelta64[us]`` values since midnight, of any shape.
+
+	Returns
+	-------
+	NDArray[numpy.float64]
+		The hours, of the same shape, such as 15.5 for 15:30.
+
+	Examples
+	--------
+	>>> import numpy
+	>>> from numdaplot.plots.data.column_reading import count_hours
+	>>> count_hours(numpy.array([[55800000000, "NaT"]], dtype="timedelta64[us]"))
+	array([[15.5,  nan]])
+	"""
 	missing = numpy.isnat(stored_times)
 	microseconds = stored_times.astype(numpy.float64)
 	hours = microseconds / MICROSECONDS_PER_HOUR

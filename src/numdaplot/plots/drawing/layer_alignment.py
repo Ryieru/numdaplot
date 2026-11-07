@@ -231,7 +231,7 @@ def align_layer(layer: ChartLayer, labels: list[str], merged_labels: list[str]) 
 	series = [Series(one_series.name, pick_values(one_series.values, sources)) for one_series in values.series]
 	label_count = len(merged_labels)
 	rows = numpy.arange(label_count)
-	aligned_values = ChartValues(positions, series, rows, values.value_name)
+	aligned_values = ChartValues(positions, series, rows, values.value_name, values.value_type)
 	aligned_points = align_points(layer.points, sources)
 	aligned_layer = replace(layer, values=aligned_values, points=aligned_points)
 

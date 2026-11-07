@@ -240,3 +240,15 @@ def test_pick_values_fills_texts_with_none() -> None:
 	picked_values = pick_values(texts, SOURCES)
 
 	assert picked_values.tolist() == ["Lyon", None, "Paris"]
+
+
+def test_align_layer_keeps_the_type_of_the_values() -> None:
+	"""
+	Check that the aligned values keep the type of the values of the chart.
+
+	.. versionadded:: 0.1.0
+	"""
+	aligned_layer = align_layer(TARGET_LINE, ["Pau", "Paris"], EXPECTED_LABELS)
+
+	aligned_values = cast(ChartValues, aligned_layer.values)
+	assert aligned_values.value_type == TARGET_VALUES.value_type
