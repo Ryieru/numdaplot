@@ -15,6 +15,7 @@ from pandas.api.types import infer_dtype
 from numdaplot.tables.columns.column_names import require_column_names
 from numdaplot.tables.files.csv_read_options import CsvReadOptions
 from numdaplot.tables.files.csv_write_options import CsvWriteOptions
+from numdaplot.tables.files.missing_texts import find_missing_settings
 from numdaplot.tables.files.pandas_backend import NULLABLE_DTYPE_BACKEND
 from numdaplot.tables.frames.frame_normalization import PYTHON_OBJECT_DTYPE
 from numdaplot.tables.frames.pandas_decimals import find_exact_csv_settings
@@ -102,7 +103,7 @@ def read_pandas_csv(path: Path, options: CsvReadOptions, column_settings: dict[s
 	path
 		The path of an existing CSV file whose first row holds the column names.
 	options
-		The separator and the encoding of the file.
+		The separator, the encoding and the texts read as missing.
 	column_settings
 		Other settings of ``pandas.read_csv``, such as the columns to read and their dtype.
 
@@ -126,6 +127,7 @@ def read_pandas_csv(path: Path, options: CsvReadOptions, column_settings: dict[s
 	# Some versions of the pandas stubs leave the parameter types of read_csv unknown.
 	csv_pandas = cast(Any, pandas)
 	exact_settings = find_exact_csv_settings()
+	missing_settings = find_missing_settings(options.missing_texts)
 	with warnings.catch_warnings():
 		warnings.simplefilter(IGNORE_ACTION, pandas.errors.DtypeWarning)
 		raw_frame = csv_pandas.read_csv(
@@ -134,6 +136,7 @@ def read_pandas_csv(path: Path, options: CsvReadOptions, column_settings: dict[s
 			encoding=options.encoding.value,
 			dtype_backend=NULLABLE_DTYPE_BACKEND,
 			**exact_settings,
+			**missing_settings,
 			**column_settings,
 		)
 

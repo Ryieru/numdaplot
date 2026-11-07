@@ -25,6 +25,12 @@ class ExcelReadOptions:
 	column_names
 		Whether the column names are cleaned, ``ColumnNames.CLEANED`` by default: the spaces, tabs and line breaks at
 		the start and the end of each name are removed. ``ColumnNames.KEPT`` keeps the names as written.
+	missing_texts
+		The texts read as missing values, compared with the whole value of each cell. When omitted, the texts pandas
+		reads as missing: ``""``, ``"#N/A"``, ``"#N/A N/A"``, ``"#NA"``, ``"-1.#IND"``, ``"-1.#QNAN"``, ``"-NaN"``,
+		``"-nan"``, ``"1.#IND"``, ``"1.#QNAN"``, ``"<NA>"``, ``"N/A"``, ``"NA"``, ``"NULL"``, ``"NaN"``, ``"None"``,
+		``"n/a"``, ``"nan"`` and ``"null"``. A given list replaces them: ``[]`` reads no value as missing, not even
+		an empty one: an empty cell is then read as an empty text.
 
 	Raises
 	------
@@ -49,6 +55,7 @@ class ExcelReadOptions:
 
 	sheet: str | None = None
 	column_names: ColumnNames = ColumnNames.CLEANED
+	missing_texts: list[str] | None = None
 
 	def __post_init__(self) -> None:
 		"""
@@ -66,3 +73,7 @@ class ExcelReadOptions:
 		require_field_types(self)
 
 		require_sheet_name(self.sheet)
+
+		if self.missing_texts is not None:
+			missing_texts_copy = list(self.missing_texts)
+			object.__setattr__(self, "missing_texts", missing_texts_copy)

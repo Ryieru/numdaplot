@@ -12,6 +12,7 @@ import pandas
 from numdaplot.tables.columns.column_names import require_column_names
 from numdaplot.tables.files.excel_read_options import ExcelReadOptions
 from numdaplot.tables.files.excel_write_options import ExcelWriteOptions
+from numdaplot.tables.files.missing_texts import find_missing_settings
 from numdaplot.tables.files.optional_package import require_package
 from numdaplot.tables.files.pandas_backend import NULLABLE_DTYPE_BACKEND
 from numdaplot.tables.frames.time_zones import require_no_time_zone
@@ -21,6 +22,7 @@ EXCEL_EXTRA = "excel"
 FIRST_SHEET = 0
 DEFAULT_SHEET_NAME = "Sheet1"
 HEADER_ROW_COUNT = 1
+NO_MISSING_TEXTS = list[str]()
 EXCEL_OPERATION = "An Excel file"
 
 
@@ -35,7 +37,7 @@ def read_excel_file(path: Path, options: ExcelReadOptions) -> pandas.DataFrame:
 	path
 		The path of an existing Excel file.
 	options
-		The sheet to read, the first one when omitted.
+		The sheet to read, the first one when omitted, and the texts read as missing.
 
 	Returns
 	-------
@@ -70,7 +72,11 @@ def read_excel_file(path: Path, options: ExcelReadOptions) -> pandas.DataFrame:
 	sheet = find_read_sheet(options)
 	# The pandas stubs leave the types of the Excel engines unknown.
 	excel_pandas = cast(Any, pandas)
-	raw_header_frame = excel_pandas.read_excel(path, sheet_name=sheet, header=None, nrows=HEADER_ROW_COUNT)
+	# A column name is never a missing value, so the first row is read without any missing text.
+	header_settings = find_missing_settings(NO_MISSING_TEXTS)
+	raw_header_frame = excel_pandas.read_excel(
+		path, sheet_name=sheet, header=None, nrows=HEADER_ROW_COUNT, **header_settings
+	)
 	header_frame = cast(pandas.DataFrame, raw_header_frame)
 	if header_frame.empty:
 		empty_frame = pandas.DataFrame()
@@ -79,7 +85,10 @@ def read_excel_file(path: Path, options: ExcelReadOptions) -> pandas.DataFrame:
 	header_row = header_frame.iloc[0]
 	header = header_row.tolist()
 	require_column_names(header)
-	raw_frame = excel_pandas.read_excel(path, sheet_name=sheet, dtype_backend=NULLABLE_DTYPE_BACKEND)
+	missing_settings = find_missing_settings(options.missing_texts)
+	raw_frame = excel_pandas.read_excel(
+		path, sheet_name=sheet, dtype_backend=NULLABLE_DTYPE_BACKEND, **missing_settings
+	)
 	frame = cast(pandas.DataFrame, raw_frame)
 
 	return frame

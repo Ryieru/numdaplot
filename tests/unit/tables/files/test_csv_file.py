@@ -56,6 +56,9 @@ SAME_KIND_TEXTS = ["a", "b"]
 INTEGERS_AND_DECIMALS = [1, 2.5]
 PRICES = [1.5, 2.0]
 OBJECT_DTYPE = object
+CODES_CONTENT = "code,count\nN/A,1\n,2\nB,3\n"
+EXPECTED_CODES_WITH_EMPTY_ONLY = ["N/A", pandas.NA, "B"]
+EXPECTED_CODES_WITHOUT_MISSING = ["N/A", "", "B"]
 
 
 def write_long_codes(tmp_path: Path) -> Path:
@@ -332,6 +335,48 @@ def test_find_mixed_columns_ignores_values_that_keep_one_type(values: list[objec
 	mixed_names = find_mixed_columns(frame)
 
 	assert mixed_names == NO_COLUMN_NAMES
+
+
+def test_read_csv_file_reads_only_the_given_missing_texts(tmp_path: Path) -> None:
+	"""
+	Check that N/A stays a text when only the empty text is missing.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	tmp_path
+		A temporary folder.
+	"""
+	path = tmp_path / FILE_NAME
+	path.write_text(CODES_CONTENT)
+
+	frame = read_csv_file(path, CsvReadOptions(missing_texts=[""]))
+
+	code_column = frame["code"]
+	codes = code_column.tolist()
+	assert codes == EXPECTED_CODES_WITH_EMPTY_ONLY
+
+
+def test_read_csv_file_reads_an_empty_value_as_a_text_without_missing_text(tmp_path: Path) -> None:
+	"""
+	Check that an empty list of missing texts reads an empty value as an empty text.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	tmp_path
+		A temporary folder.
+	"""
+	path = tmp_path / FILE_NAME
+	path.write_text(CODES_CONTENT)
+
+	frame = read_csv_file(path, CsvReadOptions(missing_texts=[]))
+
+	code_column = frame["code"]
+	codes = code_column.tolist()
+	assert codes == EXPECTED_CODES_WITHOUT_MISSING
 
 
 def test_read_csv_header_keeps_repeated_names(tmp_path: Path) -> None:

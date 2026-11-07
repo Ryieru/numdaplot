@@ -32,7 +32,8 @@ class TableReading(TableData):
 
 	Integers become ``INT64``, decimals ``FLOAT64`` and true or false values ``BOOL``. Any other column of a CSV
 	or JSON file becomes ``TEXT``, dates included: convert them afterwards. Empty cells and the usual markers
-	such as ``NA`` or ``null`` are read as missing values.
+	such as ``NA`` or ``null`` are read as missing values; ``missing_texts`` of ``CsvReadOptions`` and
+	``ExcelReadOptions`` chooses other ones.
 
 	.. versionadded:: 0.1.0
 	"""

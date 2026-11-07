@@ -75,6 +75,8 @@ and numdaplot follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
   `ExcelWriteOptions`, `SasReadOptions`, `XptReadOptions`, `ParquetReadOptions` and `StataReadOptions`.
 - Every file reading and `Table.from_pandas` remove the spaces, tabs and line breaks at the start and the end of each
   column name, unless `ColumnNames.KEPT` is given; two names that become the same raise `DuplicateColumnError`.
+- `CsvReadOptions` and `ExcelReadOptions` take `missing_texts`, the texts read as missing values, which replace the 19
+  texts pandas reads as missing by default; an Excel column named like one of them, such as `NA`, keeps its name.
 - Table settings: `Filter`, `Condition`,
   `Aggregation`, `Calculation`, `PivotTable`, `Description`, `ColumnChoice`, `Renaming`, `NameChange`, `Conversion`, `NewColumn`,
   `Sorting`, `SortKey`, `Deduplication`, `Preview`, `MissingCount`, `MissingDrop`, `MissingRatio`, and the `BooleanRule`, `Encoding`,

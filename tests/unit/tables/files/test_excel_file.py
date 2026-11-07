@@ -29,6 +29,11 @@ DEFAULT_SHEET_NAMES = ["Sheet1"]
 NUMBER_HEADER = {1: [1.5]}
 EMPTY_FRAME = dict[str, list[float]]()
 FIRST_SHEET = 0
+MISSING_NAME_HEADER = {"NA": [1.5], "null": [2.0]}
+EXPECTED_MISSING_NAMES = ["NA", "null"]
+CODES = {"code": ["N/A", None, "B"]}
+EXPECTED_CODES_WITH_EMPTY_ONLY = ["N/A", pandas.NA, "B"]
+EXPECTED_CODES_WITHOUT_MISSING = ["N/A", "", "B"]
 REQUIRE_PACKAGE_NAME = "require_package"
 PARIS_TIMES = (
 	pandas.Series(pandas.to_datetime(["2026-07-01 10:30"])).astype("datetime64[ns]").dt.tz_localize("Europe/Paris")
@@ -262,3 +267,68 @@ def test_write_excel_file_rejects_a_datetime_column_with_a_time_zone(tmp_path: P
 
 	with pytest.raises(TimeZoneMismatchError):
 		write_excel_file(time_frame, path, ExcelWriteOptions())
+
+
+def test_read_excel_file_keeps_a_column_named_like_a_missing_text(tmp_path: Path) -> None:
+	"""
+	Check that the column names NA and null are read as names, not as missing values.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	tmp_path
+		A temporary folder.
+	"""
+	path = tmp_path / FILE_NAME
+	frame = pandas.DataFrame(MISSING_NAME_HEADER)
+	write_excel_file(frame, path, ExcelWriteOptions())
+
+	read_frame = read_excel_file(path, ExcelReadOptions())
+
+	column_names = read_frame.columns.tolist()
+	assert column_names == EXPECTED_MISSING_NAMES
+
+
+def test_read_excel_file_reads_only_the_given_missing_texts(tmp_path: Path) -> None:
+	"""
+	Check that N/A stays a text when only the empty text is missing.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	tmp_path
+		A temporary folder.
+	"""
+	path = tmp_path / FILE_NAME
+	frame = pandas.DataFrame(CODES)
+	write_excel_file(frame, path, ExcelWriteOptions())
+
+	read_frame = read_excel_file(path, ExcelReadOptions(missing_texts=[""]))
+
+	code_column = read_frame["code"]
+	codes = code_column.tolist()
+	assert codes == EXPECTED_CODES_WITH_EMPTY_ONLY
+
+
+def test_read_excel_file_reads_an_empty_cell_as_a_text_without_missing_text(tmp_path: Path) -> None:
+	"""
+	Check that an empty list of missing texts reads an empty cell as an empty text.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	tmp_path
+		A temporary folder.
+	"""
+	path = tmp_path / FILE_NAME
+	frame = pandas.DataFrame(CODES)
+	write_excel_file(frame, path, ExcelWriteOptions())
+
+	read_frame = read_excel_file(path, ExcelReadOptions(missing_texts=[]))
+
+	code_column = read_frame["code"]
+	codes = code_column.tolist()
+	assert codes == EXPECTED_CODES_WITHOUT_MISSING
