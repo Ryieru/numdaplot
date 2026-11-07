@@ -17,6 +17,7 @@ from numdaplot.tables.frames.cleaned_names import clean_frame_names
 from numdaplot.tables.frames.column import Column
 from numdaplot.tables.frames.column_values import find_column_type
 from numdaplot.tables.frames.frame_normalization import normalize_frame
+from numdaplot.tables.frames.time_columns import convert_outside_durations
 from numdaplot.tables.frames.time_zones import find_column_time_zone
 
 CONSTRUCTOR_OPERATION = "Creating a Table with ndp.Table(...)"
@@ -233,7 +234,8 @@ class TableData:
 			When the pandas DataFrame cannot become a Table, as in ``normalize_frame``.
 		"""
 		cleaned_frame = clean_frame_names(frame, column_names)
-		table = cls._from_frame(cleaned_frame)
+		duration_frame = convert_outside_durations(cleaned_frame)
+		table = cls._from_frame(duration_frame)
 
 		return table
 

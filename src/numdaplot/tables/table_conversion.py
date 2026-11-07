@@ -10,7 +10,7 @@ from typing import TYPE_CHECKING, Any, Self, cast
 
 import pandas
 
-from numdaplot.arrays.array import Array
+from numdaplot.arrays.array import Array, create_array
 from numdaplot.arrays.conversion.python_values import to_python_list
 from numdaplot.errors.invalid_type_error import InvalidTypeError
 from numdaplot.errors.not_single_value_error import NotSingleValueError
@@ -20,6 +20,7 @@ from numdaplot.tables.frames.array_frame import build_array_frame
 from numdaplot.tables.frames.column_values import convert_column_values, find_column_missing, read_array_values
 from numdaplot.tables.frames.frame_equality import are_frames_equal
 from numdaplot.tables.frames.table_text import format_table
+from numdaplot.tables.frames.time_columns import read_time_objects_frame
 from numdaplot.tables.frames.time_zones import find_column_time_zone
 from numdaplot.tables.table_data import TableData
 
@@ -51,7 +52,8 @@ class TableConversion(TableData):
 		----------
 		frame
 			A pandas DataFrame whose index is the row numbers 0, 1, 2... Python objects become dates, datetimes,
-			durations, integers, decimals or booleans when they all are, and texts otherwise.
+			durations, times of day, integers, decimals or booleans when they all are, and texts otherwise. Durations
+			of any unit become ``DURATION``, and ``datetime.time`` objects ``TIME``.
 		column_names
 			Whether the column names are cleaned, ``ColumnNames.CLEANED`` by default: the spaces, tabs and line breaks
 			at the start and the end of each name are removed. ``ColumnNames.KEPT`` keeps the names as written.
@@ -150,7 +152,7 @@ class TableConversion(TableData):
 		Returns
 		-------
 		pandas.DataFrame
-			A copy, rows numbered from 0.
+			A copy, rows numbered from 0. Times of day are ``datetime.time`` objects, as pandas has no type for them.
 
 		Examples
 		--------
@@ -158,9 +160,9 @@ class TableConversion(TableData):
 		>>> ndp.Table.from_arrays({"count": ndp.Array.from_list([2, 3])}).to_pandas().dtypes.tolist()
 		[Int64Dtype()]
 		"""
-		frame_copy = self._frame.copy(deep=True)
+		pandas_frame = read_time_objects_frame(self._frame)
 
-		return frame_copy
+		return pandas_frame
 
 	@checked_arguments
 	def column(self, column_name: str) -> Array:
@@ -202,7 +204,7 @@ class TableConversion(TableData):
 		"""
 		column = self._read_column(column_name)
 		array_values = read_array_values(column)
-		column_array = Array.from_numpy(array_values)
+		column_array = create_array(array_values)
 
 		return column_array
 

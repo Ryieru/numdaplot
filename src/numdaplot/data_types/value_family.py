@@ -87,6 +87,18 @@ class ValueFamily(Enum):
 	<ValueFamily.DURATION: 5>
 	"""
 
+	TIME = auto()
+	"""
+	Times of day, compared only with each other.
+
+	Examples
+	--------
+	>>> import numdaplot as ndp
+	>>> from numdaplot.data_types.value_family import find_family
+	>>> find_family(ndp.Type.TIME)
+	<ValueFamily.TIME: 6>
+	"""
+
 
 FAMILIES_BY_TYPE = {
 	Type.INT8: ValueFamily.NUMBER,
@@ -105,6 +117,7 @@ FAMILIES_BY_TYPE = {
 	Type.DATE: ValueFamily.MOMENT,
 	Type.DATETIME: ValueFamily.MOMENT,
 	Type.DURATION: ValueFamily.DURATION,
+	Type.TIME: ValueFamily.TIME,
 }
 
 

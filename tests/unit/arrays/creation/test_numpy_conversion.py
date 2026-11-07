@@ -4,12 +4,14 @@ Unit tests of copy_numpy_values and normalize_text.
 .. versionadded:: 0.1.0
 """
 
+from datetime import time
 from typing import Any, cast
 
 import numpy
 import pytest
 
-from numdaplot.arrays.creation.numpy_conversion import copy_numpy_values, normalize_text
+from numdaplot.arrays.creation.numpy_conversion import copy_numpy_values, normalize_durations, normalize_text
+from numdaplot.errors.time_overflow_error import TimeOverflowError
 from numdaplot.errors.unsupported_type_error import UnsupportedTypeError
 
 # Some versions of the numpy stubs leave out the missing value marker of StringDType.
@@ -19,6 +21,12 @@ TEXT_DTYPE_MARKED_WITH_NONE = STRING_DTYPE_CLASS(na_object=None)
 CHANGED_VALUE = 99
 FIRST_POSITION = 0
 ORIGINAL_VALUES = [1, 2]
+MICROSECOND_DURATIONS = numpy.array([5, "NaT"], dtype="timedelta64[us]")
+NANOSECOND_DTYPE = numpy.dtype("timedelta64[ns]")
+SECOND_DURATIONS = numpy.array([5], dtype="timedelta64[s]")
+FAR_DURATIONS = numpy.array([2**62], dtype="timedelta64[us]")
+OBJECT_TIMES = numpy.array([time(8), None], dtype=object)
+TIME_DTYPE = numpy.dtype("timedelta64[us]")
 
 
 def test_copy_numpy_values_is_independent_from_the_original() -> None:
@@ -87,3 +95,46 @@ def test_normalize_text_keeps_other_values_as_they_are() -> None:
 	normalized_values = normalize_text(numbers)
 
 	assert normalized_values is numbers
+
+
+def test_normalize_durations_turns_microseconds_into_nanoseconds() -> None:
+	"""
+	Check that durations in microseconds become nanoseconds, NaT kept.
+
+	.. versionadded:: 0.1.0
+	"""
+	durations = normalize_durations(MICROSECOND_DURATIONS)
+
+	assert durations.dtype == NANOSECOND_DTYPE
+
+
+def test_normalize_durations_keeps_other_units() -> None:
+	"""
+	Check that seconds are kept as they are.
+
+	.. versionadded:: 0.1.0
+	"""
+	durations = normalize_durations(SECOND_DURATIONS)
+
+	assert durations is SECOND_DURATIONS
+
+
+def test_normalize_durations_rejects_a_duration_beyond_nanoseconds() -> None:
+	"""
+	Check that a duration too long for nanoseconds raises TimeOverflowError.
+
+	.. versionadded:: 0.1.0
+	"""
+	with pytest.raises(TimeOverflowError):
+		normalize_durations(FAR_DURATIONS)
+
+
+def test_copy_numpy_values_reads_an_object_array_of_times() -> None:
+	"""
+	Check that Python times of day give times stored in microseconds.
+
+	.. versionadded:: 0.1.0
+	"""
+	copied_values = copy_numpy_values(OBJECT_TIMES)
+
+	assert copied_values.dtype == TIME_DTYPE

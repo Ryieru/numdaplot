@@ -4,13 +4,14 @@ Values an Array can be combined with.
 .. versionadded:: 0.1.0
 """
 
-from datetime import date, timedelta
+from datetime import date, time, timedelta
 from typing import Any
 
 import numpy
 from numpy.typing import NDArray
 
 from numdaplot.data_types.numpy_mapping import from_numpy_dtype
+from numdaplot.data_types.time_of_day import to_time_since_midnight
 from numdaplot.data_types.type import Type
 from numdaplot.data_types.value_type import find_value_type
 from numdaplot.rules.rule_values import ScalarValue
@@ -19,6 +20,7 @@ MICROSECONDS_IN_COUNT = 2**63 - 1
 LONGEST_MICROSECOND_DURATION = timedelta(microseconds=MICROSECONDS_IN_COUNT)
 ONE_SECOND = timedelta(seconds=1)
 SECOND_CODE = "s"
+TIME_CODE = "us"
 
 type Operand = NDArray[Any] | ScalarValue
 """The values of an Array, or a single value, on one side of an operation.
@@ -105,7 +107,8 @@ def convert_time_value(value: ScalarValue) -> Any:
 	-------
 	Any
 		A ``numpy.datetime64`` for a date or a datetime, a ``numpy.timedelta64`` for a duration, in seconds when
-		microseconds cannot count it, the value itself otherwise.
+		microseconds cannot count it, the time since midnight in microseconds for a time of day, the value itself
+		otherwise.
 
 	Examples
 	--------
@@ -117,6 +120,11 @@ def convert_time_value(value: ScalarValue) -> Any:
 	if isinstance(value, date):
 		moment = numpy.datetime64(value)
 		return moment
+
+	if isinstance(value, time):
+		since_midnight = to_time_since_midnight(value)
+		time_of_day = numpy.timedelta64(since_midnight, TIME_CODE)
+		return time_of_day
 
 	if isinstance(value, timedelta):
 		is_too_long_for_microseconds = abs(value) > LONGEST_MICROSECOND_DURATION

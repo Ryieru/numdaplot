@@ -10,6 +10,7 @@ from numpy.typing import NDArray
 
 from numdaplot.arrays.selection.missing_mask import find_missing
 from numdaplot.data_types.numpy_mapping import from_numpy_dtype
+from numdaplot.data_types.time_of_day import read_time_objects
 from numdaplot.data_types.type import Type
 
 # Python datetimes and timedeltas stop at the microsecond; finer numpy units would become integers.
@@ -24,8 +25,8 @@ def to_python_list(values: NDArray[Any]) -> list[Any]:
 	"""
 	Return the values as Python values, in nested lists for several dimensions.
 
-	Datetimes become ``datetime``, dates ``date``, durations ``timedelta``, and a missing text, date,
-	datetime or duration becomes ``None``. A missing decimal stays ``nan``.
+	Datetimes become ``datetime``, dates ``date``, durations ``timedelta``, times of day ``time``, and a missing text,
+	date, datetime, duration or time of day becomes ``None``. A missing decimal stays ``nan``.
 
 	.. versionadded:: 0.1.0
 
@@ -50,6 +51,9 @@ def to_python_list(values: NDArray[Any]) -> list[Any]:
 	"""
 	array_type = from_numpy_dtype(values.dtype)
 	converted_values = values
+	if array_type == Type.TIME:
+		converted_values = read_time_objects(values)
+
 	if array_type in PYTHON_TIME_DTYPES:
 		python_time_dtype = PYTHON_TIME_DTYPES[array_type]
 		converted_values = values.astype(python_time_dtype)

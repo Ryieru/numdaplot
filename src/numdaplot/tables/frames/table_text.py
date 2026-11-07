@@ -9,6 +9,7 @@ from shutil import get_terminal_size
 import pandas
 
 from numdaplot.tables.frames.column_values import find_column_type
+from numdaplot.tables.frames.time_columns import is_time_column, write_time_texts_column
 from numdaplot.tables.frames.time_zones import name_column_type
 from numdaplot.tables.preview.shown_columns import ShownColumns
 
@@ -64,6 +65,11 @@ def build_typed_frame(frame: pandas.DataFrame) -> pandas.DataFrame:
 
 	header = pandas.MultiIndex.from_arrays([column_names, type_names])
 	typed_frame = frame.copy()
+	for column_name in column_names:
+		column = frame[column_name]
+		if is_time_column(column):
+			typed_frame[column_name] = write_time_texts_column(column)
+
 	typed_frame.columns = header
 
 	return typed_frame

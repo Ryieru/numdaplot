@@ -23,6 +23,7 @@ EXPECTED_TYPE_NAMES = [
 	"DATE",
 	"DATETIME",
 	"DURATION",
+	"TIME",
 ]
 
 

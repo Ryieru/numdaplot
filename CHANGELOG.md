@@ -106,6 +106,9 @@ and numdaplot follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
   `IntegerOverflowError`, `InvalidShapeError`, `IrregularListError`, `MissingTypeError`, `NotSingleValueError`, `OutOfDomainError`,
   `RefusedOperationError`, `ShapeMismatchError`, `TimeOverflowError`, `UnsupportedMissingError`,
   `ValueConversionError`.
+- `Type.TIME`: times of day from 00:00 to 23:59:59.999999, created from `datetime.time` values with
+  `Array.from_list`, read back as `datetime.time` by `to_list`, `to_numpy` and `Table.to_pandas`, compared by the
+  rules and sorted; durations of any unit read from numpy or pandas stay `DURATION`.
 - `Type` enum of value types and its conversion to numpy and pandas dtypes, and the `Library` enum read on
   `UnsupportedTypeError`.
 - Rules: `Equal`, `NotEqual`, `Greater`, `GreaterOrEqual`, `Less`, `LessOrEqual`, `Between`, `IsIn`,

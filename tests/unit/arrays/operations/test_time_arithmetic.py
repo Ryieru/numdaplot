@@ -44,6 +44,7 @@ EXPECTED_SHIFTED_DATE = numpy.datetime64("2026-02-01")
 NANOSECOND_DATETIME_DTYPE = numpy.dtype("datetime64[ns]")
 NANOSECOND_DURATION_DTYPE = numpy.dtype("timedelta64[ns]")
 MISSING_DURATION = numpy.timedelta64("NaT", "ns")
+STORED_TIMES = numpy.array([60000000], dtype="timedelta64[us]")
 
 
 @dataclass(frozen=True)
@@ -246,3 +247,13 @@ def test_require_whole_days_accepts_whole_days_and_missing_durations() -> None:
 	"""
 	require_whole_days(DAYS)
 	require_whole_days(MISSING_DURATION)
+
+
+def test_combine_time_values_refuses_times_of_day_for_now() -> None:
+	"""
+	Check that a subtraction of times of day raises IncompatibleTypesError.
+
+	.. versionadded:: 0.1.0
+	"""
+	with pytest.raises(IncompatibleTypesError):
+		combine_time_values(STORED_TIMES, STORED_TIMES, numpy.subtract, "-")

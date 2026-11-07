@@ -4,7 +4,7 @@ Type of single Python values, and the common type of several values.
 .. versionadded:: 0.1.0
 """
 
-from datetime import date, datetime, timedelta
+from datetime import date, datetime, time, timedelta
 
 import numpy
 
@@ -24,6 +24,7 @@ PYTHON_TYPES = (
 	((datetime,), Type.DATETIME),
 	((date,), Type.DATE),
 	((timedelta,), Type.DURATION),
+	((time,), Type.TIME),
 )
 ARRAY_OPERATION = "An Array"
 TYPE_WIDTHS = {
@@ -42,19 +43,19 @@ def find_value_type(value: object) -> Type:
 	Parameters
 	----------
 	value
-		A boolean, a number, a text, a date, a datetime or a duration.
+		A boolean, a number, a text, a date, a datetime, a duration or a time of day.
 
 	Returns
 	-------
 	Type
-		``BOOL``, ``INT64``, ``FLOAT64``, ``TEXT``, ``DATETIME``, ``DATE`` or ``DURATION``.
+		``BOOL``, ``INT64``, ``FLOAT64``, ``TEXT``, ``DATETIME``, ``DATE``, ``DURATION`` or ``TIME``.
 
 	Raises
 	------
 	UnsupportedTypeError
 		When the value has no numdaplot type, such as a complex number or a tuple.
 	TimeZoneMismatchError
-		When the value is a datetime with a time zone, which an Array cannot hold.
+		When the value is a datetime or a time of day with a time zone, which an Array cannot hold.
 
 	Examples
 	--------
@@ -62,7 +63,7 @@ def find_value_type(value: object) -> Type:
 	>>> find_value_type(2.5)
 	<Type.FLOAT64: 10>
 	"""
-	has_time_zone = isinstance(value, datetime) and value.tzinfo is not None
+	has_time_zone = isinstance(value, (datetime, time)) and value.tzinfo is not None
 	if has_time_zone:
 		raise TimeZoneMismatchError(ARRAY_OPERATION, False)
 

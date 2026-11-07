@@ -10,6 +10,7 @@ from typing import TYPE_CHECKING
 
 import pandas
 
+from numdaplot.arrays.array_data import read_stored_values
 from numdaplot.errors.dimension_error import DimensionError
 from numdaplot.errors.empty_list_error import EmptyListError
 from numdaplot.errors.shape_mismatch_error import ShapeMismatchError
@@ -72,7 +73,7 @@ def build_array_frame(columns: dict[str, Array]) -> pandas.DataFrame:
 	value_counts = list[int]()
 
 	for column_name, array in columns.items():
-		values = array.to_numpy()
+		values = read_stored_values(array)
 		if values.ndim != ONE_DIMENSION:
 			raise DimensionError(FROM_ARRAYS_OPERATION, values.ndim)
 

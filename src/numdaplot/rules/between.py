@@ -5,7 +5,7 @@ Rule keeping the values inside an interval.
 """
 
 from dataclasses import dataclass
-from datetime import date, datetime, timedelta
+from datetime import date, datetime, time, timedelta
 
 from numdaplot.errors.invalid_bounds_error import InvalidBoundsError
 from numdaplot.rules.bounds import Bounds
@@ -16,7 +16,7 @@ from numdaplot.settings.field_types import require_field_types
 # The type parameter has the name of the alias holding the same types: the documentation shows the alias,
 # and both bounds must be of one type.
 @dataclass(frozen=True)
-class Between[OrderedValue: (int, float, str, date, datetime, timedelta)](Rule):
+class Between[OrderedValue: (int, float, str, date, datetime, timedelta, time)](Rule):
 	"""
 	Keep the values inside an interval.
 

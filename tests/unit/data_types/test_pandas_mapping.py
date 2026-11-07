@@ -29,6 +29,7 @@ SAMPLE_SIZE = 2
 PARIS_DTYPE = pandas.DatetimeTZDtype("ns", "Europe/Paris")
 SECOND_UTC_TIMES = pandas.Series(pandas.to_datetime(["2026-07-01 10:30"])).dt.tz_localize("UTC")
 SECOND_ZONE_DTYPE = SECOND_UTC_TIMES.dt.as_unit("s").dtype
+TIME_PANDAS_NAME = "timedelta64[us]"
 
 
 def test_to_pandas_dtype_converts_int64_to_nullable_integers() -> None:
@@ -156,3 +157,16 @@ def test_from_pandas_dtype_rejects_datetimes_with_a_zone_in_another_unit() -> No
 	"""
 	with pytest.raises(UnsupportedTypeError):
 		from_pandas_dtype(SECOND_ZONE_DTYPE)
+
+
+def test_time_columns_are_stored_in_microseconds() -> None:
+	"""
+	Check the pandas dtype of TIME and its reverse mapping.
+
+	.. versionadded:: 0.1.0
+	"""
+	pandas_dtype = to_pandas_dtype(Type.TIME)
+
+	time_type = from_pandas_dtype(pandas_dtype)
+	assert str(pandas_dtype) == TIME_PANDAS_NAME
+	assert time_type == Type.TIME

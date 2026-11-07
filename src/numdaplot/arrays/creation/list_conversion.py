@@ -12,6 +12,7 @@ from numpy.typing import NDArray
 from numdaplot.arrays.creation.list_shape import find_list_shape, flatten_list
 from numdaplot.arrays.operations.time_bounds import require_stored_times_fit
 from numdaplot.data_types.numpy_mapping import to_numpy_dtype
+from numdaplot.data_types.time_of_day import MISSING_TIME, store_times
 from numdaplot.data_types.type import Type
 from numdaplot.data_types.value_type import find_common_type, find_value_type
 from numdaplot.errors.missing_type_error import MissingTypeError
@@ -30,6 +31,7 @@ MISSING_MARKERS = {
 	Type.DATE: numpy.datetime64(NOT_A_TIME, NANOSECOND_UNIT),
 	Type.DATETIME: numpy.datetime64(NOT_A_TIME, NANOSECOND_UNIT),
 	Type.DURATION: numpy.timedelta64(NOT_A_TIME, NANOSECOND_UNIT),
+	Type.TIME: MISSING_TIME,
 }
 
 
@@ -241,6 +243,10 @@ def store_values(marked_values: list[object], guessed_type: Type | None, stored_
 	>>> store_values([1, 2], ndp.Type.INT64, ndp.Type.UINT8)
 	array([1, 2], dtype=uint8)
 	"""
+	if Type.TIME in (guessed_type, stored_type):
+		time_values = store_time_values(marked_values, guessed_type, stored_type)
+		return time_values
+
 	stored_dtype = to_numpy_dtype(stored_type)
 	if guessed_type is None:
 		values_without_present_value = numpy.array(marked_values, dtype=stored_dtype)
@@ -260,3 +266,46 @@ def store_values(marked_values: list[object], guessed_type: Type | None, stored_
 		raise ValueConversionError(guessed_type.name, stored_type.name) from error
 
 	return stored_values
+
+
+def store_time_values(marked_values: list[object], guessed_type: Type | None, stored_type: Type) -> NDArray[Any]:
+	"""
+	Return times of day stored as ``TIME``, refusing to store them as another type or other values as ``TIME``.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	marked_values
+		The values, missing ones already replaced by NaT.
+	guessed_type
+		The type of the present values, ``None`` when no value is present.
+	stored_type
+		The type to store the values as.
+
+	Returns
+	-------
+	NDArray
+		The times since midnight in ``timedelta64[us]``.
+
+	Raises
+	------
+	ValueConversionError
+		When times of day are stored as another type, or other values as ``TIME``.
+
+	Examples
+	--------
+	>>> from datetime import time
+	>>> import numdaplot as ndp
+	>>> from numdaplot.arrays.creation.list_conversion import store_time_values
+	>>> store_time_values([time(0, 1)], ndp.Type.TIME, ndp.Type.TIME)
+	array([60000000], dtype='timedelta64[us]')
+	"""
+	is_time_storage = stored_type == Type.TIME and guessed_type in (Type.TIME, None)
+	if not is_time_storage:
+		guessed_name = stored_type.name if guessed_type is None else guessed_type.name
+		raise ValueConversionError(guessed_name, stored_type.name)
+
+	time_values = store_times(marked_values)
+
+	return time_values

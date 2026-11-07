@@ -207,3 +207,15 @@ class Type(Enum):
 	>>> ndp.Array.from_list([timedelta(hours=2)]).dtype
 	<Type.DURATION: 16>
 	"""
+
+	TIME = auto()
+	"""
+	A time of day, from 00:00 to 23:59:59.999999, without date nor time zone. Stored as the time since midnight.
+
+	Examples
+	--------
+	>>> from datetime import time
+	>>> import numdaplot as ndp
+	>>> ndp.Array.from_list([time(15, 35)]).dtype
+	<Type.TIME: 17>
+	"""

@@ -4,6 +4,10 @@ The ``ndp.Array`` class: values of one type in one or several dimensions.
 .. versionadded:: 0.1.0
 """
 
+from typing import Any
+
+from numpy.typing import NDArray
+
 from numdaplot.arrays.array_arithmetic import ArrayArithmetic
 from numdaplot.arrays.array_calculation import ArrayCalculation
 from numdaplot.arrays.array_conversion import ArrayConversion
@@ -31,7 +35,8 @@ class Array(
 
 	An Array never changes: every operation returns a new Array.
 
-	- Create it with ``from_list``, ``from_numpy``, ``filled``, ``from_range``, ``from_spacing`` or ``random``.
+	- Create it with ``from_list``, ``from_numpy``, ``filled``, ``from_range``, ``from_spacing``, ``from_date_parts``
+	  or ``random``.
 	- Combine it with ``+``, ``-``, ``*``, ``/``, ``//``, ``%``, ``**``, and booleans with ``&``, ``|``, ``~``.
 	- Select values with ``select``, ``check``, ``take`` and ``replace``.
 	- Compute with ``compute`` and ``apply``.
@@ -54,3 +59,34 @@ class Array(
 	>>> prices.dtype
 	<Type.FLOAT64: 10>
 	"""
+
+
+def create_array(values: NDArray[Any]) -> Array:
+	"""
+	Return an Array holding values already stored as numdaplot stores them, for the code of numdaplot.
+
+	Unlike ``Array.from_numpy``, durations in microseconds stay times of day.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	values
+		Values in the numpy dtype of a numdaplot type, kept without copy.
+
+	Returns
+	-------
+	Array
+		The new Array.
+
+	Examples
+	--------
+	>>> import numpy
+	>>> from numdaplot.arrays.array import create_array
+	>>> create_array(numpy.array([60000000], dtype="timedelta64[us]"))
+	Array(['00:01:00'], dtype=TIME)
+	"""
+	# The function lives next to the class to create Arrays on behalf of the rest of numdaplot.
+	created_array = Array._create(values)  # pyright: ignore[reportPrivateUsage]
+
+	return created_array

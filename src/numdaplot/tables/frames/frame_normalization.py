@@ -13,10 +13,12 @@ from pandas.api.types import infer_dtype
 
 from numdaplot.data_types.numpy_mapping import from_numpy_dtype
 from numdaplot.data_types.pandas_mapping import TYPES_BY_PANDAS_NAME, from_pandas_dtype, to_pandas_dtype
+from numdaplot.data_types.time_of_day import holds_only_times
 from numdaplot.data_types.type import Type
 from numdaplot.errors.unsupported_index_error import UnsupportedIndexError
 from numdaplot.tables.columns.column_names import require_column_names
 from numdaplot.tables.frames.column import Column
+from numdaplot.tables.frames.time_columns import is_time_column, read_object_values, store_time_column
 from numdaplot.tables.frames.time_range_errors import TimeRangeErrors
 from numdaplot.tables.frames.time_zones import normalize_time_zone_column
 
@@ -218,6 +220,9 @@ def convert_column_dtype(column: Column) -> Column:
 		datetime_column = column.astype(DATETIME_DTYPE)
 		return datetime_column
 
+	if is_time_column(column):
+		return column
+
 	if dtype_kind == DURATION_KIND:
 		duration_column = column.astype(DURATION_DTYPE)
 		return duration_column
@@ -329,6 +334,11 @@ def infer_object_column(column: Column) -> Column:
 	>>> infer_object_column(pandas.Series([1, None, 3], dtype=object)).tolist()
 	[1, <NA>, 3]
 	"""
+	object_values = read_object_values(column)
+	if holds_only_times(object_values):
+		time_column = store_time_column(column)
+		return time_column
+
 	inferred_kind = infer_dtype(column, skipna=True)
 	target_type = INFERRED_TYPES.get(inferred_kind, Type.TEXT)
 	if inferred_kind in MOMENT_KINDS:

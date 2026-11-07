@@ -4,7 +4,7 @@ Unit tests of find_value_type, find_type_width and find_common_type.
 .. versionadded:: 0.1.0
 """
 
-from datetime import UTC, date, datetime, timedelta
+from datetime import UTC, date, datetime, time, timedelta
 
 import numpy
 import pytest
@@ -31,6 +31,8 @@ EXPECTED_COMPLEX_MESSAGE = "The type complex has no equivalent between numdaplot
 WIDE_TYPE_WIDTH = 1
 NARROW_TYPE_WIDTH = 0
 UTC_DATETIME = datetime(2026, 1, 31, 8, 30, tzinfo=UTC)
+AFTERNOON = time(15, 35)
+ZONED_AFTERNOON = time(15, 35, tzinfo=UTC)
 
 
 @pytest.mark.parametrize(("value", "expected_type"), PYTHON_VALUE_TYPES)
@@ -115,3 +117,24 @@ def test_find_value_type_rejects_a_datetime_with_a_time_zone() -> None:
 	"""
 	with pytest.raises(TimeZoneMismatchError):
 		find_value_type(UTC_DATETIME)
+
+
+def test_find_value_type_reads_a_time_as_time() -> None:
+	"""
+	Check the type of a Python time of day.
+
+	.. versionadded:: 0.1.0
+	"""
+	value_type = find_value_type(AFTERNOON)
+
+	assert value_type == Type.TIME
+
+
+def test_find_value_type_rejects_a_time_with_a_zone() -> None:
+	"""
+	Check that a time of day with a time zone raises TimeZoneMismatchError.
+
+	.. versionadded:: 0.1.0
+	"""
+	with pytest.raises(TimeZoneMismatchError):
+		find_value_type(ZONED_AFTERNOON)

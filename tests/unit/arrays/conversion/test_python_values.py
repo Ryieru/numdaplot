@@ -4,7 +4,7 @@ Unit tests of to_python_list.
 .. versionadded:: 0.1.0
 """
 
-from datetime import date, datetime, timedelta
+from datetime import date, datetime, time, timedelta
 
 import numpy
 
@@ -19,6 +19,8 @@ EXPECTED_DATES = [date(2026, 1, 31)]
 DURATIONS = numpy.array([3600], dtype="timedelta64[s]")
 EXPECTED_DURATIONS = [timedelta(hours=1)]
 GRID = [[1, 2], [3, 4]]
+STORED_TIMES = numpy.array([[60000000, "NaT"]], dtype="timedelta64[us]")
+EXPECTED_PYTHON_TIMES = [[time(0, 1), None]]
 
 
 def test_to_python_list_gives_none_for_missing_texts() -> None:
@@ -79,3 +81,14 @@ def test_to_python_list_nests_one_list_per_row() -> None:
 	python_values = to_python_list(values)
 
 	assert python_values == GRID
+
+
+def test_to_python_list_gives_times_of_day() -> None:
+	"""
+	Check nested Python times, None where missing.
+
+	.. versionadded:: 0.1.0
+	"""
+	python_values = to_python_list(STORED_TIMES)
+
+	assert python_values == EXPECTED_PYTHON_TIMES

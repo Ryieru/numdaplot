@@ -7,6 +7,7 @@ Unit tests of TableData.
 # The tests create the objects from their stored values, with the creation reserved to numdaplot.
 # pyright: reportPrivateUsage=false
 
+import numpy
 import pandas
 import pytest
 
@@ -31,6 +32,7 @@ UNKNOWN_COLUMN = "prise"
 SPACED_FRAME = pandas.DataFrame({" count\n": [1, 2]})
 EXPECTED_CLEANED_NAMES = ["count"]
 EXPECTED_KEPT_NAMES = [" count\n"]
+MICROSECOND_WAIT_FRAME = pandas.DataFrame({"wait": pandas.Series(numpy.array([5], dtype="timedelta64[us]"))})
 PARIS_TIMES = (
 	pandas.Series(pandas.to_datetime(["2026-07-01 10:30"])).astype("datetime64[ns]").dt.tz_localize("Europe/Paris")
 )
@@ -305,3 +307,14 @@ def test_from_read_frame_keeps_the_column_names() -> None:
 	table = ExposedTableData.from_read_frame(SPACED_FRAME, ColumnNames.KEPT)
 
 	assert table.column_names == EXPECTED_KEPT_NAMES
+
+
+def test_from_read_frame_reads_an_outside_duration_as_a_duration() -> None:
+	"""
+	Check that a pandas duration in microseconds becomes DURATION, not TIME.
+
+	.. versionadded:: 0.1.0
+	"""
+	table = ExposedTableData.from_read_frame(MICROSECOND_WAIT_FRAME, ColumnNames.CLEANED)
+
+	assert table.column_types == {"wait": Type.DURATION}

@@ -11,6 +11,7 @@ from numdaplot.arrays.conversion.time_text import (
 	format_datetimes,
 	format_durations,
 	format_fractions,
+	format_times,
 	join_clock_parts,
 	join_texts,
 )
@@ -39,6 +40,8 @@ NUMBER_TEXTS = numpy.array(["1", "2"])
 DAYS_SUFFIX = " days"
 EXPECTED_JOINED_TEXTS = ["1 days", "2 days"]
 EXPECTED_FRACTIONS = ["", ".250000000"]
+TIME_GRID = numpy.array([[56100250000, "NaT"]], dtype="timedelta64[us]")
+EXPECTED_TIME_TEXTS = [["15:35:00.250000", "NaT"]]
 
 
 def test_format_datetimes_writes_whole_seconds_without_fraction() -> None:
@@ -173,3 +176,15 @@ def test_join_texts_adds_a_text_after_each_value() -> None:
 
 	text_list = joined_texts.tolist()
 	assert text_list == EXPECTED_JOINED_TEXTS
+
+
+def test_format_times_keeps_the_shape_and_writes_nat() -> None:
+	"""
+	Check the texts of a grid of times.
+
+	.. versionadded:: 0.1.0
+	"""
+	time_texts = format_times(TIME_GRID)
+
+	text_list = time_texts.tolist()
+	assert text_list == EXPECTED_TIME_TEXTS

@@ -5,7 +5,7 @@ Unit tests of the conversion of Python lists to numpy values.
 """
 
 import math
-from datetime import date
+from datetime import date, time
 
 import numpy
 import pytest
@@ -16,6 +16,7 @@ from numdaplot.arrays.creation.list_conversion import (
 	convert_list,
 	guess_list_type,
 	mark_missing_values,
+	store_time_values,
 	store_values,
 )
 from numdaplot.data_types.type import Type
@@ -42,6 +43,8 @@ MISSING_POSITION = 1
 FIND_LIST_SHAPE_NAME = "find_list_shape"
 NOT_A_TIME_TEXT = "NaT"
 FLATTEN_LIST_NAME = "flatten_list"
+TIME_DTYPE_NAME = "timedelta64[us]"
+TIMES_WITH_MISSING = [time(8), None]
 
 
 def test_convert_list_keeps_the_nesting_as_dimensions() -> None:
@@ -267,3 +270,32 @@ def give_fake_single_values(values: list[object]) -> list[object]:
 		Always six integers.
 	"""
 	return FAKE_SINGLE_VALUES
+
+
+def test_convert_list_stores_times_in_microseconds() -> None:
+	"""
+	Check that times of day and None give TIME with NaT.
+
+	.. versionadded:: 0.1.0
+	"""
+	stored_values = convert_list(list(TIMES_WITH_MISSING), None)
+
+	assert stored_values.dtype.name == TIME_DTYPE_NAME
+
+
+@pytest.mark.parametrize(("guessed_type", "stored_type"), [(Type.TIME, Type.DURATION), (Type.INT64, Type.TIME)])
+def test_store_time_values_refuses_another_type(guessed_type: Type, stored_type: Type) -> None:
+	"""
+	Check that times are not stored as durations, nor integers as times.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	guessed_type
+		The type of the values.
+	stored_type
+		The type asked.
+	"""
+	with pytest.raises(ValueConversionError):
+		store_time_values(list(TIMES_WITH_MISSING), guessed_type, stored_type)

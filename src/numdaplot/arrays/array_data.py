@@ -13,6 +13,7 @@ from numdaplot.arrays.operations.combination import combine_values
 from numdaplot.arrays.operations.operand import Operand
 from numdaplot.arrays.shape import Shape
 from numdaplot.data_types.numpy_mapping import from_numpy_dtype
+from numdaplot.data_types.time_of_day import read_time_objects
 from numdaplot.data_types.type import Type
 from numdaplot.errors.refused_operation_error import RefusedOperationError
 from numdaplot.rules.rule_values import ScalarValue
@@ -121,7 +122,8 @@ class ArrayData:
 		Returns
 		-------
 		numpy.typing.NDArray
-			A writable copy of the values. Texts use ``StringDType`` with NaN as missing value.
+			A writable copy of the values. Texts use ``StringDType`` with NaN as missing value. Times of day are
+			Python ``datetime.time`` objects, None where missing, as numpy has no type for them.
 
 		Examples
 		--------
@@ -131,6 +133,11 @@ class ArrayData:
 		>>> values
 		array([99,  2])
 		"""
+		array_type = from_numpy_dtype(self._values.dtype)
+		if array_type == Type.TIME:
+			time_objects = read_time_objects(self._values)
+			return time_objects
+
 		copied_values = self._values.copy()
 
 		return copied_values
@@ -240,3 +247,35 @@ class ArrayData:
 		combined_array = self._wrap(combined_values)
 
 		return combined_array
+
+
+def read_stored_values(array: ArrayData) -> numpy.typing.NDArray[Any]:
+	"""
+	Return the values an Array stores, without copy, for the code of numdaplot that builds other objects from them.
+
+	Unlike ``Array.to_numpy``, times of day stay stored as the time since midnight.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	array
+		An Array.
+
+	Returns
+	-------
+	numpy.typing.NDArray
+		The stored values, which must not be changed.
+
+	Examples
+	--------
+	>>> from datetime import time
+	>>> import numdaplot as ndp
+	>>> from numdaplot.arrays.array_data import read_stored_values
+	>>> read_stored_values(ndp.Array.from_list([time(0, 1)]))
+	array([60000000], dtype='timedelta64[us]')
+	"""
+	# The function lives next to the class to read its stored values on behalf of the rest of numdaplot.
+	stored_values = array._values  # pyright: ignore[reportPrivateUsage]
+
+	return stored_values

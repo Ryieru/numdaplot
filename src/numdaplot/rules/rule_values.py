@@ -4,15 +4,15 @@ Kinds of values that a rule compares against.
 .. versionadded:: 0.1.0
 """
 
-from datetime import date, datetime, timedelta
+from datetime import date, datetime, time, timedelta
 
-type ScalarValue = bool | int | float | str | date | datetime | timedelta
+type ScalarValue = bool | int | float | str | date | datetime | timedelta | time
 """
-A single value: a boolean, a number, a text, a date, a datetime or a duration.
+A single value: a boolean, a number, a text, a date, a datetime, a duration or a time of day.
 
 It is a name used by the documentation and the annotations, not an object to create: pass the value itself,
 such as ``True``, ``10``, ``2.5``, ``"Paris"``, ``date(2026, 1, 31)``, ``datetime(2026, 1, 31, 14, 30)`` or
-``timedelta(days=1)``.
+``timedelta(days=1)`` or ``time(15, 35)``.
 
 .. versionadded:: 0.1.0
 
@@ -24,13 +24,14 @@ Examples
 Array([ True, False,  True], dtype=BOOL)
 """
 
-type OrderedValue = int | float | str | date | datetime | timedelta
+type OrderedValue = int | float | str | date | datetime | timedelta | time
 """
-A single value that can be ordered: a number, a text in alphabetical order, a date, a datetime or a duration.
+A single value that can be ordered: a number, a text in alphabetical order, a date, a datetime, a duration or a
+time of day.
 
 It is a name used by the documentation and the annotations, not an object to create: pass the value itself,
 such as ``10``, ``2.5``, ``"Paris"``, ``date(2026, 1, 31)``, ``datetime(2026, 1, 31, 14, 30)`` or
-``timedelta(days=1)``.
+``timedelta(days=1)`` or ``time(15, 35)``.
 
 .. versionadded:: 0.1.0
 

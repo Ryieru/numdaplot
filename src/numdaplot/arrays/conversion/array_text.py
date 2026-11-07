@@ -9,7 +9,7 @@ from typing import Any
 import numpy
 from numpy.typing import NDArray
 
-from numdaplot.arrays.conversion.time_text import format_datetimes, format_durations
+from numdaplot.arrays.conversion.time_text import format_datetimes, format_durations, format_times
 from numdaplot.data_types.numpy_mapping import from_numpy_dtype
 from numdaplot.data_types.type import Type
 
@@ -23,7 +23,8 @@ def format_array(values: NDArray[Any]) -> str:
 	Return the text of an Array: its values as nested lists, then its type.
 
 	Rows of a two-dimensional Array are aligned on separate lines, and long Arrays are shortened with ``...``.
-	Datetimes are written as ``"2026-01-02 10:30:00"`` and durations as pandas writes them, ``"1 days 12:00:00"``.
+	Datetimes are written as ``"2026-01-02 10:30:00"``, durations as pandas writes them, ``"1 days 12:00:00"``, and
+	times of day as ``"15:35:00"``.
 
 	.. versionadded:: 0.1.0
 
@@ -51,6 +52,9 @@ def format_array(values: NDArray[Any]) -> str:
 
 	if array_type == Type.DURATION:
 		shown_values = format_durations(values)
+
+	if array_type == Type.TIME:
+		shown_values = format_times(values)
 
 	values_text = numpy.array2string(shown_values, separator=VALUE_SEPARATOR, prefix=ARRAY_PREFIX)
 	array_text = ARRAY_TEXT.format(values=values_text, type_name=array_type.name)

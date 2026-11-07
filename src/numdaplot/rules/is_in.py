@@ -5,7 +5,7 @@ Rule keeping the values that belong to a list.
 """
 
 from dataclasses import dataclass
-from datetime import date, datetime, timedelta
+from datetime import date, datetime, time, timedelta
 
 from numdaplot.errors.empty_values_error import EmptyValuesError
 from numdaplot.rules.rule import Rule
@@ -15,7 +15,7 @@ from numdaplot.settings.field_types import require_field_types
 # The type parameter has the name of the alias holding the same types: the documentation shows the alias,
 # and every accepted value must be of one type.
 @dataclass(frozen=True)
-class IsIn[ScalarValue: (bool, int, float, str, date, datetime, timedelta)](Rule):
+class IsIn[ScalarValue: (bool, int, float, str, date, datetime, timedelta, time)](Rule):
 	"""
 	Keep the values that belong to a list of accepted values.
 

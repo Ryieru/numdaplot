@@ -4,7 +4,7 @@ Unit tests of the normalization of DataFrames into Table columns.
 .. versionadded:: 0.1.0
 """
 
-from datetime import UTC, date, datetime
+from datetime import UTC, date, datetime, time
 from typing import Any, cast
 
 import numpy
@@ -62,6 +62,9 @@ OBJECT_DECIMALS = pandas.Series([1, 2.5], dtype=object)
 NUMBER_CATEGORIES = pandas.Series([1, 2], dtype="category")
 EXPECTED_TEXT_CATEGORIES = ["1", "2"]
 TEXT_CATEGORIES = pandas.Series(["a", "b"], dtype="category")
+TIME_FRAME = pandas.DataFrame({"hour": pandas.Series(numpy.array([60000000], dtype="timedelta64[us]"))})
+OBJECT_TIME_FRAME = pandas.DataFrame({"hour": pandas.Series([time(0, 1), None], dtype=object)})
+TIME_PANDAS_NAME = "timedelta64[us]"
 
 
 def find_dtype_names(frame: pandas.DataFrame) -> list[str]:
@@ -357,3 +360,27 @@ def test_find_moment_type_gives_text_for_a_time_zone() -> None:
 	moment_type = find_moment_type(column)
 
 	assert moment_type == Type.TEXT
+
+
+def test_normalize_frame_keeps_a_column_of_times() -> None:
+	"""
+	Check that a column in microseconds stays a column of times.
+
+	.. versionadded:: 0.1.0
+	"""
+	normalized_frame = normalize_frame(TIME_FRAME)
+
+	hour_column = normalized_frame["hour"]
+	assert str(hour_column.dtype) == TIME_PANDAS_NAME
+
+
+def test_normalize_frame_reads_python_times_as_times() -> None:
+	"""
+	Check that a column of datetime.time objects becomes a column of times.
+
+	.. versionadded:: 0.1.0
+	"""
+	normalized_frame = normalize_frame(OBJECT_TIME_FRAME)
+
+	hour_column = normalized_frame["hour"]
+	assert str(hour_column.dtype) == TIME_PANDAS_NAME

@@ -21,7 +21,7 @@ from numdaplot.errors.refused_operation_error import RefusedOperationError
 from numdaplot.errors.time_overflow_error import TimeOverflowError
 from numdaplot.errors.value_conversion_error import ValueConversionError
 
-TIME_FAMILIES = frozenset({ValueFamily.MOMENT, ValueFamily.DURATION})
+TIME_FAMILIES = frozenset({ValueFamily.MOMENT, ValueFamily.DURATION, ValueFamily.TIME})
 # The family of the result of each accepted operation, by function and families of the left and right operands.
 type TimeOperation = tuple[numpy.ufunc, ValueFamily, ValueFamily]
 TIME_RESULTS = dict[TimeOperation, ValueFamily](

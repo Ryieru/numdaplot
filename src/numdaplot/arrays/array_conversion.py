@@ -43,7 +43,8 @@ class ArrayConversion(ArrayData):
 		Returns
 		-------
 		list[Any]
-			Python values. A missing date, datetime or duration becomes ``None``, a missing decimal ``nan``.
+			Python values, ``datetime.time`` for times of day. A missing date, datetime, duration or time of day
+			becomes ``None``, a missing decimal ``nan``.
 
 		Examples
 		--------

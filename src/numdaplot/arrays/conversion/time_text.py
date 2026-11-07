@@ -9,6 +9,8 @@ from typing import Any, Literal, cast
 import numpy
 from numpy.typing import NDArray
 
+from numdaplot.data_types.time_of_day import read_times, write_time
+
 type DatetimeUnit = Literal["s", "ms", "us", "ns"]
 DATETIME_UNITS = tuple[DatetimeUnit, ...](("s", "ms", "us", "ns"))
 ISO_TIME_SEPARATOR = "T"
@@ -247,3 +249,42 @@ def join_texts(left_texts: NDArray[Any] | str, right_texts: NDArray[Any] | str) 
 	joined_texts = string_functions.add(left_texts, right_texts)
 
 	return joined_texts
+
+
+def format_times(values: NDArray[numpy.timedelta64]) -> NDArray[numpy.str_]:
+	"""
+	Return times of day stored as the time since midnight as texts, ``NaT`` where missing.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	values
+		Values in ``timedelta64[us]``, of any shape.
+
+	Returns
+	-------
+	NDArray[numpy.str_]
+		One text per value, of the same shape, such as ``15:35:00``.
+
+	Examples
+	--------
+	>>> import numpy
+	>>> from numdaplot.arrays.conversion.time_text import format_times
+	>>> format_times(numpy.array([56100000000, "NaT"], dtype="timedelta64[us]")).tolist()
+	['15:35:00', 'NaT']
+	"""
+	flat_values = values.ravel()
+	times = read_times(flat_values)
+	time_texts = list[str]()
+	for time_of_day in times:
+		time_text = NOT_A_TIME_TEXT
+		if time_of_day is not None:
+			time_text = write_time(time_of_day)
+
+		time_texts.append(time_text)
+
+	text_values = numpy.array(time_texts)
+	shaped_texts = text_values.reshape(values.shape)
+
+	return shaped_texts

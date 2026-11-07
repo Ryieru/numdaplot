@@ -19,7 +19,7 @@ from numdaplot.tables.frames.column import Column
 from numdaplot.tables.frames.time_zones import find_column_time_zone, remove_utc_zone
 
 MISSING_CAPABLE_TYPES = frozenset(
-	{Type.FLOAT32, Type.FLOAT64, Type.TEXT, Type.CATEGORY, Type.DATE, Type.DATETIME, Type.DURATION}
+	{Type.FLOAT32, Type.FLOAT64, Type.TEXT, Type.CATEGORY, Type.DATE, Type.DATETIME, Type.DURATION, Type.TIME}
 )
 TEXT_TYPES = frozenset({Type.TEXT, Type.CATEGORY})
 PYTHON_OBJECT_DTYPE = numpy.dtype(object)

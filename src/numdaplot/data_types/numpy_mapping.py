@@ -30,6 +30,7 @@ NUMPY_DTYPE_CODES = {
 	Type.DATE: "datetime64[D]",
 	Type.DATETIME: "datetime64[ns]",
 	Type.DURATION: "timedelta64[ns]",
+	Type.TIME: "timedelta64[us]",
 }
 NAMED_NUMPY_TYPES = (
 	Type.INT8,
@@ -49,6 +50,7 @@ TEXT_KINDS = frozenset({"U", "T"})
 DATETIME_KIND = "M"
 DURATION_KIND = "m"
 DAY_UNIT = "D"
+TIME_UNIT = "us"
 
 
 def to_numpy_dtype(data_type: Type) -> numpy.dtype[Any]:
@@ -101,8 +103,9 @@ def from_numpy_dtype(numpy_dtype: numpy.dtype[Any]) -> Type:
 	Parameters
 	----------
 	numpy_dtype
-		The numpy dtype to convert. Fixed-length (``<U5``) and variable-length strings both give ``TEXT``,
-		and every ``timedelta64`` unit gives ``DURATION``.
+		The numpy dtype to convert. Fixed-length (``<U5``) and variable-length strings both give ``TEXT``.
+		``timedelta64[us]`` gives ``TIME``, the time since midnight, and every other ``timedelta64`` unit gives
+		``DURATION``.
 
 	Returns
 	-------
@@ -131,7 +134,8 @@ def from_numpy_dtype(numpy_dtype: numpy.dtype[Any]) -> Type:
 		return Type.TEXT
 
 	if dtype_kind == DURATION_KIND:
-		return Type.DURATION
+		duration_type = find_duration_type(numpy_dtype)
+		return duration_type
 
 	if dtype_kind == DATETIME_KIND:
 		datetime_type = find_datetime_type(numpy_dtype)
@@ -139,6 +143,38 @@ def from_numpy_dtype(numpy_dtype: numpy.dtype[Any]) -> Type:
 
 	type_name = str(numpy_dtype)
 	raise UnsupportedTypeError(type_name, Library.NUMPY)
+
+
+def find_duration_type(numpy_dtype: numpy.dtype[Any]) -> Type:
+	"""
+	Return the numdaplot type of a ``timedelta64`` dtype.
+
+	numdaplot stores a time of day as the time since midnight in microseconds, and every duration in another unit.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	numpy_dtype
+		A ``timedelta64`` dtype.
+
+	Returns
+	-------
+	Type
+		``TIME`` for microseconds, ``DURATION`` otherwise.
+
+	Examples
+	--------
+	>>> import numpy
+	>>> from numdaplot.data_types.numpy_mapping import find_duration_type
+	>>> find_duration_type(numpy.dtype("timedelta64[us]")), find_duration_type(numpy.dtype("timedelta64[s]"))
+	(<Type.TIME: 17>, <Type.DURATION: 16>)
+	"""
+	unit, _ = numpy.datetime_data(numpy_dtype)
+	if unit == TIME_UNIT:
+		return Type.TIME
+
+	return Type.DURATION
 
 
 def find_datetime_type(numpy_dtype: numpy.dtype[Any]) -> Type:

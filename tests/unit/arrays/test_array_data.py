@@ -7,14 +7,16 @@ Unit tests of ArrayData.
 # The tests create the objects from their stored values, with the creation reserved to numdaplot.
 # pyright: reportPrivateUsage=false
 
+from datetime import time
 from typing import Any, Self
 
 import numpy
 import pytest
 from numpy.typing import NDArray
 
+import numdaplot as ndp
 from numdaplot.arrays import array_data
-from numdaplot.arrays.array_data import ArrayData
+from numdaplot.arrays.array_data import ArrayData, read_stored_values
 from numdaplot.arrays.operations.operand import Operand
 from numdaplot.arrays.shape import Shape
 from numdaplot.data_types.type import Type
@@ -31,6 +33,9 @@ SUBTRACTION_SYMBOL = "-"
 COMBINE_VALUES_NAME = "combine_values"
 FAKE_RESULT = numpy.array([7, 7])
 EXPECTED_FAKE_RESULT = [7, 7]
+TIME_ARRAY = ndp.Array.from_list([time(0, 1), None])
+EXPECTED_TIME_OBJECTS = [time(0, 1), None]
+STORED_TIME_DTYPE_NAME = "timedelta64[us]"
 
 
 class ExposedArrayData(ArrayData):
@@ -279,3 +284,26 @@ def test_array_data_combines_with_itself_on_the_right(monkeypatch: pytest.Monkey
 	data.combine_reflected(SINGLE_VALUE)
 
 	assert recorder.operands == [SINGLE_VALUE, values]
+
+
+def test_to_numpy_gives_python_times_of_day() -> None:
+	"""
+	Check that an Array of times gives an object array of datetime.time.
+
+	.. versionadded:: 0.1.0
+	"""
+	values = TIME_ARRAY.to_numpy()
+
+	value_list = values.tolist()
+	assert value_list == EXPECTED_TIME_OBJECTS
+
+
+def test_read_stored_values_keeps_the_storage_of_times() -> None:
+	"""
+	Check that the stored values stay in microseconds.
+
+	.. versionadded:: 0.1.0
+	"""
+	stored_values = read_stored_values(TIME_ARRAY)
+
+	assert stored_values.dtype.name == STORED_TIME_DTYPE_NAME

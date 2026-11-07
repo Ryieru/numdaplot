@@ -10,7 +10,7 @@ import numpy
 import pytest
 
 from numdaplot.data_types.library import Library
-from numdaplot.data_types.numpy_mapping import find_datetime_type, from_numpy_dtype, to_numpy_dtype
+from numdaplot.data_types.numpy_mapping import find_datetime_type, find_duration_type, from_numpy_dtype, to_numpy_dtype
 from numdaplot.data_types.type import Type
 from numdaplot.errors.unsupported_type_error import UnsupportedTypeError
 
@@ -24,6 +24,8 @@ DAY_DATETIME_DTYPE = numpy.dtype("datetime64[D]")
 SECOND_DATETIME_DTYPE = numpy.dtype("datetime64[s]")
 COMPLEX_DTYPE = numpy.dtype("complex128")
 OBJECT_DTYPE = numpy.dtype("object")
+TIME_NUMPY_DTYPE = numpy.dtype("timedelta64[us]")
+SECOND_NUMPY_DTYPE = numpy.dtype("timedelta64[s]")
 
 
 def test_to_numpy_dtype_converts_int32() -> None:
@@ -148,3 +150,29 @@ def test_find_datetime_type_reads_other_units_as_datetime() -> None:
 	data_type = find_datetime_type(SECOND_DATETIME_DTYPE)
 
 	assert data_type == Type.DATETIME
+
+
+def test_find_duration_type_reads_microseconds_as_times() -> None:
+	"""
+	Check that microseconds give TIME and seconds DURATION.
+
+	.. versionadded:: 0.1.0
+	"""
+	time_type = find_duration_type(TIME_NUMPY_DTYPE)
+	duration_type = find_duration_type(SECOND_NUMPY_DTYPE)
+
+	assert time_type == Type.TIME
+	assert duration_type == Type.DURATION
+
+
+def test_to_numpy_dtype_stores_times_in_microseconds() -> None:
+	"""
+	Check the storage of TIME and its reverse mapping.
+
+	.. versionadded:: 0.1.0
+	"""
+	numpy_dtype = to_numpy_dtype(Type.TIME)
+
+	time_type = from_numpy_dtype(numpy_dtype)
+	assert numpy_dtype == TIME_NUMPY_DTYPE
+	assert time_type == Type.TIME

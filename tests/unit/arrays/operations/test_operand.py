@@ -4,7 +4,7 @@ Unit tests of the operands an Array can be combined with.
 .. versionadded:: 0.1.0
 """
 
-from datetime import date, timedelta
+from datetime import date, time, timedelta
 
 import numpy
 
@@ -24,6 +24,8 @@ DAY = date(2026, 1, 31)
 EXPECTED_DAY = numpy.datetime64("2026-01-31")
 ONE_HOUR = timedelta(hours=1)
 NUMBER = 3
+AFTERNOON = time(15, 35)
+AFTERNOON_MICROSECONDS = numpy.timedelta64(56100000000, "us")
 
 
 def test_find_operand_type_reads_the_type_of_array_values() -> None:
@@ -107,3 +109,15 @@ def test_convert_time_value_keeps_microseconds_of_a_usual_duration() -> None:
 
 	expected_duration = numpy.timedelta64(1, "us")
 	assert converted_duration == expected_duration
+
+
+def test_convert_time_value_gives_the_microseconds_since_midnight() -> None:
+	"""
+	Check that a time of day is compared as its time since midnight.
+
+	.. versionadded:: 0.1.0
+	"""
+	converted_value = convert_time_value(AFTERNOON)
+
+	assert converted_value == AFTERNOON_MICROSECONDS
+	assert converted_value.dtype == AFTERNOON_MICROSECONDS.dtype

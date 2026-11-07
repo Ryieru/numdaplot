@@ -46,6 +46,8 @@ EXPECTED_REBUILT_INTEGERS = [1, pandas.NA, 3]
 NAIVE_TIMES = pandas.Series(pandas.to_datetime(["2026-07-01 10:30"])).astype("datetime64[ns]")
 PARIS_TIMES = NAIVE_TIMES.dt.tz_localize("Europe/Paris")
 EXPECTED_UTC_VALUES = numpy.array(["2026-07-01T08:30"], dtype="datetime64[ns]")
+TIME_WITH_MISSING = pandas.Series(numpy.array([60000000, "NaT"], dtype="timedelta64[us]"))
+TIME_NUMPY_NAME = "timedelta64[us]"
 
 
 def read_list(values: numpy.ndarray[Any, Any]) -> list[Any]:
@@ -234,3 +236,14 @@ def test_read_array_values_rejects_a_zone_column() -> None:
 	"""
 	with pytest.raises(TimeZoneMismatchError):
 		read_array_values(PARIS_TIMES)
+
+
+def test_read_array_values_accepts_a_missing_time() -> None:
+	"""
+	Check that a column of times with a missing value gives values in microseconds.
+
+	.. versionadded:: 0.1.0
+	"""
+	array_values = read_array_values(TIME_WITH_MISSING)
+
+	assert array_values.dtype.name == TIME_NUMPY_NAME

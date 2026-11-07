@@ -32,6 +32,7 @@ PANDAS_DTYPE_CODES = {
 	Type.DATE: "datetime64[s]",
 	Type.DATETIME: "datetime64[ns]",
 	Type.DURATION: "timedelta64[ns]",
+	Type.TIME: "timedelta64[us]",
 }
 NANOSECOND_UNIT = "ns"
 TYPES_BY_PANDAS_NAME = {dtype_code: data_type for data_type, dtype_code in PANDAS_DTYPE_CODES.items()}

@@ -138,7 +138,8 @@ class ArrayCreation(ArrayData):
 		Parameters
 		----------
 		values
-			The numpy array. Texts may mark their missing values with any marker of ``StringDType``.
+			The numpy array. Texts may mark their missing values with any marker of ``StringDType``. Durations of any
+			unit give ``DURATION``, and an object array of ``datetime.time`` and None gives ``TIME``.
 
 		Returns
 		-------
@@ -150,7 +151,9 @@ class ArrayCreation(ArrayData):
 		InvalidTypeError
 			When an argument is not of the type its annotation names.
 		UnsupportedTypeError
-			When numdaplot has no equivalent type, for example complex numbers or Python objects.
+			When numdaplot has no equivalent type, for example complex numbers or other Python objects.
+		TimeOverflowError
+			When a duration in microseconds is beyond about 292 years, which ``DURATION`` cannot hold.
 
 		Examples
 		--------

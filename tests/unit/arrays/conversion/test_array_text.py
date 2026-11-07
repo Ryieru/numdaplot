@@ -18,6 +18,8 @@ DATETIMES = numpy.array(["2026-01-02T10:30", "NaT"], dtype="datetime64[ns]")
 DURATIONS = numpy.array([36], dtype="timedelta64[h]")
 EXPECTED_DATETIME_TEXT = "Array(['2026-01-02 10:30:00', 'NaT'], dtype=DATETIME)"
 EXPECTED_DURATION_TEXT = "Array(['1 days 12:00:00'], dtype=DURATION)"
+STORED_TIMES = numpy.array([56100000000, "NaT"], dtype="timedelta64[us]")
+EXPECTED_TIME_TEXT = "Array(['15:35:00', 'NaT'], dtype=TIME)"
 
 
 def test_format_array_shows_values_and_type() -> None:
@@ -79,3 +81,14 @@ def test_format_array_writes_durations_as_pandas_writes_them() -> None:
 	array_text = format_array(DURATIONS)
 
 	assert array_text == EXPECTED_DURATION_TEXT
+
+
+def test_format_array_writes_times_of_day() -> None:
+	"""
+	Check the text of an Array of times.
+
+	.. versionadded:: 0.1.0
+	"""
+	array_text = format_array(STORED_TIMES)
+
+	assert array_text == EXPECTED_TIME_TEXT

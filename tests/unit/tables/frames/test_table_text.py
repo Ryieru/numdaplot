@@ -4,6 +4,7 @@ Unit tests of the text of a Table.
 .. versionadded:: 0.1.0
 """
 
+import numpy
 import pandas
 import pytest
 
@@ -26,6 +27,8 @@ PARIS_TIMES = (
 	pandas.Series(pandas.to_datetime(["2026-07-01 10:30"])).astype("datetime64[ns]").dt.tz_localize("Europe/Paris")
 )
 EXPECTED_ZONE_HEADER = [("time", "DATETIME Europe/Paris")]
+SHOWN_TIME_FRAME = pandas.DataFrame({"hour": pandas.Series(numpy.array([56100000000, "NaT"], dtype="timedelta64[us]"))})
+EXPECTED_TIME_TABLE = "       hour\n       TIME\n0  15:35:00\n1       NaT"
 
 
 def test_build_typed_frame_puts_the_type_under_each_name() -> None:
@@ -247,3 +250,14 @@ def test_format_table_compacts_the_wide_header_without_dimensions(monkeypatch: p
 	assert "..." in table_text
 	assert "1 rows" not in table_text
 	assert table_text.splitlines()[-1] == "(0 rows)"
+
+
+def test_format_table_writes_times_of_day() -> None:
+	"""
+	Check that a column of times is shown as 15:35:00, NaT where missing.
+
+	.. versionadded:: 0.1.0
+	"""
+	table_text = format_table(SHOWN_TIME_FRAME)
+
+	assert table_text == EXPECTED_TIME_TABLE

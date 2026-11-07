@@ -56,3 +56,16 @@ def test_find_family_classifies_every_type() -> None:
 	family_count = len(families)
 	type_count = len(Type)
 	assert family_count == type_count
+
+
+def test_times_have_their_own_family() -> None:
+	"""
+	Check that TIME is compared with no other type.
+
+	.. versionadded:: 0.1.0
+	"""
+	time_family = find_family(Type.TIME)
+	duration_family = find_family(Type.DURATION)
+
+	assert time_family == ValueFamily.TIME
+	assert time_family != duration_family

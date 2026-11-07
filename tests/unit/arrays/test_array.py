@@ -4,9 +4,10 @@ Unit tests of Array.
 .. versionadded:: 0.1.0
 """
 
+import numpy
 import pytest
 
-from numdaplot.arrays.array import Array
+from numdaplot.arrays.array import Array, create_array
 from numdaplot.arrays.array_arithmetic import ArrayArithmetic
 from numdaplot.arrays.array_calculation import ArrayCalculation
 from numdaplot.arrays.array_conversion import ArrayConversion
@@ -16,6 +17,7 @@ from numdaplot.arrays.array_logic import ArrayLogic
 from numdaplot.arrays.array_reflected_arithmetic import ArrayReflectedArithmetic
 from numdaplot.arrays.array_refusals import ArrayRefusals
 from numdaplot.arrays.array_selection import ArraySelection
+from numdaplot.data_types.type import Type
 
 METHOD_GROUPS = [
 	ArrayCreation,
@@ -30,6 +32,7 @@ METHOD_GROUPS = [
 ]
 VALUES = [1, 2]
 FACTOR = 2
+STORED_TIMES = numpy.array([60000000], dtype="timedelta64[us]")
 
 
 @pytest.mark.parametrize("method_group", METHOD_GROUPS)
@@ -58,3 +61,14 @@ def test_array_operations_return_arrays() -> None:
 	doubled_array = array * FACTOR
 
 	assert type(doubled_array) is Array
+
+
+def test_create_array_keeps_times_of_day() -> None:
+	"""
+	Check that stored microseconds stay times of day, unlike from_numpy.
+
+	.. versionadded:: 0.1.0
+	"""
+	time_array = create_array(STORED_TIMES)
+
+	assert time_array.dtype == Type.TIME
