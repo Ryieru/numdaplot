@@ -68,9 +68,11 @@ and numdaplot follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 - Settings that work as they are may be omitted: `Array.sort`, `Table.preview`, `Table.describe`,
   `Table.drop_duplicates`, `Table.drop_missing` and `Table.count_missing` use their default settings, and the Plot
   creation methods and `Plot.add_*`, except `Plot.pie`, their default chart.
+- `Table.convert` converts booleans to numbers, 1 for `True` and 0 for `False`, and numbers to booleans, only 0 and
+  1 by default or every number but 0 as `True` with `BooleanRule.NONZERO_TRUE`.
 - Table settings: `CsvOptions`, `JsonOptions`, `ExcelOptions`, `SasOptions`, `XptOptions`, `Filter`, `Condition`,
   `Aggregation`, `Calculation`, `PivotTable`, `Description`, `ColumnChoice`, `Renaming`, `NameChange`, `Conversion`, `NewColumn`,
-  `Sorting`, `SortKey`, `Deduplication`, `Preview`, `MissingCount`, `MissingDrop`, `MissingRatio`, and the `Encoding`,
+  `Sorting`, `SortKey`, `Deduplication`, `Preview`, `MissingCount`, `MissingDrop`, `MissingRatio`, and the `BooleanRule`, `Encoding`,
   `JsonLayout`, `Conflict`, `FilterMode`, `ColumnMatch`, `ColumnMode`, `Keep`, `Side`, `ShownColumns`, `MissingMode`,
   `RatioComparison` and `Measure` enums. `Equality` compares two Tables as well as two Arrays.
 - Table errors: `ColumnNotFoundError`, `DuplicateColumnError`, `DuplicateStatisticError`, `EmptyListError`,

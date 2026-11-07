@@ -4,6 +4,7 @@ Unit tests of the conversion of Table columns to another type.
 .. versionadded:: 0.1.0
 """
 
+import math
 from typing import Any
 
 import numpy
@@ -16,8 +17,14 @@ from numdaplot.dates.time_zone_change import TimeZoneChange
 from numdaplot.dates.time_zone_mode import TimeZoneMode
 from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
 from numdaplot.errors.value_conversion_error import ValueConversionError
+from numdaplot.tables.columns.boolean_rule import BooleanRule
 from numdaplot.tables.columns.conversion import Conversion
-from numdaplot.tables.columns.converted_column import convert_column
+from numdaplot.tables.columns.converted_column import (
+	convert_column,
+	convert_plain_column,
+	read_plain_column,
+	write_plain_column,
+)
 from numdaplot.tables.columns.number_conversion import (
 	convert_numbers,
 	find_lost_values,
@@ -41,6 +48,12 @@ TEXT_INTEGERS = pandas.Series(["1", None, "3"], dtype="string")
 EXPECTED_PARSED_INTEGERS = [1, pandas.NA, 3]
 TEXT_BOOLEANS = pandas.Series(["TRUE", " false "], dtype="string")
 EXPECTED_PARSED_BOOLEANS = [True, False]
+EXPECTED_TRUE_NUMBER = 1.0
+ZERO_ONE_INTEGERS = pandas.Series([1, None, 0], dtype="Int64")
+EXPECTED_INTEGER_BOOLEANS = [True, pandas.NA, False]
+TWO_AND_ZERO = pandas.Series([2, 0], dtype="Int64")
+EXPECTED_NONZERO_BOOLEANS = [True, False]
+EXPECTED_CATEGORY_TEXTS = ["True", pandas.NA]
 DATES = pandas.Series(numpy.array(["2026-01-31"], dtype="datetime64[s]"))
 WHOLE_DECIMALS = pandas.Series([2.0, None])
 EXPECTED_WHOLE_INTEGERS = [2, pandas.NA]
@@ -215,15 +228,15 @@ def test_convert_column_copies_a_column_of_the_same_type() -> None:
 @pytest.mark.parametrize(
 	("column", "target_type"),
 	[
-		(BOOLEANS, Type.INT64),
-		(INTEGERS, Type.BOOL),
+		(BOOLEANS, Type.DATE),
+		(DATES, Type.INT64),
 		(DATES, Type.BOOL),
 		(INTEGERS, Type.DATE),
 	],
 )
 def test_convert_column_rejects_a_conversion_that_is_not_accepted(column: Column, target_type: Type) -> None:
 	"""
-	Check that conversions between booleans and numbers, of dates to booleans and of numbers to dates raise.
+	Check that conversions of booleans to dates, of dates to numbers or booleans and of numbers to dates raise.
 
 	.. versionadded:: 0.1.0
 
@@ -433,3 +446,105 @@ def test_convert_column_changes_the_time_zone() -> None:
 
 	time_zone = find_column_time_zone(zone_column)
 	assert time_zone == UTC_ZONE
+
+
+def test_convert_column_converts_booleans_to_decimals() -> None:
+	"""
+	Check that True gives 1.0 and a missing boolean stays missing.
+
+	.. versionadded:: 0.1.0
+	"""
+	column = convert_to(BOOLEANS, Type.FLOAT64)
+
+	values = column.tolist()
+	true_number = values[0]
+	missing_number = values[1]
+	is_missing = math.isnan(missing_number)
+	assert true_number == EXPECTED_TRUE_NUMBER
+	assert is_missing
+
+
+def test_convert_column_reads_zeros_and_ones_as_booleans_by_default() -> None:
+	"""
+	Check that a conversion of numbers to BOOL without boolean rule reads 0 and 1.
+
+	.. versionadded:: 0.1.0
+	"""
+	column = convert_to(ZERO_ONE_INTEGERS, Type.BOOL)
+
+	values = column.tolist()
+	assert values == EXPECTED_INTEGER_BOOLEANS
+
+
+def test_convert_column_rejects_another_number_than_zero_or_one_by_default() -> None:
+	"""
+	Check that a conversion of numbers to BOOL without boolean rule refuses 2.
+
+	.. versionadded:: 0.1.0
+	"""
+	with pytest.raises(ValueConversionError):
+		convert_to(TWO_AND_ZERO, Type.BOOL)
+
+
+def test_convert_column_applies_the_given_boolean_rule() -> None:
+	"""
+	Check that NONZERO_TRUE reads 2 as True.
+
+	.. versionadded:: 0.1.0
+	"""
+	conversion = Conversion(column=CONVERTED_NAME, dtype=Type.BOOL, booleans=BooleanRule.NONZERO_TRUE)
+
+	column = convert_column(TWO_AND_ZERO, conversion)
+
+	values = column.tolist()
+	assert values == EXPECTED_NONZERO_BOOLEANS
+
+
+def test_convert_plain_column_writes_booleans_as_texts() -> None:
+	"""
+	Check that a conversion to TEXT goes through the writing of the values.
+
+	.. versionadded:: 0.1.0
+	"""
+	conversion = Conversion(column=CONVERTED_NAME, dtype=Type.TEXT)
+
+	column = convert_plain_column(BOOLEANS, Type.BOOL, conversion)
+
+	values = column.tolist()
+	assert values == EXPECTED_BOOLEAN_TEXTS
+
+
+def test_write_plain_column_writes_booleans_as_categories() -> None:
+	"""
+	Check that booleans become categories written as Python writes them.
+
+	.. versionadded:: 0.1.0
+	"""
+	column = write_plain_column(BOOLEANS, Type.BOOL, Type.CATEGORY)
+
+	dtype_name = str(column.dtype)
+	values = column.tolist()
+	assert dtype_name == CATEGORY_DTYPE_NAME
+	assert values == EXPECTED_CATEGORY_TEXTS
+
+
+def test_write_plain_column_rejects_dates() -> None:
+	"""
+	Check that a column of another family than numbers, booleans and texts raises IncompatibleTypesError.
+
+	.. versionadded:: 0.1.0
+	"""
+	with pytest.raises(IncompatibleTypesError):
+		write_plain_column(DATES, Type.DATE, Type.TEXT)
+
+
+def test_read_plain_column_rejects_booleans_read_as_dates() -> None:
+	"""
+	Check that a conversion of booleans to dates raises IncompatibleTypesError.
+
+	.. versionadded:: 0.1.0
+	"""
+	conversion = Conversion(column=CONVERTED_NAME, dtype=Type.DATE)
+
+	with pytest.raises(IncompatibleTypesError):
+		read_plain_column(BOOLEANS, Type.BOOL, conversion)

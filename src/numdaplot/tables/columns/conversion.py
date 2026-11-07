@@ -11,6 +11,7 @@ from numdaplot.dates.custom_date_format import CustomDateFormat
 from numdaplot.dates.date_format import DateFormat
 from numdaplot.dates.time_zone_change import TimeZoneChange
 from numdaplot.settings.field_types import require_field_types
+from numdaplot.tables.columns.boolean_rule import BooleanRule
 from numdaplot.tables.columns.column_names import require_column_name
 
 
@@ -19,10 +20,10 @@ class Conversion:
 	"""
 	A new type for a column of a Table, used by ``Table.convert``.
 
-	Accepted conversions: between number types, from numbers, booleans, categories, dates, datetimes and
-	durations to texts, from texts and categories to numbers, booleans, dates or datetimes, from any type
-	but categories to categories, and between dates and datetimes. A time zone change keeps the type
-	``DATETIME``: give it alone, in a conversion of a datetime column to ``DATETIME``.
+	Accepted conversions: between number types, between numbers and booleans, from numbers, booleans,
+	categories, dates, datetimes and durations to texts, from texts and categories to numbers, booleans, dates or
+	datetimes, from any type but categories to categories, and between dates and datetimes. A time zone change
+	keeps the type ``DATETIME``: give it alone, in a conversion of a datetime column to ``DATETIME``.
 
 	.. versionadded:: 0.1.0
 
@@ -40,6 +41,9 @@ class Conversion:
 		dates are written as year, month and day separated by ``"-"``, with the time for datetimes.
 	timezone
 		A change of the time zone of a datetime column, the time zone unchanged when omitted.
+	booleans
+		How numbers are read as booleans, only when numbers are converted to ``BOOL``. When omitted, ``ZERO_ONE``:
+		0 gives ``False``, 1 gives ``True``, and any other number raises ``ValueConversionError``.
 
 	Raises
 	------
@@ -74,6 +78,7 @@ class Conversion:
 	dtype: Type
 	format: DateFormat | CustomDateFormat | None = None
 	timezone: TimeZoneChange | None = None
+	booleans: BooleanRule | None = None
 
 	def __post_init__(self) -> None:
 		"""

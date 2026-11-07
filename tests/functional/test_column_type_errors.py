@@ -116,8 +116,8 @@ def test_a_chart_names_the_column_it_refuses(calculate: Callable[[], Any], expec
 			"Cannot apply Mean to the TEXT column 'zone'.",
 		),
 		(
-			lambda: TRIPS.convert(ndp.Conversion(column="paid", dtype=ndp.Type.FLOAT64)),
-			"Cannot apply convert to the BOOL column 'paid' and FLOAT64.",
+			lambda: TRIPS.convert(ndp.Conversion(column="paid", dtype=ndp.Type.DATE)),
+			"Cannot apply convert to the BOOL column 'paid' and DATE.",
 		),
 	],
 )

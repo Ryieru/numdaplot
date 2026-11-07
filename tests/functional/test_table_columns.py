@@ -29,6 +29,14 @@ EXPECTED_KEPT_NAMES = ["price", "city"]
 EXPECTED_SWAPPED_NAMES = ["price", "city", "zip_code"]
 EXPECTED_PRICE_TEXTS = ["10.0", "20.0"]
 MISSPELLED_COLUMN = "prise"
+PAID_FLAGS = [True, False, True]
+EXPECTED_PAID_SHARE = 2 / 3
+SEVERITY_CODES = [1, 0, 1]
+EXPECTED_SEVERE_FLAGS = [True, False, True]
+VISIT_COUNTS = [0, 3, 1]
+EXPECTED_VISITED_FLAGS = [False, True, True]
+EXPECTED_VISIT_MESSAGE = "Cannot store the INT64 value 3 of the column 'visits' as BOOL without losing information."
+EXPECTED_BOOLEANS_MESSAGE = "The setting booleans does not apply to a conversion from TEXT to BOOL."
 
 
 def build_shops() -> ndp.Table:
@@ -193,3 +201,86 @@ def test_dates_written_with_a_time_format_point_to_a_conversion_through_datetime
 	texts = datetimes.convert(to_text)
 	text_list = texts.column("day").to_list()
 	assert text_list == [EXPECTED_SALE_DAY_TEXT]
+
+
+def test_booleans_become_numbers_for_a_share() -> None:
+	"""
+	Check that a BOOL column converted to FLOAT64 gives 1 and 0, so its mean is the share of True.
+
+	.. versionadded:: 0.1.0
+	"""
+	paid = ndp.Array.from_list(PAID_FLAGS)
+	sales = ndp.Table.from_arrays({"paid": paid})
+
+	numbers = sales.convert(ndp.Conversion(column="paid", dtype=ndp.Type.FLOAT64))
+
+	paid_numbers = numbers.column("paid")
+	paid_share_array = paid_numbers.compute(ndp.Mean())
+	paid_share = paid_share_array.to_value()
+	assert paid_share == EXPECTED_PAID_SHARE
+
+
+def test_zeros_and_ones_become_booleans() -> None:
+	"""
+	Check that a column of 0 and 1 converts to BOOL without boolean rule.
+
+	.. versionadded:: 0.1.0
+	"""
+	codes = ndp.Array.from_list(SEVERITY_CODES)
+	accidents = ndp.Table.from_arrays({"severe": codes})
+
+	flags = accidents.convert(ndp.Conversion(column="severe", dtype=ndp.Type.BOOL))
+
+	severe_flags = flags.column("severe")
+	severe_values = severe_flags.to_list()
+	assert severe_values == EXPECTED_SEVERE_FLAGS
+
+
+def test_another_number_than_zero_or_one_is_named_in_the_error() -> None:
+	"""
+	Check the message naming the first number and the column when 0 and 1 are expected.
+
+	.. versionadded:: 0.1.0
+	"""
+	counts = ndp.Array.from_list(VISIT_COUNTS)
+	shops = ndp.Table.from_arrays({"visits": counts})
+
+	with pytest.raises(ndp.ValueConversionError) as error_info:
+		shops.convert(ndp.Conversion(column="visits", dtype=ndp.Type.BOOL))
+
+	error_text = str(error_info.value)
+	assert error_text == EXPECTED_VISIT_MESSAGE
+
+
+def test_every_number_but_zero_is_true_with_its_rule() -> None:
+	"""
+	Check that NONZERO_TRUE reads 3 as True.
+
+	.. versionadded:: 0.1.0
+	"""
+	counts = ndp.Array.from_list(VISIT_COUNTS)
+	shops = ndp.Table.from_arrays({"visits": counts})
+	conversion = ndp.Conversion(column="visits", dtype=ndp.Type.BOOL, booleans=ndp.BooleanRule.NONZERO_TRUE)
+
+	flags = shops.convert(conversion)
+
+	visited_flags = flags.column("visits")
+	visited_values = visited_flags.to_list()
+	assert visited_values == EXPECTED_VISITED_FLAGS
+
+
+def test_a_boolean_rule_on_texts_is_refused() -> None:
+	"""
+	Check that a boolean rule given to a conversion of texts to BOOL raises InvalidConversionError.
+
+	.. versionadded:: 0.1.0
+	"""
+	answers = ndp.Array.from_list(["true", "false"])
+	survey = ndp.Table.from_arrays({"answer": answers})
+	conversion = ndp.Conversion(column="answer", dtype=ndp.Type.BOOL, booleans=ndp.BooleanRule.NONZERO_TRUE)
+
+	with pytest.raises(ndp.InvalidConversionError) as error_info:
+		survey.convert(conversion)
+
+	error_text = str(error_info.value)
+	assert error_text == EXPECTED_BOOLEANS_MESSAGE

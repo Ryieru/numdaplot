@@ -186,6 +186,7 @@ from numdaplot.statistics.statistic import Statistic
 from numdaplot.statistics.sum import Sum
 from numdaplot.tables.aggregation.aggregation import Aggregation
 from numdaplot.tables.aggregation.calculation import Calculation
+from numdaplot.tables.columns.boolean_rule import BooleanRule
 from numdaplot.tables.columns.column_choice import ColumnChoice
 from numdaplot.tables.columns.column_mode import ColumnMode
 from numdaplot.tables.columns.conversion import Conversion
@@ -233,6 +234,7 @@ __all__ = [
 	"Between",
 	"BinCount",
 	"BinWidth",
+	"BooleanRule",
 	"Bounds",
 	"BoxChart",
 	"BroadcastWarning",

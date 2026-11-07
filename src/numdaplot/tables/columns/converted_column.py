@@ -11,6 +11,8 @@ from numdaplot.data_types.value_family import ValueFamily, find_family
 from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
 from numdaplot.errors.invalid_conversion_error import InvalidConversionError
 from numdaplot.errors.time_overflow_error import TimeOverflowError
+from numdaplot.tables.columns.boolean_conversion import convert_booleans_to_numbers, convert_numbers_to_booleans
+from numdaplot.tables.columns.boolean_rule import BooleanRule
 from numdaplot.tables.columns.conversion import Conversion
 from numdaplot.tables.columns.date_conversion import (
 	convert_moments,
@@ -32,6 +34,13 @@ WRITABLE_FAMILIES = frozenset({ValueFamily.NUMBER, ValueFamily.BOOL, ValueFamily
 WRITTEN_TYPES = frozenset({Type.TEXT, Type.CATEGORY})
 FORMAT_SETTING = "format"
 TIMEZONE_SETTING = "timezone"
+BOOLEANS_SETTING = "booleans"
+DEFAULT_BOOLEAN_RULE = BooleanRule.ZERO_ONE
+NUMBERS_TO_NUMBERS = (ValueFamily.NUMBER, ValueFamily.NUMBER)
+TEXTS_TO_NUMBERS = (ValueFamily.TEXT, ValueFamily.NUMBER)
+TEXTS_TO_BOOLEANS = (ValueFamily.TEXT, ValueFamily.BOOL)
+BOOLEANS_TO_NUMBERS = (ValueFamily.BOOL, ValueFamily.NUMBER)
+NUMBERS_TO_BOOLEANS = (ValueFamily.NUMBER, ValueFamily.BOOL)
 
 
 def convert_column(column: Column, conversion: Conversion) -> Column:
@@ -45,7 +54,7 @@ def convert_column(column: Column, conversion: Conversion) -> Column:
 	column
 		A Table column.
 	conversion
-		The new type, and the date format or the time zone change.
+		The new type, and the date format, the time zone change or the rule reading numbers as booleans.
 
 	Returns
 	-------
@@ -56,9 +65,9 @@ def convert_column(column: Column, conversion: Conversion) -> Column:
 	Raises
 	------
 	InvalidConversionError
-		When the format or the time zone change does not apply to the conversion.
+		When the format, the time zone change or the boolean rule does not apply to the conversion.
 	IncompatibleTypesError
-		When the conversion is not accepted, such as a boolean to a number, or a number to a date.
+		When the conversion is not accepted, such as a boolean to a date, or a number to a date.
 	ValueConversionError
 		When a value cannot be stored in the new type without losing information.
 	TimeOverflowError
@@ -93,14 +102,14 @@ def convert_column(column: Column, conversion: Conversion) -> Column:
 	if time_column is not None:
 		return time_column
 
-	plain_column = convert_plain_column(column, source_type, conversion.dtype)
+	plain_column = convert_plain_column(column, source_type, conversion)
 
 	return plain_column
 
 
 def require_conversion_settings(source_type: Type, conversion: Conversion) -> None:
 	"""
-	Check that the format and the time zone change of a conversion apply to its types.
+	Check that the format, the time zone change and the boolean rule of a conversion apply to its types.
 
 	.. versionadded:: 0.1.0
 
@@ -115,7 +124,8 @@ def require_conversion_settings(source_type: Type, conversion: Conversion) -> No
 	------
 	InvalidConversionError
 		When a time zone change is given to another conversion than datetimes to datetimes, a format to another
-		conversion than texts to dates or dates to texts, or a format with a time to dates.
+		conversion than texts to dates or dates to texts, a format with a time to dates, or a boolean rule to another
+		conversion than numbers to booleans.
 
 	Examples
 	--------
@@ -129,15 +139,84 @@ def require_conversion_settings(source_type: Type, conversion: Conversion) -> No
 	The format DAY_MONTH_YEAR_TIME has a time, which DATE cannot hold.
 	Convert the column to DATETIME first, then to DATE.
 	"""
-	target_type = conversion.dtype
-	if conversion.timezone is not None:
-		changes_datetimes = source_type == Type.DATETIME and target_type == Type.DATETIME
-		if not changes_datetimes:
-			raise InvalidConversionError(TIMEZONE_SETTING, source_type.name, target_type.name)
+	require_time_zone_setting(source_type, conversion)
+	require_format_setting(source_type, conversion)
+	require_booleans_setting(source_type, conversion)
 
+
+def require_time_zone_setting(source_type: Type, conversion: Conversion) -> None:
+	"""
+	Check that a time zone change, when given, is given to a conversion of datetimes to datetimes.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	source_type
+		The type of the converted column.
+	conversion
+		The new type and the settings.
+
+	Raises
+	------
+	InvalidConversionError
+		When a time zone change is given to another conversion.
+
+	Examples
+	--------
+	>>> import numdaplot as ndp
+	>>> from numdaplot.tables.columns.converted_column import require_time_zone_setting
+	>>> to_paris = ndp.TimeZoneChange(zone=ndp.TimeZone("Europe/Paris"), mode=ndp.TimeZoneMode.ATTRIBUTE)
+	>>> zone_change = ndp.Conversion(column="day", dtype=ndp.Type.DATETIME, timezone=to_paris)
+	>>> try:
+	... 	require_time_zone_setting(ndp.Type.TEXT, zone_change)
+	... except ndp.InvalidConversionError as error:
+	... 	print(error)
+	The setting timezone does not apply to a conversion from TEXT to DATETIME.
+	"""
+	if conversion.timezone is None:
+		return
+
+	target_type = conversion.dtype
+	changes_datetimes = source_type == Type.DATETIME and target_type == Type.DATETIME
+	if not changes_datetimes:
+		raise InvalidConversionError(TIMEZONE_SETTING, source_type.name, target_type.name)
+
+
+def require_format_setting(source_type: Type, conversion: Conversion) -> None:
+	"""
+	Check that a date format, when given, is given to a conversion of texts to dates or of dates to texts.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	source_type
+		The type of the converted column.
+	conversion
+		The new type and the settings.
+
+	Raises
+	------
+	InvalidConversionError
+		When a format is given to another conversion, or a format with a time to dates.
+
+	Examples
+	--------
+	>>> import numdaplot as ndp
+	>>> from numdaplot.tables.columns.converted_column import require_format_setting
+	>>> day_first = ndp.DateFormat.DAY_MONTH_YEAR
+	>>> price_texts = ndp.Conversion(column="price", dtype=ndp.Type.TEXT, format=day_first)
+	>>> try:
+	... 	require_format_setting(ndp.Type.FLOAT64, price_texts)
+	... except ndp.InvalidConversionError as error:
+	... 	print(error)
+	The setting format does not apply to a conversion from FLOAT64 to TEXT.
+	"""
 	if conversion.format is None:
 		return
 
+	target_type = conversion.dtype
 	source_family = find_family(source_type)
 	target_family = find_family(target_type)
 	reads_dates = source_family == ValueFamily.TEXT and target_family == ValueFamily.MOMENT
@@ -155,6 +234,45 @@ def require_conversion_settings(source_type: Type, conversion: Conversion) -> No
 	if misses_time:
 		format_name = find_format_name(target_type, conversion.format)
 		raise InvalidConversionError(FORMAT_SETTING, source_type.name, target_type.name, format_name)
+
+
+def require_booleans_setting(source_type: Type, conversion: Conversion) -> None:
+	"""
+	Check that a boolean rule, when given, is given to a conversion of numbers to booleans.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	source_type
+		The type of the converted column.
+	conversion
+		The new type and the settings.
+
+	Raises
+	------
+	InvalidConversionError
+		When a boolean rule is given to another conversion.
+
+	Examples
+	--------
+	>>> import numdaplot as ndp
+	>>> from numdaplot.tables.columns.converted_column import require_booleans_setting
+	>>> rule = ndp.BooleanRule.NONZERO_TRUE
+	>>> try:
+	... 	require_booleans_setting(ndp.Type.TEXT, ndp.Conversion(column="paid", dtype=ndp.Type.BOOL, booleans=rule))
+	... except ndp.InvalidConversionError as error:
+	... 	print(error)
+	The setting booleans does not apply to a conversion from TEXT to BOOL.
+	"""
+	if conversion.booleans is None:
+		return
+
+	target_type = conversion.dtype
+	source_family = find_family(source_type)
+	reads_numbers = source_family == ValueFamily.NUMBER and target_type == Type.BOOL
+	if not reads_numbers:
+		raise InvalidConversionError(BOOLEANS_SETTING, source_type.name, target_type.name)
 
 
 def convert_time_column(column: Column, source_type: Type, conversion: Conversion) -> Column | None:
@@ -223,7 +341,7 @@ def convert_time_column(column: Column, source_type: Type, conversion: Conversio
 	return None
 
 
-def convert_plain_column(column: Column, source_type: Type, target_type: Type) -> Column:
+def convert_plain_column(column: Column, source_type: Type, conversion: Conversion) -> Column:
 	"""
 	Return a column converted between numbers, booleans, texts and categories.
 
@@ -235,8 +353,8 @@ def convert_plain_column(column: Column, source_type: Type, target_type: Type) -
 		A Table column of another type than the target.
 	source_type
 		The type of the column.
-	target_type
-		The new type.
+	conversion
+		The new type and the rule reading numbers as booleans.
 
 	Returns
 	-------
@@ -246,7 +364,7 @@ def convert_plain_column(column: Column, source_type: Type, target_type: Type) -
 	Raises
 	------
 	IncompatibleTypesError
-		When the conversion is not accepted, such as a boolean to a number.
+		When the conversion is not accepted, such as a boolean to a date.
 	ValueConversionError
 		When a value cannot be stored in the new type without losing information.
 
@@ -255,31 +373,129 @@ def convert_plain_column(column: Column, source_type: Type, target_type: Type) -
 	>>> import pandas
 	>>> import numdaplot as ndp
 	>>> from numdaplot.tables.columns.converted_column import convert_plain_column
-	>>> convert_plain_column(pandas.Series([1.5]), ndp.Type.FLOAT64, ndp.Type.TEXT).tolist()
+	>>> to_text = ndp.Conversion(column="price", dtype=ndp.Type.TEXT)
+	>>> convert_plain_column(pandas.Series([1.5]), ndp.Type.FLOAT64, to_text).tolist()
 	['1.5']
 	"""
+	target_type = conversion.dtype
+	if target_type in WRITTEN_TYPES:
+		written_column = write_plain_column(column, source_type, target_type)
+		return written_column
+
+	read_column = read_plain_column(column, source_type, conversion)
+
+	return read_column
+
+
+def write_plain_column(column: Column, source_type: Type, target_type: Type) -> Column:
+	"""
+	Return a column of numbers, booleans, texts or categories written as texts or categories.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	column
+		A Table column of another type than the target.
+	source_type
+		The type of the column.
+	target_type
+		``TEXT`` or ``CATEGORY``.
+
+	Returns
+	-------
+	Column
+		The column written as Python writes each value, such as ``2.5`` or ``True``.
+
+	Raises
+	------
+	IncompatibleTypesError
+		When the column holds other values than numbers, booleans, texts or categories.
+
+	Examples
+	--------
+	>>> import pandas
+	>>> import numdaplot as ndp
+	>>> from numdaplot.tables.columns.converted_column import write_plain_column
+	>>> write_plain_column(pandas.Series([True]), ndp.Type.BOOL, ndp.Type.CATEGORY).tolist()
+	['True']
+	"""
 	source_family = find_family(source_type)
-	target_family = find_family(target_type)
-	if target_type == Type.CATEGORY and source_family in WRITABLE_FAMILIES:
-		text_column = convert_to_type(column, Type.TEXT)
+	if source_family not in WRITABLE_FAMILIES:
+		type_names = [source_type.name, target_type.name]
+		raise IncompatibleTypesError(CONVERT_OPERATION, type_names)
+
+	text_column = convert_to_type(column, Type.TEXT)
+	if target_type == Type.CATEGORY:
 		category_column = convert_to_type(text_column, Type.CATEGORY)
 		return category_column
 
-	if target_type == Type.TEXT and source_family in WRITABLE_FAMILIES:
-		text_column = convert_to_type(column, Type.TEXT)
-		return text_column
+	return text_column
 
-	if source_family == ValueFamily.NUMBER and target_family == ValueFamily.NUMBER:
+
+def read_plain_column(column: Column, source_type: Type, conversion: Conversion) -> Column:
+	"""
+	Return a column of numbers, booleans, texts or categories converted to numbers or booleans.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	column
+		A Table column of another type than the target.
+	source_type
+		The type of the column.
+	conversion
+		The new type, a number type or ``BOOL``, and the rule reading numbers as booleans.
+
+	Returns
+	-------
+	Column
+		The converted column.
+
+	Raises
+	------
+	IncompatibleTypesError
+		When the conversion is not accepted, such as a boolean to a date.
+	ValueConversionError
+		When a value cannot be stored in the new type without losing information.
+
+	Examples
+	--------
+	>>> import pandas
+	>>> import numdaplot as ndp
+	>>> from numdaplot.tables.columns.converted_column import read_plain_column
+	>>> to_integers = ndp.Conversion(column="paid", dtype=ndp.Type.INT64)
+	>>> read_plain_column(pandas.Series([True, False]), ndp.Type.BOOL, to_integers).tolist()
+	[1, 0]
+	"""
+	target_type = conversion.dtype
+	source_family = find_family(source_type)
+	target_family = find_family(target_type)
+	family_pair = (source_family, target_family)
+	if family_pair == NUMBERS_TO_NUMBERS:
 		number_column = convert_numbers(column, target_type)
 		return number_column
 
-	if source_family == ValueFamily.TEXT and target_family == ValueFamily.NUMBER:
+	if family_pair == TEXTS_TO_NUMBERS:
 		parsed_column = parse_numbers(column, target_type)
 		return parsed_column
 
-	if source_family == ValueFamily.TEXT and target_type == Type.BOOL:
+	if family_pair == TEXTS_TO_BOOLEANS:
 		boolean_column = parse_booleans(column)
 		return boolean_column
+
+	if family_pair == BOOLEANS_TO_NUMBERS:
+		boolean_numbers = convert_booleans_to_numbers(column, target_type)
+		return boolean_numbers
+
+	if family_pair == NUMBERS_TO_BOOLEANS:
+		boolean_rule = conversion.booleans
+		if boolean_rule is None:
+			boolean_rule = DEFAULT_BOOLEAN_RULE
+
+		number_booleans = convert_numbers_to_booleans(column, boolean_rule)
+		return number_booleans
 
 	type_names = [source_type.name, target_type.name]
 	raise IncompatibleTypesError(CONVERT_OPERATION, type_names)

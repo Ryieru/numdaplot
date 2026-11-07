@@ -13,8 +13,14 @@ from numdaplot.dates.time_zone import TimeZone
 from numdaplot.dates.time_zone_change import TimeZoneChange
 from numdaplot.dates.time_zone_mode import TimeZoneMode
 from numdaplot.errors.invalid_conversion_error import InvalidConversionError
+from numdaplot.tables.columns.boolean_rule import BooleanRule
 from numdaplot.tables.columns.conversion import Conversion
-from numdaplot.tables.columns.converted_column import require_conversion_settings
+from numdaplot.tables.columns.converted_column import (
+	require_booleans_setting,
+	require_conversion_settings,
+	require_format_setting,
+	require_time_zone_setting,
+)
 
 CONVERTED_NAME = "value"
 UTC_ZONE = TimeZone("UTC")
@@ -23,6 +29,7 @@ REJECTED_SETTINGS = [
 	Conversion(column=CONVERTED_NAME, dtype=Type.INT64, format=DateFormat.DAY_MONTH_YEAR),
 	Conversion(column=CONVERTED_NAME, dtype=Type.DATE, format=DateFormat.DAY_MONTH_YEAR_TIME),
 	Conversion(column=CONVERTED_NAME, dtype=Type.DATETIME, timezone=ATTRIBUTE_UTC),
+	Conversion(column=CONVERTED_NAME, dtype=Type.BOOL, booleans=BooleanRule.NONZERO_TRUE),
 ]
 FORMAT_AND_ZONE = Conversion(
 	column=CONVERTED_NAME,
@@ -53,6 +60,10 @@ TIME_FORMAT_ON_DATE_TO_INTEGER = Conversion(
 	column=CONVERTED_NAME, dtype=Type.INT64, format=DateFormat.YEAR_MONTH_DAY_TIME
 )
 EXPECTED_GENERAL_MESSAGE = "The setting format does not apply to a conversion from DATE to INT64."
+NONZERO_TO_BOOLEANS = Conversion(column=CONVERTED_NAME, dtype=Type.BOOL, booleans=BooleanRule.NONZERO_TRUE)
+NONZERO_TO_INTEGERS = Conversion(column=CONVERTED_NAME, dtype=Type.INT64, booleans=BooleanRule.NONZERO_TRUE)
+PLAIN_TO_BOOLEANS = Conversion(column=CONVERTED_NAME, dtype=Type.BOOL)
+EXPECTED_BOOLEANS_MESSAGE = "The setting booleans does not apply to a conversion from TEXT to BOOL."
 
 
 @pytest.mark.parametrize("conversion", REJECTED_SETTINGS)
@@ -152,3 +163,89 @@ def test_require_conversion_settings_keeps_the_general_message_when_no_format_ap
 
 	error_text = str(caught_error.value)
 	assert error_text == EXPECTED_GENERAL_MESSAGE
+
+
+@pytest.mark.parametrize("source_type", [Type.INT64, Type.UINT8, Type.FLOAT32])
+def test_require_booleans_setting_accepts_numbers_read_as_booleans(source_type: Type) -> None:
+	"""
+	Check that a boolean rule given to a conversion of numbers to BOOL raises nothing.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	source_type
+		A number type.
+	"""
+	require_booleans_setting(source_type, NONZERO_TO_BOOLEANS)
+
+
+@pytest.mark.parametrize(
+	("source_type", "conversion"),
+	[
+		(Type.TEXT, NONZERO_TO_BOOLEANS),
+		(Type.BOOL, NONZERO_TO_BOOLEANS),
+		(Type.FLOAT64, NONZERO_TO_INTEGERS),
+	],
+)
+def test_require_booleans_setting_rejects_another_conversion(source_type: Type, conversion: Conversion) -> None:
+	"""
+	Check that a boolean rule given to another conversion than numbers to BOOL raises InvalidConversionError.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	source_type
+		The type of the converted column.
+	conversion
+		A conversion with a boolean rule.
+	"""
+	with pytest.raises(InvalidConversionError):
+		require_booleans_setting(source_type, conversion)
+
+
+def test_require_booleans_setting_names_the_setting_and_the_types() -> None:
+	"""
+	Check the message of a boolean rule that does not apply.
+
+	.. versionadded:: 0.1.0
+	"""
+	with pytest.raises(InvalidConversionError) as error_info:
+		require_booleans_setting(Type.TEXT, NONZERO_TO_BOOLEANS)
+
+	error_text = str(error_info.value)
+	assert error_text == EXPECTED_BOOLEANS_MESSAGE
+
+
+def test_require_booleans_setting_accepts_an_omitted_rule() -> None:
+	"""
+	Check that a conversion without boolean rule raises nothing, whatever its types.
+
+	.. versionadded:: 0.1.0
+	"""
+	require_booleans_setting(Type.TEXT, PLAIN_TO_BOOLEANS)
+
+
+def test_require_time_zone_setting_rejects_a_change_of_texts() -> None:
+	"""
+	Check that a time zone change given to a conversion of texts raises InvalidConversionError.
+
+	.. versionadded:: 0.1.0
+	"""
+	zone_change = Conversion(column=CONVERTED_NAME, dtype=Type.DATETIME, timezone=ATTRIBUTE_UTC)
+
+	with pytest.raises(InvalidConversionError):
+		require_time_zone_setting(Type.TEXT, zone_change)
+
+
+def test_require_format_setting_rejects_a_format_between_numbers() -> None:
+	"""
+	Check that a date format given to a conversion between numbers raises InvalidConversionError.
+
+	.. versionadded:: 0.1.0
+	"""
+	day_first = Conversion(column=CONVERTED_NAME, dtype=Type.INT64, format=DateFormat.DAY_MONTH_YEAR)
+
+	with pytest.raises(InvalidConversionError):
+		require_format_setting(Type.FLOAT64, day_first)
