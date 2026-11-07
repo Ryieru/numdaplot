@@ -7,6 +7,7 @@ Unit tests of CsvReadOptions.
 import pytest
 
 from numdaplot.errors.invalid_separator_error import InvalidSeparatorError
+from numdaplot.tables.files.column_names import ColumnNames
 from numdaplot.tables.files.csv_read_options import CsvReadOptions
 from numdaplot.tables.files.encoding import Encoding
 
@@ -47,3 +48,14 @@ def test_csv_read_options_reject_a_separator_that_is_not_one_character() -> None
 	"""
 	with pytest.raises(InvalidSeparatorError):
 		CsvReadOptions(separator=DOUBLE_SEMICOLON)
+
+
+def test_csv_read_options_clean_the_column_names_by_default() -> None:
+	"""
+	Check that the column names are cleaned by default.
+
+	.. versionadded:: 0.1.0
+	"""
+	options = CsvReadOptions()
+
+	assert options.column_names == ColumnNames.CLEANED

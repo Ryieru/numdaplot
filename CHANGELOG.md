@@ -72,7 +72,9 @@ and numdaplot follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
   1 by default or every number but 0 as `True` with `BooleanRule.NONZERO_TRUE`.
 - File settings, separate for reading and writing so that each setting only exists where it applies:
   `CsvReadOptions`, `CsvWriteOptions`, `JsonReadOptions`, `JsonWriteOptions`, `ExcelReadOptions`,
-  `ExcelWriteOptions`, `SasReadOptions` and `XptReadOptions`.
+  `ExcelWriteOptions`, `SasReadOptions`, `XptReadOptions`, `ParquetReadOptions` and `StataReadOptions`.
+- Every file reading and `Table.from_pandas` remove the spaces, tabs and line breaks at the start and the end of each
+  column name, unless `ColumnNames.KEPT` is given; two names that become the same raise `DuplicateColumnError`.
 - Table settings: `Filter`, `Condition`,
   `Aggregation`, `Calculation`, `PivotTable`, `Description`, `ColumnChoice`, `Renaming`, `NameChange`, `Conversion`, `NewColumn`,
   `Sorting`, `SortKey`, `Deduplication`, `Preview`, `MissingCount`, `MissingDrop`, `MissingRatio`, and the `BooleanRule`, `Encoding`,

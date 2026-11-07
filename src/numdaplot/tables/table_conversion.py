@@ -15,6 +15,7 @@ from numdaplot.arrays.conversion.python_values import to_python_list
 from numdaplot.errors.invalid_type_error import InvalidTypeError
 from numdaplot.errors.not_single_value_error import NotSingleValueError
 from numdaplot.settings.argument_types import checked_arguments
+from numdaplot.tables.files.column_names import ColumnNames
 from numdaplot.tables.frames.array_frame import build_array_frame
 from numdaplot.tables.frames.column_values import convert_column_values, find_column_missing, read_array_values
 from numdaplot.tables.frames.frame_equality import are_frames_equal
@@ -40,7 +41,7 @@ class TableConversion(TableData):
 
 	@classmethod
 	@checked_arguments
-	def from_pandas(cls, frame: pandas.DataFrame) -> Self:
+	def from_pandas(cls, frame: pandas.DataFrame, column_names: ColumnNames = ColumnNames.CLEANED) -> Self:
 		"""
 		Return a Table holding a copy of a pandas DataFrame; changing the DataFrame never changes the Table.
 
@@ -51,6 +52,9 @@ class TableConversion(TableData):
 		frame
 			A pandas DataFrame whose index is the row numbers 0, 1, 2... Python objects become dates, datetimes,
 			durations, integers, decimals or booleans when they all are, and texts otherwise.
+		column_names
+			Whether the column names are cleaned, ``ColumnNames.CLEANED`` by default: the spaces, tabs and line breaks
+			at the start and the end of each name are removed. ``ColumnNames.KEPT`` keeps the names as written.
 
 		Returns
 		-------
@@ -64,7 +68,8 @@ class TableConversion(TableData):
 		UnsupportedIndexError
 			When the index holds other values: call ``reset_index()`` first to keep them as a column.
 		InvalidColumnNameError, DuplicateColumnError
-			When a column name is not a non-empty text, or appears twice.
+			When a column name is not a non-empty text, even once cleaned, or appears twice, or two names become the
+			same once cleaned.
 		UnsupportedTypeError
 			When a column has a type numdaplot does not support, such as complex numbers
 			or datetimes with a time zone.
@@ -81,7 +86,7 @@ class TableConversion(TableData):
 		0   Pau     2
 		1  <NA>     3
 		"""
-		table = cls._from_frame(frame)
+		table = cls._from_read_frame(frame, column_names)
 
 		return table
 

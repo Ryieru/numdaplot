@@ -12,6 +12,8 @@ from numdaplot.data_types.type import Type
 from numdaplot.dates.time_zone import TimeZone
 from numdaplot.errors.refused_operation_error import RefusedOperationError
 from numdaplot.tables.columns.column_names import require_known_columns
+from numdaplot.tables.files.column_names import ColumnNames
+from numdaplot.tables.frames.cleaned_names import clean_frame_names
 from numdaplot.tables.frames.column import Column
 from numdaplot.tables.frames.column_values import find_column_type
 from numdaplot.tables.frames.frame_normalization import normalize_frame
@@ -201,6 +203,37 @@ class TableData:
 		"""
 		normalized_frame = normalize_frame(frame)
 		table = cls._create(normalized_frame)
+
+		return table
+
+	@classmethod
+	def _from_read_frame(cls, frame: pandas.DataFrame, column_names: ColumnNames) -> Self:
+		"""
+		Return a new Table holding a DataFrame read from a file or given by the user, its names cleaned when asked.
+
+		.. versionadded:: 0.1.0
+
+		Parameters
+		----------
+		frame
+			A pandas DataFrame read from outside numdaplot, which is not changed.
+		column_names
+			Whether the spaces, tabs and line breaks at the start and the end of each name are removed.
+
+		Returns
+		-------
+		Self
+			The new Table.
+
+		Raises
+		------
+		DuplicateColumnError
+			When two names become the same once cleaned, or a name appears twice.
+		InvalidColumnNameError, UnsupportedIndexError, UnsupportedTypeError
+			When the pandas DataFrame cannot become a Table, as in ``normalize_frame``.
+		"""
+		cleaned_frame = clean_frame_names(frame, column_names)
+		table = cls._from_frame(cleaned_frame)
 
 		return table
 

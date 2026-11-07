@@ -7,6 +7,7 @@ Settings of the Excel files a Table reads.
 from dataclasses import dataclass
 
 from numdaplot.settings.field_types import require_field_types
+from numdaplot.tables.files.column_names import ColumnNames
 from numdaplot.tables.files.excel_sheet import require_sheet_name
 
 
@@ -21,6 +22,9 @@ class ExcelReadOptions:
 	----------
 	sheet
 		The name of the sheet read, the first sheet when omitted.
+	column_names
+		Whether the column names are cleaned, ``ColumnNames.CLEANED`` by default: the spaces, tabs and line breaks at
+		the start and the end of each name are removed. ``ColumnNames.KEPT`` keeps the names as written.
 
 	Raises
 	------
@@ -44,6 +48,7 @@ class ExcelReadOptions:
 	"""
 
 	sheet: str | None = None
+	column_names: ColumnNames = ColumnNames.CLEANED
 
 	def __post_init__(self) -> None:
 		"""

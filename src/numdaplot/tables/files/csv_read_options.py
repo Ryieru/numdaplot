@@ -7,6 +7,7 @@ Settings of the CSV files a Table reads.
 from dataclasses import dataclass
 
 from numdaplot.settings.field_types import require_field_types
+from numdaplot.tables.files.column_names import ColumnNames
 from numdaplot.tables.files.csv_separator import DEFAULT_SEPARATOR, require_separator
 from numdaplot.tables.files.encoding import Encoding
 
@@ -24,6 +25,9 @@ class CsvReadOptions:
 		The character between two values of a row, ``","`` by default.
 	encoding
 		The text encoding of the file, UTF-8 by default.
+	column_names
+		Whether the column names are cleaned, ``ColumnNames.CLEANED`` by default: the spaces, tabs and line breaks at
+		the start and the end of each name are removed. ``ColumnNames.KEPT`` keeps the names as written.
 
 	Raises
 	------
@@ -48,6 +52,7 @@ class CsvReadOptions:
 
 	separator: str = DEFAULT_SEPARATOR
 	encoding: Encoding = Encoding.UTF_8
+	column_names: ColumnNames = ColumnNames.CLEANED
 
 	def __post_init__(self) -> None:
 		"""

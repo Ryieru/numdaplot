@@ -7,6 +7,7 @@ Settings of the JSON files a Table reads.
 from dataclasses import dataclass
 
 from numdaplot.settings.field_types import require_field_types
+from numdaplot.tables.files.column_names import ColumnNames
 from numdaplot.tables.files.json_layout import JsonLayout
 
 
@@ -23,6 +24,9 @@ class JsonReadOptions:
 	----------
 	layout
 		The layout of the rows, one list of objects by default.
+	column_names
+		Whether the column names are cleaned, ``ColumnNames.CLEANED`` by default: the spaces, tabs and line breaks at
+		the start and the end of each name are removed. ``ColumnNames.KEPT`` keeps the names as written.
 
 	Raises
 	------
@@ -44,6 +48,7 @@ class JsonReadOptions:
 	"""
 
 	layout: JsonLayout = JsonLayout.RECORDS
+	column_names: ColumnNames = ColumnNames.CLEANED
 
 	def __post_init__(self) -> None:
 		"""

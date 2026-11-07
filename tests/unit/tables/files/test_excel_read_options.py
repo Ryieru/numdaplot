@@ -7,6 +7,7 @@ Unit tests of ExcelReadOptions.
 import pytest
 
 from numdaplot.errors.invalid_sheet_name_error import InvalidSheetNameError
+from numdaplot.tables.files.column_names import ColumnNames
 from numdaplot.tables.files.excel_read_options import ExcelReadOptions
 
 SHEET_NAME = "Sales"
@@ -43,3 +44,14 @@ def test_excel_read_options_reject_a_sheet_name_excel_refuses() -> None:
 	"""
 	with pytest.raises(InvalidSheetNameError):
 		ExcelReadOptions(sheet=REFUSED_SHEET_NAME)
+
+
+def test_excel_read_options_clean_the_column_names_by_default() -> None:
+	"""
+	Check that the column names are cleaned by default.
+
+	.. versionadded:: 0.1.0
+	"""
+	options = ExcelReadOptions()
+
+	assert options.column_names == ColumnNames.CLEANED

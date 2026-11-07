@@ -17,9 +17,11 @@ from numdaplot.tables.files.file_paths import FilePath, require_existing_file
 from numdaplot.tables.files.json_file import read_json_file
 from numdaplot.tables.files.json_read_options import JsonReadOptions
 from numdaplot.tables.files.parquet_file import read_parquet_file
+from numdaplot.tables.files.parquet_read_options import ParquetReadOptions
 from numdaplot.tables.files.sas_file import read_sas_file, read_xpt_file
 from numdaplot.tables.files.sas_read_options import SasReadOptions
 from numdaplot.tables.files.stata_file import read_stata_file
+from numdaplot.tables.files.stata_read_options import StataReadOptions
 from numdaplot.tables.files.xpt_read_options import XptReadOptions
 from numdaplot.tables.table_data import TableData
 
@@ -67,7 +69,8 @@ class TableReading(TableData):
 		FileAccessError
 			When the file system refuses the file, for a missing permission for example.
 		InvalidColumnNameError, DuplicateColumnError
-			When a column name is empty or appears twice.
+			When a column name is empty, even once cleaned, or appears twice, or two names become the same once
+			cleaned.
 
 		Examples
 		--------
@@ -90,7 +93,7 @@ class TableReading(TableData):
 		with FileAccessErrors(READ_OPERATION, file_path):
 			frame = read_csv_file(file_path, options)
 
-		table = cls._from_frame(frame)
+		table = cls._from_read_frame(frame, options.column_names)
 
 		return table
 
@@ -124,8 +127,8 @@ class TableReading(TableData):
 			When there is no file at the path.
 		FileAccessError
 			When the file system refuses the file, for a missing permission for example.
-		InvalidColumnNameError
-			When a column name is empty.
+		InvalidColumnNameError, DuplicateColumnError
+			When a column name is empty, even once cleaned, or two names become the same once cleaned.
 
 		Examples
 		--------
@@ -148,7 +151,7 @@ class TableReading(TableData):
 		with FileAccessErrors(READ_OPERATION, file_path):
 			frame = read_json_file(file_path, options)
 
-		table = cls._from_frame(frame)
+		table = cls._from_read_frame(frame, options.column_names)
 
 		return table
 
@@ -185,7 +188,8 @@ class TableReading(TableData):
 		MissingDependencyError
 			When the ``excel`` extra is not installed.
 		InvalidColumnNameError, DuplicateColumnError
-			When a cell of the first row is empty, is not a text, or repeats another one.
+			When a cell of the first row is empty, even once cleaned, is not a text, or repeats another one, or two
+			names become the same once cleaned.
 		TimeOverflowError
 			When a column holds a datetime outside 1677 to 2262, or a duration beyond about 292 years.
 
@@ -207,13 +211,13 @@ class TableReading(TableData):
 		with FileAccessErrors(READ_OPERATION, file_path):
 			frame = read_excel_file(file_path, options)
 
-		table = cls._from_frame(frame)
+		table = cls._from_read_frame(frame, options.column_names)
 
 		return table
 
 	@classmethod
 	@checked_arguments
-	def from_parquet(cls, path: FilePath) -> Self:
+	def from_parquet(cls, path: FilePath, options: ParquetReadOptions | None = None) -> Self:
 		"""
 		Return a Table read from a Parquet file.
 
@@ -225,6 +229,8 @@ class TableReading(TableData):
 		----------
 		path
 			The path of the file, a ``FilePath`` such as ``"sales.parquet"`` or ``Path("data/sales.parquet")``.
+		options
+			Whether the column names are cleaned, cleaned when omitted.
 
 		Returns
 		-------
@@ -243,6 +249,8 @@ class TableReading(TableData):
 			When the ``parquet`` extra is not installed.
 		TimeOverflowError
 			When a column holds a datetime outside 1677 to 2262, or a duration beyond about 292 years.
+		DuplicateColumnError
+			When two column names become the same once cleaned.
 
 		Examples
 		--------
@@ -254,18 +262,21 @@ class TableReading(TableData):
 		>>> ndp.Table.from_parquet(path).column_types
 		{'count': <Type.INT64: 4>}
 		"""
+		if options is None:
+			options = ParquetReadOptions()
+
 		file_path = Path(path)
 		require_existing_file(file_path)
 		with FileAccessErrors(READ_OPERATION, file_path):
 			frame = read_parquet_file(file_path)
 
-		table = cls._from_frame(frame)
+		table = cls._from_read_frame(frame, options.column_names)
 
 		return table
 
 	@classmethod
 	@checked_arguments
-	def from_stata(cls, path: FilePath) -> Self:
+	def from_stata(cls, path: FilePath, options: StataReadOptions | None = None) -> Self:
 		"""
 		Return a Table read from a Stata file (``.dta``).
 
@@ -275,6 +286,8 @@ class TableReading(TableData):
 		----------
 		path
 			The path of the file, a ``FilePath`` such as ``"sales.dta"`` or ``Path("data/sales.dta")``.
+		options
+			Whether the column names are cleaned, cleaned when omitted.
 
 		Returns
 		-------
@@ -291,6 +304,8 @@ class TableReading(TableData):
 			When the file system refuses the file, for a missing permission for example.
 		TimeOverflowError
 			When a column holds a datetime outside 1677 to 2262, or a duration beyond about 292 years.
+		DuplicateColumnError
+			When two column names become the same once cleaned.
 
 		Examples
 		--------
@@ -302,12 +317,15 @@ class TableReading(TableData):
 		>>> ndp.Table.from_stata(path).column_types
 		{'price': <Type.FLOAT64: 10>}
 		"""
+		if options is None:
+			options = StataReadOptions()
+
 		file_path = Path(path)
 		require_existing_file(file_path)
 		with FileAccessErrors(READ_OPERATION, file_path):
 			frame = read_stata_file(file_path)
 
-		table = cls._from_frame(frame)
+		table = cls._from_read_frame(frame, options.column_names)
 
 		return table
 
@@ -345,6 +363,8 @@ class TableReading(TableData):
 			When the file system refuses the file, for a missing permission for example.
 		TimeOverflowError
 			When a column holds a datetime outside 1677 to 2262, or a duration beyond about 292 years.
+		DuplicateColumnError
+			When two column names become the same once cleaned.
 
 		Examples
 		--------
@@ -365,7 +385,7 @@ class TableReading(TableData):
 		with FileAccessErrors(READ_OPERATION, file_path):
 			frame = read_sas_file(file_path, options)
 
-		table = cls._from_frame(frame)
+		table = cls._from_read_frame(frame, options.column_names)
 
 		return table
 
@@ -403,6 +423,8 @@ class TableReading(TableData):
 			When the file system refuses the file, for a missing permission for example.
 		TimeOverflowError
 			When a column holds a datetime outside 1677 to 2262, or a duration beyond about 292 years.
+		DuplicateColumnError
+			When two column names become the same once cleaned.
 
 		Examples
 		--------
@@ -421,6 +443,6 @@ class TableReading(TableData):
 		with FileAccessErrors(READ_OPERATION, file_path):
 			frame = read_xpt_file(file_path, options)
 
-		table = cls._from_frame(frame)
+		table = cls._from_read_frame(frame, options.column_names)
 
 		return table

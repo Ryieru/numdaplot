@@ -197,6 +197,7 @@ from numdaplot.tables.conflict import Conflict
 from numdaplot.tables.description.description import Description
 from numdaplot.tables.duplicates.deduplication import Deduplication
 from numdaplot.tables.duplicates.keep import Keep
+from numdaplot.tables.files.column_names import ColumnNames
 from numdaplot.tables.files.csv_read_options import CsvReadOptions
 from numdaplot.tables.files.csv_write_options import CsvWriteOptions
 from numdaplot.tables.files.encoding import Encoding
@@ -205,7 +206,9 @@ from numdaplot.tables.files.excel_write_options import ExcelWriteOptions
 from numdaplot.tables.files.json_layout import JsonLayout
 from numdaplot.tables.files.json_read_options import JsonReadOptions
 from numdaplot.tables.files.json_write_options import JsonWriteOptions
+from numdaplot.tables.files.parquet_read_options import ParquetReadOptions
 from numdaplot.tables.files.sas_read_options import SasReadOptions
+from numdaplot.tables.files.stata_read_options import StataReadOptions
 from numdaplot.tables.files.xpt_read_options import XptReadOptions
 from numdaplot.tables.filtering.column_match import ColumnMatch
 from numdaplot.tables.filtering.condition import Condition
@@ -241,8 +244,8 @@ __all__ = [
 	"Bounds",
 	"BoxChart",
 	"BroadcastWarning",
-	"CalculationWarning",
 	"Calculation",
+	"CalculationWarning",
 	"Case",
 	"Cell",
 	"CellOutOfRangeError",
@@ -253,6 +256,7 @@ __all__ = [
 	"ColumnChoice",
 	"ColumnMatch",
 	"ColumnMode",
+	"ColumnNames",
 	"ColumnNotFoundError",
 	"Condition",
 	"Conflict",
@@ -307,8 +311,8 @@ __all__ = [
 	"ImageOptions",
 	"IncompatibleChartsError",
 	"IncompatibleTypesError",
-	"IntegerOverflowError",
 	"Index",
+	"IntegerOverflowError",
 	"InvalidBaseError",
 	"InvalidBinWidthError",
 	"InvalidBoundsError",
@@ -380,6 +384,7 @@ __all__ = [
 	"Orientation",
 	"OutOfDomainError",
 	"Outliers",
+	"ParquetReadOptions",
 	"Percentages",
 	"PeriodUnit",
 	"PieChart",
@@ -413,6 +418,7 @@ __all__ = [
 	"Spacing",
 	"SquareRoot",
 	"StandardDeviation",
+	"StataReadOptions",
 	"Statistic",
 	"Sum",
 	"Table",

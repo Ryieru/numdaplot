@@ -14,6 +14,7 @@ from numdaplot.data_types.type import Type
 from numdaplot.dates.time_zone import TimeZone
 from numdaplot.errors.column_not_found_error import ColumnNotFoundError
 from numdaplot.errors.refused_operation_error import RefusedOperationError
+from numdaplot.tables.files.column_names import ColumnNames
 from numdaplot.tables.frames.column import Column
 from numdaplot.tables.table_data import TableData
 
@@ -27,6 +28,9 @@ RAW_FRAME = pandas.DataFrame({"count": [1, 2]})
 INTEGER_DTYPE_NAME = "Int64"
 OTHER_FRAME = pandas.DataFrame({"price": [3.0]})
 UNKNOWN_COLUMN = "prise"
+SPACED_FRAME = pandas.DataFrame({" count\n": [1, 2]})
+EXPECTED_CLEANED_NAMES = ["count"]
+EXPECTED_KEPT_NAMES = [" count\n"]
 PARIS_TIMES = (
 	pandas.Series(pandas.to_datetime(["2026-07-01 10:30"])).astype("datetime64[ns]").dt.tz_localize("Europe/Paris")
 )
@@ -99,6 +103,29 @@ class ExposedTableData(TableData):
 			What the protected helper returns.
 		"""
 		table = cls._from_frame(frame)
+
+		return table
+
+	@classmethod
+	def from_read_frame(cls, frame: pandas.DataFrame, column_names: ColumnNames) -> TableData:
+		"""
+		Call the protected creation from a DataFrame read from outside numdaplot.
+
+		.. versionadded:: 0.1.0
+
+		Parameters
+		----------
+		frame
+			Any DataFrame.
+		column_names
+			Whether its names are cleaned.
+
+		Returns
+		-------
+		TableData
+			What the protected helper returns.
+		"""
+		table = cls._from_read_frame(frame, column_names)
 
 		return table
 
@@ -256,3 +283,25 @@ def test_table_data_gives_the_time_zone_of_each_datetime_column() -> None:
 	table = TableData._create(TIME_FRAME)
 
 	assert table.column_time_zones == EXPECTED_TIME_ZONES
+
+
+def test_from_read_frame_cleans_the_column_names() -> None:
+	"""
+	Check that CLEANED removes the spaces and line breaks around each name.
+
+	.. versionadded:: 0.1.0
+	"""
+	table = ExposedTableData.from_read_frame(SPACED_FRAME, ColumnNames.CLEANED)
+
+	assert table.column_names == EXPECTED_CLEANED_NAMES
+
+
+def test_from_read_frame_keeps_the_column_names() -> None:
+	"""
+	Check that KEPT leaves each name as written.
+
+	.. versionadded:: 0.1.0
+	"""
+	table = ExposedTableData.from_read_frame(SPACED_FRAME, ColumnNames.KEPT)
+
+	assert table.column_names == EXPECTED_KEPT_NAMES
