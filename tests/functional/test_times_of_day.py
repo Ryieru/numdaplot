@@ -9,6 +9,7 @@ from datetime import UTC, datetime, time, timedelta
 from pathlib import Path
 
 import numpy
+import openpyxl
 import pandas
 import pytest
 
@@ -47,6 +48,10 @@ EXPECTED_HOURS = [15.0, 8.0, 23.0]
 LATE_EVENING = time(23, 30)
 LAST_TIME = time(23, 59, 59, 999999)
 EXPECTED_STATA_TEXTS = ["15:35:00", "08:00:00", "", "23:59:59.999999"]
+EXCEL_HOURS = [time(15, 35), None, time(8, 5)]
+EXCEL_WAITS = [timedelta(hours=30), None, timedelta(minutes=5)]
+EXPECTED_EXCEL_TYPES = {"hrmn": ndp.Type.TIME, "wait": ndp.Type.DURATION}
+EXPECTED_EXCEL_HOURS = [time(15, 35), None, time(8, 5)]
 
 
 def build_accident_times() -> ndp.Array:
@@ -424,3 +429,34 @@ def test_a_stata_file_holds_times_as_texts(tmp_path: Path) -> None:
 	hour_column = read_accidents.column("hrmn")
 	hour_texts = hour_column.to_list()
 	assert hour_texts == EXPECTED_STATA_TEXTS
+
+
+def test_an_excel_file_typed_by_hand_gives_times_of_day_and_durations(tmp_path: Path) -> None:
+	"""
+	Check that time cells and duration cells of an Excel file become TIME and DURATION columns.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	tmp_path
+		A temporary folder given by pytest.
+	"""
+	path = tmp_path / "accidents.xlsx"
+	book = openpyxl.Workbook()
+	sheet = book.active
+	assert sheet is not None
+	sheet.append(["hrmn", "wait"])
+
+	for hour, wait in zip(EXCEL_HOURS, EXCEL_WAITS, strict=True):
+		sheet.append([hour, wait])
+
+	book.save(path)
+
+	table = ndp.Table.from_excel(path)
+
+	frame = table.to_pandas()
+	hour_column = frame["hrmn"]
+	hours = hour_column.tolist()
+	assert table.column_types == EXPECTED_EXCEL_TYPES
+	assert hours == EXPECTED_EXCEL_HOURS

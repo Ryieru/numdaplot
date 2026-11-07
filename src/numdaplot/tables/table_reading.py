@@ -176,7 +176,9 @@ class TableReading(TableData):
 		Returns
 		-------
 		Self
-			A new Table. Dates of the sheet become ``DATETIME`` columns.
+			A new Table. Dates of the sheet become ``DATETIME`` columns. A column of time cells only, such as
+			``hh:mm``, becomes ``TIME``, and a column of duration cells only, such as ``[h]:mm``, ``DURATION``: a
+			column mixing them with texts stays ``TEXT``.
 
 		Raises
 		------

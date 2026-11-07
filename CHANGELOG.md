@@ -117,6 +117,7 @@ and numdaplot follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
   hour, the minute and the second, and `Min`, `Max`, `Count`, `CountDistinct` and `MostFrequent` apply to times.
 - `TIME` columns are written as texts such as `15:35:00` in CSV, JSON, Excel and Stata files, read back as `TEXT`,
   and as Parquet times read back as `TIME`.
+- `Table.from_excel` reads columns of time cells as `TIME` and columns of duration cells as `DURATION`.
 - Plots place `TIME` columns at their hours on the x axis of line, bar and scatter charts, labeled `HH:MM`, and
   name heatmap rows, pie slices, `color_by` groups and box `group_by` groups with `HH:MM` labels.
 - Plots measure `TIME` values on an axis labeled `HH:MM`: `y` of line and scatter charts, box charts, histograms

@@ -11,6 +11,7 @@ import pandas
 
 from numdaplot.tables.columns.column_names import require_column_names
 from numdaplot.tables.files.excel_read_options import ExcelReadOptions
+from numdaplot.tables.files.excel_time_cells import restore_time_columns
 from numdaplot.tables.files.excel_write_options import ExcelWriteOptions
 from numdaplot.tables.files.missing_texts import find_missing_settings
 from numdaplot.tables.files.optional_package import require_package
@@ -42,7 +43,8 @@ def read_excel_file(path: Path, options: ExcelReadOptions) -> pandas.DataFrame:
 	Returns
 	-------
 	pandas.DataFrame
-		The columns as pandas reads them, empty for an empty sheet.
+		The columns as pandas reads them, empty for an empty sheet. A column of time cells only, or of duration cells
+		only, holds Python times or durations.
 
 	Raises
 	------
@@ -89,7 +91,8 @@ def read_excel_file(path: Path, options: ExcelReadOptions) -> pandas.DataFrame:
 	raw_frame = excel_pandas.read_excel(
 		path, sheet_name=sheet, dtype_backend=NULLABLE_DTYPE_BACKEND, **missing_settings
 	)
-	frame = cast(pandas.DataFrame, raw_frame)
+	read_frame = cast(pandas.DataFrame, raw_frame)
+	frame = restore_time_columns(read_frame, path, sheet, missing_settings)
 
 	return frame
 
