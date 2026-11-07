@@ -15,6 +15,7 @@ from numdaplot.tables.columns.column_names import require_column_names
 from numdaplot.tables.joining.join_mode import JoinMode
 from numdaplot.tables.joining.join_suffixes import JoinSuffixes
 from numdaplot.tables.joining.key_types import KeyTypes
+from numdaplot.tables.joining.relation import Relation
 
 if TYPE_CHECKING:
 	from numdaplot.tables.table import Table
@@ -48,6 +49,9 @@ class Join:
 		``DuplicateColumnError``.
 	key_types
 		How close the types of each key must be, ``KeyTypes.SAME_FAMILY`` by default: ``INT64`` matches ``FLOAT64``.
+	relation
+		How many times each key may appear in this Table, the left one, and in the other Table, the right one,
+		``Relation.MANY_TO_MANY`` by default, which checks nothing.
 
 	Raises
 	------
@@ -77,6 +81,7 @@ class Join:
 	mode: JoinMode = JoinMode.INNER
 	suffixes: JoinSuffixes | None = None
 	key_types: KeyTypes = KeyTypes.SAME_FAMILY
+	relation: Relation = Relation.MANY_TO_MANY
 
 	def __post_init__(self) -> None:
 		"""

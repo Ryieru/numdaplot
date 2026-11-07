@@ -31,6 +31,7 @@ def test_join_defaults_keep_matching_rows_of_keys_of_one_family() -> None:
 	assert join.mode == ndp.JoinMode.INNER
 	assert join.suffixes is None
 	assert join.key_types == ndp.KeyTypes.SAME_FAMILY
+	assert join.relation == ndp.Relation.MANY_TO_MANY
 
 
 def test_join_keeps_its_own_copy_of_the_keys() -> None:

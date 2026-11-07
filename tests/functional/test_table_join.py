@@ -44,6 +44,12 @@ MOMENTS = ndp.Table.from_arrays({"day": NEW_YEAR_MIDNIGHT})
 KEY_CHANGE = ndp.NameChange(old_name="Num_Acc", new_name="accident")
 KEY_RENAMING = ndp.Renaming(changes=[KEY_CHANGE])
 RENAMED_USERS = USERS.rename(KEY_RENAMING)
+REPEATED_ACCIDENT_IDS = ndp.Array.from_list([101, 101])
+REPEATED_ACCIDENTS = ndp.Table.from_arrays({"Num_Acc": REPEATED_ACCIDENT_IDS})
+EXPECTED_RELATION_MESSAGE = (
+	"Expected each key of the left Table to appear once for Relation.ONE_TO_MANY, but 'Num_Acc' 101 appears 2 times."
+)
+EXPECTED_MANY_ROW_COUNT = 2
 
 
 def read_column_values(table: ndp.Table, column_name: str) -> list[Any]:
@@ -209,3 +215,43 @@ def test_a_join_rejects_a_date_key_against_a_datetime_key() -> None:
 
 	with pytest.raises(ndp.IncompatibleTypesError):
 		DAYS.join(join)
+
+
+def test_a_one_to_many_join_accepts_several_users_per_accident() -> None:
+	"""
+	Check that each accident once and its users several times are accepted.
+
+	.. versionadded:: 0.1.0
+	"""
+	join = ndp.Join(other=USERS, keys=KEYS, relation=ndp.Relation.ONE_TO_MANY)
+
+	joined_table = ACCIDENTS.join(join)
+
+	assert joined_table.row_count == EXPECTED_MANY_ROW_COUNT
+
+
+def test_a_one_to_many_join_rejects_an_accident_repeated() -> None:
+	"""
+	Check that an accident repeated in the left Table raises JoinRelationError naming it.
+
+	.. versionadded:: 0.1.0
+	"""
+	join = ndp.Join(other=USERS, keys=KEYS, relation=ndp.Relation.ONE_TO_MANY)
+
+	with pytest.raises(ndp.JoinRelationError) as error_info:
+		REPEATED_ACCIDENTS.join(join)
+
+	message = str(error_info.value)
+	assert message == EXPECTED_RELATION_MESSAGE
+
+
+def test_a_one_to_one_join_rejects_a_key_repeated_in_the_right_table() -> None:
+	"""
+	Check that several users of one accident raise JoinRelationError for a one-to-one join.
+
+	.. versionadded:: 0.1.0
+	"""
+	join = ndp.Join(other=USERS, keys=KEYS, relation=ndp.Relation.ONE_TO_ONE)
+
+	with pytest.raises(ndp.JoinRelationError):
+		ACCIDENTS.join(join)

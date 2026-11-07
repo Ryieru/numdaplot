@@ -10,6 +10,7 @@ from numpy.typing import NDArray
 
 from numdaplot.tables.joining.join import Join
 from numdaplot.tables.joining.join_keys import align_key_frames
+from numdaplot.tables.joining.join_relation import require_relation
 from numdaplot.tables.joining.joined_names import name_joined_columns
 from numdaplot.tables.joining.joined_rows import pair_rows
 from numdaplot.tables.table_data import read_stored_frame
@@ -44,6 +45,8 @@ def join_frames(frame: pandas.DataFrame, join: Join) -> pandas.DataFrame:
 		When the two columns of a key cannot match.
 	TimeZoneMismatchError
 		When the two columns of a key hold datetimes of different time zones, or with and without one.
+	JoinRelationError
+		When a key is repeated in a Table where the relation of the join expects it once.
 	DuplicateColumnError
 		When both Tables have a column besides the keys and no suffixes are given, or a suffixed name is already
 		taken.
@@ -60,6 +63,7 @@ def join_frames(frame: pandas.DataFrame, join: Join) -> pandas.DataFrame:
 	"""
 	other_frame = read_stored_frame(join.other)
 	key_frame, other_key_frame = align_key_frames(frame, other_frame, join.keys, join.key_types)
+	require_relation(key_frame, other_key_frame, join.relation)
 	column_names = frame.columns.tolist()
 	other_names = other_frame.columns.tolist()
 	joined_names, other_joined_names = name_joined_columns(column_names, other_names, join.keys, join.suffixes)

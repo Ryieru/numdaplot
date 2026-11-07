@@ -123,7 +123,8 @@ and numdaplot follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
   and Arrays of times of day. A histogram of times has one bin per hour from 00:00 to 24:00 by default, and
   `BinWidth` takes a duration of at most a day for times of day.
 - `Table.join` joins two Tables on key columns (`Join`, `JoinMode`, `JoinSuffixes`, `KeyTypes`): inner, left,
-  right and outer joins, missing keys never matching, keys of one family by default, and `InvalidSuffixesError`.
+  right and outer joins, missing keys never matching, keys of one family by default, an optional check of how many
+  times each key appears (`Relation`), `InvalidSuffixesError` and `JoinRelationError`.
 - `Type` enum of value types and its conversion to numpy and pandas dtypes, and the `Library` enum read on
   `UnsupportedTypeError`.
 - Rules: `Equal`, `NotEqual`, `Greater`, `GreaterOrEqual`, `Less`, `LessOrEqual`, `Between`, `IsIn`,

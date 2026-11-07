@@ -29,7 +29,8 @@ class TableJoining(TableData):
 		Parameters
 		----------
 		join
-			The other Table, the key columns, the rows kept and how the columns both Tables have are told apart.
+			The other Table, the key columns, the rows kept, how the columns both Tables have are told apart, and
+			how many times each key may appear.
 
 		Returns
 		-------
@@ -51,6 +52,8 @@ class TableJoining(TableData):
 		TimeZoneMismatchError
 			When the two columns of a key hold datetimes of different time zones, or with and without one: change
 			them first with ``TimeZoneChange``.
+		JoinRelationError
+			When a key is repeated in a Table where the ``relation`` of the join expects it once.
 		DuplicateColumnError
 			When both Tables have a column besides the keys and the join has no ``suffixes``, or a suffixed name is
 			already the name of another column.

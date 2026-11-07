@@ -243,6 +243,8 @@ from numdaplot.tables.sorting.sorting import Sorting
 from numdaplot.tables.table import Table
 
 __version__ = find_package_version()
+from numdaplot.errors.join_relation_error import JoinRelationError
+from numdaplot.tables.joining.relation import Relation
 
 __all__ = [
 	"Absolute",
@@ -366,6 +368,7 @@ __all__ = [
 	"IsPresent",
 	"Join",
 	"JoinMode",
+	"JoinRelationError",
 	"JoinSuffixes",
 	"JsonLayout",
 	"JsonReadOptions",
@@ -426,6 +429,7 @@ __all__ = [
 	"RefusedOperationError",
 	"RefusedSettingError",
 	"Region",
+	"Relation",
 	"Renaming",
 	"Replacement",
 	"Round",
