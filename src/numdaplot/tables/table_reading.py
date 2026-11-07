@@ -41,6 +41,9 @@ class TableReading(TableData):
 		r"""
 		Return a Table read from a CSV file whose first row holds the column names.
 
+		Each column takes the type of all its values, even in a long file: a column mixing numbers and texts is read
+		as texts written as in the file, such as ``01``.
+
 		.. versionadded:: 0.1.0
 
 		Parameters

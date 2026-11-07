@@ -59,6 +59,8 @@ and numdaplot follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
   `Table.count_missing`, `Table.to_value`, `Table.to_pandas`, `Table.is_equal`, `Table.row_count`,
   `Table.column_count`, `Table.column_names`, `Table.column_types`, `Table.preview`, `Table.preview_missing`
   and `print`.
+- `Table.from_csv` gives each column the type of all its values, even when pandas reads a long file in blocks: a
+  column mixing numbers and texts keeps every text as written, such as `01`, without the pandas `DtypeWarning`.
 - `Array`, `Table` and `Plot`, and the base classes `Rule`, `Statistic`, `MathFunction`, `TimeFunction`,
   `Distribution` and `Chart`, refuse their constructor with `RefusedOperationError`, which names what to use instead.
   Settings, methods and arithmetic operators check their values against their annotations and raise
