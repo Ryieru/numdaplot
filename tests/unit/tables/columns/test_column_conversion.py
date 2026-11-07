@@ -22,6 +22,7 @@ from numdaplot.tables.columns.conversion import Conversion
 from numdaplot.tables.columns.converted_column import (
 	convert_column,
 	convert_plain_column,
+	convert_times,
 	read_plain_column,
 	write_plain_column,
 )
@@ -90,6 +91,10 @@ EXPECTED_OVERFLOW = [True]
 FAILED_VALUES = numpy.array(["12", "abc"])
 FAILED_MASK = numpy.array([False, True])
 NO_FAILURE = numpy.array([False, False])
+CLOCK_TEXTS = pandas.Series(["15:35"], dtype="string")
+TIME_STORAGE_NAME = "timedelta64[us]"
+STORED_TIMES = pandas.Series(numpy.array([56100000000], dtype="timedelta64[us]"))
+EXPECTED_TIME_TEXTS = ["15:35:00"]
 
 
 def convert_to(column: Column, target_type: Type) -> Column:
@@ -548,3 +553,49 @@ def test_read_plain_column_rejects_booleans_read_as_dates() -> None:
 
 	with pytest.raises(IncompatibleTypesError):
 		read_plain_column(BOOLEANS, Type.BOOL, conversion)
+
+
+def test_convert_times_reads_texts_as_times() -> None:
+	"""
+	Check the conversion of texts to TIME.
+
+	.. versionadded:: 0.1.0
+	"""
+	time_column = convert_times(CLOCK_TEXTS, Type.TEXT, Type.TIME, None)
+
+	assert time_column is not None
+	assert str(time_column.dtype) == TIME_STORAGE_NAME
+
+
+def test_convert_times_writes_times_as_texts() -> None:
+	"""
+	Check the conversion of TIME to TEXT.
+
+	.. versionadded:: 0.1.0
+	"""
+	text_column = convert_times(STORED_TIMES, Type.TIME, Type.TEXT, None)
+
+	assert text_column is not None
+	texts = text_column.tolist()
+	assert texts == EXPECTED_TIME_TEXTS
+
+
+@pytest.mark.parametrize(
+	("source_type", "target_type"), [(Type.DATE, Type.TIME), (Type.TIME, Type.DATETIME), (Type.TIME, Type.DURATION)]
+)
+def test_convert_times_gives_none_for_a_refused_conversion(source_type: Type, target_type: Type) -> None:
+	"""
+	Check that dates to times, and times to datetimes or durations, are not converted here.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	source_type
+		The type of the column.
+	target_type
+		The new type.
+	"""
+	converted_column = convert_times(STORED_TIMES, source_type, target_type, None)
+
+	assert converted_column is None

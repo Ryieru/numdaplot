@@ -22,8 +22,9 @@ class Conversion:
 	A new type for a column of a Table, used by ``Table.convert``.
 
 	Accepted conversions: between number types, between numbers and booleans, from numbers, booleans,
-	categories, dates, datetimes and durations to texts, from texts and categories to numbers, booleans, dates or
-	datetimes, from any type but categories to categories, and between dates and datetimes. A time zone change
+	categories, dates, datetimes, durations and times of day to texts, from texts and categories to numbers,
+	booleans, dates, datetimes or times of day, from any type but categories to categories, between dates and
+	datetimes, and from datetimes to times of day, the local time for a datetime with a time zone. A time zone change
 	keeps the type ``DATETIME``: give it alone, in a conversion of a datetime column to ``DATETIME``.
 
 	.. versionadded:: 0.1.0
@@ -39,8 +40,10 @@ class Conversion:
 		written as texts. When omitted, texts are read as year, month and day. For ``DATETIME``, each text may
 		also have a time after a space or a ``"T"``, and a text without time counts as midnight. A format that is
 		given applies to every text: ``DateFormat.YEAR_MONTH_DAY_TIME`` refuses a text without time. When omitted,
-		dates are written as year, month and day separated by ``"-"``, with the time for datetimes. For a conversion of
-		numbers to ``CATEGORY``, ``Brackets`` cut the numbers into ordered categories, such as ages into ``0 to 9``.
+		dates are written as year, month and day separated by ``"-"``, with the time for datetimes. Times of day
+		take a ``CustomDateFormat`` of a time only, such as ``"%H%M"``: when omitted, texts are read as ``HH:MM``,
+		``HH:MM:SS`` or ``HH:MM:SS.ffffff``, and times are written as ``15:35:00``. For a conversion of numbers to
+		``CATEGORY``, ``Brackets`` cut the numbers into ordered categories, such as ages into ``0 to 9``.
 	timezone
 		A change of the time zone of a datetime column, the time zone unchanged when omitted.
 	booleans

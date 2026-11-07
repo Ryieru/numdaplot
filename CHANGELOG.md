@@ -109,6 +109,9 @@ and numdaplot follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 - `Type.TIME`: times of day from 00:00 to 23:59:59.999999, created from `datetime.time` values with
   `Array.from_list`, read back as `datetime.time` by `to_list`, `to_numpy` and `Table.to_pandas`, compared by the
   rules and sorted; durations of any unit read from numpy or pandas stay `DURATION`.
+- `Table.convert` reads texts as `TIME`, as `HH:MM`, `HH:MM:SS` or `HH:MM:SS.ffffff` by default or with a
+  `CustomDateFormat` of a time only such as `"%H%M"`, takes the local time of day of a `DATETIME`, and writes `TIME` as
+  texts or categories, `15:35:00` by default.
 - `Type` enum of value types and its conversion to numpy and pandas dtypes, and the `Library` enum read on
   `UnsupportedTypeError`.
 - Rules: `Equal`, `NotEqual`, `Greater`, `GreaterOrEqual`, `Less`, `LessOrEqual`, `Between`, `IsIn`,

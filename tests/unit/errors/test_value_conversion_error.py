@@ -26,6 +26,10 @@ HALF_DAY = RejectedDatePart("day", 3.5)
 FEBRUARY_31 = RejectedDate(2025, 2, 31)
 EXPECTED_HALF_DAY_MESSAGE = "Cannot use the FLOAT64 value 3.5 as a day: date parts must be whole numbers."
 EXPECTED_FEBRUARY_31_MESSAGE = "Cannot build a DATE from the year 2025, the month 2 and the day 31."
+EXPECTED_UNREADABLE_TIME_MESSAGE = (
+	"Cannot read the TEXT value '25:00' as TIME with the format HH:MM:SS. Give the format of the column with format=, "
+	"using a CustomDateFormat of a time only."
+)
 
 
 def test_value_conversion_error_is_a_numdaplot_error() -> None:
@@ -215,3 +219,15 @@ def test_value_conversion_error_names_parts_that_form_no_date() -> None:
 
 	error_text = str(error)
 	assert error_text == EXPECTED_FEBRUARY_31_MESSAGE
+
+
+def test_value_conversion_error_points_an_unreadable_time_to_a_time_pattern() -> None:
+	"""
+	Check the message of a text that is not a time of day.
+
+	.. versionadded:: 0.1.0
+	"""
+	error = ValueConversionError("TEXT", "TIME", "25:00", "HH:MM:SS")
+
+	error_text = str(error)
+	assert error_text == EXPECTED_UNREADABLE_TIME_MESSAGE

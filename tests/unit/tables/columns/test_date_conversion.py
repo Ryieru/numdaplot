@@ -18,6 +18,7 @@ from numdaplot.tables.columns.date_conversion import (
 	YEAR_FIRST,
 	convert_moments,
 	find_format_name,
+	has_date,
 	has_time,
 	parse_dates,
 	read_common_format,
@@ -489,3 +490,18 @@ def test_parse_dates_refusal_with_a_custom_format_shows_its_pattern() -> None:
 
 	error_text = str(caught_error.value)
 	assert error_text == EXPECTED_CUSTOM_MESSAGE
+
+
+def test_has_date_is_false_only_for_a_time_pattern() -> None:
+	"""
+	Check a common format, a pattern with a date and a pattern of a time.
+
+	.. versionadded:: 0.1.0
+	"""
+	common_has_date = has_date(DateFormat.DAY_MONTH_YEAR)
+	date_pattern_has_date = has_date(CustomDateFormat("%d/%m/%Y"))
+	time_pattern_has_date = has_date(CustomDateFormat("%H:%M"))
+
+	assert common_has_date
+	assert date_pattern_has_date
+	assert not time_pattern_has_date

@@ -11,7 +11,7 @@ import pandas
 
 from numdaplot.arrays.conversion.time_text import format_durations
 from numdaplot.data_types.type import Type
-from numdaplot.dates.custom_date_format import TIME_CODES, CustomDateFormat
+from numdaplot.dates.custom_date_format import DATE_CODES, TIME_CODES, CustomDateFormat
 from numdaplot.dates.date_format import DateFormat
 from numdaplot.errors.time_overflow_error import TimeOverflowError
 from numdaplot.errors.value_conversion_error import ValueConversionError
@@ -65,6 +65,37 @@ COMPACT_OFFSET = r"([+-]\d{2})(\d{2})$"
 SEPARATED_OFFSET = r"\1:\2"
 NANOSECOND_DTYPE = "timedelta64[ns]"
 CONVERT_OPERATION = "convert"
+
+
+def has_date(date_format: DateFormat | CustomDateFormat) -> bool:
+	"""
+	Return whether a format reads or writes a date: every common format does, and a pattern with a date code.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	date_format
+		A common format or a custom pattern.
+
+	Returns
+	-------
+	bool
+		False only for a custom pattern of a time without date.
+
+	Examples
+	--------
+	>>> import numdaplot as ndp
+	>>> from numdaplot.tables.columns.date_conversion import has_date
+	>>> has_date(ndp.DateFormat.DAY_MONTH_YEAR), has_date(ndp.CustomDateFormat("%H:%M"))
+	(True, False)
+	"""
+	if not isinstance(date_format, CustomDateFormat):
+		return True
+
+	pattern_has_date = any(date_code in date_format.pattern for date_code in DATE_CODES)
+
+	return pattern_has_date
 
 
 def has_time(date_format: DateFormat | CustomDateFormat) -> bool:

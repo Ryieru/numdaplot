@@ -9,6 +9,11 @@ from numdaplot.errors.numdaplot_error import NumdaplotError
 INVALID_CONVERSION_MESSAGE = (
 	"The setting {setting_name} does not apply to a conversion from {source_type_name} to {target_type_name}."
 )
+DATE_FORMAT_ON_TIME_MESSAGE = (
+	"The format {date_format_name} has a date, which TIME cannot hold. Give a CustomDateFormat of a time only, "
+	'such as "%H:%M".'
+)
+TIME_TYPE_NAME = "TIME"
 TIME_FORMAT_ON_DATE_MESSAGE = (
 	"The format {date_format_name} has a time, which DATE cannot hold. "
 	"Convert the column to DATETIME first, then to {target_type_name}."
@@ -88,15 +93,20 @@ class InvalidConversionError(NumdaplotError):
 		target_type_name
 			Name of the ``ndp.Type`` member it is converted to.
 		date_format_name
-			The name or the pattern of a format with a time, when dates are read or written with it. When omitted, the
-			message names the setting and the types.
+			The name or the pattern of a format with a time, when dates are read or written with it, or of a format with
+			a date, when times of day are read or written with it. When omitted, the message names the setting and the
+			types.
 		"""
 		message = INVALID_CONVERSION_MESSAGE.format(
 			setting_name=setting_name,
 			source_type_name=source_type_name,
 			target_type_name=target_type_name,
 		)
-		if date_format_name is not None:
+		converts_times = TIME_TYPE_NAME in (source_type_name, target_type_name)
+		if date_format_name is not None and converts_times:
+			message = DATE_FORMAT_ON_TIME_MESSAGE.format(date_format_name=date_format_name)
+
+		if date_format_name is not None and not converts_times:
 			message = TIME_FORMAT_ON_DATE_MESSAGE.format(
 				date_format_name=date_format_name,
 				target_type_name=target_type_name,

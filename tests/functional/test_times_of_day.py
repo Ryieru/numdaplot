@@ -4,6 +4,7 @@ Functional tests of the times of day of Arrays and Tables.
 .. versionadded:: 0.1.0
 """
 
+from collections.abc import Sequence
 from datetime import UTC, time, timedelta
 
 import numpy
@@ -26,6 +27,16 @@ MICROSECOND_WAITS = pandas.Series(numpy.array([5], dtype="timedelta64[us]"))
 NUMPY_WAITS = numpy.array([5], dtype="timedelta64[us]")
 ONE_HOUR = timedelta(hours=1)
 ZONED_TIME = time(8, tzinfo=UTC)
+BAAC_HOURS = ["15:35", "08:05", None]
+EXPECTED_BAAC_TIMES = [time(15, 35), time(8, 5), None]
+COMPACT_HOURS = ["1535", "0805"]
+EXPECTED_COMPACT_TIMES = [time(15, 35), time(8, 5)]
+WRONG_HOURS = ["15:35", "25:00"]
+EXPECTED_WRONG_HOUR_MESSAGE = (
+	"Cannot read the TEXT value '25:00' of the column 'hrmn' as TIME with the format HH:MM:SS. Give the format of "
+	"the column with format=, using a CustomDateFormat of a time only."
+)
+EXPECTED_HOUR_TEXTS = ["15h35", "08h00", None, "23h59"]
 
 
 def build_accident_times() -> ndp.Array:
@@ -161,3 +172,99 @@ def test_a_time_with_a_time_zone_is_refused() -> None:
 	"""
 	with pytest.raises(ndp.TimeZoneMismatchError):
 		ndp.Array.from_list([ZONED_TIME])
+
+
+def convert_hours(hours: Sequence[str | None], conversion: ndp.Conversion) -> ndp.Table:
+	"""
+	Return a Table of one hrmn column of texts, converted.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	hours
+		The texts of the column.
+	conversion
+		The conversion of the column hrmn.
+
+	Returns
+	-------
+	ndp.Table
+		The converted Table.
+	"""
+	hour_texts = ndp.Array.from_list(hours)
+	accidents = ndp.Table.from_arrays({"hrmn": hour_texts})
+	converted_accidents = accidents.convert(conversion)
+
+	return converted_accidents
+
+
+def test_baac_hours_written_as_texts_become_times() -> None:
+	"""
+	Check the BAAC use: the hrmn column of texts such as 15:35 becomes TIME without any format.
+
+	.. versionadded:: 0.1.0
+	"""
+	accidents = convert_hours(BAAC_HOURS, ndp.Conversion(column="hrmn", dtype=ndp.Type.TIME))
+
+	hour_column = accidents.column("hrmn")
+	hours = hour_column.to_list()
+	assert hours == EXPECTED_BAAC_TIMES
+
+
+def test_hours_without_separator_are_read_with_a_custom_format() -> None:
+	"""
+	Check texts such as 1535 read with the pattern %H%M.
+
+	.. versionadded:: 0.1.0
+	"""
+	conversion = ndp.Conversion(column="hrmn", dtype=ndp.Type.TIME, format=ndp.CustomDateFormat("%H%M"))
+
+	accidents = convert_hours(COMPACT_HOURS, conversion)
+
+	hour_column = accidents.column("hrmn")
+	hours = hour_column.to_list()
+	assert hours == EXPECTED_COMPACT_TIMES
+
+
+def test_an_hour_that_does_not_exist_is_named_in_the_error() -> None:
+	"""
+	Check the message of 25:00.
+
+	.. versionadded:: 0.1.0
+	"""
+	with pytest.raises(ndp.ValueConversionError) as error_info:
+		convert_hours(WRONG_HOURS, ndp.Conversion(column="hrmn", dtype=ndp.Type.TIME))
+
+	error_text = str(error_info.value)
+	assert error_text == EXPECTED_WRONG_HOUR_MESSAGE
+
+
+def test_times_are_written_with_a_custom_format() -> None:
+	"""
+	Check TIME written as texts with the pattern %Hh%M.
+
+	.. versionadded:: 0.1.0
+	"""
+	times = build_accident_times()
+	accidents = ndp.Table.from_arrays({"hrmn": times})
+	conversion = ndp.Conversion(column="hrmn", dtype=ndp.Type.TEXT, format=ndp.CustomDateFormat("%Hh%M"))
+
+	written_accidents = accidents.convert(conversion)
+
+	hour_column = written_accidents.column("hrmn")
+	hour_texts = hour_column.to_list()
+	assert hour_texts == EXPECTED_HOUR_TEXTS
+
+
+def test_times_are_never_converted_to_datetimes() -> None:
+	"""
+	Check that TIME to DATETIME raises IncompatibleTypesError.
+
+	.. versionadded:: 0.1.0
+	"""
+	times = build_accident_times()
+	accidents = ndp.Table.from_arrays({"hrmn": times})
+
+	with pytest.raises(ndp.IncompatibleTypesError):
+		accidents.convert(ndp.Conversion(column="hrmn", dtype=ndp.Type.DATETIME))

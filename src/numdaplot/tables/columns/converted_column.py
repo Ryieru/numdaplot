@@ -21,6 +21,7 @@ from numdaplot.tables.columns.conversion import Conversion
 from numdaplot.tables.columns.date_conversion import (
 	convert_moments,
 	find_format_name,
+	has_date,
 	has_time,
 	parse_dates,
 	write_dates,
@@ -28,6 +29,7 @@ from numdaplot.tables.columns.date_conversion import (
 )
 from numdaplot.tables.columns.number_conversion import convert_numbers, parse_numbers
 from numdaplot.tables.columns.text_conversion import parse_booleans
+from numdaplot.tables.columns.time_conversion import keep_time_of_day, parse_times, write_times
 from numdaplot.tables.columns.time_zone_conversion import change_time_zone
 from numdaplot.tables.frames.column import Column
 from numdaplot.tables.frames.column_values import find_column_type
@@ -232,6 +234,11 @@ def require_format_setting(source_type: Type, conversion: Conversion) -> None:
 		require_brackets_setting(source_type, conversion.dtype)
 		return
 
+	converts_times = Type.TIME in (source_type, conversion.dtype)
+	if converts_times:
+		require_time_format_setting(source_type, conversion.dtype, conversion.format)
+		return
+
 	target_type = conversion.dtype
 	source_family = find_family(source_type)
 	target_family = find_family(target_type)
@@ -242,13 +249,60 @@ def require_format_setting(source_type: Type, conversion: Conversion) -> None:
 		date_type = target_type
 
 	format_has_time = has_time(conversion.format)
+	format_has_date = has_date(conversion.format)
 	misses_time = date_type == Type.DATE and format_has_time
 	uses_format = reads_dates or writes_dates
-	if not uses_format:
+	if not uses_format or not format_has_date:
 		raise InvalidConversionError(FORMAT_SETTING, source_type.name, target_type.name)
 
 	if misses_time:
 		format_name = find_format_name(target_type, conversion.format)
+		raise InvalidConversionError(FORMAT_SETTING, source_type.name, target_type.name, format_name)
+
+
+def require_time_format_setting(
+	source_type: Type, target_type: Type, time_format: DateFormat | CustomDateFormat
+) -> None:
+	"""
+	Check that a format given to a conversion of times of day reads or writes them, and holds no date.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	source_type
+		The type of the converted column.
+	target_type
+		The new type, ``TIME`` or the type a ``TIME`` column is converted to.
+	time_format
+		The format given.
+
+	Raises
+	------
+	InvalidConversionError
+		When the conversion neither reads texts as times nor writes times as texts, or the format holds a date.
+
+	Examples
+	--------
+	>>> import numdaplot as ndp
+	>>> from numdaplot.tables.columns.converted_column import require_time_format_setting
+	>>> try:
+	... 	require_time_format_setting(ndp.Type.TEXT, ndp.Type.TIME, ndp.DateFormat.DAY_MONTH_YEAR)
+	... except ndp.InvalidConversionError as error:
+	... 	print(error)
+	The format DAY_MONTH_YEAR has a date, which TIME cannot hold.
+	Give a CustomDateFormat of a time only, such as "%H:%M".
+	"""
+	source_family = find_family(source_type)
+	reads_times = source_family == ValueFamily.TEXT and target_type == Type.TIME
+	writes_times = source_type == Type.TIME and target_type in WRITTEN_TYPES
+	uses_format = reads_times or writes_times
+	if not uses_format:
+		raise InvalidConversionError(FORMAT_SETTING, source_type.name, target_type.name)
+
+	format_has_date = has_date(time_format)
+	if format_has_date:
+		format_name = find_format_name(target_type, time_format)
 		raise InvalidConversionError(FORMAT_SETTING, source_type.name, target_type.name, format_name)
 
 
@@ -367,6 +421,11 @@ def convert_time_column(
 	>>> convert_time_column(texts, ndp.Type.TEXT, ndp.Type.DATE, None).tolist()
 	[Timestamp('2026-12-31 00:00:00')]
 	"""
+	converts_times = Type.TIME in (source_type, target_type)
+	if converts_times:
+		time_column = convert_times(column, source_type, target_type, date_format)
+		return time_column
+
 	source_family = find_family(source_type)
 	target_family = find_family(target_type)
 	if source_family == ValueFamily.TEXT and target_family == ValueFamily.MOMENT:
@@ -390,6 +449,62 @@ def convert_time_column(
 		duration_texts = write_durations(column)
 		written_durations = convert_to_type(duration_texts, target_type)
 		return written_durations
+
+	return None
+
+
+def convert_times(
+	column: Column, source_type: Type, target_type: Type, time_format: DateFormat | CustomDateFormat | None
+) -> Column | None:
+	"""
+	Return a column converted from texts or datetimes to times of day, or from times of day to texts or categories.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	column
+		A Table column of another type than the target, one of the two types being ``TIME``.
+	source_type
+		The type of the column.
+	target_type
+		The new type.
+	time_format
+		A pattern of a time without date, already checked, or None for the default format.
+
+	Returns
+	-------
+	Column or None
+		The converted column, or ``None`` for a conversion of times of day that is not accepted.
+
+	Raises
+	------
+	ValueConversionError
+		At the first text that is not a time in the format.
+
+	Examples
+	--------
+	>>> import pandas
+	>>> import numdaplot as ndp
+	>>> from numdaplot.tables.columns.converted_column import convert_times
+	>>> moments = pandas.Series(pandas.to_datetime(["2026-03-14 15:35"]))
+	>>> convert_times(moments, ndp.Type.DATETIME, ndp.Type.TIME, None).tolist()
+	[Timedelta('0 days 15:35:00')]
+	"""
+	custom_format = time_format if isinstance(time_format, CustomDateFormat) else None
+	source_family = find_family(source_type)
+	if source_family == ValueFamily.TEXT and target_type == Type.TIME:
+		read_times = parse_times(column, custom_format)
+		return read_times
+
+	if source_type == Type.DATETIME and target_type == Type.TIME:
+		day_times = keep_time_of_day(column)
+		return day_times
+
+	if source_type == Type.TIME and target_type in WRITTEN_TYPES:
+		time_texts = write_times(column, custom_format)
+		written_times = convert_to_type(time_texts, target_type)
+		return written_times
 
 	return None
 

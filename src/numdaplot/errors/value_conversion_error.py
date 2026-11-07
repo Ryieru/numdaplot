@@ -26,6 +26,11 @@ IMPOSSIBLE_DATE_MESSAGE = (
 	"Cannot build a {target_type_name} from the year {rejected_value.year}, the month {rejected_value.month} and the "
 	"day {rejected_value.day}."
 )
+UNREADABLE_TIME_MESSAGE = (
+	"Cannot read the {source_type_name} value {rejected_value!r}{column_text} as {target_type_name} with the format "
+	"{date_format_name}. Give the format of the column with format=, using a CustomDateFormat of a time only."
+)
+TIME_TYPE_NAME = "TIME"
 COLUMN_TEXT = " of the column {column_name!r}"
 NO_COLUMN_TEXT = ""
 
@@ -174,10 +179,13 @@ class ValueConversionError(NumdaplotError):
 		if self.rejected_value is None:
 			return VALUE_CONVERSION_MESSAGE
 
-		if self.date_format_name is not None:
-			return UNREADABLE_DATE_MESSAGE
+		if self.date_format_name is None:
+			return REJECTED_VALUE_MESSAGE
 
-		return REJECTED_VALUE_MESSAGE
+		if self.target_type_name == TIME_TYPE_NAME:
+			return UNREADABLE_TIME_MESSAGE
+
+		return UNREADABLE_DATE_MESSAGE
 
 	def name_column(self, column_name: str) -> None:
 		"""

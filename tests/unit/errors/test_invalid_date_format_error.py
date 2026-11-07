@@ -7,8 +7,8 @@ Unit tests of InvalidDateFormatError.
 from numdaplot.errors.invalid_date_format_error import InvalidDateFormatError
 from numdaplot.errors.numdaplot_error import NumdaplotError
 
-PATTERN = "%H:%M"
-EXPECTED_MESSAGE = "Expected a date pattern with a day, a month or a year code and no time zone code, got '%H:%M'."
+PATTERN = "%d/%m/%Y %z"
+EXPECTED_MESSAGE = "Expected a pattern with a date or a time code and no time zone code, got '%d/%m/%Y %z'."
 
 
 def test_invalid_date_format_error_is_a_numdaplot_error() -> None:

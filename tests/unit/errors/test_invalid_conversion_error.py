@@ -22,6 +22,10 @@ EXPECTED_TIME_FORMAT_MESSAGE = (
 	"The format YEAR_MONTH_DAY_TIME has a time, which DATE cannot hold. "
 	"Convert the column to DATETIME first, then to DATE."
 )
+EXPECTED_DATE_ON_TIME_MESSAGE = (
+	"The format DAY_MONTH_YEAR has a date, which TIME cannot hold. Give a CustomDateFormat of a time only, "
+	'such as "%H:%M".'
+)
 
 
 def test_invalid_conversion_error_is_a_numdaplot_error() -> None:
@@ -93,3 +97,15 @@ def test_invalid_conversion_error_keeps_its_date_format_name() -> None:
 
 	assert error.date_format_name == DATE_FORMAT_NAME
 	assert general_error.date_format_name is None
+
+
+def test_invalid_conversion_error_points_a_date_format_on_times_to_a_time_pattern() -> None:
+	"""
+	Check the message of a format with a date given to times of day.
+
+	.. versionadded:: 0.1.0
+	"""
+	error = InvalidConversionError("format", "TEXT", "TIME", "DAY_MONTH_YEAR")
+
+	error_text = str(error)
+	assert error_text == EXPECTED_DATE_ON_TIME_MESSAGE

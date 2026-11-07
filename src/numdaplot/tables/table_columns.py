@@ -140,7 +140,8 @@ class TableColumns(TableData):
 			When a number is in no bracket of ``Brackets`` whose ``others`` is ``Unmatched.ERROR``.
 		ValueConversionError
 			At the first value that cannot be stored in the new type, such as ``"abc"`` read as a number,
-			2.5 stored as an integer, 3 read as a boolean with ``ZERO_ONE``, or ``"31/02/2026"`` read as a date.
+			2.5 stored as an integer, 3 read as a boolean with ``ZERO_ONE``, ``"31/02/2026"`` read as a date, or
+			``"25:00"`` read as a time of day.
 		TimeOverflowError
 			When a value converted to ``DATETIME`` is outside 1677 to 2262.
 		TimeZoneMismatchError

@@ -20,6 +20,7 @@ from numdaplot.tables.columns.converted_column import (
 	require_brackets_setting,
 	require_conversion_settings,
 	require_format_setting,
+	require_time_format_setting,
 	require_time_zone_setting,
 )
 
@@ -65,6 +66,8 @@ NONZERO_TO_BOOLEANS = Conversion(column=CONVERTED_NAME, dtype=Type.BOOL, boolean
 NONZERO_TO_INTEGERS = Conversion(column=CONVERTED_NAME, dtype=Type.INT64, booleans=BooleanRule.NONZERO_TRUE)
 PLAIN_TO_BOOLEANS = Conversion(column=CONVERTED_NAME, dtype=Type.BOOL)
 EXPECTED_BOOLEANS_MESSAGE = "The setting booleans does not apply to a conversion from TEXT to BOOL."
+TIME_PATTERN = CustomDateFormat("%H:%M")
+DATE_PATTERN = CustomDateFormat("%d/%m/%Y")
 
 
 @pytest.mark.parametrize("conversion", REJECTED_SETTINGS)
@@ -277,3 +280,60 @@ def test_require_brackets_setting_rejects_another_conversion(source_type: Type, 
 	"""
 	with pytest.raises(InvalidConversionError):
 		require_brackets_setting(source_type, target_type)
+
+
+@pytest.mark.parametrize(
+	("source_type", "target_type"), [(Type.TEXT, Type.TIME), (Type.TIME, Type.TEXT), (Type.TIME, Type.CATEGORY)]
+)
+def test_require_time_format_setting_accepts_a_time_pattern(source_type: Type, target_type: Type) -> None:
+	"""
+	Check that a pattern of a time only reads and writes times of day.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	source_type
+		The type of the column.
+	target_type
+		The new type.
+	"""
+	require_time_format_setting(source_type, target_type, TIME_PATTERN)
+
+
+@pytest.mark.parametrize("time_format", [DATE_PATTERN, DateFormat.DAY_MONTH_YEAR])
+def test_require_time_format_setting_rejects_a_format_with_a_date(time_format: DateFormat | CustomDateFormat) -> None:
+	"""
+	Check that a pattern or a common format holding a date raises InvalidConversionError.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	time_format
+		A format with a date.
+	"""
+	with pytest.raises(InvalidConversionError):
+		require_time_format_setting(Type.TEXT, Type.TIME, time_format)
+
+
+def test_require_time_format_setting_rejects_a_conversion_without_text() -> None:
+	"""
+	Check that a format given to datetimes converted to times raises InvalidConversionError.
+
+	.. versionadded:: 0.1.0
+	"""
+	with pytest.raises(InvalidConversionError):
+		require_time_format_setting(Type.DATETIME, Type.TIME, TIME_PATTERN)
+
+
+def test_require_conversion_settings_rejects_a_time_pattern_for_dates() -> None:
+	"""
+	Check that a pattern without date given to a conversion of texts to DATETIME raises InvalidConversionError.
+
+	.. versionadded:: 0.1.0
+	"""
+	conversion = Conversion(column=CONVERTED_NAME, dtype=Type.DATETIME, format=TIME_PATTERN)
+
+	with pytest.raises(InvalidConversionError):
+		require_conversion_settings(Type.TEXT, conversion)
