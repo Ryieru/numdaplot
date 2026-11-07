@@ -29,8 +29,9 @@ class LineChart(Chart):
 	Parameters
 	----------
 	x
-		For a Table, the column of the horizontal positions: numbers, dates, datetimes, texts or booleans, the row
-		numbers when omitted. An Array takes none, its rows being numbered.
+		For a Table, the column of the horizontal positions: numbers, dates, datetimes, times of day, texts or
+		booleans, the row numbers when omitted. An Array takes none, its rows being numbered. Times of day are placed
+		on an axis of one day labeled ``HH:MM``.
 	y
 		For a Table, the columns drawn, holding numbers, one line each. A Table needs it, even for a single column. An
 		Array takes none: when omitted, each of its columns is a line.

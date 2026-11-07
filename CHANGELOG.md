@@ -117,6 +117,8 @@ and numdaplot follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
   hour, the minute and the second, and `Min`, `Max`, `Count`, `CountDistinct` and `MostFrequent` apply to times.
 - `TIME` columns are written as texts such as `15:35:00` in CSV, JSON, Excel and Stata files, read back as `TEXT`,
   and as Parquet times read back as `TIME`.
+- Plots place `TIME` columns at their hours on the x axis of line, bar and scatter charts, labeled `HH:MM`, and
+  name heatmap rows, pie slices, `color_by` groups and box `group_by` groups with `HH:MM` labels.
 - `Type` enum of value types and its conversion to numpy and pandas dtypes, and the `Library` enum read on
   `UnsupportedTypeError`.
 - Rules: `Equal`, `NotEqual`, `Greater`, `GreaterOrEqual`, `Less`, `LessOrEqual`, `Between`, `IsIn`,

@@ -18,6 +18,7 @@ from numdaplot.plots.data.column_reading import read_texts
 from numdaplot.plots.data.table_values import name_columns, read_series
 from numdaplot.tables.columns.column_names import require_known_columns
 from numdaplot.tables.table import Table
+from numdaplot.tables.table_data import read_stored_frame
 
 COLUMNS_SETTING = "columns"
 GROUP_SETTING = "group_by"
@@ -109,7 +110,7 @@ def read_sample_values(
 		return array_samples
 
 	required_names = require_column_setting(chart_name, COLUMNS_SETTING, column_names)
-	frame = data.to_pandas()
+	frame = read_stored_frame(data)
 	known_names = frame.columns.tolist()
 	require_known_columns(required_names, known_names)
 	series = read_series(frame, required_names, chart_name)

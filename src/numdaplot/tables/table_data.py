@@ -286,3 +286,36 @@ class TableData:
 		column = self._frame[column_name]
 
 		return column
+
+
+def read_stored_frame(table: TableData) -> pandas.DataFrame:
+	"""
+	Return the columns a Table stores, without copy, for the code of numdaplot that reads them.
+
+	Unlike ``Table.to_pandas``, times of day stay stored as the time since midnight.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	table
+		A Table.
+
+	Returns
+	-------
+	pandas.DataFrame
+		The stored columns, which must not be changed.
+
+	Examples
+	--------
+	>>> from datetime import time
+	>>> import numdaplot as ndp
+	>>> from numdaplot.tables.table_data import read_stored_frame
+	>>> hours = ndp.Table.from_arrays({"hour": ndp.Array.from_list([time(0, 1)])})
+	>>> read_stored_frame(hours).dtypes.tolist()
+	[dtype('<m8[us]')]
+	"""
+	# The function lives next to the class to read its stored columns on behalf of the rest of numdaplot.
+	stored_frame = table._frame  # pyright: ignore[reportPrivateUsage]
+
+	return stored_frame

@@ -65,3 +65,19 @@ class PositionKind(Enum):
 	>>> read_table_values(sales, "city", ["price"], "LineChart").positions.kind
 	<PositionKind.TEXTS: 3>
 	"""
+
+	TIMES = auto()
+	"""
+	Times of day, placed on an axis of one day labeled ``HH:MM``.
+
+	Examples
+	--------
+	>>> from datetime import time
+	>>> import numdaplot as ndp
+	>>> from numdaplot.plots.data.table_values import read_table_values
+	>>> hours = ndp.Array.from_list([time(8), time(17, 30)])
+	>>> counts = ndp.Array.from_list([12.0, 15.5])
+	>>> traffic = ndp.Table.from_arrays({"hour": hours, "count": counts})
+	>>> read_table_values(traffic, "hour", ["count"], "LineChart").positions.kind
+	<PositionKind.TIMES: 4>
+	"""

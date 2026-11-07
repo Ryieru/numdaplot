@@ -20,6 +20,7 @@ from numdaplot.arrays.conversion.time_text import format_datetimes
 from numdaplot.plots.data.chart_values import Positions
 from numdaplot.plots.data.position_kind import PositionKind
 from numdaplot.plots.drawing.moment_period_formatter import MomentPeriodFormatter
+from numdaplot.plots.drawing.time_axis import format_hour, place_hour_ticks
 from numdaplot.plots.drawing.whole_numbers import place_whole_ticks
 
 DAY_UNIT = "D"
@@ -71,6 +72,10 @@ def place_positions(axes: Axes, positions: Positions, on_vertical_axis: bool) ->
 	position_axis = find_axis(axes, on_vertical_axis)
 	if positions.kind == PositionKind.NUMBERS:
 		place_whole_ticks(position_axis, positions.values)
+		return positions.values
+
+	if positions.kind == PositionKind.TIMES:
+		place_hour_ticks(position_axis, positions.values)
 		return positions.values
 
 	if positions.kind == PositionKind.MOMENTS:
@@ -222,6 +227,10 @@ def write_position_labels(positions: Positions) -> list[str]:
 	if positions.kind == PositionKind.MOMENTS:
 		moment_labels = write_moment_labels(positions.values)
 		return moment_labels
+
+	if positions.kind == PositionKind.TIMES:
+		hour_labels = [format_hour(value) for value in positions.values]
+		return hour_labels
 
 	text_labels = [str(value) for value in positions.values]
 

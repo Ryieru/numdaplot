@@ -17,7 +17,7 @@ from numdaplot.errors.column_not_found_error import ColumnNotFoundError
 from numdaplot.errors.refused_operation_error import RefusedOperationError
 from numdaplot.tables.files.column_names import ColumnNames
 from numdaplot.tables.frames.column import Column
-from numdaplot.tables.table_data import TableData
+from numdaplot.tables.table_data import TableData, read_stored_frame
 
 FRAME = pandas.DataFrame({"city": pandas.Series(["Pau", "Lyon"], dtype="string"), "price": [1.5, 8.0]})
 NO_COLUMN_FRAME = pandas.DataFrame()
@@ -38,6 +38,9 @@ PARIS_TIMES = (
 )
 TIME_FRAME = pandas.DataFrame({"time": PARIS_TIMES, "price": [1.5]})
 EXPECTED_TIME_ZONES = {"time": TimeZone("Europe/Paris")}
+HOUR_DTYPE_NAME = "timedelta64[us]"
+MINUTE_AFTER_MIDNIGHT = numpy.array([60000000], dtype=HOUR_DTYPE_NAME)
+HOUR_FRAME = pandas.DataFrame({"hour": MINUTE_AFTER_MIDNIGHT})
 
 
 class ExposedTableData(TableData):
@@ -318,3 +321,18 @@ def test_from_read_frame_reads_an_outside_duration_as_a_duration() -> None:
 	table = ExposedTableData.from_read_frame(MICROSECOND_WAIT_FRAME, ColumnNames.CLEANED)
 
 	assert table.column_types == {"wait": Type.DURATION}
+
+
+def test_read_stored_frame_keeps_the_storage_of_times() -> None:
+	"""
+	Check that a column of times stays in microseconds, unlike to_pandas.
+
+	.. versionadded:: 0.1.0
+	"""
+	table = ExposedTableData.from_frame(HOUR_FRAME)
+
+	stored_frame = read_stored_frame(table)
+
+	hour_column = stored_frame["hour"]
+	hour_dtype = str(hour_column.dtype)
+	assert hour_dtype == HOUR_DTYPE_NAME

@@ -21,6 +21,7 @@ from numdaplot.tables.missing.missing_counts import (
 	find_frame_missing,
 )
 from numdaplot.tables.table import Table
+from numdaplot.tables.table_data import read_stored_frame
 
 MEASURE_LABELS = {
 	Measure.COUNT: "Missing count",
@@ -97,7 +98,7 @@ def read_missing_counts(table: Table, measure: Measure) -> MissingCounts:
 	>>> read_missing_counts(flats, ndp.Measure.RATIO).series[0].values
 	array([0.5, 0. ])
 	"""
-	frame = table.to_pandas()
+	frame = read_stored_frame(table)
 	missing_count = MissingCount(measure=measure)
 	counts_frame = count_frame_missing(frame, missing_count, Axis.EACH_COLUMN)
 	count_name = MEASURE_COLUMN_NAMES[measure]
@@ -141,7 +142,7 @@ def read_missing_cells(table: Table) -> ChartValues:
 	>>> read_missing_cells(flats).series[0].values
 	array([0., 1.])
 	"""
-	frame = table.to_pandas()
+	frame = read_stored_frame(table)
 	missing_grid = find_frame_missing(frame)
 	cells = missing_grid.astype(FLOAT_DTYPE)
 	column_names = frame.columns.tolist()

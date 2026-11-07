@@ -13,6 +13,7 @@ from numdaplot.plots.data.column_reading import read_numbers, read_positions
 from numdaplot.plots.data.position_kind import PositionKind
 from numdaplot.tables.columns.column_names import require_known_columns
 from numdaplot.tables.table import Table
+from numdaplot.tables.table_data import read_stored_frame
 
 MAXIMUM_NAMED_COLUMNS = 3
 NAME_SEPARATOR = ", "
@@ -63,7 +64,7 @@ def read_table_values(table: Table, x_name: str | None, y_names: list[str], char
 	>>> chart_values.series[0].values
 	array([12., nan])
 	"""
-	frame = table.to_pandas()
+	frame = read_stored_frame(table)
 	column_names = frame.columns.tolist()
 	require_known_columns(y_names, column_names)
 	positions = read_table_positions(frame, x_name, chart_name)

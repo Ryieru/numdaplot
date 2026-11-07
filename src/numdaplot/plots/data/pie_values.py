@@ -22,6 +22,7 @@ from numdaplot.plots.data.position_kind import PositionKind
 from numdaplot.plots.data.unique_labels import require_unique_labels
 from numdaplot.tables.columns.column_names import require_known_columns
 from numdaplot.tables.table import Table
+from numdaplot.tables.table_data import read_stored_frame
 
 CHART_NAME = "PieChart"
 MAXIMUM_READABLE_SLICES = 5
@@ -82,7 +83,7 @@ def read_pie_values(table: Table, chart: PieChart) -> ChartValues:
 	"""
 	labels_name = chart.labels
 	values_name = chart.values
-	frame = table.to_pandas()
+	frame = read_stored_frame(table)
 	known_names = frame.columns.tolist()
 	require_known_columns([labels_name, values_name], known_names)
 	labels = read_texts(frame[labels_name], CHART_NAME)

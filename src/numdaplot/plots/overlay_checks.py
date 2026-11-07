@@ -22,6 +22,7 @@ POSITION_NAMES = {
 	PositionKind.NUMBERS: "numbers",
 	PositionKind.MOMENTS: "dates",
 	PositionKind.TEXTS: "texts",
+	PositionKind.TIMES: "times of day",
 }
 PLOT_NAME = "a Plot of {chart_name}"
 HORIZONTAL_BARS_NAME = "a Plot of horizontal bars"

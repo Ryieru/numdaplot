@@ -9,7 +9,14 @@ import pandas
 import pytest
 
 from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
-from numdaplot.plots.data.column_reading import read_moments, read_numbers, read_positions, read_texts
+from numdaplot.plots.data.column_reading import (
+	read_hours,
+	read_moments,
+	read_numbers,
+	read_positions,
+	read_texts,
+	write_hour_labels,
+)
 from numdaplot.plots.data.position_kind import PositionKind
 
 CHART_NAME = "LineChart"
@@ -26,6 +33,9 @@ PARIS_TIMES = UTC_TIMES.dt.tz_convert("Europe/Paris")
 EXPECTED_PARIS_CLOCK = numpy.datetime64("2026-07-01T12:30", "ns")
 MOMENT_DTYPE = numpy.dtype("datetime64[ns]")
 REFUSED_POSITIONS = [DURATIONS]
+STORED_HOURS = pandas.Series(numpy.array([55800000000, "NaT"], dtype="timedelta64[us]"))
+EXPECTED_HOUR_LABELS = ["15:30", None]
+HALF_PAST_THREE_HOURS = 15.5
 
 
 def test_read_numbers_gives_nan_at_missing_integers() -> None:
@@ -163,3 +173,53 @@ def test_read_positions_places_booleans_as_texts() -> None:
 
 	assert kind == PositionKind.TEXTS
 	assert values.tolist() == ["True", "False"]
+
+
+def test_read_hours_counts_hours_since_midnight() -> None:
+	"""
+	Check 15:30 as 15.5 and NaN for a missing time.
+
+	.. versionadded:: 0.1.0
+	"""
+	hours = read_hours(STORED_HOURS)
+
+	second_missing = numpy.isnan(hours[1])
+	is_second_missing = bool(second_missing)
+	assert hours[0] == HALF_PAST_THREE_HOURS
+	assert is_second_missing
+
+
+def test_read_texts_writes_times_as_hour_labels() -> None:
+	"""
+	Check that times of day become HH:MM labels, None where missing.
+
+	.. versionadded:: 0.1.0
+	"""
+	texts = read_texts(STORED_HOURS, "PieChart")
+
+	text_list = texts.tolist()
+	assert text_list == EXPECTED_HOUR_LABELS
+
+
+def test_write_hour_labels_drops_the_seconds() -> None:
+	"""
+	Check the HH:MM labels of times of day.
+
+	.. versionadded:: 0.1.0
+	"""
+	labels = write_hour_labels(STORED_HOURS)
+
+	label_list = labels.tolist()
+	assert label_list == EXPECTED_HOUR_LABELS
+
+
+def test_read_positions_places_times_on_a_day() -> None:
+	"""
+	Check that a column of times gives positions in hours.
+
+	.. versionadded:: 0.1.0
+	"""
+	kind, values = read_positions(STORED_HOURS, "LineChart")
+
+	assert kind == PositionKind.TIMES
+	assert values[0] == HALF_PAST_THREE_HOURS

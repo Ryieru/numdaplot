@@ -7,6 +7,7 @@ Values a chart draws from the columns of an Array.
 import numpy
 
 from numdaplot.arrays.array import Array
+from numdaplot.arrays.array_data import read_stored_values
 from numdaplot.arrays.operations.type_requirements import require_family
 from numdaplot.data_types.value_family import ValueFamily
 from numdaplot.errors.dimension_error import DimensionError
@@ -56,7 +57,7 @@ def read_array_values(array: Array, chart_name: str) -> ChartValues:
 	>>> read_array_values(grid, "LineChart").series[1].values
 	array([2., 4.])
 	"""
-	values = array.to_numpy()
+	values = read_stored_values(array)
 	require_family(values, NUMBER_FAMILIES, chart_name)
 	dimension_count = values.ndim
 	if dimension_count > TWO_DIMENSIONS:

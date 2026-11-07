@@ -19,11 +19,12 @@ from numdaplot.plots.data.column_reading import read_numbers, read_texts, requir
 from numdaplot.tables.columns.column_names import require_known_columns
 from numdaplot.tables.frames.column import Column
 from numdaplot.tables.table import Table
+from numdaplot.tables.table_data import read_stored_frame
 
 CHART_NAME = "ScatterChart"
 NUMBER_COLORS_DTYPE = numpy.dtype(numpy.float64)
 SCALE_ON_TEXTS = "scale without a color_by column of numbers"
-COLOR_FAMILIES = frozenset({ValueFamily.NUMBER, ValueFamily.TEXT, ValueFamily.BOOL})
+COLOR_FAMILIES = frozenset({ValueFamily.NUMBER, ValueFamily.TEXT, ValueFamily.BOOL, ValueFamily.TIME})
 
 
 @dataclass(frozen=True, eq=False)
@@ -100,7 +101,7 @@ def read_point_values(
 	>>> read_point_values(flats, "city", "surface", numpy.arange(2)).sizes
 	array([30., 45.])
 	"""
-	frame = table.to_pandas()
+	frame = read_stored_frame(table)
 	column_names = frame.columns.tolist()
 	colors = None
 	sizes = None
@@ -175,7 +176,7 @@ def read_colors(column: Column) -> NDArray[Any]:
 	Raises
 	------
 	IncompatibleTypesError
-		When the column holds neither numbers, texts nor booleans.
+		When the column holds neither numbers, texts, booleans nor times of day.
 
 	Examples
 	--------

@@ -30,8 +30,8 @@ class BarChart(Chart):
 	Parameters
 	----------
 	x
-		For a Table, the column labeling the bars: numbers, dates, datetimes, texts or booleans, the row numbers when
-		omitted. An Array takes none, its rows being numbered.
+		For a Table, the column labeling the bars: numbers, dates, datetimes, times of day (labeled ``HH:MM``), texts
+		or booleans, the row numbers when omitted. An Array takes none, its rows being numbered.
 	y
 		For a Table, the columns drawn, holding numbers, one series of bars each. A Table needs it, even for a single
 		column. An Array takes none: when omitted, each of its columns is a series.
