@@ -52,6 +52,7 @@ PRECISE_ERRORS = [
 	ndp.InvalidRotationError,
 	ndp.InvalidSizeError,
 	ndp.InvalidStepError,
+	ndp.InvalidSuffixesError,
 	ndp.InvalidTimeZoneChangeError,
 	ndp.IntegerOverflowError,
 	ndp.IrregularListError,

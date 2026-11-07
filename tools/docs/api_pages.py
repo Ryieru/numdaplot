@@ -114,6 +114,7 @@ SECTIONS = (
 	Section("numdaplot.tables.preview", "Tables", "tables", "Sort, duplicate and preview settings"),
 	Section("numdaplot.tables.missing", "Tables", "tables", "Missing value settings"),
 	Section("numdaplot.ratios", "Tables", "tables", "Missing value settings"),
+	Section("numdaplot.tables.joining", "Tables", "tables", "Join settings"),
 	Section("numdaplot.tables", "Tables", "tables"),
 	Section("numdaplot.dates", "Dates", "dates"),
 	Section("numdaplot.data_types", "Types", "types"),

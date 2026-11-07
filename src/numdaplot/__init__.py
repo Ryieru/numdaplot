@@ -100,6 +100,7 @@ from numdaplot.errors.invalid_shape_error import InvalidShapeError
 from numdaplot.errors.invalid_sheet_name_error import InvalidSheetNameError
 from numdaplot.errors.invalid_size_error import InvalidSizeError
 from numdaplot.errors.invalid_step_error import InvalidStepError
+from numdaplot.errors.invalid_suffixes_error import InvalidSuffixesError
 from numdaplot.errors.invalid_time_zone_change_error import InvalidTimeZoneChangeError
 from numdaplot.errors.invalid_type_error import InvalidTypeError
 from numdaplot.errors.irregular_list_error import IrregularListError
@@ -224,6 +225,10 @@ from numdaplot.tables.filtering.column_match import ColumnMatch
 from numdaplot.tables.filtering.condition import Condition
 from numdaplot.tables.filtering.filter import Filter
 from numdaplot.tables.filtering.filter_mode import FilterMode
+from numdaplot.tables.joining.join import Join
+from numdaplot.tables.joining.join_mode import JoinMode
+from numdaplot.tables.joining.join_suffixes import JoinSuffixes
+from numdaplot.tables.joining.key_types import KeyTypes
 from numdaplot.tables.missing.missing_count import MissingCount
 from numdaplot.tables.missing.missing_drop import MissingDrop
 from numdaplot.tables.missing.missing_mode import MissingMode
@@ -352,16 +357,21 @@ __all__ = [
 	"InvalidSheetNameError",
 	"InvalidSizeError",
 	"InvalidStepError",
+	"InvalidSuffixesError",
 	"InvalidTimeZoneChangeError",
 	"InvalidTypeError",
 	"IrregularListError",
 	"IsIn",
 	"IsMissing",
 	"IsPresent",
+	"Join",
+	"JoinMode",
+	"JoinSuffixes",
 	"JsonLayout",
 	"JsonReadOptions",
 	"JsonWriteOptions",
 	"Keep",
+	"KeyTypes",
 	"Layout",
 	"LegendPosition",
 	"Less",

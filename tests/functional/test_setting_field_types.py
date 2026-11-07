@@ -18,6 +18,7 @@ import numdaplot as ndp
 CASE_ID = "{class_name}.{field_name}"
 SUM_CALCULATION = ndp.Calculation(column="a", function=ndp.Sum())
 ONE_PART = ndp.Array.from_list([1])
+JOINED_TABLE = ndp.Table.from_arrays({"a": ONE_PART})
 REQUIRED_SETTINGS = dict[str, dict[str, object]](
 	{
 		"Aggregation": {"calculations": [SUM_CALCULATION]},
@@ -53,6 +54,8 @@ REQUIRED_SETTINGS = dict[str, dict[str, object]](
 		"Normal": {"mean": 0, "deviation": 1},
 		"NotEqual": {"value": 1},
 		"PieChart": {"labels": "a", "values": "b"},
+		"Join": {"other": JOINED_TABLE, "keys": ["a"]},
+		"JoinSuffixes": {"left": "_a", "right": "_b"},
 		"PivotTable": {"rows": ["a"], "columns": "b", "calculation": SUM_CALCULATION},
 		"Quantile": {"fraction": 0.5},
 		"RandomIntegers": {"low": 0, "high": 1},

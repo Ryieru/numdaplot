@@ -12,6 +12,9 @@ EXPECTS_TIME_ZONE = True
 EXPECTED_MESSAGE = "Removing the time zone needs datetimes with a time zone."
 ARRAY_OPERATION = "An Array"
 EXPECTED_NAIVE_MESSAGE = "An Array needs datetimes without a time zone."
+JOIN_OPERATION = "Joining on 'time'"
+ZONE_NAMES = ["UTC", "Europe/Paris"]
+EXPECTED_ZONES_MESSAGE = "Joining on 'time' needs datetimes in one time zone, got UTC and Europe/Paris."
 
 
 def test_time_zone_mismatch_error_is_a_numdaplot_error() -> None:
@@ -57,3 +60,27 @@ def test_time_zone_mismatch_error_message_states_a_zone_is_not_wanted() -> None:
 
 	error_text = str(error)
 	assert error_text == EXPECTED_NAIVE_MESSAGE
+
+
+def test_time_zone_mismatch_error_names_two_different_zones() -> None:
+	"""
+	Check the message and the attribute when two time zones meet.
+
+	.. versionadded:: 0.1.0
+	"""
+	error = TimeZoneMismatchError(JOIN_OPERATION, True, ZONE_NAMES)
+
+	error_text = str(error)
+	assert error_text == EXPECTED_ZONES_MESSAGE
+	assert error.zone_names == ZONE_NAMES
+
+
+def test_time_zone_mismatch_error_has_no_zone_names_by_default() -> None:
+	"""
+	Check that the zone names are None when omitted.
+
+	.. versionadded:: 0.1.0
+	"""
+	error = TimeZoneMismatchError(OPERATION, EXPECTS_TIME_ZONE)
+
+	assert error.zone_names is None

@@ -8,6 +8,7 @@ from numdaplot.tables.table_calculation import TableCalculation
 from numdaplot.tables.table_columns import TableColumns
 from numdaplot.tables.table_conversion import TableConversion
 from numdaplot.tables.table_display import TableDisplay
+from numdaplot.tables.table_joining import TableJoining
 from numdaplot.tables.table_layout import TableLayout
 from numdaplot.tables.table_missing import TableMissing
 from numdaplot.tables.table_reading import TableReading
@@ -24,6 +25,7 @@ class Table(
 	TableColumns,
 	TableCalculation,
 	TableLayout,
+	TableJoining,
 	TableMissing,
 	TableDisplay,
 	TableRefusals,
@@ -40,7 +42,7 @@ class Table(
 	- Select rows with ``filter`` and ``take``, check values with ``check``, read a column with ``column``.
 	- Change columns with ``choose_columns``, ``rename``, ``convert`` and ``add_column``.
 	- Compute with ``aggregate``, ``pivot_table`` and ``describe``.
-	- Rearrange rows with ``sort`` and ``drop_duplicates``.
+	- Rearrange rows with ``sort`` and ``drop_duplicates``, and combine two Tables with ``join``.
 	- Handle missing values with ``count_missing``, ``preview_missing`` and ``drop_missing``.
 	- Read it with ``row_count``, ``column_names``, ``column_types``, ``to_value``, ``to_pandas`` and ``is_equal``,
 	and show it with ``preview`` or ``print``.
