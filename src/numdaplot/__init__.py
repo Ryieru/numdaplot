@@ -101,6 +101,7 @@ from numdaplot.errors.missing_type_error import MissingTypeError
 from numdaplot.errors.missing_value_error import MissingValueError
 from numdaplot.errors.not_single_value_error import NotSingleValueError
 from numdaplot.errors.numdaplot_error import NumdaplotError
+from numdaplot.errors.numdaplot_warning import NumdaplotWarning
 from numdaplot.errors.occupied_cell_error import OccupiedCellError
 from numdaplot.errors.out_of_domain_error import OutOfDomainError
 from numdaplot.errors.readability_warning import ReadabilityWarning
@@ -365,6 +366,7 @@ __all__ = [
 	"NotEqual",
 	"NotSingleValueError",
 	"NumdaplotError",
+	"NumdaplotWarning",
 	"OccupiedCellError",
 	"Order",
 	"Orientation",

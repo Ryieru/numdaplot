@@ -4,15 +4,18 @@ Warning emitted when a calculation on decimals gives NaN or an infinite value.
 .. versionadded:: 0.1.0
 """
 
+from numdaplot.errors.numdaplot_warning import NumdaplotWarning
 
-class CalculationWarning(UserWarning):
+
+class CalculationWarning(NumdaplotWarning):
 	"""
 	Emitted when values of a calculation on decimals have no defined result or do not fit their type.
 
 	The calculation still runs: these values become NaN or an infinite value. The warning points at the line of
 	the calculation in the calling code.
 
-	Silence it with the standard ``warnings`` module, for one block of code or for a whole script.
+	Silence it with the standard ``warnings`` module, for one block of code or for a whole script, alone or with every
+	``NumdaplotWarning``.
 
 	.. versionadded:: 0.1.0
 

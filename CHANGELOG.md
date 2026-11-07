@@ -95,3 +95,4 @@ and numdaplot follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 - Errors: `NumdaplotError`, `EmptyRegionError`, `EmptyTextError`, `EmptyValuesError`, `InvalidBoundsError`,
   `InvalidFractionError`, `InvalidTypeError`, `InvalidStepError`, `UnsupportedTypeError`, and the
   `BroadcastWarning` and `CalculationWarning` warnings.
+- `NumdaplotWarning`, the base of every numdaplot warning, filters them all at once with the `warnings` module.

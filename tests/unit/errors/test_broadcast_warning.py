@@ -7,6 +7,7 @@ Unit tests of BroadcastWarning.
 import warnings
 
 from numdaplot.errors.broadcast_warning import BroadcastWarning
+from numdaplot.errors.numdaplot_warning import NumdaplotWarning
 
 WARNING_MESSAGE = "Shapes differ."
 
@@ -31,3 +32,12 @@ def test_broadcast_warning_is_silenced_by_the_warnings_module() -> None:
 		warnings.warn(WARNING_MESSAGE, category=BroadcastWarning, stacklevel=1)
 
 	assert recorded_warnings == []
+
+
+def test_broadcast_warning_is_a_numdaplot_warning() -> None:
+	"""
+	Check that BroadcastWarning inherits NumdaplotWarning.
+
+	.. versionadded:: 0.1.0
+	"""
+	assert issubclass(BroadcastWarning, NumdaplotWarning)

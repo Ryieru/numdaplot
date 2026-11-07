@@ -38,6 +38,7 @@ FIRST_CLASSES = frozenset(
 		"Rule",
 		"Statistic",
 		"NumdaplotError",
+		"NumdaplotWarning",
 		"MathFunction",
 		"Distribution",
 		"TimeFunction",
