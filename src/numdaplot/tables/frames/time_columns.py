@@ -18,6 +18,7 @@ from numdaplot.tables.frames.time_range_errors import TimeRangeErrors
 DURATION_KIND = "m"
 NANOSECOND_DURATION_DTYPE = numpy.dtype("timedelta64[ns]")
 PYTHON_OBJECT_DTYPE = numpy.dtype(object)
+TEXT_PANDAS_DTYPE = "string"
 TABLE_CREATION_OPERATION = "Table creation"
 
 
@@ -303,3 +304,42 @@ def write_time_texts_column(column: Column) -> Column:
 	text_column = pandas.Series(time_texts, index=column.index, name=column.name, dtype=PYTHON_OBJECT_DTYPE)
 
 	return text_column
+
+
+def write_time_texts_frame(frame: pandas.DataFrame) -> pandas.DataFrame:
+	"""
+	Return a DataFrame whose columns of times of day are written as texts, missing where a time is missing.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	frame
+		The columns of a Table. It is not changed.
+
+	Returns
+	-------
+	pandas.DataFrame
+		A copy, each column of times of day as texts such as ``15:35:00``.
+
+	Examples
+	--------
+	>>> import numpy
+	>>> import pandas
+	>>> from numdaplot.tables.frames.time_columns import write_time_texts_frame
+	>>> frame = pandas.DataFrame({"hour": numpy.array([56100000000, "NaT"], dtype="timedelta64[us]")})
+	>>> write_time_texts_frame(frame)["hour"].tolist()
+	['15:35:00', <NA>]
+	"""
+	text_frame = frame.copy()
+	for column_name in frame.columns:
+		column = frame[column_name]
+		if is_time_column(column):
+			time_texts = write_time_texts_column(column)
+			missing = column.isna()
+			# Some versions of the pandas stubs leave the types of mask partly unknown.
+			text_column = cast(Any, time_texts)
+			present_texts = cast(Column, text_column.mask(missing))
+			text_frame[column_name] = present_texts.astype(TEXT_PANDAS_DTYPE)
+
+	return text_frame

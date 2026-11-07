@@ -115,6 +115,8 @@ and numdaplot follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 - Calculations on `TIME`: two times subtracted give a `DURATION`, a duration added or subtracted moves a time within
   its day with a `TimeOverflowError` past midnight, a `DATE` plus a `TIME` gives a `DATETIME`, `DatePart` reads the
   hour, the minute and the second, and `Min`, `Max`, `Count`, `CountDistinct` and `MostFrequent` apply to times.
+- `TIME` columns are written as texts such as `15:35:00` in CSV, JSON, Excel and Stata files, read back as `TEXT`,
+  and as Parquet times read back as `TIME`.
 - `Type` enum of value types and its conversion to numpy and pandas dtypes, and the `Library` enum read on
   `UnsupportedTypeError`.
 - Rules: `Equal`, `NotEqual`, `Greater`, `GreaterOrEqual`, `Less`, `LessOrEqual`, `Between`, `IsIn`,

@@ -6,11 +6,12 @@ Unit tests of TableWriting.
 
 # The tests create the objects from their stored values, with the creation reserved to numdaplot.
 # pyright: reportPrivateUsage=false
-
 from collections.abc import Callable
 from dataclasses import dataclass
+from datetime import time
 from pathlib import Path
 
+import numpy
 import pandas
 import pytest
 
@@ -30,6 +31,15 @@ WRITERS_WITHOUT_OPTIONS = [
 	("write_parquet_file", TableWriting.to_parquet),
 	("write_stata_file", TableWriting.to_stata),
 ]
+TIME_FRAME = pandas.DataFrame({"hour": numpy.array([56100000000, "NaT"], dtype="timedelta64[us]")})
+EXPECTED_TIME_TEXTS = ["15:35:00", pandas.NA]
+EXPECTED_PYTHON_TIMES = [time(15, 35), None]
+WRITE_METHODS = {
+	CSV_WRITER_NAME: TableWriting.to_csv,
+	"write_json_file": TableWriting.to_json,
+	"write_excel_file": TableWriting.to_excel,
+	"write_stata_file": TableWriting.to_stata,
+}
 
 
 @dataclass(frozen=True)
@@ -126,7 +136,9 @@ def test_writing_uses_the_default_options_of_the_format(
 
 	writing_case.write_table(table, path_text)
 
-	assert recorder.frames == [FRAME]
+	recorded_frame = recorder.frames[0]
+	is_same_frame = recorded_frame.equals(FRAME)
+	assert is_same_frame
 	assert recorder.paths == [path]
 	assert recorder.options == [writing_case.default_options]
 
@@ -211,3 +223,55 @@ def test_writing_overwrites_a_file_to_replace(monkeypatch: pytest.MonkeyPatch, t
 	table.to_csv(path, on_conflict=Conflict.REPLACE)
 
 	assert recorder.paths == [path]
+
+
+@pytest.mark.parametrize("writer_name", [CSV_WRITER_NAME, "write_json_file", "write_excel_file", "write_stata_file"])
+def test_writing_gives_times_of_day_as_texts(monkeypatch: pytest.MonkeyPatch, tmp_path: Path, writer_name: str) -> None:
+	"""
+	Check that CSV, JSON, Excel and Stata files receive times of day as texts.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	monkeypatch
+		Replaces the file writer with a fake.
+	tmp_path
+		A temporary folder.
+	writer_name
+		The name of the file writer.
+	"""
+	recorder = WriteRecorder()
+	monkeypatch.setattr(table_writing, writer_name, recorder)
+	table = TableWriting._create(TIME_FRAME)
+	write_table = WRITE_METHODS[writer_name]
+
+	write_table(table, str(tmp_path / FILE_NAME))
+
+	recorded_frame = recorder.frames[0]
+	hours = recorded_frame["hour"].tolist()
+	assert hours == EXPECTED_TIME_TEXTS
+
+
+def test_parquet_writing_gives_times_of_day_as_python_times(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
+	"""
+	Check that a Parquet file receives times of day as datetime.time objects, stored as Parquet times.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	monkeypatch
+		Replaces the file writer with a fake.
+	tmp_path
+		A temporary folder.
+	"""
+	recorder = WriteRecorder()
+	monkeypatch.setattr(table_writing, "write_parquet_file", recorder)
+	table = TableWriting._create(TIME_FRAME)
+
+	table.to_parquet(str(tmp_path / FILE_NAME))
+
+	recorded_frame = recorder.frames[0]
+	hours = recorded_frame["hour"].tolist()
+	assert hours == EXPECTED_PYTHON_TIMES

@@ -6,6 +6,7 @@ Functional tests of the times of day of Arrays and Tables.
 
 from collections.abc import Sequence
 from datetime import UTC, datetime, time, timedelta
+from pathlib import Path
 
 import numpy
 import pandas
@@ -45,6 +46,7 @@ EXPECTED_MOMENTS = [datetime(2025, 7, 14, 15, 35), datetime(2025, 1, 1, 0, 5)]
 EXPECTED_HOURS = [15.0, 8.0, 23.0]
 LATE_EVENING = time(23, 30)
 LAST_TIME = time(23, 59, 59, 999999)
+EXPECTED_STATA_TEXTS = ["15:35:00", "08:00:00", "", "23:59:59.999999"]
 
 
 def build_accident_times() -> ndp.Array:
@@ -345,3 +347,80 @@ def test_the_earliest_and_latest_times_are_computed_per_group() -> None:
 	latest = latest_column.to_value()
 	assert earliest == MORNING
 	assert latest == LAST_TIME
+
+
+@pytest.mark.parametrize("file_name", ["accidents.csv", "accidents.json", "accidents.xlsx"])
+def test_text_files_hold_times_as_texts_read_back_as_times(tmp_path: Path, file_name: str) -> None:
+	"""
+	Check that CSV, JSON and Excel files hold 15:35:00, which a conversion reads back as times.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	tmp_path
+		A temporary folder.
+	file_name
+		The name of the file, whose extension chooses the format.
+	"""
+	times = build_accident_times()
+	accidents = ndp.Table.from_arrays({"hrmn": times})
+	path = tmp_path / file_name
+	write_methods = {".csv": accidents.to_csv, ".json": accidents.to_json, ".xlsx": accidents.to_excel}
+	read_methods = {".csv": ndp.Table.from_csv, ".json": ndp.Table.from_json, ".xlsx": ndp.Table.from_excel}
+	write_table = write_methods[path.suffix]
+	read_table = read_methods[path.suffix]
+
+	write_table(path)
+	read_accidents = read_table(path)
+	converted_accidents = read_accidents.convert(ndp.Conversion(column="hrmn", dtype=ndp.Type.TIME))
+
+	hour_column = converted_accidents.column("hrmn")
+	hours = hour_column.to_list()
+	assert read_accidents.column_types["hrmn"] == ndp.Type.TEXT
+	assert hours == ACCIDENT_TIMES
+
+
+def test_a_parquet_file_keeps_times_of_day(tmp_path: Path) -> None:
+	"""
+	Check that a Parquet file gives back the same Table of times.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	tmp_path
+		A temporary folder.
+	"""
+	times = build_accident_times()
+	accidents = ndp.Table.from_arrays({"hrmn": times})
+	path = tmp_path / "accidents.parquet"
+
+	accidents.to_parquet(path)
+	read_accidents = ndp.Table.from_parquet(path)
+
+	is_same_table = read_accidents.is_equal(ndp.Equality(other=accidents, types=ndp.TypeMatch.STRICT))
+	assert is_same_table
+
+
+def test_a_stata_file_holds_times_as_texts(tmp_path: Path) -> None:
+	"""
+	Check that a Stata file holds times as texts, a missing time being an empty text as for any Stata text.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	tmp_path
+		A temporary folder.
+	"""
+	times = build_accident_times()
+	accidents = ndp.Table.from_arrays({"hrmn": times})
+	path = tmp_path / "accidents.dta"
+
+	accidents.to_stata(path)
+	read_accidents = ndp.Table.from_stata(path)
+
+	hour_column = read_accidents.column("hrmn")
+	hour_texts = hour_column.to_list()
+	assert hour_texts == EXPECTED_STATA_TEXTS

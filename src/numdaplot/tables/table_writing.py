@@ -18,6 +18,7 @@ from numdaplot.tables.files.json_file import write_json_file
 from numdaplot.tables.files.json_write_options import JsonWriteOptions
 from numdaplot.tables.files.parquet_file import write_parquet_file
 from numdaplot.tables.files.stata_file import write_stata_file
+from numdaplot.tables.frames.time_columns import read_time_objects_frame, write_time_texts_frame
 from numdaplot.tables.table_data import TableData
 
 
@@ -37,7 +38,7 @@ class TableWriting(TableData):
 		"""
 		Write the Table in a CSV file, column names on the first row, without row numbers.
 
-		Missing values are written as empty values.
+		Missing values are written as empty values, and times of day as texts such as ``15:35:00``.
 
 		.. versionadded:: 0.1.0
 
@@ -79,7 +80,7 @@ class TableWriting(TableData):
 			options = CsvWriteOptions()
 
 		with FileAccessErrors(WRITE_OPERATION, file_path):
-			write_csv_file(self._frame, file_path, options)
+			write_csv_file(write_time_texts_frame(self._frame), file_path, options)
 
 	@checked_arguments
 	def to_json(
@@ -88,8 +89,8 @@ class TableWriting(TableData):
 		"""
 		Write the Table in a JSON file in UTF-8, one object per row.
 
-		Missing values are written as ``null``, dates and durations in the ISO 8601 format, and decimals with every
-		digit of their value unless ``options`` gives their number.
+		Missing values are written as ``null``, dates and durations in the ISO 8601 format, times of day as texts such
+		as ``15:35:00``, and decimals with every digit of their value unless ``options`` gives their number.
 
 		.. versionadded:: 0.1.0
 
@@ -129,7 +130,7 @@ class TableWriting(TableData):
 			options = JsonWriteOptions()
 
 		with FileAccessErrors(WRITE_OPERATION, file_path):
-			write_json_file(self._frame, file_path, options)
+			write_json_file(write_time_texts_frame(self._frame), file_path, options)
 
 	@checked_arguments
 	def to_excel(
@@ -138,7 +139,8 @@ class TableWriting(TableData):
 		"""
 		Write the Table in a sheet of an Excel file, column names on the first row.
 
-		Needs the ``excel`` extra: ``pip install numdaplot[excel]``.
+		Times of day are written as texts such as ``15:35:00``. Needs the ``excel`` extra:
+		``pip install numdaplot[excel]``.
 
 		.. versionadded:: 0.1.0
 
@@ -179,14 +181,15 @@ class TableWriting(TableData):
 			options = ExcelWriteOptions()
 
 		with FileAccessErrors(WRITE_OPERATION, file_path):
-			write_excel_file(self._frame, file_path, options)
+			write_excel_file(write_time_texts_frame(self._frame), file_path, options)
 
 	@checked_arguments
 	def to_parquet(self, path: FilePath, on_conflict: Conflict = Conflict.ERROR) -> None:
 		"""
 		Write the Table in a Parquet file, which keeps the type of each column.
 
-		Needs the ``parquet`` extra: ``pip install numdaplot[parquet]``.
+		Times of day are stored as Parquet times, read back as ``TIME``. Needs the ``parquet`` extra:
+		``pip install numdaplot[parquet]``.
 
 		.. versionadded:: 0.1.0
 
@@ -221,16 +224,16 @@ class TableWriting(TableData):
 		file_path = Path(path)
 		require_free_path(file_path, on_conflict)
 		with FileAccessErrors(WRITE_OPERATION, file_path):
-			write_parquet_file(self._frame, file_path)
+			write_parquet_file(read_time_objects_frame(self._frame), file_path)
 
 	@checked_arguments
 	def to_stata(self, path: FilePath, on_conflict: Conflict = Conflict.ERROR) -> None:
 		"""
 		Write the Table in a Stata file (``.dta``).
 
-		Stata stores integers and booleans holding missing values as decimals, and a missing text
-		as an empty text. Column names that Stata refuses, such as names with spaces, are changed
-		by pandas with a warning.
+		Stata stores integers and booleans holding missing values as decimals, a missing text as an empty text, and
+		times of day as texts such as ``15:35:00``, as it has no type for them. Column names that Stata refuses, such
+		as names with spaces, are changed by pandas with a warning.
 
 		.. versionadded:: 0.1.0
 
@@ -263,4 +266,4 @@ class TableWriting(TableData):
 		file_path = Path(path)
 		require_free_path(file_path, on_conflict)
 		with FileAccessErrors(WRITE_OPERATION, file_path):
-			write_stata_file(self._frame, file_path)
+			write_stata_file(write_time_texts_frame(self._frame), file_path)

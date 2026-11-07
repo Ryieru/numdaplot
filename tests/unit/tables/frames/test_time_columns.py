@@ -19,6 +19,7 @@ from numdaplot.tables.frames.time_columns import (
 	read_time_objects_frame,
 	store_time_column,
 	write_time_texts_column,
+	write_time_texts_frame,
 )
 
 TIME_COLUMN = pandas.Series(numpy.array([56100000000, "NaT"], dtype="timedelta64[us]"))
@@ -28,6 +29,7 @@ OBJECT_TIMES = pandas.Series([time(15, 35), numpy.nan], dtype=object)
 TIME_DTYPE_NAME = "timedelta64[us]"
 EXPECTED_MISSING = [False, True]
 EXPECTED_TEXTS = ["15:35:00", "NaT"]
+EXPECTED_HOUR_TEXTS = ["15:35:00", pandas.NA]
 MIXED_OBJECTS = pandas.Series(["a", float("nan"), pandas.NA], dtype=object)
 EXPECTED_OBJECTS = ["a", None, None]
 MICROSECOND_FRAME = pandas.DataFrame({"wait": pandas.Series(numpy.array([5], dtype="timedelta64[us]")), "count": [1]})
@@ -151,3 +153,19 @@ def test_write_time_texts_column_writes_times_and_nat() -> None:
 
 	texts = text_column.tolist()
 	assert texts == EXPECTED_TEXTS
+
+
+def test_write_time_texts_frame_writes_only_times_as_texts() -> None:
+	"""
+	Check that a column of times becomes texts, missing kept, and a column of durations stays.
+
+	.. versionadded:: 0.1.0
+	"""
+	text_frame = write_time_texts_frame(TIME_AND_WAIT)
+
+	hour_column = text_frame["hour"]
+	wait_column = text_frame["wait"]
+	hours = hour_column.tolist()
+	wait_dtype = str(wait_column.dtype)
+	assert hours == EXPECTED_HOUR_TEXTS
+	assert wait_dtype == NANOSECOND_DTYPE_NAME
