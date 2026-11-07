@@ -10,6 +10,8 @@ from typing import Any, Self
 import numpy.typing
 
 from numdaplot.arrays.array_data import ArrayData
+from numdaplot.arrays.creation.date_parts import DateParts
+from numdaplot.arrays.creation.date_parts_values import build_dates
 from numdaplot.arrays.creation.filled_values import build_filled_values
 from numdaplot.arrays.creation.list_conversion import convert_list
 from numdaplot.arrays.creation.normal import Normal
@@ -226,7 +228,6 @@ class ArrayCreation(ArrayData):
 		Self
 			A new Array of integers when the start and the step are integers, of decimals otherwise.
 
-
 		Raises
 		------
 		InvalidTypeError
@@ -240,6 +241,52 @@ class ArrayCreation(ArrayData):
 		"""
 		range_values = compute_range_values(sequence)
 		created_array = cls._create(range_values)
+
+		return created_array
+
+	@classmethod
+	@checked_arguments
+	def from_date_parts(cls, parts: DateParts) -> Self:
+		"""
+		Create an Array of dates from their year, their month and their day, such as three columns of a file.
+
+		.. versionadded:: 0.1.0
+
+		Parameters
+		----------
+		parts
+			The year, the month and the day of each date, Arrays of whole numbers of the same shape.
+
+		Returns
+		-------
+		Self
+			A new ``DATE`` Array of the shape of the parts. A date is missing where one of its parts is missing.
+
+		Raises
+		------
+		InvalidTypeError
+			When an argument is not of the type its annotation names.
+		ValueConversionError
+			At the first part that is not a whole number, such as the day 3.5, then at the first year, month and day
+			that form no date, such as the 31st of February, a month 13 or a year outside 1 to 9999.
+
+		Examples
+		--------
+		>>> import numdaplot as ndp
+		>>> accidents = ndp.Table.from_arrays(
+		... 	{
+		... 		"jour": ndp.Array.from_list([14, 25]),
+		... 		"mois": ndp.Array.from_list([7, 12]),
+		... 		"an": ndp.Array.from_list([2025, 2025]),
+		... 	}
+		... )
+		>>> years = accidents.column("an")
+		>>> parts = ndp.DateParts(year=years, month=accidents.column("mois"), day=accidents.column("jour"))
+		>>> ndp.Array.from_date_parts(parts)
+		Array(['2025-07-14', '2025-12-25'], dtype=DATE)
+		"""
+		dates = build_dates(parts)
+		created_array = cls._create(dates)
 
 		return created_array
 

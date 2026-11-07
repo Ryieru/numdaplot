@@ -12,10 +12,13 @@ and numdaplot follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 - `numdaplot.__version__` gives the version of the installed package.
 - `dir(numdaplot)` and the completion of notebooks show only the public names and `__version__`.
 - `Array`: values of one type in one or several dimensions, created with `Array.from_list`, `Array.from_numpy`,
-  `Array.filled`, `Array.from_range`, `Array.from_spacing` and `Array.random`; combined with `+`, `-`, `*`, `/`,
-  `//`, `%`, `**` and, for booleans, `&`, `|`, `~`; read with `Array.select`, `Array.check`, `Array.take`,
-  `Array.replace`, `Array.compute`, `Array.apply`, `Array.reshape`, `Array.transpose`, `Array.flatten`,
+  `Array.filled`, `Array.from_range`, `Array.from_spacing`, `Array.from_date_parts` and `Array.random`; combined with
+  `+`, `-`, `*`, `/`, `//`, `%`, `**` and, for booleans, `&`, `|`, `~`; read with `Array.select`, `Array.check`,
+  `Array.take`, `Array.replace`, `Array.compute`, `Array.apply`, `Array.reshape`, `Array.transpose`, `Array.flatten`,
   `Array.sort`, `Array.unique`, `Array.to_list`, `Array.to_value`, `Array.to_numpy` and `Array.is_equal`.
+- `Array.from_date_parts(DateParts(year, month, day))` builds a `DATE` Array from three Arrays of whole numbers, such
+  as the day, month and year columns of a file, a date being missing where a part is missing; `ValueConversionError`
+  names a part that is not whole or a year, month and day that form no date.
 - Array settings: `Shape`, `Spacing`, `ArraySorting`, `Replacement`, `Equality` and the `TypeMatch` enum.
 - Dates: arithmetic between dates, datetimes, durations and numbers on `Array`, time functions applied by
   `Array.apply` (`TimeFunction`, `DatePart`, `DatePeriod`, `DurationIn`, `ToDuration`, with the `DatePartUnit`,

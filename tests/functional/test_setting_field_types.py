@@ -17,6 +17,7 @@ import numdaplot as ndp
 
 CASE_ID = "{class_name}.{field_name}"
 SUM_CALCULATION = ndp.Calculation(column="a", function=ndp.Sum())
+ONE_PART = ndp.Array.from_list([1])
 REQUIRED_SETTINGS = dict[str, dict[str, object]](
 	{
 		"Aggregation": {"calculations": [SUM_CALCULATION]},
@@ -33,6 +34,7 @@ REQUIRED_SETTINGS = dict[str, dict[str, object]](
 		"CustomColor": {"code": "#ff8800"},
 		"CustomDateFormat": {"pattern": "%d"},
 		"DatePart": {"unit": ndp.DatePartUnit.MONTH},
+		"DateParts": {"year": ONE_PART, "month": ONE_PART, "day": ONE_PART},
 		"DatePeriod": {"unit": ndp.PeriodUnit.MONTH},
 		"DurationIn": {"unit": ndp.DurationUnit.DAY},
 		"Equal": {"value": 1},

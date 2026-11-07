@@ -5,6 +5,7 @@ Error raised when values cannot be stored in a type without losing information, 
 """
 
 from numdaplot.errors.numdaplot_error import NumdaplotError
+from numdaplot.errors.rejected_dates import RejectedDate, RejectedDatePart
 
 VALUE_CONVERSION_MESSAGE = (
 	"Cannot store {source_type_name} values{column_text} as {target_type_name} without losing information."
@@ -17,6 +18,14 @@ UNREADABLE_DATE_MESSAGE = (
 	"Cannot read the {source_type_name} value {rejected_value!r}{column_text} as {target_type_name} with the format "
 	"{date_format_name}. Give the format of the column with format=, using DateFormat or CustomDateFormat."
 )
+NOT_WHOLE_PART_MESSAGE = (
+	"Cannot use the {source_type_name} value {rejected_value.value!r} as a {rejected_value.part_name}: "
+	"date parts must be whole numbers."
+)
+IMPOSSIBLE_DATE_MESSAGE = (
+	"Cannot build a {target_type_name} from the year {rejected_value.year}, the month {rejected_value.month} and the "
+	"day {rejected_value.day}."
+)
 COLUMN_TEXT = " of the column {column_name!r}"
 NO_COLUMN_TEXT = ""
 
@@ -25,8 +34,8 @@ class ValueConversionError(NumdaplotError):
 	"""
 	Raised when values cannot be stored in a type without losing information, or texts cannot be read as dates.
 
-	For example, decimals stored as integers, a text stored as a number, or a text that does not follow the
-	date format. When the first rejected value is known, the message shows it.
+	For example, decimals stored as integers, a text stored as a number, a text that does not follow the date
+	format, or date parts that form no date. When the first rejected value is known, the message shows it.
 
 	.. versionadded:: 0.1.0
 
@@ -37,7 +46,8 @@ class ValueConversionError(NumdaplotError):
 	target_type_name
 		Name of the ``ndp.Type`` member they should be stored as, or ``JSON`` for a value JSON cannot write.
 	rejected_value
-		The first value that cannot be stored. When omitted, the message names no value.
+		The first value that cannot be stored. When omitted, the message names no value. A ``RejectedDatePart`` or
+		a ``RejectedDate``, with the year, the month and the day, names the date parts that form no date.
 	date_format_name
 		The name or the pattern of the date format a rejected text was read with. When omitted, or without
 		``rejected_value``, the message names no format.
@@ -126,13 +136,7 @@ class ValueConversionError(NumdaplotError):
 		>>> ndp.ValueConversionError("FLOAT64", "INT64").write_message("")
 		'Cannot store FLOAT64 values as INT64 without losing information.'
 		"""
-		message_format = VALUE_CONVERSION_MESSAGE
-		if self.rejected_value is not None:
-			message_format = REJECTED_VALUE_MESSAGE
-
-		if self.rejected_value is not None and self.date_format_name is not None:
-			message_format = UNREADABLE_DATE_MESSAGE
-
+		message_format = self.choose_message_format()
 		message = message_format.format(
 			source_type_name=self.source_type_name,
 			target_type_name=self.target_type_name,
@@ -142,6 +146,38 @@ class ValueConversionError(NumdaplotError):
 		)
 
 		return message
+
+	def choose_message_format(self) -> str:
+		"""
+		Return the message format fitting what is known of the rejected value.
+
+		.. versionadded:: 0.1.0
+
+		Returns
+		-------
+		str
+			The format for date parts, a text read with a date format, a known value, or values in general.
+
+		Examples
+		--------
+		>>> import numdaplot as ndp
+		>>> from numdaplot.errors.rejected_dates import RejectedDate
+		>>> print(ndp.ValueConversionError("INT64", "DATE", RejectedDate(2025, 2, 31)))
+		Cannot build a DATE from the year 2025, the month 2 and the day 31.
+		"""
+		if isinstance(self.rejected_value, RejectedDatePart):
+			return NOT_WHOLE_PART_MESSAGE
+
+		if isinstance(self.rejected_value, RejectedDate):
+			return IMPOSSIBLE_DATE_MESSAGE
+
+		if self.rejected_value is None:
+			return VALUE_CONVERSION_MESSAGE
+
+		if self.date_format_name is not None:
+			return UNREADABLE_DATE_MESSAGE
+
+		return REJECTED_VALUE_MESSAGE
 
 	def name_column(self, column_name: str) -> None:
 		"""

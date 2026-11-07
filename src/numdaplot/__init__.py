@@ -17,6 +17,7 @@ Array([30.], dtype=FLOAT64)
 
 from numdaplot.arrays.array import Array
 from numdaplot.arrays.array_sorting import ArraySorting
+from numdaplot.arrays.creation.date_parts import DateParts
 from numdaplot.arrays.creation.distribution import Distribution
 from numdaplot.arrays.creation.normal import Normal
 from numdaplot.arrays.creation.random_integers import RandomIntegers
@@ -285,6 +286,7 @@ __all__ = [
 	"DateFormat",
 	"DatePart",
 	"DatePartUnit",
+	"DateParts",
 	"DatePeriod",
 	"Deduplication",
 	"Description",

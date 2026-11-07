@@ -132,7 +132,7 @@ SECTION_TITLES = tuple(dict.fromkeys(section.title for section in SECTIONS))
 GROUP_ORDER = (None, *dict.fromkeys(section.group for section in SECTIONS if section.group is not None))
 MEMBER_SECTIONS = {
 	"Array": (
-		("Creation", ("from_list", "from_numpy", "filled", "from_range", "from_spacing", "random")),
+		("Creation", ("from_list", "from_numpy", "filled", "from_range", "from_spacing", "from_date_parts", "random")),
 		("Information", ("shape", "dtype")),
 		("Conversion and comparison", ("to_list", "to_value", "to_numpy", "is_equal")),
 		("Selection", ("select", "check", "take", "replace")),

@@ -5,6 +5,7 @@ Unit tests of ValueConversionError.
 """
 
 from numdaplot.errors.numdaplot_error import NumdaplotError
+from numdaplot.errors.rejected_dates import RejectedDate, RejectedDatePart
 from numdaplot.errors.value_conversion_error import ValueConversionError
 
 SOURCE_TYPE_NAME = "FLOAT64"
@@ -20,6 +21,11 @@ EXPECTED_UNREADABLE_DATE_MESSAGE = (
 	"Cannot read the TEXT value '31/12/2026' as DATETIME with the format YEAR_MONTH_DAY_TIME. "
 	"Give the format of the column with format=, using DateFormat or CustomDateFormat."
 )
+
+HALF_DAY = RejectedDatePart("day", 3.5)
+FEBRUARY_31 = RejectedDate(2025, 2, 31)
+EXPECTED_HALF_DAY_MESSAGE = "Cannot use the FLOAT64 value 3.5 as a day: date parts must be whole numbers."
+EXPECTED_FEBRUARY_31_MESSAGE = "Cannot build a DATE from the year 2025, the month 2 and the day 31."
 
 
 def test_value_conversion_error_is_a_numdaplot_error() -> None:
@@ -185,3 +191,27 @@ def test_name_column_keeps_the_first_name() -> None:
 	error.name_column("other")
 
 	assert error.column_name == "price"
+
+
+def test_value_conversion_error_names_a_date_part_that_is_not_whole() -> None:
+	"""
+	Check the message of the day 3.5.
+
+	.. versionadded:: 0.1.0
+	"""
+	error = ValueConversionError("FLOAT64", "DATE", HALF_DAY)
+
+	error_text = str(error)
+	assert error_text == EXPECTED_HALF_DAY_MESSAGE
+
+
+def test_value_conversion_error_names_parts_that_form_no_date() -> None:
+	"""
+	Check the message of the 31st of February.
+
+	.. versionadded:: 0.1.0
+	"""
+	error = ValueConversionError("INT64", "DATE", FEBRUARY_31)
+
+	error_text = str(error)
+	assert error_text == EXPECTED_FEBRUARY_31_MESSAGE
