@@ -26,7 +26,7 @@ from mkdocs.structure.files import Files
 import numdaplot
 
 RULES_MODULE = "numdaplot.rules.greater"
-FILES_MODULE = "numdaplot.tables.files.csv_options"
+FILES_MODULE = "numdaplot.tables.files.csv_read_options"
 UNKNOWN_MODULE = "numdaplot.reports.report"
 EXPECTED_FILE_GROUP = "File settings"
 TABLES_TITLE = "Tables"
@@ -36,7 +36,7 @@ RULE = PublicObject("Rule", "numdaplot.rules.rule.Rule", GREATER_SECTION)
 TABLE_SECTION = find_section("numdaplot.tables.table")
 TABLE = PublicObject("Table", "numdaplot.tables.table.Table", TABLE_SECTION)
 CSV_SECTION = find_section(FILES_MODULE)
-CSV_OPTIONS = PublicObject("CsvOptions", "numdaplot.tables.files.csv_options.CsvOptions", CSV_SECTION)
+CSV_OPTIONS = PublicObject("CsvReadOptions", "numdaplot.tables.files.csv_read_options.CsvReadOptions", CSV_SECTION)
 EXPECTED_GREATER_PATH = "api/rules/greater.md"
 EXPECTED_GREATER_PAGE = "::: numdaplot.rules.greater.Greater\n    options:\n      heading_level: 1\n"
 TABLE_SECTION_TITLE = "## Reading files { .api-section }"
@@ -52,7 +52,7 @@ EXPECTED_TABLES_NAV = [
 	{
 		"Tables": [
 			{"Table": "api/tables/table.md"},
-			{EXPECTED_FILE_GROUP: [{"CsvOptions": "api/tables/csv_options.md"}]},
+			{EXPECTED_FILE_GROUP: [{"CsvReadOptions": "api/tables/csv_read_options.md"}]},
 		]
 	}
 ]
@@ -157,7 +157,7 @@ def test_build_member_block_shows_the_type_of_an_attribute() -> None:
 
 def test_build_api_nav_groups_settings_inside_their_section() -> None:
 	"""
-	Check that CsvOptions sits in the File settings group of Tables, after Table.
+	Check that CsvReadOptions sits in the File settings group of Tables, after Table.
 
 	.. versionadded:: 0.1.0
 	"""
@@ -167,7 +167,7 @@ def test_build_api_nav_groups_settings_inside_their_section() -> None:
 		{
 			"Tables": [
 				{"Table": "api/tables/table.md"},
-				{EXPECTED_FILE_GROUP: [{"CsvOptions": "api/tables/csv_options.md"}]},
+				{EXPECTED_FILE_GROUP: [{"CsvReadOptions": "api/tables/csv_read_options.md"}]},
 			]
 		},
 		EXPECTED_VALUE_TYPES_SECTION,

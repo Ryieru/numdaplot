@@ -11,7 +11,7 @@ INVALID_SEPARATOR_MESSAGE = "Expected a separator of exactly one character, got 
 
 class InvalidSeparatorError(NumdaplotError):
 	"""
-	Raised when the separator of ``CsvOptions`` is empty or longer than one character.
+	Raised when the separator of ``CsvReadOptions`` or ``CsvWriteOptions`` is empty or longer than one character.
 
 	.. versionadded:: 0.1.0
 
@@ -29,7 +29,7 @@ class InvalidSeparatorError(NumdaplotError):
 	--------
 	>>> import numdaplot as ndp
 	>>> try:
-	... 	ndp.CsvOptions(separator=";;")
+	... 	ndp.CsvReadOptions(separator=";;")
 	... except ndp.InvalidSeparatorError as error:
 	... 	print(error)
 	Expected a separator of exactly one character, got ';;'.

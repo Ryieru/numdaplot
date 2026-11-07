@@ -8,19 +8,19 @@ from pathlib import Path
 from typing import Self
 
 from numdaplot.settings.argument_types import checked_arguments
-from numdaplot.tables.files.csv_file import read_csv_file, require_read_options
-from numdaplot.tables.files.csv_options import CsvOptions
+from numdaplot.tables.files.csv_file import read_csv_file
+from numdaplot.tables.files.csv_read_options import CsvReadOptions
 from numdaplot.tables.files.excel_file import read_excel_file
-from numdaplot.tables.files.excel_options import ExcelOptions
+from numdaplot.tables.files.excel_read_options import ExcelReadOptions
 from numdaplot.tables.files.file_access import READ_OPERATION, FileAccessErrors
 from numdaplot.tables.files.file_paths import FilePath, require_existing_file
-from numdaplot.tables.files.json_file import read_json_file, require_json_read_options
-from numdaplot.tables.files.json_options import JsonOptions
+from numdaplot.tables.files.json_file import read_json_file
+from numdaplot.tables.files.json_read_options import JsonReadOptions
 from numdaplot.tables.files.parquet_file import read_parquet_file
 from numdaplot.tables.files.sas_file import read_sas_file, read_xpt_file
-from numdaplot.tables.files.sas_options import SasOptions
+from numdaplot.tables.files.sas_read_options import SasReadOptions
 from numdaplot.tables.files.stata_file import read_stata_file
-from numdaplot.tables.files.xpt_options import XptOptions
+from numdaplot.tables.files.xpt_read_options import XptReadOptions
 from numdaplot.tables.table_data import TableData
 
 
@@ -37,7 +37,7 @@ class TableReading(TableData):
 
 	@classmethod
 	@checked_arguments
-	def from_csv(cls, path: FilePath, options: CsvOptions | None = None) -> Self:
+	def from_csv(cls, path: FilePath, options: CsvReadOptions | None = None) -> Self:
 		r"""
 		Return a Table read from a CSV file whose first row holds the column names.
 
@@ -62,8 +62,6 @@ class TableReading(TableData):
 		------
 		InvalidTypeError
 			When an argument is not of the type its annotation names.
-		RefusedSettingError
-			When ``options`` has ``decimals``, which only applies to ``to_csv``.
 		FileNotFoundError
 			When there is no file at the path.
 		FileAccessError
@@ -78,16 +76,15 @@ class TableReading(TableData):
 		>>> import numdaplot as ndp
 		>>> path = Path(tempfile.mkdtemp()) / "sales.csv"
 		>>> _ = path.write_text("city;price\nParis;1.5\nLyon;\n")
-		>>> ndp.Table.from_csv(path, ndp.CsvOptions(separator=";"))
+		>>> ndp.Table.from_csv(path, ndp.CsvReadOptions(separator=";"))
 		    city   price
 		    TEXT FLOAT64
 		0  Paris     1.5
 		1   Lyon     NaN
 		"""
 		if options is None:
-			options = CsvOptions()
+			options = CsvReadOptions()
 
-		require_read_options(options)
 		file_path = Path(path)
 		require_existing_file(file_path)
 		with FileAccessErrors(READ_OPERATION, file_path):
@@ -99,7 +96,7 @@ class TableReading(TableData):
 
 	@classmethod
 	@checked_arguments
-	def from_json(cls, path: FilePath, options: JsonOptions | None = None) -> Self:
+	def from_json(cls, path: FilePath, options: JsonReadOptions | None = None) -> Self:
 		r"""
 		Return a Table read from a JSON file in UTF-8 holding one object per row.
 
@@ -127,8 +124,6 @@ class TableReading(TableData):
 			When there is no file at the path.
 		FileAccessError
 			When the file system refuses the file, for a missing permission for example.
-		RefusedSettingError
-			When ``options`` gives ``decimals``, which only applies to the writing.
 		InvalidColumnNameError
 			When a column name is empty.
 
@@ -139,7 +134,7 @@ class TableReading(TableData):
 		>>> import numdaplot as ndp
 		>>> path = Path(tempfile.mkdtemp()) / "sales.jsonl"
 		>>> _ = path.write_text('{"city": "Paris", "count": 2}\n{"city": "Lyon", "count": null}\n')
-		>>> ndp.Table.from_json(path, ndp.JsonOptions(layout=ndp.JsonLayout.LINES))
+		>>> ndp.Table.from_json(path, ndp.JsonReadOptions(layout=ndp.JsonLayout.LINES))
 		    city count
 		    TEXT INT64
 		0  Paris     2
@@ -148,9 +143,8 @@ class TableReading(TableData):
 		file_path = Path(path)
 		require_existing_file(file_path)
 		if options is None:
-			options = JsonOptions()
+			options = JsonReadOptions()
 
-		require_json_read_options(options)
 		with FileAccessErrors(READ_OPERATION, file_path):
 			frame = read_json_file(file_path, options)
 
@@ -160,7 +154,7 @@ class TableReading(TableData):
 
 	@classmethod
 	@checked_arguments
-	def from_excel(cls, path: FilePath, options: ExcelOptions | None = None) -> Self:
+	def from_excel(cls, path: FilePath, options: ExcelReadOptions | None = None) -> Self:
 		"""
 		Return a Table read from a sheet of an Excel file whose first row holds the column names.
 
@@ -208,7 +202,7 @@ class TableReading(TableData):
 		file_path = Path(path)
 		require_existing_file(file_path)
 		if options is None:
-			options = ExcelOptions()
+			options = ExcelReadOptions()
 
 		with FileAccessErrors(READ_OPERATION, file_path):
 			frame = read_excel_file(file_path, options)
@@ -319,7 +313,7 @@ class TableReading(TableData):
 
 	@classmethod
 	@checked_arguments
-	def from_sas(cls, path: FilePath, options: SasOptions | None = None) -> Self:
+	def from_sas(cls, path: FilePath, options: SasReadOptions | None = None) -> Self:
 		"""
 		Return a Table read from a SAS data file (``.sas7bdat``). numdaplot does not write this format.
 
@@ -366,7 +360,7 @@ class TableReading(TableData):
 		file_path = Path(path)
 		require_existing_file(file_path)
 		if options is None:
-			options = SasOptions()
+			options = SasReadOptions()
 
 		with FileAccessErrors(READ_OPERATION, file_path):
 			frame = read_sas_file(file_path, options)
@@ -377,7 +371,7 @@ class TableReading(TableData):
 
 	@classmethod
 	@checked_arguments
-	def from_xpt(cls, path: FilePath, options: XptOptions | None = None) -> Self:
+	def from_xpt(cls, path: FilePath, options: XptReadOptions | None = None) -> Self:
 		"""
 		Return a Table read from a SAS transport file (``.xpt``). numdaplot does not write this format.
 
@@ -422,7 +416,7 @@ class TableReading(TableData):
 		file_path = Path(path)
 		require_existing_file(file_path)
 		if options is None:
-			options = XptOptions()
+			options = XptReadOptions()
 
 		with FileAccessErrors(READ_OPERATION, file_path):
 			frame = read_xpt_file(file_path, options)

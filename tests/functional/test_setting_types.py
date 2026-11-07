@@ -158,7 +158,7 @@ def test_an_excel_sheet_name_with_a_slash_is_refused() -> None:
 	.. versionadded:: 0.1.0
 	"""
 	with pytest.raises(ndp.InvalidSheetNameError):
-		ndp.ExcelOptions(sheet=REFUSED_SHEET_NAME)
+		ndp.ExcelReadOptions(sheet=REFUSED_SHEET_NAME)
 
 
 def test_a_shape_written_as_a_tuple_names_the_list_to_write() -> None:

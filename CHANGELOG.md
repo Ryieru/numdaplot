@@ -70,7 +70,10 @@ and numdaplot follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
   creation methods and `Plot.add_*`, except `Plot.pie`, their default chart.
 - `Table.convert` converts booleans to numbers, 1 for `True` and 0 for `False`, and numbers to booleans, only 0 and
   1 by default or every number but 0 as `True` with `BooleanRule.NONZERO_TRUE`.
-- Table settings: `CsvOptions`, `JsonOptions`, `ExcelOptions`, `SasOptions`, `XptOptions`, `Filter`, `Condition`,
+- File settings, separate for reading and writing so that each setting only exists where it applies:
+  `CsvReadOptions`, `CsvWriteOptions`, `JsonReadOptions`, `JsonWriteOptions`, `ExcelReadOptions`,
+  `ExcelWriteOptions`, `SasReadOptions` and `XptReadOptions`.
+- Table settings: `Filter`, `Condition`,
   `Aggregation`, `Calculation`, `PivotTable`, `Description`, `ColumnChoice`, `Renaming`, `NameChange`, `Conversion`, `NewColumn`,
   `Sorting`, `SortKey`, `Deduplication`, `Preview`, `MissingCount`, `MissingDrop`, `MissingRatio`, and the `BooleanRule`, `Encoding`,
   `JsonLayout`, `Conflict`, `FilterMode`, `ColumnMatch`, `ColumnMode`, `Keep`, `Side`, `ShownColumns`, `MissingMode`,

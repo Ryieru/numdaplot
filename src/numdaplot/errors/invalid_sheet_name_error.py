@@ -11,7 +11,9 @@ INVALID_SHEET_NAME_MESSAGE = "Expected a sheet name of 1 to 31 characters withou
 
 class InvalidSheetNameError(NumdaplotError):
 	r"""
-	Raised when the sheet of ``ExcelOptions`` is empty, longer than 31 characters, or holds ``[ ] : * ? / \``.
+	Raised when Excel would refuse the sheet name of ``ExcelReadOptions`` or ``ExcelWriteOptions``.
+
+	The name is empty, longer than 31 characters, or holds ``[ ] : * ? / \``.
 
 	.. versionadded:: 0.1.0
 
@@ -29,7 +31,7 @@ class InvalidSheetNameError(NumdaplotError):
 	--------
 	>>> import numdaplot as ndp
 	>>> try:
-	... 	ndp.ExcelOptions(sheet="Sales/2026")
+	... 	ndp.ExcelWriteOptions(sheet="Sales/2026")
 	... except ndp.InvalidSheetNameError as error:
 	... 	print(error)
 	Expected a sheet name of 1 to 31 characters without [ ] : * ? / \, got 'Sales/2026'.

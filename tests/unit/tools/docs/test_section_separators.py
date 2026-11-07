@@ -10,8 +10,8 @@ EN_DASH = "\u2013"
 SECTION_HTML = "<b><code>path</code></b> (<code>FilePath</code>)\n          " + EN_DASH + "\n<p>The path.</p>"
 EXPECTED_SECTION_HTML = "<b><code>path</code></b> (<code>FilePath</code>)\n<p>The path.</p>"
 HTML_WITHOUT_DASH = "<p>A text - with a hyphen.</p>"
-SPACED_TYPE_HTML = "( <code>CsvOptions</code>, default:\n <code>None</code>\n)"
-EXPECTED_TYPE_HTML = "(<code>CsvOptions</code>, default:\n <code>None</code>)"
+SPACED_TYPE_HTML = "( <code>CsvReadOptions</code>, default:\n <code>None</code>\n)"
+EXPECTED_TYPE_HTML = "(<code>CsvReadOptions</code>, default:\n <code>None</code>)"
 PUNCTUATION_HTML = "(a, )"
 
 

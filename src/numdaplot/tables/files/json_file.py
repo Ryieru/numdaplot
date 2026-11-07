@@ -10,17 +10,15 @@ from typing import Any, cast
 
 import pandas
 
-from numdaplot.errors.refused_setting_error import RefusedSettingError
 from numdaplot.tables.files.json_decimals import has_decimal_column, write_exact_objects
 from numdaplot.tables.files.json_layout import JsonLayout
-from numdaplot.tables.files.json_options import JsonOptions
+from numdaplot.tables.files.json_read_options import JsonReadOptions
+from numdaplot.tables.files.json_write_options import JsonWriteOptions
 
 JSON_ENCODING = "utf-8"
 RECORDS_ORIENTATION = "records"
 ISO_DATE_FORMAT = "iso"
 PYTHON_OBJECT_DTYPE = object
-DECIMALS_SETTING = "decimals"
-FROM_JSON_NAME = "Table.from_json"
 WRITE_MODE = "w"
 LINE_END = "\n"
 OBJECT_SEPARATOR = ","
@@ -29,37 +27,7 @@ UNCHANGED_NEWLINES = ""
 EMPTY_LINES_TEXT = ""
 
 
-def require_json_read_options(options: JsonOptions) -> None:
-	"""
-	Check that the settings of a JSON file apply to its reading.
-
-	.. versionadded:: 0.1.0
-
-	Parameters
-	----------
-	options
-		The settings of the file.
-
-	Raises
-	------
-	RefusedSettingError
-		When ``decimals`` is given, which only applies to the writing.
-
-	Examples
-	--------
-	>>> import numdaplot as ndp
-	>>> from numdaplot.tables.files.json_file import require_json_read_options
-	>>> try:
-	... 	require_json_read_options(ndp.JsonOptions(decimals=2))
-	... except ndp.RefusedSettingError as error:
-	... 	print(error)
-	Table.from_json does not accept decimals.
-	"""
-	if options.decimals is not None:
-		raise RefusedSettingError(DECIMALS_SETTING, FROM_JSON_NAME)
-
-
-def read_json_file(path: Path, options: JsonOptions) -> pandas.DataFrame:
+def read_json_file(path: Path, options: JsonReadOptions) -> pandas.DataFrame:
 	"""
 	Return the columns of a JSON file holding one object per row.
 
@@ -88,7 +56,7 @@ def read_json_file(path: Path, options: JsonOptions) -> pandas.DataFrame:
 	>>> from numdaplot.tables.files.json_file import read_json_file
 	>>> path = Path(tempfile.mkdtemp()) / "sales.json"
 	>>> _ = path.write_text('[{"city": "Paris", "count": 2}]')
-	>>> read_json_file(path, ndp.JsonOptions())
+	>>> read_json_file(path, ndp.JsonReadOptions())
 	    city count
 	0  Paris     2
 	"""
@@ -140,7 +108,7 @@ def read_json_lines(content: str) -> list[Any]:
 	return records
 
 
-def write_json_file(frame: pandas.DataFrame, path: Path, options: JsonOptions) -> None:
+def write_json_file(frame: pandas.DataFrame, path: Path, options: JsonWriteOptions) -> None:
 	"""
 	Write the columns of a Table in a JSON file, one object per row, in UTF-8.
 
@@ -171,7 +139,7 @@ def write_json_file(frame: pandas.DataFrame, path: Path, options: JsonOptions) -
 	>>> import numdaplot as ndp
 	>>> from numdaplot.tables.files.json_file import write_json_file
 	>>> path = Path(tempfile.mkdtemp()) / "sales.json"
-	>>> write_json_file(pandas.DataFrame({"price": [1.5]}), path, ndp.JsonOptions())
+	>>> write_json_file(pandas.DataFrame({"price": [1.5]}), path, ndp.JsonWriteOptions())
 	>>> path.read_text()
 	'[{"price":1.5}]'
 	"""

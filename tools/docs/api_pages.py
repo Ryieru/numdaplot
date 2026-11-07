@@ -198,7 +198,7 @@ def find_section(module_name: str) -> Section:
 	Examples
 	--------
 	>>> from api_pages import find_section
-	>>> find_section("numdaplot.tables.files.csv_options").group
+	>>> find_section("numdaplot.tables.files.csv_read_options").group
 	'File settings'
 	"""
 	for section in SECTIONS:

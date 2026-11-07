@@ -10,7 +10,8 @@ from typing import Any, cast
 import pandas
 
 from numdaplot.tables.columns.column_names import require_column_names
-from numdaplot.tables.files.excel_options import ExcelOptions
+from numdaplot.tables.files.excel_read_options import ExcelReadOptions
+from numdaplot.tables.files.excel_write_options import ExcelWriteOptions
 from numdaplot.tables.files.optional_package import require_package
 from numdaplot.tables.files.pandas_backend import NULLABLE_DTYPE_BACKEND
 from numdaplot.tables.frames.time_zones import require_no_time_zone
@@ -23,7 +24,7 @@ HEADER_ROW_COUNT = 1
 EXCEL_OPERATION = "An Excel file"
 
 
-def read_excel_file(path: Path, options: ExcelOptions) -> pandas.DataFrame:
+def read_excel_file(path: Path, options: ExcelReadOptions) -> pandas.DataFrame:
 	"""
 	Return the columns of a sheet of an Excel file whose first row holds the column names.
 
@@ -61,7 +62,7 @@ def read_excel_file(path: Path, options: ExcelOptions) -> pandas.DataFrame:
 	>>> from numdaplot.tables.files.excel_file import read_excel_file
 	>>> path = Path(tempfile.mkdtemp()) / "sales.xlsx"
 	>>> pandas.DataFrame({"price": [1.5]}).to_excel(path, index=False)
-	>>> read_excel_file(path, ndp.ExcelOptions())
+	>>> read_excel_file(path, ndp.ExcelReadOptions())
 	   price
 	0    1.5
 	"""
@@ -84,7 +85,7 @@ def read_excel_file(path: Path, options: ExcelOptions) -> pandas.DataFrame:
 	return frame
 
 
-def find_read_sheet(options: ExcelOptions) -> str | int:
+def find_read_sheet(options: ExcelReadOptions) -> str | int:
 	"""
 	Return the sheet pandas reads: its name, or the position of the first sheet.
 
@@ -104,7 +105,7 @@ def find_read_sheet(options: ExcelOptions) -> str | int:
 	--------
 	>>> import numdaplot as ndp
 	>>> from numdaplot.tables.files.excel_file import find_read_sheet
-	>>> find_read_sheet(ndp.ExcelOptions())
+	>>> find_read_sheet(ndp.ExcelReadOptions())
 	0
 	"""
 	if options.sheet is None:
@@ -113,7 +114,7 @@ def find_read_sheet(options: ExcelOptions) -> str | int:
 	return options.sheet
 
 
-def write_excel_file(frame: pandas.DataFrame, path: Path, options: ExcelOptions) -> None:
+def write_excel_file(frame: pandas.DataFrame, path: Path, options: ExcelWriteOptions) -> None:
 	"""
 	Write the columns of a Table in a sheet of an Excel file, column names on the first row.
 
@@ -143,7 +144,7 @@ def write_excel_file(frame: pandas.DataFrame, path: Path, options: ExcelOptions)
 	>>> import numdaplot as ndp
 	>>> from numdaplot.tables.files.excel_file import write_excel_file
 	>>> path = Path(tempfile.mkdtemp()) / "sales.xlsx"
-	>>> write_excel_file(pandas.DataFrame({"price": [1.5]}), path, ndp.ExcelOptions(sheet="Sales"))
+	>>> write_excel_file(pandas.DataFrame({"price": [1.5]}), path, ndp.ExcelWriteOptions(sheet="Sales"))
 	>>> pandas.ExcelFile(path).sheet_names
 	['Sales']
 	"""

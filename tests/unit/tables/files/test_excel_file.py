@@ -15,7 +15,8 @@ from numdaplot.errors.missing_dependency_error import MissingDependencyError
 from numdaplot.errors.time_zone_mismatch_error import TimeZoneMismatchError
 from numdaplot.tables.files import excel_file
 from numdaplot.tables.files.excel_file import find_read_sheet, read_excel_file, write_excel_file
-from numdaplot.tables.files.excel_options import ExcelOptions
+from numdaplot.tables.files.excel_read_options import ExcelReadOptions
+from numdaplot.tables.files.excel_write_options import ExcelWriteOptions
 
 FILE_NAME = "sales.xlsx"
 SHEET_NAME = "Sales"
@@ -68,9 +69,9 @@ def test_read_excel_file_reads_the_first_sheet_by_default(tmp_path: Path) -> Non
 	"""
 	path = tmp_path / FILE_NAME
 	frame = pandas.DataFrame(PRICES)
-	write_excel_file(frame, path, ExcelOptions())
+	write_excel_file(frame, path, ExcelWriteOptions())
 
-	read_frame = read_excel_file(path, ExcelOptions())
+	read_frame = read_excel_file(path, ExcelReadOptions())
 
 	price_column = read_frame["price"]
 	prices = price_column.tolist()
@@ -90,8 +91,9 @@ def test_read_excel_file_reads_a_named_sheet(tmp_path: Path) -> None:
 	"""
 	path = tmp_path / FILE_NAME
 	cost_frame = pandas.DataFrame(COSTS)
-	options = ExcelOptions(sheet=OTHER_SHEET_NAME)
-	write_excel_file(cost_frame, path, options)
+	write_options = ExcelWriteOptions(sheet=OTHER_SHEET_NAME)
+	options = ExcelReadOptions(sheet=OTHER_SHEET_NAME)
+	write_excel_file(cost_frame, path, write_options)
 
 	read_frame = read_excel_file(path, options)
 
@@ -113,10 +115,10 @@ def test_read_excel_file_rejects_a_number_as_column_name(tmp_path: Path) -> None
 	"""
 	path = tmp_path / FILE_NAME
 	frame = pandas.DataFrame(NUMBER_HEADER)
-	write_excel_file(frame, path, ExcelOptions())
+	write_excel_file(frame, path, ExcelWriteOptions())
 
 	with pytest.raises(InvalidColumnNameError):
-		read_excel_file(path, ExcelOptions())
+		read_excel_file(path, ExcelReadOptions())
 
 
 def test_read_excel_file_rejects_a_repeated_column_name(tmp_path: Path) -> None:
@@ -133,10 +135,10 @@ def test_read_excel_file_rejects_a_repeated_column_name(tmp_path: Path) -> None:
 	path = tmp_path / FILE_NAME
 	frame = pandas.DataFrame(PRICES)
 	repeated_frame = pandas.concat([frame, frame], axis="columns")
-	write_excel_file(repeated_frame, path, ExcelOptions())
+	write_excel_file(repeated_frame, path, ExcelWriteOptions())
 
 	with pytest.raises(DuplicateColumnError):
-		read_excel_file(path, ExcelOptions())
+		read_excel_file(path, ExcelReadOptions())
 
 
 def test_read_excel_file_gives_no_column_for_an_empty_sheet(tmp_path: Path) -> None:
@@ -152,9 +154,9 @@ def test_read_excel_file_gives_no_column_for_an_empty_sheet(tmp_path: Path) -> N
 	"""
 	path = tmp_path / FILE_NAME
 	frame = pandas.DataFrame(EMPTY_FRAME)
-	write_excel_file(frame, path, ExcelOptions())
+	write_excel_file(frame, path, ExcelWriteOptions())
 
-	read_frame = read_excel_file(path, ExcelOptions())
+	read_frame = read_excel_file(path, ExcelReadOptions())
 
 	assert read_frame.empty
 
@@ -176,7 +178,7 @@ def test_read_excel_file_names_the_missing_extra(monkeypatch: pytest.MonkeyPatch
 	path = tmp_path / FILE_NAME
 
 	with pytest.raises(MissingDependencyError):
-		read_excel_file(path, ExcelOptions())
+		read_excel_file(path, ExcelReadOptions())
 
 
 def test_find_read_sheet_gives_the_first_sheet_without_name() -> None:
@@ -185,7 +187,7 @@ def test_find_read_sheet_gives_the_first_sheet_without_name() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	sheet = find_read_sheet(ExcelOptions())
+	sheet = find_read_sheet(ExcelReadOptions())
 
 	assert sheet == FIRST_SHEET
 
@@ -196,7 +198,7 @@ def test_find_read_sheet_gives_the_named_sheet() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	options = ExcelOptions(sheet=SHEET_NAME)
+	options = ExcelReadOptions(sheet=SHEET_NAME)
 
 	sheet = find_read_sheet(options)
 
@@ -217,7 +219,7 @@ def test_write_excel_file_names_the_sheet_sheet1_by_default(tmp_path: Path) -> N
 	path = tmp_path / FILE_NAME
 	frame = pandas.DataFrame(PRICES)
 
-	write_excel_file(frame, path, ExcelOptions())
+	write_excel_file(frame, path, ExcelWriteOptions())
 
 	excel_book = pandas.ExcelFile(path)
 	assert excel_book.sheet_names == DEFAULT_SHEET_NAMES
@@ -241,7 +243,7 @@ def test_write_excel_file_names_the_missing_extra(monkeypatch: pytest.MonkeyPatc
 	frame = pandas.DataFrame(PRICES)
 
 	with pytest.raises(MissingDependencyError):
-		write_excel_file(frame, path, ExcelOptions())
+		write_excel_file(frame, path, ExcelWriteOptions())
 
 
 def test_write_excel_file_rejects_a_datetime_column_with_a_time_zone(tmp_path: Path) -> None:
@@ -259,4 +261,4 @@ def test_write_excel_file_rejects_a_datetime_column_with_a_time_zone(tmp_path: P
 	time_frame = pandas.DataFrame({"time": PARIS_TIMES})
 
 	with pytest.raises(TimeZoneMismatchError):
-		write_excel_file(time_frame, path, ExcelOptions())
+		write_excel_file(time_frame, path, ExcelWriteOptions())

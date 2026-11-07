@@ -13,11 +13,11 @@ import pytest
 
 from numdaplot.errors.file_not_found_error import FileNotFoundError
 from numdaplot.tables import table_reading
-from numdaplot.tables.files.csv_options import CsvOptions
-from numdaplot.tables.files.excel_options import ExcelOptions
-from numdaplot.tables.files.json_options import JsonOptions
-from numdaplot.tables.files.sas_options import SasOptions
-from numdaplot.tables.files.xpt_options import XptOptions
+from numdaplot.tables.files.csv_read_options import CsvReadOptions
+from numdaplot.tables.files.excel_read_options import ExcelReadOptions
+from numdaplot.tables.files.json_read_options import JsonReadOptions
+from numdaplot.tables.files.sas_read_options import SasReadOptions
+from numdaplot.tables.files.xpt_read_options import XptReadOptions
 from numdaplot.tables.table_reading import TableReading
 
 FILE_NAME = "sales.data"
@@ -55,11 +55,11 @@ class ReadingCase:
 
 
 READERS_WITH_OPTIONS = [
-	ReadingCase(CSV_READER_NAME, TableReading.from_csv, CsvOptions()),
-	ReadingCase("read_json_file", TableReading.from_json, JsonOptions()),
-	ReadingCase("read_excel_file", TableReading.from_excel, ExcelOptions()),
-	ReadingCase("read_sas_file", TableReading.from_sas, SasOptions()),
-	ReadingCase("read_xpt_file", TableReading.from_xpt, XptOptions()),
+	ReadingCase(CSV_READER_NAME, TableReading.from_csv, CsvReadOptions()),
+	ReadingCase("read_json_file", TableReading.from_json, JsonReadOptions()),
+	ReadingCase("read_excel_file", TableReading.from_excel, ExcelReadOptions()),
+	ReadingCase("read_sas_file", TableReading.from_sas, SasReadOptions()),
+	ReadingCase("read_xpt_file", TableReading.from_xpt, XptReadOptions()),
 ]
 
 
@@ -206,7 +206,7 @@ def test_reading_passes_the_given_options(monkeypatch: pytest.MonkeyPatch, tmp_p
 	recorder = ReadRecorder()
 	monkeypatch.setattr(table_reading, CSV_READER_NAME, recorder)
 	path = write_file(tmp_path)
-	options = CsvOptions(separator=SEMICOLON)
+	options = CsvReadOptions(separator=SEMICOLON)
 
 	TableReading.from_csv(path, options)
 

@@ -25,9 +25,9 @@ INFINITE_MESSAGE = "Cannot store the FLOAT64 value inf of the column 'price' as 
 NEGATIVE_INFINITE_MESSAGE = (
 	"Cannot store the FLOAT64 value -inf of the column 'price' as JSON without losing information."
 )
-READ_REFUSAL = "Table.from_json does not accept decimals."
-LINES_OPTIONS = ndp.JsonOptions(layout=ndp.JsonLayout.LINES)
-ROUNDED_OPTIONS = ndp.JsonOptions(decimals=2)
+LINES_OPTIONS = ndp.JsonWriteOptions(layout=ndp.JsonLayout.LINES)
+LINES_READ_OPTIONS = ndp.JsonReadOptions(layout=ndp.JsonLayout.LINES)
+ROUNDED_OPTIONS = ndp.JsonWriteOptions(decimals=2)
 
 
 def build_prices(values: list[float | None], dtype: ndp.Type | None = None) -> ndp.Table:
@@ -54,7 +54,7 @@ def build_prices(values: list[float | None], dtype: ndp.Type | None = None) -> n
 	return table
 
 
-def write_text(table: ndp.Table, tmp_path: Path, options: ndp.JsonOptions | None = None) -> str:
+def write_text(table: ndp.Table, tmp_path: Path, options: ndp.JsonWriteOptions | None = None) -> str:
 	"""
 	Return the text of a JSON file written from a Table.
 
@@ -189,22 +189,29 @@ def test_one_object_per_line_ends_each_line(tmp_path: Path) -> None:
 	assert file_text == '{"price":1.5}\n{"price":2.5}\n'
 
 
-@pytest.mark.parametrize("options", [None, LINES_OPTIONS])
-def test_a_table_of_decimals_without_row_gives_a_file_without_row(
-	tmp_path: Path, options: ndp.JsonOptions | None
-) -> None:
+@pytest.mark.parametrize("layout", [ndp.JsonLayout.RECORDS, ndp.JsonLayout.LINES])
+def test_a_table_of_decimals_without_row_gives_a_file_without_row(tmp_path: Path, layout: ndp.JsonLayout) -> None:
 	"""
 	Check that a file without row can be read again.
 
 	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	tmp_path
+		A temporary folder.
+	layout
+		The layout of the rows, written and read.
 	"""
 	prices = ndp.Array.from_list([], dtype=ndp.Type.FLOAT64)
 	table = ndp.Table.from_arrays({"price": prices})
 	path = tmp_path / FILE_NAME
+	write_options = ndp.JsonWriteOptions(layout=layout)
+	read_options = ndp.JsonReadOptions(layout=layout)
 
-	table.to_json(path, options)
+	table.to_json(path, write_options)
 
-	read_table = ndp.Table.from_json(path, options)
+	read_table = ndp.Table.from_json(path, read_options)
 	assert read_table.column_names == []
 
 
@@ -276,7 +283,7 @@ def test_no_decimal_writes_whole_numbers(tmp_path: Path) -> None:
 	.. versionadded:: 0.1.0
 	"""
 	table = build_prices([2.5, 3.6])
-	options = ndp.JsonOptions(decimals=0)
+	options = ndp.JsonWriteOptions(decimals=0)
 
 	file_text = write_text(table, tmp_path, options)
 
@@ -303,20 +310,4 @@ def test_negative_decimals_are_refused() -> None:
 	.. versionadded:: 0.1.0
 	"""
 	with pytest.raises(ndp.InvalidCountError):
-		ndp.JsonOptions(decimals=-1)
-
-
-def test_reading_refuses_decimals(tmp_path: Path) -> None:
-	"""
-	Check that ``decimals`` only applies to the writing.
-
-	.. versionadded:: 0.1.0
-	"""
-	path = tmp_path / FILE_NAME
-	build_prices([1.5]).to_json(path)
-
-	with pytest.raises(ndp.RefusedSettingError) as error_info:
-		ndp.Table.from_json(path, ROUNDED_OPTIONS)
-
-	error_text = str(error_info.value)
-	assert error_text == READ_REFUSAL
+		ndp.JsonWriteOptions(decimals=-1)

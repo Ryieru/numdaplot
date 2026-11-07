@@ -14,8 +14,8 @@ import pytest
 
 from numdaplot.tables.files.encoding import Encoding
 from numdaplot.tables.files.sas_file import read_sas_file, read_sas_format, read_xpt_file
-from numdaplot.tables.files.sas_options import SasOptions
-from numdaplot.tables.files.xpt_options import XptOptions
+from numdaplot.tables.files.sas_read_options import SasReadOptions
+from numdaplot.tables.files.xpt_read_options import XptReadOptions
 
 FILE_PATH = Path("sales.sas7bdat")
 READ_SAS_NAME = "read_sas"
@@ -78,7 +78,7 @@ def test_read_sas_file_reads_the_sas_data_format(monkeypatch: pytest.MonkeyPatch
 	"""
 	reader = FakeSasReader()
 	monkeypatch.setattr(pandas, READ_SAS_NAME, reader)
-	options = SasOptions(encoding=Encoding.LATIN_1)
+	options = SasReadOptions(encoding=Encoding.LATIN_1)
 
 	frame = read_sas_file(FILE_PATH, options)
 
@@ -102,7 +102,7 @@ def test_read_xpt_file_reads_the_sas_transport_format(monkeypatch: pytest.Monkey
 	reader = FakeSasReader()
 	monkeypatch.setattr(pandas, READ_SAS_NAME, reader)
 
-	read_xpt_file(FILE_PATH, XptOptions())
+	read_xpt_file(FILE_PATH, XptReadOptions())
 
 	call = reader.calls[0]
 	assert call["format"] == SAS_TRANSPORT_FORMAT

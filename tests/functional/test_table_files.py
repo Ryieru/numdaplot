@@ -80,7 +80,7 @@ def test_a_csv_file_gives_a_type_to_each_column(tmp_path: Path) -> None:
 	path = tmp_path / CSV_NAME
 	path.write_text(SALES_CSV)
 
-	sales = ndp.Table.from_csv(path, ndp.CsvOptions(separator=SEMICOLON))
+	sales = ndp.Table.from_csv(path, ndp.CsvReadOptions(separator=SEMICOLON))
 
 	assert sales.column_types == EXPECTED_CSV_TYPES
 	assert sales.row_count == EXPECTED_ROW_COUNT
@@ -131,10 +131,11 @@ def test_a_table_written_in_json_reads_back_the_same(tmp_path: Path, file_name: 
 	"""
 	path = tmp_path / file_name
 	sales = build_sales()
-	options = ndp.JsonOptions(layout=layout)
+	write_options = ndp.JsonWriteOptions(layout=layout)
+	read_options = ndp.JsonReadOptions(layout=layout)
 
-	sales.to_json(path, options)
-	read_sales = ndp.Table.from_json(path, options)
+	sales.to_json(path, write_options)
+	read_sales = ndp.Table.from_json(path, read_options)
 
 	is_equal = read_sales.is_equal(ndp.Equality(other=sales))
 	assert is_equal
@@ -175,10 +176,11 @@ def test_an_excel_sheet_reads_back_the_same(tmp_path: Path) -> None:
 	"""
 	path = tmp_path / EXCEL_NAME
 	sales = build_sales()
-	options = ndp.ExcelOptions(sheet=SHEET_NAME)
+	write_options = ndp.ExcelWriteOptions(sheet=SHEET_NAME)
+	read_options = ndp.ExcelReadOptions(sheet=SHEET_NAME)
 
-	sales.to_excel(path, options)
-	read_sales = ndp.Table.from_excel(path, options)
+	sales.to_excel(path, write_options)
+	read_sales = ndp.Table.from_excel(path, read_options)
 
 	is_equal = read_sales.is_equal(ndp.Equality(other=sales))
 	assert is_equal

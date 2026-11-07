@@ -9,7 +9,9 @@ from enum import Enum
 
 class Encoding(Enum):
 	r"""
-	Text encoding of a file, used by ``CsvOptions``, ``SasOptions`` and ``XptOptions``.
+	Text encoding of a file, used by the CSV, SAS and SAS transport options.
+
+	``CsvReadOptions``, ``CsvWriteOptions``, ``SasReadOptions`` and ``XptReadOptions`` take it.
 
 	The value of each member is the name Python gives to the encoding.
 
@@ -23,7 +25,7 @@ class Encoding(Enum):
 	>>> folder = Path(tempfile.mkdtemp())
 	>>> path = folder / "cities.csv"
 	>>> _ = path.write_text("city\nB\u00e9ziers\n", encoding="latin-1")
-	>>> cities = ndp.Table.from_csv(path, ndp.CsvOptions(encoding=ndp.Encoding.LATIN_1))
+	>>> cities = ndp.Table.from_csv(path, ndp.CsvReadOptions(encoding=ndp.Encoding.LATIN_1))
 	>>> cities.column("city").to_list() == ["B\u00e9ziers"]
 	True
 	"""
@@ -40,7 +42,7 @@ class Encoding(Enum):
 	>>> folder = Path(tempfile.mkdtemp())
 	>>> path = folder / "cities.csv"
 	>>> _ = path.write_text("city\nB\u00e9ziers\n", encoding="utf-8")
-	>>> cities = ndp.Table.from_csv(path, ndp.CsvOptions(encoding=ndp.Encoding.UTF_8))
+	>>> cities = ndp.Table.from_csv(path, ndp.CsvReadOptions(encoding=ndp.Encoding.UTF_8))
 	>>> cities.column("city").to_list() == ["B\u00e9ziers"]
 	True
 	"""
@@ -57,7 +59,7 @@ class Encoding(Enum):
 	>>> folder = Path(tempfile.mkdtemp())
 	>>> path = folder / "cities.csv"
 	>>> _ = path.write_text("city\nB\u00e9ziers\n", encoding="utf-8-sig")
-	>>> cities = ndp.Table.from_csv(path, ndp.CsvOptions(encoding=ndp.Encoding.UTF_8_BOM))
+	>>> cities = ndp.Table.from_csv(path, ndp.CsvReadOptions(encoding=ndp.Encoding.UTF_8_BOM))
 	>>> cities.column("city").to_list() == ["B\u00e9ziers"]
 	True
 	"""
@@ -74,7 +76,7 @@ class Encoding(Enum):
 	>>> folder = Path(tempfile.mkdtemp())
 	>>> path = folder / "cities.csv"
 	>>> _ = path.write_text("city\nB\u00e9ziers\n", encoding="latin-1")
-	>>> cities = ndp.Table.from_csv(path, ndp.CsvOptions(encoding=ndp.Encoding.LATIN_1))
+	>>> cities = ndp.Table.from_csv(path, ndp.CsvReadOptions(encoding=ndp.Encoding.LATIN_1))
 	>>> cities.column("city").to_list() == ["B\u00e9ziers"]
 	True
 	"""

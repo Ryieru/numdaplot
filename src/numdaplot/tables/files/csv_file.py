@@ -12,17 +12,15 @@ from typing import Any, cast
 import pandas
 from pandas.api.types import infer_dtype
 
-from numdaplot.errors.refused_setting_error import RefusedSettingError
 from numdaplot.tables.columns.column_names import require_column_names
-from numdaplot.tables.files.csv_options import CsvOptions
+from numdaplot.tables.files.csv_read_options import CsvReadOptions
+from numdaplot.tables.files.csv_write_options import CsvWriteOptions
 from numdaplot.tables.files.pandas_backend import NULLABLE_DTYPE_BACKEND
 from numdaplot.tables.frames.frame_normalization import PYTHON_OBJECT_DTYPE
 from numdaplot.tables.frames.pandas_decimals import find_exact_csv_settings
 
 CSV_NEWLINE = ""
 DECIMAL_FORMAT = "%.{decimals}f"
-DECIMALS_SETTING = "decimals"
-FROM_CSV_NAME = "Table.from_csv"
 IGNORE_ACTION = "ignore"
 # The kinds pandas infers for a column whose blocks were read as numbers or booleans in one place and texts in another.
 MIXED_BLOCK_KINDS = frozenset({"mixed", "mixed-integer"})
@@ -30,37 +28,7 @@ TEXT_COLUMNS_SETTING = "usecols"
 TEXT_DTYPE_SETTING = "dtype"
 
 
-def require_read_options(options: CsvOptions) -> None:
-	"""
-	Check that the settings of a CSV file apply to its reading.
-
-	.. versionadded:: 0.1.0
-
-	Parameters
-	----------
-	options
-		The settings of the file.
-
-	Raises
-	------
-	RefusedSettingError
-		When ``decimals`` is given, which only applies to the writing.
-
-	Examples
-	--------
-	>>> import numdaplot as ndp
-	>>> from numdaplot.tables.files.csv_file import require_read_options
-	>>> try:
-	... 	require_read_options(ndp.CsvOptions(decimals=2))
-	... except ndp.RefusedSettingError as error:
-	... 	print(error)
-	Table.from_csv does not accept decimals.
-	"""
-	if options.decimals is not None:
-		raise RefusedSettingError(DECIMALS_SETTING, FROM_CSV_NAME)
-
-
-def read_csv_file(path: Path, options: CsvOptions) -> pandas.DataFrame:
+def read_csv_file(path: Path, options: CsvReadOptions) -> pandas.DataFrame:
 	r"""
 	Return the columns of a CSV file whose first row holds the column names, with the exact value of each decimal.
 
@@ -97,7 +65,7 @@ def read_csv_file(path: Path, options: CsvOptions) -> pandas.DataFrame:
 	>>> folder = Path(tempfile.mkdtemp())
 	>>> path = folder / "sales.csv"
 	>>> _ = path.write_text("city;price\nParis;1.5\n")
-	>>> read_csv_file(path, ndp.CsvOptions(separator=";"))
+	>>> read_csv_file(path, ndp.CsvReadOptions(separator=";"))
 	    city  price
 	0  Paris    1.5
 	"""
@@ -120,7 +88,7 @@ def read_csv_file(path: Path, options: CsvOptions) -> pandas.DataFrame:
 	return frame
 
 
-def read_pandas_csv(path: Path, options: CsvOptions, column_settings: dict[str, Any]) -> pandas.DataFrame:
+def read_pandas_csv(path: Path, options: CsvReadOptions, column_settings: dict[str, Any]) -> pandas.DataFrame:
 	r"""
 	Return the columns of a CSV file as ``pandas.read_csv`` reads them in blocks, with the exact value of each decimal.
 
@@ -151,7 +119,7 @@ def read_pandas_csv(path: Path, options: CsvOptions, column_settings: dict[str, 
 	>>> from numdaplot.tables.files.csv_file import read_pandas_csv
 	>>> path = Path(tempfile.mkdtemp()) / "codes.csv"
 	>>> _ = path.write_text("code;price\n01;1.5\n")
-	>>> read_pandas_csv(path, ndp.CsvOptions(separator=";"), {"usecols": ["code"], "dtype": str})
+	>>> read_pandas_csv(path, ndp.CsvReadOptions(separator=";"), {"usecols": ["code"], "dtype": str})
 	  code
 	0   01
 	"""
@@ -213,7 +181,7 @@ def find_mixed_columns(frame: pandas.DataFrame) -> list[str]:
 	return mixed_names
 
 
-def read_csv_header(path: Path, options: CsvOptions) -> list[str] | None:
+def read_csv_header(path: Path, options: CsvReadOptions) -> list[str] | None:
 	r"""
 	Return the column names written on the first row of a CSV file, before pandas renames repeated ones.
 
@@ -240,7 +208,7 @@ def read_csv_header(path: Path, options: CsvOptions) -> list[str] | None:
 	>>> folder = Path(tempfile.mkdtemp())
 	>>> path = folder / "sales.csv"
 	>>> _ = path.write_text("price,price\n1,2\n")
-	>>> read_csv_header(path, ndp.CsvOptions())
+	>>> read_csv_header(path, ndp.CsvReadOptions())
 	['price', 'price']
 	"""
 	with path.open(encoding=options.encoding.value, newline=CSV_NEWLINE) as file:
@@ -250,7 +218,7 @@ def read_csv_header(path: Path, options: CsvOptions) -> list[str] | None:
 	return header
 
 
-def write_csv_file(frame: pandas.DataFrame, path: Path, options: CsvOptions) -> None:
+def write_csv_file(frame: pandas.DataFrame, path: Path, options: CsvWriteOptions) -> None:
 	"""
 	Write the columns of a Table in a CSV file, column names on the first row and without row numbers.
 
@@ -275,7 +243,7 @@ def write_csv_file(frame: pandas.DataFrame, path: Path, options: CsvOptions) -> 
 	>>> import numdaplot as ndp
 	>>> from numdaplot.tables.files.csv_file import write_csv_file
 	>>> path = Path(tempfile.mkdtemp()) / "sales.csv"
-	>>> write_csv_file(pandas.DataFrame({"price": [1.5]}), path, ndp.CsvOptions())
+	>>> write_csv_file(pandas.DataFrame({"price": [1.5]}), path, ndp.CsvWriteOptions())
 	>>> print(path.read_text())
 	price
 	1.5

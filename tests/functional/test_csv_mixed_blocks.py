@@ -88,7 +88,7 @@ def test_a_long_csv_file_keeps_the_leading_zeros_of_a_mixed_column(tmp_path: Pat
 	"""
 	path = write_long_file(tmp_path)
 
-	table = ndp.Table.from_csv(path, ndp.CsvOptions(separator=SEMICOLON))
+	table = ndp.Table.from_csv(path, ndp.CsvReadOptions(separator=SEMICOLON))
 
 	dep_column = table.column("dep")
 	first_dep_array = dep_column.take(FIRST_ROW)
@@ -113,7 +113,7 @@ def test_a_long_csv_file_gives_the_table_of_a_whole_file_reading(tmp_path: Path)
 	path = write_long_file(tmp_path)
 	whole_table = read_whole_file(path)
 
-	table = ndp.Table.from_csv(path, ndp.CsvOptions(separator=SEMICOLON))
+	table = ndp.Table.from_csv(path, ndp.CsvReadOptions(separator=SEMICOLON))
 
 	is_same_table = table.is_equal(ndp.Equality(other=whole_table))
 	assert is_same_table
@@ -134,6 +134,6 @@ def test_a_long_csv_file_with_mixed_columns_emits_no_warning(tmp_path: Path) -> 
 
 	with warnings.catch_warnings(record=True) as caught_warnings:
 		warnings.simplefilter("always")
-		ndp.Table.from_csv(path, ndp.CsvOptions(separator=SEMICOLON))
+		ndp.Table.from_csv(path, ndp.CsvReadOptions(separator=SEMICOLON))
 
 	assert caught_warnings == []

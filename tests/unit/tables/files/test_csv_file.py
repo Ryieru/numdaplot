@@ -19,7 +19,8 @@ from numdaplot.tables.files.csv_file import (
 	read_pandas_csv,
 	write_csv_file,
 )
-from numdaplot.tables.files.csv_options import CsvOptions
+from numdaplot.tables.files.csv_read_options import CsvReadOptions
+from numdaplot.tables.files.csv_write_options import CsvWriteOptions
 from numdaplot.tables.files.encoding import Encoding
 
 FILE_NAME = "sales.csv"
@@ -95,7 +96,7 @@ def test_read_csv_file_reads_every_row_with_its_separator(tmp_path: Path) -> Non
 	path = tmp_path / FILE_NAME
 	path.write_text(SEMICOLON_CONTENT)
 
-	options = CsvOptions(separator=SEMICOLON)
+	options = CsvReadOptions(separator=SEMICOLON)
 
 	frame = read_csv_file(path, options)
 
@@ -120,7 +121,7 @@ def test_read_csv_file_keeps_integers_with_missing_values_as_integers(tmp_path: 
 	path = tmp_path / FILE_NAME
 	path.write_text(INTEGER_CONTENT)
 
-	frame = read_csv_file(path, CsvOptions())
+	frame = read_csv_file(path, CsvReadOptions())
 
 	count_column = frame["count"]
 	dtype_name = str(count_column.dtype)
@@ -141,7 +142,7 @@ def test_read_csv_file_gives_no_column_for_an_empty_file(tmp_path: Path) -> None
 	path = tmp_path / FILE_NAME
 	path.write_text(EMPTY_CONTENT)
 
-	frame = read_csv_file(path, CsvOptions())
+	frame = read_csv_file(path, CsvReadOptions())
 
 	assert frame.empty
 
@@ -161,7 +162,7 @@ def test_read_csv_file_rejects_a_repeated_column_name(tmp_path: Path) -> None:
 	path.write_text(REPEATED_NAME_CONTENT)
 
 	with pytest.raises(DuplicateColumnError):
-		read_csv_file(path, CsvOptions())
+		read_csv_file(path, CsvReadOptions())
 
 
 def test_read_csv_file_rejects_an_empty_column_name(tmp_path: Path) -> None:
@@ -179,7 +180,7 @@ def test_read_csv_file_rejects_an_empty_column_name(tmp_path: Path) -> None:
 	path.write_text(EMPTY_NAME_CONTENT)
 
 	with pytest.raises(InvalidColumnNameError):
-		read_csv_file(path, CsvOptions())
+		read_csv_file(path, CsvReadOptions())
 
 
 def test_read_csv_file_decodes_its_encoding(tmp_path: Path) -> None:
@@ -196,7 +197,7 @@ def test_read_csv_file_decodes_its_encoding(tmp_path: Path) -> None:
 	path = tmp_path / FILE_NAME
 	path.write_text(LATIN_1_CONTENT, encoding=Encoding.LATIN_1.value)
 
-	options = CsvOptions(encoding=Encoding.LATIN_1)
+	options = CsvReadOptions(encoding=Encoding.LATIN_1)
 
 	frame = read_csv_file(path, options)
 
@@ -217,7 +218,7 @@ def test_read_csv_file_reads_mixed_blocks_again_as_texts(tmp_path: Path) -> None
 		A temporary folder.
 	"""
 	path = write_long_codes(tmp_path)
-	options = CsvOptions(separator=SEMICOLON)
+	options = CsvReadOptions(separator=SEMICOLON)
 
 	frame = read_csv_file(path, options)
 
@@ -239,7 +240,7 @@ def test_read_csv_file_keeps_the_types_of_the_other_columns(tmp_path: Path) -> N
 		A temporary folder.
 	"""
 	path = write_long_codes(tmp_path)
-	options = CsvOptions(separator=SEMICOLON)
+	options = CsvReadOptions(separator=SEMICOLON)
 
 	frame = read_csv_file(path, options)
 
@@ -260,7 +261,7 @@ def test_read_pandas_csv_hides_the_pandas_mixed_type_warning(tmp_path: Path) -> 
 		A temporary folder.
 	"""
 	path = write_long_codes(tmp_path)
-	options = CsvOptions(separator=SEMICOLON)
+	options = CsvReadOptions(separator=SEMICOLON)
 
 	with warnings.catch_warnings(record=True) as caught_warnings:
 		warnings.simplefilter("always")
@@ -281,7 +282,7 @@ def test_read_pandas_csv_reads_the_given_columns_as_texts(tmp_path: Path) -> Non
 		A temporary folder.
 	"""
 	path = write_long_codes(tmp_path)
-	options = CsvOptions(separator=SEMICOLON)
+	options = CsvReadOptions(separator=SEMICOLON)
 
 	frame = read_pandas_csv(path, options, TEXT_SETTINGS)
 
@@ -347,7 +348,7 @@ def test_read_csv_header_keeps_repeated_names(tmp_path: Path) -> None:
 	path = tmp_path / FILE_NAME
 	path.write_text(REPEATED_NAME_CONTENT)
 
-	header = read_csv_header(path, CsvOptions())
+	header = read_csv_header(path, CsvReadOptions())
 
 	assert header == EXPECTED_REPEATED_HEADER
 
@@ -366,7 +367,7 @@ def test_write_csv_file_writes_missing_values_as_empty_values(tmp_path: Path) ->
 	path = tmp_path / FILE_NAME
 	frame = pandas.DataFrame(WRITTEN_FRAME)
 
-	options = CsvOptions(separator=SEMICOLON)
+	options = CsvWriteOptions(separator=SEMICOLON)
 
 	write_csv_file(frame, path, options)
 

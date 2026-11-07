@@ -10,8 +10,8 @@ from typing import Literal
 import pandas
 
 from numdaplot.tables.files.encoding import Encoding
-from numdaplot.tables.files.sas_options import SasOptions
-from numdaplot.tables.files.xpt_options import XptOptions
+from numdaplot.tables.files.sas_read_options import SasReadOptions
+from numdaplot.tables.files.xpt_read_options import XptReadOptions
 
 SAS_DATA_FORMAT = "sas7bdat"
 SAS_TRANSPORT_FORMAT = "xport"
@@ -23,7 +23,7 @@ type SasFormat = Literal["sas7bdat", "xport"]
 """
 
 
-def read_sas_file(path: Path, options: SasOptions) -> pandas.DataFrame:
+def read_sas_file(path: Path, options: SasReadOptions) -> pandas.DataFrame:
 	"""
 	Return the columns of a SAS data file (``.sas7bdat``).
 
@@ -46,7 +46,7 @@ def read_sas_file(path: Path, options: SasOptions) -> pandas.DataFrame:
 	return frame
 
 
-def read_xpt_file(path: Path, options: XptOptions) -> pandas.DataFrame:
+def read_xpt_file(path: Path, options: XptReadOptions) -> pandas.DataFrame:
 	"""
 	Return the columns of a SAS transport file (``.xpt``).
 

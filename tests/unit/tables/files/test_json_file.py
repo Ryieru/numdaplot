@@ -10,7 +10,8 @@ import pandas
 
 from numdaplot.tables.files.json_file import read_json_file, read_json_lines, write_json_file
 from numdaplot.tables.files.json_layout import JsonLayout
-from numdaplot.tables.files.json_options import JsonOptions
+from numdaplot.tables.files.json_read_options import JsonReadOptions
+from numdaplot.tables.files.json_write_options import JsonWriteOptions
 
 FILE_NAME = "sales.json"
 RECORDS_CONTENT = '[{"date": "2026-01-31", "count": 2}, {"date": "2026-02-01", "count": null}]'
@@ -42,7 +43,7 @@ def test_read_json_file_keeps_texts_that_look_like_dates(tmp_path: Path) -> None
 	path = tmp_path / FILE_NAME
 	path.write_text(RECORDS_CONTENT)
 
-	frame = read_json_file(path, JsonOptions())
+	frame = read_json_file(path, JsonReadOptions())
 
 	date_column = frame["date"]
 	dates = date_column.tolist()
@@ -63,7 +64,7 @@ def test_read_json_file_keeps_python_objects(tmp_path: Path) -> None:
 	path = tmp_path / FILE_NAME
 	path.write_text(RECORDS_CONTENT)
 
-	frame = read_json_file(path, JsonOptions())
+	frame = read_json_file(path, JsonReadOptions())
 
 	count_column = frame["count"]
 	counts = count_column.tolist()
@@ -85,7 +86,7 @@ def test_read_json_file_reads_one_object_per_line(tmp_path: Path) -> None:
 	"""
 	path = tmp_path / FILE_NAME
 	path.write_text(LINES_CONTENT)
-	options = JsonOptions(layout=JsonLayout.LINES)
+	options = JsonReadOptions(layout=JsonLayout.LINES)
 
 	frame = read_json_file(path, options)
 
@@ -119,7 +120,7 @@ def test_write_json_file_writes_one_list_of_objects(tmp_path: Path) -> None:
 	path = tmp_path / FILE_NAME
 	frame = pandas.DataFrame(WRITTEN_FRAME)
 
-	write_json_file(frame, path, JsonOptions())
+	write_json_file(frame, path, JsonWriteOptions())
 
 	content = path.read_text()
 	assert content == EXPECTED_RECORDS_TEXT
@@ -138,7 +139,7 @@ def test_write_json_file_writes_one_object_per_line(tmp_path: Path) -> None:
 	"""
 	path = tmp_path / FILE_NAME
 	frame = pandas.DataFrame(WRITTEN_FRAME)
-	options = JsonOptions(layout=JsonLayout.LINES)
+	options = JsonWriteOptions(layout=JsonLayout.LINES)
 
 	write_json_file(frame, path, options)
 
@@ -160,7 +161,7 @@ def test_write_json_file_keeps_accented_letters(tmp_path: Path) -> None:
 	path = tmp_path / FILE_NAME
 	frame = pandas.DataFrame(ACCENTED_FRAME)
 
-	write_json_file(frame, path, JsonOptions())
+	write_json_file(frame, path, JsonWriteOptions())
 
 	content = path.read_text(encoding=JSON_ENCODING)
 	assert content == EXPECTED_ACCENTED_TEXT

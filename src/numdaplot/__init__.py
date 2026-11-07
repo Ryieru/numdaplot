@@ -197,13 +197,16 @@ from numdaplot.tables.conflict import Conflict
 from numdaplot.tables.description.description import Description
 from numdaplot.tables.duplicates.deduplication import Deduplication
 from numdaplot.tables.duplicates.keep import Keep
-from numdaplot.tables.files.csv_options import CsvOptions
+from numdaplot.tables.files.csv_read_options import CsvReadOptions
+from numdaplot.tables.files.csv_write_options import CsvWriteOptions
 from numdaplot.tables.files.encoding import Encoding
-from numdaplot.tables.files.excel_options import ExcelOptions
+from numdaplot.tables.files.excel_read_options import ExcelReadOptions
+from numdaplot.tables.files.excel_write_options import ExcelWriteOptions
 from numdaplot.tables.files.json_layout import JsonLayout
-from numdaplot.tables.files.json_options import JsonOptions
-from numdaplot.tables.files.sas_options import SasOptions
-from numdaplot.tables.files.xpt_options import XptOptions
+from numdaplot.tables.files.json_read_options import JsonReadOptions
+from numdaplot.tables.files.json_write_options import JsonWriteOptions
+from numdaplot.tables.files.sas_read_options import SasReadOptions
+from numdaplot.tables.files.xpt_read_options import XptReadOptions
 from numdaplot.tables.filtering.column_match import ColumnMatch
 from numdaplot.tables.filtering.condition import Condition
 from numdaplot.tables.filtering.filter import Filter
@@ -260,7 +263,8 @@ __all__ = [
 	"Count",
 	"CountDistinct",
 	"CountedMissing",
-	"CsvOptions",
+	"CsvReadOptions",
+	"CsvWriteOptions",
 	"CustomColor",
 	"CustomDateFormat",
 	"DateFormat",
@@ -285,7 +289,8 @@ __all__ = [
 	"Encoding",
 	"Equal",
 	"Equality",
-	"ExcelOptions",
+	"ExcelReadOptions",
+	"ExcelWriteOptions",
 	"Exponential",
 	"Figure",
 	"FigureStyle",
@@ -334,7 +339,8 @@ __all__ = [
 	"IsMissing",
 	"IsPresent",
 	"JsonLayout",
-	"JsonOptions",
+	"JsonReadOptions",
+	"JsonWriteOptions",
 	"Keep",
 	"Layout",
 	"LegendPosition",
@@ -393,7 +399,7 @@ __all__ = [
 	"Replacement",
 	"Round",
 	"Rule",
-	"SasOptions",
+	"SasReadOptions",
 	"ScatterChart",
 	"Shape",
 	"ShapeMismatchError",
@@ -427,7 +433,7 @@ __all__ = [
 	"UnsupportedTypeError",
 	"ValueAxis",
 	"ValueConversionError",
-	"XptOptions",
+	"XptReadOptions",
 ]
 
 
