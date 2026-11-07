@@ -27,6 +27,8 @@ from numdaplot.plots.charts.missing_map_chart import MissingMapChart
 from numdaplot.plots.charts.pie_chart import PieChart
 from numdaplot.plots.charts.scatter_chart import ScatterChart
 from numdaplot.plots.charts.value_axis import ValueAxis
+from numdaplot.plots.data.renamed_layers import rename_layers
+from numdaplot.plots.data.shown_columns import require_renamed_columns_shown
 from numdaplot.plots.drawing.bar_drawing import draw_bar_chart
 from numdaplot.plots.drawing.box_drawing import draw_box_chart
 from numdaplot.plots.drawing.drawn_chart import DrawnChart
@@ -144,6 +146,8 @@ def draw_plot(figure: FigureBase, layers: list[ChartLayer], style: PlotStyle) ->
 	------
 	InvalidColorCountError
 		When the colors of a chart are not one per series.
+	ColumnNotFoundError
+		When the style renames a column that no chart shows.
 
 	Examples
 	--------
@@ -158,8 +162,10 @@ def draw_plot(figure: FigureBase, layers: list[ChartLayer], style: PlotStyle) ->
 	>>> figure.axes[0].spines["top"].get_visible()
 	False
 	"""
+	require_renamed_columns_shown(layers, style.renaming)
+	shown_layers = rename_layers(layers, style.renaming)
 	figure.set_facecolor(BACKGROUND_COLOR)
-	colored_layers = continue_color_cycle(layers)
+	colored_layers = continue_color_cycle(shown_layers)
 	aligned_layers = align_layers(colored_layers)
 
 	# Some versions of the matplotlib stubs only accept the names of known settings as keys.

@@ -170,3 +170,14 @@ def test_style_rejects_another_y_rotation(rotation: float) -> None:
 	"""
 	with pytest.raises(InvalidRotationError):
 		PlotStyle(y_tick_rotation=rotation)
+
+
+def test_plot_style_shows_every_column_under_its_name_by_default() -> None:
+	"""
+	Check that no renaming is given by default.
+
+	.. versionadded:: 0.1.0
+	"""
+	style = PlotStyle()
+
+	assert style.renaming is None

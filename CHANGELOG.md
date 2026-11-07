@@ -28,6 +28,9 @@ and numdaplot follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
   right with the `ValueAxis` enum.
 - Plots of missing values: `Plot.missing_by_column` writes the count and the share of the rows above each bar, and
   `Plot.missing_map` keeps a mark for every missing value of a long Table, with its total in a legend past the axes.
+- `PlotStyle(renaming=Renaming(...))` shows columns under other names in the legend, the labels of boxes, heatmaps
+  and missing value charts and the default title and axis labels, on every chart of a Plot, without renaming the
+  Table; the columns of an Array are named `"0"`, `"1"`...
 - Plot titles and axis labels are written by default: the title is the `y` label by the `x` label, such as
   `sales by month`, and `PlotStyle` replaces them or removes them with an empty text.
 - Plots with many text labels, such as bars, heatmaps and boxes, only create the labels that fit, so they stay fast

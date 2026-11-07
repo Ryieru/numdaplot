@@ -11,6 +11,7 @@ from numdaplot.plots.style.grid_lines import GridLines
 from numdaplot.plots.style.legend_position import LegendPosition
 from numdaplot.plots.style.size import Size
 from numdaplot.settings.field_types import require_field_types
+from numdaplot.tables.columns.renaming import Renaming
 
 MINIMUM_ROTATION = -90
 MAXIMUM_ROTATION = 90
@@ -50,14 +51,20 @@ class PlotStyle:
 		the axis on the right keep no rotation. Labels without enough room are left out as for ``x_tick_rotation``.
 	legend
 		Where the legend is placed, ``LegendPosition.BEST`` by default, past the axes for a map of missing values. It is
-		only drawn for several series, so never on a pie or a heatmap. It names each series after its column: to change
-		a name, use ``result_name`` in a ``Calculation`` or ``Table.rename`` before drawing.
+		only drawn for several series, so never on a pie or a heatmap. It names each series after its column, or after
+		the name ``renaming`` gives it.
 	grid_lines
 		Whether light grid lines are drawn behind the values, ``GridLines.SHOWN`` by default. A pie and a heatmap have
 		none.
 	size
 		The width and the height, 6.4 by 4.8 inches by default. A Plot placed in a ``Figure`` takes the size of
 		its cells instead.
+	renaming
+		The names under which some columns are shown, every column under its own name when omitted. Each
+		``NameChange`` applies to the legend, the labels of boxes, heatmaps and missing value charts, the legends of
+		``color_by`` and ``size_by``, and the default title and axis labels, on every chart of the Plot. The columns
+		of an Array are named ``"0"``, ``"1"``... The values themselves, such as the parts of a pie, are never
+		renamed. A title or a label given here keeps its text.
 
 	Raises
 	------
@@ -86,6 +93,12 @@ class PlotStyle:
 	>>> city_chart = ndp.BarChart(x="city", y=["total"])
 	>>> city_plot = ndp.Plot.bar(city_sales, city_chart, ndp.PlotStyle(x_tick_rotation=90))
 	>>> city_plot.show()
+
+	The columns can be shown under other names, without renaming them in the Table.
+
+	>>> shown_names = ndp.Renaming(changes=[ndp.NameChange(old_name="total", new_name="Total sales")])
+	>>> named_plot = ndp.Plot.bar(city_sales, city_chart, ndp.PlotStyle(renaming=shown_names))
+	>>> named_plot.show()
 	"""
 
 	title: str | None = None
@@ -97,6 +110,7 @@ class PlotStyle:
 	legend: LegendPosition = LegendPosition.BEST
 	grid_lines: GridLines = GridLines.SHOWN
 	size: Size = Size()
+	renaming: Renaming | None = None
 
 	def __post_init__(self) -> None:
 		"""

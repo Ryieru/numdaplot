@@ -10,6 +10,7 @@ from matplotlib.figure import FigureBase
 
 from numdaplot.errors.refused_operation_error import RefusedOperationError
 from numdaplot.plots.chart_layer import ChartLayer
+from numdaplot.plots.data.shown_columns import require_distinct_shown_names
 from numdaplot.plots.drawing.plot_drawing import FigureDrawing, draw_plot
 from numdaplot.plots.drawing.size_inches import convert_size_to_inches
 from numdaplot.plots.style.plot_style import PlotStyle
@@ -69,7 +70,13 @@ class PlotData:
 		-------
 		Self
 			The new Plot.
+
+		Raises
+		------
+		DuplicateColumnError
+			When the style shows a column under the name of another column of the charts.
 		"""
+		require_distinct_shown_names(layers, style.renaming)
 		created_plot = cls.__new__(cls)
 		created_plot._layers = list(layers)
 		created_plot._style = style

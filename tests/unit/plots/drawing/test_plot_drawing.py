@@ -62,6 +62,11 @@ def draw_title(target: FigureBase) -> None:
 
 
 FONT_SIZE_SETTING = "font.size"
+MISSPELLED_RENAMING = ndp.Renaming(changes=[ndp.NameChange(old_name="prise", new_name="Price")])
+FIRST_SERIES_RENAMING = ndp.Renaming(changes=[ndp.NameChange(old_name="0", new_name="Price")])
+SHOWN_PRICE = "Price"
+GRID = ndp.Array.from_list([[12.0, 8.0]])
+GRID_LAYER = ChartLayer(ndp.LineChart(), read_array_values(GRID, "LineChart"))
 CHART_CLASSES = [
 	ndp.LineChart,
 	ndp.BarChart,
@@ -207,3 +212,31 @@ def test_find_right_axes_shows_the_right_border_once() -> None:
 
 	assert same_axes is right_axes
 	assert right_axes.spines["right"].get_visible()
+
+
+def test_draw_plot_rejects_a_renamed_column_no_chart_shows() -> None:
+	"""
+	Check that a misspelled renamed column raises ColumnNotFoundError when drawing.
+
+	.. versionadded:: 0.1.0
+	"""
+	style = ndp.PlotStyle(renaming=MISSPELLED_RENAMING)
+
+	with pytest.raises(ndp.ColumnNotFoundError):
+		draw_plot(Figure(), [LAYER], style)
+
+
+def test_draw_plot_draws_the_shown_names() -> None:
+	"""
+	Check that the default label of the values takes the shown name of the column.
+
+	.. versionadded:: 0.1.0
+	"""
+	figure = Figure()
+	style = ndp.PlotStyle(renaming=FIRST_SERIES_RENAMING)
+
+	draw_plot(figure, [GRID_LAYER], style)
+
+	axes = figure.axes[0]
+	line_labels = [line.get_label() for line in axes.lines]
+	assert SHOWN_PRICE in line_labels

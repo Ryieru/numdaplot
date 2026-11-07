@@ -17,6 +17,9 @@ from numdaplot.plots.plot import Plot
 PRICES = ndp.Array.from_list([12.0, 15.5, 14.0])
 LAYER = ChartLayer(ndp.LineChart(), read_array_values(PRICES, "LineChart"))
 STYLE = ndp.PlotStyle(title="Prices")
+GRID = ndp.Array.from_list([[12.0, 8.0]])
+GRID_LAYER = ChartLayer(ndp.LineChart(), read_array_values(GRID, "LineChart"))
+FIRST_AS_SECOND = ndp.Renaming(changes=[ndp.NameChange(old_name="0", new_name="1")])
 
 
 def test_plot_refuses_its_constructor() -> None:
@@ -67,3 +70,15 @@ def test_create_from_layer_uses_the_given_style() -> None:
 
 	figure = plot.to_matplotlib()
 	assert figure.axes[0].get_title() == "Prices"
+
+
+def test_create_rejects_a_column_shown_under_the_name_of_another() -> None:
+	"""
+	Check that showing the column 0 under the name of the column 1 raises DuplicateColumnError.
+
+	.. versionadded:: 0.1.0
+	"""
+	style = ndp.PlotStyle(renaming=FIRST_AS_SECOND)
+
+	with pytest.raises(ndp.DuplicateColumnError):
+		Plot._create([GRID_LAYER], style)
