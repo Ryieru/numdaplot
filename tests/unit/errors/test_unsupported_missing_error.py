@@ -20,6 +20,9 @@ EXPECTED_BOOL_COLUMN_MESSAGE = (
 	"The column 'age' has missing values, which a BOOL Array cannot hold. Remove them with drop_missing."
 )
 
+MAPPING_ADVICE = "Give decimal new values, such as 10.0, which can be missing."
+EXPECTED_MAPPING_MESSAGE = "INT64 values cannot be missing in an Array. " + MAPPING_ADVICE
+
 
 def test_unsupported_missing_error_is_a_numdaplot_error() -> None:
 	"""
@@ -100,3 +103,15 @@ def test_unsupported_missing_error_keeps_its_values() -> None:
 	error = UnsupportedMissingError(TYPE_NAME)
 
 	assert error.type_name == TYPE_NAME
+
+
+def test_unsupported_missing_error_takes_the_advice_of_an_operation() -> None:
+	"""
+	Check that a given advice replaces the advice of from_list.
+
+	.. versionadded:: 0.1.0
+	"""
+	error = UnsupportedMissingError("INT64", advice=MAPPING_ADVICE)
+
+	error_text = str(error)
+	assert error_text == EXPECTED_MAPPING_MESSAGE

@@ -23,6 +23,9 @@ from numdaplot.arrays.creation.random_integers import RandomIntegers
 from numdaplot.arrays.creation.spacing import Spacing
 from numdaplot.arrays.creation.uniform import Uniform
 from numdaplot.arrays.equality import Equality
+from numdaplot.arrays.mapping.unmatched import Unmatched
+from numdaplot.arrays.mapping.value_change import ValueChange
+from numdaplot.arrays.mapping.value_mapping import ValueMapping
 from numdaplot.arrays.math_functions.absolute import Absolute
 from numdaplot.arrays.math_functions.cosine import Cosine
 from numdaplot.arrays.math_functions.exponential import Exponential
@@ -58,6 +61,7 @@ from numdaplot.errors.dimension_error import DimensionError
 from numdaplot.errors.duplicate_column_error import DuplicateColumnError
 from numdaplot.errors.duplicate_label_error import DuplicateLabelError
 from numdaplot.errors.duplicate_statistic_error import DuplicateStatisticError
+from numdaplot.errors.duplicate_value_error import DuplicateValueError
 from numdaplot.errors.empty_array_error import EmptyArrayError
 from numdaplot.errors.empty_list_error import EmptyListError
 from numdaplot.errors.empty_region_error import EmptyRegionError
@@ -111,6 +115,7 @@ from numdaplot.errors.shape_mismatch_error import ShapeMismatchError
 from numdaplot.errors.time_overflow_error import TimeOverflowError
 from numdaplot.errors.time_zone_mismatch_error import TimeZoneMismatchError
 from numdaplot.errors.unknown_time_zone_error import UnknownTimeZoneError
+from numdaplot.errors.unmatched_value_error import UnmatchedValueError
 from numdaplot.errors.unsupported_image_format_error import UnsupportedImageFormatError
 from numdaplot.errors.unsupported_index_error import UnsupportedIndexError
 from numdaplot.errors.unsupported_missing_error import UnsupportedMissingError
@@ -282,6 +287,7 @@ __all__ = [
 	"DuplicateColumnError",
 	"DuplicateLabelError",
 	"DuplicateStatisticError",
+	"DuplicateValueError",
 	"DurationIn",
 	"DurationUnit",
 	"EmptyArrayError",
@@ -433,12 +439,16 @@ __all__ = [
 	"TypeMatch",
 	"Uniform",
 	"UnknownTimeZoneError",
+	"Unmatched",
+	"UnmatchedValueError",
 	"UnsupportedImageFormatError",
 	"UnsupportedIndexError",
 	"UnsupportedMissingError",
 	"UnsupportedTypeError",
 	"ValueAxis",
+	"ValueChange",
 	"ValueConversionError",
+	"ValueMapping",
 	"XptReadOptions",
 ]
 

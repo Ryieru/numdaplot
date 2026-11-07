@@ -34,6 +34,9 @@ class UnsupportedMissingError(NumdaplotError):
 		Name of the ``ndp.Type`` member that cannot hold a missing value.
 	column_name
 		Name of the Table column holding the missing values. When omitted, the values were given to an Array.
+	advice
+		What to do instead, for values given to an Array by an operation that has its own solution. When omitted,
+		the advice of ``Array.from_list``.
 
 	Attributes
 	----------
@@ -52,9 +55,9 @@ class UnsupportedMissingError(NumdaplotError):
 	INT64 values cannot be missing in an Array. Remove them, or give dtype=ndp.Type.FLOAT64.
 	"""
 
-	def __init__(self, type_name: str, column_name: str | None = None) -> None:
+	def __init__(self, type_name: str, column_name: str | None = None, advice: str | None = None) -> None:
 		"""
-		Build the error message from the type name and the column name.
+		Build the error message from the type name, the column name and the advice.
 
 		.. versionadded:: 0.1.0
 
@@ -64,15 +67,17 @@ class UnsupportedMissingError(NumdaplotError):
 			Name of the ``ndp.Type`` member that cannot hold a missing value.
 		column_name
 			Name of the Table column holding the missing values. When omitted, the values were given to an Array.
+		advice
+			What to do instead, for values given to an Array. When omitted, the advice of ``Array.from_list``.
 		"""
-		message = write_missing_message(type_name, column_name)
+		message = write_missing_message(type_name, column_name, advice)
 		super().__init__(message)
 
 		self.type_name = type_name
 		self.column_name = column_name
 
 
-def write_missing_message(type_name: str, column_name: str | None) -> str:
+def write_missing_message(type_name: str, column_name: str | None, advice: str | None = None) -> str:
 	"""
 	Return the message of the error, with the solutions that apply to the type.
 
@@ -86,6 +91,8 @@ def write_missing_message(type_name: str, column_name: str | None) -> str:
 		Name of the ``ndp.Type`` member that cannot hold a missing value.
 	column_name
 		Name of the Table column holding the missing values, or ``None`` for values given to an Array.
+	advice
+		What to do instead, for values given to an Array. When omitted, the advice of ``Array.from_list``.
 
 	Returns
 	-------
@@ -103,6 +110,9 @@ def write_missing_message(type_name: str, column_name: str | None) -> str:
 	converts_to_decimal = type_name != BOOL_TYPE_NAME
 	if column_name is None:
 		list_advice = LIST_DECIMAL_ADVICE if converts_to_decimal else LIST_ADVICE
+		if advice is not None:
+			list_advice = advice
+
 		list_message = LIST_MESSAGE.format(type_name=type_name, advice=list_advice)
 		return list_message
 

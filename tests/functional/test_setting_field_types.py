@@ -50,6 +50,7 @@ REQUIRED_SETTINGS = dict[str, dict[str, object]](
 		"Normal": {"mean": 0, "deviation": 1},
 		"NotEqual": {"value": 1},
 		"PieChart": {"labels": "a", "values": "b"},
+		"PivotTable": {"rows": ["a"], "columns": "b", "calculation": SUM_CALCULATION},
 		"Quantile": {"fraction": 0.5},
 		"RandomIntegers": {"low": 0, "high": 1},
 		"Range": {"start": 0, "stop": 1},
@@ -59,12 +60,13 @@ REQUIRED_SETTINGS = dict[str, dict[str, object]](
 		"Shape": {"dimensions": [1]},
 		"SortKey": {"column": "a"},
 		"Sorting": {"keys": [ndp.SortKey(column="a")]},
-		"PivotTable": {"rows": ["a"], "columns": "b", "calculation": SUM_CALCULATION},
 		"Spacing": {"start": 0, "stop": 1, "count": 2},
 		"TimeZone": {"name": "UTC"},
 		"TimeZoneChange": {"mode": ndp.TimeZoneMode.REMOVE},
 		"ToDuration": {"unit": ndp.DurationUnit.DAY},
 		"Uniform": {"low": 0, "high": 1},
+		"ValueChange": {"old_value": 1, "new_value": "a"},
+		"ValueMapping": {"changes": [ndp.ValueChange(1, "a")]},
 	}
 )
 

@@ -10,6 +10,8 @@ from numdaplot.arrays.array_data import ArrayData
 from numdaplot.arrays.calculation.math_function_values import apply_math_function
 from numdaplot.arrays.calculation.statistic_values import compute_statistic
 from numdaplot.arrays.calculation.time_function_values import apply_time_function
+from numdaplot.arrays.mapping.mapped_values import map_values
+from numdaplot.arrays.mapping.value_mapping import ValueMapping
 from numdaplot.arrays.math_functions.math_function import MathFunction
 from numdaplot.dates.time_function import TimeFunction
 from numdaplot.positions.axis import Axis
@@ -76,9 +78,9 @@ class ArrayCalculation(ArrayData):
 		return statistic_array
 
 	@checked_arguments
-	def apply(self, function: MathFunction | TimeFunction) -> Self:
+	def apply(self, function: MathFunction | TimeFunction | ValueMapping) -> Self:
 		"""
-		Return a math function or a time function applied to each value.
+		Return a math function, a time function or a value mapping applied to each value.
 
 		.. versionadded:: 0.1.0
 
@@ -87,7 +89,8 @@ class ArrayCalculation(ArrayData):
 		function
 			A ``MathFunction``, such as ``ndp.SquareRoot()``, applied to numbers, or a ``TimeFunction``,
 			such as ``ndp.DatePart(unit=ndp.DatePartUnit.MONTH)``, applied to dates, datetimes, durations or
-			numbers as each one states: see ``MathFunction`` and ``TimeFunction`` for every function.
+			numbers as each one states: see ``MathFunction`` and ``TimeFunction`` for every function. Or a
+			``ValueMapping`` giving a new value to listed values, such as codes replaced by labels.
 
 		Returns
 		-------
@@ -102,6 +105,10 @@ class ArrayCalculation(ArrayData):
 			When the function does not apply to the type of the values.
 		OutOfDomainError
 			When a value is outside the domain of a math function, such as the square root of -1.
+		UnmatchedValueError
+			When a value has no ``ValueChange`` in a ``ValueMapping`` whose ``others`` is ``Unmatched.ERROR``.
+		UnsupportedMissingError
+			When a ``ValueMapping`` gives integers or booleans and a missing value.
 
 		Warns
 		-----
@@ -116,7 +123,15 @@ class ArrayCalculation(ArrayData):
 		Array([1., 2., 3.], dtype=FLOAT64)
 		>>> ndp.Array.from_list([date(2026, 3, 14)]).apply(ndp.DatePart(unit=ndp.DatePartUnit.MONTH))
 		Array([3.], dtype=FLOAT64)
+		>>> sexes = ndp.ValueMapping(changes=[ndp.ValueChange(1, "M"), ndp.ValueChange(2, "F")])
+		>>> ndp.Array.from_list([2, 1]).apply(sexes)
+		Array(['F', 'M'], dtype=TEXT)
 		"""
+		if isinstance(function, ValueMapping):
+			mapped_values = map_values(self._values, function)
+			mapped_array = self._wrap(mapped_values)
+			return mapped_array
+
 		if isinstance(function, TimeFunction):
 			time_values = apply_time_function(self._values, function)
 			time_array = self._wrap(time_values)

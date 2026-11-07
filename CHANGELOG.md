@@ -90,6 +90,9 @@ and numdaplot follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
   `InvalidSheetNameError`, `MissingDependencyError` and `UnsupportedIndexError`. `FileNotFoundError` and
   `FileExistsError` are also the Python errors of the same name, and `FileAccessError` is also an `OSError`.
 - Distributions: `Distribution`, `Uniform`, `Normal`, `RandomIntegers`.
+- Value mapping: `Array.apply(ValueMapping(changes=[ValueChange(old_value, new_value)], others=Unmatched.ERROR))`
+  replaces listed values by new ones, such as codes by labels, with `DuplicateValueError` for an old value given twice
+  and `UnmatchedValueError` for a value without new value; `Unmatched.MISSING` makes those values missing.
 - Math functions: `MathFunction`, `SquareRoot`, `Exponential`, `Logarithm`, `Absolute`, `Round`, `Sine`, `Cosine`.
 - Array errors: `DimensionError`, `EmptyArrayError`, `IncompatibleTypesError`, `InvalidBaseError`,
   `InvalidCountError`, `InvalidDeviationError`, `InvalidPositionError`, `InvalidSeedError`,
