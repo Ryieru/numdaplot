@@ -19,7 +19,7 @@ class XptReadOptions:
 	These files are read only.
 
 	The example reads
-	[paxraw_d_short.xpt](https://github.com/Ryieru/Numdaplot/blob/main/tests/data/paxraw_d_short.xpt),
+	[paxraw_d_short.xpt](https://github.com/Ryieru/numdaplot/blob/main/tests/data/paxraw_d_short.xpt),
 	a SAS transport file of 100 rows.
 
 	.. versionadded:: 0.1.0

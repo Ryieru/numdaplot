@@ -1,6 +1,7 @@
 site_name: numdaplot
 site_description: A simpler, explicit API over numpy, pandas and matplotlib.
-repo_url: https://github.com/Ryieru/Numdaplot
+site_url: https://ryieru.github.io/numdaplot/
+repo_url: https://github.com/Ryieru/numdaplot
 
 watch:
   - src

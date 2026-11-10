@@ -339,7 +339,7 @@ class TableReading(TableData):
 		Return a Table read from a SAS data file (``.sas7bdat``). numdaplot does not write this format.
 
 		The example reads
-		[airline.sas7bdat](https://github.com/Ryieru/Numdaplot/blob/main/tests/data/airline.sas7bdat),
+		[airline.sas7bdat](https://github.com/Ryieru/numdaplot/blob/main/tests/data/airline.sas7bdat),
 		a SAS data file of 32 rows.
 
 		.. versionadded:: 0.1.0
@@ -399,7 +399,7 @@ class TableReading(TableData):
 		Return a Table read from a SAS transport file (``.xpt``). numdaplot does not write this format.
 
 		The example reads
-		[paxraw_d_short.xpt](https://github.com/Ryieru/Numdaplot/blob/main/tests/data/paxraw_d_short.xpt),
+		[paxraw_d_short.xpt](https://github.com/Ryieru/numdaplot/blob/main/tests/data/paxraw_d_short.xpt),
 		a SAS transport file of 100 rows.
 
 		.. versionadded:: 0.1.0

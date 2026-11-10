@@ -27,7 +27,7 @@ plot.save("prices.png")
 
 ## Status
 
-Version 0.1.0 is in development, and `ndp.__version__` gives the installed version.
+numdaplot is in alpha: the API can still change between versions, and `ndp.__version__` gives the installed version.
 The shared foundations (types, rules, statistics, positions,
 sort settings, errors), `Array`, `Table`, the tools for missing values and dates (formats, time zones,
 parts, periods and durations), line, bar, scatter, histogram, box, pie, heatmap and missing value plots,
@@ -40,6 +40,15 @@ charts overlaid on a plot, and figures placing plots on a grid are available.
 - Optional extras: `excel` (openpyxl) and `parquet` (pyarrow)
 
 ## Installation
+
+```
+pip install numdaplot
+pip install "numdaplot[excel,parquet]"
+```
+
+The `excel` extra reads and writes Excel files, the `parquet` extra reads and writes Parquet files.
+
+## Development
 
 From a clone of the repository, with [uv](https://docs.astral.sh/uv/):
 
@@ -69,7 +78,8 @@ uv run pyright
 
 ## Documentation
 
-The documentation site is generated from the docstrings:
+The documentation is online at https://ryieru.github.io/numdaplot/. It is generated from the docstrings,
+and shown locally with:
 
 ```
 uv run mkdocs serve
@@ -103,4 +113,4 @@ conftest.py         pytest settings shared by the tests and the docstring exampl
 
 ## License
 
-BSD-3-Clause, see [LICENSE](https://github.com/Ryieru/Numdaplot/blob/main/LICENSE).
+BSD-3-Clause, see [LICENSE](https://github.com/Ryieru/numdaplot/blob/main/LICENSE).

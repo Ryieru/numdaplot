@@ -19,7 +19,7 @@ class SasReadOptions:
 	These files are read only.
 
 	The example reads
-	[airline.sas7bdat](https://github.com/Ryieru/Numdaplot/blob/main/tests/data/airline.sas7bdat),
+	[airline.sas7bdat](https://github.com/Ryieru/numdaplot/blob/main/tests/data/airline.sas7bdat),
 	a SAS data file of 32 rows.
 
 	.. versionadded:: 0.1.0
