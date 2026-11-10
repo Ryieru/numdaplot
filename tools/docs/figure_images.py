@@ -23,6 +23,7 @@ import griffe
 from matplotlib.figure import Figure
 
 from numdaplot.plots.drawing.plot_drawing import FigureDrawing, build_figure
+from numdaplot.plots.output.shown_object import ShownObject
 
 SHOW_CALL = ".show()"
 SHOWN_FUNCTION_PATHS = ("numdaplot.plots.plot_output.show_drawing", "numdaplot.plots.figure.figure.show_drawing")
@@ -45,7 +46,9 @@ class ShownImages:
 	>>> from figure_images import ShownImages
 	>>> from numdaplot.plots.drawing.plot_drawing import FigureDrawing
 	>>> shown_images = ShownImages()
-	>>> shown_images.record(FigureDrawing(lambda target: target.suptitle("Sales"), (3.0, 2.0)))
+	>>> from numdaplot.plots.output.shown_object import ShownObject
+	>>> drawing = FigureDrawing(lambda target: target.suptitle("Sales"), (3.0, 2.0))
+	>>> shown_images.record(drawing, ShownObject.PLOT)
 	>>> shown_images.images[0].startswith("<?xml")
 	True
 	"""
@@ -58,7 +61,7 @@ class ShownImages:
 		"""
 		self.images = list[str]()
 
-	def record(self, drawing: FigureDrawing) -> None:
+	def record(self, drawing: FigureDrawing, shown_object: ShownObject) -> None:
 		"""
 		Draw a shown Plot or Figure as an SVG image and keep it, in place of the display of ``show``.
 
@@ -68,6 +71,8 @@ class ShownImages:
 		----------
 		drawing
 			What the Plot or the Figure draws, and its size.
+		shown_object
+			Whether a Plot or a Figure is shown, ignored: both are recorded the same way.
 		"""
 		figure = build_figure(drawing)
 		svg_image = write_svg_image(figure)

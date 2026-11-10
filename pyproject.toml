@@ -54,7 +54,7 @@ testpaths = ["tests", "src", "tools"]
 pythonpath = ["tools/docs"]
 addopts = ["--doctest-modules", "--import-mode=importlib"]
 doctest_optionflags = ["NORMALIZE_WHITESPACE"]
-filterwarnings = ["ignore:FigureCanvasAgg is non-interactive:UserWarning"]
+filterwarnings = ["ignore::numdaplot.errors.display_warning.DisplayWarning"]
 
 [tool.ruff]
 line-length = 120

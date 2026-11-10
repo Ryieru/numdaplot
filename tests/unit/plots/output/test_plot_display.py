@@ -14,9 +14,17 @@ import pytest
 from matplotlib import pyplot
 from matplotlib.figure import Figure, FigureBase
 
+from numdaplot.errors.display_warning import DisplayWarning
 from numdaplot.plots.drawing.plot_drawing import FigureDrawing
 from numdaplot.plots.output import plot_display
-from numdaplot.plots.output.plot_display import show_drawing, show_drawing_in_window, show_figure_in_notebook
+from numdaplot.plots.output.plot_display import (
+	is_window_backend,
+	show_drawing,
+	show_drawing_in_window,
+	show_figure_in_notebook,
+	warn_without_window,
+)
+from numdaplot.plots.output.shown_object import ShownObject
 
 TITLE = "Prices"
 DRAWING_SIZE = (6.4, 4.8)
@@ -25,6 +33,12 @@ IS_NOTEBOOK_NAME = "is_notebook"
 IMPORT_MODULE_NAME = "import_module"
 SHOW_IN_WINDOW_NAME = "show_drawing_in_window"
 SHOW_IN_NOTEBOOK_NAME = "show_figure_in_notebook"
+IS_WINDOW_BACKEND_NAME = "is_window_backend"
+SHOW_NAME = "show"
+PLOT_ADVICE = "to see the plot, or save it with Plot.save"
+FIGURE_ADVICE = "to see the figure, or save it with Figure.save"
+NO_WINDOW_BACKENDS = ["agg", "Agg", "pdf", "svg"]
+WINDOW_BACKENDS = ["TkAgg", "qtagg", "module://some_package.backend"]
 
 
 class DisplayModule:
@@ -169,6 +183,44 @@ def answer_value(answer: bool) -> Any:
 	return check
 
 
+def answer_backend(answer: bool) -> Any:
+	"""
+	Return a fake backend check giving one answer.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	answer
+		Whether the backend opens windows.
+
+	Returns
+	-------
+	Any
+		A function taking a backend name and returning the answer.
+	"""
+
+	def check(backend_name: str) -> bool:
+		"""
+		Return the fixed answer.
+
+		.. versionadded:: 0.1.0
+
+		Parameters
+		----------
+		backend_name
+			The backend name, ignored.
+
+		Returns
+		-------
+		bool
+			The answer.
+		"""
+		return answer
+
+	return check
+
+
 def test_show_figure_in_notebook_displays_a_png_image(monkeypatch: pytest.MonkeyPatch) -> None:
 	"""
 	Check that a notebook receives the figure as PNG bytes.
@@ -226,9 +278,9 @@ def test_show_drawing_opens_a_window_outside_a_notebook(monkeypatch: pytest.Monk
 
 	drawing = describe_plot_drawing()
 
-	show_drawing(drawing)
+	show_drawing(drawing, ShownObject.PLOT)
 
-	assert window_display.calls == [(drawing,)]
+	assert window_display.calls == [(drawing, ShownObject.PLOT)]
 
 
 def test_show_drawing_displays_an_image_in_a_notebook(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -248,21 +300,111 @@ def test_show_drawing_displays_an_image_in_a_notebook(monkeypatch: pytest.Monkey
 
 	drawing = describe_plot_drawing()
 
-	show_drawing(drawing)
+	show_drawing(drawing, ShownObject.PLOT)
 
 	shown_figure = notebook_display.calls[0][0]
 	assert shown_figure.axes[0].get_title() == "Prices"
 
 
-def test_show_drawing_in_window_closes_the_figure_once_shown() -> None:
+def test_show_drawing_in_window_closes_the_figure_once_shown(monkeypatch: pytest.MonkeyPatch) -> None:
 	"""
 	Check that pyplot keeps no figure after a non-interactive display.
 
 	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	monkeypatch
+		Replaces the backend check and the pyplot display with fakes.
 	"""
+	figure_numbers = pyplot.get_fignums()
+	monkeypatch.setattr(plot_display, IS_WINDOW_BACKEND_NAME, answer_backend(True))
+	monkeypatch.setattr(pyplot, SHOW_NAME, Recorder())
+	drawing = describe_plot_drawing()
+
+	show_drawing_in_window(drawing, ShownObject.PLOT)
+
+	assert pyplot.get_fignums() == figure_numbers
+
+
+@pytest.mark.parametrize(
+	("shown_object", "expected_text"),
+	[(ShownObject.PLOT, PLOT_ADVICE), (ShownObject.FIGURE, FIGURE_ADVICE)],
+)
+def test_show_drawing_in_window_warns_without_window_backend(
+	monkeypatch: pytest.MonkeyPatch,
+	shown_object: ShownObject,
+	expected_text: str,
+) -> None:
+	"""
+	Check that a backend without window emits a DisplayWarning naming the save method of the shown object.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	monkeypatch
+		Replaces the backend check and the pyplot display with fakes.
+	shown_object
+		The kind of object shown.
+	expected_text
+		The advice the message gives.
+	"""
+	window_display = Recorder()
+	monkeypatch.setattr(plot_display, IS_WINDOW_BACKEND_NAME, answer_backend(False))
+	monkeypatch.setattr(pyplot, SHOW_NAME, window_display)
 	figure_numbers = pyplot.get_fignums()
 	drawing = describe_plot_drawing()
 
-	show_drawing_in_window(drawing)
+	with pytest.warns(DisplayWarning, match=expected_text):
+		show_drawing_in_window(drawing, shown_object)
 
+	assert window_display.calls == []
 	assert pyplot.get_fignums() == figure_numbers
+
+
+def test_warn_without_window_points_at_the_caller() -> None:
+	"""
+	Check that the warning names the file of the calling code, not a numdaplot file.
+
+	.. versionadded:: 0.1.0
+	"""
+	with pytest.warns(DisplayWarning) as caught_warnings:
+		warn_without_window(ShownObject.PLOT)
+
+	warning_file = caught_warnings[0].filename
+	assert warning_file == __file__
+
+
+@pytest.mark.parametrize("backend_name", NO_WINDOW_BACKENDS)
+def test_is_window_backend_refuses_a_backend_without_window(backend_name: str) -> None:
+	"""
+	Check that the matplotlib backends without window are refused, whatever their case.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	backend_name
+		A backend without window.
+	"""
+	is_window = is_window_backend(backend_name)
+
+	assert not is_window
+
+
+@pytest.mark.parametrize("backend_name", WINDOW_BACKENDS)
+def test_is_window_backend_accepts_a_window_backend(backend_name: str) -> None:
+	"""
+	Check that window backends, and a backend added by another package, are accepted.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	backend_name
+		A backend opening windows.
+	"""
+	is_window = is_window_backend(backend_name)
+
+	assert is_window

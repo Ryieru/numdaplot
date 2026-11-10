@@ -20,6 +20,7 @@ from numdaplot.plots.chart_layer import ChartLayer
 from numdaplot.plots.data.array_values import read_array_values
 from numdaplot.plots.drawing.plot_drawing import FigureDrawing, build_figure
 from numdaplot.plots.output import image_saving
+from numdaplot.plots.output.shown_object import ShownObject
 from numdaplot.plots.plot import Plot
 
 PRICES = ndp.Array.from_list([12.0, 15.5, 14.0])
@@ -200,7 +201,25 @@ def test_show_hands_the_drawing_of_the_plot_to_the_display(monkeypatch: pytest.M
 		Replaces the display with a fake.
 	"""
 	shown_drawings = list[FigureDrawing]()
-	monkeypatch.setattr(plot_module, SHOW_FUNCTION_NAME, shown_drawings.append)
+	shown_objects = list[ShownObject]()
+
+	def record_show(drawing: FigureDrawing, shown_object: ShownObject) -> None:
+		"""
+		Keep the drawing and the kind of object shown, in place of the display.
+
+		.. versionadded:: 0.1.0
+
+		Parameters
+		----------
+		drawing
+			What is shown.
+		shown_object
+			Whether a Plot or a Figure is shown.
+		"""
+		shown_drawings.append(drawing)
+		shown_objects.append(shown_object)
+
+	monkeypatch.setattr(plot_module, SHOW_FUNCTION_NAME, record_show)
 
 	build_plot().show()
 
@@ -208,3 +227,4 @@ def test_show_hands_the_drawing_of_the_plot_to_the_display(monkeypatch: pytest.M
 	shown_figure = build_figure(shown_drawing)
 	assert shown_drawing.size_inches == DEFAULT_INCHES
 	assert shown_figure.axes[0].get_title() == "Prices"
+	assert shown_objects == [ShownObject.PLOT]

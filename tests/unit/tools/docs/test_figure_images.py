@@ -23,6 +23,7 @@ from figure_images import (
 from matplotlib.figure import Figure, FigureBase
 
 from numdaplot.plots.drawing.plot_drawing import FigureDrawing
+from numdaplot.plots.output.shown_object import ShownObject
 
 MODULE_NAME = "plots"
 PLOT_LINES = [
@@ -78,7 +79,7 @@ def test_shown_images_record_each_shown_drawing_as_svg() -> None:
 	"""
 	shown_images = ShownImages()
 
-	shown_images.record(TITLE_DRAWING)
+	shown_images.record(TITLE_DRAWING, ShownObject.PLOT)
 
 	image_count = len(shown_images.images)
 	assert image_count == 1

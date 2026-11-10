@@ -42,18 +42,20 @@ and numdaplot follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
   `ReadabilityWarning`, instead of leaving most of them out.
 - Figures: `Figure` places Plots on the cells of a `Layout` with `Figure.place` and `Cell`, takes its title and its
   size from a `FigureStyle`, and has `show`, `save` and `to_matplotlib` like a Plot.
+- `Plot.show` and `Figure.show` emit a `DisplayWarning` at the line calling them when no window can be opened, such
+  as without `tkinter` or on a server, suggesting to install `tkinter` or to save the image.
 - Plot settings: `Chart`, `LineChart`, `BarChart`, `ScatterChart`, `HistogramChart`, `BoxChart`, `PieChart`,
   `HeatmapChart`, `MissingChart`, `BinCount`, `BinWidth`, `PlotStyle`, `Size`, `CustomColor`, `ImageOptions`, and the
   `Color`, `LineType`, `MarkerShape`, `Orientation`, `BarLayout`, `Outliers`, `Percentages`, `ColorScale`,
   `CellValues`, `LegendPosition`, `GridLines` and `SizeUnit` enums.
 - Plots: the labels of an axis without enough room are left out, one out of as many as needed from the first one,
   with a `ReadabilityWarning` when they may be texts.
-- Plot errors and warning: `ConflictingSettingsError`, `DuplicateLabelError`, `EmptyTotalError`,
+- Plot errors and warnings: `ConflictingSettingsError`, `DuplicateLabelError`, `EmptyTotalError`,
   `InvalidBinWidthError`, `InvalidChartDataError`, `InvalidColorCountError`, `InvalidColorError`,
   `InvalidOpacityError`, `InvalidPointSizeError`, `InvalidResolutionError`, `InvalidRotationError`,
   `InvalidSizeError`, `MissingValueError`, `RefusedSettingError`,
-  `UnsupportedImageFormatError`, `IncompatibleChartsError`, `OccupiedCellError`, `CellOutOfRangeError` and
-  `ReadabilityWarning`.
+  `UnsupportedImageFormatError`, `IncompatibleChartsError`, `OccupiedCellError`, `CellOutOfRangeError`,
+  `ReadabilityWarning` and `DisplayWarning`.
 - Date errors: `InvalidConversionError`, `InvalidDateFormatError`, `InvalidTimeZoneChangeError`,
   `TimeZoneMismatchError` and `UnknownTimeZoneError`.
 - `Table`: named columns of one type each, read with `Table.from_csv`, `Table.from_json`, `Table.from_excel`,

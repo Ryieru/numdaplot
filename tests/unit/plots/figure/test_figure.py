@@ -14,6 +14,7 @@ import pytest
 import numdaplot as ndp
 from numdaplot.plots.drawing.plot_drawing import FigureDrawing, build_figure
 from numdaplot.plots.figure import figure as figure_module
+from numdaplot.plots.output.shown_object import ShownObject
 
 PLOT = ndp.Plot.line(ndp.Array.from_list([12.0, 15.5]), ndp.LineChart(), ndp.PlotStyle(title="Prices"))
 LAYOUT = ndp.Layout(rows=1, columns=2)
@@ -147,7 +148,25 @@ def test_show_hands_the_drawing_of_the_figure_to_the_display(monkeypatch: pytest
 		Replaces the display with a fake.
 	"""
 	shown_drawings = list[FigureDrawing]()
-	monkeypatch.setattr(figure_module, SHOW_FUNCTION_NAME, shown_drawings.append)
+	shown_objects = list[ShownObject]()
+
+	def record_show(drawing: FigureDrawing, shown_object: ShownObject) -> None:
+		"""
+		Keep the drawing and the kind of object shown, in place of the display.
+
+		.. versionadded:: 0.1.0
+
+		Parameters
+		----------
+		drawing
+			What is shown.
+		shown_object
+			Whether a Plot or a Figure is shown.
+		"""
+		shown_drawings.append(drawing)
+		shown_objects.append(shown_object)
+
+	monkeypatch.setattr(figure_module, SHOW_FUNCTION_NAME, record_show)
 	figure = ndp.Figure(LAYOUT).place(PLOT, LEFT)
 
 	figure.show()
@@ -155,3 +174,4 @@ def test_show_hands_the_drawing_of_the_figure_to_the_display(monkeypatch: pytest
 	shown_figure = build_figure(shown_drawings[0])
 	subfigure_count = len(shown_figure.subfigs)
 	assert subfigure_count == 1
+	assert shown_objects == [ShownObject.FIGURE]

@@ -59,6 +59,7 @@ from numdaplot.errors.cell_out_of_range_error import CellOutOfRangeError
 from numdaplot.errors.column_not_found_error import ColumnNotFoundError
 from numdaplot.errors.conflicting_settings_error import ConflictingSettingsError
 from numdaplot.errors.dimension_error import DimensionError
+from numdaplot.errors.display_warning import DisplayWarning
 from numdaplot.errors.duplicate_column_error import DuplicateColumnError
 from numdaplot.errors.duplicate_label_error import DuplicateLabelError
 from numdaplot.errors.duplicate_statistic_error import DuplicateStatisticError
@@ -298,6 +299,7 @@ __all__ = [
 	"Deduplication",
 	"Description",
 	"DimensionError",
+	"DisplayWarning",
 	"Distribution",
 	"DuplicateColumnError",
 	"DuplicateLabelError",

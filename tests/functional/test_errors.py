@@ -79,6 +79,7 @@ PRECISE_ERRORS = [
 PRECISE_WARNINGS = [
 	ndp.BroadcastWarning,
 	ndp.CalculationWarning,
+	ndp.DisplayWarning,
 	ndp.ReadabilityWarning,
 ]
 REJECTED_FRACTION = 2.0

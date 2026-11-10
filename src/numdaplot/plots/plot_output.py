@@ -9,6 +9,7 @@ from matplotlib.figure import Figure
 from numdaplot.plots.drawing.plot_drawing import build_figure
 from numdaplot.plots.output.image_saving import write_image
 from numdaplot.plots.output.plot_display import show_drawing
+from numdaplot.plots.output.shown_object import ShownObject
 from numdaplot.plots.plot_data import PlotData
 from numdaplot.plots.style.image_options import ImageOptions
 from numdaplot.settings.argument_types import checked_arguments
@@ -107,8 +108,8 @@ class PlotOutput(PlotData):
 		"""
 		Show the Plot: as an image in a Jupyter notebook, in a matplotlib window anywhere else.
 
-		In a script, the window stays open until it is closed. With a matplotlib backend that opens no window,
-		such as the one of a server, matplotlib warns that the figure cannot be shown: save it instead.
+		In a script, the window stays open until it is closed. When no window can be opened, because Python has no
+		``tkinter`` or runs on a server, nothing is shown and a ``DisplayWarning`` suggests saving the Plot instead.
 
 		.. versionadded:: 0.1.0
 
@@ -120,4 +121,4 @@ class PlotOutput(PlotData):
 		>>> plot.show()
 		"""
 		drawing = self._describe_drawing()
-		show_drawing(drawing)
+		show_drawing(drawing, ShownObject.PLOT)
