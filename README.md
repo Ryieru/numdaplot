@@ -68,6 +68,18 @@ uv run python run_tests.py
 
 Arguments are passed to pytest, for example `uv run python run_tests.py -k between`.
 
+## Measure the coverage
+
+The coverage of every line and every branch of `src/numdaplot` and `tools/docs` is measured while the whole suite
+runs, and must reach 99.50%:
+
+```
+uv run coverage run run_tests.py
+uv run coverage report
+```
+
+`uv run coverage html` writes a detailed report in `htmlcov/`.
+
 ## Check the code
 
 ```

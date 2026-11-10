@@ -40,6 +40,7 @@ dev = [
 	"pandas-stubs>=2.3.3.251201",
 	"mkdocs-material>=9.8",
 	"mkdocstrings[python]>=1.0.7",
+	"coverage>=7.17",
 ]
 
 [build-system]
@@ -55,6 +56,16 @@ pythonpath = ["tools/docs"]
 addopts = ["--doctest-modules", "--import-mode=importlib"]
 doctest_optionflags = ["NORMALIZE_WHITESPACE"]
 filterwarnings = ["ignore::numdaplot.errors.display_warning.DisplayWarning"]
+
+[tool.coverage.run]
+branch = true
+source = ["."]
+
+[tool.coverage.report]
+fail_under = 99.5
+precision = 2
+show_missing = true
+skip_covered = true
 
 [tool.ruff]
 line-length = 120

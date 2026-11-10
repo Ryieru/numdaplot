@@ -38,6 +38,8 @@ jobs:
       - name: Type check
         run: uv run --frozen pyright
       - name: Tests
-        run: uv run --frozen python run_tests.py
+        run: uv run --frozen coverage run run_tests.py
+      - name: Coverage
+        run: uv run --frozen coverage report
       - name: Documentation
         run: uv run --frozen mkdocs build --strict
