@@ -1,6 +1,6 @@
 [project]
 name = "numdaplot"
-version = "0.1.0"
+version = "0.1.0rc1"
 description = "A simpler, explicit API over numpy, pandas and matplotlib."
 readme = "README.md"
 license = "BSD-3-Clause"
