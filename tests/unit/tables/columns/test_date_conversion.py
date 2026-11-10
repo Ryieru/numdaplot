@@ -13,7 +13,9 @@ import pytest
 from numdaplot.data_types.type import Type
 from numdaplot.dates.custom_date_format import CustomDateFormat
 from numdaplot.dates.date_format import DateFormat
+from numdaplot.errors.time_overflow_error import TimeOverflowError
 from numdaplot.errors.value_conversion_error import ValueConversionError
+from numdaplot.tables.columns import date_conversion
 from numdaplot.tables.columns.date_conversion import (
 	YEAR_FIRST,
 	convert_moments,
@@ -48,6 +50,8 @@ EXPECTED_CUSTOM_TEXTS = ["31 Dec 2026"]
 EXPECTED_DURATION_TEXTS = ["1 days 12:00:00", None, "-1 days +12:00:00"]
 EXPECTED_MIDNIGHT = [pandas.Timestamp("2026-12-31")]
 REJECTED_TEXT = "31/02/2026"
+FAR_DAY_TEXT = "3000-01-01"
+READ_MOMENTS_NAME = "read_moments"
 DAY_TEXT = "2026-12-31"
 DAY_TIME_TEXT = "2026-12-31 14:30"
 DAY_T_TIME_TEXT = "2026-12-31T14:30"
@@ -505,3 +509,48 @@ def test_has_date_is_false_only_for_a_time_pattern() -> None:
 	assert common_has_date
 	assert date_pattern_has_date
 	assert not time_pattern_has_date
+
+
+def read_no_moment(texts: pandas.Series, target_type: Type, date_format: DateFormat | None) -> pandas.Series:
+	"""
+	Fake reading giving a missing moment for every text, as pandas does for a date beyond its range.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	texts
+		The texts read.
+	target_type
+		Ignored.
+	date_format
+		Ignored.
+
+	Returns
+	-------
+	pandas.Series
+		NaT for each text.
+	"""
+	text_count = len(texts)
+	missing_moments = [pandas.NaT] * text_count
+	moments = pandas.Series(missing_moments, dtype="datetime64[ns]")
+
+	return moments
+
+
+def test_parse_dates_refuses_a_date_beyond_the_range_pandas_reads_as_missing(monkeypatch: pytest.MonkeyPatch) -> None:
+	"""
+	Check that a date beyond about 2262 that pandas leaves missing raises TimeOverflowError.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	monkeypatch
+		Replaces the reading of the moments with a fake.
+	"""
+	monkeypatch.setattr(date_conversion, READ_MOMENTS_NAME, read_no_moment)
+	texts = pandas.Series([FAR_DAY_TEXT], dtype=TEXT_DTYPE)
+
+	with pytest.raises(TimeOverflowError):
+		parse_dates(texts, Type.DATE, None)

@@ -53,6 +53,8 @@ TEXT_DTYPE_NAME = "string"
 SMALL_INTEGERS = pandas.Series(numpy.array([1, 2], dtype=numpy.int16))
 SMALL_INTEGER_DTYPE_NAME = "Int16"
 BOOLEANS = pandas.Series([True, False])
+NULLABLE_INTEGERS = pandas.Series([1, None], dtype="Int64")
+TIMES_OF_DAY = pandas.Series(numpy.array([56100000000], dtype="timedelta64[us]"))
 BOOLEAN_DTYPE_NAME = "boolean"
 OBJECT_INTEGERS = pandas.Series([1, None, 3], dtype=object)
 EXPECTED_OBJECT_INTEGERS = [1, pandas.NA, 3]
@@ -384,3 +386,25 @@ def test_normalize_frame_reads_python_times_as_times() -> None:
 
 	hour_column = normalized_frame["hour"]
 	assert str(hour_column.dtype) == TIME_PANDAS_NAME
+
+
+def test_convert_column_dtype_keeps_times_of_day() -> None:
+	"""
+	Check that a column of times of day, stored in microseconds, is not turned into nanosecond durations.
+
+	.. versionadded:: 0.1.0
+	"""
+	converted_column = convert_column_dtype(TIMES_OF_DAY)
+
+	assert converted_column is TIMES_OF_DAY
+
+
+def test_convert_column_dtype_keeps_a_column_already_of_a_pandas_type() -> None:
+	"""
+	Check that nullable integers of pandas are kept as they are.
+
+	.. versionadded:: 0.1.0
+	"""
+	converted_column = convert_column_dtype(NULLABLE_INTEGERS)
+
+	assert converted_column is NULLABLE_INTEGERS

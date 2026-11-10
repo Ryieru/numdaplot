@@ -4,6 +4,7 @@ Unit tests of the check of the settings against their annotations.
 .. versionadded:: 0.1.0
 """
 
+import typing
 from dataclasses import dataclass
 
 import numpy
@@ -28,7 +29,9 @@ from numdaplot.settings.field_types import (
 )
 
 EXPECTED_SINGLE_MEMBERS = [int, type(None)]
+ACCEPTED_TEXTS = ["a", "b"]
 EXPECTED_MESSAGE = "ProbeSetting count expects an int, got '2'."
+type TextPairs[ItemType] = list[ItemType]
 CLASS_MESSAGE = "ndp.Mean is a class, use ndp.Mean() instead."
 ACCEPTED_CASES = [
 	(int, 1, True),
@@ -185,6 +188,31 @@ def test_find_rejected_value_gives_the_first_rejected_item() -> None:
 	rejected_value = find_rejected_value(kinds, ["a", 1, 2])
 
 	assert rejected_value == 1
+
+
+def test_find_rejected_value_gives_the_whole_list_when_every_item_is_accepted() -> None:
+	"""
+	Check that a list without rejected item is itself the rejected value.
+
+	.. versionadded:: 0.1.0
+	"""
+	kinds = read_accepted_kinds(list[str])
+
+	rejected_value = find_rejected_value(kinds, ACCEPTED_TEXTS)
+
+	assert rejected_value == ACCEPTED_TEXTS
+
+
+def test_list_annotation_members_expands_a_generic_type_alias() -> None:
+	"""
+	Check that a type alias with a parameter is read as the type it names.
+
+	.. versionadded:: 0.1.0
+	"""
+	members = list_annotation_members(TextPairs[str])
+
+	member_origins = [typing.get_origin(member) for member in members]
+	assert member_origins == [list]
 
 
 def test_describe_kinds_shows_a_text_inside_a_list() -> None:

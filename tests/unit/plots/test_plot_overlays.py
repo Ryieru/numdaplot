@@ -164,3 +164,18 @@ def test_add_line_without_chart_draws_the_lines_of_an_array() -> None:
 	figure = both.to_matplotlib()
 	line_count = len(figure.axes[0].lines)
 	assert line_count == 1
+
+
+def test_add_scatter_without_chart_draws_the_points_of_an_array() -> None:
+	"""
+	Check that add_scatter without chart draws points over the bars.
+
+	.. versionadded:: 0.1.0
+	"""
+	bar_plot = ndp.Plot.bar(PRICES)
+
+	both = bar_plot.add_scatter(PRICES)
+
+	figure = both.to_matplotlib()
+	point_group_count = len(figure.axes[0].collections)
+	assert point_group_count == 1

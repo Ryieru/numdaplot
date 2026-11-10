@@ -82,6 +82,17 @@ def test_require_valid_positions_accepts_positions_inside_the_dimension() -> Non
 	require_valid_positions(positions, SIZE)
 
 
+def test_require_valid_positions_accepts_no_position() -> None:
+	"""
+	Check that an empty selection of positions is accepted.
+
+	.. versionadded:: 0.1.0
+	"""
+	positions = numpy.array([], dtype=int)
+
+	require_valid_positions(positions, SIZE)
+
+
 def test_require_valid_positions_rejects_a_position_outside_the_dimension() -> None:
 	"""
 	Check that the position equal to the size is rejected.

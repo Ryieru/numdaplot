@@ -22,6 +22,9 @@ EXPECTED_SHAPE_NAME = "SHAPE"
 LITERAL_SOURCES = ["','", "10", "None", "(2, 3)"]
 EXPRESSION_SOURCES = ["Shape([2, 3])", "make_shape()", "values"]
 UNKNOWN_NAME = "MISSING"
+IMPORT_CODE = "from os import sep\nLIMIT = 10\ndef cut(limit: int = LIMIT) -> int:\n    return limit"
+CLASS_DEFAULT_CODE = "class Options:\n    pass\ndef read(options: object = Options) -> None:\n    pass"
+EXPECTED_CLASS_NAME = "Options"
 
 
 def load_package(code: str) -> tuple[griffe.Module, griffe.GriffeLoader]:
@@ -177,3 +180,33 @@ def test_resolve_default_values_replaces_a_constant_in_the_call_of_a_parameter()
 	resolve_default_values(package, loader)
 
 	assert str(package["draw"].parameters["bins"].default) == EXPECTED_CALL
+
+
+def test_resolve_default_values_skips_the_imported_names() -> None:
+	"""
+	Check that a package importing a name still resolves its own constants.
+
+	.. versionadded:: 0.1.0
+	"""
+	package, loader = load_package(IMPORT_CODE)
+
+	resolve_default_values(package, loader)
+
+	limit_default = package["cut"].parameters["limit"].default
+	limit_text = str(limit_default)
+	assert limit_text == EXPECTED_LIMIT
+
+
+def test_resolve_default_values_keeps_a_default_naming_a_class() -> None:
+	"""
+	Check that a default naming a class, not a constant, keeps its name.
+
+	.. versionadded:: 0.1.0
+	"""
+	package, loader = load_package(CLASS_DEFAULT_CODE)
+
+	resolve_default_values(package, loader)
+
+	options_default = package["read"].parameters["options"].default
+	options_text = str(options_default)
+	assert options_text == EXPECTED_CLASS_NAME

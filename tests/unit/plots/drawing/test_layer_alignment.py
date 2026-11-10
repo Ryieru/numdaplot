@@ -48,6 +48,8 @@ REPEATED_SALES = ndp.Table.from_pandas(REPEATED_FRAME)
 REPEATED_BARS = ChartLayer(ndp.BarChart(), read_table_values(REPEATED_SALES, "city", ["sales"], "BarChart"))
 EXPECTED_LABELS = ["Paris", "Lyon", "Pau"]
 SOURCES = numpy.array([1, -1, 0])
+POINT_COLORS = ["north", "south"]
+COLOR_NAME = "zone"
 
 
 def read_series_values(layer: ChartLayer) -> list[float]:
@@ -252,3 +254,21 @@ def test_align_layer_keeps_the_type_of_the_values() -> None:
 
 	aligned_values = cast(ChartValues, aligned_layer.values)
 	assert aligned_values.value_type == TARGET_VALUES.value_type
+
+
+def test_align_points_reorders_the_colors_of_the_points() -> None:
+	"""
+	Check that the color_by values of the points follow their labels.
+
+	.. versionadded:: 0.1.0
+	"""
+	colors = numpy.array(POINT_COLORS, dtype=object)
+	points = PointValues(COLOR_NAME, colors, None, None)
+
+	aligned_points = align_points(points, SOURCES)
+
+	assert aligned_points is not None
+	assert aligned_points.colors is not None
+	aligned_colors = cast(list[str], aligned_points.colors.tolist())
+	assert aligned_colors[0] == POINT_COLORS[1]
+	assert aligned_colors[2] == POINT_COLORS[0]

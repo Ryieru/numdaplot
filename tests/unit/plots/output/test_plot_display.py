@@ -35,6 +35,7 @@ SHOW_IN_WINDOW_NAME = "show_drawing_in_window"
 SHOW_IN_NOTEBOOK_NAME = "show_figure_in_notebook"
 IS_WINDOW_BACKEND_NAME = "is_window_backend"
 SHOW_NAME = "show"
+IS_INTERACTIVE_NAME = "isinteractive"
 PLOT_ADVICE = "to see the plot, or save it with Plot.save"
 FIGURE_ADVICE = "to see the figure, or save it with Figure.save"
 NO_WINDOW_BACKENDS = ["agg", "Agg", "pdf", "svg"]
@@ -408,3 +409,32 @@ def test_is_window_backend_accepts_a_window_backend(backend_name: str) -> None:
 	is_window = is_window_backend(backend_name)
 
 	assert is_window
+
+
+def test_show_drawing_in_window_keeps_the_figure_when_matplotlib_runs_interactively(
+	monkeypatch: pytest.MonkeyPatch,
+) -> None:
+	"""
+	Check that an interactive matplotlib keeps the shown figure open.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	monkeypatch
+		Replaces the backend check, the pyplot display and the interactive check with fakes.
+	"""
+	monkeypatch.setattr(plot_display, IS_WINDOW_BACKEND_NAME, answer_backend(True))
+	monkeypatch.setattr(pyplot, SHOW_NAME, Recorder())
+	monkeypatch.setattr(pyplot, IS_INTERACTIVE_NAME, answer_value(True))
+	figure_numbers = pyplot.get_fignums()
+	drawing = describe_plot_drawing()
+
+	show_drawing_in_window(drawing, ShownObject.PLOT)
+
+	shown_figure_numbers = pyplot.get_fignums()
+	shown_figure_count = len(shown_figure_numbers)
+	previous_figure_count = len(figure_numbers)
+	new_figure_count = shown_figure_count - previous_figure_count
+	pyplot.close(shown_figure_numbers[-1])
+	assert new_figure_count == 1

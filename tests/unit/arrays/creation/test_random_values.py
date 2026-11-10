@@ -44,6 +44,19 @@ def test_draw_random_values_gives_the_same_values_with_the_same_seed() -> None:
 	assert are_same
 
 
+def test_draw_random_values_draws_without_seed() -> None:
+	"""
+	Check that a draw without seed gives values of the distribution.
+
+	.. versionadded:: 0.1.0
+	"""
+	values = draw_random_values(DIE, DRAW_SHAPE, None)
+
+	drawn_values = cast(list[int], values.tolist())
+	drawn_faces = set(drawn_values)
+	assert drawn_faces <= DIE_FACES
+
+
 def test_draw_random_values_follows_the_shape() -> None:
 	"""
 	Check that the values have the requested shape.

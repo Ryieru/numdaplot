@@ -5,6 +5,7 @@ Functional tests of the range of dates, datetimes and durations.
 """
 
 import warnings
+from collections.abc import Callable
 from dataclasses import dataclass
 from datetime import date, datetime, timedelta
 
@@ -30,6 +31,38 @@ ZERO_DIVISION_MESSAGE = "The operation / divides by zero: these values became mi
 UNDEFINED_MESSAGE = "The operation / has values without a defined result, such as 0 / 0: they became missing."
 
 
+def multiply_durations(durations: ndp.Array, factor: int | float) -> None:
+	"""
+	Compute the durations multiplied by a factor, for a calculation expected to raise.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	durations
+		The durations.
+	factor
+		The multiplier.
+	"""
+	_ = durations * factor
+
+
+def divide_durations(durations: ndp.Array, factor: int | float) -> None:
+	"""
+	Compute the durations divided by a factor, for a calculation expected to raise.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	durations
+		The durations.
+	factor
+		The divisor.
+	"""
+	_ = durations / factor
+
+
 @dataclass(frozen=True)
 class FactorCase:
 	"""
@@ -38,47 +71,20 @@ class FactorCase:
 	.. versionadded:: 0.1.0
 	"""
 
-	symbol: str
+	operation: Callable[[ndp.Array, int | float], None]
 	factor: int | float
-
-
-def compute_factor_case(durations: ndp.Array, case: FactorCase) -> ndp.Array:
-	"""
-	Return the durations multiplied or divided by the factor of a case.
-
-	.. versionadded:: 0.1.0
-
-	Parameters
-	----------
-	durations
-		The durations.
-	case
-		The operator and the factor.
-
-	Returns
-	-------
-	ndp.Array
-		The result.
-	"""
-	if case.symbol == "*":
-		product = durations * case.factor
-		return product
-
-	quotient = durations / case.factor
-
-	return quotient
 
 
 @pytest.mark.parametrize(
 	"case",
 	[
-		FactorCase("*", 2**60),
-		FactorCase("*", DAYS_BEYOND_RANGE),
-		FactorCase("*", HUGE_FACTOR),
-		FactorCase("*", DECIMAL_DAYS_BEYOND_RANGE),
-		FactorCase("*", 1e300),
-		FactorCase("/", TINY_DIVISOR),
-		FactorCase("/", 1e-300),
+		FactorCase(multiply_durations, 2**60),
+		FactorCase(multiply_durations, DAYS_BEYOND_RANGE),
+		FactorCase(multiply_durations, HUGE_FACTOR),
+		FactorCase(multiply_durations, DECIMAL_DAYS_BEYOND_RANGE),
+		FactorCase(multiply_durations, 1e300),
+		FactorCase(divide_durations, TINY_DIVISOR),
+		FactorCase(divide_durations, 1e-300),
 	],
 )
 def test_a_factor_giving_a_duration_too_large_is_refused(case: FactorCase) -> None:
@@ -90,7 +96,7 @@ def test_a_factor_giving_a_duration_too_large_is_refused(case: FactorCase) -> No
 	durations = ndp.Array.from_list([ONE_DAY])
 
 	with pytest.raises(ndp.TimeOverflowError):
-		compute_factor_case(durations, case)
+		case.operation(durations, case.factor)
 
 
 def test_the_duration_error_names_the_operation_and_the_range() -> None:

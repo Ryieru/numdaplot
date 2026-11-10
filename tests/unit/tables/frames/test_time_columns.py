@@ -5,6 +5,7 @@ Unit tests of the Table columns of times of day and of the durations read from o
 """
 
 from datetime import time
+from typing import Any
 
 import numpy
 import pandas
@@ -13,6 +14,7 @@ import pytest
 from numdaplot.errors.time_overflow_error import TimeOverflowError
 from numdaplot.tables.frames.time_columns import (
 	convert_outside_durations,
+	convert_to_nanoseconds,
 	is_time_column,
 	read_object_values,
 	read_time_objects_column,
@@ -36,6 +38,7 @@ MICROSECOND_FRAME = pandas.DataFrame({"wait": pandas.Series(numpy.array([5], dty
 NANOSECOND_DTYPE_NAME = "timedelta64[ns]"
 FAR_FRAME = pandas.DataFrame({"wait": pandas.Series(numpy.array([2**62], dtype="timedelta64[us]"))})
 COUNT_FRAME = pandas.DataFrame({"count": [1]})
+WAIT_COLUMN = "wait"
 TIME_AND_WAIT = pandas.DataFrame(
 	{"hour": TIME_COLUMN, "wait": pandas.Series(numpy.array([1, 2], dtype="timedelta64[ns]"))}
 )
@@ -125,6 +128,36 @@ def test_convert_outside_durations_rejects_a_duration_beyond_nanoseconds() -> No
 	"""
 	with pytest.raises(TimeOverflowError):
 		convert_outside_durations(FAR_FRAME)
+
+
+def test_convert_to_nanoseconds_rejects_a_duration_numpy_cannot_convert(overflowing_durations: Any) -> None:
+	"""
+	Check that a numpy raising OverflowError for nanoseconds gives TimeOverflowError.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	overflowing_durations
+		Durations whose conversion raises.
+	"""
+	with pytest.raises(TimeOverflowError):
+		convert_to_nanoseconds(overflowing_durations, WAIT_COLUMN)
+
+
+def test_convert_to_nanoseconds_rejects_a_duration_numpy_wraps_around(wrapping_durations: Any) -> None:
+	"""
+	Check that a numpy wrapping the value around for nanoseconds gives TimeOverflowError.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	wrapping_durations
+		Durations whose conversion wraps around.
+	"""
+	with pytest.raises(TimeOverflowError):
+		convert_to_nanoseconds(wrapping_durations, WAIT_COLUMN)
 
 
 def test_read_time_objects_frame_turns_only_times_into_objects() -> None:

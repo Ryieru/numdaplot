@@ -61,8 +61,7 @@ def test_a_loop_goes_through_to_list() -> None:
 	looped_values = list[object]()
 
 	with pytest.raises(ndp.RefusedOperationError):
-		for price in prices:
-			looped_values.append(price)
+		iter(prices)
 
 	price_list = prices.to_list()
 	for price in price_list:

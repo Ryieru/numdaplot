@@ -23,6 +23,8 @@ from numdaplot.errors.out_of_domain_error import OutOfDomainError
 INTEGERS = numpy.array([1, 2])
 DECIMALS = numpy.array([1.0, 2.0])
 LARGE_INTEGERS = numpy.array([2**62, 2**62])
+CANCELLING_INTEGERS = numpy.array([2**62, -(2**62), 2**62, -(2**62), 1])
+EMPTY_INTEGERS = numpy.array([], dtype="int64")
 INT8_RESULT = numpy.array([0], dtype="int8")
 UINT8_RESULT = numpy.array([0], dtype="uint8")
 INT64_RESULT = numpy.array([0])
@@ -131,6 +133,27 @@ def test_require_sum_fits_ignores_decimals() -> None:
 	.. versionadded:: 0.1.0
 	"""
 	require_sum_fits(DECIMALS, None, DECIMALS, OPERATION_NAME)
+
+
+def test_require_sum_fits_accepts_an_empty_sum() -> None:
+	"""
+	Check that a sum without values is accepted.
+
+	.. versionadded:: 0.1.0
+	"""
+	require_sum_fits(EMPTY_INTEGERS, None, INT64_RESULT, OPERATION_NAME)
+
+
+def test_require_sum_fits_accepts_large_values_cancelling_each_other() -> None:
+	"""
+	Check that large values whose sum stays far from the limit are accepted without exact calculation.
+
+	.. versionadded:: 0.1.0
+	"""
+	values_sum = CANCELLING_INTEGERS.sum()
+	result = numpy.array(values_sum)
+
+	require_sum_fits(CANCELLING_INTEGERS, None, result, OPERATION_NAME)
 
 
 def test_find_doubtful_estimates_keeps_only_values_near_the_limit() -> None:

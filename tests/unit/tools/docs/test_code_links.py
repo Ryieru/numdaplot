@@ -34,6 +34,9 @@ INT64_LINK = (
 )
 TABLE_LINK_START = '<span class="api-link api-link-class"><autoref identifier="sales.table.Table" optional>'
 LIBRARY_NAME = "pandas.to_csv"
+INSTANCE_CALL = "table.to_csv()"
+UNKNOWN_MEMBER = "table.to_json"
+TO_CSV_LINK_START = '<autoref identifier="sales.table.Table.to_csv" optional>'
 PLAIN_CODE = "1 + 2"
 SPECIAL_TEXT = "[a_b] * <c>"
 ESCAPED_SPECIAL_TEXT = "&#91;a&#95;b&#93; &#42; &lt;c&gt;"
@@ -271,3 +274,30 @@ def test_escape_code_writes_html_and_markdown_characters_as_entities() -> None:
 	escaped_text = escape_code(SPECIAL_TEXT)
 
 	assert escaped_text == ESCAPED_SPECIAL_TEXT
+
+
+def test_find_instance_member_gives_nothing_for_a_member_the_class_does_not_have() -> None:
+	"""
+	Check that a name written on the instance but missing from the documented class is not linked.
+
+	.. versionadded:: 0.1.0
+	"""
+	context = build_context(TABLE_PATH)
+
+	identifier = find_instance_member(UNKNOWN_MEMBER, context)
+
+	assert identifier is None
+
+
+def test_link_code_tokens_links_a_member_called_on_an_instance() -> None:
+	"""
+	Check that table.to_csv() in the documentation of Table links to Table.to_csv.
+
+	.. versionadded:: 0.1.0
+	"""
+	context = build_context(TABLE_PATH)
+
+	links = link_code_tokens(INSTANCE_CALL, context)
+
+	assert links is not None
+	assert TO_CSV_LINK_START in links

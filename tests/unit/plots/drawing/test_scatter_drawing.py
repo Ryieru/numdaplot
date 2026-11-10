@@ -30,6 +30,7 @@ GRID_VALUES = read_array_values(GRID, "ScatterChart")
 SIZES = numpy.array([10.0, 20.0, numpy.nan, 30.0])
 EXPECTED_AREAS = [16.0, 136.0, 0.0, 256.0]
 SAME_SIZES = numpy.array([5.0, 5.0])
+MISSING_SIZES = numpy.array([numpy.nan, numpy.nan])
 MIDDLE_AREA = 136.0
 DEFAULT_AREA = 36.0
 
@@ -172,3 +173,14 @@ def test_choose_areas_squares_the_point_size() -> None:
 	areas = choose_areas(None, 2, 3.0)
 
 	assert areas.tolist() == [9.0, 9.0]
+
+
+def test_choose_areas_gives_the_middle_area_when_every_size_is_missing() -> None:
+	"""
+	Check that points without any size_by value all get the middle area.
+
+	.. versionadded:: 0.1.0
+	"""
+	areas = choose_areas(MISSING_SIZES, 2, None)
+
+	assert areas.tolist() == [MIDDLE_AREA, MIDDLE_AREA]

@@ -52,6 +52,7 @@ EXPECTED_RATIO_TOP_TICK = 1.0
 MANY_COLUMN_NAMES = [f"column_{i}" for i in range(50)]
 TOO_MANY_COLUMN_NAMES = [f"column_{i}" for i in range(200)]
 AXES_HEIGHT = 400.0
+COMPLETE_PRICES = [1.0, 2.0]
 BAR_TOP = 30.0
 LABEL_HEIGHT = 40.0
 EXPECTED_AXIS_TOP = 33.333333333333336
@@ -291,3 +292,20 @@ def test_add_legend_swatch_draws_nothing_visible() -> None:
 	assert swatch.get_width() == 0
 	assert swatch.get_height() == 0
 	assert numpy.isnan(swatch.get_x())
+
+
+def test_draw_missing_chart_keeps_room_above_bars_of_zero() -> None:
+	"""
+	Check that a Table without missing value still gets a count axis above zero.
+
+	.. versionadded:: 0.1.0
+	"""
+	prices = ndp.Array.from_list(COMPLETE_PRICES)
+	complete_flats = ndp.Table.from_arrays({"price": prices})
+	axes = Figure().add_subplot()
+	values = read_missing_counts(complete_flats, ndp.Measure.COUNT)
+
+	draw_missing_chart(axes, ChartLayer(ndp.MissingChart(), values))
+
+	axis_top = axes.get_ylim()[1]
+	assert axis_top > 0

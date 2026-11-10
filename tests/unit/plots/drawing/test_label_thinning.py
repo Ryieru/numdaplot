@@ -28,6 +28,8 @@ DPI = 100
 SLANTED = 45.0
 MANY_TICKS = 60
 FEW_TICKS = 5
+STACKED_TICK = 1.0
+STACKED_TEXTS = ["a", "b", "c", "d", "e"]
 STEP_AT_45 = 2
 TEXTS = ["Paris", "Lyon", "Nice"]
 ORDERED_TEXTS = ["2025", "\N{MINUS SIGN}1.5", "2026-01-31", "2026-01-31 10:00:00", ""]
@@ -251,3 +253,18 @@ def test_thin_labels_leaves_labels_with_enough_room() -> None:
 	labels = read_labels(axes)
 	assert len(labels) == FEW_TICKS
 	assert caught_warnings == []
+
+
+def test_find_label_step_keeps_every_label_of_ticks_at_the_same_place() -> None:
+	"""
+	Check that ticks without any gap between them leave every label.
+
+	.. versionadded:: 0.1.0
+	"""
+	axes = Figure().add_subplot()
+	stacked_ticks = [STACKED_TICK] * FEW_TICKS
+	axes.xaxis.set_ticks(stacked_ticks, STACKED_TEXTS)
+
+	label_step = find_label_step(axes.xaxis, False, SLANTED)
+
+	assert label_step == 1

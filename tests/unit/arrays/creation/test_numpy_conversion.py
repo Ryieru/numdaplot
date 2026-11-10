@@ -21,6 +21,7 @@ TEXT_DTYPE_MARKED_WITH_NONE = STRING_DTYPE_CLASS(na_object=None)
 CHANGED_VALUE = 99
 FIRST_POSITION = 0
 ORIGINAL_VALUES = [1, 2]
+TEXT_VALUES = ["a", "b"]
 MICROSECOND_DURATIONS = numpy.array([5, "NaT"], dtype="timedelta64[us]")
 NANOSECOND_DTYPE = numpy.dtype("timedelta64[ns]")
 SECOND_DURATIONS = numpy.array([5], dtype="timedelta64[s]")
@@ -97,6 +98,19 @@ def test_normalize_text_keeps_other_values_as_they_are() -> None:
 	assert normalized_values is numbers
 
 
+def test_normalize_text_keeps_texts_already_stored_as_they_are() -> None:
+	"""
+	Check that texts already of the TEXT dtype are returned without copy.
+
+	.. versionadded:: 0.1.0
+	"""
+	texts = numpy.array(TEXT_VALUES, dtype=TEXT_DTYPE)
+
+	normalized_values = normalize_text(texts)
+
+	assert normalized_values is texts
+
+
 def test_normalize_durations_turns_microseconds_into_nanoseconds() -> None:
 	"""
 	Check that durations in microseconds become nanoseconds, NaT kept.
@@ -127,6 +141,36 @@ def test_normalize_durations_rejects_a_duration_beyond_nanoseconds() -> None:
 	"""
 	with pytest.raises(TimeOverflowError):
 		normalize_durations(FAR_DURATIONS)
+
+
+def test_normalize_durations_rejects_a_duration_numpy_cannot_convert(overflowing_durations: Any) -> None:
+	"""
+	Check that a numpy raising OverflowError for nanoseconds gives TimeOverflowError.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	overflowing_durations
+		Durations whose conversion raises.
+	"""
+	with pytest.raises(TimeOverflowError):
+		normalize_durations(overflowing_durations)
+
+
+def test_normalize_durations_rejects_a_duration_numpy_wraps_around(wrapping_durations: Any) -> None:
+	"""
+	Check that a numpy wrapping the value around for nanoseconds gives TimeOverflowError.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	wrapping_durations
+		Durations whose conversion wraps around.
+	"""
+	with pytest.raises(TimeOverflowError):
+		normalize_durations(wrapping_durations)
 
 
 def test_copy_numpy_values_reads_an_object_array_of_times() -> None:

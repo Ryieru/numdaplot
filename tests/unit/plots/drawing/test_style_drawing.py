@@ -285,3 +285,20 @@ def test_place_legend_moves_best_outside_with_axes_on_the_right() -> None:
 	legend_anchor = legend.get_bbox_to_anchor()
 	axes_box = right_axes.get_window_extent()
 	assert legend_anchor.x0 > axes_box.x1
+
+
+def test_find_transform_past_right_axis_stays_on_the_edge_of_a_hidden_axis() -> None:
+	"""
+	Check that a right axis hidden from view adds no shift past the edge of the axes.
+
+	.. versionadded:: 0.1.0
+	"""
+	axes = Figure().add_subplot()
+	right_axes = axes.twinx()
+	right_axes.yaxis.set_visible(False)
+
+	transform = find_transform_past_right_axis(right_axes)
+
+	shifted_edge = transform.transform((1.0, 0.0))[0]
+	axes_box = right_axes.get_window_extent()
+	assert shifted_edge == pytest.approx(axes_box.x1)
