@@ -32,8 +32,8 @@ import numdaplot as ndp
 
 prices = ndp.Array.from_list([12.5, 8.0, None, 30.0])
 taxed_prices = prices * 1.2
-taxed_prices.to_list()
-# [15.0, 9.6, nan, 36.0]
+taxed_prices
+# Array([15. ,  9.6,  nan, 36. ], dtype=FLOAT64)
 
 high_prices = taxed_prices.select(ndp.Greater(10))
 high_prices.to_list()
