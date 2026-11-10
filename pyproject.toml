@@ -1,7 +1,8 @@
 [project]
 name = "numdaplot"
-version = "0.1.0"
+version = "0.1.1"
 description = "A simpler, explicit API over numpy, pandas and matplotlib."
+keywords = ["numpy", "pandas", "matplotlib", "data analysis", "plotting"]
 readme = "README.md"
 license = "BSD-3-Clause"
 license-files = ["LICENSE"]
@@ -31,6 +32,8 @@ parquet = ["pyarrow>=18.1"]
 [project.urls]
 Repository = "https://github.com/Ryieru/numdaplot"
 Documentation = "https://ryieru.github.io/numdaplot/"
+Changelog = "https://github.com/Ryieru/numdaplot/blob/main/CHANGELOG.md"
+Issues = "https://github.com/Ryieru/numdaplot/issues"
 
 [dependency-groups]
 dev = [
