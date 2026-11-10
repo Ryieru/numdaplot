@@ -16,6 +16,7 @@ EXPECTED_END_ROWS = ["7", "8", "9"]
 HEADER_LINE_COUNT = 2
 SEED = 11
 ROW_NUMBER_POSITION = 0
+TABLE_HTML_START = "<table"
 
 
 def build_prices() -> ndp.Table:
@@ -77,6 +78,22 @@ def test_printing_a_table_shows_the_type_under_each_name() -> None:
 	first_lines = lines[:HEADER_LINE_COUNT]
 	header_lines = [line.strip() for line in first_lines]
 	assert header_lines == EXPECTED_TABLE_LINES
+
+
+def test_a_table_at_the_end_of_a_notebook_cell_shows_an_html_table() -> None:
+	"""
+	Check that a notebook receives an HTML table with the type under each name.
+
+	.. versionadded:: 0.1.0
+	"""
+	table = build_prices()
+
+	# Jupyter calls _repr_html_ to show an object written at the end of a cell.
+	table_html = table._repr_html_()  # pyright: ignore[reportPrivateUsage]
+
+	assert table_html.startswith(TABLE_HTML_START)
+	for expected_text in EXPECTED_TABLE_LINES:
+		assert expected_text in table_html
 
 
 def test_a_preview_prints_the_last_rows_with_their_numbers(capsys: pytest.CaptureFixture[str]) -> None:

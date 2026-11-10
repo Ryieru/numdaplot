@@ -65,6 +65,8 @@ and numdaplot follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
   `Table.count_missing`, `Table.to_value`, `Table.to_pandas`, `Table.is_equal`, `Table.row_count`,
   `Table.column_count`, `Table.column_names`, `Table.column_types`, `Table.preview`, `Table.preview_missing`
   and `print`.
+- A `Table` written at the end of a notebook cell is shown as the HTML table of `Table.preview`, with every column
+  and the type of each column under its name; a long Table shows its first and last rows, as its text does.
 - `Table.from_csv` gives each column the type of all its values, even when pandas reads a long file in blocks: a
   column mixing numbers and texts keeps every text as written, such as `01`, without the pandas `DtypeWarning`.
 - `Array`, `Table` and `Plot`, and the base classes `Rule`, `Statistic`, `MathFunction`, `TimeFunction`,

@@ -22,6 +22,8 @@ from numdaplot.tables.frames.frame_equality import are_frames_equal
 from numdaplot.tables.frames.table_text import format_table
 from numdaplot.tables.frames.time_columns import read_time_objects_frame
 from numdaplot.tables.frames.time_zones import find_column_time_zone
+from numdaplot.tables.preview.notebook_display import format_table_html
+from numdaplot.tables.preview.shown_columns import ShownColumns
 from numdaplot.tables.table_data import TableData
 
 if TYPE_CHECKING:
@@ -322,3 +324,28 @@ class TableConversion(TableData):
 		table_text = format_table(self._frame)
 
 		return table_text
+
+	def _repr_html_(self) -> str:
+		"""
+		Return the HTML table a Jupyter notebook shows for a Table written at the end of a cell.
+
+		The table is the one of ``preview``: every column, with the type of each column under its name. A long Table
+		only shows its first and last rows, as its text does.
+
+		.. versionadded:: 0.1.0
+
+		Returns
+		-------
+		str
+			The HTML table, or a note for a Table without rows or without columns.
+
+		Examples
+		--------
+		>>> import numdaplot as ndp
+		>>> table = ndp.Table.from_arrays({"paid": ndp.Array.from_list([True, False])})
+		>>> "BOOL" in table._repr_html_()
+		True
+		"""
+		table_html = format_table_html(self._frame, ShownColumns.ALL)
+
+		return table_html

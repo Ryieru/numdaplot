@@ -21,6 +21,7 @@ from numdaplot.errors.invalid_type_error import InvalidTypeError
 from numdaplot.errors.not_single_value_error import NotSingleValueError
 from numdaplot.errors.time_zone_mismatch_error import TimeZoneMismatchError
 from numdaplot.tables import table_conversion
+from numdaplot.tables.preview.shown_columns import ShownColumns
 from numdaplot.tables.table import Table
 from numdaplot.tables.table_conversion import TableConversion
 
@@ -36,6 +37,8 @@ MISSING_COUNT = pandas.DataFrame({"count": pandas.Series([None], dtype="Int64")}
 EXPECTED_VALUE_COUNT = 2
 FAKE_TEXT = "fake table text"
 FORMAT_TABLE_NAME = "format_table"
+FORMAT_TABLE_HTML_NAME = "format_table_html"
+FAKE_HTML = "<table>fake</table>"
 ARE_FRAMES_EQUAL_NAME = "are_frames_equal"
 PARIS_TIMES = (
 	pandas.Series(pandas.to_datetime(["2026-07-01 10:30"])).astype("datetime64[ns]").dt.tz_localize("Europe/Paris")
@@ -102,6 +105,44 @@ def format_fake_table(frame: pandas.DataFrame) -> str:
 		Always the fake text.
 	"""
 	return FAKE_TEXT
+
+
+class TableHtmlRecorder:
+	"""
+	Fake HTML builder recording the columns setting it receives.
+
+	.. versionadded:: 0.1.0
+	"""
+
+	def __init__(self) -> None:
+		"""
+		Start without any recorded call.
+
+		.. versionadded:: 0.1.0
+		"""
+		self.shown_columns = list[ShownColumns]()
+
+	def format_table_html(self, frame: pandas.DataFrame, shown_columns: ShownColumns) -> str:
+		"""
+		Record the columns setting and return the fake HTML.
+
+		.. versionadded:: 0.1.0
+
+		Parameters
+		----------
+		frame
+			The columns, ignored.
+		shown_columns
+			The recorded setting.
+
+		Returns
+		-------
+		str
+			Always the fake HTML.
+		"""
+		self.shown_columns.append(shown_columns)
+
+		return FAKE_HTML
 
 
 def test_from_pandas_copies_the_dataframe() -> None:
@@ -255,6 +296,27 @@ def test_repr_gives_the_text_of_the_table(monkeypatch: pytest.MonkeyPatch) -> No
 	table_text = repr(table)
 
 	assert table_text == FAKE_TEXT
+
+
+def test_repr_html_gives_the_html_table_with_every_column(monkeypatch: pytest.MonkeyPatch) -> None:
+	"""
+	Check that the notebook HTML of the Table comes from format_table_html, with every column.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	monkeypatch
+		Replaces the HTML builder with a fake.
+	"""
+	recorder = TableHtmlRecorder()
+	monkeypatch.setattr(table_conversion, FORMAT_TABLE_HTML_NAME, recorder.format_table_html)
+	table = TableConversion._create(FRAME)
+
+	table_html = table._repr_html_()
+
+	assert table_html == FAKE_HTML
+	assert recorder.shown_columns == [ShownColumns.ALL]
 
 
 def test_to_value_keeps_the_time_zone_of_a_datetime() -> None:

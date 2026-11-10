@@ -17,6 +17,8 @@ IPYTHON_DISPLAY_MODULE = "IPython.display"
 NOTEBOOK_KERNEL = "IPKernelApp"
 COMPACT_NOTEBOOK_COLUMN_COUNT = 10
 NOTE_HTML = "<p>{note}</p>"
+MAX_ROWS_OPTION = "display.max_rows"
+MIN_ROWS_OPTION = "display.min_rows"
 
 
 def show_frame(frame: pandas.DataFrame, shown_columns: ShownColumns) -> None:
@@ -50,23 +52,106 @@ def show_frame(frame: pandas.DataFrame, shown_columns: ShownColumns) -> None:
 		print(table_text)
 		return
 
+	table_html = format_table_html(frame, shown_columns)
+	display_html(table_html)
+
+
+def format_table_html(frame: pandas.DataFrame, shown_columns: ShownColumns) -> str:
+	"""
+	Return the HTML table of the columns of a Table, with the type of each column under its name.
+
+	A long Table only shows its first and last rows, following the pandas display settings, as its text does.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	frame
+		The columns of a Table.
+	shown_columns
+		Whether every column is shown. A compact HTML table shows 10 columns.
+
+	Returns
+	-------
+	str
+		The HTML table, followed by a note for a Table without rows, or only the note for a Table without columns.
+
+	Examples
+	--------
+	>>> import pandas
+	>>> import numdaplot as ndp
+	>>> from numdaplot.tables.preview.notebook_display import format_table_html
+	>>> table_html = format_table_html(pandas.DataFrame({"price": [1.5]}), ndp.ShownColumns.ALL)
+	>>> "FLOAT64" in table_html
+	True
+	"""
 	note = write_empty_table_note(frame)
 	column_count = len(frame.columns)
 	if column_count == 0:
 		note_html = NOTE_HTML.format(note=note)
-		display_html(note_html)
-		return
+		return note_html
 
 	typed_frame = build_typed_frame(frame)
 	column_limit = None
+	are_columns_left_out = False
 	if shown_columns == ShownColumns.COMPACT:
 		column_limit = COMPACT_NOTEBOOK_COLUMN_COUNT
+		are_columns_left_out = column_count > column_limit
 
-	frame_html = typed_frame.to_html(max_cols=column_limit)
+	row_count = len(frame.index)
+	row_limit = find_shown_row_count(row_count)
+	are_rows_left_out = row_limit is not None
+	# pandas writes the size of the Table under it, as in its text, only when rows or columns are left out.
+	shows_size = are_rows_left_out or are_columns_left_out
+	table_html = typed_frame.to_html(max_rows=row_limit, max_cols=column_limit, show_dimensions=shows_size)
 	if note is not None:
-		frame_html += NOTE_HTML.format(note=note)
+		note_html = NOTE_HTML.format(note=note)
+		table_html += note_html
 
-	display_html(frame_html)
+	return table_html
+
+
+def find_shown_row_count(row_count: int) -> int | None:
+	"""
+	Return how many rows pandas shows for a Table of this length.
+
+	pandas shows every row up to ``display.max_rows``, and only ``display.min_rows`` of them, the first and last
+	ones, beyond it. A missing ``display.min_rows`` or one above ``display.max_rows`` shows ``display.max_rows`` rows.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	row_count
+		The number of rows of the Table.
+
+	Returns
+	-------
+	int or None
+		The number of rows shown, or None to show every row.
+
+	Examples
+	--------
+	>>> from numdaplot.tables.preview.notebook_display import find_shown_row_count
+	>>> find_shown_row_count(5) is None
+	True
+	>>> find_shown_row_count(1000)
+	10
+	"""
+	max_rows = pandas.get_option(MAX_ROWS_OPTION)
+	if max_rows is None:
+		return None
+
+	if row_count <= max_rows:
+		return None
+
+	min_rows = pandas.get_option(MIN_ROWS_OPTION)
+	if min_rows is None:
+		return max_rows
+
+	shown_row_count = min(min_rows, max_rows)
+
+	return shown_row_count
 
 
 def show_pandas_frame(frame: pandas.DataFrame) -> None:
