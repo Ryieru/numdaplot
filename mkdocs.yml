@@ -1,5 +1,5 @@
 site_name: numdaplot
-site_description: A simpler, explicit API over numpy, pandas and matplotlib.
+site_description: A typed API for arrays, tables and plots, built on numpy, pandas and matplotlib.
 site_url: https://ryieru.github.io/numdaplot/
 repo_url: https://github.com/Ryieru/numdaplot
 
@@ -75,6 +75,9 @@ plugins:
 nav:
   - Home: index.md
   - Changelog: changelog.md
+  - Development:
+      - Development: development.md
+      - Releasing: releasing.md
 
 extra_css:
   - stylesheets/symbols.css

@@ -5,6 +5,14 @@ All notable changes to numdaplot are listed in this file.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and numdaplot follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Changed
+
+- The description of the package has changed to "A typed API for arrays, tables and plots, built on
+  numpy, pandas and matplotlib".
+- The README presents the library only; the development and release guides are pages of the documentation.
+
 ## [0.1.1] - 2026-11-10
 
 ### Added

@@ -1,5 +1,5 @@
 """
-numdaplot: a simpler, explicit API over numpy, pandas and matplotlib.
+numdaplot: a typed API for arrays, tables and plots, built on numpy, pandas and matplotlib.
 
 Import it as ``ndp``; every public name is available directly under it.
 
