@@ -43,5 +43,14 @@ jobs:
         run: uv run --frozen coverage run run_tests.py
       - name: Coverage
         run: uv run --frozen coverage report
+      - name: Coverage file
+        if: ${{ github.ref == 'refs/heads/main' && matrix.python == '3.13' && matrix.dependencies == 'latest' }}
+        run: uv run --frozen coverage xml
+      - name: Coverage upload
+        if: ${{ github.ref == 'refs/heads/main' && matrix.python == '3.13' && matrix.dependencies == 'latest' }}
+        uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
+        with:
+          files: coverage.xml
+          token: ${{ secrets.CODECOV_TOKEN }}
       - name: Documentation
         run: uv run --frozen mkdocs build --strict
