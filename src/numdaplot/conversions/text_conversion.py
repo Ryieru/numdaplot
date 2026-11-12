@@ -46,7 +46,7 @@ def parse_booleans(column: Column) -> Column:
 	Examples
 	--------
 	>>> import pandas
-	>>> from numdaplot.tables.columns.text_conversion import parse_booleans
+	>>> from numdaplot.conversions.text_conversion import parse_booleans
 	>>> parse_booleans(pandas.Series(["True", " false ", None], dtype="string")).tolist()
 	[True, False, <NA>]
 	"""

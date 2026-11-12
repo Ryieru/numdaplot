@@ -20,6 +20,7 @@ import pytest
 from numpy.typing import NDArray
 
 from numdaplot.arrays.array import Array
+from numdaplot.conversions.table_conversion import TableConversion
 from numdaplot.data_types.type import Type
 from numdaplot.positions.axis import Axis
 from numdaplot.positions.index import Index
@@ -34,7 +35,6 @@ from numdaplot.tables.columns.column_choice import ColumnChoice
 from numdaplot.tables.columns.name_change import NameChange
 from numdaplot.tables.columns.new_column import NewColumn
 from numdaplot.tables.columns.renaming import Renaming
-from numdaplot.tables.columns.table_conversion import TableConversion
 from numdaplot.tables.description.description import Description
 from numdaplot.tables.duplicates.deduplication import Deduplication
 from numdaplot.tables.filtering.condition import Condition

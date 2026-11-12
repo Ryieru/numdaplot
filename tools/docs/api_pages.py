@@ -116,6 +116,7 @@ SECTIONS = (
 	Section("numdaplot.ratios", "Tables", "tables", "Missing value settings"),
 	Section("numdaplot.tables.joining", "Tables", "tables", "Join settings"),
 	Section("numdaplot.tables", "Tables", "tables"),
+	Section("numdaplot.conversions", "Conversions", "conversions"),
 	Section("numdaplot.dates", "Dates", "dates"),
 	Section("numdaplot.data_types", "Types", "types"),
 	Section("numdaplot.rules", "Rules", "rules"),
@@ -272,7 +273,7 @@ def order_public_object(public_object: PublicObject) -> tuple[int, int, bool, st
 	>>> from api_pages import PublicObject, find_section, order_public_object
 	>>> rule_section = find_section("numdaplot.rules.rule")
 	>>> order_public_object(PublicObject("Rule", "numdaplot.rules.rule.Rule", rule_section))
-	(4, 0, False, 'Rule')
+	(5, 0, False, 'Rule')
 	"""
 	section_position = SECTION_TITLES.index(public_object.section.title)
 	group_position = GROUP_ORDER.index(public_object.section.group)

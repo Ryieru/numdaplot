@@ -10,14 +10,14 @@ import numpy
 import pandas
 from numpy.typing import NDArray
 
+from numdaplot.conversions.converted_column import convert_column
+from numdaplot.conversions.table_conversion import TableConversion
 from numdaplot.data_types.number_types import DECIMAL_TYPES
 from numdaplot.data_types.type import Type
 from numdaplot.errors.refused_operation_error import RefusedOperationError
 from numdaplot.tables.aggregation.aggregated_frame import compute_group_results, take_group_keys
 from numdaplot.tables.aggregation.row_groups import find_row_groups, split_positions
 from numdaplot.tables.columns.column_names import require_known_columns, require_unique_names
-from numdaplot.tables.columns.converted_column import convert_column
-from numdaplot.tables.columns.table_conversion import TableConversion
 from numdaplot.tables.frames.column import Column
 from numdaplot.tables.frames.column_values import find_column_missing, find_column_type
 from numdaplot.tables.pivot.pivot_table import PivotTable

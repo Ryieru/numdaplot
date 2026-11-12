@@ -63,7 +63,7 @@ def parse_times(column: Column, time_format: CustomDateFormat | None) -> Column:
 	--------
 	>>> import pandas
 	>>> import numdaplot as ndp
-	>>> from numdaplot.tables.columns.time_conversion import parse_times
+	>>> from numdaplot.conversions.time_conversion import parse_times
 	>>> parse_times(pandas.Series(["15:35", " 8:05:30.5", None], dtype="string"), None).tolist()
 	[Timedelta('0 days 15:35:00'), Timedelta('0 days 08:05:30.500000'), NaT]
 	>>> parse_times(pandas.Series(["1535"], dtype="string"), ndp.CustomDateFormat("%H%M")).tolist()
@@ -108,7 +108,7 @@ def read_times(texts: Column, time_format: CustomDateFormat | None) -> Column:
 	Examples
 	--------
 	>>> import pandas
-	>>> from numdaplot.tables.columns.time_conversion import read_times
+	>>> from numdaplot.conversions.time_conversion import read_times
 	>>> read_times(pandas.Series(["24:00", "23:59"], dtype="string"), None).tolist()
 	[NaT, Timedelta('0 days 23:59:00')]
 	"""
@@ -143,7 +143,7 @@ def read_clock_texts(texts: Column) -> Column:
 	Examples
 	--------
 	>>> import pandas
-	>>> from numdaplot.tables.columns.time_conversion import read_clock_texts
+	>>> from numdaplot.conversions.time_conversion import read_clock_texts
 	>>> read_clock_texts(pandas.Series(["9:07", "12:60", "noon"], dtype="string")).tolist()
 	[Timedelta('0 days 09:07:00'), NaT, NaT]
 	"""
@@ -190,7 +190,7 @@ def read_fraction_microseconds(fractions: Column) -> Column:
 	Examples
 	--------
 	>>> import pandas
-	>>> from numdaplot.tables.columns.time_conversion import read_fraction_microseconds
+	>>> from numdaplot.conversions.time_conversion import read_fraction_microseconds
 	>>> read_fraction_microseconds(pandas.Series(["5", "000250", None], dtype=object)).tolist()
 	[500000.0, 250.0, 0.0]
 	"""
@@ -223,7 +223,7 @@ def keep_time_of_day(moments: Column) -> Column:
 	Examples
 	--------
 	>>> import pandas
-	>>> from numdaplot.tables.columns.time_conversion import keep_time_of_day
+	>>> from numdaplot.conversions.time_conversion import keep_time_of_day
 	>>> keep_time_of_day(pandas.Series(pandas.to_datetime(["2026-03-14 15:35"]))).tolist()
 	[Timedelta('0 days 15:35:00')]
 	"""
@@ -263,7 +263,7 @@ def write_times(column: Column, time_format: CustomDateFormat | None) -> Column:
 	>>> import numpy
 	>>> import pandas
 	>>> import numdaplot as ndp
-	>>> from numdaplot.tables.columns.time_conversion import write_times
+	>>> from numdaplot.conversions.time_conversion import write_times
 	>>> times = pandas.Series(numpy.array([56100000000, "NaT"], dtype="timedelta64[us]"))
 	>>> write_times(times, None).tolist()
 	['15:35:00', <NA>]
@@ -303,7 +303,7 @@ def find_time_format_name(time_format: CustomDateFormat | None) -> str:
 
 	Examples
 	--------
-	>>> from numdaplot.tables.columns.time_conversion import find_time_format_name
+	>>> from numdaplot.conversions.time_conversion import find_time_format_name
 	>>> find_time_format_name(None)
 	'HH:MM:SS'
 	"""

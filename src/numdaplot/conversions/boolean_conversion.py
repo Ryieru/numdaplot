@@ -8,9 +8,9 @@ from typing import Any, cast
 
 import numpy
 
+from numdaplot.conversions.boolean_rule import BooleanRule
 from numdaplot.data_types.type import Type
 from numdaplot.errors.value_conversion_error import ValueConversionError
-from numdaplot.tables.columns.boolean_rule import BooleanRule
 from numdaplot.tables.frames.column import Column
 from numdaplot.tables.frames.column_values import (
 	build_column_with_missing,
@@ -46,7 +46,7 @@ def convert_booleans_to_numbers(column: Column, target_type: Type) -> Column:
 	--------
 	>>> import pandas
 	>>> import numdaplot as ndp
-	>>> from numdaplot.tables.columns.boolean_conversion import convert_booleans_to_numbers
+	>>> from numdaplot.conversions.boolean_conversion import convert_booleans_to_numbers
 	>>> flags = pandas.Series([True, None, False], dtype="boolean")
 	>>> convert_booleans_to_numbers(flags, ndp.Type.FLOAT64).tolist()
 	[1.0, nan, 0.0]
@@ -83,7 +83,7 @@ def convert_numbers_to_booleans(column: Column, rule: BooleanRule) -> Column:
 	--------
 	>>> import pandas
 	>>> import numdaplot as ndp
-	>>> from numdaplot.tables.columns.boolean_conversion import convert_numbers_to_booleans
+	>>> from numdaplot.conversions.boolean_conversion import convert_numbers_to_booleans
 	>>> numbers = pandas.Series([1, None, 0], dtype="Int64")
 	>>> convert_numbers_to_booleans(numbers, ndp.BooleanRule.ZERO_ONE).tolist()
 	[True, <NA>, False]
@@ -122,7 +122,7 @@ def require_zero_or_one(numbers: numpy.typing.NDArray[numpy.number], source_type
 	--------
 	>>> import numpy
 	>>> import numdaplot as ndp
-	>>> from numdaplot.tables.columns.boolean_conversion import require_zero_or_one
+	>>> from numdaplot.conversions.boolean_conversion import require_zero_or_one
 	>>> try:
 	... 	require_zero_or_one(numpy.array([1, 2, 0]), ndp.Type.INT64)
 	... except ndp.ValueConversionError as error:

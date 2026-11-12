@@ -53,7 +53,7 @@ def change_time_zone(column: Column, change: TimeZoneChange) -> Column:
 	--------
 	>>> import pandas
 	>>> import numdaplot as ndp
-	>>> from numdaplot.tables.columns.time_zone_conversion import change_time_zone
+	>>> from numdaplot.conversions.time_zone_conversion import change_time_zone
 	>>> times = pandas.Series(pandas.to_datetime(["2026-07-01 10:30"]))
 	>>> paris = ndp.TimeZoneChange(mode=ndp.TimeZoneMode.ATTRIBUTE, zone=ndp.TimeZone("Europe/Paris"))
 	>>> change_time_zone(times, paris).tolist()
@@ -106,7 +106,7 @@ def attribute_time_zone(column: Column, zone_name: str) -> Column:
 	--------
 	>>> import pandas
 	>>> import numdaplot as ndp
-	>>> from numdaplot.tables.columns.time_zone_conversion import attribute_time_zone
+	>>> from numdaplot.conversions.time_zone_conversion import attribute_time_zone
 	>>> try:
 	... 	attribute_time_zone(pandas.Series(pandas.to_datetime(["2026-03-29 02:30"])), "Europe/Paris")
 	... except ndp.ValueConversionError as error:

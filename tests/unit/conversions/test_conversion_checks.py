@@ -6,15 +6,8 @@ Unit tests of the check of the format and the time zone change of a conversion.
 
 import pytest
 
-from numdaplot.data_types.type import Type
-from numdaplot.dates.custom_date_format import CustomDateFormat
-from numdaplot.dates.date_format import DateFormat
-from numdaplot.dates.time_zone import TimeZone
-from numdaplot.dates.time_zone_change import TimeZoneChange
-from numdaplot.dates.time_zone_mode import TimeZoneMode
-from numdaplot.errors.invalid_conversion_error import InvalidConversionError
-from numdaplot.tables.columns.boolean_rule import BooleanRule
-from numdaplot.tables.columns.converted_column import (
+from numdaplot.conversions.boolean_rule import BooleanRule
+from numdaplot.conversions.conversion_checks import (
 	require_booleans_setting,
 	require_brackets_setting,
 	require_conversion_settings,
@@ -22,7 +15,14 @@ from numdaplot.tables.columns.converted_column import (
 	require_time_format_setting,
 	require_time_zone_setting,
 )
-from numdaplot.tables.columns.table_conversion import TableConversion
+from numdaplot.conversions.table_conversion import TableConversion
+from numdaplot.data_types.type import Type
+from numdaplot.dates.custom_date_format import CustomDateFormat
+from numdaplot.dates.date_format import DateFormat
+from numdaplot.dates.time_zone import TimeZone
+from numdaplot.dates.time_zone_change import TimeZoneChange
+from numdaplot.dates.time_zone_mode import TimeZoneMode
+from numdaplot.errors.invalid_conversion_error import InvalidConversionError
 
 CONVERTED_NAME = "value"
 UTC_ZONE = TimeZone("UTC")

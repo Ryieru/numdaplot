@@ -10,10 +10,7 @@ import numpy
 import pandas
 import pytest
 
-from numdaplot.data_types.time_of_day import read_times as read_times_of_day
-from numdaplot.dates.custom_date_format import CustomDateFormat
-from numdaplot.errors.value_conversion_error import ValueConversionError
-from numdaplot.tables.columns.time_conversion import (
+from numdaplot.conversions.time_conversion import (
 	find_time_format_name,
 	keep_time_of_day,
 	parse_times,
@@ -22,6 +19,9 @@ from numdaplot.tables.columns.time_conversion import (
 	read_times,
 	write_times,
 )
+from numdaplot.data_types.time_of_day import read_times as read_times_of_day
+from numdaplot.dates.custom_date_format import CustomDateFormat
+from numdaplot.errors.value_conversion_error import ValueConversionError
 
 TIME_DTYPE_NAME = "timedelta64[us]"
 CLOCK_TEXTS = pandas.Series([" 15:35 ", "8:05:30", "23:59:59.999999", None], dtype="string")

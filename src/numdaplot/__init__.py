@@ -37,6 +37,8 @@ from numdaplot.arrays.math_functions.sine import Sine
 from numdaplot.arrays.math_functions.square_root import SquareRoot
 from numdaplot.arrays.replacement import Replacement
 from numdaplot.arrays.type_match import TypeMatch
+from numdaplot.conversions.boolean_rule import BooleanRule
+from numdaplot.conversions.table_conversion import TableConversion
 from numdaplot.data_types.library import Library
 from numdaplot.data_types.type import Type
 from numdaplot.dates.custom_date_format import CustomDateFormat
@@ -196,7 +198,6 @@ from numdaplot.statistics.statistic import Statistic
 from numdaplot.statistics.sum import Sum
 from numdaplot.tables.aggregation.aggregation import Aggregation
 from numdaplot.tables.aggregation.calculation import Calculation
-from numdaplot.tables.columns.boolean_rule import BooleanRule
 from numdaplot.tables.columns.bracket_end import BracketEnd
 from numdaplot.tables.columns.brackets import Brackets
 from numdaplot.tables.columns.column_choice import ColumnChoice
@@ -204,7 +205,6 @@ from numdaplot.tables.columns.column_mode import ColumnMode
 from numdaplot.tables.columns.name_change import NameChange
 from numdaplot.tables.columns.new_column import NewColumn
 from numdaplot.tables.columns.renaming import Renaming
-from numdaplot.tables.columns.table_conversion import TableConversion
 from numdaplot.tables.conflict import Conflict
 from numdaplot.tables.description.description import Description
 from numdaplot.tables.duplicates.deduplication import Deduplication

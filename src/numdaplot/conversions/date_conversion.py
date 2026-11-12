@@ -10,12 +10,12 @@ import numpy
 import pandas
 
 from numdaplot.arrays.conversion.time_text import format_durations
+from numdaplot.conversions.date_range import is_text_out_of_range
 from numdaplot.data_types.type import Type
 from numdaplot.dates.custom_date_format import DATE_CODES, TIME_CODES, CustomDateFormat
 from numdaplot.dates.date_format import DateFormat
 from numdaplot.errors.time_overflow_error import TimeOverflowError
 from numdaplot.errors.value_conversion_error import ValueConversionError
-from numdaplot.tables.columns.date_range import is_text_out_of_range
 from numdaplot.tables.frames.column import Column
 from numdaplot.tables.frames.column_values import find_column_missing, find_column_type
 from numdaplot.tables.frames.frame_normalization import convert_to_type
@@ -86,7 +86,7 @@ def has_date(date_format: DateFormat | CustomDateFormat) -> bool:
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> from numdaplot.tables.columns.date_conversion import has_date
+	>>> from numdaplot.conversions.date_conversion import has_date
 	>>> has_date(ndp.DateFormat.DAY_MONTH_YEAR), has_date(ndp.CustomDateFormat("%H:%M"))
 	(True, False)
 	"""
@@ -118,7 +118,7 @@ def has_time(date_format: DateFormat | CustomDateFormat) -> bool:
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> from numdaplot.tables.columns.date_conversion import has_time
+	>>> from numdaplot.conversions.date_conversion import has_time
 	>>> has_time(ndp.DateFormat.DAY_MONTH_YEAR)
 	False
 	"""
@@ -163,7 +163,7 @@ def parse_dates(column: Column, target_type: Type, date_format: DateFormat | Cus
 	--------
 	>>> import pandas
 	>>> import numdaplot as ndp
-	>>> from numdaplot.tables.columns.date_conversion import parse_dates
+	>>> from numdaplot.conversions.date_conversion import parse_dates
 	>>> texts = pandas.Series(["31/12/2026", None], dtype="string")
 	>>> parse_dates(texts, ndp.Type.DATE, ndp.DateFormat.DAY_MONTH_YEAR).tolist()
 	[Timestamp('2026-12-31 00:00:00'), NaT]
@@ -220,7 +220,7 @@ def read_moments(texts: Column, target_type: Type, date_format: DateFormat | Cus
 	--------
 	>>> import pandas
 	>>> import numdaplot as ndp
-	>>> from numdaplot.tables.columns.date_conversion import read_moments
+	>>> from numdaplot.conversions.date_conversion import read_moments
 	>>> texts = pandas.Series(["2026-12-31 14:30"], dtype="string")
 	>>> read_moments(texts, ndp.Type.DATE, None).tolist()
 	[NaT]
@@ -262,7 +262,7 @@ def find_read_format(target_type: Type, date_format: DateFormat | CustomDateForm
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> from numdaplot.tables.columns.date_conversion import YEAR_FIRST, find_read_format
+	>>> from numdaplot.conversions.date_conversion import YEAR_FIRST, find_read_format
 	>>> find_read_format(ndp.Type.DATE, None) == YEAR_FIRST
 	True
 	"""
@@ -299,7 +299,7 @@ def find_format_name(target_type: Type, date_format: DateFormat | CustomDateForm
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> from numdaplot.tables.columns.date_conversion import find_format_name
+	>>> from numdaplot.conversions.date_conversion import find_format_name
 	>>> find_format_name(ndp.Type.DATETIME, None)
 	'YEAR_MONTH_DAY_TIME'
 	>>> find_format_name(ndp.Type.DATE, ndp.CustomDateFormat("%d %b %Y"))
@@ -338,7 +338,7 @@ def read_common_format(texts: Column, date_format: DateFormat) -> Column:
 	--------
 	>>> import pandas
 	>>> import numdaplot as ndp
-	>>> from numdaplot.tables.columns.date_conversion import read_common_format
+	>>> from numdaplot.conversions.date_conversion import read_common_format
 	>>> texts = pandas.Series(["2026-12-31T14:30", "31/12/2026"], dtype="string")
 	>>> read_common_format(texts, ndp.DateFormat.YEAR_MONTH_DAY_TIME).tolist()
 	[Timestamp('2026-12-31 14:30:00'), NaT]
@@ -371,7 +371,7 @@ def read_date_pattern(texts: Column, read_pattern: str) -> Column:
 	Examples
 	--------
 	>>> import pandas
-	>>> from numdaplot.tables.columns.date_conversion import YEAR_FIRST, read_date_pattern
+	>>> from numdaplot.conversions.date_conversion import YEAR_FIRST, read_date_pattern
 	>>> texts = pandas.Series(["2026-12-31", "31/12/2026"], dtype="string")
 	>>> read_date_pattern(texts, YEAR_FIRST).tolist()
 	[Timestamp('2026-12-31 00:00:00'), NaT]
@@ -419,7 +419,7 @@ def write_dates(column: Column, date_format: DateFormat | CustomDateFormat | Non
 	--------
 	>>> import pandas
 	>>> import numdaplot as ndp
-	>>> from numdaplot.tables.columns.date_conversion import write_dates
+	>>> from numdaplot.conversions.date_conversion import write_dates
 	>>> days = pandas.Series(pandas.to_datetime(["2026-12-31", None])).astype("datetime64[s]")
 	>>> write_dates(days, ndp.DateFormat.DAY_MONTH_YEAR).tolist()
 	['31/12/2026', <NA>]
@@ -469,7 +469,7 @@ def write_durations(column: Column) -> Column:
 	Examples
 	--------
 	>>> import pandas
-	>>> from numdaplot.tables.columns.date_conversion import write_durations
+	>>> from numdaplot.conversions.date_conversion import write_durations
 	>>> write_durations(pandas.Series(pandas.to_timedelta(["36h", None]))).tolist()
 	['1 days 12:00:00', <NA>]
 	"""
@@ -506,7 +506,7 @@ def convert_moments(column: Column, target_type: Type) -> Column:
 	--------
 	>>> import pandas
 	>>> import numdaplot as ndp
-	>>> from numdaplot.tables.columns.date_conversion import convert_moments
+	>>> from numdaplot.conversions.date_conversion import convert_moments
 	>>> times = pandas.Series(pandas.to_datetime(["2026-12-31 14:30"]))
 	>>> convert_moments(times, ndp.Type.DATE).tolist()
 	[Timestamp('2026-12-31 00:00:00')]

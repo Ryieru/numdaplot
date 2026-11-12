@@ -34,7 +34,7 @@ def read_moment_text(text: str, read_pattern: str) -> datetime | None:
 
 	Examples
 	--------
-	>>> from numdaplot.tables.columns.date_range import read_moment_text
+	>>> from numdaplot.conversions.date_range import read_moment_text
 	>>> read_moment_text("3000-12-31", r"(?P<year>\d{4})-(?P<month>\d{2})-(?P<day>\d{2})")
 	datetime.datetime(3000, 12, 31, 0, 0)
 	>>> read_moment_text("3000-02-31", r"(?P<year>\d{4})-(?P<month>\d{2})-(?P<day>\d{2})") is None
@@ -81,7 +81,7 @@ def read_custom_text(text: str, date_format: CustomDateFormat) -> datetime | Non
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> from numdaplot.tables.columns.date_range import read_custom_text
+	>>> from numdaplot.conversions.date_range import read_custom_text
 	>>> read_custom_text("31 Dec 3000", ndp.CustomDateFormat("%d %b %Y"))
 	datetime.datetime(3000, 12, 31, 0, 0)
 	"""
@@ -114,7 +114,7 @@ def is_text_out_of_range(text: str, read_format: str | CustomDateFormat) -> bool
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> from numdaplot.tables.columns.date_range import is_text_out_of_range
+	>>> from numdaplot.conversions.date_range import is_text_out_of_range
 	>>> is_text_out_of_range("31 Dec 3000", ndp.CustomDateFormat("%d %b %Y"))
 	True
 	>>> is_text_out_of_range("31 Dec 2026", ndp.CustomDateFormat("%d %b %Y"))

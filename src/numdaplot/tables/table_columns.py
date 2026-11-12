@@ -6,15 +6,15 @@ Column operations of a Table: choice, renaming, conversion and addition.
 
 from typing import Self
 
+from numdaplot.conversions.converted_column import convert_column
+from numdaplot.conversions.table_conversion import TableConversion
 from numdaplot.settings.argument_types import checked_arguments
 from numdaplot.tables.columns.added_column import add_frame_column
 from numdaplot.tables.columns.chosen_columns import choose_frame_columns
 from numdaplot.tables.columns.column_choice import ColumnChoice
-from numdaplot.tables.columns.converted_column import convert_column
 from numdaplot.tables.columns.new_column import NewColumn
 from numdaplot.tables.columns.renamed_columns import rename_frame_columns
 from numdaplot.tables.columns.renaming import Renaming
-from numdaplot.tables.columns.table_conversion import TableConversion
 from numdaplot.tables.frames.named_column_errors import NamedColumnErrors
 from numdaplot.tables.table_data import TableData
 

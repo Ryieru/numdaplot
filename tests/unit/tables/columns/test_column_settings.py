@@ -1,5 +1,5 @@
 """
-Unit tests of ColumnChoice, NameChange, Renaming, TableConversion and NewColumn.
+Unit tests of ColumnChoice, NameChange, Renaming and NewColumn.
 
 .. versionadded:: 0.1.0
 """
@@ -7,7 +7,6 @@ Unit tests of ColumnChoice, NameChange, Renaming, TableConversion and NewColumn.
 import pytest
 
 from numdaplot.arrays.array import Array
-from numdaplot.data_types.type import Type
 from numdaplot.errors.duplicate_column_error import DuplicateColumnError
 from numdaplot.errors.empty_list_error import EmptyListError
 from numdaplot.errors.invalid_column_name_error import InvalidColumnNameError
@@ -16,7 +15,6 @@ from numdaplot.tables.columns.column_mode import ColumnMode
 from numdaplot.tables.columns.name_change import NameChange
 from numdaplot.tables.columns.new_column import NewColumn
 from numdaplot.tables.columns.renaming import Renaming
-from numdaplot.tables.columns.table_conversion import TableConversion
 from numdaplot.tables.conflict import Conflict
 
 COLUMN_NAMES = ["city", "price"]
@@ -138,18 +136,6 @@ def test_renaming_keeps_its_own_copy_of_the_changes() -> None:
 
 	change_count = len(renaming.changes)
 	assert change_count == 1
-
-
-def test_conversion_keeps_its_settings() -> None:
-	"""
-	Check that the column and the type are available as attributes.
-
-	.. versionadded:: 0.1.0
-	"""
-	conversion = TableConversion(column=COLUMN_NAME, dtype=Type.TEXT)
-
-	assert conversion.column == COLUMN_NAME
-	assert conversion.dtype == Type.TEXT
 
 
 def test_new_column_refuses_an_existing_name_by_default() -> None:

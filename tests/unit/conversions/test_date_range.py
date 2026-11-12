@@ -6,8 +6,8 @@ Unit tests of the detection of texts holding a date out of range.
 
 from datetime import datetime
 
+from numdaplot.conversions.date_range import is_text_out_of_range, read_custom_text, read_moment_text
 from numdaplot.dates.custom_date_format import CustomDateFormat
-from numdaplot.tables.columns.date_range import is_text_out_of_range, read_custom_text, read_moment_text
 
 DATE_PATTERN = r"(?P<year>\d{4})-(?P<month>\d{2})-(?P<day>\d{2})"
 CUSTOM_FORMAT = CustomDateFormat("%Y/%m/%d")

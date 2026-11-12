@@ -24,6 +24,7 @@ and numdaplot follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
   `FLOAT64` for `INT64` and `UINT64`.
 - The documentation shows the latest version note of each object and folds the earlier ones in a version history.
   Every enum member tells its version. Class pages no longer repeat the parameters of the creation.
+- The documentation lists `TableConversion` and `BooleanRule` in a Conversions section.
 
 ### Fixed
 

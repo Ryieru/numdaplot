@@ -10,13 +10,8 @@ import numpy
 import pandas
 import pytest
 
-from numdaplot.data_types.type import Type
-from numdaplot.dates.custom_date_format import CustomDateFormat
-from numdaplot.dates.date_format import DateFormat
-from numdaplot.errors.time_overflow_error import TimeOverflowError
-from numdaplot.errors.value_conversion_error import ValueConversionError
-from numdaplot.tables.columns import date_conversion
-from numdaplot.tables.columns.date_conversion import (
+from numdaplot.conversions import date_conversion
+from numdaplot.conversions.date_conversion import (
 	YEAR_FIRST,
 	convert_moments,
 	find_format_name,
@@ -29,6 +24,11 @@ from numdaplot.tables.columns.date_conversion import (
 	write_dates,
 	write_durations,
 )
+from numdaplot.data_types.type import Type
+from numdaplot.dates.custom_date_format import CustomDateFormat
+from numdaplot.dates.date_format import DateFormat
+from numdaplot.errors.time_overflow_error import TimeOverflowError
+from numdaplot.errors.value_conversion_error import ValueConversionError
 from numdaplot.tables.frames.column_values import find_column_type
 
 TEXT_DTYPE = "string"

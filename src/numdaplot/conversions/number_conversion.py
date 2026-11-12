@@ -56,7 +56,7 @@ def convert_numbers(column: Column, target_type: Type) -> Column:
 	--------
 	>>> import pandas
 	>>> import numdaplot as ndp
-	>>> from numdaplot.tables.columns.number_conversion import convert_numbers
+	>>> from numdaplot.conversions.number_conversion import convert_numbers
 	>>> convert_numbers(pandas.Series([2.0, None]), ndp.Type.INT64).tolist()
 	[2, <NA>]
 	"""
@@ -97,7 +97,7 @@ def parse_numbers(column: Column, target_type: Type) -> Column:
 	--------
 	>>> import pandas
 	>>> import numdaplot as ndp
-	>>> from numdaplot.tables.columns.number_conversion import parse_numbers
+	>>> from numdaplot.conversions.number_conversion import parse_numbers
 	>>> parse_numbers(pandas.Series(["2.5", "1e3"], dtype="string"), ndp.Type.FLOAT64).tolist()
 	[2.5, 1000.0]
 	"""
@@ -143,7 +143,7 @@ def store_numbers(values: NDArray[Any], target_type: Type) -> NDArray[Any]:
 	--------
 	>>> import numpy
 	>>> import numdaplot as ndp
-	>>> from numdaplot.tables.columns.number_conversion import store_numbers
+	>>> from numdaplot.conversions.number_conversion import store_numbers
 	>>> store_numbers(numpy.array([2.0]), ndp.Type.INT8)
 	array([2], dtype=int8)
 	"""
@@ -176,7 +176,7 @@ def find_lost_values(values: NDArray[Any], stored_values: NDArray[Any]) -> NDArr
 	Examples
 	--------
 	>>> import numpy
-	>>> from numdaplot.tables.columns.number_conversion import find_lost_values
+	>>> from numdaplot.conversions.number_conversion import find_lost_values
 	>>> find_lost_values(numpy.array([2.0, 2.5]), numpy.array([2, 2]))
 	array([False,  True])
 	"""
@@ -222,7 +222,7 @@ def require_no_lost_value(
 	--------
 	>>> import numpy
 	>>> import numdaplot as ndp
-	>>> from numdaplot.tables.columns.number_conversion import require_no_lost_value
+	>>> from numdaplot.conversions.number_conversion import require_no_lost_value
 	>>> try:
 	... 	require_no_lost_value(numpy.array([2.0, 2.5]), numpy.array([2, 2]), ndp.Type.FLOAT64, ndp.Type.INT64)
 	... except ndp.ValueConversionError as error:
@@ -261,7 +261,7 @@ def require_no_failed_value(
 	--------
 	>>> import numpy
 	>>> import numdaplot as ndp
-	>>> from numdaplot.tables.columns.number_conversion import require_no_failed_value
+	>>> from numdaplot.conversions.number_conversion import require_no_failed_value
 	>>> texts = numpy.array(["12", "abc"])
 	>>> failed = numpy.array([False, True])
 	>>> try:
