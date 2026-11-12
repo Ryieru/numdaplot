@@ -30,6 +30,8 @@ and numdaplot follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 - The documentation lists `TableConversion` and `BooleanRule` in a Conversions section.
 - The advice of `ValueConversionError` and `InvalidConversionError` about formats speaks of the values, which fits an
   Array as well as a column.
+- Each member of `Type` gives the rules of its type with examples, such as the type of a sum or of a division, and
+  the page of `Type` no longer says that integers wrap around.
 
 ### Fixed
 
