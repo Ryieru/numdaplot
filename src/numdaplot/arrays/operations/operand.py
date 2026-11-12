@@ -61,6 +61,36 @@ def find_operand_type(operand: Operand) -> Type:
 	return value_type
 
 
+def find_array_operand_type(operands: list[Operand]) -> Type:
+	"""
+	Return the type of the first operand holding the values of an Array, which a single value has to fit.
+
+	.. versionadded:: 0.2.0
+
+	Parameters
+	----------
+	operands
+		The values of Arrays, or single values, at least one holding the values of an Array.
+
+	Returns
+	-------
+	Type
+		The type of the values of the first Array among the operands.
+
+	Examples
+	--------
+	>>> import numpy
+	>>> from numdaplot.arrays.operations.operand import find_array_operand_type
+	>>> find_array_operand_type([300, numpy.array([1], dtype=numpy.int8)])
+	<Type.INT8: 1>
+	"""
+	array_operands = [operand for operand in operands if isinstance(operand, numpy.ndarray)]
+	first_array_operand = array_operands[0]
+	array_type = from_numpy_dtype(first_array_operand.dtype)
+
+	return array_type
+
+
 def find_operand_type_names(operands: list[Operand]) -> list[str]:
 	"""
 	Return the names of the numdaplot types of several operands, as shown in error messages.

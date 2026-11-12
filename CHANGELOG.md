@@ -19,6 +19,13 @@ and numdaplot follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 - Numbers given by a `ValueMapping` to an Array of numbers take its type, as with the operators: `INT8` codes stay
   `INT8`, integers given to decimals give decimals, and a number that does not fit raises `ValueConversionError`.
   Decimals given to integers still give `FLOAT64`.
+- The message of `IntegerOverflowError` gives the range of the type, and advises `INT64` for smaller integers,
+  `FLOAT64` for `INT64` and `UINT64`.
+
+### Fixed
+
+- `IntegerOverflowError` names the type of the Array when a number written before an operator does not fit it,
+  such as `1000 * values` on `INT8` values, instead of `INT64`.
 
 ## [0.1.2] - 2026-11-10
 

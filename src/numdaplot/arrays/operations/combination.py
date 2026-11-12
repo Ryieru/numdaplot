@@ -12,7 +12,7 @@ from numpy.typing import NDArray
 
 from numdaplot.arrays.operations.float_errors import FloatErrorWarnings, TimeErrorWarnings
 from numdaplot.arrays.operations.integer_rules import require_combination_fits, require_defined_integers
-from numdaplot.arrays.operations.operand import Operand, find_operand_type_names
+from numdaplot.arrays.operations.operand import Operand, find_array_operand_type, find_operand_type_names
 from numdaplot.arrays.operations.time_arithmetic import combine_time_values, involves_time
 from numdaplot.errors.broadcast_warning import BroadcastWarning
 from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
@@ -30,6 +30,8 @@ def combine_values(left: Operand, right: Operand, function: numpy.ufunc, symbol:
 	Return the result of a numpy function applied to two operands, value by value.
 
 	.. versionadded:: 0.1.0
+	.. versionchanged:: 0.2.0
+		Names the type of the Array in ``IntegerOverflowError`` when a single value does not fit it.
 
 	Parameters
 	----------
@@ -95,8 +97,8 @@ def combine_values(left: Operand, right: Operand, function: numpy.ufunc, symbol:
 		type_names = find_operand_type_names(operands)
 		raise IncompatibleTypesError(symbol, type_names) from error
 	except OverflowError as error:
-		type_names = find_operand_type_names(operands)
-		raise IntegerOverflowError(symbol, type_names[0]) from error
+		array_type = find_array_operand_type(operands)
+		raise IntegerOverflowError(symbol, array_type.name) from error
 
 	if combined_values.dtype.kind == PYTHON_OBJECT_KIND:
 		type_names = find_operand_type_names(operands)

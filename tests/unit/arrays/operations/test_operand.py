@@ -10,6 +10,7 @@ import numpy
 
 from numdaplot.arrays.operations.operand import (
 	convert_time_value,
+	find_array_operand_type,
 	find_operand_type,
 	find_operand_type_names,
 )
@@ -26,6 +27,8 @@ ONE_HOUR = timedelta(hours=1)
 NUMBER = 3
 AFTERNOON = time(15, 35)
 AFTERNOON_MICROSECONDS = numpy.timedelta64(56100000000, "us")
+LARGE_NUMBER = 300
+SMALL_INTEGERS = numpy.array([1], dtype=numpy.int8)
 
 
 def test_find_operand_type_reads_the_type_of_array_values() -> None:
@@ -37,6 +40,17 @@ def test_find_operand_type_reads_the_type_of_array_values() -> None:
 	operand_type = find_operand_type(DECIMAL_VALUES)
 
 	assert operand_type == Type.FLOAT64
+
+
+def test_find_array_operand_type_skips_a_single_value_on_the_left() -> None:
+	"""
+	Check that a Python number before the Array values gives the type of the Array.
+
+	.. versionadded:: 0.2.0
+	"""
+	array_type = find_array_operand_type([LARGE_NUMBER, SMALL_INTEGERS])
+
+	assert array_type == Type.INT8
 
 
 def test_find_operand_type_names_lists_each_type_in_order() -> None:

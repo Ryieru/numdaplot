@@ -184,7 +184,8 @@ def require_sum_fits(values: NDArray[Any], axis: int | None, result: NDArray[Any
 	... 	require_sum_fits(values, None, numpy.array([0]), "Sum")
 	... except ndp.IntegerOverflowError as error:
 	... 	print(error)
-	The operation Sum gives values too large for INT64. Convert the values to FLOAT64 first.
+	The operation Sum gives values outside the range of INT64, from -9223372036854775808 to 9223372036854775807.
+	Convert the values to FLOAT64 first, which keeps about 16 digits.
 	"""
 	if result.dtype.kind not in INTEGER_KINDS:
 		return

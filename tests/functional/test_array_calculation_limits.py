@@ -23,9 +23,15 @@ TOO_LARGE_MESSAGE = "The operation * has values too large for their type: they b
 FLOOR_DIVISION_MESSAGE = "Floor division is not defined for 0 between integers. Convert the values to FLOAT64 first."
 REMAINDER_MESSAGE = "Remainder is not defined for 0 between integers. Convert the values to FLOAT64 first."
 POWER_MESSAGE = "Power is not defined for -1 between integers. Convert the values to FLOAT64 first."
-OVERFLOW_MESSAGE = (
-	"The operation {operation} gives values too large for {type_name}. Convert the values to FLOAT64 first."
-)
+OVERFLOW_MESSAGE = "The operation {operation} gives values outside the range of {type_name}, {range_and_advice}"
+RANGE_AND_ADVICE_BY_TYPE = {
+	"INT64": (
+		"from -9223372036854775808 to 9223372036854775807. Convert the values to FLOAT64 first, which keeps about 16 "
+		"digits."
+	),
+	"INT8": "from -128 to 127. Convert the values to INT64 first.",
+	"UINT8": "from 0 to 255. Convert the values to INT64 first.",
+}
 
 
 def test_zero_divided_by_zero_warns_and_gives_nan() -> None:
@@ -250,6 +256,7 @@ def test_the_advice_for_integers_works() -> None:
 		(lambda: 2 ** ndp.Array.from_list([64]), "**", "INT64"),
 		(lambda: ndp.Array.from_list([HIGHEST_INT8], dtype=ndp.Type.INT8) + 1, "+", "INT8"),
 		(lambda: ndp.Array.from_list([1], dtype=ndp.Type.INT8) * 1000, "*", "INT8"),
+		(lambda: 1000 * ndp.Array.from_list([1], dtype=ndp.Type.INT8), "*", "INT8"),
 		(lambda: ndp.Array.from_list([1], dtype=ndp.Type.UINT8) - 2, "-", "UINT8"),
 		(lambda: ndp.Array.from_list([1, 2]) * 2**64, "*", "INT64"),
 		(lambda: ndp.Array.from_list([-(2**63)]) // -1, "//", "INT64"),
@@ -258,11 +265,13 @@ def test_the_advice_for_integers_works() -> None:
 		(lambda: ndp.Array.from_list([-(2**63)]).apply(ndp.Absolute()), "Absolute", "INT64"),
 	],
 )
-def test_integers_refuse_a_result_too_large(calculate: Any, operation: str, type_name: str) -> None:
+def test_integers_refuse_a_result_outside_their_range(calculate: Any, operation: str, type_name: str) -> None:
 	"""
 	Check the refusal of every integer result that numpy would wrap around.
 
 	.. versionadded:: 0.1.0
+	.. versionchanged:: 0.2.0
+		Checks the range of the type and the advice in the message, and a number written before the Array.
 
 	Parameters
 	----------
@@ -273,7 +282,10 @@ def test_integers_refuse_a_result_too_large(calculate: Any, operation: str, type
 	type_name
 		The expected type in the message.
 	"""
-	expected_message = OVERFLOW_MESSAGE.format(operation=operation, type_name=type_name)
+	range_and_advice = RANGE_AND_ADVICE_BY_TYPE[type_name]
+	expected_message = OVERFLOW_MESSAGE.format(
+		operation=operation, type_name=type_name, range_and_advice=range_and_advice
+	)
 
 	with pytest.raises(ndp.IntegerOverflowError) as error_info:
 		calculate()
