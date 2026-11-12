@@ -37,6 +37,10 @@ DIABETES_TARGET = ndp.ValueMapping(changes=[ndp.ValueChange(1, 1), ndp.ValueChan
 EXPECTED_PRESENT_TARGETS = [1.0, 0.0]
 SMALL_CODES = [1, 2]
 SMALL_CODE_LABELS = ndp.ValueMapping(changes=[ndp.ValueChange(1, 100), ndp.ValueChange(2, 2)])
+UNKNOWN_ANSWER_CODES = [7.0, 9.0]
+INTEGER_UNKNOWN_ANSWERS = [7, 9]
+ONLY_UNKNOWN_ANSWERS = ndp.ValueMapping(changes=[ndp.ValueChange(7, None), ndp.ValueChange(9, None)])
+EXPECTED_MISSING_ANSWER_COUNT = 2
 EXPECTED_KEPT_INTEGER_MESSAGE = (
 	"INT64 values cannot be missing in an Array. Give decimal new values, such as 10.0, or convert the Array to "
 	"FLOAT64 first."
@@ -137,6 +141,37 @@ def test_kept_integers_with_a_missing_value_point_to_a_conversion() -> None:
 
 	with pytest.raises(ndp.UnsupportedMissingError) as error_info:
 		answers.apply(UNKNOWN_ANSWERS)
+
+	error_text = str(error_info.value)
+	assert error_text == EXPECTED_KEPT_INTEGER_MESSAGE
+
+
+def test_decimals_given_only_missing_values_stay_decimals() -> None:
+	"""
+	Check that a mapping making every value missing keeps the decimal type of the Array.
+
+	.. versionadded:: 0.2.0
+	"""
+	answers = ndp.Array.from_list(UNKNOWN_ANSWER_CODES)
+
+	cleared_answers = answers.apply(ONLY_UNKNOWN_ANSWERS)
+
+	missing_flags = cleared_answers.check(ndp.IsMissing())
+	missing_count = missing_flags.compute(ndp.Sum()).to_value()
+	assert cleared_answers.dtype == ndp.Type.FLOAT64
+	assert missing_count == EXPECTED_MISSING_ANSWER_COUNT
+
+
+def test_integers_given_only_missing_values_point_to_a_conversion() -> None:
+	"""
+	Check that integers made all missing raise an error advising to convert the Array to FLOAT64.
+
+	.. versionadded:: 0.2.0
+	"""
+	answers = ndp.Array.from_list(INTEGER_UNKNOWN_ANSWERS)
+
+	with pytest.raises(ndp.UnsupportedMissingError) as error_info:
+		answers.apply(ONLY_UNKNOWN_ANSWERS)
 
 	error_text = str(error_info.value)
 	assert error_text == EXPECTED_KEPT_INTEGER_MESSAGE

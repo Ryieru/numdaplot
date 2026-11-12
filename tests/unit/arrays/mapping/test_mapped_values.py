@@ -51,6 +51,7 @@ MIDNIGHT_CHRISTMAS = datetime(2026, 12, 25, 0, 0)
 MORNING_CHRISTMAS = datetime(2026, 12, 25, 10, 0)
 INTEGERS_WITH_MISSING = [10, None]
 BOOLEANS_WITH_MISSING = [True, None]
+ONLY_MISSING_VALUES = [None, None]
 TEXTS_WITH_MISSING = ["a", None]
 KEPT_CODES = ValueMapping(changes=[ValueChange(1, 10)], others=Unmatched.KEEP)
 EXPECTED_KEPT_CODES = [10, 9]
@@ -230,6 +231,19 @@ def test_require_missing_supported_advises_to_convert_kept_integers() -> None:
 	assert error_text == KEPT_INTEGER_MESSAGE
 
 
+def test_require_missing_supported_advises_to_convert_integers_given_only_missing_values() -> None:
+	"""
+	Check that integers whose new values are all missing get the advice to convert the Array to FLOAT64.
+
+	.. versionadded:: 0.2.0
+	"""
+	with pytest.raises(UnsupportedMissingError) as error_info:
+		require_missing_supported(ONLY_MISSING_VALUES, Type.INT64, Unmatched.MISSING)
+
+	error_text = str(error_info.value)
+	assert error_text == KEPT_INTEGER_MESSAGE
+
+
 def test_require_missing_supported_advises_to_convert_kept_booleans() -> None:
 	"""
 	Check that with Unmatched.KEEP, the advice for booleans names the conversion to TEXT.
@@ -313,15 +327,15 @@ def test_find_result_type_gives_the_new_type_to_another_family_without_keep() ->
 	assert result_type == Type.INT64
 
 
-def test_find_result_type_gives_none_without_new_type_nor_keep() -> None:
+def test_find_result_type_gives_the_array_type_to_only_missing_new_values() -> None:
 	"""
-	Check that only missing new values give no type when the other values are not kept.
+	Check that only missing new values keep the type of the Array when the other values are not kept.
 
 	.. versionadded:: 0.2.0
 	"""
-	result_type = find_result_type(Type.FLOAT64, ONLY_MISSING_CHANGE)
+	result_type = find_result_type(Type.FLOAT32, ONLY_MISSING_CHANGE)
 
-	assert result_type is None
+	assert result_type == Type.FLOAT32
 
 
 def test_find_result_type_widens_dates_to_datetimes_with_keep() -> None:

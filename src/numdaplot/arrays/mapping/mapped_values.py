@@ -39,7 +39,7 @@ def map_values(values: NDArray[Any], mapping: ValueMapping) -> NDArray[Any]:
 	.. versionadded:: 0.1.0
 	.. versionchanged:: 0.2.0
 		Keeps the values without ``ValueChange`` when ``others`` is ``Unmatched.KEEP``. Numbers given to an Array of
-		numbers take its type.
+		numbers take its type. Only missing new values keep the type of the Array.
 
 	Parameters
 	----------
@@ -155,13 +155,13 @@ def find_flat_new_values(flat_values: NDArray[Any], mapping: ValueMapping) -> li
 	return new_values
 
 
-def find_result_type(array_type: Type, mapping: ValueMapping) -> Type | None:
+def find_result_type(array_type: Type, mapping: ValueMapping) -> Type:
 	"""
 	Return the type of the result of a mapping.
 
 	Numbers given to an Array of numbers take its type, as with the operators, except decimals given to integers,
 	which give ``FLOAT64``. Other new values give their own type, which also holds the kept values with
-	``Unmatched.KEEP``.
+	``Unmatched.KEEP``. When every new value is None, the result keeps the type of the Array.
 
 	.. versionadded:: 0.2.0
 
@@ -174,8 +174,8 @@ def find_result_type(array_type: Type, mapping: ValueMapping) -> Type | None:
 
 	Returns
 	-------
-	Type or None
-		The type holding every value of the result, or None when no value gives a type.
+	Type
+		The type holding every value of the result.
 
 	Raises
 	------
@@ -190,12 +190,12 @@ def find_result_type(array_type: Type, mapping: ValueMapping) -> Type | None:
 	<Type.INT8: 1>
 	>>> find_result_type(ndp.Type.INT8, ndp.ValueMapping(changes=[ndp.ValueChange(7, 7.5)]))
 	<Type.FLOAT64: 10>
+	>>> find_result_type(ndp.Type.FLOAT32, ndp.ValueMapping(changes=[ndp.ValueChange(7, None)]))
+	<Type.FLOAT32: 9>
 	"""
 	new_type = find_new_type(mapping.changes)
-	keeps_others = mapping.others == Unmatched.KEEP
 	if new_type is None:
-		type_without_new_value = array_type if keeps_others else None
-		return type_without_new_value
+		return array_type
 
 	array_family = find_family(array_type)
 	new_family = find_family(new_type)
@@ -204,7 +204,7 @@ def find_result_type(array_type: Type, mapping: ValueMapping) -> Type | None:
 		number_type = find_number_type(array_type, new_type)
 		return number_type
 
-	if not keeps_others:
+	if mapping.others != Unmatched.KEEP:
 		return new_type
 
 	result_types = [array_type, new_type]
@@ -248,22 +248,22 @@ def find_number_type(array_type: Type, new_type: Type) -> Type:
 	return array_type
 
 
-def require_missing_supported(new_values: Sequence[object], new_type: Type | None, others: Unmatched) -> None:
+def require_missing_supported(new_values: Sequence[object], new_type: Type, others: Unmatched) -> None:
 	"""
 	Check that a result of integers or booleans holds no missing value, with advice fitting a mapping.
 
 	.. versionadded:: 0.1.0
 	.. versionchanged:: 0.2.0
-		Takes ``others``, which chooses the advice.
+		Takes ``others``, which chooses the advice, and advises to convert the Array when every new value is None.
 
 	Parameters
 	----------
 	new_values
 		The new Python values, None for a missing one.
 	new_type
-		The type the new values share, or None.
+		The type of the result.
 	others
-		What happens to a value without ``ValueChange``, which chooses the advice.
+		What happens to a value without ``ValueChange``, which chooses the advice with the new values.
 
 	Raises
 	------
@@ -285,13 +285,15 @@ def require_missing_supported(new_values: Sequence[object], new_type: Type | Non
 	if not has_missing:
 		return
 
+	gives_only_missing = all(new_value is None for new_value in new_values)
 	keeps_others = others == Unmatched.KEEP
+	keeps_array_type = keeps_others or gives_only_missing
 	if new_type in INTEGER_TYPES:
-		integer_advice = KEPT_DECIMAL_ADVICE if keeps_others else DECIMAL_ADVICE
+		integer_advice = KEPT_DECIMAL_ADVICE if keeps_array_type else DECIMAL_ADVICE
 		raise UnsupportedMissingError(new_type.name, advice=integer_advice)
 
 	if new_type == Type.BOOL:
-		boolean_advice = KEPT_BOOLEAN_ADVICE if keeps_others else BOOLEAN_ADVICE
+		boolean_advice = KEPT_BOOLEAN_ADVICE if keeps_array_type else BOOLEAN_ADVICE
 		raise UnsupportedMissingError(new_type.name, advice=boolean_advice)
 
 

@@ -27,12 +27,12 @@ class ValueMapping:
 	A missing value stays missing. The new values share one type: integers and decimals give decimals. Numbers given
 	to an Array of numbers take its type, as with the operators, except decimals given to integers, which give
 	``FLOAT64``. Other new values give their own type, which also holds the kept values with
-	``others=Unmatched.KEEP``.
+	``others=Unmatched.KEEP``. Only missing new values keep the type of the Array.
 
 	.. versionadded:: 0.1.0
 	.. versionchanged:: 0.2.0
 		Accepts ``others=Unmatched.KEEP``, which keeps the values without ``ValueChange``. Numbers given to an Array
-		of numbers take its type, as with the operators.
+		of numbers take its type, as with the operators. Only missing new values keep the type of the Array.
 
 	Parameters
 	----------

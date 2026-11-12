@@ -61,6 +61,8 @@ and numdaplot follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
   `UnsupportedTypeError` on `INT8` and `UINT8` values, and gave `FLOAT32` on `INT16` and `UINT16` values.
 - `IntegerOverflowError` names the type of the Array when a number written before an operator does not fit it,
   such as `1000 * values` on `INT8` values, instead of `INT64`.
+- A `ValueMapping` whose new values are all missing keeps the type of the Array: it raised `MissingTypeError`.
+  On integers or booleans, `UnsupportedMissingError` advises to convert the Array first.
 
 ## [0.1.2] - 2026-11-10
 
