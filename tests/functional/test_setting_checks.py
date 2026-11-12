@@ -13,7 +13,7 @@ import numdaplot as ndp
 SUM = ndp.Sum()
 EMPTY_NAME_CASES = [
 	lambda: ndp.Calculation(column="", function=SUM),
-	lambda: ndp.Conversion(column="", dtype=ndp.Type.TEXT),
+	lambda: ndp.TableConversion(column="", dtype=ndp.Type.TEXT),
 	lambda: ndp.SortKey(column=""),
 	lambda: ndp.NameChange(old_name="", new_name="city"),
 	lambda: ndp.BarChart(x=""),

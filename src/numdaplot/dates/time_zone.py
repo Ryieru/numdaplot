@@ -40,7 +40,7 @@ class TimeZone:
 	>>> times = ndp.Table.from_arrays({"time": ndp.Array.from_list([datetime(2026, 7, 1, 10, 30)])})
 	>>> paris = ndp.TimeZone("Europe/Paris")
 	>>> in_paris = ndp.TimeZoneChange(mode=ndp.TimeZoneMode.ATTRIBUTE, zone=paris)
-	>>> paris_times = times.convert(ndp.Conversion(column="time", dtype=ndp.Type.DATETIME, timezone=in_paris))
+	>>> paris_times = times.convert(ndp.TableConversion(column="time", dtype=ndp.Type.DATETIME, timezone=in_paris))
 	>>> paris_times.column_time_zones
 	{'time': TimeZone(name='Europe/Paris')}
 	"""

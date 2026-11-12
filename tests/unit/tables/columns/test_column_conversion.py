@@ -18,7 +18,6 @@ from numdaplot.dates.time_zone_mode import TimeZoneMode
 from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
 from numdaplot.errors.value_conversion_error import ValueConversionError
 from numdaplot.tables.columns.boolean_rule import BooleanRule
-from numdaplot.tables.columns.conversion import Conversion
 from numdaplot.tables.columns.converted_column import (
 	convert_column,
 	convert_plain_column,
@@ -34,6 +33,7 @@ from numdaplot.tables.columns.number_conversion import (
 	require_no_lost_value,
 	store_numbers,
 )
+from numdaplot.tables.columns.table_conversion import TableConversion
 from numdaplot.tables.columns.text_conversion import parse_booleans
 from numdaplot.tables.frames.column import Column
 from numdaplot.tables.frames.column_values import find_column_type
@@ -115,7 +115,7 @@ def convert_to(column: Column, target_type: Type) -> Column:
 	Column
 		The converted column.
 	"""
-	conversion = Conversion(column=CONVERTED_NAME, dtype=target_type)
+	conversion = TableConversion(column=CONVERTED_NAME, dtype=target_type)
 	converted_column = convert_column(column, conversion)
 
 	return converted_column
@@ -445,7 +445,7 @@ def test_convert_column_changes_the_time_zone() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	conversion = Conversion(column=CONVERTED_NAME, dtype=Type.DATETIME, timezone=ATTRIBUTE_UTC)
+	conversion = TableConversion(column=CONVERTED_NAME, dtype=Type.DATETIME, timezone=ATTRIBUTE_UTC)
 
 	zone_column = convert_column(DATETIMES, conversion)
 
@@ -497,7 +497,7 @@ def test_convert_column_applies_the_given_boolean_rule() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	conversion = Conversion(column=CONVERTED_NAME, dtype=Type.BOOL, booleans=BooleanRule.NONZERO_TRUE)
+	conversion = TableConversion(column=CONVERTED_NAME, dtype=Type.BOOL, booleans=BooleanRule.NONZERO_TRUE)
 
 	column = convert_column(TWO_AND_ZERO, conversion)
 
@@ -511,7 +511,7 @@ def test_convert_plain_column_writes_booleans_as_texts() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	conversion = Conversion(column=CONVERTED_NAME, dtype=Type.TEXT)
+	conversion = TableConversion(column=CONVERTED_NAME, dtype=Type.TEXT)
 
 	column = convert_plain_column(BOOLEANS, Type.BOOL, conversion)
 
@@ -549,7 +549,7 @@ def test_read_plain_column_rejects_booleans_read_as_dates() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	conversion = Conversion(column=CONVERTED_NAME, dtype=Type.DATE)
+	conversion = TableConversion(column=CONVERTED_NAME, dtype=Type.DATE)
 
 	with pytest.raises(IncompatibleTypesError):
 		read_plain_column(BOOLEANS, Type.BOOL, conversion)

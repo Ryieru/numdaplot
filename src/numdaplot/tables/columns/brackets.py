@@ -26,7 +26,7 @@ KEEP_SETTING_NAME = "Unmatched.KEEP"
 @dataclass(frozen=True)
 class Brackets:
 	"""
-	Brackets cutting a number column into categories, used as the ``format`` of a ``Conversion`` to ``CATEGORY``.
+	Brackets cutting a number column into categories, used as the ``format`` of a ``TableConversion`` to ``CATEGORY``.
 
 	The categories keep the order of the brackets, so that sorting and plots follow it. A missing value stays missing.
 
@@ -77,7 +77,7 @@ class Brackets:
 	>>> ages = ndp.Array.from_list([4, 17, 30, 92])
 	>>> victims = ndp.Table.from_arrays({"age": ages})
 	>>> brackets = ndp.Brackets(limits=[0, 10, 20], last=ndp.BracketEnd.OPEN)
-	>>> victims.convert(ndp.Conversion(column="age", dtype=ndp.Type.CATEGORY, format=brackets))
+	>>> victims.convert(ndp.TableConversion(column="age", dtype=ndp.Type.CATEGORY, format=brackets))
 	          age
 	     CATEGORY
 	0      0 to 9

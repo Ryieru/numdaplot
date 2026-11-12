@@ -16,8 +16,8 @@ from numdaplot.errors.refused_operation_error import RefusedOperationError
 from numdaplot.tables.aggregation.aggregated_frame import compute_group_results, take_group_keys
 from numdaplot.tables.aggregation.row_groups import find_row_groups, split_positions
 from numdaplot.tables.columns.column_names import require_known_columns, require_unique_names
-from numdaplot.tables.columns.conversion import Conversion
 from numdaplot.tables.columns.converted_column import convert_column
+from numdaplot.tables.columns.table_conversion import TableConversion
 from numdaplot.tables.frames.column import Column
 from numdaplot.tables.frames.column_values import find_column_missing, find_column_type
 from numdaplot.tables.pivot.pivot_table import PivotTable
@@ -173,7 +173,7 @@ def name_value_columns(pivot_column: Column, column_groups: list[NDArray[Any]], 
 		decimal_names = [write_decimal(decimal) for decimal in decimals]
 		return decimal_names
 
-	text_conversion = Conversion(column=column_name, dtype=Type.TEXT)
+	text_conversion = TableConversion(column=column_name, dtype=Type.TEXT)
 	value_texts = convert_column(first_values, text_conversion)
 	value_names = cast(list[str], value_texts.tolist())
 

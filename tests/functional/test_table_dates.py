@@ -86,7 +86,7 @@ def build_paris_visits() -> ndp.Table:
 	"""
 	visit_times = ndp.Array.from_list(VISIT_TIMES)
 	visits = ndp.Table.from_arrays({"time": visit_times})
-	paris_visits = visits.convert(ndp.Conversion(column="time", dtype=ndp.Type.DATETIME, timezone=ATTRIBUTE_PARIS))
+	paris_visits = visits.convert(ndp.TableConversion(column="time", dtype=ndp.Type.DATETIME, timezone=ATTRIBUTE_PARIS))
 
 	return paris_visits
 
@@ -109,7 +109,7 @@ def read_texts(table: ndp.Table, column_name: str) -> list[str]:
 	list[str]
 		The texts.
 	"""
-	text_table = table.convert(ndp.Conversion(column=column_name, dtype=ndp.Type.TEXT))
+	text_table = table.convert(ndp.TableConversion(column=column_name, dtype=ndp.Type.TEXT))
 	texts = text_table.column(column_name)
 	text_list = texts.to_list()
 
@@ -123,7 +123,7 @@ def test_texts_written_day_first_become_dates() -> None:
 	.. versionadded:: 0.1.0
 	"""
 	text_days = build_text_days(DAY_TEXTS)
-	day_first = ndp.Conversion(column="day", dtype=ndp.Type.DATE, format=ndp.DateFormat.DAY_MONTH_YEAR)
+	day_first = ndp.TableConversion(column="day", dtype=ndp.Type.DATE, format=ndp.DateFormat.DAY_MONTH_YEAR)
 
 	days = text_days.convert(day_first)
 
@@ -140,7 +140,7 @@ def test_texts_without_format_are_read_year_first() -> None:
 	"""
 	text_days = build_text_days(ISO_DAY_TEXTS)
 
-	days = text_days.convert(ndp.Conversion(column="day", dtype=ndp.Type.DATE))
+	days = text_days.convert(ndp.TableConversion(column="day", dtype=ndp.Type.DATE))
 
 	day_array = days.column("day")
 	day_list = day_array.to_list()
@@ -154,7 +154,7 @@ def test_an_impossible_date_is_cited() -> None:
 	.. versionadded:: 0.1.0
 	"""
 	text_days = build_text_days([IMPOSSIBLE_DAY])
-	day_first = ndp.Conversion(column="day", dtype=ndp.Type.DATE, format=ndp.DateFormat.DAY_MONTH_YEAR)
+	day_first = ndp.TableConversion(column="day", dtype=ndp.Type.DATE, format=ndp.DateFormat.DAY_MONTH_YEAR)
 
 	with pytest.raises(ndp.ValueConversionError) as caught:
 		text_days.convert(day_first)
@@ -169,8 +169,8 @@ def test_dates_are_written_in_a_format() -> None:
 	.. versionadded:: 0.1.0
 	"""
 	text_days = build_text_days(ISO_DAY_TEXTS)
-	days = text_days.convert(ndp.Conversion(column="day", dtype=ndp.Type.DATE))
-	day_first = ndp.Conversion(column="day", dtype=ndp.Type.TEXT, format=ndp.DateFormat.DAY_MONTH_YEAR)
+	days = text_days.convert(ndp.TableConversion(column="day", dtype=ndp.Type.DATE))
+	day_first = ndp.TableConversion(column="day", dtype=ndp.Type.TEXT, format=ndp.DateFormat.DAY_MONTH_YEAR)
 
 	written_days = days.convert(day_first)
 
@@ -186,7 +186,7 @@ def test_a_format_on_numbers_is_refused() -> None:
 	.. versionadded:: 0.1.0
 	"""
 	prices = ndp.Table.from_arrays({"price": ndp.Array.from_list(SALE_PRICES)})
-	price_texts = ndp.Conversion(column="price", dtype=ndp.Type.TEXT, format=ndp.DateFormat.DAY_MONTH_YEAR)
+	price_texts = ndp.TableConversion(column="price", dtype=ndp.Type.TEXT, format=ndp.DateFormat.DAY_MONTH_YEAR)
 
 	with pytest.raises(ndp.InvalidConversionError):
 		prices.convert(price_texts)
@@ -201,9 +201,11 @@ def test_a_zone_is_attributed_shifted_and_removed() -> None:
 	paris_visits = build_paris_visits()
 
 	new_york_visits = paris_visits.convert(
-		ndp.Conversion(column="time", dtype=ndp.Type.DATETIME, timezone=SHIFT_NEW_YORK)
+		ndp.TableConversion(column="time", dtype=ndp.Type.DATETIME, timezone=SHIFT_NEW_YORK)
 	)
-	naive_visits = new_york_visits.convert(ndp.Conversion(column="time", dtype=ndp.Type.DATETIME, timezone=REMOVE_ZONE))
+	naive_visits = new_york_visits.convert(
+		ndp.TableConversion(column="time", dtype=ndp.Type.DATETIME, timezone=REMOVE_ZONE)
+	)
 
 	new_york_texts = read_texts(new_york_visits, "time")
 	assert paris_visits.column_time_zones == EXPECTED_PARIS_ZONES
@@ -220,7 +222,7 @@ def test_a_clock_time_skipped_by_the_spring_change_is_cited() -> None:
 	visits = ndp.Table.from_arrays({"time": ndp.Array.from_list([SPRING_GAP])})
 
 	with pytest.raises(ndp.ValueConversionError):
-		visits.convert(ndp.Conversion(column="time", dtype=ndp.Type.DATETIME, timezone=ATTRIBUTE_PARIS))
+		visits.convert(ndp.TableConversion(column="time", dtype=ndp.Type.DATETIME, timezone=ATTRIBUTE_PARIS))
 
 
 def test_shifting_datetimes_without_zone_is_refused() -> None:
@@ -232,7 +234,7 @@ def test_shifting_datetimes_without_zone_is_refused() -> None:
 	visits = ndp.Table.from_arrays({"time": ndp.Array.from_list(VISIT_TIMES)})
 
 	with pytest.raises(ndp.TimeZoneMismatchError):
-		visits.convert(ndp.Conversion(column="time", dtype=ndp.Type.DATETIME, timezone=SHIFT_NEW_YORK))
+		visits.convert(ndp.TableConversion(column="time", dtype=ndp.Type.DATETIME, timezone=SHIFT_NEW_YORK))
 
 
 def test_print_shows_the_zone_under_the_column_name() -> None:
@@ -338,7 +340,7 @@ def test_different_zones_are_never_equal() -> None:
 	"""
 	paris_visits = build_paris_visits()
 	new_york_visits = paris_visits.convert(
-		ndp.Conversion(column="time", dtype=ndp.Type.DATETIME, timezone=SHIFT_NEW_YORK)
+		ndp.TableConversion(column="time", dtype=ndp.Type.DATETIME, timezone=SHIFT_NEW_YORK)
 	)
 
 	is_equal = paris_visits.is_equal(ndp.Equality(other=new_york_visits))
@@ -431,7 +433,7 @@ def test_datetime_texts_without_format_keep_their_time_or_become_midnight() -> N
 	pickups = ndp.Array.from_list(PICKUP_TEXTS)
 	trips = ndp.Table.from_arrays({"pickup": pickups})
 
-	converted = trips.convert(ndp.Conversion(column="pickup", dtype=ndp.Type.DATETIME))
+	converted = trips.convert(ndp.TableConversion(column="pickup", dtype=ndp.Type.DATETIME))
 
 	pickup_list = converted.column("pickup").to_list()
 	assert pickup_list == EXPECTED_PICKUPS
@@ -445,7 +447,9 @@ def test_a_given_time_format_refuses_a_text_without_time() -> None:
 	"""
 	pickups = ndp.Array.from_list([PICKUP_DAY])
 	trips = ndp.Table.from_arrays({"pickup": pickups})
-	conversion = ndp.Conversion(column="pickup", dtype=ndp.Type.DATETIME, format=ndp.DateFormat.YEAR_MONTH_DAY_TIME)
+	conversion = ndp.TableConversion(
+		column="pickup", dtype=ndp.Type.DATETIME, format=ndp.DateFormat.YEAR_MONTH_DAY_TIME
+	)
 
 	with pytest.raises(ndp.ValueConversionError, match="YEAR_MONTH_DAY_TIME") as caught_error:
 		trips.convert(conversion)
@@ -463,7 +467,7 @@ def test_date_texts_with_a_time_are_refused_without_format() -> None:
 	trips = ndp.Table.from_arrays({"pickup": pickups})
 
 	with pytest.raises(ndp.ValueConversionError, match="YEAR_MONTH_DAY") as caught_error:
-		trips.convert(ndp.Conversion(column="pickup", dtype=ndp.Type.DATE))
+		trips.convert(ndp.TableConversion(column="pickup", dtype=ndp.Type.DATE))
 
 	assert caught_error.value.rejected_value == PICKUP_TIME
 
@@ -481,7 +485,7 @@ def test_datetimes_written_in_a_csv_file_are_read_back_without_format(tmp_path: 
 	trips.to_csv(csv_path)
 
 	read_trips = ndp.Table.from_csv(csv_path)
-	converted = read_trips.convert(ndp.Conversion(column="pickup", dtype=ndp.Type.DATETIME))
+	converted = read_trips.convert(ndp.TableConversion(column="pickup", dtype=ndp.Type.DATETIME))
 
 	pickup_list = converted.column("pickup").to_list()
 	assert pickup_list == pickups
@@ -494,7 +498,7 @@ def test_a_time_format_on_dates_points_to_a_conversion_through_datetimes() -> No
 	.. versionadded:: 0.1.0
 	"""
 	trips = ndp.Table.from_arrays({"pickup": ndp.Array.from_list([PICKUP_TIME])})
-	conversion = ndp.Conversion(column="pickup", dtype=ndp.Type.DATE, format=ndp.DateFormat.YEAR_MONTH_DAY_TIME)
+	conversion = ndp.TableConversion(column="pickup", dtype=ndp.Type.DATE, format=ndp.DateFormat.YEAR_MONTH_DAY_TIME)
 
 	with pytest.raises(ndp.InvalidConversionError, match=THROUGH_DATETIME_HINT):
 		trips.convert(conversion)

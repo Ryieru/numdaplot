@@ -120,7 +120,7 @@ def test_a_column_with_missing_integers_must_be_converted_to_become_an_array() -
 	"""
 	frame = pandas.DataFrame({"count": COUNTS_WITH_HOLE})
 	table = ndp.Table.from_pandas(frame)
-	decimal_table = table.convert(ndp.Conversion(column="count", dtype=ndp.Type.FLOAT64))
+	decimal_table = table.convert(ndp.TableConversion(column="count", dtype=ndp.Type.FLOAT64))
 
 	with pytest.raises(ndp.UnsupportedMissingError):
 		table.column("count")
@@ -139,7 +139,7 @@ def test_a_category_column_becomes_a_text_array() -> None:
 	"""
 	letters = ndp.Array.from_list(CATEGORIES)
 	table = ndp.Table.from_arrays({"letter": letters})
-	category_table = table.convert(ndp.Conversion(column="letter", dtype=ndp.Type.CATEGORY))
+	category_table = table.convert(ndp.TableConversion(column="letter", dtype=ndp.Type.CATEGORY))
 
 	letter_array = category_table.column("letter")
 

@@ -189,7 +189,7 @@ def test_a_time_with_a_time_zone_is_refused() -> None:
 		ndp.Array.from_list([ZONED_TIME])
 
 
-def convert_hours(hours: Sequence[str | None], conversion: ndp.Conversion) -> ndp.Table:
+def convert_hours(hours: Sequence[str | None], conversion: ndp.TableConversion) -> ndp.Table:
 	"""
 	Return a Table of one hrmn column of texts, converted.
 
@@ -220,7 +220,7 @@ def test_baac_hours_written_as_texts_become_times() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	accidents = convert_hours(BAAC_HOURS, ndp.Conversion(column="hrmn", dtype=ndp.Type.TIME))
+	accidents = convert_hours(BAAC_HOURS, ndp.TableConversion(column="hrmn", dtype=ndp.Type.TIME))
 
 	hour_column = accidents.column("hrmn")
 	hours = hour_column.to_list()
@@ -233,7 +233,7 @@ def test_hours_without_separator_are_read_with_a_custom_format() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	conversion = ndp.Conversion(column="hrmn", dtype=ndp.Type.TIME, format=ndp.CustomDateFormat("%H%M"))
+	conversion = ndp.TableConversion(column="hrmn", dtype=ndp.Type.TIME, format=ndp.CustomDateFormat("%H%M"))
 
 	accidents = convert_hours(COMPACT_HOURS, conversion)
 
@@ -249,7 +249,7 @@ def test_an_hour_that_does_not_exist_is_named_in_the_error() -> None:
 	.. versionadded:: 0.1.0
 	"""
 	with pytest.raises(ndp.ValueConversionError) as error_info:
-		convert_hours(WRONG_HOURS, ndp.Conversion(column="hrmn", dtype=ndp.Type.TIME))
+		convert_hours(WRONG_HOURS, ndp.TableConversion(column="hrmn", dtype=ndp.Type.TIME))
 
 	error_text = str(error_info.value)
 	assert error_text == EXPECTED_WRONG_HOUR_MESSAGE
@@ -263,7 +263,7 @@ def test_times_are_written_with_a_custom_format() -> None:
 	"""
 	times = build_accident_times()
 	accidents = ndp.Table.from_arrays({"hrmn": times})
-	conversion = ndp.Conversion(column="hrmn", dtype=ndp.Type.TEXT, format=ndp.CustomDateFormat("%Hh%M"))
+	conversion = ndp.TableConversion(column="hrmn", dtype=ndp.Type.TEXT, format=ndp.CustomDateFormat("%Hh%M"))
 
 	written_accidents = accidents.convert(conversion)
 
@@ -282,7 +282,7 @@ def test_times_are_never_converted_to_datetimes() -> None:
 	accidents = ndp.Table.from_arrays({"hrmn": times})
 
 	with pytest.raises(ndp.IncompatibleTypesError):
-		accidents.convert(ndp.Conversion(column="hrmn", dtype=ndp.Type.DATETIME))
+		accidents.convert(ndp.TableConversion(column="hrmn", dtype=ndp.Type.DATETIME))
 
 
 def test_baac_day_parts_and_hours_become_moments() -> None:
@@ -378,7 +378,7 @@ def test_text_files_hold_times_as_texts_read_back_as_times(tmp_path: Path, file_
 
 	write_table(path)
 	read_accidents = read_table(path)
-	converted_accidents = read_accidents.convert(ndp.Conversion(column="hrmn", dtype=ndp.Type.TIME))
+	converted_accidents = read_accidents.convert(ndp.TableConversion(column="hrmn", dtype=ndp.Type.TIME))
 
 	hour_column = converted_accidents.column("hrmn")
 	hours = hour_column.to_list()

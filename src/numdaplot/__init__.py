@@ -201,10 +201,10 @@ from numdaplot.tables.columns.bracket_end import BracketEnd
 from numdaplot.tables.columns.brackets import Brackets
 from numdaplot.tables.columns.column_choice import ColumnChoice
 from numdaplot.tables.columns.column_mode import ColumnMode
-from numdaplot.tables.columns.conversion import Conversion
 from numdaplot.tables.columns.name_change import NameChange
 from numdaplot.tables.columns.new_column import NewColumn
 from numdaplot.tables.columns.renaming import Renaming
+from numdaplot.tables.columns.table_conversion import TableConversion
 from numdaplot.tables.conflict import Conflict
 from numdaplot.tables.description.description import Description
 from numdaplot.tables.duplicates.deduplication import Deduplication
@@ -282,7 +282,7 @@ __all__ = [
 	"Conflict",
 	"ConflictingSettingsError",
 	"Contains",
-	"Conversion",
+	"TableConversion",
 	"Cosine",
 	"Count",
 	"CountDistinct",

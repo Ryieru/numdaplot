@@ -31,10 +31,10 @@ from numdaplot.tables import table_calculation, table_columns, table_layout, tab
 from numdaplot.tables.aggregation.aggregation import Aggregation
 from numdaplot.tables.aggregation.calculation import Calculation
 from numdaplot.tables.columns.column_choice import ColumnChoice
-from numdaplot.tables.columns.conversion import Conversion
 from numdaplot.tables.columns.name_change import NameChange
 from numdaplot.tables.columns.new_column import NewColumn
 from numdaplot.tables.columns.renaming import Renaming
+from numdaplot.tables.columns.table_conversion import TableConversion
 from numdaplot.tables.description.description import Description
 from numdaplot.tables.duplicates.deduplication import Deduplication
 from numdaplot.tables.filtering.condition import Condition
@@ -139,7 +139,7 @@ def give_fake_mask(frame: pandas.DataFrame, row_filter: Filter) -> NDArray[Any]:
 	return FAKE_MASK
 
 
-def give_fake_column(column: Column, conversion: Conversion) -> Column:
+def give_fake_column(column: Column, conversion: TableConversion) -> Column:
 	"""
 	Fake conversion returning known texts.
 
@@ -230,7 +230,7 @@ def test_convert_replaces_the_column_with_its_conversion(monkeypatch: pytest.Mon
 	monkeypatch.setattr(table_columns, CONVERT_COLUMN_NAME, give_fake_column)
 	table = Table._create(FRAME)
 
-	converted_table = table.convert(Conversion(column="price", dtype=Type.TEXT))
+	converted_table = table.convert(TableConversion(column="price", dtype=Type.TEXT))
 
 	original_types = table.column_types
 	assert converted_table.column_types == EXPECTED_CONVERTED_TYPES

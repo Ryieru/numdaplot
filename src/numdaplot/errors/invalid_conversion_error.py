@@ -22,7 +22,7 @@ TIME_FORMAT_ON_DATE_MESSAGE = (
 
 class InvalidConversionError(NumdaplotError):
 	"""
-	Raised when a setting of a ``Conversion`` does not apply to the types it converts.
+	Raised when a setting of a ``TableConversion`` does not apply to the types it converts.
 
 	For example, a date format given to a conversion between numbers, a format with a time given to
 	a ``DATE`` column, or a time zone change given to a conversion from texts.
@@ -58,14 +58,14 @@ class InvalidConversionError(NumdaplotError):
 	>>> prices = ndp.Table.from_arrays({"price": ndp.Array.from_list([12.5])})
 	>>> day_first = ndp.DateFormat.DAY_MONTH_YEAR
 	>>> try:
-	... 	prices.convert(ndp.Conversion(column="price", dtype=ndp.Type.TEXT, format=day_first))
+	... 	prices.convert(ndp.TableConversion(column="price", dtype=ndp.Type.TEXT, format=day_first))
 	... except ndp.InvalidConversionError as error:
 	... 	print(error)
 	The setting format does not apply to a conversion from FLOAT64 to TEXT.
 	>>> days = ndp.Table.from_arrays({"day": ndp.Array.from_list(["31/12/2026 14:30"])})
 	>>> day_and_time = ndp.DateFormat.DAY_MONTH_YEAR_TIME
 	>>> try:
-	... 	days.convert(ndp.Conversion(column="day", dtype=ndp.Type.DATE, format=day_and_time))
+	... 	days.convert(ndp.TableConversion(column="day", dtype=ndp.Type.DATE, format=day_and_time))
 	... except ndp.InvalidConversionError as error:
 	... 	print(error)
 	The format DAY_MONTH_YEAR_TIME has a time, which DATE cannot hold.

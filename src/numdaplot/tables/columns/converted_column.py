@@ -17,7 +17,6 @@ from numdaplot.tables.columns.boolean_conversion import convert_booleans_to_numb
 from numdaplot.tables.columns.boolean_rule import BooleanRule
 from numdaplot.tables.columns.bracketed_column import cut_column
 from numdaplot.tables.columns.brackets import Brackets
-from numdaplot.tables.columns.conversion import Conversion
 from numdaplot.tables.columns.date_conversion import (
 	convert_moments,
 	find_format_name,
@@ -28,6 +27,7 @@ from numdaplot.tables.columns.date_conversion import (
 	write_durations,
 )
 from numdaplot.tables.columns.number_conversion import convert_numbers, parse_numbers
+from numdaplot.tables.columns.table_conversion import TableConversion
 from numdaplot.tables.columns.text_conversion import parse_booleans
 from numdaplot.tables.columns.time_conversion import keep_time_of_day, parse_times, write_times
 from numdaplot.tables.columns.time_zone_conversion import change_time_zone
@@ -49,7 +49,7 @@ BOOLEANS_TO_NUMBERS = (ValueFamily.BOOL, ValueFamily.NUMBER)
 NUMBERS_TO_BOOLEANS = (ValueFamily.NUMBER, ValueFamily.BOOL)
 
 
-def convert_column(column: Column, conversion: Conversion) -> Column:
+def convert_column(column: Column, conversion: TableConversion) -> Column:
 	"""
 	Return a Table column converted to another type, missing values staying missing.
 
@@ -91,7 +91,7 @@ def convert_column(column: Column, conversion: Conversion) -> Column:
 	>>> import numdaplot as ndp
 	>>> from numdaplot.tables.columns.converted_column import convert_column
 	>>> texts = pandas.Series(["1", None, "3"], dtype="string")
-	>>> convert_column(texts, ndp.Conversion(column="count", dtype=ndp.Type.INT64)).tolist()
+	>>> convert_column(texts, ndp.TableConversion(column="count", dtype=ndp.Type.INT64)).tolist()
 	[1, <NA>, 3]
 	"""
 	source_type = find_column_type(column)
@@ -121,7 +121,7 @@ def convert_column(column: Column, conversion: Conversion) -> Column:
 	return plain_column
 
 
-def require_conversion_settings(source_type: Type, conversion: Conversion) -> None:
+def require_conversion_settings(source_type: Type, conversion: TableConversion) -> None:
 	"""
 	Check that the format, the time zone change and the boolean rule of a conversion apply to its types.
 
@@ -145,7 +145,7 @@ def require_conversion_settings(source_type: Type, conversion: Conversion) -> No
 	--------
 	>>> import numdaplot as ndp
 	>>> from numdaplot.tables.columns.converted_column import require_conversion_settings
-	>>> day_and_time = ndp.Conversion(column="day", dtype=ndp.Type.DATE, format=ndp.DateFormat.DAY_MONTH_YEAR_TIME)
+	>>> day_and_time = ndp.TableConversion(column="day", dtype=ndp.Type.DATE, format=ndp.DateFormat.DAY_MONTH_YEAR_TIME)
 	>>> try:
 	... 	require_conversion_settings(ndp.Type.TEXT, day_and_time)
 	... except ndp.InvalidConversionError as error:
@@ -158,7 +158,7 @@ def require_conversion_settings(source_type: Type, conversion: Conversion) -> No
 	require_booleans_setting(source_type, conversion)
 
 
-def require_time_zone_setting(source_type: Type, conversion: Conversion) -> None:
+def require_time_zone_setting(source_type: Type, conversion: TableConversion) -> None:
 	"""
 	Check that a time zone change, when given, is given to a conversion of datetimes to datetimes.
 
@@ -181,7 +181,7 @@ def require_time_zone_setting(source_type: Type, conversion: Conversion) -> None
 	>>> import numdaplot as ndp
 	>>> from numdaplot.tables.columns.converted_column import require_time_zone_setting
 	>>> to_paris = ndp.TimeZoneChange(zone=ndp.TimeZone("Europe/Paris"), mode=ndp.TimeZoneMode.ATTRIBUTE)
-	>>> zone_change = ndp.Conversion(column="day", dtype=ndp.Type.DATETIME, timezone=to_paris)
+	>>> zone_change = ndp.TableConversion(column="day", dtype=ndp.Type.DATETIME, timezone=to_paris)
 	>>> try:
 	... 	require_time_zone_setting(ndp.Type.TEXT, zone_change)
 	... except ndp.InvalidConversionError as error:
@@ -197,7 +197,7 @@ def require_time_zone_setting(source_type: Type, conversion: Conversion) -> None
 		raise InvalidConversionError(TIMEZONE_SETTING, source_type.name, target_type.name)
 
 
-def require_format_setting(source_type: Type, conversion: Conversion) -> None:
+def require_format_setting(source_type: Type, conversion: TableConversion) -> None:
 	"""
 	Check that a date format, when given, is given to a conversion of texts to dates or of dates to texts.
 
@@ -220,7 +220,7 @@ def require_format_setting(source_type: Type, conversion: Conversion) -> None:
 	>>> import numdaplot as ndp
 	>>> from numdaplot.tables.columns.converted_column import require_format_setting
 	>>> day_first = ndp.DateFormat.DAY_MONTH_YEAR
-	>>> price_texts = ndp.Conversion(column="price", dtype=ndp.Type.TEXT, format=day_first)
+	>>> price_texts = ndp.TableConversion(column="price", dtype=ndp.Type.TEXT, format=day_first)
 	>>> try:
 	... 	require_format_setting(ndp.Type.FLOAT64, price_texts)
 	... except ndp.InvalidConversionError as error:
@@ -340,7 +340,7 @@ def require_brackets_setting(source_type: Type, target_type: Type) -> None:
 		raise InvalidConversionError(FORMAT_SETTING, source_type.name, target_type.name)
 
 
-def require_booleans_setting(source_type: Type, conversion: Conversion) -> None:
+def require_booleans_setting(source_type: Type, conversion: TableConversion) -> None:
 	"""
 	Check that a boolean rule, when given, is given to a conversion of numbers to booleans.
 
@@ -363,8 +363,9 @@ def require_booleans_setting(source_type: Type, conversion: Conversion) -> None:
 	>>> import numdaplot as ndp
 	>>> from numdaplot.tables.columns.converted_column import require_booleans_setting
 	>>> rule = ndp.BooleanRule.NONZERO_TRUE
+	>>> to_booleans = ndp.TableConversion(column="paid", dtype=ndp.Type.BOOL, booleans=rule)
 	>>> try:
-	... 	require_booleans_setting(ndp.Type.TEXT, ndp.Conversion(column="paid", dtype=ndp.Type.BOOL, booleans=rule))
+	... 	require_booleans_setting(ndp.Type.TEXT, to_booleans)
 	... except ndp.InvalidConversionError as error:
 	... 	print(error)
 	The setting booleans does not apply to a conversion from TEXT to BOOL.
@@ -509,7 +510,7 @@ def convert_times(
 	return None
 
 
-def convert_plain_column(column: Column, source_type: Type, conversion: Conversion) -> Column:
+def convert_plain_column(column: Column, source_type: Type, conversion: TableConversion) -> Column:
 	"""
 	Return a column converted between numbers, booleans, texts and categories.
 
@@ -541,7 +542,7 @@ def convert_plain_column(column: Column, source_type: Type, conversion: Conversi
 	>>> import pandas
 	>>> import numdaplot as ndp
 	>>> from numdaplot.tables.columns.converted_column import convert_plain_column
-	>>> to_text = ndp.Conversion(column="price", dtype=ndp.Type.TEXT)
+	>>> to_text = ndp.TableConversion(column="price", dtype=ndp.Type.TEXT)
 	>>> convert_plain_column(pandas.Series([1.5]), ndp.Type.FLOAT64, to_text).tolist()
 	['1.5']
 	"""
@@ -601,7 +602,7 @@ def write_plain_column(column: Column, source_type: Type, target_type: Type) -> 
 	return text_column
 
 
-def read_plain_column(column: Column, source_type: Type, conversion: Conversion) -> Column:
+def read_plain_column(column: Column, source_type: Type, conversion: TableConversion) -> Column:
 	"""
 	Return a column of numbers, booleans, texts or categories converted to numbers or booleans.
 
@@ -633,7 +634,7 @@ def read_plain_column(column: Column, source_type: Type, conversion: Conversion)
 	>>> import pandas
 	>>> import numdaplot as ndp
 	>>> from numdaplot.tables.columns.converted_column import read_plain_column
-	>>> to_integers = ndp.Conversion(column="paid", dtype=ndp.Type.INT64)
+	>>> to_integers = ndp.TableConversion(column="paid", dtype=ndp.Type.INT64)
 	>>> read_plain_column(pandas.Series([True, False]), ndp.Type.BOOL, to_integers).tolist()
 	[1, 0]
 	"""

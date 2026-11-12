@@ -15,7 +15,7 @@ from numdaplot.settings.field_types import require_field_types
 @dataclass(frozen=True)
 class TimeZoneChange:
 	"""
-	A change of the time zone of a datetime column, used by ``Conversion``.
+	A change of the time zone of a datetime column, used by ``TableConversion``.
 
 	.. versionadded:: 0.1.0
 
@@ -41,7 +41,7 @@ class TimeZoneChange:
 	>>> import numdaplot as ndp
 	>>> times = ndp.Table.from_arrays({"time": ndp.Array.from_list([datetime(2026, 7, 1, 10, 30)])})
 	>>> paris = ndp.TimeZoneChange(mode=ndp.TimeZoneMode.ATTRIBUTE, zone=ndp.TimeZone("Europe/Paris"))
-	>>> times.convert(ndp.Conversion(column="time", dtype=ndp.Type.DATETIME, timezone=paris))
+	>>> times.convert(ndp.TableConversion(column="time", dtype=ndp.Type.DATETIME, timezone=paris))
 	                       time
 	      DATETIME Europe/Paris
 	0 2026-07-01 10:30:00+02:00

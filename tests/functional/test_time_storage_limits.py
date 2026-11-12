@@ -191,7 +191,7 @@ def test_convert_refuses_a_text_read_as_a_datetime_out_of_range(
 	.. versionadded:: 0.1.0
 	"""
 	table = build_text_table(FAR_TEXT)
-	conversion = ndp.Conversion(column=COLUMN_NAME, dtype=ndp.Type.DATETIME, format=date_format)
+	conversion = ndp.TableConversion(column=COLUMN_NAME, dtype=ndp.Type.DATETIME, format=date_format)
 
 	with pytest.raises(ndp.TimeOverflowError):
 		table.convert(conversion)
@@ -204,7 +204,7 @@ def test_convert_names_the_column_out_of_range() -> None:
 	.. versionadded:: 0.1.0
 	"""
 	table = build_text_table(FAR_TEXT)
-	conversion = ndp.Conversion(column=COLUMN_NAME, dtype=ndp.Type.DATETIME)
+	conversion = ndp.TableConversion(column=COLUMN_NAME, dtype=ndp.Type.DATETIME)
 
 	with pytest.raises(ndp.TimeOverflowError) as error_info:
 		table.convert(conversion)
@@ -221,7 +221,7 @@ def test_convert_refuses_dates_out_of_range_as_datetimes() -> None:
 	"""
 	dates = ndp.Array.from_list([FAR_DATE])
 	table = ndp.Table.from_arrays({COLUMN_NAME: dates})
-	conversion = ndp.Conversion(column=COLUMN_NAME, dtype=ndp.Type.DATETIME)
+	conversion = ndp.TableConversion(column=COLUMN_NAME, dtype=ndp.Type.DATETIME)
 
 	with pytest.raises(ndp.TimeOverflowError):
 		table.convert(conversion)
@@ -234,7 +234,7 @@ def test_convert_still_refuses_an_impossible_date_as_unreadable() -> None:
 	.. versionadded:: 0.1.0
 	"""
 	table = build_text_table(IMPOSSIBLE_FAR_TEXT)
-	conversion = ndp.Conversion(column=COLUMN_NAME, dtype=ndp.Type.DATETIME)
+	conversion = ndp.TableConversion(column=COLUMN_NAME, dtype=ndp.Type.DATETIME)
 
 	with pytest.raises(ndp.ValueConversionError):
 		table.convert(conversion)

@@ -10,11 +10,11 @@ from numdaplot.settings.argument_types import checked_arguments
 from numdaplot.tables.columns.added_column import add_frame_column
 from numdaplot.tables.columns.chosen_columns import choose_frame_columns
 from numdaplot.tables.columns.column_choice import ColumnChoice
-from numdaplot.tables.columns.conversion import Conversion
 from numdaplot.tables.columns.converted_column import convert_column
 from numdaplot.tables.columns.new_column import NewColumn
 from numdaplot.tables.columns.renamed_columns import rename_frame_columns
 from numdaplot.tables.columns.renaming import Renaming
+from numdaplot.tables.columns.table_conversion import TableConversion
 from numdaplot.tables.frames.named_column_errors import NamedColumnErrors
 from numdaplot.tables.table_data import TableData
 
@@ -105,7 +105,7 @@ class TableColumns(TableData):
 		return renamed_table
 
 	@checked_arguments
-	def convert(self, conversion: Conversion) -> Self:
+	def convert(self, conversion: TableConversion) -> Self:
 		"""
 		Return the Table with a column converted to another type, missing values staying missing.
 
@@ -151,7 +151,7 @@ class TableColumns(TableData):
 		--------
 		>>> import numdaplot as ndp
 		>>> table = ndp.Table.from_arrays({"zip_code": ndp.Array.from_list(["06000", "75001"])})
-		>>> table.convert(ndp.Conversion(column="zip_code", dtype=ndp.Type.INT32))
+		>>> table.convert(ndp.TableConversion(column="zip_code", dtype=ndp.Type.INT32))
 		  zip_code
 		     INT32
 		0     6000

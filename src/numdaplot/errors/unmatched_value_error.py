@@ -57,7 +57,7 @@ class UnmatchedValueError(NumdaplotError):
 	>>> ages = ndp.Table.from_arrays({"age": ndp.Array.from_list([5, 105])})
 	>>> brackets = ndp.Brackets(limits=[0, 18, 100])
 	>>> try:
-	... 	ages.convert(ndp.Conversion(column="age", dtype=ndp.Type.CATEGORY, format=brackets))
+	... 	ages.convert(ndp.TableConversion(column="age", dtype=ndp.Type.CATEGORY, format=brackets))
 	... except ndp.UnmatchedValueError as error:
 	... 	print(error)
 	The value 105 is in no bracket. Open the first or the last bracket,

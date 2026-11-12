@@ -1,5 +1,5 @@
 """
-Unit tests of ColumnChoice, NameChange, Renaming, Conversion and NewColumn.
+Unit tests of ColumnChoice, NameChange, Renaming, TableConversion and NewColumn.
 
 .. versionadded:: 0.1.0
 """
@@ -13,10 +13,10 @@ from numdaplot.errors.empty_list_error import EmptyListError
 from numdaplot.errors.invalid_column_name_error import InvalidColumnNameError
 from numdaplot.tables.columns.column_choice import ColumnChoice
 from numdaplot.tables.columns.column_mode import ColumnMode
-from numdaplot.tables.columns.conversion import Conversion
 from numdaplot.tables.columns.name_change import NameChange
 from numdaplot.tables.columns.new_column import NewColumn
 from numdaplot.tables.columns.renaming import Renaming
+from numdaplot.tables.columns.table_conversion import TableConversion
 from numdaplot.tables.conflict import Conflict
 
 COLUMN_NAMES = ["city", "price"]
@@ -146,7 +146,7 @@ def test_conversion_keeps_its_settings() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	conversion = Conversion(column=COLUMN_NAME, dtype=Type.TEXT)
+	conversion = TableConversion(column=COLUMN_NAME, dtype=Type.TEXT)
 
 	assert conversion.column == COLUMN_NAME
 	assert conversion.dtype == Type.TEXT

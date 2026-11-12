@@ -31,7 +31,7 @@ REQUIRED_SETTINGS = dict[str, dict[str, object]](
 		"ColumnChoice": {"columns": ["a"]},
 		"Condition": {"rule": ndp.IsMissing()},
 		"Contains": {"text": "a"},
-		"Conversion": {"column": "a", "dtype": ndp.Type.TEXT},
+		"TableConversion": {"column": "a", "dtype": ndp.Type.TEXT},
 		"CustomColor": {"code": "#ff8800"},
 		"CustomDateFormat": {"pattern": "%d"},
 		"DatePart": {"unit": ndp.DatePartUnit.MONTH},

@@ -1,5 +1,5 @@
 """
-How a Conversion reads numbers as booleans.
+How a TableConversion reads numbers as booleans.
 
 .. versionadded:: 0.1.0
 """
@@ -9,7 +9,7 @@ from enum import Enum, auto
 
 class BooleanRule(Enum):
 	"""
-	How a ``Conversion`` of a number column to ``BOOL`` reads each number.
+	How a ``TableConversion`` of a number column to ``BOOL`` reads each number.
 
 	.. versionadded:: 0.1.0
 
@@ -18,7 +18,7 @@ class BooleanRule(Enum):
 	>>> import numdaplot as ndp
 	>>> visits = ndp.Table.from_arrays({"visits": ndp.Array.from_list([0, 3])})
 	>>> rule = ndp.BooleanRule.NONZERO_TRUE
-	>>> visits.convert(ndp.Conversion(column="visits", dtype=ndp.Type.BOOL, booleans=rule))
+	>>> visits.convert(ndp.TableConversion(column="visits", dtype=ndp.Type.BOOL, booleans=rule))
 	  visits
 	    BOOL
 	0  False
@@ -36,7 +36,7 @@ class BooleanRule(Enum):
 	--------
 	>>> import numdaplot as ndp
 	>>> severe = ndp.Table.from_arrays({"severe": ndp.Array.from_list([1, 0])})
-	>>> severe.convert(ndp.Conversion(column="severe", dtype=ndp.Type.BOOL, booleans=ndp.BooleanRule.ZERO_ONE))
+	>>> severe.convert(ndp.TableConversion(column="severe", dtype=ndp.Type.BOOL, booleans=ndp.BooleanRule.ZERO_ONE))
 	  severe
 	    BOOL
 	0   True
@@ -54,7 +54,7 @@ class BooleanRule(Enum):
 	>>> import numdaplot as ndp
 	>>> visits = ndp.Table.from_arrays({"visits": ndp.Array.from_list([0, 3, -1])})
 	>>> rule = ndp.BooleanRule.NONZERO_TRUE
-	>>> visits.convert(ndp.Conversion(column="visits", dtype=ndp.Type.BOOL, booleans=rule))
+	>>> visits.convert(ndp.TableConversion(column="visits", dtype=ndp.Type.BOOL, booleans=rule))
 	  visits
 	    BOOL
 	0  False
