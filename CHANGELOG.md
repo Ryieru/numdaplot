@@ -32,6 +32,9 @@ and numdaplot follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 - The documentation lists `TableConversion` and `BooleanRule` in a Conversions section.
 - The documentation lists `Measure` in a Measures section, shared by tables and plots, and groups the settings of
   `aggregate`, `pivot_table`, `describe` and `count_values` under Statistic settings.
+- The documentation lists every method and operator of `Array`, `Table` and `Plot`, `Table.pivot_table` and
+  `Table.join` included, in sections that follow the code: the same notion has the same title on every page, such
+  as Calculation and Layout.
 - The documentation links each object to its source on GitHub instead of showing the code.
 - The advice of `ValueConversionError` and `InvalidConversionError` about formats speaks of the values, which fits an
   Array as well as a column.

@@ -12,6 +12,7 @@ from numpy.typing import NDArray
 
 from numdaplot.arrays import array_creation
 from numdaplot.arrays.array_creation import ArrayCreation
+from numdaplot.arrays.array_data import read_stored_values
 from numdaplot.arrays.creation.random_integers import RandomIntegers
 from numdaplot.arrays.creation.spacing import Spacing
 from numdaplot.positions.range import Range
@@ -71,7 +72,7 @@ def read_values(created_array: ArrayCreation) -> list[Any]:
 	list[Any]
 		Its values.
 	"""
-	numpy_values = created_array.to_numpy()
+	numpy_values = read_stored_values(created_array)
 	raw_values = numpy_values.tolist()
 	value_list = cast(list[Any], raw_values)
 

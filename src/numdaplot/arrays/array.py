@@ -11,6 +11,7 @@ from numpy.typing import NDArray
 from numdaplot.arrays.array_arithmetic import ArrayArithmetic
 from numdaplot.arrays.array_calculation import ArrayCalculation
 from numdaplot.arrays.array_creation import ArrayCreation
+from numdaplot.arrays.array_display import ArrayDisplay
 from numdaplot.arrays.array_exchange import ArrayExchange
 from numdaplot.arrays.array_layout import ArrayLayout
 from numdaplot.arrays.array_logic import ArrayLogic
@@ -30,6 +31,7 @@ class Array(
 	ArrayArithmetic,
 	ArrayReflectedArithmetic,
 	ArrayLogic,
+	ArrayDisplay,
 	ArrayRefusals,
 ):
 	"""

@@ -15,6 +15,7 @@ from numpy.typing import NDArray
 
 from numdaplot.arrays import array_calculation
 from numdaplot.arrays.array_calculation import ArrayCalculation
+from numdaplot.arrays.array_data import read_stored_values
 from numdaplot.arrays.math_functions.math_function import MathFunction
 from numdaplot.arrays.math_functions.square_root import SquareRoot
 from numdaplot.dates.date_part import DatePart
@@ -112,7 +113,7 @@ def test_compute_returns_the_statistic_values(monkeypatch: pytest.MonkeyPatch) -
 
 	result_array = array.compute(Mean())
 
-	result_values = result_array.to_numpy()
+	result_values = read_stored_values(result_array)
 	result_list = result_values.tolist()
 	assert result_list == EXPECTED_FAKE_RESULT
 
@@ -155,7 +156,7 @@ def test_apply_returns_the_transformed_values(monkeypatch: pytest.MonkeyPatch) -
 
 	result_array = array.apply(SquareRoot())
 
-	result_values = result_array.to_numpy()
+	result_values = read_stored_values(result_array)
 	result_list = result_values.tolist()
 	assert result_list == EXPECTED_FAKE_RESULT
 
@@ -197,6 +198,6 @@ def test_apply_hands_a_time_function_to_the_time_function_application(monkeypatc
 
 	transformed_array = array.apply(DatePart(unit=DatePartUnit.MONTH))
 
-	transformed_values = transformed_array.to_numpy()
+	transformed_values = read_stored_values(transformed_array)
 	transformed_list = transformed_values.tolist()
 	assert transformed_list == EXPECTED_FAKE_RESULT

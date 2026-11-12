@@ -24,52 +24,6 @@ class TableSelection(TableData):
 	"""
 
 	@checked_arguments
-	def check(self, rule: Rule) -> Self:
-		"""
-		Return which values satisfy a rule, in every column.
-
-		To check some columns only, choose them first with ``choose_columns``.
-
-		.. versionadded:: 0.1.0
-
-		Parameters
-		----------
-		rule
-			A ``Rule``, such as ``ndp.Greater(10)`` or ``ndp.IsIn(["Paris"])``: see ``Rule`` for every rule.
-			A missing value only satisfies ``IsMissing``.
-
-		Returns
-		-------
-		Self
-			A new Table with the same columns and rows, holding True where the value satisfies the rule.
-			Every column is of type ``BOOL``.
-
-		Raises
-		------
-		InvalidTypeError
-			When an argument is not of the type its annotation names.
-		IncompatibleTypesError
-			When the rule does not apply to the type of one of the columns.
-
-		Examples
-		--------
-		>>> import numdaplot as ndp
-		>>> prices = ndp.Array.from_list([120.0, None, 150.0])
-		>>> stocks = ndp.Array.from_list([3.0, 5.0, None])
-		>>> table = ndp.Table.from_arrays({"price": prices, "stock": stocks})
-		>>> table.check(ndp.IsMissing())
-		   price  stock
-		    BOOL   BOOL
-		0  False  False
-		1   True  False
-		2  False   True
-		"""
-		checked_frame = check_frame(self._frame, rule)
-		checked_table = self._wrap(checked_frame)
-
-		return checked_table
-
-	@checked_arguments
 	def filter(self, row_filter: Filter) -> Self:
 		"""
 		Return the rows satisfying a filter.
@@ -161,3 +115,49 @@ class TableSelection(TableData):
 		region_table = self._wrap(region_frame)
 
 		return region_table
+
+	@checked_arguments
+	def check(self, rule: Rule) -> Self:
+		"""
+		Return which values satisfy a rule, in every column.
+
+		To check some columns only, choose them first with ``choose_columns``.
+
+		.. versionadded:: 0.1.0
+
+		Parameters
+		----------
+		rule
+			A ``Rule``, such as ``ndp.Greater(10)`` or ``ndp.IsIn(["Paris"])``: see ``Rule`` for every rule.
+			A missing value only satisfies ``IsMissing``.
+
+		Returns
+		-------
+		Self
+			A new Table with the same columns and rows, holding True where the value satisfies the rule.
+			Every column is of type ``BOOL``.
+
+		Raises
+		------
+		InvalidTypeError
+			When an argument is not of the type its annotation names.
+		IncompatibleTypesError
+			When the rule does not apply to the type of one of the columns.
+
+		Examples
+		--------
+		>>> import numdaplot as ndp
+		>>> prices = ndp.Array.from_list([120.0, None, 150.0])
+		>>> stocks = ndp.Array.from_list([3.0, 5.0, None])
+		>>> table = ndp.Table.from_arrays({"price": prices, "stock": stocks})
+		>>> table.check(ndp.IsMissing())
+		   price  stock
+		    BOOL   BOOL
+		0  False  False
+		1   True  False
+		2  False   True
+		"""
+		checked_frame = check_frame(self._frame, rule)
+		checked_table = self._wrap(checked_frame)
+
+		return checked_table

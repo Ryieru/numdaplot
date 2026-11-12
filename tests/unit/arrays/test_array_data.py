@@ -25,8 +25,6 @@ from numdaplot.shapes.shape import Shape
 GRID = [[1, 2, 3], [4, 5, 6]]
 GRID_SHAPE = Shape([2, 3])
 DECIMALS = [1.5]
-CHANGED_VALUE = 99
-FIRST_POSITION = (0, 0)
 SINGLE_VALUE = 10
 REJECTED_OPERAND = [1, 2]
 SUBTRACTION_SYMBOL = "-"
@@ -34,7 +32,6 @@ COMBINE_VALUES_NAME = "combine_values"
 FAKE_RESULT = numpy.array([7, 7])
 EXPECTED_FAKE_RESULT = [7, 7]
 TIME_ARRAY = ndp.Array.from_list([time(0, 1), None])
-EXPECTED_TIME_OBJECTS = [time(0, 1), None]
 STORED_TIME_DTYPE_NAME = "timedelta64[us]"
 
 
@@ -209,22 +206,6 @@ def test_array_data_makes_its_values_read_only() -> None:
 	assert not values.flags.writeable
 
 
-def test_array_data_gives_an_independent_numpy_copy() -> None:
-	"""
-	Check that changing the result of to_numpy never changes the data.
-
-	.. versionadded:: 0.1.0
-	"""
-	values = numpy.array(GRID)
-	data = ArrayData._create(values)
-	numpy_copy = data.to_numpy()
-
-	numpy_copy[FIRST_POSITION] = CHANGED_VALUE
-
-	stored_rows = values.tolist()
-	assert stored_rows == GRID
-
-
 def test_array_data_reads_the_values_of_another_array_as_operand() -> None:
 	"""
 	Check that an Array operand gives its numpy values.
@@ -259,7 +240,7 @@ def test_array_data_combines_with_itself_on_the_left(monkeypatch: pytest.MonkeyP
 
 	combined = data.combine(SINGLE_VALUE)
 
-	combined_values = combined.to_numpy()
+	combined_values = read_stored_values(combined)
 	combined_list = combined_values.tolist()
 	assert recorder.operands == [values, SINGLE_VALUE]
 	assert combined_list == EXPECTED_FAKE_RESULT
@@ -284,18 +265,6 @@ def test_array_data_combines_with_itself_on_the_right(monkeypatch: pytest.Monkey
 	data.combine_reflected(SINGLE_VALUE)
 
 	assert recorder.operands == [SINGLE_VALUE, values]
-
-
-def test_to_numpy_gives_python_times_of_day() -> None:
-	"""
-	Check that an Array of times gives an object array of datetime.time.
-
-	.. versionadded:: 0.1.0
-	"""
-	values = TIME_ARRAY.to_numpy()
-
-	value_list = values.tolist()
-	assert value_list == EXPECTED_TIME_OBJECTS
 
 
 def test_read_stored_values_keeps_the_storage_of_times() -> None:

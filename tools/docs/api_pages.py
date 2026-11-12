@@ -2,9 +2,9 @@
 MkDocs hook generating one API page per public class of numdaplot, and the navigation between them.
 
 Every name of ``ndp.__all__`` gets a page made at build time, so no page is written by hand and a new
-public class appears in the documentation on its own. The pages of ``Array`` and ``Table`` list their
-methods in sections, such as "Creation". The navigation groups the pages by section, such as "Rules",
-then by settings family, such as "File settings", and is placed after the home page.
+public class appears in the documentation on its own. The pages of ``Array``, ``Table`` and ``Plot`` list their
+members in sections taken from the classes they are built from, such as "Creation". The navigation groups the pages
+by section, such as "Rules", then by settings family, such as "File settings", and is placed after the home page.
 
 .. versionadded:: 0.1.0
 """
@@ -13,7 +13,8 @@ import inspect
 from dataclasses import dataclass
 from typing import Any
 
-from api_sections import GROUP_ORDER, MEMBER_SECTIONS, PATH_SEPARATOR, SECTION_TITLES, Section, find_section
+from api_sections import GROUP_ORDER, PATH_SEPARATOR, SECTION_TITLES, Section, find_section
+from member_sections import find_member_sections
 from mkdocs.structure.files import File, Files
 from value_types import VALUE_TYPES_PAGE_PATH, VALUE_TYPES_SECTION, VALUE_TYPES_TITLE, build_value_types_page
 
@@ -179,6 +180,9 @@ def build_page_content(public_object: PublicObject) -> str:
 
 	.. versionadded:: 0.1.0
 
+	.. versionchanged:: 0.2.0
+		The sections of ``Array``, ``Table`` and ``Plot`` come from the classes they are built from.
+
 	Parameters
 	----------
 	public_object
@@ -202,16 +206,18 @@ def build_page_content(public_object: PublicObject) -> str:
 	<BLANKLINE>
 	"""
 	class_block = CLASS_BLOCK.format(identifier=public_object.identifier, heading_level=PAGE_HEADING_LEVEL)
-	if public_object.name not in MEMBER_SECTIONS:
+	documented_class = getattr(numdaplot, public_object.name)
+	member_sections = find_member_sections(documented_class)
+	if not member_sections:
 		return class_block
 
 	blocks = [class_block + MAIN_CLASS_OPTIONS]
 
-	for section_title, member_names in MEMBER_SECTIONS[public_object.name]:
-		section_heading = SECTION_TITLE.format(title=section_title)
+	for member_section in member_sections:
+		section_heading = SECTION_TITLE.format(title=member_section.title)
 		blocks.append(section_heading)
 
-		for member_name in member_names:
+		for member_name in member_section.member_names:
 			member_block = build_member_block(public_object, member_name)
 			blocks.append(member_block)
 
@@ -229,7 +235,7 @@ def build_member_block(public_object: PublicObject, member_name: str) -> str:
 	Parameters
 	----------
 	public_object
-		``Array`` or ``Table``.
+		``Array``, ``Table`` or ``Plot``.
 	member_name
 		The name of a method or an attribute.
 

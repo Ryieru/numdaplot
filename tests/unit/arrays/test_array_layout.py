@@ -14,6 +14,7 @@ import pytest
 from numpy.typing import NDArray
 
 from numdaplot.arrays import array_layout
+from numdaplot.arrays.array_data import read_stored_values
 from numdaplot.arrays.array_layout import ArrayLayout
 from numdaplot.arrays.array_sorting import ArraySorting
 from numdaplot.errors.shape_mismatch_error import ShapeMismatchError
@@ -68,7 +69,7 @@ def read_values(array: ArrayLayout) -> list[Any]:
 	list[Any]
 		Its values.
 	"""
-	numpy_values = array.to_numpy()
+	numpy_values = read_stored_values(array)
 	raw_values = numpy_values.tolist()
 	value_list = cast(list[Any], raw_values)
 

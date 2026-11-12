@@ -23,6 +23,10 @@ SHOW_FRAME_NAME = "show_frame"
 SUMMARIZE_MISSING_NAME = "summarize_missing"
 SHOW_PANDAS_FRAME_NAME = "show_pandas_frame"
 SUMMARY_FRAME = pandas.DataFrame({"column": ["price", "total"]})
+FAKE_TEXT = "fake table text"
+FORMAT_TABLE_NAME = "format_table"
+FORMAT_TABLE_HTML_NAME = "format_table_html"
+FAKE_HTML = "<table>fake</table>"
 
 
 class ShownRows:
@@ -183,3 +187,100 @@ def test_preview_without_settings_shows_the_default_preview(monkeypatch: pytest.
 	table.preview()
 
 	assert received_previews == [Preview()]
+
+
+def format_fake_table(frame: pandas.DataFrame) -> str:
+	"""
+	Fake text of a Table.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	frame
+		The columns, ignored.
+
+	Returns
+	-------
+	str
+		Always the fake text.
+	"""
+	return FAKE_TEXT
+
+
+class TableHtmlRecorder:
+	"""
+	Fake HTML builder recording the columns setting it receives.
+
+	.. versionadded:: 0.1.0
+	"""
+
+	def __init__(self) -> None:
+		"""
+		Start without any recorded call.
+
+		.. versionadded:: 0.1.0
+		"""
+		self.shown_columns = list[ShownColumns]()
+
+	def format_table_html(self, frame: pandas.DataFrame, shown_columns: ShownColumns) -> str:
+		"""
+		Record the columns setting and return the fake HTML.
+
+		.. versionadded:: 0.1.0
+
+		Parameters
+		----------
+		frame
+			The columns, ignored.
+		shown_columns
+			The recorded setting.
+
+		Returns
+		-------
+		str
+			Always the fake HTML.
+		"""
+		self.shown_columns.append(shown_columns)
+
+		return FAKE_HTML
+
+
+def test_repr_gives_the_text_of_the_table(monkeypatch: pytest.MonkeyPatch) -> None:
+	"""
+	Check that the text of the Table comes from format_table.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	monkeypatch
+		Replaces the text builder with a fake.
+	"""
+	monkeypatch.setattr(table_display, FORMAT_TABLE_NAME, format_fake_table)
+	table = TableDisplay._create(FRAME)
+
+	table_text = repr(table)
+
+	assert table_text == FAKE_TEXT
+
+
+def test_repr_html_gives_the_html_table_with_every_column(monkeypatch: pytest.MonkeyPatch) -> None:
+	"""
+	Check that the notebook HTML of the Table comes from format_table_html, with every column.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	monkeypatch
+		Replaces the HTML builder with a fake.
+	"""
+	recorder = TableHtmlRecorder()
+	monkeypatch.setattr(table_display, FORMAT_TABLE_HTML_NAME, recorder.format_table_html)
+	table = TableDisplay._create(FRAME)
+
+	table_html = table._repr_html_()
+
+	assert table_html == FAKE_HTML
+	assert recorder.shown_columns == [ShownColumns.ALL]

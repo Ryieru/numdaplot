@@ -14,6 +14,7 @@ import numpy
 import pytest
 
 from numdaplot.arrays.array_arithmetic import ArrayArithmetic
+from numdaplot.arrays.array_data import read_stored_values
 from numdaplot.arrays.array_reflected_arithmetic import ArrayReflectedArithmetic
 from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
 
@@ -145,7 +146,7 @@ def test_array_arithmetic_negates_each_value() -> None:
 
 	negated_array = -array
 
-	negated_values = negated_array.to_numpy()
+	negated_values = read_stored_values(negated_array)
 	negated_list = negated_values.tolist()
 	assert negated_list == EXPECTED_NEGATED_VALUES
 

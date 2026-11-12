@@ -1,5 +1,5 @@
 """
-Exchange of an Array with Python values and text, and comparison of two Arrays.
+Exchange of an Array with Python values and numpy, and comparison of two Arrays.
 
 .. versionadded:: 0.1.0
 """
@@ -8,10 +8,15 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any, cast
 
+import numpy
+import numpy.typing
+
 from numdaplot.arrays.array_data import ArrayData
-from numdaplot.arrays.conversion.array_text import format_array
 from numdaplot.arrays.conversion.equality_check import are_equal
 from numdaplot.arrays.conversion.python_values import to_python_list
+from numdaplot.data_types.numpy_mapping import from_numpy_dtype
+from numdaplot.data_types.time_of_day import read_time_objects
+from numdaplot.data_types.type import Type
 from numdaplot.errors.invalid_type_error import InvalidTypeError
 from numdaplot.errors.not_single_value_error import NotSingleValueError
 from numdaplot.settings.argument_types import checked_arguments
@@ -27,7 +32,7 @@ EQUALITY_EXPECTED = "an Array"
 
 class ArrayExchange(ArrayData):
 	"""
-	Exchange of an Array with Python values, comparison with ``is_equal``, and its text.
+	Exchange of an Array with Python values and numpy, and comparison with ``is_equal``.
 
 	.. versionadded:: 0.1.0
 	"""
@@ -87,6 +92,35 @@ class ArrayExchange(ArrayData):
 
 		return single_value
 
+	def to_numpy(self) -> numpy.typing.NDArray[Any]:
+		"""
+		Return a numpy copy of the values; changing it never changes the Array.
+
+		.. versionadded:: 0.1.0
+
+		Returns
+		-------
+		numpy.typing.NDArray
+			A writable copy of the values. Texts use ``StringDType`` with NaN as missing value. Times of day are
+			Python ``datetime.time`` objects, None where missing, as numpy has no type for them.
+
+		Examples
+		--------
+		>>> import numdaplot as ndp
+		>>> values = ndp.Array.from_list([1, 2]).to_numpy()
+		>>> values[0] = 99
+		>>> values
+		array([99,  2])
+		"""
+		array_type = from_numpy_dtype(self._values.dtype)
+		if array_type == Type.TIME:
+			time_objects = read_time_objects(self._values)
+			return time_objects
+
+		copied_values = self._values.copy()
+
+		return copied_values
+
 	@checked_arguments
 	def is_equal(self, equality: Equality) -> bool:
 		"""
@@ -127,24 +161,3 @@ class ArrayExchange(ArrayData):
 		is_equal = are_equal(self._values, other_values, equality.types)
 
 		return is_equal
-
-	def __repr__(self) -> str:
-		"""
-		Return the text of the Array: its values, then its type.
-
-		.. versionadded:: 0.1.0
-
-		Returns
-		-------
-		str
-			The text, such as ``Array([1, 2, 3], dtype=INT64)``.
-
-		Examples
-		--------
-		>>> import numdaplot as ndp
-		>>> ndp.Array.from_list(["a", "b"])
-		Array(['a', 'b'], dtype=TEXT)
-		"""
-		array_text = format_array(self._values)
-
-		return array_text

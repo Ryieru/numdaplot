@@ -12,7 +12,6 @@ import numpy.typing
 from numdaplot.arrays.operations.combination import combine_values
 from numdaplot.arrays.operations.operand import Operand
 from numdaplot.data_types.numpy_mapping import from_numpy_dtype
-from numdaplot.data_types.time_of_day import read_time_objects
 from numdaplot.data_types.type import Type
 from numdaplot.errors.refused_operation_error import RefusedOperationError
 from numdaplot.rules.rule_values import ScalarValue
@@ -112,35 +111,6 @@ class ArrayData:
 		array_type = from_numpy_dtype(self._values.dtype)
 
 		return array_type
-
-	def to_numpy(self) -> numpy.typing.NDArray[Any]:
-		"""
-		Return a numpy copy of the values; changing it never changes the Array.
-
-		.. versionadded:: 0.1.0
-
-		Returns
-		-------
-		numpy.typing.NDArray
-			A writable copy of the values. Texts use ``StringDType`` with NaN as missing value. Times of day are
-			Python ``datetime.time`` objects, None where missing, as numpy has no type for them.
-
-		Examples
-		--------
-		>>> import numdaplot as ndp
-		>>> values = ndp.Array.from_list([1, 2]).to_numpy()
-		>>> values[0] = 99
-		>>> values
-		array([99,  2])
-		"""
-		array_type = from_numpy_dtype(self._values.dtype)
-		if array_type == Type.TIME:
-			time_objects = read_time_objects(self._values)
-			return time_objects
-
-		copied_values = self._values.copy()
-
-		return copied_values
 
 	def _wrap(self, values: numpy.typing.NDArray[Any]) -> Self:
 		"""

@@ -26,35 +26,24 @@ class PlotOutput(PlotData):
 	.. versionadded:: 0.1.0
 	"""
 
-	def to_matplotlib(self) -> Figure:
+	def show(self) -> None:
 		"""
-		Return a new matplotlib figure of the Plot, to change it with matplotlib.
+		Show the Plot: as an image in a Jupyter notebook, in a matplotlib window anywhere else.
 
-		Changing the figure never changes the Plot. The figure is not managed by ``matplotlib.pyplot``, so
-		a notebook does not display it on its own.
+		In a script, the window stays open until it is closed. When no window can be opened, because Python has no
+		``tkinter`` or runs on a server, nothing is shown and a ``DisplayWarning`` suggests saving the Plot instead.
 
 		.. versionadded:: 0.1.0
-
-		Returns
-		-------
-		matplotlib.figure.Figure
-			The figure, drawn on a single matplotlib ``Axes``.
 
 		Examples
 		--------
 		>>> import numdaplot as ndp
-		>>> prices = ndp.Array.from_list([12.0, 15.5, 14.0])
-		>>> style = ndp.PlotStyle(title="Prices")
-		>>> figure = ndp.Plot.line(prices, style=style).to_matplotlib()
-		>>> figure.axes[0].get_title()
-		'Prices'
-		>>> figure.axes[0].lines[0].get_ydata()
-		array([12. , 15.5, 14. ])
+		>>> prices = ndp.Array.from_list([12.0, 15.5, 14.0, 17.0])
+		>>> plot = ndp.Plot.bar(prices)
+		>>> plot.show()
 		"""
 		drawing = self._describe_drawing()
-		figure = build_figure(drawing)
-
-		return figure
+		show_drawing(drawing, ShownObject.PLOT)
 
 	@checked_arguments
 	def save(self, path: FilePath, options: ImageOptions | None = None, on_conflict: Conflict = Conflict.ERROR) -> None:
@@ -104,21 +93,32 @@ class PlotOutput(PlotData):
 		drawing = self._describe_drawing()
 		write_image(drawing, path, options, on_conflict)
 
-	def show(self) -> None:
+	def to_matplotlib(self) -> Figure:
 		"""
-		Show the Plot: as an image in a Jupyter notebook, in a matplotlib window anywhere else.
+		Return a new matplotlib figure of the Plot, to change it with matplotlib.
 
-		In a script, the window stays open until it is closed. When no window can be opened, because Python has no
-		``tkinter`` or runs on a server, nothing is shown and a ``DisplayWarning`` suggests saving the Plot instead.
+		Changing the figure never changes the Plot. The figure is not managed by ``matplotlib.pyplot``, so
+		a notebook does not display it on its own.
 
 		.. versionadded:: 0.1.0
+
+		Returns
+		-------
+		matplotlib.figure.Figure
+			The figure, drawn on a single matplotlib ``Axes``.
 
 		Examples
 		--------
 		>>> import numdaplot as ndp
-		>>> prices = ndp.Array.from_list([12.0, 15.5, 14.0, 17.0])
-		>>> plot = ndp.Plot.bar(prices)
-		>>> plot.show()
+		>>> prices = ndp.Array.from_list([12.0, 15.5, 14.0])
+		>>> style = ndp.PlotStyle(title="Prices")
+		>>> figure = ndp.Plot.line(prices, style=style).to_matplotlib()
+		>>> figure.axes[0].get_title()
+		'Prices'
+		>>> figure.axes[0].lines[0].get_ydata()
+		array([12. , 15.5, 14. ])
 		"""
 		drawing = self._describe_drawing()
-		show_drawing(drawing, ShownObject.PLOT)
+		figure = build_figure(drawing)
+
+		return figure

@@ -1,5 +1,5 @@
 """
-Sections of the navigation of the API pages, and the groups of methods of the Array, Table and Plot pages.
+Sections of the navigation of the API pages.
 
 The navigation places each public class in the first section whose prefix matches its module. A new package needs its
 own section here, or the build stops with a ``KeyError``.
@@ -75,49 +75,6 @@ SECTIONS = (
 SECTION_TITLES = tuple(dict.fromkeys(section.title for section in SECTIONS))
 # Classes without group come first in their section, then the groups in the order of SECTIONS.
 GROUP_ORDER = (None, *dict.fromkeys(section.group for section in SECTIONS if section.group is not None))
-MEMBER_SECTIONS = {
-	"Array": (
-		("Creation", ("from_list", "from_numpy", "filled", "from_range", "from_spacing", "from_date_parts", "random")),
-		("Information", ("shape", "dtype")),
-		("Conversion and comparison", ("convert", "to_list", "to_value", "to_numpy", "is_equal")),
-		("Selection", ("select", "check", "take", "replace")),
-		("Calculation", ("compute", "apply")),
-		("Layout", ("reshape", "transpose", "flatten", "sort", "unique")),
-		(
-			"Arithmetic operators",
-			("__add__", "__sub__", "__mul__", "__truediv__", "__floordiv__", "__mod__", "__pow__", "__neg__"),
-		),
-		("Logical operators", ("__and__", "__or__", "__invert__")),
-		(
-			"Refused operations",
-			("__eq__", "__lt__", "__getitem__", "__iter__", "__contains__", "__len__", "__bool__", "__matmul__"),
-		),
-	),
-	"Plot": (
-		(
-			"Creation",
-			("line", "bar", "scatter", "histogram", "box", "pie", "heatmap", "missing_by_column", "missing_map"),
-		),
-		("Charts over a Plot", ("add_line", "add_bar", "add_scatter")),
-		("Output", ("show", "save", "to_matplotlib")),
-	),
-	"Table": (
-		(
-			"Reading files",
-			("from_csv", "from_json", "from_excel", "from_parquet", "from_stata", "from_sas", "from_xpt"),
-		),
-		("Writing files", ("to_csv", "to_json", "to_excel", "to_parquet", "to_stata")),
-		("Conversion and comparison", ("from_pandas", "from_arrays", "to_pandas", "column", "to_value", "is_equal")),
-		("Information", ("shape", "row_count", "column_count", "column_names", "column_types", "column_time_zones")),
-		("Selection", ("filter", "take", "check")),
-		("Columns", ("choose_columns", "rename", "convert", "add_column")),
-		("Statistics", ("aggregate", "describe", "count_values")),
-		("Order and duplicates", ("sort", "drop_duplicates")),
-		("Missing values", ("count_missing", "preview_missing", "drop_missing")),
-		("Display", ("preview", "__repr__")),
-		("Refused operations", ("__eq__", "__lt__", "__getitem__", "__iter__", "__contains__", "__len__", "__bool__")),
-	),
-}
 
 
 def find_section(module_name: str) -> Section:

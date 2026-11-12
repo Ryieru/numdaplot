@@ -19,11 +19,8 @@ from numdaplot.tables.files.column_names import ColumnNames
 from numdaplot.tables.frames.array_frame import build_array_frame
 from numdaplot.tables.frames.column_values import convert_column_values, find_column_missing, read_array_values
 from numdaplot.tables.frames.frame_equality import are_frames_equal
-from numdaplot.tables.frames.table_text import format_table
 from numdaplot.tables.frames.time_columns import read_time_objects_frame
 from numdaplot.tables.frames.time_zones import find_column_time_zone
-from numdaplot.tables.preview.notebook_display import format_table_html
-from numdaplot.tables.preview.shown_columns import ShownColumns
 from numdaplot.tables.table_data import TableData
 
 if TYPE_CHECKING:
@@ -297,55 +294,3 @@ class TableExchange(TableData):
 		is_equal = are_frames_equal(self._frame, other_frame, equality.types)
 
 		return is_equal
-
-	def __repr__(self) -> str:
-		"""
-		Return the text of the Table, with the type of each column under its name.
-
-		A long Table only shows its first and last rows, as in pandas. Every column is shown, going on after a line
-		break, ended by a backslash, when they do not fit in the width of the terminal.
-
-		.. versionadded:: 0.1.0
-
-		Returns
-		-------
-		str
-			The text shown by ``print(table)``.
-
-		Examples
-		--------
-		>>> import numdaplot as ndp
-		>>> print(ndp.Table.from_arrays({"paid": ndp.Array.from_list([True, False])}))
-		    paid
-		    BOOL
-		0   True
-		1  False
-		"""
-		table_text = format_table(self._frame)
-
-		return table_text
-
-	def _repr_html_(self) -> str:
-		"""
-		Return the HTML table a Jupyter notebook shows for a Table written at the end of a cell.
-
-		The table is the one of ``preview``: every column, with the type of each column under its name. A long Table
-		only shows its first and last rows, as its text does.
-
-		.. versionadded:: 0.1.0
-
-		Returns
-		-------
-		str
-			The HTML table, or a note for a Table without rows or without columns.
-
-		Examples
-		--------
-		>>> import numdaplot as ndp
-		>>> table = ndp.Table.from_arrays({"paid": ndp.Array.from_list([True, False])})
-		>>> "BOOL" in table._repr_html_()
-		True
-		"""
-		table_html = format_table_html(self._frame, ShownColumns.ALL)
-
-		return table_html

@@ -12,6 +12,7 @@ from typing import Any, cast
 import numpy
 import pytest
 
+from numdaplot.arrays.array_data import read_stored_values
 from numdaplot.arrays.array_logic import ArrayLogic
 from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
 
@@ -40,7 +41,7 @@ def read_values(array: ArrayLogic) -> list[bool]:
 	list[bool]
 		Its values.
 	"""
-	numpy_values = array.to_numpy()
+	numpy_values = read_stored_values(array)
 	raw_values = numpy_values.tolist()
 	value_list = cast(list[Any], raw_values)
 
