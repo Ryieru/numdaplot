@@ -86,7 +86,7 @@ class ArrayCalculation(ArrayData):
 		.. versionchanged:: 0.2.0
 			Accepts a ``ValueMapping`` keeping the values it does not list, with ``others=Unmatched.KEEP``, and raises
 			``ValueConversionError`` when a ``ValueMapping`` gives a number that does not fit the number type of the
-			values.
+			values. The math functions giving decimals give ``FLOAT64`` for integers of any size.
 
 		Parameters
 		----------

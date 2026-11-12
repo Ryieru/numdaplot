@@ -119,3 +119,18 @@ def test_a_math_function_on_texts_is_rejected() -> None:
 
 	with pytest.raises(ndp.IncompatibleTypesError):
 		texts.apply(ndp.Absolute())
+
+
+def test_square_roots_of_small_integers_are_decimals_of_64_bits() -> None:
+	"""
+	Check that the square roots of INT8 values are FLOAT64 values.
+
+	.. versionadded:: 0.2.0
+	"""
+	squares = ndp.Array.from_list(SQUARES, dtype=ndp.Type.INT8)
+
+	roots = squares.apply(ndp.SquareRoot())
+
+	root_values = roots.to_list()
+	assert roots.dtype == ndp.Type.FLOAT64
+	assert root_values == EXPECTED_ROOTS

@@ -33,6 +33,8 @@ and numdaplot follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
 ### Fixed
 
+- `SquareRoot`, `Exponential`, `Logarithm`, `Sine` and `Cosine` give `FLOAT64` for integers of any size: they raised
+  `UnsupportedTypeError` on `INT8` and `UINT8` values, and gave `FLOAT32` on `INT16` and `UINT16` values.
 - `IntegerOverflowError` names the type of the Array when a number written before an operator does not fit it,
   such as `1000 * values` on `INT8` values, instead of `INT64`.
 

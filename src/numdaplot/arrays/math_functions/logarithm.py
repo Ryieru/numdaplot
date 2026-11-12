@@ -23,6 +23,8 @@ class Logarithm(MathFunction):
 	Missing values stay missing.
 
 	.. versionadded:: 0.1.0
+	.. versionchanged:: 0.2.0
+		Gives ``FLOAT64`` for integers of any size.
 
 	Parameters
 	----------
