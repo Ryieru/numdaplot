@@ -29,6 +29,9 @@ HORIZONTAL_CHART = ndp.BarChart(x="city", y=["2025", "2026"], orientation=ndp.Or
 HORIZONTAL_LAYER = ChartLayer(HORIZONTAL_CHART, VALUES)
 EXPECTED_GROUPED_MIDDLES = [-0.2, 0.8, 0.2]
 EXPECTED_STACKED_BASES = [0.0, 0.0, 120.0]
+LABELED_CHART = ndp.BarChart(x="city", y=["2025", "2026"], value_labels=ndp.ValueLabels(decimals=1))
+LABELED_LAYER = ChartLayer(LABELED_CHART, VALUES)
+EXPECTED_LABEL_TEXTS = ["120.0", "-10.0", "150.0"]
 
 
 def test_draw_bar_chart_draws_no_bar_at_a_missing_value() -> None:
@@ -101,6 +104,34 @@ def test_draw_bar_chart_only_grids_the_values() -> None:
 	drawn_chart = draw_bar_chart(axes, GROUPED_LAYER)
 
 	assert drawn_chart.grid_axes == GridAxes.VALUES
+
+
+def test_draw_bar_chart_writes_the_value_of_each_present_bar() -> None:
+	"""
+	Check that a chart with value labels writes one rounded value per bar drawn.
+
+	.. versionadded:: 0.2.0
+	"""
+	axes = Figure().add_subplot()
+
+	draw_bar_chart(axes, LABELED_LAYER)
+
+	label_texts = [text.get_text() for text in axes.texts]
+	assert label_texts == EXPECTED_LABEL_TEXTS
+
+
+def test_draw_bar_chart_writes_no_value_by_default() -> None:
+	"""
+	Check that a chart without value labels writes no text.
+
+	.. versionadded:: 0.2.0
+	"""
+	axes = Figure().add_subplot()
+
+	draw_bar_chart(axes, GROUPED_LAYER)
+
+	text_count = len(axes.texts)
+	assert text_count == 0
 
 
 def test_find_group_coordinates_centers_the_group_on_the_position() -> None:

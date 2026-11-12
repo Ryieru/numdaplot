@@ -112,6 +112,7 @@ def test_bar_chart_defaults_draw_grouped_vertical_bars() -> None:
 
 	assert chart.orientation == Orientation.VERTICAL
 	assert chart.layout == BarLayout.GROUPED
+	assert chart.value_labels is None
 
 
 def test_bar_chart_rejects_empty_colors() -> None:

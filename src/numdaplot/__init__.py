@@ -153,6 +153,7 @@ from numdaplot.plots.charts.percentages import Percentages
 from numdaplot.plots.charts.pie_chart import PieChart
 from numdaplot.plots.charts.scatter_chart import ScatterChart
 from numdaplot.plots.charts.value_axis import ValueAxis
+from numdaplot.plots.charts.value_labels import ValueLabels
 from numdaplot.plots.figure.cell import Cell
 from numdaplot.plots.figure.figure import Figure
 from numdaplot.plots.figure.figure_style import FigureStyle
@@ -484,6 +485,7 @@ __all__ = [
 	"ValueChange",
 	"ValueConversionError",
 	"ValueCount",
+	"ValueLabels",
 	"ValueMapping",
 	"XptReadOptions",
 ]

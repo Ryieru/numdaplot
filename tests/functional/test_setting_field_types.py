@@ -76,6 +76,7 @@ REQUIRED_SETTINGS = dict[str, dict[str, object]](
 		"Uniform": {"low": 0, "high": 1},
 		"ValueChange": {"old_value": 1, "new_value": "a"},
 		"ValueCount": {"column": "a"},
+		"ValueLabels": {"decimals": 2},
 		"ValueMapping": {"changes": [ndp.ValueChange(1, "a")]},
 	}
 )

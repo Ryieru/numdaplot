@@ -12,6 +12,7 @@ from typing import cast
 
 import numpy
 from matplotlib.axes import Axes
+from matplotlib.container import BarContainer
 from numpy.typing import NDArray
 
 from numdaplot.plots.chart_layer import ChartLayer
@@ -19,6 +20,7 @@ from numdaplot.plots.charts.bar_chart import BarChart
 from numdaplot.plots.charts.bar_layout import BarLayout
 from numdaplot.plots.charts.orientation import Orientation
 from numdaplot.plots.data.chart_values import ChartValues
+from numdaplot.plots.drawing.bar_value_labels import find_label_place, format_value_labels, write_value_labels
 from numdaplot.plots.drawing.colored_parts import ColoredParts
 from numdaplot.plots.drawing.default_labels import find_position_label
 from numdaplot.plots.drawing.drawn_chart import DrawnChart
@@ -119,11 +121,13 @@ class StackTops:
 
 def draw_bar_chart(axes: Axes, layer: ChartLayer) -> DrawnChart:
 	"""
-	Draw each series of a BarChart as bars, one position per ``x`` value.
+	Draw each series of a BarChart as bars, one position per ``x`` value, with their values when asked.
 
 	A missing value draws no bar. Horizontal bars are drawn from the top, in the order of the rows.
 
 	.. versionadded:: 0.1.0
+	.. versionchanged:: 0.2.0
+		Writes the value of each bar when the chart has ``value_labels``.
 
 	Parameters
 	----------
@@ -169,6 +173,8 @@ def draw_bar_chart(axes: Axes, layer: ChartLayer) -> DrawnChart:
 	if is_stacked:
 		thickness = GROUP_WIDTH
 
+	label_place = find_label_place(is_horizontal, is_stacked)
+
 	for i, series in enumerate(values.series):
 		bar_coordinates = find_group_coordinates(coordinates, i, series_count)
 		if is_stacked:
@@ -177,7 +183,14 @@ def draw_bar_chart(axes: Axes, layer: ChartLayer) -> DrawnChart:
 
 		bar_style = BarStyle(thickness, color_codes[i])
 		bar_series = BarSeries(series.name, bar_coordinates, series.values, bases, bar_style)
-		draw_series_bars(axes, bar_series, is_horizontal)
+		bars = draw_series_bars(axes, bar_series, is_horizontal)
+		if chart.value_labels is None:
+			continue
+
+		is_missing = numpy.isnan(series.values)
+		present_lengths = series.values[~is_missing]
+		label_texts = format_value_labels(present_lengths, chart.value_labels, values.value_type)
+		write_value_labels(axes, bars, label_texts, label_place)
 
 	if is_horizontal:
 		axes.invert_yaxis()
@@ -270,11 +283,13 @@ def stack_bars(lengths: NDArray[numpy.float64], stack_tops: StackTops) -> tuple[
 	return bases, new_tops
 
 
-def draw_series_bars(axes: Axes, bar_series: BarSeries, is_horizontal: bool) -> None:
+def draw_series_bars(axes: Axes, bar_series: BarSeries, is_horizontal: bool) -> BarContainer:
 	"""
 	Draw the bars of one series, except at its missing values.
 
 	.. versionadded:: 0.1.0
+	.. versionchanged:: 0.2.0
+		Returns the bars drawn.
 
 	Parameters
 	----------
@@ -285,6 +300,11 @@ def draw_series_bars(axes: Axes, bar_series: BarSeries, is_horizontal: bool) -> 
 	is_horizontal
 		True to draw horizontal bars.
 
+	Returns
+	-------
+	matplotlib.container.BarContainer
+		The bars drawn, one per present value.
+
 	Examples
 	--------
 	>>> import numpy
@@ -293,8 +313,8 @@ def draw_series_bars(axes: Axes, bar_series: BarSeries, is_horizontal: bool) -> 
 	>>> axes = Figure().add_subplot()
 	>>> bar_style = BarStyle(0.8, "#1f77b4")
 	>>> bar_series = BarSeries("price", numpy.arange(2.0), numpy.array([3.0, 4.0]), numpy.zeros(2), bar_style)
-	>>> draw_series_bars(axes, bar_series, True)
-	>>> [float(bar.get_width()) for bar in axes.patches]
+	>>> bars = draw_series_bars(axes, bar_series, True)
+	>>> [float(bar.get_width()) for bar in bars.patches]
 	[3.0, 4.0]
 	"""
 	is_present = ~numpy.isnan(bar_series.lengths)
@@ -303,7 +323,7 @@ def draw_series_bars(axes: Axes, bar_series: BarSeries, is_horizontal: bool) -> 
 	bases = bar_series.bases[is_present]
 	bar_style = bar_series.style
 	if is_horizontal:
-		axes.barh(
+		horizontal_bars = axes.barh(
 			coordinates,
 			lengths,
 			height=bar_style.thickness,
@@ -311,8 +331,10 @@ def draw_series_bars(axes: Axes, bar_series: BarSeries, is_horizontal: bool) -> 
 			color=bar_style.color_code,
 			label=bar_series.name,
 		)
-		return
+		return horizontal_bars
 
-	axes.bar(
+	vertical_bars = axes.bar(
 		coordinates, lengths, width=bar_style.thickness, bottom=bases, color=bar_style.color_code, label=bar_series.name
 	)
+
+	return vertical_bars

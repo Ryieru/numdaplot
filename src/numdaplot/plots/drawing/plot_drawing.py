@@ -45,6 +45,7 @@ from numdaplot.plots.drawing.plot_theme import BACKGROUND_COLOR, THEME
 from numdaplot.plots.drawing.scatter_drawing import draw_scatter_chart
 from numdaplot.plots.drawing.style_drawing import apply_style
 from numdaplot.plots.drawing.time_axis import place_value_hours
+from numdaplot.plots.drawing.value_label_fitting import fit_value_labels
 from numdaplot.plots.style.image_options import DEFAULT_DPI
 from numdaplot.plots.style.plot_style import PlotStyle
 
@@ -132,8 +133,9 @@ def build_figure(drawing: FigureDrawing) -> Figure:
 
 def draw_on_figure(drawing: FigureDrawing, figure: Figure) -> None:
 	"""
-	Draw a Plot or a Figure on an empty matplotlib figure, then move past the axes a ``BEST`` legend hiding a value.
+	Draw a Plot or a Figure on an empty matplotlib figure, then fit its values written on bars and its legends.
 
+	The values written on bars are fitted to their bars, then a ``BEST`` legend hiding a value moves past the axes.
 	Every figure numdaplot draws goes through this step, whether it is returned, saved or shown in a window.
 
 	.. versionadded:: 0.2.0
@@ -155,6 +157,7 @@ def draw_on_figure(drawing: FigureDrawing, figure: Figure) -> None:
 	'Sales'
 	"""
 	drawing.draw_on(figure)
+	fit_value_labels(figure)
 	move_hiding_legends(figure)
 
 

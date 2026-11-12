@@ -11,6 +11,7 @@ from numdaplot.plots.charts.bar_layout import BarLayout
 from numdaplot.plots.charts.chart import Chart
 from numdaplot.plots.charts.chart_settings import copy_colors, copy_columns
 from numdaplot.plots.charts.orientation import Orientation
+from numdaplot.plots.charts.value_labels import ValueLabels
 from numdaplot.plots.style.color import Color
 from numdaplot.plots.style.custom_color import CustomColor
 from numdaplot.settings.field_types import require_field_types
@@ -26,6 +27,8 @@ class BarChart(Chart):
 	draws no bar, and a row whose ``x`` text is missing is left out.
 
 	.. versionadded:: 0.1.0
+	.. versionchanged:: 0.2.0
+		Adds ``value_labels``, which writes the value of each bar.
 
 	Parameters
 	----------
@@ -41,6 +44,9 @@ class BarChart(Chart):
 		How the bars of several series share a position, ``BarLayout.GROUPED`` by default.
 	colors
 		One color per series, the colors of the default cycle when omitted. The chart keeps its own list.
+	value_labels
+		The value written on each bar and its number of decimals, such as ``ndp.ValueLabels(decimals=2)``. When
+		omitted, no value is written.
 
 	Raises
 	------
@@ -70,6 +76,7 @@ class BarChart(Chart):
 	orientation: Orientation = Orientation.VERTICAL
 	layout: BarLayout = BarLayout.GROUPED
 	colors: Sequence[Color | CustomColor] | None = None
+	value_labels: ValueLabels | None = None
 
 	def __post_init__(self) -> None:
 		"""

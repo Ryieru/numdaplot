@@ -20,6 +20,9 @@ and numdaplot follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
   `pivot_table` and `describe`, without the missing values unless `missing=CountedMissing.INCLUDED`.
 - `Aggregation(row_count=...)` adds the number of rows of each group, without choosing a column, right after the
   group columns. `calculations` becomes optional, and `EmptyAggregationError` is raised when neither is given.
+- `BarChart(value_labels=ValueLabels(decimals=2))` writes the value of each bar past its end, or in the middle of
+  each part of stacked bars, rounded to the decimals asked. The axis makes room for the values, values too wide
+  for their bars turn upright, and values that still do not fit are left out with a `ReadabilityWarning`.
 - `Table.apply` applies a math function, a time function or a `ValueMapping` to several columns at once with a
   `TableApplication`, each column replaced at its place. An integer or boolean column keeps its type when a
   `ValueMapping` gives it missing values.

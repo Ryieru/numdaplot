@@ -21,6 +21,7 @@ from numdaplot.plots.charts.missing_chart import MissingChart
 from numdaplot.plots.data.chart_values import ChartValues
 from numdaplot.plots.data.missing_cells import MissingCounts
 from numdaplot.plots.drawing.bar_drawing import draw_bar_chart
+from numdaplot.plots.drawing.bar_value_labels import BAR_LABEL_FONT_SIZE, BAR_LABEL_PADDING
 from numdaplot.plots.drawing.cell_merging import find_cell_limits, fit_cells_to_axes, merge_cells
 from numdaplot.plots.drawing.default_labels import COLUMN_LABEL, ROW_LABEL
 from numdaplot.plots.drawing.drawn_chart import DrawnChart
@@ -51,8 +52,6 @@ LEGEND_SWATCH_EDGE_WIDTH = 0.5
 PERCENT_FACTOR = 100.0
 STACKED_BAR_LABEL = "{count}\n{percent:.1f} %"
 ONE_LINE_BAR_LABEL = "{count} ({percent:.1f} %)"
-BAR_LABEL_FONT_SIZE = 9
-BAR_LABEL_PADDING = 3
 STACKED_LABEL_MINIMUM_WIDTH = 34.0
 ONE_LINE_LABEL_MINIMUM_WIDTH = 13.0
 # Heights in pixels, kept high enough for the layout narrowing the axes afterwards.
