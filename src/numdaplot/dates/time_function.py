@@ -29,6 +29,11 @@ class TimeFunction:
 
 	.. versionadded:: 0.1.0
 
+	Raises
+	------
+	RefusedOperationError
+		When the created object is a TimeFunction and not one of its subclasses.
+
 	Examples
 	--------
 	>>> from datetime import date

@@ -29,6 +29,8 @@ class TimeZoneMode(Enum):
 	"""
 	Gives a zone to datetimes without one: the clock time stays the same.
 
+	.. versionadded:: 0.1.0
+
 	A time that does not exist in the zone, or exists twice when the clocks change, raises
 	``ValueConversionError``.
 
@@ -48,6 +50,8 @@ class TimeZoneMode(Enum):
 	"""
 	Moves datetimes with a zone to another zone: the instant stays the same, the clock time changes.
 
+	.. versionadded:: 0.1.0
+
 	Examples
 	--------
 	>>> from datetime import datetime
@@ -65,6 +69,8 @@ class TimeZoneMode(Enum):
 	REMOVE = auto()
 	"""
 	Removes the zone of datetimes: the clock time stays the same.
+
+	.. versionadded:: 0.1.0
 
 	Examples
 	--------

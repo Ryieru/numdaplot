@@ -31,6 +31,8 @@ class JsonLayout(Enum):
 	"""
 	One list holding one object per row: ``[{"city": "Paris"}, {"city": "Lyon"}]``. Default value.
 
+	.. versionadded:: 0.1.0
+
 	Examples
 	--------
 	>>> import tempfile
@@ -47,6 +49,8 @@ class JsonLayout(Enum):
 	LINES = auto()
 	"""
 	One object per line, without enclosing list, also called JSON Lines.
+
+	.. versionadded:: 0.1.0
 
 	Examples
 	--------

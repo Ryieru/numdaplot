@@ -33,6 +33,8 @@ class LegendPosition(Enum):
 	Inside the axes, where it hides the fewest values. With an axis on the right, the values of both axes leave little
 	room inside: the legend is placed as with ``OUTSIDE_RIGHT``. Default value.
 
+	.. versionadded:: 0.1.0
+
 	Examples
 	--------
 	>>> import numdaplot as ndp
@@ -49,6 +51,8 @@ class LegendPosition(Enum):
 	UPPER_LEFT = auto()
 	"""
 	Inside the axes, in the upper left corner.
+
+	.. versionadded:: 0.1.0
 
 	Examples
 	--------
@@ -67,6 +71,8 @@ class LegendPosition(Enum):
 	"""
 	Inside the axes, in the upper right corner.
 
+	.. versionadded:: 0.1.0
+
 	Examples
 	--------
 	>>> import numdaplot as ndp
@@ -83,6 +89,8 @@ class LegendPosition(Enum):
 	LOWER_LEFT = auto()
 	"""
 	Inside the axes, in the lower left corner.
+
+	.. versionadded:: 0.1.0
 
 	Examples
 	--------
@@ -101,6 +109,8 @@ class LegendPosition(Enum):
 	"""
 	Inside the axes, in the lower right corner.
 
+	.. versionadded:: 0.1.0
+
 	Examples
 	--------
 	>>> import numdaplot as ndp
@@ -118,6 +128,8 @@ class LegendPosition(Enum):
 	"""
 	Outside the axes, on their right and past an axis on the right if any, so it never hides a value.
 
+	.. versionadded:: 0.1.0
+
 	Examples
 	--------
 	>>> import numdaplot as ndp
@@ -134,6 +146,8 @@ class LegendPosition(Enum):
 	HIDDEN = auto()
 	"""
 	No legend.
+
+	.. versionadded:: 0.1.0
 
 	Examples
 	--------

@@ -34,6 +34,8 @@ class Encoding(Enum):
 	r"""
 	UTF-8, the most common encoding. Default value.
 
+	.. versionadded:: 0.1.0
+
 	Examples
 	--------
 	>>> import tempfile
@@ -51,6 +53,8 @@ class Encoding(Enum):
 	r"""
 	UTF-8 starting with a byte order mark, as written by Excel when it saves a CSV file.
 
+	.. versionadded:: 0.1.0
+
 	Examples
 	--------
 	>>> import tempfile
@@ -67,6 +71,8 @@ class Encoding(Enum):
 	LATIN_1 = "latin-1"
 	r"""
 	Latin-1 (ISO 8859-1), used by older software in Western Europe.
+
+	.. versionadded:: 0.1.0
 
 	Examples
 	--------

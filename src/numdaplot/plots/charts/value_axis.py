@@ -34,6 +34,8 @@ class ValueAxis(Enum):
 	"""
 	The axis on the left, shared with the first chart of the Plot. Default value.
 
+	.. versionadded:: 0.1.0
+
 	Examples
 	--------
 	>>> import numdaplot as ndp
@@ -50,6 +52,8 @@ class ValueAxis(Enum):
 	RIGHT = auto()
 	"""
 	A second axis on the right, with its own scale and label.
+
+	.. versionadded:: 0.1.0
 
 	Examples
 	--------

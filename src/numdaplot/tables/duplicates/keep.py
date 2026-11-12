@@ -34,6 +34,8 @@ class Keep(Enum):
 	"""
 	The first row of each group is kept. Default value.
 
+	.. versionadded:: 0.1.0
+
 	Examples
 	--------
 	>>> import numdaplot as ndp
@@ -51,6 +53,8 @@ class Keep(Enum):
 	"""
 	The last row of each group is kept.
 
+	.. versionadded:: 0.1.0
+
 	Examples
 	--------
 	>>> import numdaplot as ndp
@@ -67,6 +71,8 @@ class Keep(Enum):
 	NONE = auto()
 	"""
 	No row of a duplicated group is kept, only rows that appear once remain.
+
+	.. versionadded:: 0.1.0
 
 	Examples
 	--------

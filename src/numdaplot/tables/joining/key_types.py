@@ -28,6 +28,8 @@ class KeyTypes(Enum):
 	"""
 	Both columns hold numbers, texts, booleans, dates, datetimes, durations or times of day. Default value.
 
+	.. versionadded:: 0.1.0
+
 	The key of the result takes the type holding both: ``INT64`` and ``FLOAT64`` give ``FLOAT64``, ``TEXT`` and
 	``CATEGORY`` give ``TEXT``.
 
@@ -43,6 +45,8 @@ class KeyTypes(Enum):
 	SAME_TYPE = auto()
 	"""
 	Both columns have the same type: ``INT64`` and ``FLOAT64`` are refused.
+
+	.. versionadded:: 0.1.0
 
 	Examples
 	--------

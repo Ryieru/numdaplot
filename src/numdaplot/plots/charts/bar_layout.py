@@ -29,6 +29,8 @@ class BarLayout(Enum):
 	"""
 	Side by side. Default value.
 
+	.. versionadded:: 0.1.0
+
 	Examples
 	--------
 	>>> import numdaplot as ndp
@@ -44,6 +46,8 @@ class BarLayout(Enum):
 	STACKED = auto()
 	"""
 	On top of each other, positive values above zero and negative values below it.
+
+	.. versionadded:: 0.1.0
 
 	Examples
 	--------

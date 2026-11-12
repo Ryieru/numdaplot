@@ -28,6 +28,8 @@ class TypeMatch(Enum):
 	"""
 	The types must be the same: ``[1, 2]`` as ``INT64`` differs from ``[1.0, 2.0]`` as ``FLOAT64``.
 
+	.. versionadded:: 0.1.0
+
 	Examples
 	--------
 	>>> import numdaplot as ndp
@@ -40,6 +42,8 @@ class TypeMatch(Enum):
 	IGNORED = auto()
 	"""
 	Only the values are compared: ``[1, 2]`` equals ``[1.0, 2.0]``. Default value.
+
+	.. versionadded:: 0.1.0
 
 	Examples
 	--------

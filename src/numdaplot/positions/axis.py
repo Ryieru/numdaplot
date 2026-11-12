@@ -33,6 +33,8 @@ class Axis(Enum):
 	"""
 	Every row is handled on its own: one result per row.
 
+	.. versionadded:: 0.1.0
+
 	Examples
 	--------
 	>>> import numdaplot as ndp
@@ -44,6 +46,8 @@ class Axis(Enum):
 	EACH_COLUMN = auto()
 	"""
 	Every column is handled on its own: one result per column.
+
+	.. versionadded:: 0.1.0
 
 	Examples
 	--------

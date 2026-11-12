@@ -26,6 +26,8 @@ class Unmatched(Enum):
 	"""
 	The value raises ``UnmatchedValueError``. Default value.
 
+	.. versionadded:: 0.1.0
+
 	Examples
 	--------
 	>>> import numdaplot as ndp
@@ -41,6 +43,8 @@ class Unmatched(Enum):
 	MISSING = auto()
 	"""
 	The value becomes missing.
+
+	.. versionadded:: 0.1.0
 
 	Examples
 	--------

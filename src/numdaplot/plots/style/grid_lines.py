@@ -26,6 +26,8 @@ class GridLines(Enum):
 	"""
 	Light grid lines at each tick of the axes. Default value.
 
+	.. versionadded:: 0.1.0
+
 	Examples
 	--------
 	>>> import numdaplot as ndp
@@ -38,6 +40,8 @@ class GridLines(Enum):
 	HIDDEN = auto()
 	"""
 	No grid lines.
+
+	.. versionadded:: 0.1.0
 
 	Examples
 	--------

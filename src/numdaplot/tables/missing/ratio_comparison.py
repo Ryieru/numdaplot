@@ -33,6 +33,8 @@ class RatioComparison(Enum):
 	"""
 	The ratio reaches the threshold or goes beyond it. Default value.
 
+	.. versionadded:: 0.1.0
+
 	Examples
 	--------
 	>>> import numdaplot as ndp
@@ -52,6 +54,8 @@ class RatioComparison(Enum):
 	ABOVE = auto()
 	"""
 	The ratio goes beyond the threshold.
+
+	.. versionadded:: 0.1.0
 
 	Examples
 	--------

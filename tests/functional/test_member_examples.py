@@ -1,5 +1,5 @@
 """
-Functional tests running the examples of the documented enum members and type aliases.
+Functional tests of the documented enum members and type aliases: their examples, and the version of each member.
 
 doctest only collects the docstrings of modules, classes and functions: the docstring written under an enum
 member, such as ``Type.INT8``, or under a type alias, such as ``ScalarValue``, is checked here instead.
@@ -17,6 +17,7 @@ import pytest
 
 SOURCE_FOLDER = Path(__file__).parent.parent.parent / "src" / "numdaplot"
 EXAMPLES_HEADER = "Examples"
+VERSION_ADDED_DIRECTIVE = ".. versionadded::"
 ENUM_BASE = "Enum"
 EXAMPLE_NAME = "{path}:{class_name}.{member_name}"
 ALIAS_EXAMPLE_NAME = "{path}:{alias_name}"
@@ -169,21 +170,25 @@ MEMBER_DOCSTRINGS = find_all_member_docstrings()
 MEMBER_NAMES = [name for name, _ in MEMBER_DOCSTRINGS]
 
 
-def find_members_without_example(path: Path) -> list[str]:
+def find_members_lacking(path: Path, required_text: str) -> list[str]:
 	"""
-	Return the members of the enums of a file that have no example in their docstring.
+	Return the members of the enums of a file whose docstring lacks a text.
 
 	.. versionadded:: 0.1.0
+	.. versionchanged:: 0.2.0
+		Renamed from ``find_members_without_example``, takes the text to look for.
 
 	Parameters
 	----------
 	path
 		The source file.
+	required_text
+		The text every member docstring holds, such as the ``Examples`` header.
 
 	Returns
 	-------
 	list[str]
-		The name of each member without example.
+		The name of each member lacking the text.
 	"""
 	source = path.read_text()
 	tree = ast.parse(source)
@@ -206,7 +211,7 @@ def find_members_without_example(path: Path) -> list[str]:
 
 			target = ast.unparse(assignment.targets[0])
 			docstring = read_following_docstring(following) or ""
-			if EXAMPLES_HEADER not in docstring:
+			if required_text not in docstring:
 				missing_names.append(f"{statement.name}.{target}")
 
 	return missing_names
@@ -217,12 +222,30 @@ def test_every_enum_member_has_an_example() -> None:
 	Check that no member of an enum of the package lacks an example, its last member included.
 
 	.. versionadded:: 0.1.0
+	.. versionchanged:: 0.2.0
+		Looks for the ``Examples`` header through ``find_members_lacking``.
 	"""
 	missing_names = list[str]()
 	source_paths = sorted(SOURCE_FOLDER.rglob("*.py"))
 
 	for source_path in source_paths:
-		file_missing_names = find_members_without_example(source_path)
+		file_missing_names = find_members_lacking(source_path, EXAMPLES_HEADER)
+		missing_names.extend(file_missing_names)
+
+	assert missing_names == []
+
+
+def test_every_enum_member_has_its_version() -> None:
+	"""
+	Check that every member of an enum of the package tells the version that added it.
+
+	.. versionadded:: 0.2.0
+	"""
+	missing_names = list[str]()
+	source_paths = sorted(SOURCE_FOLDER.rglob("*.py"))
+
+	for source_path in source_paths:
+		file_missing_names = find_members_lacking(source_path, VERSION_ADDED_DIRECTIVE)
 		missing_names.extend(file_missing_names)
 
 	assert missing_names == []

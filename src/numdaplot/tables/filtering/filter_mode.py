@@ -32,6 +32,8 @@ class FilterMode(Enum):
 	"""
 	A row is kept when it satisfies every condition. Default value.
 
+	.. versionadded:: 0.1.0
+
 	Examples
 	--------
 	>>> import numdaplot as ndp
@@ -49,6 +51,8 @@ class FilterMode(Enum):
 	ANY = auto()
 	"""
 	A row is kept when it satisfies at least one condition.
+
+	.. versionadded:: 0.1.0
 
 	Examples
 	--------

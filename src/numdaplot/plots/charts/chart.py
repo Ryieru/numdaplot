@@ -33,6 +33,11 @@ class Chart:
 
 	.. versionadded:: 0.1.0
 
+	Raises
+	------
+	RefusedOperationError
+		When the created object is a Chart and not one of its subclasses.
+
 	Examples
 	--------
 	>>> import numdaplot as ndp

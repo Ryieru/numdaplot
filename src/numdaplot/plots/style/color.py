@@ -28,6 +28,8 @@ class Color(Enum):
 	"""
 	Blue, ``#1f77b4``, the first color of the default cycle.
 
+	.. versionadded:: 0.1.0
+
 	Examples
 	--------
 	>>> import numdaplot as ndp
@@ -40,6 +42,8 @@ class Color(Enum):
 	ORANGE = auto()
 	"""
 	Orange, ``#ff7f0e``.
+
+	.. versionadded:: 0.1.0
 
 	Examples
 	--------
@@ -54,6 +58,8 @@ class Color(Enum):
 	"""
 	Green, ``#2ca02c``.
 
+	.. versionadded:: 0.1.0
+
 	Examples
 	--------
 	>>> import numdaplot as ndp
@@ -66,6 +72,8 @@ class Color(Enum):
 	RED = auto()
 	"""
 	Red, ``#d62728``.
+
+	.. versionadded:: 0.1.0
 
 	Examples
 	--------
@@ -80,6 +88,8 @@ class Color(Enum):
 	"""
 	Purple, ``#9467bd``.
 
+	.. versionadded:: 0.1.0
+
 	Examples
 	--------
 	>>> import numdaplot as ndp
@@ -92,6 +102,8 @@ class Color(Enum):
 	BROWN = auto()
 	"""
 	Brown, ``#8c564b``.
+
+	.. versionadded:: 0.1.0
 
 	Examples
 	--------
@@ -106,6 +118,8 @@ class Color(Enum):
 	"""
 	Pink, ``#e377c2``.
 
+	.. versionadded:: 0.1.0
+
 	Examples
 	--------
 	>>> import numdaplot as ndp
@@ -118,6 +132,8 @@ class Color(Enum):
 	GRAY = auto()
 	"""
 	Gray, ``#7f7f7f``.
+
+	.. versionadded:: 0.1.0
 
 	Examples
 	--------
@@ -132,6 +148,8 @@ class Color(Enum):
 	"""
 	Olive, ``#bcbd22``.
 
+	.. versionadded:: 0.1.0
+
 	Examples
 	--------
 	>>> import numdaplot as ndp
@@ -145,6 +163,8 @@ class Color(Enum):
 	"""
 	Cyan, ``#17becf``.
 
+	.. versionadded:: 0.1.0
+
 	Examples
 	--------
 	>>> import numdaplot as ndp
@@ -157,6 +177,8 @@ class Color(Enum):
 	BLACK = auto()
 	"""
 	Black, ``#000000``.
+
+	.. versionadded:: 0.1.0
 
 	Examples
 	--------

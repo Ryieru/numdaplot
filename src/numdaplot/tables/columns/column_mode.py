@@ -31,6 +31,8 @@ class ColumnMode(Enum):
 	"""
 	Only the named columns remain, in the order of the list. Default value.
 
+	.. versionadded:: 0.1.0
+
 	Examples
 	--------
 	>>> import numdaplot as ndp
@@ -48,6 +50,8 @@ class ColumnMode(Enum):
 	DROP = auto()
 	"""
 	The named columns are removed, the others keep their order.
+
+	.. versionadded:: 0.1.0
 
 	Examples
 	--------

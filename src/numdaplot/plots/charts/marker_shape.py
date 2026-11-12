@@ -28,6 +28,8 @@ class MarkerShape(Enum):
 	"""
 	No marker, only the line. Default value of ``LineChart``, refused by ``ScatterChart``.
 
+	.. versionadded:: 0.1.0
+
 	Examples
 	--------
 	>>> import numdaplot as ndp
@@ -40,6 +42,8 @@ class MarkerShape(Enum):
 	CIRCLE = auto()
 	"""
 	A disc. Default value of ``ScatterChart``.
+
+	.. versionadded:: 0.1.0
 
 	Examples
 	--------
@@ -56,6 +60,8 @@ class MarkerShape(Enum):
 	"""
 	A square.
 
+	.. versionadded:: 0.1.0
+
 	Examples
 	--------
 	>>> import numdaplot as ndp
@@ -70,6 +76,8 @@ class MarkerShape(Enum):
 	TRIANGLE = auto()
 	"""
 	A triangle pointing up.
+
+	.. versionadded:: 0.1.0
 
 	Examples
 	--------
@@ -86,6 +94,8 @@ class MarkerShape(Enum):
 	"""
 	A cross made of two diagonal strokes.
 
+	.. versionadded:: 0.1.0
+
 	Examples
 	--------
 	>>> import numdaplot as ndp
@@ -100,6 +110,8 @@ class MarkerShape(Enum):
 	DIAMOND = auto()
 	"""
 	A diamond.
+
+	.. versionadded:: 0.1.0
 
 	Examples
 	--------

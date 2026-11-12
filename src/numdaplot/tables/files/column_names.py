@@ -31,6 +31,8 @@ class ColumnNames(Enum):
 	r"""
 	The spaces, tabs and line breaks at the start and the end of each name are removed. Default value.
 
+	.. versionadded:: 0.1.0
+
 	Examples
 	--------
 	>>> import tempfile
@@ -46,6 +48,8 @@ class ColumnNames(Enum):
 	KEPT = auto()
 	r"""
 	Each name is kept as written.
+
+	.. versionadded:: 0.1.0
 
 	Examples
 	--------

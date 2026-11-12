@@ -35,6 +35,8 @@ class DateFormat(Enum):
 	"""
 	The day, the month, then the year: ``"31/12/2026"``.
 
+	.. versionadded:: 0.1.0
+
 	Examples
 	--------
 	>>> import numdaplot as ndp
@@ -48,6 +50,8 @@ class DateFormat(Enum):
 	MONTH_DAY_YEAR = auto()
 	"""
 	The month, the day, then the year: ``"12/31/2026"``.
+
+	.. versionadded:: 0.1.0
 
 	Examples
 	--------
@@ -63,6 +67,8 @@ class DateFormat(Enum):
 	"""
 	The year, the month, then the day: ``"2026-12-31"``. Read by default when no format is given.
 
+	.. versionadded:: 0.1.0
+
 	Examples
 	--------
 	>>> import numdaplot as ndp
@@ -76,6 +82,8 @@ class DateFormat(Enum):
 	DAY_MONTH_YEAR_TIME = auto()
 	"""
 	The day, the month, the year, then the time: ``"31/12/2026 14:30"``.
+
+	.. versionadded:: 0.1.0
 
 	Examples
 	--------
@@ -92,6 +100,8 @@ class DateFormat(Enum):
 	"""
 	The month, the day, the year, then the time: ``"12/31/2026 14:30"``.
 
+	.. versionadded:: 0.1.0
+
 	Examples
 	--------
 	>>> import numdaplot as ndp
@@ -107,6 +117,8 @@ class DateFormat(Enum):
 	"""
 	The year, the month, the day, then the time after a space or a ``"T"``: ``"2026-12-31 14:30"`` or
 	``"2026-12-31T14:30"``.
+
+	.. versionadded:: 0.1.0
 
 	Examples
 	--------

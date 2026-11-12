@@ -29,6 +29,8 @@ class Orientation(Enum):
 	"""
 	Bars rising from the horizontal axis. Default value.
 
+	.. versionadded:: 0.1.0
+
 	Examples
 	--------
 	>>> import numdaplot as ndp
@@ -44,6 +46,8 @@ class Orientation(Enum):
 	HORIZONTAL = auto()
 	"""
 	Bars extending from the vertical axis, which then holds the ``x`` values.
+
+	.. versionadded:: 0.1.0
 
 	Examples
 	--------

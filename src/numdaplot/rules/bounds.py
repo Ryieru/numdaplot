@@ -25,6 +25,8 @@ class Bounds(Enum):
 	"""
 	Both bounds are included: low <= x <= high. Default value.
 
+	.. versionadded:: 0.1.0
+
 	Examples
 	--------
 	>>> import numdaplot as ndp
@@ -36,6 +38,8 @@ class Bounds(Enum):
 	EXCLUDED = auto()
 	"""
 	Both bounds are excluded: low < x < high.
+
+	.. versionadded:: 0.1.0
 
 	Examples
 	--------
@@ -49,6 +53,8 @@ class Bounds(Enum):
 	"""
 	Only the low bound is included: low <= x < high.
 
+	.. versionadded:: 0.1.0
+
 	Examples
 	--------
 	>>> import numdaplot as ndp
@@ -60,6 +66,8 @@ class Bounds(Enum):
 	HIGH_ONLY = auto()
 	"""
 	Only the high bound is included: low < x <= high.
+
+	.. versionadded:: 0.1.0
 
 	Examples
 	--------

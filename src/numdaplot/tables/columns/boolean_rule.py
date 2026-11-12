@@ -30,6 +30,8 @@ class BooleanRule(Enum):
 	0 gives ``False`` and 1 gives ``True``; any other number raises ``ValueConversionError``. Used when ``booleans``
 	is omitted.
 
+	.. versionadded:: 0.1.0
+
 	Examples
 	--------
 	>>> import numdaplot as ndp
@@ -44,6 +46,8 @@ class BooleanRule(Enum):
 	NONZERO_TRUE = auto()
 	"""
 	0 gives ``False`` and any other number gives ``True``, as in Python.
+
+	.. versionadded:: 0.1.0
 
 	Examples
 	--------

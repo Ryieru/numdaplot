@@ -32,6 +32,8 @@ class JoinMode(Enum):
 	"""
 	Only the rows whose keys match a row of the other Table. Default value.
 
+	.. versionadded:: 0.1.0
+
 	Examples
 	--------
 	>>> import numdaplot as ndp
@@ -46,6 +48,8 @@ class JoinMode(Enum):
 	LEFT = auto()
 	"""
 	Every row of the joined Table, with missing values where the other Table has no match.
+
+	.. versionadded:: 0.1.0
 
 	Examples
 	--------
@@ -63,6 +67,8 @@ class JoinMode(Enum):
 	"""
 	Every row of the other Table, with missing values where the joined Table has no match.
 
+	.. versionadded:: 0.1.0
+
 	Examples
 	--------
 	>>> import numdaplot as ndp
@@ -78,6 +84,8 @@ class JoinMode(Enum):
 	OUTER = auto()
 	"""
 	Every row of both Tables, with missing values where one has no match.
+
+	.. versionadded:: 0.1.0
 
 	Examples
 	--------

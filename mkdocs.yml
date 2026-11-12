@@ -66,6 +66,7 @@ plugins:
             extensions:
               - tools/docs/figure_images.py
               - tools/docs/example_code.py
+              - tools/docs/init_docstrings.py
               - tools/docs/version_directives.py
               - tools/docs/tab_indentation.py
               - tools/docs/default_values.py
@@ -88,6 +89,7 @@ markdown_extensions:
   - tables
   - toc:
       permalink: true
+  - pymdownx.details
   - pymdownx.highlight:
       anchor_linenums: true
   - pymdownx.inlinehilite

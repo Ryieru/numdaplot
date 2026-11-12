@@ -25,6 +25,8 @@ class MissingPosition(Enum):
 	"""
 	Missing values come before every other value.
 
+	.. versionadded:: 0.1.0
+
 	Examples
 	--------
 	>>> import numdaplot as ndp
@@ -36,6 +38,8 @@ class MissingPosition(Enum):
 	LAST = auto()
 	"""
 	Missing values come after every other value, as in pandas. Default value.
+
+	.. versionadded:: 0.1.0
 
 	Examples
 	--------

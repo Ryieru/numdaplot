@@ -26,6 +26,8 @@ class LineType(Enum):
 	"""
 	A continuous line. Default value.
 
+	.. versionadded:: 0.1.0
+
 	Examples
 	--------
 	>>> import numdaplot as ndp
@@ -38,6 +40,8 @@ class LineType(Enum):
 	DASHED = auto()
 	"""
 	A line of dashes.
+
+	.. versionadded:: 0.1.0
 
 	Examples
 	--------
@@ -52,6 +56,8 @@ class LineType(Enum):
 	"""
 	A line of dots.
 
+	.. versionadded:: 0.1.0
+
 	Examples
 	--------
 	>>> import numdaplot as ndp
@@ -64,6 +70,8 @@ class LineType(Enum):
 	DASH_DOT = auto()
 	"""
 	A line of dashes and dots in turn.
+
+	.. versionadded:: 0.1.0
 
 	Examples
 	--------

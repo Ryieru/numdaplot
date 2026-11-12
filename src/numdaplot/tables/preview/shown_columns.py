@@ -30,6 +30,8 @@ class ShownColumns(Enum):
 	"""
 	Every column, the columns going on after a line break, ended by a backslash, when they do not fit. Default value.
 
+	.. versionadded:: 0.1.0
+
 	Examples
 	--------
 	>>> import numdaplot as ndp
@@ -46,6 +48,8 @@ class ShownColumns(Enum):
 	COMPACT = auto()
 	"""
 	Only the first and last columns that fit, the others replaced by ``...``.
+
+	.. versionadded:: 0.1.0
 
 	Examples
 	--------

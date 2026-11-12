@@ -26,6 +26,8 @@ class ShownObject(Enum):
 	"""
 	A Plot, shown with ``Plot.show``.
 
+	.. versionadded:: 0.1.0
+
 	Examples
 	--------
 	>>> from numdaplot.plots.output.shown_object import ShownObject
@@ -36,6 +38,8 @@ class ShownObject(Enum):
 	FIGURE = "Figure"
 	"""
 	A Figure, shown with ``Figure.show``.
+
+	.. versionadded:: 0.1.0
 
 	Examples
 	--------

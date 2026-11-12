@@ -27,6 +27,8 @@ class Case(Enum):
 	"""
 	``"paris"`` does not match ``"Paris"``, as in Python and pandas. Default value.
 
+	.. versionadded:: 0.1.0
+
 	Examples
 	--------
 	>>> import numdaplot as ndp
@@ -38,6 +40,8 @@ class Case(Enum):
 	IGNORED = auto()
 	"""
 	``"paris"`` matches ``"Paris"``, ``"PARIS"`` and ``"paris"``.
+
+	.. versionadded:: 0.1.0
 
 	Examples
 	--------

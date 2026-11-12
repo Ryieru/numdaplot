@@ -10,6 +10,10 @@
 	--api-section-top-margin: 2.4em;
 	--version-note-font-size: 0.7rem;
 	--version-note-margin: 0.6em 0;
+	--version-detail-margin: 0.1em 0 0;
+	--version-detail-indent: 1.6em;
+	--version-history-closed-marker: disclosure-closed inside;
+	--version-history-open-marker: disclosure-open inside;
 	--section-item-gap: 0.8em;
 	--section-description-indent: 1.6em;
 	--section-description-top-margin: 0.2em;
@@ -148,15 +152,19 @@
 }
 
 [data-md-color-scheme="default"] {
-	--version-note-color: #4f7f5a;
+	--version-latest-color: #4f7f5a;
+	--version-added-color: #6b7280;
+	--version-changed-color: #9a6b2f;
 }
 
 [data-md-color-scheme="slate"] {
-	--version-note-color: #8fbf98;
+	--version-latest-color: #8fbf98;
+	--version-added-color: #a3a9b5;
+	--version-changed-color: #d2a668;
 }
 
-.md-typeset .admonition.version-added,
-.md-typeset .admonition.version-changed {
+.md-typeset .admonition:is(.version-latest, .version-added, .version-changed),
+.md-typeset details.version-history {
 	margin: var(--version-note-margin);
 	padding: 0;
 	border: none;
@@ -165,19 +173,51 @@
 	font-size: var(--version-note-font-size);
 }
 
-.md-typeset .version-added > .admonition-title,
-.md-typeset .version-changed > .admonition-title {
+.md-typeset :is(.version-latest, .version-added, .version-changed) > .admonition-title,
+.md-typeset .version-history > summary {
 	margin: 0;
 	padding: 0;
 	background-color: transparent;
-	color: var(--version-note-color);
-	font-style: italic;
 	font-weight: normal;
 }
 
-.md-typeset .version-added > .admonition-title::before,
-.md-typeset .version-changed > .admonition-title::before {
+.md-typeset :is(.version-latest, .version-added, .version-changed) > .admonition-title::before,
+.md-typeset .version-history > summary::before,
+.md-typeset .version-history > summary::after {
 	display: none;
+}
+
+.md-typeset .version-latest > .admonition-title {
+	color: var(--version-latest-color);
+}
+
+.md-typeset .version-added > .admonition-title {
+	color: var(--version-added-color);
+}
+
+.md-typeset .version-changed > .admonition-title {
+	color: var(--version-changed-color);
+}
+
+.md-typeset :is(.version-latest, .version-added, .version-changed) > p:not(.admonition-title) {
+	margin: var(--version-detail-margin);
+	padding-left: var(--version-detail-indent);
+}
+
+.md-typeset .version-history > summary {
+	display: list-item;
+	color: var(--md-default-fg-color--light);
+	cursor: pointer;
+	list-style: var(--version-history-closed-marker);
+}
+
+.md-typeset .version-history[open] > summary {
+	list-style: var(--version-history-open-marker);
+}
+
+/* This selector outweighs the margins of the notes, so that the folded notes are indented below the history. */
+.md-typeset details.version-history > .admonition {
+	margin-left: var(--version-detail-indent);
 }
 
 .md-typeset ul:has(> li.doc-section-item) {

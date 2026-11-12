@@ -26,6 +26,8 @@ class Outliers(Enum):
 	"""
 	Each outlier is drawn as a point. Default value.
 
+	.. versionadded:: 0.1.0
+
 	Examples
 	--------
 	>>> import numdaplot as ndp
@@ -38,6 +40,8 @@ class Outliers(Enum):
 	HIDDEN = auto()
 	"""
 	The outliers are not drawn. They still count in the box and the whiskers.
+
+	.. versionadded:: 0.1.0
 
 	Examples
 	--------

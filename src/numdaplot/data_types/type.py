@@ -29,6 +29,8 @@ class Type(Enum):
 	"""
 	Signed integer from -128 to 127, 1 byte per value.
 
+	.. versionadded:: 0.1.0
+
 	Examples
 	--------
 	>>> import numdaplot as ndp
@@ -39,6 +41,8 @@ class Type(Enum):
 	INT16 = auto()
 	"""
 	Signed integer from -32 768 to 32 767, 2 bytes per value.
+
+	.. versionadded:: 0.1.0
 
 	Examples
 	--------
@@ -51,6 +55,8 @@ class Type(Enum):
 	"""
 	Signed integer of about +/- 2 billion, 4 bytes per value.
 
+	.. versionadded:: 0.1.0
+
 	Examples
 	--------
 	>>> import numdaplot as ndp
@@ -61,6 +67,8 @@ class Type(Enum):
 	INT64 = auto()
 	"""
 	Signed integer of about +/- 9.2 * 10**18, 8 bytes per value.
+
+	.. versionadded:: 0.1.0
 
 	Examples
 	--------
@@ -73,6 +81,8 @@ class Type(Enum):
 	"""
 	Unsigned integer from 0 to 255, 1 byte per value.
 
+	.. versionadded:: 0.1.0
+
 	Examples
 	--------
 	>>> import numdaplot as ndp
@@ -83,6 +93,8 @@ class Type(Enum):
 	UINT16 = auto()
 	"""
 	Unsigned integer from 0 to 65 535, 2 bytes per value.
+
+	.. versionadded:: 0.1.0
 
 	Examples
 	--------
@@ -95,6 +107,8 @@ class Type(Enum):
 	"""
 	Unsigned integer from 0 to about 4 billion, 4 bytes per value.
 
+	.. versionadded:: 0.1.0
+
 	Examples
 	--------
 	>>> import numdaplot as ndp
@@ -105,6 +119,8 @@ class Type(Enum):
 	UINT64 = auto()
 	"""
 	Unsigned integer from 0 to about 1.8 * 10**19, 8 bytes per value.
+
+	.. versionadded:: 0.1.0
 
 	Examples
 	--------
@@ -117,6 +133,8 @@ class Type(Enum):
 	"""
 	Decimal number with about 7 significant digits, 4 bytes per value.
 
+	.. versionadded:: 0.1.0
+
 	Examples
 	--------
 	>>> import numdaplot as ndp
@@ -127,6 +145,8 @@ class Type(Enum):
 	FLOAT64 = auto()
 	"""
 	Decimal number with about 16 significant digits, 8 bytes per value. Default decimal type.
+
+	.. versionadded:: 0.1.0
 
 	Examples
 	--------
@@ -139,6 +159,8 @@ class Type(Enum):
 	"""
 	True or false.
 
+	.. versionadded:: 0.1.0
+
 	Examples
 	--------
 	>>> import numdaplot as ndp
@@ -150,6 +172,8 @@ class Type(Enum):
 	"""
 	Text of any length.
 
+	.. versionadded:: 0.1.0
+
 	Examples
 	--------
 	>>> import numdaplot as ndp
@@ -160,6 +184,8 @@ class Type(Enum):
 	CATEGORY = auto()
 	"""
 	Text taking a few repeated values, stored once per distinct value. Table columns only.
+
+	.. versionadded:: 0.1.0
 
 	Examples
 	--------
@@ -176,6 +202,8 @@ class Type(Enum):
 	"""
 	A day, without time. Stored in days, but a calculation on it stays within 1677 to 2262, as ``DATETIME``.
 
+	.. versionadded:: 0.1.0
+
 	Examples
 	--------
 	>>> from datetime import date
@@ -187,6 +215,8 @@ class Type(Enum):
 	DATETIME = auto()
 	"""
 	A day and a time, with or without time zone, from 1677 to 2262.
+
+	.. versionadded:: 0.1.0
 
 	Examples
 	--------
@@ -200,6 +230,8 @@ class Type(Enum):
 	"""
 	A gap between two dates or datetimes, of about 292 years at most, before or after zero.
 
+	.. versionadded:: 0.1.0
+
 	Examples
 	--------
 	>>> from datetime import timedelta
@@ -211,6 +243,8 @@ class Type(Enum):
 	TIME = auto()
 	"""
 	A time of day, from 00:00 to 23:59:59.999999, without date nor time zone. Stored as the time since midnight.
+
+	.. versionadded:: 0.1.0
 
 	Two times give a ``DURATION`` when subtracted, a duration moves a time within its day, and a time added to a
 	``DATE`` gives a ``DATETIME``. Its hour, minute and second are read with ``DatePart``.

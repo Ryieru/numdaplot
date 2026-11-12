@@ -30,6 +30,8 @@ class ColorScale(Enum):
 	"""
 	From dark purple for the smallest values to yellow for the largest. Default value.
 
+	.. versionadded:: 0.1.0
+
 	Examples
 	--------
 	>>> import numdaplot as ndp
@@ -47,6 +49,8 @@ class ColorScale(Enum):
 	"""
 	From white for the smallest values to dark blue for the largest.
 
+	.. versionadded:: 0.1.0
+
 	Examples
 	--------
 	>>> import numdaplot as ndp
@@ -63,6 +67,8 @@ class ColorScale(Enum):
 	REDS = auto()
 	"""
 	From white for the smallest values to dark red for the largest.
+
+	.. versionadded:: 0.1.0
 
 	Examples
 	--------
@@ -82,6 +88,8 @@ class ColorScale(Enum):
 	From blue for the smallest values to red for the largest, through white. When the values are on both
 	sides of 0, the scale is centered on 0, so white means 0.
 
+	.. versionadded:: 0.1.0
+
 	Examples
 	--------
 	>>> import numdaplot as ndp
@@ -98,6 +106,8 @@ class ColorScale(Enum):
 	GREENS = auto()
 	"""
 	From white for the smallest values to dark green for the largest.
+
+	.. versionadded:: 0.1.0
 
 	Examples
 	--------
@@ -116,6 +126,8 @@ class ColorScale(Enum):
 	"""
 	From white for the smallest values to black for the largest, for a printing in black and white.
 
+	.. versionadded:: 0.1.0
+
 	Examples
 	--------
 	>>> import numdaplot as ndp
@@ -132,6 +144,8 @@ class ColorScale(Enum):
 	CIVIDIS = auto()
 	"""
 	From dark blue for the smallest values to yellow for the largest, readable with most forms of color blindness.
+
+	.. versionadded:: 0.1.0
 
 	Examples
 	--------

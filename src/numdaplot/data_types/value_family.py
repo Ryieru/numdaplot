@@ -31,6 +31,8 @@ class ValueFamily(Enum):
 	"""
 	Signed and unsigned integers, and decimals.
 
+	.. versionadded:: 0.1.0
+
 	Examples
 	--------
 	>>> import numdaplot as ndp
@@ -42,6 +44,8 @@ class ValueFamily(Enum):
 	BOOL = auto()
 	"""
 	True or false.
+
+	.. versionadded:: 0.1.0
 
 	Examples
 	--------
@@ -55,6 +59,8 @@ class ValueFamily(Enum):
 	"""
 	Texts and categories.
 
+	.. versionadded:: 0.1.0
+
 	Examples
 	--------
 	>>> import numdaplot as ndp
@@ -66,6 +72,8 @@ class ValueFamily(Enum):
 	MOMENT = auto()
 	"""
 	Dates and datetimes.
+
+	.. versionadded:: 0.1.0
 
 	Examples
 	--------
@@ -79,6 +87,8 @@ class ValueFamily(Enum):
 	"""
 	Gaps between two moments.
 
+	.. versionadded:: 0.1.0
+
 	Examples
 	--------
 	>>> import numdaplot as ndp
@@ -90,6 +100,8 @@ class ValueFamily(Enum):
 	TIME = auto()
 	"""
 	Times of day, compared only with each other.
+
+	.. versionadded:: 0.1.0
 
 	Examples
 	--------

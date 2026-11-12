@@ -30,6 +30,8 @@ class Library(Enum):
 	"""
 	numpy, used by Array.
 
+	.. versionadded:: 0.1.0
+
 	Examples
 	--------
 	>>> import numdaplot as ndp
@@ -44,6 +46,8 @@ class Library(Enum):
 	PANDAS = "pandas"
 	"""
 	pandas, used by Table.
+
+	.. versionadded:: 0.1.0
 
 	Examples
 	--------

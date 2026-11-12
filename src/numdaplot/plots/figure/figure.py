@@ -41,6 +41,11 @@ class Figure:
 	style
 		The title and the size of the Figure, the default ``FigureStyle`` when omitted.
 
+	Raises
+	------
+	InvalidTypeError
+		When an argument is not of the type its annotation names.
+
 	Examples
 	--------
 	>>> import numdaplot as ndp

@@ -31,6 +31,8 @@ class MissingMode(Enum):
 	"""
 	A single missing value is enough. Default value.
 
+	.. versionadded:: 0.1.0
+
 	Examples
 	--------
 	>>> import numdaplot as ndp
@@ -47,6 +49,8 @@ class MissingMode(Enum):
 	ALL = auto()
 	"""
 	Every value must be missing.
+
+	.. versionadded:: 0.1.0
 
 	Examples
 	--------

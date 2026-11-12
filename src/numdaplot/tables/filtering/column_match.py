@@ -30,6 +30,8 @@ class ColumnMatch(Enum):
 	"""
 	A row satisfies the condition when at least one of the columns satisfies the rule. Default value.
 
+	.. versionadded:: 0.1.0
+
 	Examples
 	--------
 	>>> import numdaplot as ndp
@@ -47,6 +49,8 @@ class ColumnMatch(Enum):
 	ALL = auto()
 	"""
 	A row satisfies the condition when every column satisfies the rule.
+
+	.. versionadded:: 0.1.0
 
 	Examples
 	--------

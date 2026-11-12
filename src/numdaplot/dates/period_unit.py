@@ -26,6 +26,8 @@ class PeriodUnit(Enum):
 	"""
 	The year, starting on January 1.
 
+	.. versionadded:: 0.1.0
+
 	Examples
 	--------
 	>>> from datetime import datetime
@@ -38,6 +40,8 @@ class PeriodUnit(Enum):
 	QUARTER = auto()
 	"""
 	The quarter, starting on January 1, April 1, July 1 or October 1.
+
+	.. versionadded:: 0.1.0
 
 	Examples
 	--------
@@ -52,6 +56,8 @@ class PeriodUnit(Enum):
 	"""
 	The month, starting on its first day.
 
+	.. versionadded:: 0.1.0
+
 	Examples
 	--------
 	>>> from datetime import datetime
@@ -64,6 +70,8 @@ class PeriodUnit(Enum):
 	WEEK = auto()
 	"""
 	The week, starting on Monday.
+
+	.. versionadded:: 0.1.0
 
 	Examples
 	--------
@@ -78,6 +86,8 @@ class PeriodUnit(Enum):
 	"""
 	The day.
 
+	.. versionadded:: 0.1.0
+
 	Examples
 	--------
 	>>> from datetime import datetime
@@ -90,6 +100,8 @@ class PeriodUnit(Enum):
 	HOUR = auto()
 	"""
 	The hour, starting at minute 0. Datetimes only, the result is a ``DATETIME``.
+
+	.. versionadded:: 0.1.0
 
 	Examples
 	--------

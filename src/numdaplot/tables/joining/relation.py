@@ -29,6 +29,8 @@ class Relation(Enum):
 	"""
 	Nothing is checked: each key may appear several times on both sides. Default value.
 
+	.. versionadded:: 0.1.0
+
 	Examples
 	--------
 	>>> import numdaplot as ndp
@@ -41,6 +43,8 @@ class Relation(Enum):
 	ONE_TO_ONE = auto()
 	"""
 	Each key appears at most once in each Table.
+
+	.. versionadded:: 0.1.0
 
 	Examples
 	--------
@@ -55,6 +59,8 @@ class Relation(Enum):
 	"""
 	Each key appears at most once in the left Table, and any number of times in the right Table.
 
+	.. versionadded:: 0.1.0
+
 	Examples
 	--------
 	>>> import numdaplot as ndp
@@ -67,6 +73,8 @@ class Relation(Enum):
 	MANY_TO_ONE = auto()
 	"""
 	Each key appears any number of times in the left Table, and at most once in the right Table.
+
+	.. versionadded:: 0.1.0
 
 	Examples
 	--------

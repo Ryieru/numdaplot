@@ -26,6 +26,8 @@ class PositionKind(Enum):
 	"""
 	Numbers, placed on a numbered axis.
 
+	.. versionadded:: 0.1.0
+
 	Examples
 	--------
 	>>> import numdaplot as ndp
@@ -38,6 +40,8 @@ class PositionKind(Enum):
 	MOMENTS = auto()
 	"""
 	Dates or datetimes, placed on a time axis.
+
+	.. versionadded:: 0.1.0
 
 	Examples
 	--------
@@ -55,6 +59,8 @@ class PositionKind(Enum):
 	"""
 	Texts, each placed at its own position labeled with it.
 
+	.. versionadded:: 0.1.0
+
 	Examples
 	--------
 	>>> import numdaplot as ndp
@@ -69,6 +75,8 @@ class PositionKind(Enum):
 	TIMES = auto()
 	"""
 	Times of day, placed on an axis of one day labeled ``HH:MM``.
+
+	.. versionadded:: 0.1.0
 
 	Examples
 	--------

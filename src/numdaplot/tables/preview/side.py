@@ -34,6 +34,8 @@ class Side(Enum):
 	"""
 	The first rows. Default value.
 
+	.. versionadded:: 0.1.0
+
 	Examples
 	--------
 	>>> import numdaplot as ndp
@@ -51,6 +53,8 @@ class Side(Enum):
 	"""
 	The last rows.
 
+	.. versionadded:: 0.1.0
+
 	Examples
 	--------
 	>>> import numdaplot as ndp
@@ -67,6 +71,8 @@ class Side(Enum):
 	RANDOM = auto()
 	"""
 	Rows drawn at random, shown in the order of the Table.
+
+	.. versionadded:: 0.1.0
 
 	Examples
 	--------

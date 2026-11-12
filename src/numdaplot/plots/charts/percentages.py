@@ -28,6 +28,8 @@ class Percentages(Enum):
 	"""
 	Each slice shows its share with one decimal, such as ``42.5%``. Default value.
 
+	.. versionadded:: 0.1.0
+
 	Examples
 	--------
 	>>> import numdaplot as ndp
@@ -42,6 +44,8 @@ class Percentages(Enum):
 	HIDDEN = auto()
 	"""
 	The slices only show their label.
+
+	.. versionadded:: 0.1.0
 
 	Examples
 	--------

@@ -27,6 +27,8 @@ class Measure(Enum):
 	"""
 	A number of values. Default value.
 
+	.. versionadded:: 0.1.0
+
 	Examples
 	--------
 	>>> import numdaplot as ndp
@@ -38,6 +40,8 @@ class Measure(Enum):
 	RATIO = auto()
 	"""
 	A fraction of the values, between 0 and 1.
+
+	.. versionadded:: 0.1.0
 
 	Examples
 	--------

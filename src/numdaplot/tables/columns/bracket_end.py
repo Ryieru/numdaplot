@@ -26,6 +26,8 @@ class BracketEnd(Enum):
 	"""
 	The bracket stops at its limit. Default value.
 
+	.. versionadded:: 0.1.0
+
 	Examples
 	--------
 	>>> import numdaplot as ndp
@@ -38,6 +40,8 @@ class BracketEnd(Enum):
 	OPEN = auto()
 	"""
 	The bracket holds every value beyond the limit: below the first one, or above the last one.
+
+	.. versionadded:: 0.1.0
 
 	Examples
 	--------

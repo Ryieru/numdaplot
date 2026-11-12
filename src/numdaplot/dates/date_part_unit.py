@@ -26,6 +26,8 @@ class DatePartUnit(Enum):
 	"""
 	The year, such as 2026.
 
+	.. versionadded:: 0.1.0
+
 	Examples
 	--------
 	>>> from datetime import datetime
@@ -38,6 +40,8 @@ class DatePartUnit(Enum):
 	QUARTER = auto()
 	"""
 	The quarter of the year, from 1 for January to March to 4 for October to December.
+
+	.. versionadded:: 0.1.0
 
 	Examples
 	--------
@@ -52,6 +56,8 @@ class DatePartUnit(Enum):
 	"""
 	The month, from 1 for January to 12 for December.
 
+	.. versionadded:: 0.1.0
+
 	Examples
 	--------
 	>>> from datetime import datetime
@@ -64,6 +70,8 @@ class DatePartUnit(Enum):
 	WEEK = auto()
 	"""
 	The ISO week number, from 1 to 53. Week 1 holds the first Thursday of the year.
+
+	.. versionadded:: 0.1.0
 
 	Examples
 	--------
@@ -78,6 +86,8 @@ class DatePartUnit(Enum):
 	"""
 	The day of the month, from 1 to 31.
 
+	.. versionadded:: 0.1.0
+
 	Examples
 	--------
 	>>> from datetime import datetime
@@ -90,6 +100,8 @@ class DatePartUnit(Enum):
 	WEEKDAY = auto()
 	"""
 	The day of the week, from 1 for Monday to 7 for Sunday.
+
+	.. versionadded:: 0.1.0
 
 	Examples
 	--------
@@ -104,6 +116,8 @@ class DatePartUnit(Enum):
 	"""
 	The day of the year, from 1 to 366.
 
+	.. versionadded:: 0.1.0
+
 	Examples
 	--------
 	>>> from datetime import datetime
@@ -116,6 +130,8 @@ class DatePartUnit(Enum):
 	HOUR = auto()
 	"""
 	The hour, from 0 to 23. Datetimes and times of day only.
+
+	.. versionadded:: 0.1.0
 
 	Examples
 	--------
@@ -130,6 +146,8 @@ class DatePartUnit(Enum):
 	"""
 	The minute, from 0 to 59. Datetimes and times of day only.
 
+	.. versionadded:: 0.1.0
+
 	Examples
 	--------
 	>>> from datetime import datetime
@@ -142,6 +160,8 @@ class DatePartUnit(Enum):
 	SECOND = auto()
 	"""
 	The second, from 0 to 59. Datetimes and times of day only.
+
+	.. versionadded:: 0.1.0
 
 	Examples
 	--------

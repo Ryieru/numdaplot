@@ -25,6 +25,8 @@ class Order(Enum):
 	"""
 	From the smallest to the largest value. Default value.
 
+	.. versionadded:: 0.1.0
+
 	Examples
 	--------
 	>>> import numdaplot as ndp
@@ -36,6 +38,8 @@ class Order(Enum):
 	DESCENDING = auto()
 	"""
 	From the largest to the smallest value.
+
+	.. versionadded:: 0.1.0
 
 	Examples
 	--------

@@ -25,6 +25,8 @@ class CountedMissing(Enum):
 	"""
 	Only the present values are counted. Default value.
 
+	.. versionadded:: 0.1.0
+
 	Examples
 	--------
 	>>> import numdaplot as ndp
@@ -36,6 +38,8 @@ class CountedMissing(Enum):
 	INCLUDED = auto()
 	"""
 	Every value is counted, missing or not, which gives the number of rows of a column.
+
+	.. versionadded:: 0.1.0
 
 	Examples
 	--------

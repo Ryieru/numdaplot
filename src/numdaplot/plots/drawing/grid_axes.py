@@ -30,6 +30,8 @@ class GridAxes(Enum):
 	"""
 	Grid lines across both axes, as for lines and points.
 
+	.. versionadded:: 0.1.0
+
 	Examples
 	--------
 	>>> from matplotlib.figure import Figure
@@ -46,6 +48,8 @@ class GridAxes(Enum):
 	"""
 	Grid lines across the axis of the values only, as for bars, histograms and boxes.
 
+	.. versionadded:: 0.1.0
+
 	Examples
 	--------
 	>>> from matplotlib.figure import Figure
@@ -61,6 +65,8 @@ class GridAxes(Enum):
 	NONE = auto()
 	"""
 	No grid lines, as for pies and heatmaps, whose grid lines would cross the drawing.
+
+	.. versionadded:: 0.1.0
 
 	Examples
 	--------

@@ -28,6 +28,8 @@ class DurationUnit(Enum):
 	"""
 	A week, 7 days.
 
+	.. versionadded:: 0.1.0
+
 	Examples
 	--------
 	>>> from datetime import timedelta
@@ -40,6 +42,8 @@ class DurationUnit(Enum):
 	DAY = auto()
 	"""
 	A day, 24 hours.
+
+	.. versionadded:: 0.1.0
 
 	Examples
 	--------
@@ -54,6 +58,8 @@ class DurationUnit(Enum):
 	"""
 	An hour, 60 minutes.
 
+	.. versionadded:: 0.1.0
+
 	Examples
 	--------
 	>>> from datetime import timedelta
@@ -67,6 +73,8 @@ class DurationUnit(Enum):
 	"""
 	A minute, 60 seconds.
 
+	.. versionadded:: 0.1.0
+
 	Examples
 	--------
 	>>> from datetime import timedelta
@@ -79,6 +87,8 @@ class DurationUnit(Enum):
 	SECOND = auto()
 	"""
 	A second.
+
+	.. versionadded:: 0.1.0
 
 	Examples
 	--------

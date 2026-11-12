@@ -34,6 +34,8 @@ class Conflict(Enum):
 	"""
 	Raise an error and change nothing. Default value.
 
+	.. versionadded:: 0.1.0
+
 	Examples
 	--------
 	>>> import numdaplot as ndp
@@ -51,6 +53,8 @@ class Conflict(Enum):
 	REPLACE = auto()
 	"""
 	Replace the existing file or column.
+
+	.. versionadded:: 0.1.0
 
 	Examples
 	--------

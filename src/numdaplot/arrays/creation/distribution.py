@@ -28,6 +28,11 @@ class Distribution:
 
 	.. versionadded:: 0.1.0
 
+	Raises
+	------
+	RefusedOperationError
+		When the created object is a Distribution and not one of its subclasses.
+
 	Examples
 	--------
 	>>> import numdaplot as ndp

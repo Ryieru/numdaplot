@@ -30,6 +30,8 @@ class CellValues(Enum):
 	"""
 	Each cell shows its value with at most two decimals, in black or white to stay readable.
 
+	.. versionadded:: 0.1.0
+
 	Examples
 	--------
 	>>> import numdaplot as ndp
@@ -46,6 +48,8 @@ class CellValues(Enum):
 	HIDDEN = auto()
 	"""
 	The cells only show their color. Default value.
+
+	.. versionadded:: 0.1.0
 
 	Examples
 	--------

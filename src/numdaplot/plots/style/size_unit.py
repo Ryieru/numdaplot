@@ -26,6 +26,8 @@ class SizeUnit(Enum):
 	"""
 	Inches, as matplotlib counts sizes. Default value.
 
+	.. versionadded:: 0.1.0
+
 	Examples
 	--------
 	>>> import numdaplot as ndp
@@ -39,6 +41,8 @@ class SizeUnit(Enum):
 	"""
 	Centimeters, 2.54 per inch.
 
+	.. versionadded:: 0.1.0
+
 	Examples
 	--------
 	>>> import numdaplot as ndp
@@ -51,6 +55,8 @@ class SizeUnit(Enum):
 	PIXEL = auto()
 	"""
 	Pixels, 100 per inch, the resolution of a PNG image saved without ``ImageOptions``.
+
+	.. versionadded:: 0.1.0
 
 	Examples
 	--------
