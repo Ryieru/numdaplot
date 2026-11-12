@@ -20,11 +20,16 @@ and numdaplot follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
   `pivot_table` and `describe`, without the missing values unless `missing=CountedMissing.INCLUDED`.
 - `Aggregation(row_count=...)` adds the number of rows of each group, without choosing a column, right after the
   group columns. `calculations` becomes optional, and `EmptyAggregationError` is raised when neither is given.
+- `Table.apply` applies a math function, a time function or a `ValueMapping` to several columns at once with a
+  `TableApplication`, each column replaced at its place. An integer or boolean column keeps its type when a
+  `ValueMapping` gives it missing values.
 
 ### Changed
 
 - `Conversion` is renamed `TableConversion`.
 - `Sorting` is renamed `TableSorting`.
+- `OutOfDomainError` and `UnmatchedValueError` name the Table column holding the value, such as a value in no
+  bracket of `Brackets` in `Table.convert`.
 - The message of `UnmatchedValueError` for a `ValueMapping` also offers `others=Unmatched.KEEP`.
 - Numbers given by a `ValueMapping` to an Array of numbers take its type, as with the operators: `INT8` codes stay
   `INT8`, integers given to decimals give decimals, and a number that does not fit raises `ValueConversionError`.

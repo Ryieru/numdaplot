@@ -17,6 +17,12 @@ EXPECTED_BRACKETS_MESSAGE = (
 	"missing."
 )
 BRACKETS_NAME = "Brackets"
+COLUMN_NAME = "sex"
+OTHER_COLUMN_NAME = "age"
+EXPECTED_COLUMN_MESSAGE = (
+	"The value 2 of the column 'sex' has no ValueChange. Add one, or give others=Unmatched.MISSING to make it "
+	"missing, or others=Unmatched.KEEP to keep it."
+)
 
 
 def test_unmatched_value_error_is_a_numdaplot_error() -> None:
@@ -52,3 +58,33 @@ def test_unmatched_value_error_advises_brackets_for_brackets() -> None:
 	error_text = str(error)
 	assert error_text == EXPECTED_BRACKETS_MESSAGE
 	assert error.setting_name == BRACKETS_NAME
+
+
+def test_unmatched_value_error_names_the_column_of_the_value() -> None:
+	"""
+	Check that name_column adds the column to the message and keeps it as an attribute.
+
+	.. versionadded:: 0.2.0
+	"""
+	error = UnmatchedValueError(VALUE)
+
+	error.name_column(COLUMN_NAME)
+
+	error_text = str(error)
+	assert error_text == EXPECTED_COLUMN_MESSAGE
+	assert error.column_name == COLUMN_NAME
+
+
+def test_unmatched_value_error_keeps_the_first_column_named() -> None:
+	"""
+	Check that a second name_column leaves the first column in the message.
+
+	.. versionadded:: 0.2.0
+	"""
+	error = UnmatchedValueError(VALUE)
+	error.name_column(COLUMN_NAME)
+
+	error.name_column(OTHER_COLUMN_NAME)
+
+	error_text = str(error)
+	assert error_text == EXPECTED_COLUMN_MESSAGE

@@ -12,6 +12,7 @@ from numpy.typing import NDArray
 
 from numdaplot.arrays.conversion.python_values import to_python_list
 from numdaplot.arrays.creation.list_conversion import convert_list
+from numdaplot.arrays.mapping.mapping_result import MappingResult
 from numdaplot.arrays.mapping.unmatched import Unmatched
 from numdaplot.arrays.mapping.value_mapping import MAPPING_OPERATION, ValueMapping, find_new_type
 from numdaplot.arrays.operations.type_requirements import require_comparable
@@ -74,18 +75,60 @@ def map_values(values: NDArray[Any], mapping: ValueMapping) -> NDArray[Any]:
 	>>> map_values(numpy.array([[1, 2], [2, 1]]), mapping).tolist()
 	[['Homme', 'Femme'], ['Femme', 'Homme']]
 	"""
+	mapping_result = find_mapping_result(values, mapping)
+	require_missing_supported(mapping_result.new_values, mapping_result.result_type, mapping.others)
+	stored_values = convert_list(mapping_result.new_values, mapping_result.result_type)
+	shaped_values = stored_values.reshape(values.shape)
+
+	return shaped_values
+
+
+def find_mapping_result(values: NDArray[Any], mapping: ValueMapping) -> MappingResult:
+	"""
+	Return the new values of a mapping in one dimension, with the type of the result.
+
+	.. versionadded:: 0.2.0
+
+	Parameters
+	----------
+	values
+		The values the mapping applies to, in any shape.
+	mapping
+		The new value of each listed value, and what happens to the others.
+
+	Returns
+	-------
+	MappingResult
+		The new Python values, None for a missing one, and the type ``find_result_type`` gives.
+
+	Raises
+	------
+	IncompatibleTypesError
+		When the old values are not of the type family of the values, or the kept values and the new values are of
+		several families.
+	UnmatchedValueError
+		When a value has no new value and ``others`` is ``Unmatched.ERROR``.
+
+	Examples
+	--------
+	>>> import numpy
+	>>> import numdaplot as ndp
+	>>> from numdaplot.arrays.mapping.mapped_values import find_mapping_result
+	>>> mapping = ndp.ValueMapping(changes=[ndp.ValueChange(1, "Homme")], others=ndp.Unmatched.MISSING)
+	>>> mapping_result = find_mapping_result(numpy.array([1, 2]), mapping)
+	>>> mapping_result.new_values, mapping_result.result_type
+	(['Homme', None], <Type.TEXT: 12>)
+	"""
 	for change in mapping.changes:
 		require_comparable(values, change.old_value, MAPPING_OPERATION)
 
 	flat_values = values.ravel()
 	new_values = find_flat_new_values(flat_values, mapping)
-	array_type = from_numpy_dtype(values.dtype)
-	result_type = find_result_type(array_type, mapping)
-	require_missing_supported(new_values, result_type, mapping.others)
-	stored_values = convert_list(new_values, result_type)
-	shaped_values = stored_values.reshape(values.shape)
+	value_type = from_numpy_dtype(values.dtype)
+	result_type = find_result_type(value_type, mapping)
+	mapping_result = MappingResult(new_values=new_values, result_type=result_type)
 
-	return shaped_values
+	return mapping_result
 
 
 def find_flat_new_values(flat_values: NDArray[Any], mapping: ValueMapping) -> list[object]:

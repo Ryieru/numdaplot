@@ -23,8 +23,8 @@ WIDTH_MISSING_BRACKETS = ndp.Brackets(
 OLD_AGES = [5, 105]
 CLOSED_AGE_BRACKETS = ndp.Brackets(limits=[0, 18, 100])
 EXPECTED_UNMATCHED_MESSAGE = (
-	"The value 105 is in no bracket. Open the first or the last bracket, or give others=Unmatched.MISSING to make it "
-	"missing."
+	"The value 105 of the column 'value' is in no bracket. Open the first or the last bracket, or give "
+	"others=Unmatched.MISSING to make it missing."
 )
 KEEP_REFUSAL_MESSAGE = "Brackets does not accept Unmatched.KEEP."
 ROADS = ["A1", "N7"]

@@ -1,5 +1,5 @@
 """
-Column operations of a Table: choice, renaming, conversion and addition.
+Column operations of a Table: choice, renaming, conversion, application of a function and addition.
 
 .. versionadded:: 0.1.0
 """
@@ -10,18 +10,20 @@ from numdaplot.conversions.converted_column import convert_column
 from numdaplot.conversions.table_conversion import TableConversion
 from numdaplot.settings.argument_types import checked_arguments
 from numdaplot.tables.columns.added_column import add_frame_column
+from numdaplot.tables.columns.applied_columns import apply_frame_columns
 from numdaplot.tables.columns.chosen_columns import choose_frame_columns
 from numdaplot.tables.columns.column_choice import ColumnChoice
 from numdaplot.tables.columns.new_column import NewColumn
 from numdaplot.tables.columns.renamed_columns import rename_frame_columns
 from numdaplot.tables.columns.renaming import Renaming
+from numdaplot.tables.columns.table_application import TableApplication
 from numdaplot.tables.frames.named_column_errors import NamedColumnErrors
 from numdaplot.tables.table_data import TableData
 
 
 class TableColumns(TableData):
 	"""
-	Column operations of a Table: ``choose_columns``, ``rename``, ``convert`` and ``add_column``.
+	Column operations of a Table: ``choose_columns``, ``rename``, ``convert``, ``apply`` and ``add_column``.
 
 	.. versionadded:: 0.1.0
 	"""
@@ -166,6 +168,72 @@ class TableColumns(TableData):
 		converted_table = self._wrap(converted_frame)
 
 		return converted_table
+
+	@checked_arguments
+	def apply(self, application: TableApplication) -> Self:
+		"""
+		Return the Table with a math function, a time function or a value mapping applied to each value of columns.
+
+		Unlike ``Array.apply``, an integer or boolean column keeps its type when a ``ValueMapping`` gives it missing
+		values, since a Table column can hold them.
+
+		.. versionadded:: 0.2.0
+
+		Parameters
+		----------
+		application
+			The function, as ``Array.apply`` takes, and the names of the columns it applies to.
+
+		Returns
+		-------
+		Self
+			A new Table, each column replaced at its place, under its name. Missing values stay missing.
+
+		Raises
+		------
+		InvalidTypeError
+			When an argument is not of the type its annotation names.
+		ColumnNotFoundError
+			When a column does not exist, before any column is changed.
+		IncompatibleTypesError
+			When the function does not apply to the type of a column, or a ``ValueMapping`` with ``Unmatched.KEEP``
+			gives new values of another family than the kept values, such as texts among numbers.
+		OutOfDomainError
+			When a value is outside the domain of a math function, such as the square root of -1.
+		TimeZoneMismatchError
+			When a column holds datetimes with a time zone: remove it first with ``convert`` and a
+			``TimeZoneChange``.
+		UnmatchedValueError
+			When a value has no ``ValueChange`` in a ``ValueMapping`` whose ``others`` is ``Unmatched.ERROR``.
+		ValueConversionError
+			When a ``ValueMapping`` gives a number that does not fit the number type of a column.
+
+		The first column that fails stops the operation, and the error names it.
+
+		Warns
+		-----
+		CalculationWarning
+			When a result of a math function becomes an infinite value or NaN.
+
+		Examples
+		--------
+		>>> import numdaplot as ndp
+		>>> first_answers = ndp.Array.from_list([1, 7, 2])
+		>>> second_answers = ndp.Array.from_list([9, 3, 1])
+		>>> survey = ndp.Table.from_arrays({"q1": first_answers, "q2": second_answers})
+		>>> unknown_answers = [ndp.ValueChange(7, None), ndp.ValueChange(9, None)]
+		>>> mapping = ndp.ValueMapping(changes=unknown_answers, others=ndp.Unmatched.KEEP)
+		>>> survey.apply(ndp.TableApplication(function=mapping, columns=["q1", "q2"]))
+		     q1    q2
+		  INT64 INT64
+		0     1  <NA>
+		1  <NA>     3
+		2     2     1
+		"""
+		applied_frame = apply_frame_columns(self._frame, application)
+		applied_table = self._wrap(applied_frame)
+
+		return applied_table
 
 	@checked_arguments
 	def add_column(self, new_column: NewColumn) -> Self:

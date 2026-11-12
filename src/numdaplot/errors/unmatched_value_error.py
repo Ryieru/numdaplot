@@ -10,14 +10,16 @@ VALUE_MAPPING_NAME = "ValueMapping"
 BRACKETS_NAME = "Brackets"
 UNMATCHED_MESSAGES = {
 	VALUE_MAPPING_NAME: (
-		"The value {value!r} has no ValueChange. Add one, or give others=Unmatched.MISSING to make it missing, or "
-		"others=Unmatched.KEEP to keep it."
+		"The value {value!r}{column_text} has no ValueChange. Add one, or give others=Unmatched.MISSING to make it "
+		"missing, or others=Unmatched.KEEP to keep it."
 	),
 	BRACKETS_NAME: (
-		"The value {value!r} is in no bracket. Open the first or the last bracket, or give others=Unmatched.MISSING "
-		"to make it missing."
+		"The value {value!r}{column_text} is in no bracket. Open the first or the last bracket, or give "
+		"others=Unmatched.MISSING to make it missing."
 	),
 }
+COLUMN_TEXT = " of the column {column_name!r}"
+NO_COLUMN_TEXT = ""
 
 
 class UnmatchedValueError(NumdaplotError):
@@ -28,7 +30,8 @@ class UnmatchedValueError(NumdaplotError):
 
 	.. versionadded:: 0.1.0
 	.. versionchanged:: 0.2.0
-		The message of a ``ValueMapping`` also offers ``others=Unmatched.KEEP``.
+		The message of a ``ValueMapping`` also offers ``others=Unmatched.KEEP``. The message names the Table column
+		holding the value.
 
 	Parameters
 	----------
@@ -43,6 +46,8 @@ class UnmatchedValueError(NumdaplotError):
 		The first value without new value or bracket.
 	setting_name
 		The setting that found no match.
+	column_name
+		Name of the Table column holding the value, or ``None`` for the values of an Array.
 
 	Examples
 	--------
@@ -60,7 +65,7 @@ class UnmatchedValueError(NumdaplotError):
 	... 	ages.convert(ndp.TableConversion(column="age", dtype=ndp.Type.CATEGORY, format=brackets))
 	... except ndp.UnmatchedValueError as error:
 	... 	print(error)
-	The value 105 is in no bracket. Open the first or the last bracket,
+	The value 105 of the column 'age' is in no bracket. Open the first or the last bracket,
 	or give others=Unmatched.MISSING to make it missing.
 	"""
 
@@ -77,9 +82,64 @@ class UnmatchedValueError(NumdaplotError):
 		setting_name
 			The setting that found no match, ``"ValueMapping"`` by default.
 		"""
-		message_template = UNMATCHED_MESSAGES[setting_name]
-		message = message_template.format(value=value)
-		super().__init__(message)
-
 		self.value = value
 		self.setting_name = setting_name
+		self.column_name: str | None = None
+		message = self.write_message(NO_COLUMN_TEXT)
+		super().__init__(message)
+
+	def write_message(self, column_text: str) -> str:
+		"""
+		Return the message, with the advice of the setting that found no match.
+
+		.. versionadded:: 0.2.0
+
+		Parameters
+		----------
+		column_text
+			The words naming the column after the value, or an empty text.
+
+		Returns
+		-------
+		str
+			The message.
+
+		Examples
+		--------
+		>>> import numdaplot as ndp
+		>>> print(ndp.UnmatchedValueError(105, "Brackets").write_message(""))
+		The value 105 is in no bracket. Open the first or the last bracket,
+		or give others=Unmatched.MISSING to make it missing.
+		"""
+		message_template = UNMATCHED_MESSAGES[self.setting_name]
+		message = message_template.format(value=self.value, column_text=column_text)
+
+		return message
+
+	def name_column(self, column_name: str) -> None:
+		"""
+		Name the Table column holding the value in the message, unless a column is already named.
+
+		.. versionadded:: 0.2.0
+
+		Parameters
+		----------
+		column_name
+			The name of the column.
+
+		Examples
+		--------
+		>>> import numdaplot as ndp
+		>>> error = ndp.UnmatchedValueError(3)
+		>>> error.name_column("sex")
+		>>> print(error)
+		The value 3 of the column 'sex' has no ValueChange. Add one,
+		or give others=Unmatched.MISSING to make it missing, or others=Unmatched.KEEP to keep it.
+		"""
+		if self.column_name is not None:
+			return
+
+		self.column_name = column_name
+		column_text = COLUMN_TEXT.format(column_name=column_name)
+		message = self.write_message(column_text)
+		self.args = (message,)

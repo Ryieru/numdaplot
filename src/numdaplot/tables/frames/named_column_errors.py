@@ -1,5 +1,5 @@
 """
-Name of the Table column in the type errors of a block.
+Name of the Table column in the errors about its values raised by a block.
 
 .. versionadded:: 0.1.0
 """
@@ -7,16 +7,31 @@ Name of the Table column in the type errors of a block.
 from types import TracebackType
 
 from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
+from numdaplot.errors.out_of_domain_error import OutOfDomainError
 from numdaplot.errors.time_overflow_error import TimeOverflowError
+from numdaplot.errors.unmatched_value_error import UnmatchedValueError
 from numdaplot.errors.value_conversion_error import ValueConversionError
 from numdaplot.tables.frames.column import Column
+
+NAMED_ERROR_TYPES = (
+	IncompatibleTypesError,
+	OutOfDomainError,
+	TimeOverflowError,
+	UnmatchedValueError,
+	ValueConversionError,
+)
 
 
 class NamedColumnErrors:
 	"""
-	Context adding the name of a Table column to the type errors raised by a block.
+	Context adding the name of a Table column to the errors about its values raised by a block.
+
+	These errors are ``IncompatibleTypesError``, ``OutOfDomainError``, ``TimeOverflowError``,
+	``UnmatchedValueError`` and ``ValueConversionError``.
 
 	.. versionadded:: 0.1.0
+	.. versionchanged:: 0.2.0
+		Also names the column in ``OutOfDomainError`` and ``UnmatchedValueError``.
 
 	Parameters
 	----------
@@ -63,9 +78,11 @@ class NamedColumnErrors:
 		traceback: TracebackType | None,
 	) -> None:
 		"""
-		Name the column in a type error of the block, which then goes on.
+		Name the column in an error of the block about its values, which then goes on.
 
 		.. versionadded:: 0.1.0
+		.. versionchanged:: 0.2.0
+			Also names the column in ``OutOfDomainError`` and ``UnmatchedValueError``.
 
 		Parameters
 		----------
@@ -80,6 +97,6 @@ class NamedColumnErrors:
 		if column_name is None:
 			return
 
-		if isinstance(error, IncompatibleTypesError | TimeOverflowError | ValueConversionError):
+		if isinstance(error, NAMED_ERROR_TYPES):
 			column_text = str(column_name)
 			error.name_column(column_text)

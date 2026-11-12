@@ -14,6 +14,7 @@ from numdaplot.arrays.creation.list_conversion import convert_list
 from numdaplot.arrays.mapping.mapped_values import (
 	find_flat_new_values,
 	find_lookup_value,
+	find_mapping_result,
 	find_number_type,
 	find_result_type,
 	map_values,
@@ -52,6 +53,7 @@ MORNING_CHRISTMAS = datetime(2026, 12, 25, 10, 0)
 INTEGERS_WITH_MISSING = [10, None]
 BOOLEANS_WITH_MISSING = [True, None]
 ONLY_MISSING_VALUES = [None, None]
+EXPECTED_FLAT_GRID_LABELS = ["Homme", "Femme", "Femme", "Homme"]
 TEXTS_WITH_MISSING = ["a", None]
 KEPT_CODES = ValueMapping(changes=[ValueChange(1, 10)], others=Unmatched.KEEP)
 EXPECTED_KEPT_CODES = [10, 9]
@@ -364,6 +366,30 @@ def test_find_number_type_follows_the_type_of_the_array(number_case: NumberCase)
 	number_type = find_number_type(number_case.array_type, number_case.new_type)
 
 	assert number_type == number_case.expected_type
+
+
+def test_find_mapping_result_gives_flat_new_values_and_their_type() -> None:
+	"""
+	Check that the new values of a grid come in one dimension, with the type of the result.
+
+	.. versionadded:: 0.2.0
+	"""
+	mapping_result = find_mapping_result(GRID, LABELS)
+
+	assert mapping_result.new_values == EXPECTED_FLAT_GRID_LABELS
+	assert mapping_result.result_type == Type.TEXT
+
+
+def test_find_mapping_result_keeps_missing_integers() -> None:
+	"""
+	Check that integers given None keep their type, without the check of map_values.
+
+	.. versionadded:: 0.2.0
+	"""
+	mapping_result = find_mapping_result(CODES_WITH_OTHER, INTEGER_CHANGE)
+
+	assert mapping_result.new_values == INTEGERS_WITH_MISSING
+	assert mapping_result.result_type == Type.INT64
 
 
 def test_map_values_keeps_small_integers_small() -> None:

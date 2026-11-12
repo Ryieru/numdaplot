@@ -20,6 +20,7 @@ import pytest
 from numpy.typing import NDArray
 
 from numdaplot.arrays.array import Array
+from numdaplot.arrays.math_functions.square_root import SquareRoot
 from numdaplot.conversions.table_conversion import TableConversion
 from numdaplot.data_types.type import Type
 from numdaplot.positions.axis import Axis
@@ -35,6 +36,7 @@ from numdaplot.tables.columns.column_choice import ColumnChoice
 from numdaplot.tables.columns.name_change import NameChange
 from numdaplot.tables.columns.new_column import NewColumn
 from numdaplot.tables.columns.renaming import Renaming
+from numdaplot.tables.columns.table_application import TableApplication
 from numdaplot.tables.description.description import Description
 from numdaplot.tables.duplicates.deduplication import Deduplication
 from numdaplot.tables.filtering.condition import Condition
@@ -71,6 +73,11 @@ FRAME_OPERATIONS = list[tuple[ModuleType, str, TableOperation]](
 			table_columns,
 			"rename_frame_columns",
 			lambda table: table.rename(Renaming(changes=[NameChange(old_name="price", new_name="cost")])),
+		),
+		(
+			table_columns,
+			"apply_frame_columns",
+			lambda table: table.apply(TableApplication(function=SquareRoot(), columns=["price"])),
 		),
 		(
 			table_columns,

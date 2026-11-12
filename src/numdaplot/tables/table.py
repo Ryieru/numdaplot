@@ -40,7 +40,7 @@ class Table(
 	``from_xpt``, ``from_pandas`` or ``from_arrays``.
 	- Write it with ``to_csv``, ``to_json``, ``to_excel``, ``to_parquet`` or ``to_stata``.
 	- Select rows with ``filter`` and ``take``, check values with ``check``, read a column with ``column``.
-	- Change columns with ``choose_columns``, ``rename``, ``convert`` and ``add_column``.
+	- Change columns with ``choose_columns``, ``rename``, ``convert``, ``apply`` and ``add_column``.
 	- Compute with ``aggregate``, ``pivot_table`` and ``describe``, and count each value of a column with
 	``count_values``.
 	- Rearrange rows with ``sort`` and ``drop_duplicates``, and combine two Tables with ``join``.
