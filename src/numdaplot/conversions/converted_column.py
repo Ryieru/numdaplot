@@ -10,12 +10,8 @@ from numdaplot.conversions.boolean_conversion import convert_booleans_to_numbers
 from numdaplot.conversions.boolean_rule import BooleanRule
 from numdaplot.conversions.conversion_checks import WRITTEN_TYPES, require_conversion_settings
 from numdaplot.conversions.conversion_settings import ConversionSettings
-from numdaplot.conversions.date_conversion import (
-	convert_moments,
-	parse_dates,
-	write_dates,
-	write_durations,
-)
+from numdaplot.conversions.date_conversion import convert_moments, write_dates, write_durations
+from numdaplot.conversions.date_reading import parse_dates
 from numdaplot.conversions.number_conversion import convert_numbers, parse_numbers
 from numdaplot.conversions.table_conversion import TableConversion
 from numdaplot.conversions.text_conversion import parse_booleans

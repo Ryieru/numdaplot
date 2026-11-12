@@ -14,14 +14,9 @@ from collections.abc import Callable
 from typing import cast
 
 from numdaplot.errors.invalid_type_error import InvalidTypeError
-from numdaplot.settings.field_types import (
-	AcceptedKinds,
-	accepts_value,
-	describe_kinds,
-	find_rejected_value,
-	read_accepted_kinds,
-	read_annotations,
-)
+from numdaplot.settings.annotation_kinds import AcceptedKinds, read_accepted_kinds, read_annotations
+from numdaplot.settings.field_types import accepts_value, find_rejected_value
+from numdaplot.settings.kind_descriptions import describe_kinds
 
 INSTANCE_PARAMETER = "self"
 CLASS_PARAMETER = "cls"
@@ -265,7 +260,7 @@ def require_argument_type(
 	--------
 	>>> import numdaplot as ndp
 	>>> from numdaplot.settings.argument_types import require_argument_type
-	>>> from numdaplot.settings.field_types import read_accepted_kinds
+	>>> from numdaplot.settings.annotation_kinds import read_accepted_kinds
 	>>> try:
 	... 	require_argument_type(ndp.Plot.line, ndp.Plot, read_accepted_kinds(str), ("chart", 5))
 	... except ndp.InvalidTypeError as error:

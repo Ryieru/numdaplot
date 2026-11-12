@@ -10,6 +10,7 @@ import pytest
 
 import numdaplot as ndp
 from numdaplot.errors.invalid_type_error import InvalidTypeError
+from numdaplot.settings.annotation_kinds import read_accepted_kinds
 from numdaplot.settings.argument_types import (
 	checked_arguments,
 	find_argument_kinds,
@@ -18,7 +19,6 @@ from numdaplot.settings.argument_types import (
 	replace_self,
 	require_argument_type,
 )
-from numdaplot.settings.field_types import read_accepted_kinds
 
 ANSWER = 42
 DOUBLED_ANSWER = 84

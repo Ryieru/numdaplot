@@ -8,7 +8,6 @@ from pathlib import Path
 from types import SimpleNamespace
 from typing import Any
 
-import pytest
 from api_pages import (
 	PublicObject,
 	build_api_nav,
@@ -16,20 +15,18 @@ from api_pages import (
 	build_page_content,
 	find_page_path,
 	find_public_objects,
-	find_section,
 	on_config,
 	on_files,
 	order_public_object,
 )
+from api_sections import find_section
 from mkdocs.structure.files import Files
 
 import numdaplot
 
 RULES_MODULE = "numdaplot.rules.greater"
 FILES_MODULE = "numdaplot.tables.files.csv_read_options"
-UNKNOWN_MODULE = "numdaplot.reports.report"
 EXPECTED_FILE_GROUP = "File settings"
-TABLES_TITLE = "Tables"
 GREATER_SECTION = find_section(RULES_MODULE)
 GREATER = PublicObject("Greater", "numdaplot.rules.greater.Greater", GREATER_SECTION)
 RULE = PublicObject("Rule", "numdaplot.rules.rule.Rule", GREATER_SECTION)
@@ -48,37 +45,7 @@ API_TITLE = "API"
 FIRST_PUBLIC_NAME = "Array"
 ROW_COUNT_NAME = "row_count"
 FILTER_NAME = "filter"
-EXPECTED_TABLES_NAV = [
-	{
-		"Tables": [
-			{"Table": "api/tables/table.md"},
-			{EXPECTED_FILE_GROUP: [{"CsvReadOptions": "api/tables/csv_read_options.md"}]},
-		]
-	}
-]
 EXPECTED_VALUE_TYPES_SECTION = {"Types": [{"Value types": "api/types/value_types.md"}]}
-
-
-def test_find_section_prefers_the_most_precise_prefix() -> None:
-	"""
-	Check that a file settings module goes to the File settings group of Tables.
-
-	.. versionadded:: 0.1.0
-	"""
-	section = find_section(FILES_MODULE)
-
-	assert section.title == TABLES_TITLE
-	assert section.group == EXPECTED_FILE_GROUP
-
-
-def test_find_section_rejects_a_module_without_section() -> None:
-	"""
-	Check that a package missing from SECTIONS raises KeyError.
-
-	.. versionadded:: 0.1.0
-	"""
-	with pytest.raises(KeyError):
-		find_section(UNKNOWN_MODULE)
 
 
 def test_find_public_objects_gives_every_public_name() -> None:

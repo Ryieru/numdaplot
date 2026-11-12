@@ -5,7 +5,7 @@ Checks of the settings of a conversion against the types it converts between.
 """
 
 from numdaplot.conversions.conversion_settings import ConversionSettings
-from numdaplot.conversions.date_conversion import find_format_name, has_date, has_time
+from numdaplot.conversions.date_formats import find_format_name, has_date, has_time
 from numdaplot.conversions.table_conversion import TableConversion
 from numdaplot.data_types.type import Type
 from numdaplot.data_types.value_family import ValueFamily, find_family
