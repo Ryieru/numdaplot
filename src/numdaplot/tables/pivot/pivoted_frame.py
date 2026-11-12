@@ -10,6 +10,7 @@ import numpy
 import pandas
 from numpy.typing import NDArray
 
+from numdaplot.data_types.number_types import DECIMAL_TYPES
 from numdaplot.data_types.type import Type
 from numdaplot.errors.refused_operation_error import RefusedOperationError
 from numdaplot.tables.aggregation.aggregated_frame import compute_group_results, take_group_keys
@@ -23,7 +24,6 @@ from numdaplot.tables.pivot.pivot_table import PivotTable
 
 MISSING_PIVOT_OPERATION = "Pivoting the column {column_name!r} while it holds missing values"
 MISSING_PIVOT_ALTERNATIVE = "drop_missing with ndp.MissingDrop(columns=[{column_name!r}])"
-DECIMAL_TYPES = frozenset({Type.FLOAT32, Type.FLOAT64})
 FIRST_ROW = 0
 ROW_POSITION_DTYPE = numpy.int64
 

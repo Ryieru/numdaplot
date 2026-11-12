@@ -16,6 +16,9 @@ and numdaplot follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 ### Changed
 
 - The message of `UnmatchedValueError` for a `ValueMapping` also offers `others=Unmatched.KEEP`.
+- Numbers given by a `ValueMapping` to an Array of numbers take its type, as with the operators: `INT8` codes stay
+  `INT8`, integers given to decimals give decimals, and a number that does not fit raises `ValueConversionError`.
+  Decimals given to integers still give `FLOAT64`.
 
 ## [0.1.2] - 2026-11-10
 

@@ -4,6 +4,7 @@ Unit tests of the application of a ValueMapping to the values of an Array.
 .. versionadded:: 0.1.0
 """
 
+from dataclasses import dataclass
 from datetime import date, datetime
 
 import numpy
@@ -13,6 +14,7 @@ from numdaplot.arrays.creation.list_conversion import convert_list
 from numdaplot.arrays.mapping.mapped_values import (
 	find_flat_new_values,
 	find_lookup_value,
+	find_number_type,
 	find_result_type,
 	map_values,
 	require_missing_supported,
@@ -26,6 +28,7 @@ from numdaplot.data_types.type import Type
 from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
 from numdaplot.errors.unmatched_value_error import UnmatchedValueError
 from numdaplot.errors.unsupported_missing_error import UnsupportedMissingError
+from numdaplot.errors.value_conversion_error import ValueConversionError
 
 LABELS = ValueMapping(changes=[ValueChange(1, "Homme"), ValueChange(2, "Femme")])
 GRID = numpy.array([[1, 2], [2, 1]])
@@ -64,6 +67,44 @@ KEPT_INTEGER_MESSAGE = (
 	"FLOAT64 first."
 )
 KEPT_BOOLEAN_MESSAGE = "BOOL values cannot be missing in an Array. Convert the Array to TEXT first."
+ONLY_MISSING_CHANGE = ValueMapping(changes=[ValueChange(7, None)], others=Unmatched.MISSING)
+DATETIME_CHANGE_AMONG_KEPT = ValueMapping(changes=[ValueChange(CHRISTMAS, MORNING_CHRISTMAS)], others=Unmatched.KEEP)
+SMALL_INTEGER_DTYPE = numpy.dtype(numpy.int8)
+SMALL_CODES = numpy.array([1, 2], dtype=SMALL_INTEGER_DTYPE)
+SMALL_CODE_CHANGES = ValueMapping(changes=[ValueChange(1, 100), ValueChange(2, 2)])
+LARGE_CODE_CHANGES = ValueMapping(changes=[ValueChange(1, 1000), ValueChange(2, 2)])
+
+
+@dataclass(frozen=True)
+class NumberCase:
+	"""
+	The type of an Array, the type of Python numbers given to it, and the type of the result.
+
+	.. versionadded:: 0.2.0
+
+	Parameters
+	----------
+	array_type
+		The number type of the Array.
+	new_type
+		The type of the Python numbers.
+	expected_type
+		The expected type of the result.
+	"""
+
+	array_type: Type
+	new_type: Type
+	expected_type: Type
+
+
+NUMBER_CASES = [
+	NumberCase(Type.INT8, Type.INT64, Type.INT8),
+	NumberCase(Type.UINT16, Type.INT64, Type.UINT16),
+	NumberCase(Type.FLOAT32, Type.INT64, Type.FLOAT32),
+	NumberCase(Type.FLOAT32, Type.FLOAT64, Type.FLOAT32),
+	NumberCase(Type.INT8, Type.FLOAT64, Type.FLOAT64),
+	NumberCase(Type.INT64, Type.FLOAT64, Type.FLOAT64),
+]
 
 
 def test_map_values_keeps_the_shape() -> None:
@@ -250,15 +291,86 @@ def test_map_values_makes_only_listed_decimals_missing_with_keep() -> None:
 	assert is_unknown_missing
 
 
-def test_find_result_type_gives_the_new_type_without_keep() -> None:
+def test_find_result_type_gives_the_array_type_to_integers_given_to_decimals() -> None:
 	"""
-	Check that without Unmatched.KEEP, the type of the Array is ignored.
+	Check that Python integers given to a decimal Array take its type, as with the operators.
 
 	.. versionadded:: 0.2.0
 	"""
 	result_type = find_result_type(Type.FLOAT64, INTEGER_CHANGE)
 
+	assert result_type == Type.FLOAT64
+
+
+def test_find_result_type_gives_the_new_type_to_another_family_without_keep() -> None:
+	"""
+	Check that numbers given to a text Array give their own type.
+
+	.. versionadded:: 0.2.0
+	"""
+	result_type = find_result_type(Type.TEXT, INTEGER_CHANGE)
+
 	assert result_type == Type.INT64
+
+
+def test_find_result_type_gives_none_without_new_type_nor_keep() -> None:
+	"""
+	Check that only missing new values give no type when the other values are not kept.
+
+	.. versionadded:: 0.2.0
+	"""
+	result_type = find_result_type(Type.FLOAT64, ONLY_MISSING_CHANGE)
+
+	assert result_type is None
+
+
+def test_find_result_type_widens_dates_to_datetimes_with_keep() -> None:
+	"""
+	Check that with Unmatched.KEEP, a datetime new value among kept dates gives datetimes.
+
+	.. versionadded:: 0.2.0
+	"""
+	result_type = find_result_type(Type.DATE, DATETIME_CHANGE_AMONG_KEPT)
+
+	assert result_type == Type.DATETIME
+
+
+@pytest.mark.parametrize("number_case", NUMBER_CASES)
+def test_find_number_type_follows_the_type_of_the_array(number_case: NumberCase) -> None:
+	"""
+	Check that numbers take the type of the Array, except decimals given to integers.
+
+	.. versionadded:: 0.2.0
+
+	Parameters
+	----------
+	number_case
+		The type of the Array, the type of the new values and the expected type.
+	"""
+	number_type = find_number_type(number_case.array_type, number_case.new_type)
+
+	assert number_type == number_case.expected_type
+
+
+def test_map_values_keeps_small_integers_small() -> None:
+	"""
+	Check that integer new values given to INT8 values stay INT8.
+
+	.. versionadded:: 0.2.0
+	"""
+	mapped_values = map_values(SMALL_CODES, SMALL_CODE_CHANGES)
+
+	assert mapped_values.dtype == SMALL_INTEGER_DTYPE
+
+
+def test_map_values_rejects_a_number_too_large_for_the_array_type() -> None:
+	"""
+	Check that a new integer out of the range of INT8 values raises ValueConversionError.
+
+	.. versionadded:: 0.2.0
+	"""
+	with pytest.raises(ValueConversionError):
+		map_values(SMALL_CODES, LARGE_CODE_CHANGES)
 
 
 def test_find_result_type_gives_the_array_type_when_every_new_value_is_missing() -> None:

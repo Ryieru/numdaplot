@@ -16,8 +16,10 @@ from numdaplot.arrays.mapping.unmatched import Unmatched
 from numdaplot.arrays.mapping.value_mapping import MAPPING_OPERATION, ValueMapping, find_new_type
 from numdaplot.arrays.operations.type_requirements import require_comparable
 from numdaplot.arrays.selection.missing_mask import find_missing
+from numdaplot.data_types.number_types import DECIMAL_TYPES, INTEGER_TYPES
 from numdaplot.data_types.numpy_mapping import from_numpy_dtype
 from numdaplot.data_types.type import Type
+from numdaplot.data_types.value_family import ValueFamily, find_family
 from numdaplot.data_types.value_type import find_common_type
 from numdaplot.errors.unmatched_value_error import UnmatchedValueError
 from numdaplot.errors.unsupported_missing_error import UnsupportedMissingError
@@ -28,9 +30,6 @@ BOOLEAN_ADVICE = "Give texts as new values, which can be missing."
 KEPT_DECIMAL_ADVICE = "Give decimal new values, such as 10.0, or convert the Array to FLOAT64 first."
 KEPT_BOOLEAN_ADVICE = "Convert the Array to TEXT first."
 MIDNIGHT = time()
-INTEGER_TYPES = frozenset(
-	{Type.INT8, Type.INT16, Type.INT32, Type.INT64, Type.UINT8, Type.UINT16, Type.UINT32, Type.UINT64}
-)
 
 
 def map_values(values: NDArray[Any], mapping: ValueMapping) -> NDArray[Any]:
@@ -39,7 +38,8 @@ def map_values(values: NDArray[Any], mapping: ValueMapping) -> NDArray[Any]:
 
 	.. versionadded:: 0.1.0
 	.. versionchanged:: 0.2.0
-		Keeps the values without ``ValueChange`` when ``others`` is ``Unmatched.KEEP``.
+		Keeps the values without ``ValueChange`` when ``others`` is ``Unmatched.KEEP``. Numbers given to an Array of
+		numbers take its type.
 
 	Parameters
 	----------
@@ -51,8 +51,7 @@ def map_values(values: NDArray[Any], mapping: ValueMapping) -> NDArray[Any]:
 	Returns
 	-------
 	NDArray
-		The new values, stored with the type the new values share, which also holds the kept values with
-		``Unmatched.KEEP``. Missing values stay missing.
+		The new values, stored with the type ``find_result_type`` gives. Missing values stay missing.
 
 	Raises
 	------
@@ -63,6 +62,8 @@ def map_values(values: NDArray[Any], mapping: ValueMapping) -> NDArray[Any]:
 		When a value has no new value and ``others`` is ``Unmatched.ERROR``.
 	UnsupportedMissingError
 		When the result holds integers or booleans and a missing value.
+	ValueConversionError
+		When a new number does not fit the number type of the Array, such as 1000 given to ``INT8`` values.
 
 	Examples
 	--------
@@ -158,8 +159,9 @@ def find_result_type(array_type: Type, mapping: ValueMapping) -> Type | None:
 	"""
 	Return the type of the result of a mapping.
 
-	It is the type of the new values, widened to the type of the Array when the mapping keeps the values without
-	``ValueChange``.
+	Numbers given to an Array of numbers take its type, as with the operators, except decimals given to integers,
+	which give ``FLOAT64``. Other new values give their own type, which also holds the kept values with
+	``Unmatched.KEEP``.
 
 	.. versionadded:: 0.2.0
 
@@ -184,21 +186,66 @@ def find_result_type(array_type: Type, mapping: ValueMapping) -> Type | None:
 	--------
 	>>> import numdaplot as ndp
 	>>> from numdaplot.arrays.mapping.mapped_values import find_result_type
-	>>> mapping = ndp.ValueMapping(changes=[ndp.ValueChange(7, 7.5)], others=ndp.Unmatched.KEEP)
-	>>> find_result_type(ndp.Type.INT64, mapping)
+	>>> find_result_type(ndp.Type.INT8, ndp.ValueMapping(changes=[ndp.ValueChange(7, 70)]))
+	<Type.INT8: 1>
+	>>> find_result_type(ndp.Type.INT8, ndp.ValueMapping(changes=[ndp.ValueChange(7, 7.5)]))
 	<Type.FLOAT64: 10>
 	"""
 	new_type = find_new_type(mapping.changes)
-	if mapping.others != Unmatched.KEEP:
-		return new_type
-
+	keeps_others = mapping.others == Unmatched.KEEP
 	if new_type is None:
-		return array_type
+		type_without_new_value = array_type if keeps_others else None
+		return type_without_new_value
+
+	array_family = find_family(array_type)
+	new_family = find_family(new_type)
+	gives_numbers_to_numbers = array_family == ValueFamily.NUMBER and new_family == ValueFamily.NUMBER
+	if gives_numbers_to_numbers:
+		number_type = find_number_type(array_type, new_type)
+		return number_type
+
+	if not keeps_others:
+		return new_type
 
 	result_types = [array_type, new_type]
 	result_type = find_common_type(result_types, MAPPING_OPERATION)
 
 	return result_type
+
+
+def find_number_type(array_type: Type, new_type: Type) -> Type:
+	"""
+	Return the type of Python numbers given to an Array of numbers.
+
+	It is the type of the Array, as with the operators, except for decimals given to integers.
+
+	.. versionadded:: 0.2.0
+
+	Parameters
+	----------
+	array_type
+		The number type of the Array.
+	new_type
+		``INT64`` for Python integers, ``FLOAT64`` when a Python decimal is among them.
+
+	Returns
+	-------
+	Type
+		``FLOAT64`` for decimals given to integers, which keeps the decimals as written, the type of the Array
+		otherwise.
+
+	Examples
+	--------
+	>>> import numdaplot as ndp
+	>>> from numdaplot.arrays.mapping.mapped_values import find_number_type
+	>>> find_number_type(ndp.Type.FLOAT32, ndp.Type.INT64), find_number_type(ndp.Type.UINT8, ndp.Type.FLOAT64)
+	(<Type.FLOAT32: 9>, <Type.FLOAT64: 10>)
+	"""
+	gives_decimals_to_integers = new_type in DECIMAL_TYPES and array_type in INTEGER_TYPES
+	if gives_decimals_to_integers:
+		return Type.FLOAT64
+
+	return array_type
 
 
 def require_missing_supported(new_values: Sequence[object], new_type: Type | None, others: Unmatched) -> None:

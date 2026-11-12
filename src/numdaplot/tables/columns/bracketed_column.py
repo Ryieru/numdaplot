@@ -11,6 +11,7 @@ import pandas
 from numpy.typing import NDArray
 
 from numdaplot.arrays.mapping.unmatched import Unmatched
+from numdaplot.data_types.number_types import INTEGER_TYPES
 from numdaplot.data_types.pandas_mapping import to_pandas_dtype
 from numdaplot.data_types.type import Type
 from numdaplot.errors.unmatched_value_error import BRACKETS_NAME, UnmatchedValueError
@@ -22,9 +23,6 @@ from numdaplot.tables.frames.column import Column
 from numdaplot.tables.frames.column_values import find_column_missing, find_column_type
 from numdaplot.tables.frames.frame_normalization import convert_to_type
 
-INTEGER_TYPES = frozenset(
-	{Type.INT8, Type.INT16, Type.INT32, Type.INT64, Type.UINT8, Type.UINT16, Type.UINT32, Type.UINT64}
-)
 NO_CATEGORY = -1
 DECIMAL_DTYPE = numpy.float64
 LOW_SIDE = "right"

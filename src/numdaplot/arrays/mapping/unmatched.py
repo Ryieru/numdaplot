@@ -52,8 +52,8 @@ class Unmatched(Enum):
 
 	KEEP = auto()
 	"""
-	The value stays as it is, so that only the listed values change. The result takes the type that holds both the
-	values of the Array and the new values. ``Brackets`` refuses it, as a number cannot name a bracket.
+	The value stays as it is, so that only the listed values change. New values of another family than the values of
+	the Array are refused, such as texts among numbers. ``Brackets`` refuses it, as a number cannot name a bracket.
 
 	.. versionadded:: 0.2.0
 

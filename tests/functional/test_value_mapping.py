@@ -32,6 +32,11 @@ UNKNOWN_ANSWERS = ndp.ValueMapping(
 EXPECTED_KNOWN_ANSWERS = [1.0, 3.0, 5.0]
 EXPECTED_UNKNOWN_COUNT = 2
 INTEGER_ANSWERS = [1, 7, 3]
+DECIMAL_DIABETES_CODES = [1.0, 3.0, 7.0]
+DIABETES_TARGET = ndp.ValueMapping(changes=[ndp.ValueChange(1, 1), ndp.ValueChange(3, 0)], others=ndp.Unmatched.MISSING)
+EXPECTED_PRESENT_TARGETS = [1.0, 0.0]
+SMALL_CODES = [1, 2]
+SMALL_CODE_LABELS = ndp.ValueMapping(changes=[ndp.ValueChange(1, 100), ndp.ValueChange(2, 2)])
 EXPECTED_KEPT_INTEGER_MESSAGE = (
 	"INT64 values cannot be missing in an Array. Give decimal new values, such as 10.0, or convert the Array to "
 	"FLOAT64 first."
@@ -135,6 +140,38 @@ def test_kept_integers_with_a_missing_value_point_to_a_conversion() -> None:
 
 	error_text = str(error_info.value)
 	assert error_text == EXPECTED_KEPT_INTEGER_MESSAGE
+
+
+def test_decimal_codes_recoded_with_integers_stay_decimals_and_hold_missing_values() -> None:
+	"""
+	Check that integer new values given to decimal codes take the decimal type, so that other codes can be missing.
+
+	.. versionadded:: 0.2.0
+	"""
+	codes = ndp.Array.from_list(DECIMAL_DIABETES_CODES)
+
+	targets = codes.apply(DIABETES_TARGET)
+
+	present_values = targets.select(ndp.IsPresent())
+	present_targets = present_values.to_list()
+	assert targets.dtype == ndp.Type.FLOAT64
+	assert present_targets == EXPECTED_PRESENT_TARGETS
+
+
+def test_small_integer_codes_keep_their_type() -> None:
+	"""
+	Check that a column converted to INT8 keeps INT8 when its codes get integer new values.
+
+	.. versionadded:: 0.2.0
+	"""
+	codes = ndp.Array.from_list(SMALL_CODES)
+	table = ndp.Table.from_arrays({"code": codes})
+	small_table = table.convert(ndp.Conversion(column="code", dtype=ndp.Type.INT8))
+	small_codes = small_table.column("code")
+
+	new_codes = small_codes.apply(SMALL_CODE_LABELS)
+
+	assert new_codes.dtype == ndp.Type.INT8
 
 
 def test_an_old_value_given_twice_is_refused() -> None:

@@ -24,13 +24,15 @@ class ValueMapping:
 	"""
 	The new value of each listed value of an Array, used by ``Array.apply``, such as codes replaced by labels.
 
-	A missing value stays missing. The new values share one type, which the result takes: integers and decimals
-	give decimals. With ``others=Unmatched.KEEP``, the result takes the type holding both the values of the Array and
-	the new values.
+	A missing value stays missing. The new values share one type: integers and decimals give decimals. Numbers given
+	to an Array of numbers take its type, as with the operators, except decimals given to integers, which give
+	``FLOAT64``. Other new values give their own type, which also holds the kept values with
+	``others=Unmatched.KEEP``.
 
 	.. versionadded:: 0.1.0
 	.. versionchanged:: 0.2.0
-		Accepts ``others=Unmatched.KEEP``, which keeps the values without ``ValueChange``.
+		Accepts ``others=Unmatched.KEEP``, which keeps the values without ``ValueChange``. Numbers given to an Array
+		of numbers take its type, as with the operators.
 
 	Parameters
 	----------

@@ -84,7 +84,9 @@ class ArrayCalculation(ArrayData):
 
 		.. versionadded:: 0.1.0
 		.. versionchanged:: 0.2.0
-			Accepts a ``ValueMapping`` keeping the values it does not list, with ``others=Unmatched.KEEP``.
+			Accepts a ``ValueMapping`` keeping the values it does not list, with ``others=Unmatched.KEEP``, and raises
+			``ValueConversionError`` when a ``ValueMapping`` gives a number that does not fit the number type of the
+			values.
 
 		Parameters
 		----------
@@ -112,6 +114,8 @@ class ArrayCalculation(ArrayData):
 			When a value has no ``ValueChange`` in a ``ValueMapping`` whose ``others`` is ``Unmatched.ERROR``.
 		UnsupportedMissingError
 			When a ``ValueMapping`` gives integers or booleans and a missing value.
+		ValueConversionError
+			When a ``ValueMapping`` gives a number that does not fit the number type of the values.
 
 		Warns
 		-----
