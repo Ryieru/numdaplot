@@ -33,6 +33,7 @@ hooks:
   - tools/docs/api_pages.py
   - tools/docs/section_separators.py
   - tools/docs/page_references.py
+  - tools/docs/source_links.py
 
 plugins:
   - search
@@ -43,7 +44,7 @@ plugins:
           options:
             docstring_style: numpy
             docstring_section_style: list
-            show_source: true
+            show_source: false
             members_order: source
             group_by_category: true
             show_category_heading: true

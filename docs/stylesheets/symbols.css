@@ -14,6 +14,9 @@
 	--version-detail-indent: 1.6em;
 	--version-history-closed-marker: disclosure-closed inside;
 	--version-history-open-marker: disclosure-open inside;
+	--source-link-font-size: 0.65rem;
+	--source-link-gap: 0.3em;
+	--source-link-icon-size: 1.1em;
 	--section-item-gap: 0.8em;
 	--section-description-indent: 1.6em;
 	--section-description-top-margin: 0.2em;
@@ -269,4 +272,25 @@
 /* Code in a table stays on one line: the text cells wrap around it. */
 .md-typeset table:not([class]) code {
 	white-space: nowrap;
+}
+
+.md-typeset .doc-heading .source-link {
+	display: inline-flex;
+	float: right;
+	align-items: center;
+	gap: var(--source-link-gap);
+	font-family: var(--md-text-font-family);
+	font-size: var(--source-link-font-size);
+	font-weight: normal;
+	color: var(--md-default-fg-color--light);
+}
+
+.md-typeset .doc-heading .source-link:hover {
+	color: var(--md-accent-fg-color);
+}
+
+.md-typeset .doc-heading .source-link svg {
+	width: var(--source-link-icon-size);
+	height: var(--source-link-icon-size);
+	fill: currentColor;
 }
