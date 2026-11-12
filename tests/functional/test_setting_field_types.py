@@ -73,6 +73,7 @@ REQUIRED_SETTINGS = dict[str, dict[str, object]](
 		"ToDuration": {"unit": ndp.DurationUnit.DAY},
 		"Uniform": {"low": 0, "high": 1},
 		"ValueChange": {"old_value": 1, "new_value": "a"},
+		"ValueCount": {"column": "a"},
 		"ValueMapping": {"changes": [ndp.ValueChange(1, "a")]},
 	}
 )

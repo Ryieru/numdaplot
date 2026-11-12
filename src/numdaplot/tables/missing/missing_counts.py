@@ -11,6 +11,7 @@ from numpy.typing import NDArray
 from numdaplot.data_types.numpy_mapping import to_numpy_dtype
 from numdaplot.data_types.type import Type
 from numdaplot.positions.axis import Axis
+from numdaplot.ratios.count_division import divide_counts
 from numdaplot.ratios.measure import Measure
 from numdaplot.tables.frames.column import Column
 from numdaplot.tables.frames.column_values import build_column
@@ -145,42 +146,6 @@ def count_axis_missing(missing_grid: NDArray[numpy.bool_], axis: Axis | None) ->
 	total_counts = numpy.array([missing_total], dtype=numpy.int64)
 
 	return total_counts, missing_grid.size
-
-
-def divide_counts(counts: NDArray[numpy.int64], value_count: int) -> NDArray[numpy.float64]:
-	"""
-	Return the fraction of the values each count represents.
-
-	.. versionadded:: 0.1.0
-
-	Parameters
-	----------
-	counts
-		Numbers of missing values.
-	value_count
-		The number of values behind each count.
-
-	Returns
-	-------
-	NDArray[numpy.float64]
-		Each count divided by the number of values, NaN everywhere when there is no value.
-
-	Examples
-	--------
-	>>> import numpy
-	>>> from numdaplot.tables.missing.missing_counts import divide_counts
-	>>> divide_counts(numpy.array([1, 2]), 4)
-	array([0.25, 0.5 ])
-	>>> divide_counts(numpy.array([0]), 0)
-	array([nan])
-	"""
-	if value_count == 0:
-		no_ratios = numpy.full(counts.shape, numpy.nan, dtype=numpy.float64)
-		return no_ratios
-
-	ratios = numpy.divide(counts, value_count, dtype=numpy.float64)
-
-	return ratios
 
 
 def build_name_column(frame: pandas.DataFrame) -> Column:

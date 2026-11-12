@@ -107,6 +107,7 @@ from numdaplot.errors.invalid_suffixes_error import InvalidSuffixesError
 from numdaplot.errors.invalid_time_zone_change_error import InvalidTimeZoneChangeError
 from numdaplot.errors.invalid_type_error import InvalidTypeError
 from numdaplot.errors.irregular_list_error import IrregularListError
+from numdaplot.errors.join_relation_error import JoinRelationError
 from numdaplot.errors.missing_dependency_error import MissingDependencyError
 from numdaplot.errors.missing_type_error import MissingTypeError
 from numdaplot.errors.missing_value_error import MissingValueError
@@ -231,6 +232,7 @@ from numdaplot.tables.joining.join import Join
 from numdaplot.tables.joining.join_mode import JoinMode
 from numdaplot.tables.joining.join_suffixes import JoinSuffixes
 from numdaplot.tables.joining.key_types import KeyTypes
+from numdaplot.tables.joining.relation import Relation
 from numdaplot.tables.missing.missing_count import MissingCount
 from numdaplot.tables.missing.missing_drop import MissingDrop
 from numdaplot.tables.missing.missing_mode import MissingMode
@@ -243,10 +245,9 @@ from numdaplot.tables.preview.side import Side
 from numdaplot.tables.sorting.sort_key import SortKey
 from numdaplot.tables.sorting.table_sorting import TableSorting
 from numdaplot.tables.table import Table
+from numdaplot.tables.value_counts.value_count import ValueCount
 
 __version__ = find_package_version()
-from numdaplot.errors.join_relation_error import JoinRelationError
-from numdaplot.tables.joining.relation import Relation
 
 __all__ = [
 	"Absolute",
@@ -476,6 +477,7 @@ __all__ = [
 	"ValueAxis",
 	"ValueChange",
 	"ValueConversionError",
+	"ValueCount",
 	"ValueMapping",
 	"XptReadOptions",
 ]

@@ -14,6 +14,8 @@ and numdaplot follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
   `Brackets` refuses it.
 - `Array.convert` changes the type of the values of an Array with an `ArrayConversion`, as `Table.convert` does
   for a column.
+- `Table.count_values` gives how many rows hold each value of a column with a `ValueCount`, as a number or,
+  with `Measure.RATIO`, as a fraction of every row, from the most frequent value to the least frequent.
 
 ### Changed
 
@@ -28,6 +30,8 @@ and numdaplot follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 - The documentation shows the latest version note of each object and folds the earlier ones in a version history.
   Every enum member tells its version. Class pages no longer repeat the parameters of the creation.
 - The documentation lists `TableConversion` and `BooleanRule` in a Conversions section.
+- The documentation lists `Measure` in a Measures section, shared by tables and plots, and groups the settings of
+  `aggregate`, `pivot_table`, `describe` and `count_values` under Statistic settings.
 - The documentation links each object to its source on GitHub instead of showing the code.
 - The advice of `ValueConversionError` and `InvalidConversionError` about formats speaks of the values, which fits an
   Array as well as a column.

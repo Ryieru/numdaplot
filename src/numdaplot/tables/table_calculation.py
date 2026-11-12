@@ -1,5 +1,5 @@
 """
-Statistics of a Table: aggregation, pivot table and description.
+Statistics of a Table: aggregation, pivot table, description and count of values.
 
 .. versionadded:: 0.1.0
 """
@@ -14,11 +14,15 @@ from numdaplot.tables.description.description import Description
 from numdaplot.tables.pivot.pivot_table import PivotTable
 from numdaplot.tables.pivot.pivoted_frame import pivot_frame
 from numdaplot.tables.table_data import TableData
+from numdaplot.tables.value_counts.counted_values import count_frame_values
+from numdaplot.tables.value_counts.value_count import ValueCount
 
 
 class TableCalculation(TableData):
 	"""
-	Statistics of a Table with ``aggregate``, ``pivot_table`` and ``describe``. Missing values are ignored.
+	Statistics of a Table with ``aggregate``, ``pivot_table``, ``describe`` and ``count_values``.
+
+	``aggregate``, ``pivot_table`` and ``describe`` ignore missing values unless a ``Count`` includes them.
 
 	.. versionadded:: 0.1.0
 	"""
@@ -170,3 +174,53 @@ class TableCalculation(TableData):
 		described_table = self._wrap(described_frame)
 
 		return described_table
+
+	@checked_arguments
+	def count_values(self, value_count: ValueCount) -> Self:
+		"""
+		Return how many rows hold each value of a column, as a number or as a fraction of every row.
+
+		.. versionadded:: 0.2.0
+
+		Parameters
+		----------
+		value_count
+			The counted column, and the measure: a number of rows by default.
+
+		Returns
+		-------
+		Self
+			A new Table: the counted column holding each value once, then ``value_count``, or ``value_ratio`` for
+			``Measure.RATIO``. Rows go from the most frequent value to the least frequent, values with the same
+			count sorted by value. The missing value has a row of its own, last, so the ratios add up to 1.
+
+		Raises
+		------
+		InvalidTypeError
+			When an argument is not of the type its annotation names.
+		ColumnNotFoundError
+			When the counted column does not exist.
+		DuplicateColumnError
+			When the counted column is named ``value_count`` or ``value_ratio``, like the measure column.
+
+		Examples
+		--------
+		>>> import numdaplot as ndp
+		>>> answers = ndp.Table.from_arrays({"sex": ndp.Array.from_list([2.0, 1.0, 2.0, None, 2.0, 1.0])})
+		>>> answers.count_values(ndp.ValueCount(column="sex"))
+		      sex value_count
+		  FLOAT64       INT64
+		0     2.0           3
+		1     1.0           2
+		2     NaN           1
+		>>> answers.count_values(ndp.ValueCount(column="sex", measure=ndp.Measure.RATIO))
+		      sex value_ratio
+		  FLOAT64     FLOAT64
+		0     2.0    0.500000
+		1     1.0    0.333333
+		2     NaN    0.166667
+		"""
+		counted_frame = count_frame_values(self._frame, value_count)
+		counted_table = self._wrap(counted_frame)
+
+		return counted_table

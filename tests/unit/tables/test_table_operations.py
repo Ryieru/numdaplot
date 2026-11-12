@@ -46,6 +46,7 @@ from numdaplot.tables.pivot.pivot_table import PivotTable
 from numdaplot.tables.sorting.sort_key import SortKey
 from numdaplot.tables.sorting.table_sorting import TableSorting
 from numdaplot.tables.table import Table
+from numdaplot.tables.value_counts.value_count import ValueCount
 
 FRAME = pandas.DataFrame({"price": [5.0, 12.0, 30.0]})
 FAKE_FRAME = pandas.DataFrame({"result": [1.0]})
@@ -83,6 +84,7 @@ FRAME_OPERATIONS = list[tuple[ModuleType, str, TableOperation]](
 		),
 		(table_calculation, "describe_frame", lambda table: table.describe(Description())),
 		(table_calculation, "pivot_frame", lambda table: table.pivot_table(PRICE_PIVOT)),
+		(table_calculation, "count_frame_values", lambda table: table.count_values(ValueCount(column="price"))),
 		(table_layout, "sort_frame", lambda table: table.sort(TableSorting(keys=[SortKey(column="price")]))),
 		(table_layout, "drop_duplicate_rows", lambda table: table.drop_duplicates(Deduplication())),
 		(
