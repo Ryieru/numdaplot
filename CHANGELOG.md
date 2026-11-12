@@ -18,6 +18,8 @@ and numdaplot follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
   with `Measure.RATIO`, as a fraction of every row, from the most frequent value to the least frequent.
 - `Share` gives the fraction of the values satisfying a rule, of an Array or of each group in `aggregate`,
   `pivot_table` and `describe`, without the missing values unless `missing=CountedMissing.INCLUDED`.
+- `Aggregation(row_count=...)` adds the number of rows of each group, without choosing a column, right after the
+  group columns. `calculations` becomes optional, and `EmptyAggregationError` is raised when neither is given.
 
 ### Changed
 

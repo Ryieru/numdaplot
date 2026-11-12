@@ -13,13 +13,13 @@ from numpy.typing import NDArray
 from numdaplot.statistics.share import Share
 from numdaplot.statistics.statistic import Statistic
 from numdaplot.tables.aggregation.aggregation import Aggregation
-from numdaplot.tables.aggregation.calculation import find_result_name
+from numdaplot.tables.aggregation.calculation import Calculation, find_result_name
 from numdaplot.tables.aggregation.result_column import build_result_column, compute_cell
-from numdaplot.tables.aggregation.row_groups import find_row_groups
+from numdaplot.tables.aggregation.row_groups import find_row_groups, measure_group_sizes
 from numdaplot.tables.aggregation.share_column import SHARE_MEAN, build_share_column
 from numdaplot.tables.columns.column_names import require_known_columns
 from numdaplot.tables.frames.column import Column
-from numdaplot.tables.frames.column_values import find_column_missing, read_present_values
+from numdaplot.tables.frames.column_values import build_column, find_column_missing, read_present_values
 from numdaplot.tables.frames.named_column_errors import NamedColumnErrors
 from numdaplot.tables.frames.time_zones import attribute_source_time_zone
 
@@ -33,18 +33,21 @@ def aggregate_frame(frame: pandas.DataFrame, aggregation: Aggregation) -> pandas
 
 	.. versionadded:: 0.1.0
 
+	.. versionchanged:: 0.2.0
+		Gives the number of rows of each group with ``row_count``.
+
 	Parameters
 	----------
 	frame
 		The columns of a Table.
 	aggregation
-		The statistics and the group columns.
+		The statistics, the group columns and the name of the row count column.
 
 	Returns
 	-------
 	pandas.DataFrame
 		One row per group, sorted by group values with missing values last, or a single row.
-		The group columns come first, then one column per calculation.
+		The group columns come first, then the row count column, then one column per calculation.
 
 	Raises
 	------
@@ -65,8 +68,12 @@ def aggregate_frame(frame: pandas.DataFrame, aggregation: Aggregation) -> pandas
 	0  Lyon        2.0
 	1   Pau        4.0
 	"""
+	calculations = list[Calculation]()
+	if aggregation.calculations is not None:
+		calculations = aggregation.calculations
+
 	column_names = [str(column_name) for column_name in frame.columns]
-	calculation_columns = [calculation.column for calculation in aggregation.calculations]
+	calculation_columns = [calculation.column for calculation in calculations]
 	require_known_columns(calculation_columns, column_names)
 	group_by = aggregation.group_by
 	if group_by is not None:
@@ -78,7 +85,12 @@ def aggregate_frame(frame: pandas.DataFrame, aggregation: Aggregation) -> pandas
 		key_columns = take_group_keys(frame, group_by, row_groups)
 		result_columns.update(key_columns)
 
-	for calculation in aggregation.calculations:
+	if aggregation.row_count is not None:
+		group_sizes = measure_group_sizes(row_groups)
+		row_count_column = build_column(group_sizes)
+		result_columns[aggregation.row_count] = row_count_column
+
+	for calculation in calculations:
 		result_name = find_result_name(calculation)
 		column = frame[calculation.column]
 		result_column = compute_group_results(column, calculation.function, row_groups)

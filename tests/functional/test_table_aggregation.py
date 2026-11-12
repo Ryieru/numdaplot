@@ -53,6 +53,10 @@ EXPECTED_PAYMENTS_PER_COLOR = [1, 1]
 EXPECTED_ROWS_PER_PAYMENT = [1, 1, 1]
 EXPECTED_PRESENT_PER_PAYMENT = [1, 1, 0]
 EXPECTED_COUNT_NAMES = ["count_excluded", "count_included"]
+SALE_COUNT_NAME = "sale_count"
+EXPECTED_COUNTED_GROUP_NAMES = ["city", SALE_COUNT_NAME, "price_mean"]
+EXPECTED_SALES_PER_CITY = [2, 2, 1]
+EXPECTED_SALE_TOTAL = 5
 EXPECTED_FARE_COUNTS = [2, 3]
 
 
@@ -265,3 +269,34 @@ def test_the_two_counts_are_named_after_their_setting_in_a_description() -> None
 
 	assert described.column("statistic").to_list() == EXPECTED_COUNT_NAMES
 	assert described.column("fare").to_list() == EXPECTED_FARE_COUNTS
+
+
+def test_row_count_gives_the_rows_of_each_group_next_to_the_calculations() -> None:
+	"""
+	Check the number of sales of each city, whatever the missing values, between the groups and the means.
+
+	.. versionadded:: 0.2.0
+	"""
+	sales = build_sales()
+	average_price = ndp.Calculation(column="price", function=ndp.Mean())
+	aggregation = ndp.Aggregation(calculations=[average_price], group_by=["city"], row_count=SALE_COUNT_NAME)
+
+	counts = sales.aggregate(aggregation)
+
+	sale_counts = read_values(counts, SALE_COUNT_NAME)
+	assert counts.column_names == EXPECTED_COUNTED_GROUP_NAMES
+	assert sale_counts == EXPECTED_SALES_PER_CITY
+
+
+def test_row_count_alone_counts_the_rows_of_the_table() -> None:
+	"""
+	Check that a row count without group nor calculation gives the number of rows.
+
+	.. versionadded:: 0.2.0
+	"""
+	sales = build_sales()
+
+	counts = sales.aggregate(ndp.Aggregation(row_count=SALE_COUNT_NAME))
+
+	sale_total = counts.to_value()
+	assert sale_total == EXPECTED_SALE_TOTAL

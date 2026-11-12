@@ -66,6 +66,7 @@ from numdaplot.errors.duplicate_column_error import DuplicateColumnError
 from numdaplot.errors.duplicate_label_error import DuplicateLabelError
 from numdaplot.errors.duplicate_statistic_error import DuplicateStatisticError
 from numdaplot.errors.duplicate_value_error import DuplicateValueError
+from numdaplot.errors.empty_aggregation_error import EmptyAggregationError
 from numdaplot.errors.empty_array_error import EmptyArrayError
 from numdaplot.errors.empty_list_error import EmptyListError
 from numdaplot.errors.empty_region_error import EmptyRegionError
@@ -311,6 +312,7 @@ __all__ = [
 	"DuplicateValueError",
 	"DurationIn",
 	"DurationUnit",
+	"EmptyAggregationError",
 	"EmptyArrayError",
 	"EmptyListError",
 	"EmptyRegionError",

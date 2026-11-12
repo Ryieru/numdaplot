@@ -34,16 +34,20 @@ class TableCalculation(TableData):
 
 		.. versionadded:: 0.1.0
 
+		.. versionchanged:: 0.2.0
+			Gives the number of rows of each group with the ``row_count`` of the aggregation.
+
 		Parameters
 		----------
 		aggregation
-			The calculations, and the columns forming the groups.
+			The calculations, the columns forming the groups, and the name of the row count column.
 
 		Returns
 		-------
 		Self
-			A new Table: the group columns, then one column per calculation; one row per group, sorted by
-			group values with missing values as a group of their own, last. Without groups, a single row.
+			A new Table: the group columns, then the ``row_count`` column, then one column per calculation; one row
+			per group, sorted by group values with missing values as a group of their own, last. Without groups, a
+			single row.
 			A statistic needing a value gives a missing value for a group without present value.
 
 		Raises

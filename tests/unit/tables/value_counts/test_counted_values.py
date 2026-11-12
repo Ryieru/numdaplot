@@ -13,7 +13,7 @@ from numdaplot.errors.column_not_found_error import ColumnNotFoundError
 from numdaplot.errors.duplicate_column_error import DuplicateColumnError
 from numdaplot.ratios.measure import Measure
 from numdaplot.tables.frames.column_values import find_column_type
-from numdaplot.tables.value_counts.counted_values import count_frame_values, measure_group_sizes, order_by_size
+from numdaplot.tables.value_counts.counted_values import count_frame_values, order_by_size
 from numdaplot.tables.value_counts.value_count import ValueCount
 
 CODE_COLUMN = "code"
@@ -28,8 +28,6 @@ EXPECTED_RATIOS = [0.4, 0.2, 0.2, 0.2]
 EXPECTED_NAMES = [CODE_COLUMN, COUNT_NAME]
 EMPTY_FRAME = pandas.DataFrame({CODE_COLUMN: pandas.Series(dtype="float64")})
 NAMED_LIKE_COUNT_FRAME = pandas.DataFrame({COUNT_NAME: [1.0, 2.0]})
-ROW_GROUPS = [numpy.array([1]), numpy.array([0, 2, 4])]
-EXPECTED_GROUP_SIZES = [1, 3]
 GROUP_SIZES = numpy.array([1, 3, 1, 5], dtype=numpy.int64)
 EXPECTED_ORDER_WITH_MISSING_GROUP = [1, 0, 2, 3]
 EXPECTED_ORDER_WITHOUT_MISSING_GROUP = [3, 1, 0, 2]
@@ -131,18 +129,6 @@ def test_count_frame_values_rejects_a_column_named_like_the_measure() -> None:
 	"""
 	with pytest.raises(DuplicateColumnError):
 		count_frame_values(NAMED_LIKE_COUNT_FRAME, ValueCount(column=COUNT_NAME))
-
-
-def test_measure_group_sizes_counts_the_rows_of_each_group() -> None:
-	"""
-	Check one size per group, in the order of the groups.
-
-	.. versionadded:: 0.2.0
-	"""
-	group_sizes = measure_group_sizes(ROW_GROUPS)
-
-	size_list = group_sizes.tolist()
-	assert size_list == EXPECTED_GROUP_SIZES
 
 
 def test_order_by_size_keeps_the_missing_group_last() -> None:

@@ -7,10 +7,11 @@ Settings of the aggregation of the rows of a Table.
 from dataclasses import dataclass
 
 from numdaplot.errors.duplicate_column_error import RESULT_NAME_ADVICE, DuplicateColumnError
+from numdaplot.errors.empty_aggregation_error import EmptyAggregationError
 from numdaplot.errors.empty_list_error import EmptyListError
 from numdaplot.settings.field_types import require_field_types
 from numdaplot.tables.aggregation.calculation import Calculation, find_result_name
-from numdaplot.tables.columns.column_names import require_column_names
+from numdaplot.tables.columns.column_names import require_column_name, require_column_names, require_unique_names
 
 CALCULATION_ITEM_NAME = "calculation"
 GROUP_COLUMN_ITEM_NAME = "group column"
@@ -24,26 +25,33 @@ class Aggregation:
 	.. versionadded:: 0.1.0
 
 	.. versionchanged:: 0.2.0
-		The error for a repeated result name advises a ``result_name`` for each calculation.
+		Adds ``row_count``, and ``calculations`` becomes optional. The error for a repeated result name advises a
+		``result_name`` for each calculation.
 
 	Parameters
 	----------
 	calculations
-		The statistics to compute, at least one. The aggregation keeps its own copy of the list.
+		The statistics to compute. The aggregation keeps its own copy of the list. None when omitted, then
+		``row_count`` is required.
 	group_by
 		The names of the columns whose values form the groups: one result row per combination
 		of values. The whole Table gives a single row when omitted.
+	row_count
+		The name of a column giving the number of rows of each group, placed right after the group columns.
+		No such column when omitted.
 
 	Raises
 	------
 	InvalidTypeError
 		When a setting is not of the type its annotation names.
+	EmptyAggregationError
+		When neither ``calculations`` nor ``row_count`` is given.
 	EmptyListError
 		When ``calculations`` or ``group_by`` is an empty list.
 	InvalidColumnNameError
-		When a group column name is an empty text.
+		When a group column name or ``row_count`` is an empty text.
 	DuplicateColumnError
-		When a name appears twice among the group columns and the result names.
+		When a name appears twice among the group columns, ``row_count`` and the result names.
 
 	Examples
 	--------
@@ -52,34 +60,44 @@ class Aggregation:
 	>>> prices = ndp.Array.from_list([120.0, 80.0, 150.0])
 	>>> sales = ndp.Table.from_arrays({"city": cities, "price": prices})
 	>>> average_price = ndp.Calculation(column="price", function=ndp.Mean())
-	>>> sales.aggregate(ndp.Aggregation(calculations=[average_price], group_by=["city"]))
-	    city price_mean
-	    TEXT    FLOAT64
-	0   Lyon       80.0
-	1  Paris      135.0
+	>>> sales.aggregate(ndp.Aggregation(calculations=[average_price], group_by=["city"], row_count="sale_count"))
+	    city sale_count price_mean
+	    TEXT      INT64    FLOAT64
+	0   Lyon          1       80.0
+	1  Paris          2      135.0
 	"""
 
-	calculations: list[Calculation]
+	calculations: list[Calculation] | None = None
 	group_by: list[str] | None = None
+	row_count: str | None = None
 
 	def __post_init__(self) -> None:
 		"""
-		Check the lists and replace them with copies that only the aggregation holds.
+		Check the settings and replace the lists with copies that only the aggregation holds.
 
 		.. versionadded:: 0.1.0
+
+		.. versionchanged:: 0.2.0
+			Checks ``row_count``, and accepts no calculation when ``row_count`` is given.
 
 		Raises
 		------
 		InvalidTypeError
 			When a setting is not of the type its annotation names.
+		EmptyAggregationError
+			When neither ``calculations`` nor ``row_count`` is given.
 		EmptyListError
 			When ``calculations`` or ``group_by`` is an empty list.
 		InvalidColumnNameError
-			When a group column name is an empty text.
+			When a group column name or ``row_count`` is an empty text.
 		DuplicateColumnError
-			When a name appears twice among the group columns and the result names.
+			When a name appears twice among the group columns, ``row_count`` and the result names.
 		"""
 		require_field_types(self)
+
+		computes_nothing = self.calculations is None and self.row_count is None
+		if computes_nothing:
+			raise EmptyAggregationError()
 
 		if self.calculations == []:
 			raise EmptyListError(CALCULATION_ITEM_NAME)
@@ -87,21 +105,27 @@ class Aggregation:
 		if self.group_by == []:
 			raise EmptyListError(GROUP_COLUMN_ITEM_NAME)
 
-		calculations_copy = list(self.calculations)
-		object.__setattr__(self, "calculations", calculations_copy)
-		group_names = list[str]()
+		output_names = list[str]()
 		if self.group_by is not None:
 			require_column_names(self.group_by)
 			group_by_copy = list(self.group_by)
 			object.__setattr__(self, "group_by", group_by_copy)
-			group_names.extend(group_by_copy)
+			output_names.extend(group_by_copy)
 
-		require_unique_result_names(calculations_copy, group_names)
+		if self.row_count is not None:
+			require_column_name(self.row_count)
+			output_names.append(self.row_count)
+			require_unique_names(output_names)
+
+		if self.calculations is not None:
+			calculations_copy = list(self.calculations)
+			object.__setattr__(self, "calculations", calculations_copy)
+			require_unique_result_names(calculations_copy, output_names)
 
 
-def require_unique_result_names(calculations: list[Calculation], group_names: list[str]) -> None:
+def require_unique_result_names(calculations: list[Calculation], used_names: list[str]) -> None:
 	"""
-	Check that each calculation gives a result name of its own, different from the group column names.
+	Check that each calculation gives a result name of its own, different from the names already used.
 
 	.. versionadded:: 0.2.0
 
@@ -109,8 +133,8 @@ def require_unique_result_names(calculations: list[Calculation], group_names: li
 	----------
 	calculations
 		The calculations of the aggregation.
-	group_names
-		The names of the group columns, already distinct.
+	used_names
+		The names of the group columns and of the row count column, already distinct.
 
 	Raises
 	------
@@ -128,11 +152,11 @@ def require_unique_result_names(calculations: list[Calculation], group_names: li
 	... 	print(error)
 	The column name 'city' appears more than once. Give each Calculation its own result_name.
 	"""
-	used_names = set(group_names)
+	taken_names = set(used_names)
 
 	for calculation in calculations:
 		result_name = find_result_name(calculation)
-		if result_name in used_names:
+		if result_name in taken_names:
 			raise DuplicateColumnError(result_name, advice=RESULT_NAME_ADVICE)
 
-		used_names.add(result_name)
+		taken_names.add(result_name)

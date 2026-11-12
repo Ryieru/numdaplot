@@ -11,6 +11,7 @@ import pandas
 from numpy.typing import NDArray
 
 STABLE_SORT = "stable"
+GROUP_SIZE_DTYPE = numpy.int64
 
 
 def find_row_groups(frame: pandas.DataFrame, group_by: list[str] | None) -> list[NDArray[Any]]:
@@ -94,3 +95,32 @@ def split_positions(positions: NDArray[Any], group_numbers: NDArray[Any], group_
 	position_groups = numpy.split(sorted_positions, group_starts)
 
 	return position_groups
+
+
+def measure_group_sizes(row_groups: list[NDArray[Any]]) -> NDArray[numpy.int64]:
+	"""
+	Return the number of rows of each group.
+
+	.. versionadded:: 0.2.0
+
+	Parameters
+	----------
+	row_groups
+		The positions of the rows of each group.
+
+	Returns
+	-------
+	NDArray[numpy.int64]
+		One size per group, in the order of the groups.
+
+	Examples
+	--------
+	>>> import numpy
+	>>> from numdaplot.tables.aggregation.row_groups import measure_group_sizes
+	>>> measure_group_sizes([numpy.array([1]), numpy.array([0, 2])])
+	array([1, 2])
+	"""
+	size_list = [len(row_group) for row_group in row_groups]
+	group_sizes = numpy.array(size_list, dtype=GROUP_SIZE_DTYPE)
+
+	return group_sizes

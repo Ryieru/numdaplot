@@ -7,6 +7,7 @@ Unit tests of Calculation and Aggregation.
 import pytest
 
 from numdaplot.errors.duplicate_column_error import RESULT_NAME_ADVICE, DuplicateColumnError
+from numdaplot.errors.empty_aggregation_error import EmptyAggregationError
 from numdaplot.errors.empty_list_error import EmptyListError
 from numdaplot.errors.invalid_column_name_error import InvalidColumnNameError
 from numdaplot.statistics.maximum import Max
@@ -22,6 +23,7 @@ AVERAGE_PRICE = Calculation(column=COLUMN_NAME, function=Mean())
 HIGHEST_PRICE = Calculation(column=COLUMN_NAME, function=Max())
 GROUP_COLUMNS = ["city"]
 EMPTY_GROUP_COLUMNS = list[str]()
+ROW_COUNT_NAME = "sale_count"
 
 
 def test_find_result_name_joins_the_column_and_the_statistic() -> None:
@@ -137,3 +139,59 @@ def test_require_unique_result_names_accepts_distinct_names() -> None:
 	.. versionadded:: 0.2.0
 	"""
 	require_unique_result_names([AVERAGE_PRICE, HIGHEST_PRICE], GROUP_COLUMNS)
+
+
+def test_aggregation_accepts_a_row_count_without_calculation() -> None:
+	"""
+	Check that the number of rows alone is enough to aggregate.
+
+	.. versionadded:: 0.2.0
+	"""
+	aggregation = Aggregation(group_by=GROUP_COLUMNS, row_count=ROW_COUNT_NAME)
+
+	assert aggregation.calculations is None
+	assert aggregation.row_count == ROW_COUNT_NAME
+
+
+def test_aggregation_rejects_neither_calculation_nor_row_count() -> None:
+	"""
+	Check that an aggregation computing nothing raises EmptyAggregationError.
+
+	.. versionadded:: 0.2.0
+	"""
+	with pytest.raises(EmptyAggregationError):
+		Aggregation(group_by=GROUP_COLUMNS)
+
+
+def test_aggregation_rejects_an_empty_row_count_name() -> None:
+	"""
+	Check that an empty name for the row count column raises InvalidColumnNameError.
+
+	.. versionadded:: 0.2.0
+	"""
+	with pytest.raises(InvalidColumnNameError):
+		Aggregation(row_count=EMPTY_NAME)
+
+
+def test_aggregation_rejects_a_row_count_named_like_a_group() -> None:
+	"""
+	Check that a row count column named like a group column raises DuplicateColumnError.
+
+	.. versionadded:: 0.2.0
+	"""
+	with pytest.raises(DuplicateColumnError):
+		Aggregation(group_by=GROUP_COLUMNS, row_count=GROUP_COLUMNS[0])
+
+
+def test_aggregation_rejects_a_result_named_like_the_row_count() -> None:
+	"""
+	Check that a result named like the row count column raises DuplicateColumnError, advising a result name.
+
+	.. versionadded:: 0.2.0
+	"""
+	counted_price = Calculation(column=COLUMN_NAME, function=Max(), result_name=ROW_COUNT_NAME)
+
+	with pytest.raises(DuplicateColumnError) as error_info:
+		Aggregation(calculations=[counted_price], row_count=ROW_COUNT_NAME)
+
+	assert error_info.value.advice == RESULT_NAME_ADVICE

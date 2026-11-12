@@ -14,7 +14,7 @@ from numdaplot.errors.duplicate_column_error import DuplicateColumnError
 from numdaplot.ratios.count_division import divide_counts
 from numdaplot.ratios.measure import Measure
 from numdaplot.tables.aggregation.aggregated_frame import take_group_keys
-from numdaplot.tables.aggregation.row_groups import STABLE_SORT, find_row_groups
+from numdaplot.tables.aggregation.row_groups import STABLE_SORT, find_row_groups, measure_group_sizes
 from numdaplot.tables.columns.column_names import require_known_columns
 from numdaplot.tables.frames.column import Column
 from numdaplot.tables.frames.column_values import build_column, find_column_missing
@@ -24,7 +24,6 @@ MEASURE_COLUMN_NAMES = {
 	Measure.COUNT: "value_count",
 	Measure.RATIO: "value_ratio",
 }
-GROUP_SIZE_DTYPE = numpy.int64
 
 
 def count_frame_values(frame: pandas.DataFrame, value_count: ValueCount) -> pandas.DataFrame:
@@ -97,35 +96,6 @@ def count_frame_values(frame: pandas.DataFrame, value_count: ValueCount) -> pand
 	counted_frame = pandas.DataFrame(result_columns)
 
 	return counted_frame
-
-
-def measure_group_sizes(row_groups: list[NDArray[Any]]) -> NDArray[numpy.int64]:
-	"""
-	Return the number of rows of each group.
-
-	.. versionadded:: 0.2.0
-
-	Parameters
-	----------
-	row_groups
-		The positions of the rows of each group.
-
-	Returns
-	-------
-	NDArray[numpy.int64]
-		One size per group, in the order of the groups.
-
-	Examples
-	--------
-	>>> import numpy
-	>>> from numdaplot.tables.value_counts.counted_values import measure_group_sizes
-	>>> measure_group_sizes([numpy.array([1]), numpy.array([0, 2])])
-	array([1, 2])
-	"""
-	size_list = [len(row_group) for row_group in row_groups]
-	group_sizes = numpy.array(size_list, dtype=GROUP_SIZE_DTYPE)
-
-	return group_sizes
 
 
 def order_by_size(group_sizes: NDArray[numpy.int64], has_missing_group: bool) -> NDArray[numpy.intp]:

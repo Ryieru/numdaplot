@@ -24,7 +24,7 @@ from numdaplot.tables.aggregation.aggregated_frame import aggregate_frame, compu
 from numdaplot.tables.aggregation.aggregation import Aggregation
 from numdaplot.tables.aggregation.calculation import Calculation
 from numdaplot.tables.aggregation.result_column import build_result_column, compute_cell
-from numdaplot.tables.aggregation.row_groups import find_row_groups, split_positions
+from numdaplot.tables.aggregation.row_groups import find_row_groups, measure_group_sizes, split_positions
 
 SALES = pandas.DataFrame(
 	{
@@ -52,11 +52,17 @@ EXPECTED_SPLIT_POSITIONS = [[7], [], [4, 9]]
 VALUE_COUNT_WITH_MISSING = 5
 EVERY_ROW_COUNT_PRICES = [10.0, None, None]
 EXPECTED_GROUP_SIZES = [2, 1]
+SIZED_ROW_GROUPS = [numpy.array([1]), numpy.array([0, 2, 4])]
+EXPECTED_SIZED_GROUP_SIZES = [1, 3]
 EXPECTED_RESULTS = [2, pandas.NA]
 EXPECTED_MISSING_RESULT_DTYPE = "float64"
 EXPECTED_COLUMN_NAMES = ["city", "price_sum"]
 EXPECTED_TOTALS = [0.0, 40.0, 20.0]
 EXPECTED_TOTAL = [60.0]
+ROW_COUNT_NAME = "sale_count"
+EXPECTED_COUNTED_NAMES = ["city", ROW_COUNT_NAME, "price_sum"]
+EXPECTED_ROWS_PER_CITY = [1, 2, 1]
+EXPECTED_TABLE_ROWS = [4]
 TOTAL = Calculation(column="price", function=Sum())
 PARIS_TIMES = (
 	pandas.Series(pandas.to_datetime(["2026-07-01 10:30", "2026-07-01 12:30"]))
@@ -382,3 +388,47 @@ def test_split_positions_gives_each_group_its_positions_and_empty_groups() -> No
 
 	group_lists = [group.tolist() for group in groups]
 	assert group_lists == EXPECTED_SPLIT_POSITIONS
+
+
+def test_measure_group_sizes_counts_the_rows_of_each_group() -> None:
+	"""
+	Check one size per group, in the order of the groups.
+
+	.. versionadded:: 0.2.0
+	"""
+	group_sizes = measure_group_sizes(SIZED_ROW_GROUPS)
+
+	size_list = group_sizes.tolist()
+	assert size_list == EXPECTED_SIZED_GROUP_SIZES
+
+
+def test_aggregate_frame_puts_the_row_count_right_after_the_group_columns() -> None:
+	"""
+	Check the place of the row count column and the number of rows of each city, missing prices included.
+
+	.. versionadded:: 0.2.0
+	"""
+	aggregation = Aggregation(calculations=[TOTAL], group_by=["city"], row_count=ROW_COUNT_NAME)
+
+	aggregated_frame = aggregate_frame(SALES, aggregation)
+
+	column_names = aggregated_frame.columns.tolist()
+	row_count_column = aggregated_frame[ROW_COUNT_NAME]
+	row_counts = row_count_column.tolist()
+	assert column_names == EXPECTED_COUNTED_NAMES
+	assert row_counts == EXPECTED_ROWS_PER_CITY
+
+
+def test_aggregate_frame_counts_every_row_without_group() -> None:
+	"""
+	Check that a row count alone, without group, gives the number of rows of the Table.
+
+	.. versionadded:: 0.2.0
+	"""
+	aggregation = Aggregation(row_count=ROW_COUNT_NAME)
+
+	aggregated_frame = aggregate_frame(SALES, aggregation)
+
+	row_count_column = aggregated_frame[ROW_COUNT_NAME]
+	row_counts = row_count_column.tolist()
+	assert row_counts == EXPECTED_TABLE_ROWS
