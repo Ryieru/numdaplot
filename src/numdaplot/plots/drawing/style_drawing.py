@@ -43,6 +43,8 @@ LEGEND_LOCATIONS = dict[LegendPosition, LegendLocation](
 	}
 )
 OUTSIDE_ANCHOR = (1.02, 0.5)
+# Marks a legend placed inside the axes by BEST, checked once the figure is laid out.
+BEST_LEGEND_ID = "numdaplot-best-legend"
 # The grid lines of bars only cross the axis of their values, which depends on their direction.
 VALUE_GRID_AXES = dict[bool, Literal["x", "y"]]({True: "x", False: "y"})
 MINIMUM_LEGEND_ENTRIES = 2
@@ -206,10 +208,14 @@ def place_legend(plot_axes: PlotAxes, drawn_chart: DrawnChart, legend_position: 
 	The series are named in the order they are drawn, the ones of the left axes first. The legend is drawn over
 	the axes on the right if any, so their charts never hide it. With these axes, ``BEST`` and ``OUTSIDE_RIGHT`` place
 	it past their axis: ``BEST`` would only avoid their charts, not the ones of the left axes. ``BEST`` also places
-	it past the axes when the chart asks for it, as a chart filling them does. Points sized by
+	it past the axes when the chart asks for it, as a chart filling them does. Otherwise a ``BEST`` legend is marked,
+	and moved past the axes once the figure is laid out if it hides a value. Points sized by
 	``size_by`` are all shown with the same size in the legend, which names their colors.
 
 	.. versionadded:: 0.1.0
+
+	.. versionchanged:: 0.2.0
+		Marks a ``BEST`` legend placed inside the axes.
 
 	Parameters
 	----------
@@ -271,6 +277,10 @@ def place_legend(plot_axes: PlotAxes, drawn_chart: DrawnChart, legend_position: 
 		bbox_transform=anchor_transform,
 		title=drawn_chart.legend_title,
 	)
+
+	is_best_inside = legend_position == LegendPosition.BEST and not is_outside
+	if is_best_inside:
+		legend.set_gid(BEST_LEGEND_ID)
 
 	for handle in legend.legend_handles:
 		if isinstance(handle, PathCollection):

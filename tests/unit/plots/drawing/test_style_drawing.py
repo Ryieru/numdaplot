@@ -16,6 +16,7 @@ from numdaplot.plots.drawing.drawn_chart import DrawnChart
 from numdaplot.plots.drawing.grid_axes import GridAxes
 from numdaplot.plots.drawing.plot_axes import PlotAxes
 from numdaplot.plots.drawing.style_drawing import (
+	BEST_LEGEND_ID,
 	LEGEND_POINT_AREA,
 	apply_style,
 	draw_grid_lines,
@@ -302,3 +303,39 @@ def test_find_transform_past_right_axis_stays_on_the_edge_of_a_hidden_axis() -> 
 	shifted_edge = transform.transform((1.0, 0.0))[0]
 	axes_box = right_axes.get_window_extent()
 	assert shifted_edge == pytest.approx(axes_box.x1)
+
+
+@pytest.mark.parametrize(
+	("legend_position", "expected_id"),
+	[
+		(ndp.LegendPosition.BEST, BEST_LEGEND_ID),
+		(ndp.LegendPosition.UPPER_LEFT, None),
+		(ndp.LegendPosition.OUTSIDE_RIGHT, None),
+	],
+)
+def test_place_legend_marks_only_a_best_legend_inside_the_axes(
+	legend_position: ndp.LegendPosition,
+	expected_id: str | None,
+) -> None:
+	"""
+	Check that only a ``BEST`` legend placed inside the axes is marked to be checked once laid out.
+
+	.. versionadded:: 0.2.0
+
+	Parameters
+	----------
+	legend_position
+		The position asked for.
+	expected_id
+		The mark of the legend, None when it is not checked.
+	"""
+	axes = Figure().add_subplot()
+	axes.plot([1.0, 2.0], label="price")
+	axes.plot([2.0, 1.0], label="cost")
+
+	place_legend(PlotAxes(axes, None, None), LINE_CHART, legend_position)
+
+	legend = axes.get_legend()
+	assert legend is not None
+	legend_id = legend.get_gid()
+	assert legend_id == expected_id

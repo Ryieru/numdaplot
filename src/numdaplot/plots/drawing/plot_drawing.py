@@ -36,6 +36,7 @@ from numdaplot.plots.drawing.heatmap_drawing import draw_heatmap_chart
 from numdaplot.plots.drawing.histogram_drawing import draw_histogram_chart
 from numdaplot.plots.drawing.layer_alignment import align_layers
 from numdaplot.plots.drawing.layer_colors import continue_color_cycle
+from numdaplot.plots.drawing.legend_overlap import move_hiding_legends
 from numdaplot.plots.drawing.line_drawing import draw_line_chart
 from numdaplot.plots.drawing.missing_drawing import draw_missing_chart, draw_missing_map
 from numdaplot.plots.drawing.pie_drawing import draw_pie_chart
@@ -98,9 +99,13 @@ def build_figure(drawing: FigureDrawing) -> Figure:
 	"""
 	Return a new matplotlib figure with a Plot or a Figure drawn on it.
 
-	No matplotlib window or notebook shows the figure on its own.
+	No matplotlib window or notebook shows the figure on its own. A legend placed with ``BEST`` that hides a value
+	is moved past the axes on the right.
 
 	.. versionadded:: 0.1.0
+
+	.. versionchanged:: 0.2.0
+		Moves a ``BEST`` legend hiding a value past the axes.
 
 	Parameters
 	----------
@@ -121,6 +126,7 @@ def build_figure(drawing: FigureDrawing) -> Figure:
 	"""
 	figure = Figure(figsize=drawing.size_inches, dpi=DEFAULT_DPI, layout=FIGURE_LAYOUT)
 	drawing.draw_on(figure)
+	move_hiding_legends(figure)
 
 	return figure
 

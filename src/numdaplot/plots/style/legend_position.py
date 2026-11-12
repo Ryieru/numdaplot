@@ -30,10 +30,14 @@ class LegendPosition(Enum):
 
 	BEST = auto()
 	"""
-	Inside the axes, where it hides the fewest values. With an axis on the right, the values of both axes leave little
-	room inside: the legend is placed as with ``OUTSIDE_RIGHT``. Default value.
+	Inside the axes where it hides no value, otherwise past the axes on the right, as with ``OUTSIDE_RIGHT``. With an
+	axis on the right, the values of both axes leave little room inside: the legend is placed as with
+	``OUTSIDE_RIGHT``. Default value.
 
 	.. versionadded:: 0.1.0
+
+	.. versionchanged:: 0.2.0
+		Goes past the axes when every place inside hides a value.
 
 	Examples
 	--------
