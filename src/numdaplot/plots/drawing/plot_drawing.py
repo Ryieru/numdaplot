@@ -105,7 +105,7 @@ def build_figure(drawing: FigureDrawing) -> Figure:
 	.. versionadded:: 0.1.0
 
 	.. versionchanged:: 0.2.0
-		Moves a ``BEST`` legend hiding a value past the axes.
+		Moves a ``BEST`` legend hiding a value past the axes, with ``draw_on_figure``.
 
 	Parameters
 	----------
@@ -125,10 +125,37 @@ def build_figure(drawing: FigureDrawing) -> Figure:
 	[3.0, 2.0]
 	"""
 	figure = Figure(figsize=drawing.size_inches, dpi=DEFAULT_DPI, layout=FIGURE_LAYOUT)
-	drawing.draw_on(figure)
-	move_hiding_legends(figure)
+	draw_on_figure(drawing, figure)
 
 	return figure
+
+
+def draw_on_figure(drawing: FigureDrawing, figure: Figure) -> None:
+	"""
+	Draw a Plot or a Figure on an empty matplotlib figure, then move past the axes a ``BEST`` legend hiding a value.
+
+	Every figure numdaplot draws goes through this step, whether it is returned, saved or shown in a window.
+
+	.. versionadded:: 0.2.0
+
+	Parameters
+	----------
+	drawing
+		What is drawn.
+	figure
+		The empty figure drawn on, laid out with the ``constrained`` layout of matplotlib.
+
+	Examples
+	--------
+	>>> from matplotlib.figure import Figure
+	>>> from numdaplot.plots.drawing.plot_drawing import FigureDrawing, draw_on_figure
+	>>> figure = Figure()
+	>>> draw_on_figure(FigureDrawing(lambda target: target.suptitle("Sales"), (3.0, 2.0)), figure)
+	>>> figure.get_suptitle()
+	'Sales'
+	"""
+	drawing.draw_on(figure)
+	move_hiding_legends(figure)
 
 
 def draw_plot(figure: FigureBase, layers: list[ChartLayer], style: PlotStyle) -> None:

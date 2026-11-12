@@ -16,7 +16,7 @@ from matplotlib.figure import Figure
 
 from numdaplot.arrays.operations.float_errors import INTERNAL_FILES
 from numdaplot.errors.display_warning import DisplayWarning
-from numdaplot.plots.drawing.plot_drawing import FIGURE_LAYOUT, FigureDrawing, build_figure
+from numdaplot.plots.drawing.plot_drawing import FIGURE_LAYOUT, FigureDrawing, build_figure, draw_on_figure
 from numdaplot.plots.output.shown_object import ShownObject
 from numdaplot.plots.style.image_options import DEFAULT_DPI
 from numdaplot.tables.preview.notebook_display import is_notebook
@@ -86,6 +86,9 @@ def show_drawing_in_window(drawing: FigureDrawing, shown_object: ShownObject) ->
 
 	.. versionadded:: 0.1.0
 
+	.. versionchanged:: 0.2.0
+		A ``BEST`` legend hiding a value is moved past the axes, as in an image or a notebook.
+
 	Parameters
 	----------
 	drawing
@@ -111,7 +114,7 @@ def show_drawing_in_window(drawing: FigureDrawing, shown_object: ShownObject) ->
 		return
 
 	figure = pyplot.figure(figsize=drawing.size_inches, dpi=DEFAULT_DPI, layout=FIGURE_LAYOUT)
-	drawing.draw_on(figure)
+	draw_on_figure(drawing, figure)
 	pyplot.show()
 	is_interactive = pyplot.isinteractive()
 	if not is_interactive:

@@ -16,6 +16,7 @@ from matplotlib.figure import Figure, FigureBase
 
 from numdaplot.errors.display_warning import DisplayWarning
 from numdaplot.plots.drawing.plot_drawing import FigureDrawing
+from numdaplot.plots.drawing.style_drawing import BEST_LEGEND_ID
 from numdaplot.plots.output import plot_display
 from numdaplot.plots.output.plot_display import (
 	is_window_backend,
@@ -40,6 +41,12 @@ PLOT_ADVICE = "to see the plot, or save it with Plot.save"
 FIGURE_ADVICE = "to see the figure, or save it with Figure.save"
 NO_WINDOW_BACKENDS = ["agg", "Agg", "pdf", "svg"]
 WINDOW_BACKENDS = ["TkAgg", "qtagg", "module://some_package.backend"]
+GRID_SIZE = 10
+GRID_NUMBERS = [float(number) for number in range(GRID_SIZE)]
+GRID_X = GRID_NUMBERS * GRID_SIZE
+GRID_Y = sorted(GRID_X)
+BEST_LOCATION = "best"
+SERIES_NAMES = ["first", "second"]
 
 
 class DisplayModule:
@@ -118,6 +125,51 @@ class Recorder:
 			The arguments given.
 		"""
 		self.calls.append(arguments)
+
+
+class ShownFigureCatcher:
+	"""
+	Fake pyplot display keeping the figure pyplot shows.
+
+	.. versionadded:: 0.2.0
+	"""
+
+	def __init__(self) -> None:
+		"""
+		Start without figure.
+
+		.. versionadded:: 0.2.0
+		"""
+		self.figures = list[Figure]()
+
+	def __call__(self) -> None:
+		"""
+		Keep the current pyplot figure.
+
+		.. versionadded:: 0.2.0
+		"""
+		current_figure = pyplot.gcf()
+		self.figures.append(current_figure)
+
+
+def draw_crowded_legend(target: FigureBase) -> None:
+	"""
+	Draw points filling the whole axes, with a legend placed by BEST and marked to be checked.
+
+	.. versionadded:: 0.2.0
+
+	Parameters
+	----------
+	target
+		The figure drawn on.
+	"""
+	axes = target.add_subplot()
+
+	for series_name in SERIES_NAMES:
+		axes.scatter(GRID_X, GRID_Y, label=series_name)
+
+	legend = axes.legend(loc=BEST_LOCATION)
+	legend.set_gid(BEST_LEGEND_ID)
 
 
 def draw_titled_axes(target: FigureBase) -> None:
@@ -440,3 +492,29 @@ def test_show_drawing_in_window_keeps_the_figure_when_matplotlib_runs_interactiv
 	new_figure_count = shown_figure_count - previous_figure_count
 	pyplot.close(shown_figure_numbers[-1])
 	assert new_figure_count == 1
+
+
+def test_show_drawing_in_window_moves_a_best_legend_hiding_values(monkeypatch: pytest.MonkeyPatch) -> None:
+	"""
+	Check that a window shows a BEST legend over values past the axes, as an image does.
+
+	.. versionadded:: 0.2.0
+
+	Parameters
+	----------
+	monkeypatch
+		Replaces the backend check and the pyplot display with fakes.
+	"""
+	figure_catcher = ShownFigureCatcher()
+	monkeypatch.setattr(plot_display, IS_WINDOW_BACKEND_NAME, answer_backend(True))
+	monkeypatch.setattr(pyplot, SHOW_NAME, figure_catcher)
+	drawing = FigureDrawing(draw_crowded_legend, DRAWING_SIZE)
+
+	show_drawing_in_window(drawing, ShownObject.PLOT)
+
+	shown_figure = figure_catcher.figures[0]
+	shown_axes = shown_figure.axes[0]
+	legend = shown_axes.get_legend()
+	assert legend is not None
+	anchor_box = legend.get_bbox_to_anchor()
+	assert anchor_box.x0 > shown_axes.bbox.x1
