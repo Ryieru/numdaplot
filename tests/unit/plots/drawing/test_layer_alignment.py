@@ -272,3 +272,18 @@ def test_align_points_reorders_the_colors_of_the_points() -> None:
 	aligned_colors = cast(list[str], aligned_points.colors.tolist())
 	assert aligned_colors[0] == POINT_COLORS[1]
 	assert aligned_colors[2] == POINT_COLORS[0]
+
+
+def test_align_points_keeps_the_order_of_color_categories() -> None:
+	"""
+	Check that the order of the color_by categories goes through the alignment.
+
+	.. versionadded:: 0.2.0
+	"""
+	colors = numpy.array(POINT_COLORS, dtype=object)
+	points = PointValues(COLOR_NAME, colors, None, None, POINT_COLORS)
+
+	aligned_points = align_points(points, SOURCES)
+
+	assert aligned_points is not None
+	assert aligned_points.color_order == POINT_COLORS

@@ -30,6 +30,8 @@ FLATS = ndp.Table.from_arrays(
 	}
 )
 GRID = ndp.Array.from_list([[1.0, 2.0], [3.0, 4.0], [5.0, 6.0]])
+CITY_COLUMN = "city"
+EXPECTED_CITY_LEGEND = ["Lyon", "Paris", "Pau"]
 STYLE = ndp.PlotStyle(title="Sales", x_label="Day", y_label="Euros", legend=ndp.LegendPosition.UPPER_LEFT)
 IMAGE_NAMES = ["sales.png", "sales.svg", "sales.pdf"]
 IMAGE_STARTS = {"sales.png": b"\x89PNG", "sales.svg": b"<?xml", "sales.pdf": b"%PDF"}
@@ -142,20 +144,23 @@ def test_a_bar_plot_labels_each_bar_with_its_city_and_leaves_out_a_missing_city(
 
 def test_a_scatter_plot_colors_each_city_and_names_it_in_the_legend() -> None:
 	"""
-	Check that the points of each city share a color named in the legend.
+	Check that the points of each city share a color named in the legend, the cities in natural order.
 
 	.. versionadded:: 0.1.0
 	"""
-	chart = ndp.ScatterChart(x="surface", y="price", color_by="city")
+	chart = ndp.ScatterChart(x="surface", y="price", color_by=CITY_COLUMN)
 	plot = ndp.Plot.scatter(FLATS, chart)
 
-	axes = plot.to_matplotlib().axes[0]
+	figure = plot.to_matplotlib()
+	axes = figure.axes[0]
 
 	legend = axes.get_legend()
 	assert legend is not None
 	legend_texts = [text.get_text() for text in legend.get_texts()]
-	assert legend_texts == ["Paris", "Lyon", "Pau"]
-	assert legend.get_title().get_text() == "city"
+	legend_title = legend.get_title()
+	title_text = legend_title.get_text()
+	assert legend_texts == EXPECTED_CITY_LEGEND
+	assert title_text == CITY_COLUMN
 
 
 def test_a_hidden_legend_and_hidden_grid_lines_are_not_drawn() -> None:

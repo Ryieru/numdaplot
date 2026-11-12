@@ -16,6 +16,7 @@ from matplotlib.axes import Axes
 from matplotlib.collections import PathCollection
 from numpy.typing import NDArray
 
+from numdaplot.ordering.natural_order import find_natural_key
 from numdaplot.plots.chart_layer import ChartLayer
 from numdaplot.plots.charts.color_scale import ColorScale
 from numdaplot.plots.charts.scatter_chart import ScatterChart
@@ -140,7 +141,7 @@ def draw_scatter_chart(axes: Axes, layer: ChartLayer) -> DrawnChart:
 		add_color_bar(axes, scaled_points, color_name, points.colors)
 		return no_legend_chart
 
-	draw_color_groups(axes, first_series, points.colors, point_look)
+	draw_color_groups(axes, first_series, points, point_look)
 	group_chart = DrawnChart(x_label, values.value_name, False, GridAxes.BOTH, color_name)
 
 	return group_chart
@@ -314,13 +315,15 @@ def draw_color_scale(
 	return scaled_points
 
 
-def draw_color_groups(axes: Axes, series: Series, color_texts: NDArray[Any], point_look: PointLook) -> None:
+def draw_color_groups(axes: Axes, series: Series, points: PointValues, point_look: PointLook) -> None:
 	"""
 	Draw the points of each ``color_by`` text in its own color, named in the legend.
 
-	The texts take the colors of the default cycle in the order they first appear.
+	The texts take the colors of the default cycle in the order ``order_color_groups`` gives.
 
 	.. versionadded:: 0.1.0
+	.. versionchanged:: 0.2.0
+		Takes the values of the points, and draws the texts in natural order, or in the order of the categories.
 
 	Parameters
 	----------
@@ -328,8 +331,9 @@ def draw_color_groups(axes: Axes, series: Series, color_texts: NDArray[Any], poi
 		The matplotlib axes drawn on.
 	series
 		The series drawn.
-	color_texts
-		The ``color_by`` texts, None where a text is missing.
+	points
+		The values of the points: the ``color_by`` texts, None where a text is missing, and the order of their
+		categories.
 	point_look
 		The coordinates, the areas and the marker of the points.
 
@@ -339,17 +343,19 @@ def draw_color_groups(axes: Axes, series: Series, color_texts: NDArray[Any], poi
 	>>> import numpy
 	>>> from matplotlib.figure import Figure
 	>>> from numdaplot.plots.data.chart_values import Series
+	>>> from numdaplot.plots.data.point_values import PointValues
 	>>> from numdaplot.plots.drawing.scatter_drawing import PointLook, draw_color_groups
 	>>> axes = Figure().add_subplot()
 	>>> point_look = PointLook(numpy.array([0.0, 1.0]), numpy.array([36.0, 36.0]), "o", 1.0, ndp.ColorScale.VIRIDIS)
-	>>> texts = numpy.array(["Pau", "Lyon"], dtype=object)
-	>>> draw_color_groups(axes, Series("price", numpy.array([1.0, 2.0])), texts, point_look)
-	>>> [points.get_label() for points in axes.collections]
-	['Pau', 'Lyon']
+	>>> points = PointValues("city", numpy.array(["Pau", "Lyon"], dtype=object), None, None)
+	>>> draw_color_groups(axes, Series("price", numpy.array([1.0, 2.0])), points, point_look)
+	>>> [drawn_points.get_label() for drawn_points in axes.collections]
+	['Lyon', 'Pau']
 	"""
+	color_texts = cast(NDArray[Any], points.colors)
 	present = pandas.notna(color_texts)
 	present_texts = color_texts[present]
-	groups = pandas.unique(present_texts)
+	groups = order_color_groups(present_texts, points.color_order)
 	group_count = len(groups)
 	color_codes = choose_series_colors(None, group_count, CHART_NAME, ColoredParts.COLOR_GROUPS)
 
@@ -364,3 +370,44 @@ def draw_color_groups(axes: Axes, series: Series, color_texts: NDArray[Any], poi
 			alpha=point_look.opacity,
 			label=group,
 		)
+
+
+def order_color_groups(present_texts: NDArray[Any], color_order: list[str] | None) -> list[str]:
+	"""
+	Return each ``color_by`` text once, in the order of the legend.
+
+	Categories keep the order of the column, without the categories no point holds. Any other texts are sorted in
+	natural order: numbers inside them as numbers, without regard to case.
+
+	.. versionadded:: 0.2.0
+
+	Parameters
+	----------
+	present_texts
+		The ``color_by`` texts of the drawn points, without missing text.
+	color_order
+		The texts of the categories in their order, or None for texts that are not categories.
+
+	Returns
+	-------
+	list[str]
+		The texts of the groups, each once.
+
+	Examples
+	--------
+	>>> import numpy
+	>>> from numdaplot.plots.drawing.scatter_drawing import order_color_groups
+	>>> order_color_groups(numpy.array(["Noise", "Cluster 10", "Cluster 2"], dtype=object), None)
+	['Cluster 2', 'Cluster 10', 'Noise']
+	>>> order_color_groups(numpy.array(["10 to 99"], dtype=object), ["0 to 9", "10 to 99"])
+	['10 to 99']
+	"""
+	raw_texts = present_texts.tolist()
+	group_texts = set(cast(list[str], raw_texts))
+	if color_order is not None:
+		held_categories = [category for category in color_order if category in group_texts]
+		return held_categories
+
+	sorted_groups = sorted(group_texts, key=find_natural_key)
+
+	return sorted_groups

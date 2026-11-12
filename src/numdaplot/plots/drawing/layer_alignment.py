@@ -243,6 +243,8 @@ def align_points(points: PointValues | None, sources: NDArray[numpy.intp]) -> Po
 	Return the values coloring and sizing the points of a ScatterChart, reordered on the merged labels.
 
 	.. versionadded:: 0.1.0
+	.. versionchanged:: 0.2.0
+		Keeps the order of the ``color_by`` categories.
 
 	Parameters
 	----------
@@ -276,7 +278,7 @@ def align_points(points: PointValues | None, sources: NDArray[numpy.intp]) -> Po
 	if points.sizes is not None:
 		sizes = pick_values(points.sizes, sources)
 
-	aligned_points = PointValues(points.color_name, colors, points.size_name, sizes)
+	aligned_points = PointValues(points.color_name, colors, points.size_name, sizes, points.color_order)
 
 	return aligned_points
 

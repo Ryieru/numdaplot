@@ -17,7 +17,7 @@ from numdaplot.plots.chart_layer import ChartLayer
 from numdaplot.plots.data.array_values import read_array_values
 from numdaplot.plots.data.point_values import read_point_values
 from numdaplot.plots.data.table_values import read_table_values
-from numdaplot.plots.drawing.scatter_drawing import choose_areas, draw_scatter_chart
+from numdaplot.plots.drawing.scatter_drawing import choose_areas, draw_scatter_chart, order_color_groups
 
 SURFACES = ndp.Array.from_list([30.0, 45.0, 60.0])
 PRICES = ndp.Array.from_list([150.0, 210.0, 260.0])
@@ -26,6 +26,14 @@ ROOMS = ndp.Array.from_list([1, 2, 3])
 FLATS = ndp.Table.from_arrays({"surface": SURFACES, "price": PRICES, "city": CITIES, "rooms": ROOMS})
 VALUES = read_table_values(FLATS, "surface", ["price"], "ScatterChart")
 GRID = ndp.Array.from_list([[1.0, 2.0], [3.0, 4.0]])
+CITY_COLUMN = "city"
+EXPECTED_CITY_GROUPS = ["Lyon", "Paris"]
+TEXT_DTYPE = numpy.dtype(object)
+CLUSTER_TEXTS = numpy.array(["Noise", "Cluster 10", "cluster 2", "Noise", "Cluster 0"], dtype=TEXT_DTYPE)
+EXPECTED_CLUSTER_GROUPS = ["Cluster 0", "cluster 2", "Cluster 10", "Noise"]
+AGE_TEXTS = numpy.array(["20 to 99", "0 to 9", "20 to 99"], dtype=TEXT_DTYPE)
+AGE_ORDER = ["0 to 9", "10 to 19", "20 to 99"]
+EXPECTED_AGE_GROUPS = ["0 to 9", "20 to 99"]
 GRID_VALUES = read_array_values(GRID, "ScatterChart")
 SIZES = numpy.array([10.0, 20.0, numpy.nan, 30.0])
 EXPECTED_AREAS = [16.0, 136.0, 0.0, 256.0]
@@ -74,18 +82,19 @@ def test_draw_scatter_chart_draws_one_point_per_row() -> None:
 
 def test_draw_scatter_chart_draws_one_group_per_color_text() -> None:
 	"""
-	Check that a text color_by gives one group of points per text, and its column as legend title.
+	Check that a text color_by gives one group of points per text, in natural order, and its column as legend title.
 
 	.. versionadded:: 0.1.0
 	"""
 	axes = Figure().add_subplot()
-	layer = build_table_layer(ndp.ScatterChart(x="surface", y="price", color_by="city"))
+	chart = ndp.ScatterChart(x="surface", y="price", color_by=CITY_COLUMN)
+	layer = build_table_layer(chart)
 
 	drawn_chart = draw_scatter_chart(axes, layer)
 
 	labels = [points.get_label() for points in axes.collections]
-	assert labels == ["Paris", "Lyon"]
-	assert drawn_chart.legend_title == "city"
+	assert labels == EXPECTED_CITY_GROUPS
+	assert drawn_chart.legend_title == CITY_COLUMN
 
 
 def test_draw_scatter_chart_adds_a_color_bar_for_color_numbers() -> None:
@@ -184,3 +193,25 @@ def test_choose_areas_gives_the_middle_area_when_every_size_is_missing() -> None
 	areas = choose_areas(MISSING_SIZES, 2, None)
 
 	assert areas.tolist() == [MIDDLE_AREA, MIDDLE_AREA]
+
+
+def test_order_color_groups_sorts_texts_in_natural_order() -> None:
+	"""
+	Check that each text comes once, numbers inside texts read as numbers and case ignored.
+
+	.. versionadded:: 0.2.0
+	"""
+	groups = order_color_groups(CLUSTER_TEXTS, None)
+
+	assert groups == EXPECTED_CLUSTER_GROUPS
+
+
+def test_order_color_groups_follows_the_categories_held() -> None:
+	"""
+	Check that categories keep their order, without the categories no point holds.
+
+	.. versionadded:: 0.2.0
+	"""
+	groups = order_color_groups(AGE_TEXTS, AGE_ORDER)
+
+	assert groups == EXPECTED_AGE_GROUPS

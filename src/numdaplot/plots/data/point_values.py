@@ -5,12 +5,13 @@ Values coloring and sizing the points of a ScatterChart.
 """
 
 from dataclasses import dataclass, replace
-from typing import Any
+from typing import Any, cast
 
 import numpy
 import pandas
 from numpy.typing import NDArray
 
+from numdaplot.data_types.type import Type
 from numdaplot.data_types.value_family import ValueFamily
 from numdaplot.errors.refused_setting_error import RefusedSettingError
 from numdaplot.plots.charts.color_scale import ColorScale
@@ -18,6 +19,7 @@ from numdaplot.plots.data.chart_values import ChartValues, Series
 from numdaplot.plots.data.column_reading import read_numbers, read_texts, require_column_family
 from numdaplot.tables.columns.column_names import require_known_columns
 from numdaplot.tables.frames.column import Column
+from numdaplot.tables.frames.column_values import find_column_type
 from numdaplot.tables.table import Table
 from numdaplot.tables.table_data import read_stored_frame
 
@@ -33,6 +35,8 @@ class PointValues:
 	The values coloring and sizing each point of a ScatterChart, one per drawn row.
 
 	.. versionadded:: 0.1.0
+	.. versionchanged:: 0.2.0
+		Keeps the order of the categories of a ``color_by`` column of categories.
 
 	Parameters
 	----------
@@ -44,6 +48,9 @@ class PointValues:
 		The ``size_by`` column, or None.
 	sizes
 		Its float64 numbers, or None.
+	color_order
+		The texts of the categories of a ``color_by`` column of categories, in their order, None for any other
+		column, whose texts are sorted when drawn.
 
 	Examples
 	--------
@@ -57,6 +64,7 @@ class PointValues:
 	colors: NDArray[Any] | None
 	size_name: str | None
 	sizes: NDArray[numpy.float64] | None
+	color_order: list[str] | None = None
 
 
 def read_point_values(
@@ -66,6 +74,8 @@ def read_point_values(
 	Return the values of the ``color_by`` and ``size_by`` columns of a ScatterChart for the drawn rows.
 
 	.. versionadded:: 0.1.0
+	.. versionchanged:: 0.2.0
+		Reads the order of the categories of a ``color_by`` column of categories.
 
 	Parameters
 	----------
@@ -81,7 +91,8 @@ def read_point_values(
 	Returns
 	-------
 	PointValues
-		The values of each column given, in the order of the drawn rows.
+		The values of each column given, in the order of the drawn rows, and the order of the ``color_by``
+		categories.
 
 	Raises
 	------
@@ -105,17 +116,20 @@ def read_point_values(
 	column_names = frame.columns.tolist()
 	colors = None
 	sizes = None
+	color_order = None
 	if color_name is not None:
 		require_known_columns([color_name], column_names)
-		all_colors = read_colors(frame[color_name])
+		color_column = frame[color_name]
+		all_colors = read_colors(color_column)
 		colors = all_colors[rows]
+		color_order = read_category_order(color_column)
 
 	if size_name is not None:
 		require_known_columns([size_name], column_names)
 		all_sizes = read_numbers(frame[size_name], CHART_NAME)
 		sizes = all_sizes[rows]
 
-	point_values = PointValues(color_name, colors, size_name, sizes)
+	point_values = PointValues(color_name, colors, size_name, sizes, color_order)
 
 	return point_values
 
@@ -193,6 +207,46 @@ def read_colors(column: Column) -> NDArray[Any]:
 	texts = read_texts(column, CHART_NAME)
 
 	return texts
+
+
+def read_category_order(column: Column) -> list[str] | None:
+	"""
+	Return the texts of the categories of a column of categories, in their order.
+
+	.. versionadded:: 0.2.0
+
+	Parameters
+	----------
+	column
+		A Table column.
+
+	Returns
+	-------
+	list[str] or None
+		The categories written as the texts of the column, None for a column of another type.
+
+	Examples
+	--------
+	>>> import numdaplot as ndp
+	>>> from numdaplot.plots.data.point_values import read_category_order
+	>>> from numdaplot.tables.table_data import read_stored_frame
+	>>> ages = ndp.Table.from_arrays({"age": ndp.Array.from_list([25, 5])})
+	>>> brackets = ndp.Brackets(limits=[0, 10, 100])
+	>>> age_groups = ages.convert(ndp.TableConversion(columns=["age"], dtype=ndp.Type.CATEGORY, format=brackets))
+	>>> read_category_order(read_stored_frame(age_groups)["age"])
+	['0 to 9', '10 to 99']
+	"""
+	column_type = find_column_type(column)
+	if column_type != Type.CATEGORY:
+		return None
+
+	categories = column.cat.categories
+	raw_category_column = pandas.Series(categories)
+	category_column = raw_category_column.astype(column.dtype)
+	category_texts = read_texts(category_column, CHART_NAME)
+	category_order = cast(list[str], category_texts.tolist())
+
+	return category_order
 
 
 def hide_missing_points(chart_values: ChartValues, point_values: PointValues) -> ChartValues:

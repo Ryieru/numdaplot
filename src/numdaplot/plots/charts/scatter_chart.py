@@ -37,6 +37,9 @@ class ScatterChart(Chart):
 	the points gather, and a small ``point_size`` separates them. The last group drawn stays on top of the others.
 
 	.. versionadded:: 0.1.0
+	.. versionchanged:: 0.2.0
+		The groups of ``color_by`` follow the natural order of their values, or the order of the categories,
+		instead of the order of the rows.
 
 	Parameters
 	----------
@@ -53,8 +56,10 @@ class ScatterChart(Chart):
 		several columns, the series take the colors of the default cycle and ``color`` is refused.
 	color_by
 		For a Table, the column coloring each point: numbers give a color scale shown next to the axes, texts, booleans
-		and times of day give one color per value, named in the legend, times being written ``HH:MM``. Every point
-		takes the same color when omitted.
+		and times of day give one color per value, named in the legend, times being written ``HH:MM``. The legend
+		and the colors follow the order of the categories of a column of categories, and the natural order of
+		any other values: numbers inside texts as numbers, ``Cluster 2`` before ``Cluster 10``, without regard to
+		case. Every point takes the same color when omitted.
 	size_by
 		For a Table, the column of numbers sizing each point, from the smallest to the largest value. Every point has
 		the same size when omitted.
