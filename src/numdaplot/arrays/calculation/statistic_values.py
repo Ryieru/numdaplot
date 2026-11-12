@@ -27,6 +27,7 @@ from numdaplot.arrays.calculation.location_statistics import (
 	compute_standard_deviation,
 	compute_sum,
 )
+from numdaplot.arrays.calculation.share_values import build_share_values
 from numdaplot.arrays.creation.numpy_conversion import normalize_text
 from numdaplot.arrays.operations.float_errors import FloatErrorWarnings
 from numdaplot.arrays.operations.integer_rules import require_sum_fits
@@ -45,6 +46,7 @@ from numdaplot.statistics.minimum import Min
 from numdaplot.statistics.most_frequent import MostFrequent
 from numdaplot.statistics.most_frequent_count import MostFrequentCount
 from numdaplot.statistics.quantile import Quantile
+from numdaplot.statistics.share import Share
 from numdaplot.statistics.standard_deviation import StandardDeviation
 from numdaplot.statistics.statistic import Statistic
 from numdaplot.statistics.sum import Sum
@@ -89,6 +91,8 @@ STATISTIC_CALCULATIONS = {
 	Quantile: StatisticCalculation(compute_quantile, NUMBER_FAMILIES, needs_present_value=True),
 	MostFrequent: StatisticCalculation(compute_most_frequent, ALL_FAMILIES, needs_present_value=True),
 	MostFrequentCount: StatisticCalculation(compute_most_frequent_count, ALL_FAMILIES, needs_present_value=False),
+	# A share is the mean of the values built by build_share_values.
+	Share: StatisticCalculation(compute_mean, ALL_FAMILIES, needs_present_value=True),
 }
 SINGLE_VALUE_DIMENSIONS = (1,)
 UNKNOWN_STATISTIC_OPERATION = "The statistic {statistic_name}"
@@ -100,6 +104,9 @@ def compute_statistic(values: NDArray[Any], statistic: Statistic, axis: Axis | N
 	Return a statistic of the present values, for the whole Array or for each row or column.
 
 	.. versionadded:: 0.1.0
+
+	.. versionchanged:: 0.2.0
+		Computes ``Share``.
 
 	Parameters
 	----------
@@ -123,9 +130,9 @@ def compute_statistic(values: NDArray[Any], statistic: Statistic, axis: Axis | N
 	DimensionError
 		When an axis is given for an Array that is not two-dimensional.
 	EmptyArrayError
-		When the statistic needs a present value and a slice has none.
+		When the statistic needs a present value and a slice has none, or a ``Share`` has no value to count.
 	RefusedOperationError
-		When the statistic is not a statistic of numdaplot.
+		When the statistic, or the rule of a ``Share``, is not one of numdaplot.
 	IntegerOverflowError
 		When the sum of integers does not fit their type.
 
@@ -151,11 +158,15 @@ def compute_statistic(values: NDArray[Any], statistic: Statistic, axis: Axis | N
 	calculation = STATISTIC_CALCULATIONS[statistic_class]
 	require_family(values, calculation.accepted_families, statistic_name)
 	numpy_axis = find_numpy_axis(axis, values.ndim)
+	measured_values = values
+	if isinstance(statistic, Share):
+		measured_values = build_share_values(values, statistic)
+
 	if calculation.needs_present_value:
-		require_present_values(values, numpy_axis, statistic_name)
+		require_present_values(measured_values, numpy_axis, statistic_name)
 
 	with FloatErrorWarnings(statistic_name):
-		result = calculation.function(values, numpy_axis, statistic)
+		result = calculation.function(measured_values, numpy_axis, statistic)
 
 	result_values = numpy.asarray(result)
 	if statistic_class == Sum:

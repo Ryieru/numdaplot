@@ -6,10 +6,11 @@ Settings of the aggregation of the rows of a Table.
 
 from dataclasses import dataclass
 
+from numdaplot.errors.duplicate_column_error import RESULT_NAME_ADVICE, DuplicateColumnError
 from numdaplot.errors.empty_list_error import EmptyListError
 from numdaplot.settings.field_types import require_field_types
 from numdaplot.tables.aggregation.calculation import Calculation, find_result_name
-from numdaplot.tables.columns.column_names import require_column_names, require_unique_names
+from numdaplot.tables.columns.column_names import require_column_names
 
 CALCULATION_ITEM_NAME = "calculation"
 GROUP_COLUMN_ITEM_NAME = "group column"
@@ -21,6 +22,9 @@ class Aggregation:
 	Statistics computed on the whole Table or on each group of rows, used by ``Table.aggregate``.
 
 	.. versionadded:: 0.1.0
+
+	.. versionchanged:: 0.2.0
+		The error for a repeated result name advises a ``result_name`` for each calculation.
 
 	Parameters
 	----------
@@ -85,13 +89,50 @@ class Aggregation:
 
 		calculations_copy = list(self.calculations)
 		object.__setattr__(self, "calculations", calculations_copy)
-		output_names = list[str]()
+		group_names = list[str]()
 		if self.group_by is not None:
 			require_column_names(self.group_by)
 			group_by_copy = list(self.group_by)
 			object.__setattr__(self, "group_by", group_by_copy)
-			output_names.extend(group_by_copy)
+			group_names.extend(group_by_copy)
 
-		result_names = [find_result_name(calculation) for calculation in calculations_copy]
-		output_names.extend(result_names)
-		require_unique_names(output_names)
+		require_unique_result_names(calculations_copy, group_names)
+
+
+def require_unique_result_names(calculations: list[Calculation], group_names: list[str]) -> None:
+	"""
+	Check that each calculation gives a result name of its own, different from the group column names.
+
+	.. versionadded:: 0.2.0
+
+	Parameters
+	----------
+	calculations
+		The calculations of the aggregation.
+	group_names
+		The names of the group columns, already distinct.
+
+	Raises
+	------
+	DuplicateColumnError
+		At the first result name already used, advising a ``result_name`` for each calculation.
+
+	Examples
+	--------
+	>>> import numdaplot as ndp
+	>>> from numdaplot.tables.aggregation.aggregation import require_unique_result_names
+	>>> total = ndp.Calculation(column="price", function=ndp.Sum(), result_name="city")
+	>>> try:
+	... 	require_unique_result_names([total], ["city"])
+	... except ndp.DuplicateColumnError as error:
+	... 	print(error)
+	The column name 'city' appears more than once. Give each Calculation its own result_name.
+	"""
+	used_names = set(group_names)
+
+	for calculation in calculations:
+		result_name = find_result_name(calculation)
+		if result_name in used_names:
+			raise DuplicateColumnError(result_name, advice=RESULT_NAME_ADVICE)
+
+		used_names.add(result_name)

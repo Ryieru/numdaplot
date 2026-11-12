@@ -10,11 +10,13 @@ import numpy
 import pandas
 from numpy.typing import NDArray
 
+from numdaplot.statistics.share import Share
 from numdaplot.statistics.statistic import Statistic
 from numdaplot.tables.aggregation.aggregation import Aggregation
 from numdaplot.tables.aggregation.calculation import find_result_name
 from numdaplot.tables.aggregation.result_column import build_result_column, compute_cell
 from numdaplot.tables.aggregation.row_groups import find_row_groups
+from numdaplot.tables.aggregation.share_column import SHARE_MEAN, build_share_column
 from numdaplot.tables.columns.column_names import require_known_columns
 from numdaplot.tables.frames.column import Column
 from numdaplot.tables.frames.column_values import find_column_missing, read_present_values
@@ -137,6 +139,9 @@ def compute_group_results(column: Column, statistic: Statistic, row_groups: list
 
 	.. versionadded:: 0.1.0
 
+	.. versionchanged:: 0.2.0
+		Computes ``Share``.
+
 	Parameters
 	----------
 	column
@@ -154,7 +159,7 @@ def compute_group_results(column: Column, statistic: Statistic, row_groups: list
 	Raises
 	------
 	IncompatibleTypesError
-		When the statistic does not apply to the type of the column.
+		When the statistic, or the rule of a ``Share``, does not apply to the type of the column.
 
 	Examples
 	--------
@@ -166,6 +171,11 @@ def compute_group_results(column: Column, statistic: Statistic, row_groups: list
 	>>> compute_group_results(column, ndp.Mean(), [numpy.array([1]), numpy.array([0, 2])]).tolist()
 	[nan, 2.0]
 	"""
+	if isinstance(statistic, Share):
+		share_column = build_share_column(column, statistic)
+		group_shares = compute_group_results(share_column, SHARE_MEAN, row_groups)
+		return group_shares
+
 	missing = find_column_missing(column)
 	present = ~missing
 	present_values = read_present_values(column)

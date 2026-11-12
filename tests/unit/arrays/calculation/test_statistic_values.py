@@ -13,8 +13,11 @@ from numdaplot.errors.empty_array_error import EmptyArrayError
 from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
 from numdaplot.errors.refused_operation_error import RefusedOperationError
 from numdaplot.positions.axis import Axis
+from numdaplot.rules.greater import Greater
+from numdaplot.statistics.counted_missing import CountedMissing
 from numdaplot.statistics.maximum import Max
 from numdaplot.statistics.mean import Mean
+from numdaplot.statistics.share import Share
 from numdaplot.statistics.statistic import Statistic
 from numdaplot.statistics.sum import Sum
 
@@ -30,6 +33,11 @@ LAST_TEXT = ["b"]
 TEXT_KIND = "T"
 MISSING_ROWS = [[1.0, numpy.nan], [numpy.nan, numpy.nan]]
 MISSING_ONLY = [numpy.nan]
+AGES = [70.0, numpy.nan, 30.0, 80.0]
+SENIOR_AGE = 65
+EXPECTED_PRESENT_SHARE = [2 / 3]
+EXPECTED_EVERY_SHARE = [0.5]
+EXPECTED_ROW_SHARES = [0.5, 0.0]
 
 
 class UnknownStatistic(Statistic):
@@ -167,3 +175,59 @@ def test_require_present_values_rejects_only_missing_values() -> None:
 
 	with pytest.raises(EmptyArrayError):
 		require_present_values(values, None, Mean.__name__)
+
+
+def test_compute_statistic_divides_a_share_by_the_present_values() -> None:
+	"""
+	Check that a share leaves the missing values out of its total by default.
+
+	.. versionadded:: 0.2.0
+	"""
+	values = numpy.array(AGES)
+
+	shares = compute_statistic(values, Share(rule=Greater(SENIOR_AGE)), None)
+
+	share_list = shares.tolist()
+	assert share_list == EXPECTED_PRESENT_SHARE
+
+
+def test_compute_statistic_divides_a_share_by_every_value_when_missing_values_count() -> None:
+	"""
+	Check that a share including the missing values counts them as not satisfying the rule.
+
+	.. versionadded:: 0.2.0
+	"""
+	values = numpy.array(AGES)
+	share = Share(rule=Greater(SENIOR_AGE), missing=CountedMissing.INCLUDED)
+
+	shares = compute_statistic(values, share, None)
+
+	share_list = shares.tolist()
+	assert share_list == EXPECTED_EVERY_SHARE
+
+
+def test_compute_statistic_gives_one_share_per_row() -> None:
+	"""
+	Check one share per row, missing values counted.
+
+	.. versionadded:: 0.2.0
+	"""
+	values = numpy.array(MISSING_ROWS)
+	share = Share(rule=Greater(0), missing=CountedMissing.INCLUDED)
+
+	shares = compute_statistic(values, share, Axis.EACH_ROW)
+
+	share_list = shares.tolist()
+	assert share_list == EXPECTED_ROW_SHARES
+
+
+def test_compute_statistic_rejects_a_share_without_present_value() -> None:
+	"""
+	Check that a share of missing values only raises EmptyArrayError when they are left out.
+
+	.. versionadded:: 0.2.0
+	"""
+	values = numpy.array(MISSING_ONLY)
+
+	with pytest.raises(EmptyArrayError):
+		compute_statistic(values, Share(rule=Greater(SENIOR_AGE)), None)

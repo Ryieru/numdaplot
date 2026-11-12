@@ -6,12 +6,12 @@ Unit tests of Calculation and Aggregation.
 
 import pytest
 
-from numdaplot.errors.duplicate_column_error import DuplicateColumnError
+from numdaplot.errors.duplicate_column_error import RESULT_NAME_ADVICE, DuplicateColumnError
 from numdaplot.errors.empty_list_error import EmptyListError
 from numdaplot.errors.invalid_column_name_error import InvalidColumnNameError
 from numdaplot.statistics.maximum import Max
 from numdaplot.statistics.mean import Mean
-from numdaplot.tables.aggregation.aggregation import Aggregation
+from numdaplot.tables.aggregation.aggregation import Aggregation, require_unique_result_names
 from numdaplot.tables.aggregation.calculation import Calculation, find_result_name
 
 COLUMN_NAME = "price"
@@ -108,12 +108,14 @@ def test_aggregation_rejects_an_empty_list_of_groups() -> None:
 
 def test_aggregation_rejects_two_results_of_the_same_name() -> None:
 	"""
-	Check that two calculations giving price_mean raise DuplicateColumnError.
+	Check that two calculations giving price_mean raise DuplicateColumnError, advising a result name.
 
 	.. versionadded:: 0.1.0
 	"""
-	with pytest.raises(DuplicateColumnError):
+	with pytest.raises(DuplicateColumnError) as error_info:
 		Aggregation(calculations=[AVERAGE_PRICE, AVERAGE_PRICE])
+
+	assert error_info.value.advice == RESULT_NAME_ADVICE
 
 
 def test_aggregation_rejects_a_result_named_like_a_group() -> None:
@@ -126,3 +128,12 @@ def test_aggregation_rejects_a_result_named_like_a_group() -> None:
 
 	with pytest.raises(DuplicateColumnError):
 		Aggregation(calculations=[city_result, HIGHEST_PRICE], group_by=GROUP_COLUMNS)
+
+
+def test_require_unique_result_names_accepts_distinct_names() -> None:
+	"""
+	Check that two results of different names, apart from the group column, pass.
+
+	.. versionadded:: 0.2.0
+	"""
+	require_unique_result_names([AVERAGE_PRICE, HIGHEST_PRICE], GROUP_COLUMNS)

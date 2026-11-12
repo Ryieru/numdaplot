@@ -16,6 +16,8 @@ and numdaplot follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
   for a column.
 - `Table.count_values` gives how many rows hold each value of a column with a `ValueCount`, as a number or,
   with `Measure.RATIO`, as a fraction of every row, from the most frequent value to the least frequent.
+- `Share` gives the fraction of the values satisfying a rule, of an Array or of each group in `aggregate`,
+  `pivot_table` and `describe`, without the missing values unless `missing=CountedMissing.INCLUDED`.
 
 ### Changed
 
@@ -32,6 +34,8 @@ and numdaplot follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 - The documentation lists `TableConversion` and `BooleanRule` in a Conversions section.
 - The documentation lists `Measure` in a Measures section, shared by tables and plots, and groups the settings of
   `aggregate`, `pivot_table`, `describe` and `count_values` under Statistic settings.
+- The `DuplicateColumnError` of an `Aggregation` giving two results the same name advises a `result_name` for each
+  calculation.
 - The documentation lists every method and operator of `Array`, `Table` and `Plot`, `Table.pivot_table` and
   `Table.join` included, in sections that follow the code: the same notion has the same title on every page, such
   as Calculation and Layout.
@@ -43,6 +47,8 @@ and numdaplot follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
 ### Fixed
 
+- `Description` refuses two statistics giving rows of the same name, such as two `Share`, with
+  `DuplicateStatisticError`. A statistic whose settings hold a list no longer raises `TypeError`.
 - `SquareRoot`, `Exponential`, `Logarithm`, `Sine` and `Cosine` give `FLOAT64` for integers of any size: they raised
   `UnsupportedTypeError` on `INT8` and `UINT8` values, and gave `FLOAT32` on `INT16` and `UINT16` values.
 - `IntegerOverflowError` names the type of the Array when a number written before an operator does not fit it,

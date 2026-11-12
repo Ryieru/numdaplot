@@ -14,6 +14,8 @@ EXPECTED_CLEANED_MESSAGE = (
 	"The column names 'price' and 'price\\n' both become 'price' once cleaned. "
 	"Use ColumnNames.KEPT to keep them as written."
 )
+ADVICE = "Rename one of them."
+EXPECTED_ADVISED_MESSAGE = "The column name 'price' appears more than once. Rename one of them."
 
 
 def test_duplicate_column_error_is_a_numdaplot_error() -> None:
@@ -80,3 +82,16 @@ def test_duplicate_column_error_has_no_original_names_for_a_repeated_name() -> N
 	error = DuplicateColumnError(COLUMN_NAME)
 
 	assert error.original_names is None
+
+
+def test_duplicate_column_error_adds_its_advice_to_the_message() -> None:
+	"""
+	Check that the advice ends the message and is kept as an attribute.
+
+	.. versionadded:: 0.2.0
+	"""
+	error = DuplicateColumnError(COLUMN_NAME, advice=ADVICE)
+
+	error_text = str(error)
+	assert error_text == EXPECTED_ADVISED_MESSAGE
+	assert error.advice == ADVICE

@@ -19,8 +19,10 @@ from numdaplot.data_types.value_family import ValueFamily, find_family
 from numdaplot.dates.time_zone import TimeZone
 from numdaplot.errors.duplicate_column_error import DuplicateColumnError
 from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
+from numdaplot.statistics.share import Share
 from numdaplot.statistics.statistic import Statistic
 from numdaplot.tables.aggregation.result_column import build_result_column, compute_cell
+from numdaplot.tables.aggregation.share_column import SHARE_MEAN, build_share_column
 from numdaplot.tables.aggregation.statistic_name import name_statistic
 from numdaplot.tables.columns.column_names import require_known_columns
 from numdaplot.tables.description.description import DEFAULT_FUNCTIONS, Description
@@ -182,6 +184,9 @@ def describe_column(column: Column, functions: list[Statistic]) -> Column:
 
 	.. versionadded:: 0.1.0
 
+	.. versionchanged:: 0.2.0
+		Computes ``Share``.
+
 	Parameters
 	----------
 	column
@@ -204,8 +209,7 @@ def describe_column(column: Column, functions: list[Statistic]) -> Column:
 	['2', 'a', <NA>]
 	"""
 	present_values = read_present_values(column)
-	value_count = len(column)
-	results = [compute_description_cell(present_values, function, value_count) for function in functions]
+	results = [describe_statistic(column, present_values, function) for function in functions]
 	present_results = [result for result in results if result is not None]
 	result_families = {find_result_family(result) for result in present_results}
 	family_count = len(result_families)
@@ -217,6 +221,57 @@ def describe_column(column: Column, functions: list[Statistic]) -> Column:
 	described_column = attribute_source_time_zone(utc_column, column)
 
 	return described_column
+
+
+def describe_statistic(column: Column, present_values: NDArray[Any], statistic: Statistic) -> NDArray[Any] | None:
+	"""
+	Return a statistic of a column, or nothing when it does not apply or finds no value.
+
+	.. versionadded:: 0.2.0
+
+	Parameters
+	----------
+	column
+		A Table column.
+	present_values
+		The present values of the column.
+	statistic
+		Any statistic of numdaplot. A ``Share`` is computed on the whole column, so that its rule sees the time
+		zone and the missing values of the column.
+
+	Returns
+	-------
+	NDArray or None
+		The result as a one-value array, or ``None``.
+
+	Raises
+	------
+	TimeZoneMismatchError
+		When a datetime of the rule of a ``Share`` has a time zone and the column has none, or the reverse.
+
+	Examples
+	--------
+	>>> import pandas
+	>>> import numdaplot as ndp
+	>>> from numdaplot.tables.description.described_frame import describe_statistic
+	>>> ages = pandas.Series([70.0, None, 30.0, 80.0])
+	>>> describe_statistic(ages, ages.dropna().to_numpy(), ndp.Share(rule=ndp.Greater(65)))
+	array([0.66666667])
+	"""
+	value_count = len(column)
+	if not isinstance(statistic, Share):
+		statistic_cell = compute_description_cell(present_values, statistic, value_count)
+		return statistic_cell
+
+	try:
+		share_column = build_share_column(column, statistic)
+	except IncompatibleTypesError:
+		return None
+
+	share_values = read_present_values(share_column)
+	share_cell = compute_description_cell(share_values, SHARE_MEAN, value_count)
+
+	return share_cell
 
 
 def compute_description_cell(

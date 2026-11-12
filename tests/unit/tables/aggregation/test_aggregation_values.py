@@ -13,10 +13,12 @@ from numpy.typing import NDArray
 
 from numdaplot.errors.column_not_found_error import ColumnNotFoundError
 from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
+from numdaplot.rules.greater import Greater
 from numdaplot.statistics.count import Count
 from numdaplot.statistics.counted_missing import CountedMissing
 from numdaplot.statistics.maximum import Max
 from numdaplot.statistics.mean import Mean
+from numdaplot.statistics.share import Share
 from numdaplot.statistics.sum import Sum
 from numdaplot.tables.aggregation.aggregated_frame import aggregate_frame, compute_group_results, take_group_keys
 from numdaplot.tables.aggregation.aggregation import Aggregation
@@ -36,6 +38,8 @@ EMPTY_FRAME = pandas.DataFrame({"city": pandas.Series([], dtype="string")})
 GROUP_ROWS = [numpy.array([2]), numpy.array([0, 3]), numpy.array([1])]
 EXPECTED_KEYS = ["Lyon", "Pau", pandas.NA]
 EXPECTED_GROUP_MEANS = [None, 20.0, 20.0]
+MIDDLE_PRICE = 15.0
+EXPECTED_GROUP_SHARES = [None, 0.5, 1.0]
 EXPECTED_GROUP_COUNTS = [0, 2, 1]
 EMPTY_DECIMALS = numpy.array([], dtype=numpy.float64)
 TEXTS = numpy.array(["a"], dtype="T")
@@ -174,6 +178,21 @@ def test_compute_group_results_skips_the_missing_values_of_each_group() -> None:
 	result_values = result_column.tolist()
 	means = read_with_none(result_values)
 	assert means == EXPECTED_GROUP_MEANS
+
+
+def test_compute_group_results_gives_the_share_of_each_group() -> None:
+	"""
+	Check the share of each group: a group without present value gives a missing share.
+
+	.. versionadded:: 0.2.0
+	"""
+	price_column = SALES["price"]
+
+	result_column = compute_group_results(price_column, Share(rule=Greater(MIDDLE_PRICE)), GROUP_ROWS)
+
+	result_values = result_column.tolist()
+	shares = read_with_none(result_values)
+	assert shares == EXPECTED_GROUP_SHARES
 
 
 def test_compute_group_results_counts_zero_for_a_group_without_value() -> None:

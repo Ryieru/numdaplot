@@ -195,6 +195,7 @@ from numdaplot.statistics.minimum import Min
 from numdaplot.statistics.most_frequent import MostFrequent
 from numdaplot.statistics.most_frequent_count import MostFrequentCount
 from numdaplot.statistics.quantile import Quantile
+from numdaplot.statistics.share import Share
 from numdaplot.statistics.standard_deviation import StandardDeviation
 from numdaplot.statistics.statistic import Statistic
 from numdaplot.statistics.sum import Sum
@@ -442,6 +443,7 @@ __all__ = [
 	"SasReadOptions",
 	"ScatterChart",
 	"Shape",
+	"Share",
 	"ShapeMismatchError",
 	"ShownColumns",
 	"Side",

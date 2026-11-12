@@ -64,6 +64,7 @@ REQUIRED_SETTINGS = dict[str, dict[str, object]](
 		"Renaming": {"changes": [ndp.NameChange(old_name="a", new_name="b")]},
 		"Replacement": {"region": ndp.Region(rows=ndp.Index(0)), "value": 1},
 		"Shape": {"dimensions": [1]},
+		"Share": {"rule": ndp.IsMissing()},
 		"SortKey": {"column": "a"},
 		"Spacing": {"start": 0, "stop": 1, "count": 2},
 		"TableConversion": {"column": "a", "dtype": ndp.Type.TEXT},

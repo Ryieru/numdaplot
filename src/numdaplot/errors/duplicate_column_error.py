@@ -11,6 +11,8 @@ DUPLICATE_CLEANED_MESSAGE = (
 	"The column names {first_name!r} and {second_name!r} both become {column_name!r} once cleaned. "
 	"Use ColumnNames.KEPT to keep them as written."
 )
+RESULT_NAME_ADVICE = "Give each Calculation its own result_name."
+ADVICE_SEPARATOR = " "
 
 
 class DuplicateColumnError(NumdaplotError):
@@ -22,6 +24,9 @@ class DuplicateColumnError(NumdaplotError):
 
 	.. versionadded:: 0.1.0
 
+	.. versionchanged:: 0.2.0
+		Takes an advice, such as giving each ``Calculation`` its own ``result_name``.
+
 	Parameters
 	----------
 	column_name
@@ -29,6 +34,8 @@ class DuplicateColumnError(NumdaplotError):
 	original_names
 		The two names, as written in the file, that both become ``column_name`` once cleaned. When omitted, the
 		name itself appears twice.
+	advice
+		A sentence added at the end of the message, telling how to avoid the repeated name, no advice when omitted.
 
 	Attributes
 	----------
@@ -36,6 +43,8 @@ class DuplicateColumnError(NumdaplotError):
 		The repeated name.
 	original_names
 		The two names as written before cleaning, ``None`` when the name itself appears twice.
+	advice
+		The sentence added at the end of the message, ``None`` without advice.
 
 	Examples
 	--------
@@ -54,13 +63,23 @@ class DuplicateColumnError(NumdaplotError):
 	... except ndp.DuplicateColumnError as error:
 	... 	print(error)
 	The column names 'id' and 'id ' both become 'id' once cleaned. Use ColumnNames.KEPT to keep them as written.
+	>>> first_mean = ndp.Calculation(column="price", function=ndp.Mean())
+	>>> second_mean = ndp.Calculation(column="price", function=ndp.Mean())
+	>>> try:
+	... 	ndp.Aggregation(calculations=[first_mean, second_mean])
+	... except ndp.DuplicateColumnError as error:
+	... 	print(error)
+	The column name 'price_mean' appears more than once. Give each Calculation its own result_name.
 	"""
 
-	def __init__(self, column_name: str, original_names: list[str] | None = None) -> None:
+	def __init__(self, column_name: str, original_names: list[str] | None = None, advice: str | None = None) -> None:
 		"""
-		Build the error message from the column name, and from the names before cleaning when they are given.
+		Build the error message from the column name, from the names before cleaning and from the advice.
 
 		.. versionadded:: 0.1.0
+
+		.. versionchanged:: 0.2.0
+			Takes an advice.
 
 		Parameters
 		----------
@@ -68,6 +87,8 @@ class DuplicateColumnError(NumdaplotError):
 			The repeated name.
 		original_names
 			The two names before cleaning. When omitted, the name itself appears twice.
+		advice
+			A sentence added at the end of the message, no advice when omitted.
 		"""
 		message = DUPLICATE_COLUMN_MESSAGE.format(column_name=column_name)
 		if original_names is not None:
@@ -76,7 +97,11 @@ class DuplicateColumnError(NumdaplotError):
 				first_name=first_name, second_name=second_name, column_name=column_name
 			)
 
+		if advice is not None:
+			message = message + ADVICE_SEPARATOR + advice
+
 		super().__init__(message)
 
 		self.column_name = column_name
 		self.original_names = original_names
+		self.advice = advice

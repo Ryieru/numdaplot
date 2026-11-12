@@ -33,6 +33,7 @@ class Statistic:
 	|``Quantile``|Value below which a given fraction of the values lies|``ndp.Quantile(0.9)``|
 	|``MostFrequent``|Value that appears the most often|``ndp.MostFrequent()``|
 	|``MostFrequentCount``|Number of times the most frequent value appears|``ndp.MostFrequentCount()``|
+	|``Share``|Fraction of the values satisfying a rule|``ndp.Share(ndp.Greater(0))``|
 
 	.. versionadded:: 0.1.0
 

@@ -17,6 +17,7 @@ from numdaplot.statistics.minimum import Min
 from numdaplot.statistics.quantile import Quantile
 from numdaplot.statistics.standard_deviation import StandardDeviation
 from numdaplot.statistics.statistic import Statistic
+from numdaplot.tables.aggregation.statistic_name import name_statistic
 from numdaplot.tables.columns.column_names import require_column_names
 
 LOWER_QUARTILE = 0.25
@@ -42,6 +43,9 @@ class Description:
 
 	.. versionadded:: 0.1.0
 
+	.. versionchanged:: 0.2.0
+		Refuses two statistics giving rows of the same name, such as two ``Share``.
+
 	Parameters
 	----------
 	functions
@@ -62,7 +66,10 @@ class Description:
 	DuplicateColumnError
 		When a column name appears twice.
 	DuplicateStatisticError
-		When a statistic appears twice in ``functions``.
+		When a statistic appears twice in ``functions``, or two statistics give rows of the same name, such as two
+		``Share``.
+	RefusedOperationError
+		When a statistic is not a statistic of numdaplot.
 
 	Examples
 	--------
@@ -98,7 +105,9 @@ class Description:
 		DuplicateColumnError
 			When a column name appears twice.
 		DuplicateStatisticError
-			When a statistic appears twice in ``functions``.
+			When a statistic appears twice in ``functions``, or two statistics give rows of the same name.
+		RefusedOperationError
+			When a statistic is not a statistic of numdaplot.
 		"""
 		require_field_types(self)
 
@@ -121,9 +130,12 @@ class Description:
 
 def require_distinct_statistics(functions: list[Statistic]) -> None:
 	"""
-	Check that each statistic of a description is given once.
+	Check that the statistics of a description give rows of different names.
 
 	.. versionadded:: 0.1.0
+
+	.. versionchanged:: 0.2.0
+		Compares the names of the rows, so that two ``Share`` with different rules are refused.
 
 	Parameters
 	----------
@@ -133,7 +145,9 @@ def require_distinct_statistics(functions: list[Statistic]) -> None:
 	Raises
 	------
 	DuplicateStatisticError
-		When a statistic appears twice, with the same settings.
+		When a statistic appears twice, or two statistics give rows of the same name.
+	RefusedOperationError
+		When a statistic is not a statistic of numdaplot.
 
 	Examples
 	--------
@@ -146,10 +160,16 @@ def require_distinct_statistics(functions: list[Statistic]) -> None:
 	... 	print(error)
 	The statistic Mean() appears more than once.
 	"""
-	seen_statistics = set[Statistic]()
+	seen_statistics = dict[str, Statistic]()
 
 	for function in functions:
-		if function in seen_statistics:
+		function_name = name_statistic(function)
+		if function_name not in seen_statistics:
+			seen_statistics[function_name] = function
+			continue
+
+		seen_function = seen_statistics[function_name]
+		if seen_function == function:
 			raise DuplicateStatisticError(function)
 
-		seen_statistics.add(function)
+		raise DuplicateStatisticError(seen_function, function)

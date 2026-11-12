@@ -7,11 +7,13 @@ Unit tests of the names of statistics.
 import pytest
 
 from numdaplot.errors.refused_operation_error import RefusedOperationError
+from numdaplot.rules.is_missing import IsMissing
 from numdaplot.statistics.count import Count
 from numdaplot.statistics.count_distinct import CountDistinct
 from numdaplot.statistics.counted_missing import CountedMissing
 from numdaplot.statistics.most_frequent_count import MostFrequentCount
 from numdaplot.statistics.quantile import Quantile
+from numdaplot.statistics.share import Share
 from numdaplot.statistics.standard_deviation import StandardDeviation
 from numdaplot.statistics.statistic import Statistic
 from numdaplot.statistics.sum import Sum
@@ -41,6 +43,7 @@ class UnknownStatistic(Statistic):
 		(StandardDeviation(), "standard_deviation"),
 		(MostFrequentCount(), "most_frequent_count"),
 		(Quantile(LAST_DECILE), "quantile_90"),
+		(Share(rule=IsMissing()), "share"),
 	],
 )
 def test_name_statistic_uses_lowercase_words_joined_by_underscores(statistic: Statistic, expected_name: str) -> None:

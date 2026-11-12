@@ -12,14 +12,18 @@ from numdaplot.data_types.value_family import ValueFamily
 from numdaplot.dates.time_zone import TimeZone
 from numdaplot.errors.column_not_found_error import ColumnNotFoundError
 from numdaplot.errors.duplicate_column_error import DuplicateColumnError
+from numdaplot.rules.between import Between
+from numdaplot.rules.greater import Greater
 from numdaplot.statistics.count import Count
 from numdaplot.statistics.mean import Mean
 from numdaplot.statistics.minimum import Min
+from numdaplot.statistics.share import Share
 from numdaplot.tables.description.described_frame import (
 	compute_description_cell,
 	convert_result_to_text,
 	describe_column,
 	describe_frame,
+	describe_statistic,
 	find_described_columns,
 	find_number_columns,
 	find_result_family,
@@ -54,6 +58,12 @@ NUMBER = numpy.array([2])
 EXPECTED_TEXT = ["2"]
 UTC_RESULT = numpy.array(["2026-07-01T08:30"], dtype="datetime64[ns]")
 PARIS = TimeZone("Europe/Paris")
+AGES = pandas.Series([70.0, None, 30.0, 80.0])
+PRESENT_AGES = numpy.array([70.0, 30.0, 80.0])
+SENIOR_AGE = 65
+EXPECTED_SENIOR_SHARE = [2 / 3]
+CITIES = pandas.Series(["Pau", "Lyon"], dtype="string")
+PRESENT_CITIES = numpy.array(["Pau", "Lyon"], dtype="T")
 EXPECTED_PARIS_TEXT = ["2026-07-01 10:30:00+02:00"]
 
 
@@ -153,6 +163,30 @@ def test_compute_description_cell_gives_nothing_for_a_statistic_that_does_not_ap
 	.. versionadded:: 0.1.0
 	"""
 	result = compute_description_cell(TEXTS, Mean(), TEXTS.size)
+
+	assert result is None
+
+
+def test_describe_statistic_computes_a_share_on_the_whole_column() -> None:
+	"""
+	Check the share of a column, its missing value left out.
+
+	.. versionadded:: 0.2.0
+	"""
+	result = describe_statistic(AGES, PRESENT_AGES, Share(rule=Greater(SENIOR_AGE)))
+
+	assert result is not None
+	result_list = result.tolist()
+	assert result_list == EXPECTED_SENIOR_SHARE
+
+
+def test_describe_statistic_gives_nothing_for_a_share_whose_rule_does_not_apply() -> None:
+	"""
+	Check that a number interval on texts gives None instead of an error.
+
+	.. versionadded:: 0.2.0
+	"""
+	result = describe_statistic(CITIES, PRESENT_CITIES, Share(rule=Between(1, 2)))
 
 	assert result is None
 
