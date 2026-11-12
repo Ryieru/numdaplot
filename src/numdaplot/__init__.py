@@ -36,7 +36,6 @@ from numdaplot.arrays.math_functions.round import Round
 from numdaplot.arrays.math_functions.sine import Sine
 from numdaplot.arrays.math_functions.square_root import SquareRoot
 from numdaplot.arrays.replacement import Replacement
-from numdaplot.arrays.shape import Shape
 from numdaplot.arrays.type_match import TypeMatch
 from numdaplot.data_types.library import Library
 from numdaplot.data_types.type import Type
@@ -181,6 +180,7 @@ from numdaplot.rules.less import Less
 from numdaplot.rules.less_or_equal import LessOrEqual
 from numdaplot.rules.not_equal import NotEqual
 from numdaplot.rules.rule import Rule
+from numdaplot.shapes.shape import Shape
 from numdaplot.statistics.count import Count
 from numdaplot.statistics.count_distinct import CountDistinct
 from numdaplot.statistics.counted_missing import CountedMissing

@@ -21,6 +21,9 @@ EXPECTED_COLUMN_NAMES = ["city", "price"]
 EXPECTED_COLUMN_COUNT = 2
 PRICE_COLUMN_ONLY = ["price"]
 EXPECTED_KEPT_COLUMN_COUNT = 1
+PRICE_THRESHOLD = 100.0
+EXPECTED_SALES_SHAPE = ndp.Shape([2, 2])
+EXPECTED_EXPENSIVE_PRICES_SHAPE = ndp.Shape([1, 1])
 SINGLE_PRICE = [9.5]
 INTEGER_COUNTS = [1, 2]
 DECIMAL_COUNTS = [1.0, 2.0]
@@ -57,6 +60,24 @@ def test_a_table_counts_its_columns_as_they_change() -> None:
 
 	assert sales.column_count == EXPECTED_COLUMN_COUNT
 	assert prices_only.column_count == EXPECTED_KEPT_COLUMN_COUNT
+
+
+def test_a_table_shape_follows_its_rows_and_columns() -> None:
+	"""
+	Check that shape follows the rows kept by filter and the columns kept by choose_columns.
+
+	.. versionadded:: 0.2.0
+	"""
+	frame = pandas.DataFrame({"city": CITY_INDEX, "price": PRICES})
+	sales = ndp.Table.from_pandas(frame)
+	expensive_condition = ndp.Condition(rule=ndp.Greater(PRICE_THRESHOLD), columns=PRICE_COLUMN_ONLY)
+	price_choice = ndp.ColumnChoice(columns=PRICE_COLUMN_ONLY)
+
+	expensive_sales = sales.filter(ndp.Filter(conditions=[expensive_condition]))
+	expensive_prices = expensive_sales.choose_columns(price_choice)
+
+	assert sales.shape == EXPECTED_SALES_SHAPE
+	assert expensive_prices.shape == EXPECTED_EXPENSIVE_PRICES_SHAPE
 
 
 def test_python_objects_of_a_dataframe_get_their_type() -> None:

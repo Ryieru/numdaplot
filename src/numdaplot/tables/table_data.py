@@ -11,6 +11,7 @@ import pandas
 from numdaplot.data_types.type import Type
 from numdaplot.dates.time_zone import TimeZone
 from numdaplot.errors.refused_operation_error import RefusedOperationError
+from numdaplot.shapes.shape import Shape
 from numdaplot.tables.columns.column_names import require_known_columns
 from numdaplot.tables.files.column_names import ColumnNames
 from numdaplot.tables.frames.cleaned_names import clean_frame_names
@@ -77,6 +78,26 @@ class TableData:
 		created_table._frame = frame
 
 		return created_table
+
+	@property
+	def shape(self) -> Shape:
+		"""
+		Number of rows, then number of columns.
+
+		.. versionadded:: 0.2.0
+
+		Examples
+		--------
+		>>> import numdaplot as ndp
+		>>> cities = ndp.Array.from_list(["Pau", "Lyon", "Nice"])
+		>>> prices = ndp.Array.from_list([1.5, 8.0, 3.0])
+		>>> ndp.Table.from_arrays({"city": cities, "price": prices}).shape
+		Shape(dimensions=[3, 2])
+		"""
+		dimensions = [self.row_count, self.column_count]
+		table_shape = Shape(dimensions)
+
+		return table_shape
 
 	@property
 	def row_count(self) -> int:

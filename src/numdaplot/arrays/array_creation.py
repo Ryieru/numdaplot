@@ -22,11 +22,11 @@ from numdaplot.arrays.creation.range_values import compute_range_values
 from numdaplot.arrays.creation.spacing import Spacing
 from numdaplot.arrays.creation.spacing_values import compute_spacing_values
 from numdaplot.arrays.creation.uniform import Uniform
-from numdaplot.arrays.shape import Shape
 from numdaplot.data_types.type import Type
 from numdaplot.positions.range import Range
 from numdaplot.rules.rule_values import ScalarValue
 from numdaplot.settings.argument_types import checked_arguments
+from numdaplot.shapes.shape import Shape
 
 type ListValue = ScalarValue | None
 """

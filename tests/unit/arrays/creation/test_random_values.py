@@ -13,9 +13,9 @@ from numdaplot.arrays.creation.normal import Normal
 from numdaplot.arrays.creation.random_integers import RandomIntegers
 from numdaplot.arrays.creation.random_values import draw_random_values, require_valid_seed
 from numdaplot.arrays.creation.uniform import Uniform
-from numdaplot.arrays.shape import Shape
 from numdaplot.errors.invalid_seed_error import InvalidSeedError
 from numdaplot.rules.bounds import Bounds
+from numdaplot.shapes.shape import Shape
 
 SEED = 42
 NEGATIVE_SEED = -1

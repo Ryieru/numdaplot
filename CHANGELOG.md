@@ -5,6 +5,12 @@ All notable changes to numdaplot are listed in this file.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and numdaplot follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- `Table.shape` gives the number of rows and columns of a table as a `Shape`, like `Array.shape`.
+
 ## [0.1.2] - 2026-11-10
 
 ### Changed

@@ -15,6 +15,7 @@ from numdaplot.data_types.type import Type
 from numdaplot.dates.time_zone import TimeZone
 from numdaplot.errors.column_not_found_error import ColumnNotFoundError
 from numdaplot.errors.refused_operation_error import RefusedOperationError
+from numdaplot.shapes.shape import Shape
 from numdaplot.tables.files.column_names import ColumnNames
 from numdaplot.tables.frames.column import Column
 from numdaplot.tables.table_data import TableData, read_stored_frame
@@ -23,6 +24,10 @@ FRAME = pandas.DataFrame({"city": pandas.Series(["Pau", "Lyon"], dtype="string")
 NO_COLUMN_FRAME = pandas.DataFrame()
 EXPECTED_ROW_COUNT = 2
 EXPECTED_COLUMN_COUNT = 2
+EXPECTED_SHAPE = Shape([2, 2])
+NO_ROW_FRAME = pandas.DataFrame({"price": pandas.Series([], dtype="float64")})
+EXPECTED_NO_ROW_SHAPE = Shape([0, 1])
+EXPECTED_EMPTY_SHAPE = Shape([0, 0])
 EXPECTED_COLUMN_NAMES = ["city", "price"]
 EXPECTED_COLUMN_TYPES = {"city": Type.TEXT, "price": Type.FLOAT64}
 RAW_FRAME = pandas.DataFrame({"count": [1, 2]})
@@ -167,6 +172,39 @@ def test_table_data_create_stores_the_columns_without_copy() -> None:
 	table = TableData._create(FRAME)
 
 	assert table._frame is FRAME
+
+
+def test_table_data_gives_its_rows_then_its_columns_as_shape() -> None:
+	"""
+	Check that the shape holds the number of rows, then the number of columns.
+
+	.. versionadded:: 0.2.0
+	"""
+	table = TableData._create(FRAME)
+
+	assert table.shape == EXPECTED_SHAPE
+
+
+def test_table_data_shape_keeps_the_columns_of_a_table_without_rows() -> None:
+	"""
+	Check that a table with columns and no row has a first dimension of zero.
+
+	.. versionadded:: 0.2.0
+	"""
+	table = TableData._create(NO_ROW_FRAME)
+
+	assert table.shape == EXPECTED_NO_ROW_SHAPE
+
+
+def test_table_data_shape_is_zero_by_zero_without_columns() -> None:
+	"""
+	Check that a table without columns has a shape of zero rows and zero columns.
+
+	.. versionadded:: 0.2.0
+	"""
+	table = TableData._create(NO_COLUMN_FRAME)
+
+	assert table.shape == EXPECTED_EMPTY_SHAPE
 
 
 def test_table_data_counts_its_rows() -> None:

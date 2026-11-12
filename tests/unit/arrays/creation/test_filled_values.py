@@ -7,9 +7,9 @@ Unit tests of build_filled_values.
 import pytest
 
 from numdaplot.arrays.creation.filled_values import build_filled_values
-from numdaplot.arrays.shape import Shape
 from numdaplot.data_types.type import Type
 from numdaplot.errors.value_conversion_error import ValueConversionError
+from numdaplot.shapes.shape import Shape
 
 GRID_SHAPE = Shape([2, 3])
 ZERO = 0
