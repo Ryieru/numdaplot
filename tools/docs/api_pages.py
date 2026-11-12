@@ -137,7 +137,7 @@ MEMBER_SECTIONS = {
 	"Array": (
 		("Creation", ("from_list", "from_numpy", "filled", "from_range", "from_spacing", "from_date_parts", "random")),
 		("Information", ("shape", "dtype")),
-		("Conversion and comparison", ("to_list", "to_value", "to_numpy", "is_equal")),
+		("Conversion and comparison", ("convert", "to_list", "to_value", "to_numpy", "is_equal")),
 		("Selection", ("select", "check", "take", "replace")),
 		("Calculation", ("compute", "apply")),
 		("Layout", ("reshape", "transpose", "flatten", "sort", "unique")),

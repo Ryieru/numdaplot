@@ -6,6 +6,7 @@ Unit tests of the check of the format and the time zone change of a conversion.
 
 import pytest
 
+from numdaplot.conversions.array_conversion import ArrayConversion
 from numdaplot.conversions.boolean_rule import BooleanRule
 from numdaplot.conversions.conversion_checks import (
 	require_booleans_setting,
@@ -51,19 +52,21 @@ TIME_FORMAT_WRITING_DATE = TableConversion(
 )
 EXPECTED_TIME_FORMAT_MESSAGE = (
 	"The format YEAR_MONTH_DAY_TIME has a time, which DATE cannot hold. "
-	"Convert the column to DATETIME first, then to DATE."
+	"Convert the values to DATETIME first, then to DATE."
 )
 EXPECTED_CUSTOM_TIME_MESSAGE = (
-	"The format %d/%m/%Y %H:%M has a time, which DATE cannot hold. Convert the column to DATETIME first, then to DATE."
+	"The format %d/%m/%Y %H:%M has a time, which DATE cannot hold. Convert the values to DATETIME first, then to DATE."
 )
 EXPECTED_WRITING_MESSAGE = (
 	"The format YEAR_MONTH_DAY_TIME has a time, which DATE cannot hold. "
-	"Convert the column to DATETIME first, then to TEXT."
+	"Convert the values to DATETIME first, then to TEXT."
 )
 TIME_FORMAT_ON_DATE_TO_INTEGER = TableConversion(
 	column=CONVERTED_NAME, dtype=Type.INT64, format=DateFormat.YEAR_MONTH_DAY_TIME
 )
 EXPECTED_GENERAL_MESSAGE = "The setting format does not apply to a conversion from DATE to INT64."
+ARRAY_TIME_FORMAT_TO_INTEGER = ArrayConversion(dtype=Type.INT64, format=DateFormat.YEAR_MONTH_DAY_TIME)
+ARRAY_PLAIN_CONVERSION = ArrayConversion(dtype=Type.INT64)
 NONZERO_TO_BOOLEANS = TableConversion(column=CONVERTED_NAME, dtype=Type.BOOL, booleans=BooleanRule.NONZERO_TRUE)
 NONZERO_TO_INTEGERS = TableConversion(column=CONVERTED_NAME, dtype=Type.INT64, booleans=BooleanRule.NONZERO_TRUE)
 PLAIN_TO_BOOLEANS = TableConversion(column=CONVERTED_NAME, dtype=Type.BOOL)
@@ -169,6 +172,28 @@ def test_require_conversion_settings_keeps_the_general_message_when_no_format_ap
 
 	error_text = str(caught_error.value)
 	assert error_text == EXPECTED_GENERAL_MESSAGE
+
+
+def test_require_conversion_settings_checks_the_format_of_an_array_conversion() -> None:
+	"""
+	Check that the settings of an Array, without time zone change, still have their format checked.
+
+	.. versionadded:: 0.2.0
+	"""
+	with pytest.raises(InvalidConversionError) as error_info:
+		require_conversion_settings(Type.DATE, ARRAY_TIME_FORMAT_TO_INTEGER)
+
+	error_text = str(error_info.value)
+	assert error_text == EXPECTED_GENERAL_MESSAGE
+
+
+def test_require_conversion_settings_accepts_an_array_conversion_without_setting() -> None:
+	"""
+	Check that the settings of an Array without format nor boolean rule are accepted.
+
+	.. versionadded:: 0.2.0
+	"""
+	require_conversion_settings(Type.TEXT, ARRAY_PLAIN_CONVERSION)
 
 
 @pytest.mark.parametrize("source_type", [Type.INT64, Type.UINT8, Type.FLOAT32])

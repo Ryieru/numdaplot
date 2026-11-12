@@ -16,7 +16,7 @@ REJECTED_VALUE_MESSAGE = (
 )
 UNREADABLE_DATE_MESSAGE = (
 	"Cannot read the {source_type_name} value {rejected_value!r}{column_text} as {target_type_name} with the format "
-	"{date_format_name}. Give the format of the column with format=, using DateFormat or CustomDateFormat."
+	"{date_format_name}. Give the format of the values with format=, using DateFormat or CustomDateFormat."
 )
 NOT_WHOLE_PART_MESSAGE = (
 	"Cannot use the {source_type_name} value {rejected_value.value!r} as a {rejected_value.part_name}: "
@@ -28,7 +28,7 @@ IMPOSSIBLE_DATE_MESSAGE = (
 )
 UNREADABLE_TIME_MESSAGE = (
 	"Cannot read the {source_type_name} value {rejected_value!r}{column_text} as {target_type_name} with the format "
-	"{date_format_name}. Give the format of the column with format=, using a CustomDateFormat of a time only."
+	"{date_format_name}. Give the format of the values with format=, using a CustomDateFormat of a time only."
 )
 TIME_TYPE_NAME = "TIME"
 COLUMN_TEXT = " of the column {column_name!r}"
@@ -43,6 +43,8 @@ class ValueConversionError(NumdaplotError):
 	format, or date parts that form no date. When the first rejected value is known, the message shows it.
 
 	.. versionadded:: 0.1.0
+	.. versionchanged:: 0.2.0
+		The advice to give a format speaks of the values, for an Array as for a column.
 
 	Parameters
 	----------
@@ -84,7 +86,7 @@ class ValueConversionError(NumdaplotError):
 	... except ndp.ValueConversionError as error:
 	... 	print(error)
 	Cannot read the TEXT value '31/12/2026' of the column 'day' as DATE with the format YEAR_MONTH_DAY.
-	Give the format of the column with format=, using DateFormat or CustomDateFormat.
+	Give the format of the values with format=, using DateFormat or CustomDateFormat.
 	"""
 
 	def __init__(

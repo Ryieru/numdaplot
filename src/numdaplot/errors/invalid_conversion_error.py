@@ -16,7 +16,7 @@ DATE_FORMAT_ON_TIME_MESSAGE = (
 TIME_TYPE_NAME = "TIME"
 TIME_FORMAT_ON_DATE_MESSAGE = (
 	"The format {date_format_name} has a time, which DATE cannot hold. "
-	"Convert the column to DATETIME first, then to {target_type_name}."
+	"Convert the values to DATETIME first, then to {target_type_name}."
 )
 
 
@@ -28,6 +28,8 @@ class InvalidConversionError(NumdaplotError):
 	a ``DATE`` column, or a time zone change given to a conversion from texts.
 
 	.. versionadded:: 0.1.0
+	.. versionchanged:: 0.2.0
+		The advice to convert to ``DATETIME`` first speaks of the values, for an Array as for a column.
 
 	Parameters
 	----------
@@ -69,7 +71,7 @@ class InvalidConversionError(NumdaplotError):
 	... except ndp.InvalidConversionError as error:
 	... 	print(error)
 	The format DAY_MONTH_YEAR_TIME has a time, which DATE cannot hold.
-	Convert the column to DATETIME first, then to DATE.
+	Convert the values to DATETIME first, then to DATE.
 	"""
 
 	def __init__(

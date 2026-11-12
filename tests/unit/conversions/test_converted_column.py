@@ -11,6 +11,7 @@ import numpy
 import pandas
 import pytest
 
+from numdaplot.conversions.array_conversion import ArrayConversion
 from numdaplot.conversions.boolean_rule import BooleanRule
 from numdaplot.conversions.converted_column import (
 	convert_column,
@@ -38,6 +39,7 @@ EXPECTED_BOOLEAN_TEXTS = ["True", pandas.NA]
 CATEGORY_DTYPE_NAME = "category"
 TEXT_INTEGERS = pandas.Series(["1", None, "3"], dtype="string")
 EXPECTED_PARSED_INTEGERS = [1, pandas.NA, 3]
+ARRAY_INTEGER_CONVERSION = ArrayConversion(dtype=Type.INT64)
 TEXT_BOOLEANS = pandas.Series(["TRUE", " false "], dtype="string")
 EXPECTED_PARSED_BOOLEANS = [True, False]
 EXPECTED_TRUE_NUMBER = 1.0
@@ -172,6 +174,18 @@ def test_convert_column_reads_texts_as_integers() -> None:
 	.. versionadded:: 0.1.0
 	"""
 	column = convert_to(TEXT_INTEGERS, Type.INT64)
+
+	values = column.tolist()
+	assert values == EXPECTED_PARSED_INTEGERS
+
+
+def test_convert_column_accepts_an_array_conversion() -> None:
+	"""
+	Check that the settings of an Array, which have no time zone change, convert a column too.
+
+	.. versionadded:: 0.2.0
+	"""
+	column = convert_column(TEXT_INTEGERS, ARRAY_INTEGER_CONVERSION)
 
 	values = column.tolist()
 	assert values == EXPECTED_PARSED_INTEGERS

@@ -16,11 +16,11 @@ TEXT_TYPE_NAME = "TEXT"
 DATE_FORMAT_NAME = "YEAR_MONTH_DAY_TIME"
 EXPECTED_WRITING_MESSAGE = (
 	"The format YEAR_MONTH_DAY_TIME has a time, which DATE cannot hold. "
-	"Convert the column to DATETIME first, then to TEXT."
+	"Convert the values to DATETIME first, then to TEXT."
 )
 EXPECTED_TIME_FORMAT_MESSAGE = (
 	"The format YEAR_MONTH_DAY_TIME has a time, which DATE cannot hold. "
-	"Convert the column to DATETIME first, then to DATE."
+	"Convert the values to DATETIME first, then to DATE."
 )
 EXPECTED_DATE_ON_TIME_MESSAGE = (
 	"The format DAY_MONTH_YEAR has a date, which TIME cannot hold. Give a CustomDateFormat of a time only, "

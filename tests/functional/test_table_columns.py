@@ -21,7 +21,7 @@ EXPECTED_CONVERSION_MESSAGE = (
 )
 SALE_DAY = date(2026, 12, 31)
 EXPECTED_SALE_DAY_TEXT = "31/12/2026 00:00:00"
-THROUGH_DATETIME_HINT = "Convert the column to DATETIME first, then to TEXT"
+THROUGH_DATETIME_HINT = "Convert the values to DATETIME first, then to TEXT"
 TAX_RATE = 1.2
 EXPECTED_TAXED_PRICES = [12.0, 24.0]
 EXPECTED_ADDED_NAMES = ["city", "price", "zip_code", "taxed_price"]

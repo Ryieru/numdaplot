@@ -61,15 +61,15 @@ FIRST_TIME_NAME = "YEAR_MONTH_DAY_TIME"
 CUSTOM_PATTERN_TEXT = "%d %b %Y"
 EXPECTED_DEFAULT_DATE_MESSAGE = (
 	"Cannot read the TEXT value '2026-12-31 14:30' as DATE with the format YEAR_MONTH_DAY. "
-	"Give the format of the column with format=, using DateFormat or CustomDateFormat."
+	"Give the format of the values with format=, using DateFormat or CustomDateFormat."
 )
 EXPECTED_DEFAULT_TIME_MESSAGE = (
 	"Cannot read the TEXT value '31/02/2026' as DATETIME with the format YEAR_MONTH_DAY_TIME. "
-	"Give the format of the column with format=, using DateFormat or CustomDateFormat."
+	"Give the format of the values with format=, using DateFormat or CustomDateFormat."
 )
 EXPECTED_CUSTOM_MESSAGE = (
 	"Cannot read the TEXT value '31/02/2026' as DATE with the format %d %b %Y. "
-	"Give the format of the column with format=, using DateFormat or CustomDateFormat."
+	"Give the format of the values with format=, using DateFormat or CustomDateFormat."
 )
 
 

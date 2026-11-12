@@ -4,6 +4,7 @@ Checks of the settings of a conversion against the types it converts between.
 .. versionadded:: 0.2.0
 """
 
+from numdaplot.conversions.conversion_settings import ConversionSettings
 from numdaplot.conversions.date_conversion import find_format_name, has_date, has_time
 from numdaplot.conversions.table_conversion import TableConversion
 from numdaplot.data_types.type import Type
@@ -19,11 +20,15 @@ TIMEZONE_SETTING = "timezone"
 BOOLEANS_SETTING = "booleans"
 
 
-def require_conversion_settings(source_type: Type, conversion: TableConversion) -> None:
+def require_conversion_settings(source_type: Type, conversion: ConversionSettings) -> None:
 	"""
 	Check that the format, the time zone change and the boolean rule of a conversion apply to its types.
 
+	Only the conversion of a Table column has a time zone change.
+
 	.. versionadded:: 0.1.0
+	.. versionchanged:: 0.2.0
+		Accepts an ``ArrayConversion``, which has no time zone change.
 
 	Parameters
 	----------
@@ -49,9 +54,11 @@ def require_conversion_settings(source_type: Type, conversion: TableConversion) 
 	... except ndp.InvalidConversionError as error:
 	... 	print(error)
 	The format DAY_MONTH_YEAR_TIME has a time, which DATE cannot hold.
-	Convert the column to DATETIME first, then to DATE.
+	Convert the values to DATETIME first, then to DATE.
 	"""
-	require_time_zone_setting(source_type, conversion)
+	if isinstance(conversion, TableConversion):
+		require_time_zone_setting(source_type, conversion)
+
 	require_format_setting(source_type, conversion)
 	require_booleans_setting(source_type, conversion)
 
@@ -95,11 +102,13 @@ def require_time_zone_setting(source_type: Type, conversion: TableConversion) ->
 		raise InvalidConversionError(TIMEZONE_SETTING, source_type.name, target_type.name)
 
 
-def require_format_setting(source_type: Type, conversion: TableConversion) -> None:
+def require_format_setting(source_type: Type, conversion: ConversionSettings) -> None:
 	"""
 	Check that a date format, when given, is given to a conversion of texts to dates or of dates to texts.
 
 	.. versionadded:: 0.1.0
+	.. versionchanged:: 0.2.0
+		Accepts an ``ArrayConversion``.
 
 	Parameters
 	----------
@@ -238,11 +247,13 @@ def require_brackets_setting(source_type: Type, target_type: Type) -> None:
 		raise InvalidConversionError(FORMAT_SETTING, source_type.name, target_type.name)
 
 
-def require_booleans_setting(source_type: Type, conversion: TableConversion) -> None:
+def require_booleans_setting(source_type: Type, conversion: ConversionSettings) -> None:
 	"""
 	Check that a boolean rule, when given, is given to a conversion of numbers to booleans.
 
 	.. versionadded:: 0.1.0
+	.. versionchanged:: 0.2.0
+		Accepts an ``ArrayConversion``.
 
 	Parameters
 	----------

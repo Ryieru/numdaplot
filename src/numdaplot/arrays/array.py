@@ -17,11 +17,13 @@ from numdaplot.arrays.array_logic import ArrayLogic
 from numdaplot.arrays.array_reflected_arithmetic import ArrayReflectedArithmetic
 from numdaplot.arrays.array_refusals import ArrayRefusals
 from numdaplot.arrays.array_selection import ArraySelection
+from numdaplot.arrays.array_type_change import ArrayTypeChange
 
 
 class Array(
 	ArrayCreation,
 	ArrayExchange,
+	ArrayTypeChange,
 	ArraySelection,
 	ArrayCalculation,
 	ArrayLayout,
@@ -42,6 +44,7 @@ class Array(
 	- Compute with ``compute`` and ``apply``.
 	- Rearrange it with ``reshape``, ``transpose``, ``flatten``, ``sort`` and ``unique``.
 	- Read it with ``shape``, ``dtype``, ``to_list``, ``to_value``, ``to_numpy`` and ``is_equal``.
+	- Change the type of its values with ``convert``.
 
 	Calling ``ndp.Array(...)``, comparisons, brackets, ``for``, ``in``, ``len``, ``bool`` and ``@`` are refused
 	with ``RefusedOperationError``, which names the method to use instead.

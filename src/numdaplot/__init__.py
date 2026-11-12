@@ -37,6 +37,7 @@ from numdaplot.arrays.math_functions.sine import Sine
 from numdaplot.arrays.math_functions.square_root import SquareRoot
 from numdaplot.arrays.replacement import Replacement
 from numdaplot.arrays.type_match import TypeMatch
+from numdaplot.conversions.array_conversion import ArrayConversion
 from numdaplot.conversions.boolean_rule import BooleanRule
 from numdaplot.conversions.table_conversion import TableConversion
 from numdaplot.data_types.library import Library
@@ -251,6 +252,7 @@ __all__ = [
 	"Absolute",
 	"Aggregation",
 	"Array",
+	"ArrayConversion",
 	"ArraySorting",
 	"Axis",
 	"BarChart",

@@ -19,7 +19,7 @@ REJECTED_TEXT = "31/12/2026"
 DATE_FORMAT_NAME = "YEAR_MONTH_DAY_TIME"
 EXPECTED_UNREADABLE_DATE_MESSAGE = (
 	"Cannot read the TEXT value '31/12/2026' as DATETIME with the format YEAR_MONTH_DAY_TIME. "
-	"Give the format of the column with format=, using DateFormat or CustomDateFormat."
+	"Give the format of the values with format=, using DateFormat or CustomDateFormat."
 )
 
 HALF_DAY = RejectedDatePart("day", 3.5)
@@ -27,7 +27,7 @@ FEBRUARY_31 = RejectedDate(2025, 2, 31)
 EXPECTED_HALF_DAY_MESSAGE = "Cannot use the FLOAT64 value 3.5 as a day: date parts must be whole numbers."
 EXPECTED_FEBRUARY_31_MESSAGE = "Cannot build a DATE from the year 2025, the month 2 and the day 31."
 EXPECTED_UNREADABLE_TIME_MESSAGE = (
-	"Cannot read the TEXT value '25:00' as TIME with the format HH:MM:SS. Give the format of the column with format=, "
+	"Cannot read the TEXT value '25:00' as TIME with the format HH:MM:SS. Give the format of the values with format=, "
 	"using a CustomDateFormat of a time only."
 )
 
@@ -171,6 +171,8 @@ def test_name_column_keeps_the_date_format_advice() -> None:
 	Check the message of an unreadable date.
 
 	.. versionadded:: 0.1.0
+	.. versionchanged:: 0.2.0
+		Checks the advice speaking of the values.
 	"""
 	error = ValueConversionError("TEXT", "DATE", "x", "YEAR_MONTH_DAY")
 
@@ -180,7 +182,7 @@ def test_name_column_keeps_the_date_format_advice() -> None:
 	assert error_text.startswith(
 		"Cannot read the TEXT value 'x' of the column 'day' as DATE with the format YEAR_MONTH_DAY."
 	)
-	assert "Give the format of the column" in error_text
+	assert "Give the format of the values" in error_text
 
 
 def test_name_column_keeps_the_first_name() -> None:

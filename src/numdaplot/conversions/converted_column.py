@@ -9,6 +9,7 @@ import pandas
 from numdaplot.conversions.boolean_conversion import convert_booleans_to_numbers, convert_numbers_to_booleans
 from numdaplot.conversions.boolean_rule import BooleanRule
 from numdaplot.conversions.conversion_checks import WRITTEN_TYPES, require_conversion_settings
+from numdaplot.conversions.conversion_settings import ConversionSettings
 from numdaplot.conversions.date_conversion import (
 	convert_moments,
 	parse_dates,
@@ -42,11 +43,13 @@ BOOLEANS_TO_NUMBERS = (ValueFamily.BOOL, ValueFamily.NUMBER)
 NUMBERS_TO_BOOLEANS = (ValueFamily.NUMBER, ValueFamily.BOOL)
 
 
-def convert_column(column: Column, conversion: TableConversion) -> Column:
+def convert_column(column: Column, conversion: ConversionSettings) -> Column:
 	"""
 	Return a Table column converted to another type, missing values staying missing.
 
 	.. versionadded:: 0.1.0
+	.. versionchanged:: 0.2.0
+		Accepts an ``ArrayConversion``, which converts the values of an Array placed in a column.
 
 	Parameters
 	----------
@@ -89,8 +92,9 @@ def convert_column(column: Column, conversion: TableConversion) -> Column:
 	"""
 	source_type = find_column_type(column)
 	require_conversion_settings(source_type, conversion)
-	if conversion.timezone is not None:
-		zone_column = change_time_zone(column, conversion.timezone)
+	zone_change = conversion.timezone if isinstance(conversion, TableConversion) else None
+	if zone_change is not None:
+		zone_column = change_time_zone(column, zone_change)
 		return zone_column
 
 	if isinstance(conversion.format, Brackets):
@@ -244,11 +248,13 @@ def convert_times(
 	return None
 
 
-def convert_plain_column(column: Column, source_type: Type, conversion: TableConversion) -> Column:
+def convert_plain_column(column: Column, source_type: Type, conversion: ConversionSettings) -> Column:
 	"""
 	Return a column converted between numbers, booleans, texts and categories.
 
 	.. versionadded:: 0.1.0
+	.. versionchanged:: 0.2.0
+		Accepts an ``ArrayConversion``.
 
 	Parameters
 	----------
@@ -336,11 +342,13 @@ def write_plain_column(column: Column, source_type: Type, target_type: Type) -> 
 	return text_column
 
 
-def read_plain_column(column: Column, source_type: Type, conversion: TableConversion) -> Column:
+def read_plain_column(column: Column, source_type: Type, conversion: ConversionSettings) -> Column:
 	"""
 	Return a column of numbers, booleans, texts or categories converted to numbers or booleans.
 
 	.. versionadded:: 0.1.0
+	.. versionchanged:: 0.2.0
+		Accepts an ``ArrayConversion``.
 
 	Parameters
 	----------

@@ -36,7 +36,7 @@ EXPECTED_COMPACT_TIMES = [time(15, 35), time(8, 5)]
 WRONG_HOURS = ["15:35", "25:00"]
 EXPECTED_WRONG_HOUR_MESSAGE = (
 	"Cannot read the TEXT value '25:00' of the column 'hrmn' as TIME with the format HH:MM:SS. Give the format of "
-	"the column with format=, using a CustomDateFormat of a time only."
+	"the values with format=, using a CustomDateFormat of a time only."
 )
 EXPECTED_HOUR_TEXTS = ["15h35", "08h00", None, "23h59"]
 BAAC_DAYS = [14, 1]
