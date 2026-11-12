@@ -38,13 +38,15 @@ def test_a_pie_plot_shares_out_the_values_with_their_labels_and_percentages() ->
 
 	plot = ndp.Plot.pie(TRAFFIC, CHART, style)
 
-	axes = plot.to_matplotlib().axes[0]
+	drawn_figure = plot.to_matplotlib()
+	axes = drawn_figure.axes[0]
 	slices = [patch for patch in axes.patches if isinstance(patch, Wedge)]
 	angles = [slice_.theta2 - slice_.theta1 for slice_ in slices]
 	texts = [text.get_text() for text in axes.texts]
 	assert angles == pytest.approx(EXPECTED_ANGLES)
 	assert texts == EXPECTED_TEXTS
-	assert axes.get_title() == "Visits per device"
+	plot_title = drawn_figure.get_suptitle()
+	assert plot_title == "Visits per device"
 	assert axes.get_legend() is None
 
 

@@ -61,11 +61,12 @@ def test_to_matplotlib_gives_a_new_figure_each_time() -> None:
 	"""
 	plot = build_plot()
 	first_figure = plot.to_matplotlib()
-	first_figure.axes[0].set_title(OLD_CONTENT)
+	first_figure.suptitle(OLD_CONTENT)
 
 	second_figure = plot.to_matplotlib()
 
-	assert second_figure.axes[0].get_title() == "Prices"
+	plot_title = second_figure.get_suptitle()
+	assert plot_title == "Prices"
 
 
 class SaveRecorder:
@@ -226,5 +227,6 @@ def test_show_hands_the_drawing_of_the_plot_to_the_display(monkeypatch: pytest.M
 	shown_drawing = shown_drawings[0]
 	shown_figure = build_figure(shown_drawing)
 	assert shown_drawing.size_inches == DEFAULT_INCHES
-	assert shown_figure.axes[0].get_title() == "Prices"
+	plot_title = shown_figure.get_suptitle()
+	assert plot_title == "Prices"
 	assert shown_objects == [ShownObject.PLOT]

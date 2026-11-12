@@ -29,7 +29,8 @@ def test_plot_line_uses_the_default_style_when_omitted() -> None:
 
 	figure = plot.to_matplotlib()
 	inches = figure.get_size_inches().tolist()
-	assert figure.axes[0].get_title() == "price by day"
+	plot_title = figure.get_suptitle()
+	assert plot_title == "price by day"
 	assert inches == [6.4, 4.8]
 
 

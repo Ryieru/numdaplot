@@ -113,7 +113,7 @@ class PlotOutput(PlotData):
 		>>> prices = ndp.Array.from_list([12.0, 15.5, 14.0])
 		>>> style = ndp.PlotStyle(title="Prices")
 		>>> figure = ndp.Plot.line(prices, style=style).to_matplotlib()
-		>>> figure.axes[0].get_title()
+		>>> figure.get_suptitle()
 		'Prices'
 		>>> figure.axes[0].lines[0].get_ydata()
 		array([12. , 15.5, 14. ])

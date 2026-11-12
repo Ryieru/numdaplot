@@ -26,11 +26,15 @@ class PlotStyle:
 
 	.. versionadded:: 0.1.0
 
+	.. versionchanged:: 0.2.0
+		The title is centered above the whole Plot, and goes on several lines when it is too wide.
+
 	Parameters
 	----------
 	title
-		The title above the axes: when omitted, the ``y`` label by the ``x`` label such as ``sales by month``, and for a
-		map of missing values ``Map of missing values``. An empty text draws no title.
+		The title, centered above the whole Plot and broken into lines when it is too wide: when omitted, the ``y``
+		label by the ``x`` label such as ``sales by month``, and for a map of missing values ``Map of missing values``.
+		An empty text draws no title.
 	x_label
 		The label of the axis of the ``x`` values: when omitted, the name of the ``x`` column, else ``Row``, or
 		``Column`` for a box or a heatmap without group. An empty text draws no label.

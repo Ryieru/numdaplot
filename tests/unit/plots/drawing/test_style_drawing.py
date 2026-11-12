@@ -40,11 +40,13 @@ def test_apply_style_writes_the_y_label_by_the_x_label_by_default() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	axes = Figure().add_subplot()
+	figure = Figure()
+	axes = figure.add_subplot()
 
 	apply_style(PlotAxes(axes, None, None), LINE_CHART, ndp.PlotStyle())
 
-	assert axes.get_title() == "price by day"
+	plot_title = figure.get_suptitle()
+	assert plot_title == "price by day"
 
 
 def test_write_axis_labels_puts_the_x_label_on_the_vertical_axis_for_horizontal_bars() -> None:

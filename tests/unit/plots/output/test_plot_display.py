@@ -304,7 +304,9 @@ def test_show_drawing_displays_an_image_in_a_notebook(monkeypatch: pytest.Monkey
 	show_drawing(drawing, ShownObject.PLOT)
 
 	shown_figure = notebook_display.calls[0][0]
-	assert shown_figure.axes[0].get_title() == "Prices"
+	shown_axes = shown_figure.axes[0]
+	axes_title = shown_axes.get_title()
+	assert axes_title == TITLE
 
 
 def test_show_drawing_in_window_closes_the_figure_once_shown(monkeypatch: pytest.MonkeyPatch) -> None:

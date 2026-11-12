@@ -40,6 +40,8 @@ and numdaplot follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
   first ten instead of starting again. After 20, they start again with a `ReadabilityWarning`.
 - `LegendPosition.BEST` places the legend past the axes on the right when it would hide a value inside them, such as a
   point, a part of a line or a bar.
+- The title of a Plot is centered above the whole Plot, its legend included, and goes on several lines when it is
+  too wide. It is the title of the matplotlib figure, or subfigure in a `Figure`, given by `to_matplotlib`.
 - The `DuplicateColumnError` of an `Aggregation` giving two results the same name advises a `result_name` for each
   calculation.
 - The documentation lists every method and operator of `Array`, `Table` and `Plot`, `Table.pivot_table` and

@@ -21,6 +21,7 @@ from numdaplot.plots.drawing.chart_texts import choose_label, choose_title
 from numdaplot.plots.drawing.drawn_chart import DrawnChart
 from numdaplot.plots.drawing.grid_axes import GridAxes
 from numdaplot.plots.drawing.plot_axes import PlotAxes
+from numdaplot.plots.drawing.plot_title import write_title
 from numdaplot.plots.drawing.tick_rotation import rotate_x_labels, rotate_y_labels
 from numdaplot.plots.style.grid_lines import GridLines
 from numdaplot.plots.style.legend_position import LegendPosition
@@ -58,6 +59,9 @@ def apply_style(plot_axes: PlotAxes, drawn_chart: DrawnChart, style: PlotStyle) 
 
 	.. versionadded:: 0.1.0
 
+	.. versionchanged:: 0.2.0
+		The title is centered on the whole area of the Plot, and goes on several lines when it is too wide.
+
 	Parameters
 	----------
 	plot_axes
@@ -75,15 +79,16 @@ def apply_style(plot_axes: PlotAxes, drawn_chart: DrawnChart, style: PlotStyle) 
 	>>> from numdaplot.plots.drawing.grid_axes import GridAxes
 	>>> from numdaplot.plots.drawing.plot_axes import PlotAxes
 	>>> from numdaplot.plots.drawing.style_drawing import apply_style
-	>>> axes = Figure().add_subplot()
+	>>> figure = Figure()
+	>>> axes = figure.add_subplot()
 	>>> drawn_chart = DrawnChart("day", "price", False, GridAxes.BOTH, None)
 	>>> apply_style(PlotAxes(axes, None, None), drawn_chart, ndp.PlotStyle(title="Sales"))
-	>>> axes.get_title(), axes.get_xlabel(), axes.get_ylabel()
+	>>> figure.get_suptitle(), axes.get_xlabel(), axes.get_ylabel()
 	('Sales', 'day', 'price')
 	"""
 	axes = plot_axes.left
 	title = choose_title(drawn_chart, style)
-	axes.set_title(title)
+	write_title(axes, title)
 	write_axis_labels(axes, drawn_chart, style)
 	write_right_label(plot_axes, style)
 	rotate_x_labels(axes, drawn_chart, style.x_tick_rotation)

@@ -29,7 +29,7 @@ def test_draw_figure_draws_each_plot_on_its_cells() -> None:
 	draw_figure(figure, LAYOUT, placements, None)
 
 	subfigure_count = len(figure.subfigs)
-	first_title = figure.subfigs[0].axes[0].get_title()
+	first_title = figure.subfigs[0].get_suptitle()
 	assert subfigure_count == 2
 	assert first_title == "Prices"
 
@@ -44,7 +44,8 @@ def test_draw_figure_writes_the_title() -> None:
 
 	draw_figure(figure, LAYOUT, [], "Shop")
 
-	assert figure.get_suptitle() == "Shop"
+	plot_title = figure.get_suptitle()
+	assert plot_title == "Shop"
 
 
 def test_draw_figure_leaves_an_empty_figure_blank() -> None:
@@ -58,7 +59,8 @@ def test_draw_figure_leaves_an_empty_figure_blank() -> None:
 	draw_figure(figure, LAYOUT, [], None)
 
 	assert figure.axes == []
-	assert figure.get_suptitle() == ""
+	plot_title = figure.get_suptitle()
+	assert plot_title == ""
 
 
 def test_choose_figure_size_gives_each_cell_its_size() -> None:

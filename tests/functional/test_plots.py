@@ -76,7 +76,8 @@ def test_a_line_plot_of_a_table_draws_each_column_with_the_style() -> None:
 	chart = ndp.LineChart(x="day", y=["price", "cost"])
 	plot = ndp.Plot.line(SALES, chart, STYLE)
 
-	axes = plot.to_matplotlib().axes[0]
+	drawn_figure = plot.to_matplotlib()
+	axes = drawn_figure.axes[0]
 
 	legend = axes.get_legend()
 	assert legend is not None
@@ -84,7 +85,10 @@ def test_a_line_plot_of_a_table_draws_each_column_with_the_style() -> None:
 	line_labels = [line.get_label() for line in axes.lines]
 	assert line_labels == ["price", "cost"]
 	assert legend_texts == ["price", "cost"]
-	assert (axes.get_title(), axes.get_xlabel(), axes.get_ylabel()) == ("Sales", "Day", "Euros")
+	plot_title = drawn_figure.get_suptitle()
+	x_label = axes.get_xlabel()
+	y_label = axes.get_ylabel()
+	assert (plot_title, x_label, y_label) == ("Sales", "Day", "Euros")
 
 
 def test_a_line_plot_breaks_its_line_at_a_missing_value() -> None:
@@ -422,3 +426,26 @@ def test_a_date_axis_does_not_name_a_month_past_the_values() -> None:
 	corner_text = corner_label.get_text()
 	assert last_tick_text == "Apr"
 	assert corner_text == "2019-Mar"
+
+
+def test_a_long_title_stays_whole_in_the_image() -> None:
+	"""
+	Check that a long title over a legend placed past the axes stays inside the image.
+
+	.. versionadded:: 0.2.0
+	"""
+	days = ndp.Array.from_list([1, 2, 3])
+	prices = ndp.Array.from_list([12.0, 15.5, 14.0])
+	costs = ndp.Array.from_list([8.0, 9.5, 9.0])
+	sales = ndp.Table.from_arrays({"day": days, "price": prices, "cost": costs})
+	title = "Missing ratio of the diabetics and of the non diabetics, for the ten largest columns"
+	style = ndp.PlotStyle(title=title, legend=ndp.LegendPosition.OUTSIDE_RIGHT)
+	plot = ndp.Plot.bar(sales, ndp.BarChart(x="day", y=["price", "cost"]), style)
+
+	figure = plot.to_matplotlib()
+
+	figure.draw_without_rendering()
+	title_texts = [text for text in figure.texts if text.get_text() != ""]
+	title_box = title_texts[0].get_window_extent()
+	assert title_box.x0 >= 0
+	assert title_box.x1 <= figure.bbox.width

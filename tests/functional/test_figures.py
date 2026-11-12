@@ -54,9 +54,10 @@ def test_a_figure_draws_each_plot_with_its_style_in_its_cells() -> None:
 
 	matplotlib_figure = figure.to_matplotlib()
 
-	plot_titles = [subfigure.axes[0].get_title() for subfigure in matplotlib_figure.subfigs]
+	plot_titles = [subfigure.get_suptitle() for subfigure in matplotlib_figure.subfigs]
 	assert plot_titles == ["Line", "Bars", "Box"]
-	assert matplotlib_figure.get_suptitle() == "Prices"
+	plot_title = matplotlib_figure.get_suptitle()
+	assert plot_title == "Prices"
 
 
 def test_a_wide_plot_spans_the_cells_it_covers() -> None:

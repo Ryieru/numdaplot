@@ -21,8 +21,7 @@ GRID_COLOR = "#e3e3e3"
 THEME = dict[str, Any](
 	{
 		"font.size": 11,
-		"axes.titlesize": 13,
-		"axes.titlepad": 12,
+		"figure.titlesize": 13,
 		"axes.labelsize": 11,
 		"axes.labelcolor": "#333333",
 		"axes.edgecolor": "#555555",

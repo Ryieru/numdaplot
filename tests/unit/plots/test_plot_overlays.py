@@ -147,8 +147,9 @@ def test_add_line_keeps_the_style_of_the_plot() -> None:
 
 	both = plot.add_line(SHOP, PRICE_LINE)
 
-	both_axes = both.to_matplotlib().axes[0]
-	assert both_axes.get_title() == "Shop"
+	drawn_figure = both.to_matplotlib()
+	plot_title = drawn_figure.get_suptitle()
+	assert plot_title == "Shop"
 
 
 def test_add_line_without_chart_draws_the_lines_of_an_array() -> None:

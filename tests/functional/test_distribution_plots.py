@@ -40,13 +40,15 @@ def test_a_histogram_counts_the_values_of_each_bin_of_the_given_width() -> None:
 
 	plot = ndp.Plot.histogram(PRICES, chart, STYLE)
 
-	axes = plot.to_matplotlib().axes[0]
+	drawn_figure = plot.to_matplotlib()
+	axes = drawn_figure.axes[0]
 	bars = [patch for patch in axes.patches if isinstance(patch, Rectangle)]
 	heights = [float(bar.get_height()) for bar in bars]
 	first_edge = float(bars[0].get_x())
 	assert heights == EXPECTED_YEAR_COUNTS
 	assert first_edge == 5.0
-	assert axes.get_title() == "Prices"
+	plot_title = drawn_figure.get_suptitle()
+	assert plot_title == "Prices"
 	assert axes.get_xlabel() == "Euros"
 	assert axes.get_ylabel() == "Count"
 

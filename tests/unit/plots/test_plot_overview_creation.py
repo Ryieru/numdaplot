@@ -26,7 +26,8 @@ def test_plot_heatmap_draws_with_the_default_style() -> None:
 	plot = ndp.Plot.heatmap(GRID, ndp.HeatmapChart())
 
 	figure = plot.to_matplotlib()
-	assert figure.axes[0].get_title() == "Row by Column"
+	plot_title = figure.get_suptitle()
+	assert plot_title == "Row by Column"
 
 
 def test_plot_missing_by_column_rejects_an_array() -> None:

@@ -155,7 +155,7 @@ def test_the_default_title_and_labels_take_the_shown_names(plot: ndp.Plot, expec
 	figure = plot.to_matplotlib()
 
 	axes = figure.axes[0]
-	shown_texts = (axes.get_title(), axes.get_xlabel(), axes.get_ylabel())
+	shown_texts = (figure.get_suptitle(), axes.get_xlabel(), axes.get_ylabel())
 	assert shown_texts == expected
 
 
@@ -186,8 +186,7 @@ def test_a_given_title_keeps_its_text() -> None:
 
 	figure = plot.to_matplotlib()
 
-	axes = figure.axes[0]
-	title = axes.get_title()
+	title = figure.get_suptitle()
 	assert title == CHOSEN_TITLE
 
 

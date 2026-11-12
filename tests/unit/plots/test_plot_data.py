@@ -57,7 +57,8 @@ def test_create_from_layer_uses_the_default_style_without_style() -> None:
 	plot = Plot._create_from_layer(LAYER, None)
 
 	figure = plot.to_matplotlib()
-	assert figure.axes[0].get_title() == "Value by Row"
+	plot_title = figure.get_suptitle()
+	assert plot_title == "Value by Row"
 
 
 def test_create_from_layer_uses_the_given_style() -> None:
@@ -69,7 +70,8 @@ def test_create_from_layer_uses_the_given_style() -> None:
 	plot = Plot._create_from_layer(LAYER, STYLE)
 
 	figure = plot.to_matplotlib()
-	assert figure.axes[0].get_title() == "Prices"
+	plot_title = figure.get_suptitle()
+	assert plot_title == "Prices"
 
 
 def test_create_rejects_a_column_shown_under_the_name_of_another() -> None:

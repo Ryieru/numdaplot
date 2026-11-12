@@ -64,9 +64,10 @@ def test_a_plot_has_a_title_and_axis_labels_by_default(plot: ndp.Plot, expected:
 	expected
 		The title, the label of the horizontal axis and the label of the vertical axis.
 	"""
-	axes = plot.to_matplotlib().axes[0]
+	drawn_figure = plot.to_matplotlib()
+	axes = drawn_figure.axes[0]
 
-	shown_texts = (axes.get_title(), axes.get_xlabel(), axes.get_ylabel())
+	shown_texts = (drawn_figure.get_suptitle(), axes.get_xlabel(), axes.get_ylabel())
 	assert shown_texts == expected
 
 
@@ -78,9 +79,11 @@ def test_a_pie_takes_its_title_from_its_columns() -> None:
 	"""
 	chart = ndp.PieChart(labels="month", values="cost")
 
-	axes = ndp.Plot.pie(COMPLETE_SHOP, chart).to_matplotlib().axes[0]
+	drawn_figure = ndp.Plot.pie(COMPLETE_SHOP, chart).to_matplotlib()
+	axes = drawn_figure.axes[0]
 
-	assert axes.get_title() == "cost by month"
+	plot_title = drawn_figure.get_suptitle()
+	assert plot_title == "cost by month"
 	assert axes.get_xlabel() == REMOVED_TEXT
 
 
@@ -92,9 +95,10 @@ def test_an_empty_text_removes_the_default_title_and_labels() -> None:
 	"""
 	style = ndp.PlotStyle(title=REMOVED_TEXT, x_label=REMOVED_TEXT, y_label=REMOVED_TEXT)
 
-	axes = ndp.Plot.line(SHOP, ONE_LINE, style).to_matplotlib().axes[0]
+	drawn_figure = ndp.Plot.line(SHOP, ONE_LINE, style).to_matplotlib()
+	axes = drawn_figure.axes[0]
 
-	shown_texts = (axes.get_title(), axes.get_xlabel(), axes.get_ylabel())
+	shown_texts = (drawn_figure.get_suptitle(), axes.get_xlabel(), axes.get_ylabel())
 	assert shown_texts == (REMOVED_TEXT, REMOVED_TEXT, REMOVED_TEXT)
 
 
@@ -106,9 +110,10 @@ def test_a_chosen_title_replaces_the_default_one() -> None:
 	"""
 	style = ndp.PlotStyle(title=CHOSEN_TITLE)
 
-	axes = ndp.Plot.line(SHOP, ONE_LINE, style).to_matplotlib().axes[0]
+	drawn_figure = ndp.Plot.line(SHOP, ONE_LINE, style).to_matplotlib()
 
-	assert axes.get_title() == CHOSEN_TITLE
+	plot_title = drawn_figure.get_suptitle()
+	assert plot_title == CHOSEN_TITLE
 
 
 def test_the_default_title_uses_a_chosen_label() -> None:
@@ -119,9 +124,10 @@ def test_the_default_title_uses_a_chosen_label() -> None:
 	"""
 	style = ndp.PlotStyle(x_label=CHOSEN_X_LABEL)
 
-	axes = ndp.Plot.line(SHOP, ONE_LINE, style).to_matplotlib().axes[0]
+	drawn_figure = ndp.Plot.line(SHOP, ONE_LINE, style).to_matplotlib()
 
-	assert axes.get_title() == f"sales by {CHOSEN_X_LABEL}"
+	plot_title = drawn_figure.get_suptitle()
+	assert plot_title == f"sales by {CHOSEN_X_LABEL}"
 
 
 def test_the_default_title_keeps_the_name_of_a_removed_label() -> None:
@@ -132,9 +138,11 @@ def test_the_default_title_keeps_the_name_of_a_removed_label() -> None:
 	"""
 	style = ndp.PlotStyle(x_label=REMOVED_TEXT)
 
-	axes = ndp.Plot.line(SHOP, ONE_LINE, style).to_matplotlib().axes[0]
+	drawn_figure = ndp.Plot.line(SHOP, ONE_LINE, style).to_matplotlib()
+	axes = drawn_figure.axes[0]
 
-	assert axes.get_title() == "sales by month"
+	plot_title = drawn_figure.get_suptitle()
+	assert plot_title == "sales by month"
 	assert axes.get_xlabel() == REMOVED_TEXT
 
 
@@ -148,8 +156,10 @@ def test_an_added_chart_keeps_the_title_of_the_first_one() -> None:
 
 	both = plot.add_line(SHOP, ndp.LineChart(x="month", y=["cost"]))
 
-	axes = both.to_matplotlib().axes[0]
-	assert axes.get_title() == "sales by month"
+	drawn_figure = both.to_matplotlib()
+	axes = drawn_figure.axes[0]
+	plot_title = drawn_figure.get_suptitle()
+	assert plot_title == "sales by month"
 	assert axes.get_ylabel() == "sales"
 
 
@@ -168,6 +178,7 @@ def test_each_plot_of_a_figure_keeps_its_default_title() -> None:
 
 	matplotlib_figure = figure.to_matplotlib()
 
-	titles = [subfigure.axes[0].get_title() for subfigure in matplotlib_figure.subfigs]
+	titles = [subfigure.get_suptitle() for subfigure in matplotlib_figure.subfigs]
 	assert titles == ["sales by month", "Value by Row"]
-	assert matplotlib_figure.get_suptitle() == REMOVED_TEXT
+	plot_title = matplotlib_figure.get_suptitle()
+	assert plot_title == REMOVED_TEXT

@@ -58,7 +58,8 @@ def test_plot_histogram_draws_with_the_default_style() -> None:
 	plot = ndp.Plot.histogram(SALES, ndp.HistogramChart(columns=["price"]))
 
 	figure = plot.to_matplotlib()
-	assert figure.axes[0].get_title() == "Count by price"
+	plot_title = figure.get_suptitle()
+	assert plot_title == "Count by price"
 
 
 def test_plot_box_rejects_group_by_for_an_array() -> None:
