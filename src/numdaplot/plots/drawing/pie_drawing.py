@@ -20,12 +20,14 @@ from numdaplot.plots.chart_layer import ChartLayer
 from numdaplot.plots.charts.percentages import Percentages
 from numdaplot.plots.charts.pie_chart import PieChart
 from numdaplot.plots.data.chart_values import ChartValues
+from numdaplot.plots.drawing.colored_parts import ColoredParts
 from numdaplot.plots.drawing.drawn_chart import DrawnChart
 from numdaplot.plots.drawing.grid_axes import GridAxes
 from numdaplot.plots.drawing.plot_theme import BACKGROUND_COLOR
 from numdaplot.plots.drawing.series_colors import choose_series_colors
 from numdaplot.plots.drawing.text_contrast import choose_text_color
 
+CHART_NAME = "PieChart"
 # matplotlib measures angles counterclockwise from the right, so 90 degrees is the top of the disc.
 TOP_ANGLE = 90.0
 SLICE_EDGE_WIDTH = 1.5
@@ -81,7 +83,7 @@ def draw_pie_chart(axes: Axes, layer: ChartLayer) -> DrawnChart:
 	labels = [str(label) for label in values.positions.values]
 	numbers = values.series[0].values
 	slice_count = len(labels)
-	color_codes = choose_series_colors(chart.colors, slice_count)
+	color_codes = choose_series_colors(chart.colors, slice_count, CHART_NAME, ColoredParts.SLICES)
 	slice_style = {"edgecolor": BACKGROUND_COLOR, "linewidth": SLICE_EDGE_WIDTH}
 	axes.pie(
 		numbers,

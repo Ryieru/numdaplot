@@ -15,6 +15,7 @@ from numdaplot.plots.chart_layer import ChartLayer
 from numdaplot.plots.charts.line_chart import LineChart
 from numdaplot.plots.charts.line_type import LineType
 from numdaplot.plots.data.chart_values import ChartValues
+from numdaplot.plots.drawing.colored_parts import ColoredParts
 from numdaplot.plots.drawing.default_labels import find_position_label
 from numdaplot.plots.drawing.drawn_chart import DrawnChart
 from numdaplot.plots.drawing.grid_axes import GridAxes
@@ -22,6 +23,7 @@ from numdaplot.plots.drawing.marker_codes import MARKER_CODES
 from numdaplot.plots.drawing.position_axis import place_positions
 from numdaplot.plots.drawing.series_colors import choose_series_colors
 
+CHART_NAME = "LineChart"
 LINE_STYLES = {
 	LineType.SOLID: "-",
 	LineType.DASHED: "--",
@@ -69,7 +71,7 @@ def draw_line_chart(axes: Axes, layer: ChartLayer) -> DrawnChart:
 	chart = cast(LineChart, layer.chart)
 	values = cast(ChartValues, layer.values)
 	series_count = len(values.series)
-	color_codes = choose_series_colors(chart.colors, series_count)
+	color_codes = choose_series_colors(chart.colors, series_count, CHART_NAME, ColoredParts.SERIES)
 	coordinates = place_positions(axes, values.positions, False)
 	line_style = LINE_STYLES[chart.line]
 	marker_code = MARKER_CODES[chart.marker]

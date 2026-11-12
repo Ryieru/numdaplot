@@ -22,6 +22,7 @@ from numdaplot.plots.charts.bin_count import BinCount
 from numdaplot.plots.charts.bin_width import BinWidth
 from numdaplot.plots.charts.histogram_chart import HistogramChart
 from numdaplot.plots.data.sample_values import SampleValues, drop_missing_numbers
+from numdaplot.plots.drawing.colored_parts import ColoredParts
 from numdaplot.plots.drawing.drawn_chart import DrawnChart
 from numdaplot.plots.drawing.grid_axes import GridAxes
 from numdaplot.plots.drawing.plot_theme import BACKGROUND_COLOR
@@ -30,6 +31,7 @@ from numdaplot.plots.drawing.time_axis import measures_times, place_hour_ticks
 from numdaplot.plots.drawing.whole_numbers import place_whole_ticks
 from numdaplot.ratios.measure import Measure
 
+CHART_NAME = "HistogramChart"
 MEASURE_LABELS = {
 	Measure.COUNT: "Count",
 	Measure.RATIO: "Ratio",
@@ -92,7 +94,7 @@ def draw_histogram_chart(axes: Axes, layer: ChartLayer) -> DrawnChart:
 	chart = cast(HistogramChart, layer.chart)
 	values = cast(SampleValues, layer.values)
 	series_count = len(values.series)
-	color_codes = choose_series_colors(chart.colors, series_count)
+	color_codes = choose_series_colors(chart.colors, series_count, CHART_NAME, ColoredParts.SERIES)
 	samples = [drop_missing_numbers(series.values) for series in values.series]
 	all_numbers = numpy.concatenate(samples)
 	bin_edges = find_bin_edges(all_numbers, chart.bins, values.value_type)

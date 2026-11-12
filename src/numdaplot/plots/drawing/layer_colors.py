@@ -12,9 +12,12 @@ from numdaplot.plots.charts.bar_chart import BarChart
 from numdaplot.plots.charts.line_chart import LineChart
 from numdaplot.plots.charts.scatter_chart import ScatterChart
 from numdaplot.plots.data.chart_values import ChartValues
-from numdaplot.plots.drawing.series_colors import take_cycle_colors
+from numdaplot.plots.drawing.colored_parts import ColoredParts
+from numdaplot.plots.drawing.series_colors import take_cycle_colors, warn_shared_colors
 
 SINGLE_SERIES = 1
+SINGLE_CHART = 1
+PLOT_NAME = "Plot"
 
 
 def continue_color_cycle(layers: list[ChartLayer]) -> list[ChartLayer]:
@@ -26,6 +29,9 @@ def continue_color_cycle(layers: list[ChartLayer]) -> list[ChartLayer]:
 
 	.. versionadded:: 0.1.0
 
+	.. versionchanged:: 0.2.0
+		Warns when the charts have more series than colors in the default cycle.
+
 	Parameters
 	----------
 	layers
@@ -35,6 +41,11 @@ def continue_color_cycle(layers: list[ChartLayer]) -> list[ChartLayer]:
 	-------
 	list[ChartLayer]
 		The same charts, the ones after the first given the colors of the cycle they take.
+
+	Warns
+	-----
+	ReadabilityWarning
+		When several charts have more series together than colors in the default cycle.
 
 	Examples
 	--------
@@ -57,6 +68,10 @@ def continue_color_cycle(layers: list[ChartLayer]) -> list[ChartLayer]:
 		colored_layer = give_cycle_colors(layer, used_count, series_count)
 		colored_layers.append(colored_layer)
 		used_count += series_count
+
+	layer_count = len(layers)
+	if layer_count > SINGLE_CHART:
+		warn_shared_colors(PLOT_NAME, ColoredParts.SERIES, used_count)
 
 	return colored_layers
 

@@ -9,11 +9,16 @@ from enum import Enum, auto
 
 class Color(Enum):
 	"""
-	Named colors of the series of a chart: the ten colors of the default cycle, then black.
+	Named colors of the series of a chart: the first ten colors of the default cycle, then black.
 
-	Write any other color with ``CustomColor``.
+	The series or ``color_by`` groups without chosen colors take the colors of the default cycle: these ten colors,
+	then their light colors, ``#aec7e8`` for blue to ``#9edae5`` for cyan. After 20 series the cycle starts again,
+	with a ``ReadabilityWarning``. Write any other color with ``CustomColor``.
 
 	.. versionadded:: 0.1.0
+
+	.. versionchanged:: 0.2.0
+		The default cycle goes on with ten light colors before it starts again.
 
 	Examples
 	--------

@@ -4,7 +4,12 @@ Unit tests of the colors of the charts overlaid on a Plot.
 .. versionadded:: 0.1.0
 """
 
+import warnings
+
+import pytest
+
 import numdaplot as ndp
+from numdaplot.errors.readability_warning import ReadabilityWarning
 from numdaplot.plots.chart_layer import ChartLayer
 from numdaplot.plots.charts.bar_chart import BarChart
 from numdaplot.plots.charts.line_chart import LineChart
@@ -19,6 +24,8 @@ LINE = ChartLayer(ndp.LineChart(), read_array_values(PRICES, "LineChart"))
 RED_LINE = ChartLayer(ndp.LineChart(colors=[ndp.Color.RED]), read_array_values(PRICES, "LineChart"))
 POINTS = ChartLayer(ndp.ScatterChart(), read_array_values(PRICES, "ScatterChart"))
 GRID_POINTS = ChartLayer(ndp.ScatterChart(), read_array_values(GRID, "ScatterChart"))
+WIDE_GRID = ndp.Array.filled(ndp.Shape([2, 20]), 1.0)
+WIDE_BARS = ChartLayer(ndp.BarChart(), read_array_values(WIDE_GRID, "BarChart"))
 
 
 def test_continue_color_cycle_gives_the_next_colors_to_each_chart() -> None:
@@ -71,3 +78,24 @@ def test_give_cycle_colors_keeps_several_series_of_points() -> None:
 	colored_layer = give_cycle_colors(GRID_POINTS, 1, 2)
 
 	assert colored_layer is GRID_POINTS
+
+
+def test_continue_color_cycle_warns_when_the_charts_share_colors() -> None:
+	"""
+	Check that 20 bars and a line, 21 series in all, raise a ReadabilityWarning.
+
+	.. versionadded:: 0.2.0
+	"""
+	with pytest.warns(ReadabilityWarning):
+		continue_color_cycle([WIDE_BARS, LINE])
+
+
+def test_continue_color_cycle_leaves_the_warning_of_a_single_chart_to_its_drawing() -> None:
+	"""
+	Check that a single chart of 20 series gives no warning here.
+
+	.. versionadded:: 0.2.0
+	"""
+	with warnings.catch_warnings():
+		warnings.simplefilter("error")
+		continue_color_cycle([WIDE_BARS])

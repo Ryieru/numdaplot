@@ -22,6 +22,7 @@ from numdaplot.plots.data.chart_values import Positions, Series
 from numdaplot.plots.data.position_kind import PositionKind
 from numdaplot.plots.data.sample_values import SampleValues, drop_missing_numbers
 from numdaplot.plots.drawing.bar_drawing import GROUP_WIDTH, find_group_coordinates
+from numdaplot.plots.drawing.colored_parts import ColoredParts
 from numdaplot.plots.drawing.default_labels import COLUMN_LABEL
 from numdaplot.plots.drawing.drawn_chart import DrawnChart
 from numdaplot.plots.drawing.grid_axes import GridAxes
@@ -30,6 +31,7 @@ from numdaplot.plots.drawing.position_axis import place_categories
 from numdaplot.plots.drawing.series_colors import choose_series_colors
 from numdaplot.plots.drawing.time_axis import measures_times, place_hour_ticks
 
+CHART_NAME = "BoxChart"
 # Share of its place a box fills, leaving a gap between two boxes side by side.
 BOX_SHARE = 0.8
 # Width of a box alone at its position, a position being 1 wide.
@@ -115,7 +117,7 @@ def draw_box_chart(axes: Axes, layer: ChartLayer) -> DrawnChart:
 	chart = cast(BoxChart, layer.chart)
 	values = cast(SampleValues, layer.values)
 	series_count = len(values.series)
-	color_codes = choose_series_colors(chart.colors, series_count)
+	color_codes = choose_series_colors(chart.colors, series_count, CHART_NAME, ColoredParts.SERIES)
 	shows_outliers = chart.outliers == Outliers.SHOWN
 	if values.groups is None:
 		position_count = draw_column_boxes(axes, values.series, color_codes, shows_outliers)

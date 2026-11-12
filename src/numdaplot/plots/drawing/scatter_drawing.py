@@ -23,6 +23,7 @@ from numdaplot.plots.data.chart_values import ChartValues, Series
 from numdaplot.plots.data.point_values import PointValues
 from numdaplot.plots.drawing.color_bar import add_color_bar
 from numdaplot.plots.drawing.color_scale_values import find_point_colors, find_scale_limits
+from numdaplot.plots.drawing.colored_parts import ColoredParts
 from numdaplot.plots.drawing.default_labels import find_position_label
 from numdaplot.plots.drawing.drawn_chart import DrawnChart
 from numdaplot.plots.drawing.grid_axes import GridAxes
@@ -32,6 +33,7 @@ from numdaplot.plots.drawing.series_colors import choose_series_colors
 from numdaplot.plots.style.color import Color
 from numdaplot.plots.style.custom_color import CustomColor
 
+CHART_NAME = "ScatterChart"
 DEFAULT_POINT_SIZE = 6.0
 SMALLEST_POINT_AREA = 16.0
 LARGEST_POINT_AREA = 256.0
@@ -243,7 +245,7 @@ def draw_colored_series(
 		chosen_colors = [color]
 
 	series_count = len(series_list)
-	color_codes = choose_series_colors(chosen_colors, series_count)
+	color_codes = choose_series_colors(chosen_colors, series_count, CHART_NAME, ColoredParts.SERIES)
 
 	for series, color_code in zip(series_list, color_codes, strict=True):
 		axes.scatter(
@@ -349,7 +351,7 @@ def draw_color_groups(axes: Axes, series: Series, color_texts: NDArray[Any], poi
 	present_texts = color_texts[present]
 	groups = pandas.unique(present_texts)
 	group_count = len(groups)
-	color_codes = choose_series_colors(None, group_count)
+	color_codes = choose_series_colors(None, group_count, CHART_NAME, ColoredParts.COLOR_GROUPS)
 
 	for group, color_code in zip(groups, color_codes, strict=True):
 		in_group = color_texts == group
