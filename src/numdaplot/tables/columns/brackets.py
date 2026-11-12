@@ -77,7 +77,7 @@ class Brackets:
 	>>> ages = ndp.Array.from_list([4, 17, 30, 92])
 	>>> victims = ndp.Table.from_arrays({"age": ages})
 	>>> brackets = ndp.Brackets(limits=[0, 10, 20], last=ndp.BracketEnd.OPEN)
-	>>> victims.convert(ndp.TableConversion(column="age", dtype=ndp.Type.CATEGORY, format=brackets))
+	>>> victims.convert(ndp.TableConversion(columns=["age"], dtype=ndp.Type.CATEGORY, format=brackets))
 	          age
 	     CATEGORY
 	0      0 to 9

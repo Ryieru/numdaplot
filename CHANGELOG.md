@@ -13,7 +13,7 @@ and numdaplot follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 - `Unmatched.KEEP` keeps the values a `ValueMapping` gives no new value, so that only the listed values change.
   `Brackets` refuses it.
 - `Array.convert` changes the type of the values of an Array with an `ArrayConversion`, as `Table.convert` does
-  for a column.
+  for columns.
 - `Table.count_values` gives how many rows hold each value of a column with a `ValueCount`, as a number or,
   with `Measure.RATIO`, as a fraction of every row, from the most frequent value to the least frequent.
 - `Share` gives the fraction of the values satisfying a rule, of an Array or of each group in `aggregate`,
@@ -28,6 +28,8 @@ and numdaplot follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
 - `Conversion` is renamed `TableConversion`.
 - `Sorting` is renamed `TableSorting`.
+- `TableConversion` takes `columns`, a list, in place of `column`, so that `Table.convert` converts several columns
+  to the same type at once.
 - `OutOfDomainError` and `UnmatchedValueError` name the Table column holding the value, such as a value in no
   bracket of `Brackets` in `Table.convert`.
 - The message of `UnmatchedValueError` for a `ValueMapping` also offers `others=Unmatched.KEEP`.

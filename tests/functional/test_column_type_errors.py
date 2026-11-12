@@ -116,7 +116,7 @@ def test_a_chart_names_the_column_it_refuses(calculate: Callable[[], Any], expec
 			"Cannot apply Mean to the TEXT column 'zone'.",
 		),
 		(
-			lambda: TRIPS.convert(ndp.TableConversion(column="paid", dtype=ndp.Type.DATE)),
+			lambda: TRIPS.convert(ndp.TableConversion(columns=["paid"], dtype=ndp.Type.DATE)),
 			"Cannot apply convert to the BOOL column 'paid' and DATE.",
 		),
 	],
@@ -148,7 +148,7 @@ def test_a_conversion_names_the_column_of_a_rejected_value() -> None:
 	.. versionadded:: 0.1.0
 	"""
 	with pytest.raises(ndp.ValueConversionError) as error_info:
-		TRIPS.convert(ndp.TableConversion(column="zone", dtype=ndp.Type.FLOAT64))
+		TRIPS.convert(ndp.TableConversion(columns=["zone"], dtype=ndp.Type.FLOAT64))
 
 	error_text = str(error_info.value)
 	assert error_text == "Cannot store the TEXT value 'a' of the column 'zone' as FLOAT64 without losing information."
@@ -162,7 +162,7 @@ def test_a_conversion_names_the_column_of_an_unreadable_date() -> None:
 	.. versionadded:: 0.1.0
 	"""
 	with pytest.raises(ndp.ValueConversionError) as error_info:
-		TRIPS.convert(ndp.TableConversion(column="zone", dtype=ndp.Type.DATE))
+		TRIPS.convert(ndp.TableConversion(columns=["zone"], dtype=ndp.Type.DATE))
 
 	error_text = str(error_info.value)
 	assert "value 'a' of the column 'zone' as DATE" in error_text

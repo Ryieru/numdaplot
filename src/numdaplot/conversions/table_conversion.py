@@ -1,5 +1,5 @@
 """
-A new type for a column of a Table.
+A new type for columns of a Table.
 
 .. versionadded:: 0.1.0
 """
@@ -11,15 +11,20 @@ from numdaplot.data_types.type import Type
 from numdaplot.dates.custom_date_format import CustomDateFormat
 from numdaplot.dates.date_format import DateFormat
 from numdaplot.dates.time_zone_change import TimeZoneChange
+from numdaplot.errors.empty_list_error import EmptyListError
 from numdaplot.settings.field_types import require_field_types
 from numdaplot.tables.columns.brackets import Brackets
-from numdaplot.tables.columns.column_names import require_column_name
+from numdaplot.tables.columns.column_names import require_column_names
+
+COLUMN_ITEM_NAME = "column"
 
 
 @dataclass(frozen=True)
 class TableConversion:
 	"""
-	A new type for a column of a Table, used by ``Table.convert``.
+	A new type for columns of a Table, used by ``Table.convert``.
+
+	Every listed column takes the same type and settings.
 
 	Accepted conversions: between number types, between numbers and booleans, from numbers, booleans,
 	categories, dates, datetimes, durations and times of day to texts, from texts and categories to numbers,
@@ -29,12 +34,12 @@ class TableConversion:
 
 	.. versionadded:: 0.1.0
 	.. versionchanged:: 0.2.0
-		Renamed from ``Conversion``.
+		Renamed from ``Conversion``. Takes ``columns``, a list, in place of ``column``.
 
 	Parameters
 	----------
-	column
-		The name of the column.
+	columns
+		The names of the columns, at least one, each once. The conversion keeps its own copy of the list.
 	dtype
 		Its new type.
 	format
@@ -56,32 +61,36 @@ class TableConversion:
 	------
 	InvalidTypeError
 		When a setting is not of the type its annotation names.
+	EmptyListError
+		When ``columns`` is an empty list.
 	InvalidColumnNameError
-		When ``column`` is an empty text.
+		When a column name is an empty text.
+	DuplicateColumnError
+		When a column name appears twice.
 
 	Examples
 	--------
 	>>> import numdaplot as ndp
 	>>> codes = ndp.Table.from_arrays({"zip_code": ndp.Array.from_list(["06000", "75001"])})
-	>>> codes.convert(ndp.TableConversion(column="zip_code", dtype=ndp.Type.INT32))
+	>>> codes.convert(ndp.TableConversion(columns=["zip_code"], dtype=ndp.Type.INT32))
 	  zip_code
 	     INT32
 	0     6000
 	1    75001
 	>>> days = ndp.Table.from_arrays({"day": ndp.Array.from_list(["31/12/2026"])})
-	>>> days.convert(ndp.TableConversion(column="day", dtype=ndp.Type.DATE, format=ndp.DateFormat.DAY_MONTH_YEAR))
+	>>> days.convert(ndp.TableConversion(columns=["day"], dtype=ndp.Type.DATE, format=ndp.DateFormat.DAY_MONTH_YEAR))
 	         day
 	        DATE
 	0 2026-12-31
 	>>> pickups = ndp.Table.from_arrays({"pickup": ndp.Array.from_list(["2026-12-31 20:21:09", "2026-12-31"])})
-	>>> pickups.convert(ndp.TableConversion(column="pickup", dtype=ndp.Type.DATETIME))
+	>>> pickups.convert(ndp.TableConversion(columns=["pickup"], dtype=ndp.Type.DATETIME))
 	               pickup
 	             DATETIME
 	0 2026-12-31 20:21:09
 	1 2026-12-31 00:00:00
 	"""
 
-	column: str
+	columns: list[str]
 	dtype: Type
 	format: DateFormat | CustomDateFormat | Brackets | None = None
 	timezone: TimeZoneChange | None = None
@@ -89,17 +98,28 @@ class TableConversion:
 
 	def __post_init__(self) -> None:
 		"""
-		Check that the column name is a non-empty text.
+		Check the columns and replace them with a copy that only the conversion holds.
 
 		.. versionadded:: 0.1.0
+		.. versionchanged:: 0.2.0
+			Checks ``columns``, a list, in place of ``column``.
 
 		Raises
 		------
 		InvalidTypeError
 			When a setting is not of the type its annotation names.
+		EmptyListError
+			When ``columns`` is an empty list.
 		InvalidColumnNameError
-			When ``column`` is an empty text.
+			When a column name is an empty text.
+		DuplicateColumnError
+			When a column name appears twice.
 		"""
 		require_field_types(self)
 
-		require_column_name(self.column)
+		if self.columns == []:
+			raise EmptyListError(COLUMN_ITEM_NAME)
+
+		require_column_names(self.columns)
+		columns_copy = list(self.columns)
+		object.__setattr__(self, "columns", columns_copy)

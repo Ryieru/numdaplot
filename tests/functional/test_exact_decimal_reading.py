@@ -125,7 +125,7 @@ def test_convert_reads_the_exact_decimals_of_texts() -> None:
 	"""
 	texts = list[str | None]([repr(decimal) for decimal in EXACT_DECIMALS])
 	table = build_texts(texts)
-	conversion = ndp.TableConversion(column=COLUMN_NAME, dtype=ndp.Type.FLOAT64)
+	conversion = ndp.TableConversion(columns=[COLUMN_NAME], dtype=ndp.Type.FLOAT64)
 
 	converted_table = table.convert(conversion)
 
@@ -141,7 +141,7 @@ def test_convert_keeps_missing_texts_missing_with_exact_decimals() -> None:
 	.. versionadded:: 0.1.0
 	"""
 	table = build_texts([None, "0.30000000000000004", " 1e3 "])
-	conversion = ndp.TableConversion(column=COLUMN_NAME, dtype=ndp.Type.FLOAT64)
+	conversion = ndp.TableConversion(columns=[COLUMN_NAME], dtype=ndp.Type.FLOAT64)
 
 	converted_table = table.convert(conversion)
 
@@ -160,7 +160,7 @@ def test_convert_still_refuses_a_text_that_is_not_a_number() -> None:
 	.. versionadded:: 0.1.0
 	"""
 	table = build_texts(["1.5", "abc"])
-	conversion = ndp.TableConversion(column=COLUMN_NAME, dtype=ndp.Type.FLOAT64)
+	conversion = ndp.TableConversion(columns=[COLUMN_NAME], dtype=ndp.Type.FLOAT64)
 
 	with pytest.raises(ndp.ValueConversionError):
 		table.convert(conversion)
@@ -174,7 +174,7 @@ def test_convert_reads_infinite_texts(text: str) -> None:
 	.. versionadded:: 0.1.0
 	"""
 	table = build_texts([text])
-	conversion = ndp.TableConversion(column=COLUMN_NAME, dtype=ndp.Type.FLOAT64)
+	conversion = ndp.TableConversion(columns=[COLUMN_NAME], dtype=ndp.Type.FLOAT64)
 
 	converted_table = table.convert(conversion)
 

@@ -48,7 +48,8 @@ def require_conversion_settings(source_type: Type, conversion: ConversionSetting
 	--------
 	>>> import numdaplot as ndp
 	>>> from numdaplot.conversions.conversion_checks import require_conversion_settings
-	>>> day_and_time = ndp.TableConversion(column="day", dtype=ndp.Type.DATE, format=ndp.DateFormat.DAY_MONTH_YEAR_TIME)
+	>>> day_format = ndp.DateFormat.DAY_MONTH_YEAR_TIME
+	>>> day_and_time = ndp.TableConversion(columns=["day"], dtype=ndp.Type.DATE, format=day_format)
 	>>> try:
 	... 	require_conversion_settings(ndp.Type.TEXT, day_and_time)
 	... except ndp.InvalidConversionError as error:
@@ -86,7 +87,7 @@ def require_time_zone_setting(source_type: Type, conversion: TableConversion) ->
 	>>> import numdaplot as ndp
 	>>> from numdaplot.conversions.conversion_checks import require_time_zone_setting
 	>>> to_paris = ndp.TimeZoneChange(zone=ndp.TimeZone("Europe/Paris"), mode=ndp.TimeZoneMode.ATTRIBUTE)
-	>>> zone_change = ndp.TableConversion(column="day", dtype=ndp.Type.DATETIME, timezone=to_paris)
+	>>> zone_change = ndp.TableConversion(columns=["day"], dtype=ndp.Type.DATETIME, timezone=to_paris)
 	>>> try:
 	... 	require_time_zone_setting(ndp.Type.TEXT, zone_change)
 	... except ndp.InvalidConversionError as error:
@@ -127,7 +128,7 @@ def require_format_setting(source_type: Type, conversion: ConversionSettings) ->
 	>>> import numdaplot as ndp
 	>>> from numdaplot.conversions.conversion_checks import require_format_setting
 	>>> day_first = ndp.DateFormat.DAY_MONTH_YEAR
-	>>> price_texts = ndp.TableConversion(column="price", dtype=ndp.Type.TEXT, format=day_first)
+	>>> price_texts = ndp.TableConversion(columns=["price"], dtype=ndp.Type.TEXT, format=day_first)
 	>>> try:
 	... 	require_format_setting(ndp.Type.FLOAT64, price_texts)
 	... except ndp.InvalidConversionError as error:
@@ -272,7 +273,7 @@ def require_booleans_setting(source_type: Type, conversion: ConversionSettings) 
 	>>> import numdaplot as ndp
 	>>> from numdaplot.conversions.conversion_checks import require_booleans_setting
 	>>> rule = ndp.BooleanRule.NONZERO_TRUE
-	>>> to_booleans = ndp.TableConversion(column="paid", dtype=ndp.Type.BOOL, booleans=rule)
+	>>> to_booleans = ndp.TableConversion(columns=["paid"], dtype=ndp.Type.BOOL, booleans=rule)
 	>>> try:
 	... 	require_booleans_setting(ndp.Type.TEXT, to_booleans)
 	... except ndp.InvalidConversionError as error:

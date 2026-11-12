@@ -82,7 +82,7 @@ class ValueConversionError(NumdaplotError):
 	Cannot store FLOAT64 values as INT64 without losing information.
 	>>> days = ndp.Table.from_arrays({"day": ndp.Array.from_list(["31/12/2026"])})
 	>>> try:
-	... 	days.convert(ndp.TableConversion(column="day", dtype=ndp.Type.DATE))
+	... 	days.convert(ndp.TableConversion(columns=["day"], dtype=ndp.Type.DATE))
 	... except ndp.ValueConversionError as error:
 	... 	print(error)
 	Cannot read the TEXT value '31/12/2026' of the column 'day' as DATE with the format YEAR_MONTH_DAY.

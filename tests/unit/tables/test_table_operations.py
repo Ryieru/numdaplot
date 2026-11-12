@@ -41,7 +41,6 @@ from numdaplot.tables.description.description import Description
 from numdaplot.tables.duplicates.deduplication import Deduplication
 from numdaplot.tables.filtering.condition import Condition
 from numdaplot.tables.filtering.filter import Filter
-from numdaplot.tables.frames.column import Column
 from numdaplot.tables.missing.missing_count import MissingCount
 from numdaplot.tables.missing.missing_drop import MissingDrop
 from numdaplot.tables.pivot.pivot_table import PivotTable
@@ -56,11 +55,8 @@ EXPECTED_FAKE_NAMES = ["result"]
 FAKE_MASK = numpy.array([False, True, True])
 EXPECTED_FILTERED_PRICES = [12.0, 30.0]
 EXPECTED_FILTERED_ROWS = [0, 1]
-FAKE_COLUMN = pandas.Series(["5", "12", "30"], dtype="string")
-EXPECTED_CONVERTED_TYPES = {"price": Type.TEXT}
 ROW_FILTER = Filter(conditions=[Condition(rule=Greater(10))])
 BUILD_FILTER_MASK_NAME = "build_filter_mask"
-CONVERT_COLUMN_NAME = "convert_column"
 PRICE_MEAN = Calculation(column="price", function=Mean())
 PRICE_PIVOT = PivotTable(rows=["city"], columns="day", calculation=PRICE_MEAN)
 type TableOperation = Callable[[Table], Table]
@@ -73,6 +69,11 @@ FRAME_OPERATIONS = list[tuple[ModuleType, str, TableOperation]](
 			table_columns,
 			"rename_frame_columns",
 			lambda table: table.rename(Renaming(changes=[NameChange(old_name="price", new_name="cost")])),
+		),
+		(
+			table_columns,
+			"convert_frame_columns",
+			lambda table: table.convert(TableConversion(columns=["price"], dtype=Type.TEXT)),
 		),
 		(
 			table_columns,
@@ -148,27 +149,6 @@ def give_fake_mask(frame: pandas.DataFrame, row_filter: Filter) -> NDArray[Any]:
 	return FAKE_MASK
 
 
-def give_fake_column(column: Column, conversion: TableConversion) -> Column:
-	"""
-	Fake conversion returning known texts.
-
-	.. versionadded:: 0.1.0
-
-	Parameters
-	----------
-	column
-		The converted column, ignored.
-	conversion
-		The conversion, ignored.
-
-	Returns
-	-------
-	Column
-		Always the fake texts.
-	"""
-	return FAKE_COLUMN
-
-
 @pytest.mark.parametrize(("module", "helper_name", "operation"), FRAME_OPERATIONS)
 def test_table_operations_wrap_the_columns_of_their_helper(
 	monkeypatch: pytest.MonkeyPatch,
@@ -223,27 +203,6 @@ def test_filter_keeps_the_rows_of_the_mask_and_numbers_them_from_zero(monkeypatc
 	row_numbers = filtered_frame.index.tolist()
 	assert prices == EXPECTED_FILTERED_PRICES
 	assert row_numbers == EXPECTED_FILTERED_ROWS
-
-
-def test_convert_replaces_the_column_with_its_conversion(monkeypatch: pytest.MonkeyPatch) -> None:
-	"""
-	Check that the converted column takes the place of the original one.
-
-	.. versionadded:: 0.1.0
-
-	Parameters
-	----------
-	monkeypatch
-		Replaces the conversion with a fake.
-	"""
-	monkeypatch.setattr(table_columns, CONVERT_COLUMN_NAME, give_fake_column)
-	table = Table._create(FRAME)
-
-	converted_table = table.convert(TableConversion(column="price", dtype=Type.TEXT))
-
-	original_types = table.column_types
-	assert converted_table.column_types == EXPECTED_CONVERTED_TYPES
-	assert original_types == {"price": Type.FLOAT64}
 
 
 @dataclass(frozen=True)

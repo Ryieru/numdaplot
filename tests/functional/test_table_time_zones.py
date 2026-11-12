@@ -47,7 +47,9 @@ def build_paris_visits() -> ndp.Table:
 	"""
 	visit_times = ndp.Array.from_list(VISIT_TIMES)
 	visits = ndp.Table.from_arrays({"time": visit_times})
-	paris_visits = visits.convert(ndp.TableConversion(column="time", dtype=ndp.Type.DATETIME, timezone=ATTRIBUTE_PARIS))
+	paris_visits = visits.convert(
+		ndp.TableConversion(columns=["time"], dtype=ndp.Type.DATETIME, timezone=ATTRIBUTE_PARIS)
+	)
 
 	return paris_visits
 
@@ -70,7 +72,7 @@ def read_texts(table: ndp.Table, column_name: str) -> list[str]:
 	list[str]
 		The texts.
 	"""
-	text_table = table.convert(ndp.TableConversion(column=column_name, dtype=ndp.Type.TEXT))
+	text_table = table.convert(ndp.TableConversion(columns=[column_name], dtype=ndp.Type.TEXT))
 	texts = text_table.column(column_name)
 	text_list = texts.to_list()
 
@@ -86,10 +88,10 @@ def test_a_zone_is_attributed_shifted_and_removed() -> None:
 	paris_visits = build_paris_visits()
 
 	new_york_visits = paris_visits.convert(
-		ndp.TableConversion(column="time", dtype=ndp.Type.DATETIME, timezone=SHIFT_NEW_YORK)
+		ndp.TableConversion(columns=["time"], dtype=ndp.Type.DATETIME, timezone=SHIFT_NEW_YORK)
 	)
 	naive_visits = new_york_visits.convert(
-		ndp.TableConversion(column="time", dtype=ndp.Type.DATETIME, timezone=REMOVE_ZONE)
+		ndp.TableConversion(columns=["time"], dtype=ndp.Type.DATETIME, timezone=REMOVE_ZONE)
 	)
 
 	new_york_texts = read_texts(new_york_visits, "time")
@@ -107,7 +109,7 @@ def test_a_clock_time_skipped_by_the_spring_change_is_cited() -> None:
 	visits = ndp.Table.from_arrays({"time": ndp.Array.from_list([SPRING_GAP])})
 
 	with pytest.raises(ndp.ValueConversionError):
-		visits.convert(ndp.TableConversion(column="time", dtype=ndp.Type.DATETIME, timezone=ATTRIBUTE_PARIS))
+		visits.convert(ndp.TableConversion(columns=["time"], dtype=ndp.Type.DATETIME, timezone=ATTRIBUTE_PARIS))
 
 
 def test_shifting_datetimes_without_zone_is_refused() -> None:
@@ -119,7 +121,7 @@ def test_shifting_datetimes_without_zone_is_refused() -> None:
 	visits = ndp.Table.from_arrays({"time": ndp.Array.from_list(VISIT_TIMES)})
 
 	with pytest.raises(ndp.TimeZoneMismatchError):
-		visits.convert(ndp.TableConversion(column="time", dtype=ndp.Type.DATETIME, timezone=SHIFT_NEW_YORK))
+		visits.convert(ndp.TableConversion(columns=["time"], dtype=ndp.Type.DATETIME, timezone=SHIFT_NEW_YORK))
 
 
 def test_print_shows_the_zone_under_the_column_name() -> None:
@@ -202,7 +204,7 @@ def test_different_zones_are_never_equal() -> None:
 	"""
 	paris_visits = build_paris_visits()
 	new_york_visits = paris_visits.convert(
-		ndp.TableConversion(column="time", dtype=ndp.Type.DATETIME, timezone=SHIFT_NEW_YORK)
+		ndp.TableConversion(columns=["time"], dtype=ndp.Type.DATETIME, timezone=SHIFT_NEW_YORK)
 	)
 
 	is_equal = paris_visits.is_equal(ndp.Equality(other=new_york_visits))

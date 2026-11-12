@@ -24,7 +24,7 @@ CONVERT_VALUES_NAME = "convert_array_values"
 COUNTS = numpy.array([1, 2])
 FAKE_RESULT = numpy.array(["converted"], dtype=object)
 TEXT_CONVERSION = ArrayConversion(dtype=Type.TEXT)
-TABLE_TEXT_CONVERSION = TableConversion(column="count", dtype=Type.TEXT)
+TABLE_TEXT_CONVERSION = TableConversion(columns=["count"], dtype=Type.TEXT)
 
 
 class ConversionRecorder:

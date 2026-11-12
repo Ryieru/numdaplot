@@ -4,6 +4,7 @@ Application of a function to columns of a Table.
 .. versionadded:: 0.2.0
 """
 
+from functools import partial
 from typing import Any
 
 import numpy
@@ -18,11 +19,10 @@ from numdaplot.arrays.mapping.value_mapping import ValueMapping
 from numdaplot.arrays.math_functions.math_function import MathFunction
 from numdaplot.dates.time_function import TimeFunction
 from numdaplot.errors.time_zone_mismatch_error import TimeZoneMismatchError
-from numdaplot.tables.columns.column_names import require_known_columns
+from numdaplot.tables.columns.replaced_columns import replace_frame_columns
 from numdaplot.tables.columns.table_application import TableApplication
 from numdaplot.tables.frames.column import Column
 from numdaplot.tables.frames.column_values import build_column_with_missing, find_column_missing, read_present_values
-from numdaplot.tables.frames.named_column_errors import NamedColumnErrors
 from numdaplot.tables.frames.time_zones import find_column_time_zone
 
 APPLICATION_OPERATION = "Applying a function to {column_name!r}"
@@ -64,16 +64,8 @@ def apply_frame_columns(frame: pandas.DataFrame, application: TableApplication) 
 	0   2.0  Pau
 	1   3.0  Dax
 	"""
-	column_names = [str(column_name) for column_name in frame.columns]
-	require_known_columns(application.columns, column_names)
-	applied_frame = frame.copy(deep=False)
-
-	for column_name in application.columns:
-		column = frame[column_name]
-		with NamedColumnErrors(column):
-			applied_column = apply_to_column(column, application.function)
-
-		applied_frame[column_name] = applied_column
+	function_application = partial(apply_to_column, function=application.function)
+	applied_frame = replace_frame_columns(frame, application.columns, function_application)
 
 	return applied_frame
 

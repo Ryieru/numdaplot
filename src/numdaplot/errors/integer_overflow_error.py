@@ -54,7 +54,7 @@ class IntegerOverflowError(NumdaplotError):
 	The operation * gives values outside the range of INT64, from -9223372036854775808 to 9223372036854775807.
 	Convert the values to FLOAT64 first, which keeps about 16 digits.
 	>>> small_counts = ndp.Table.from_arrays({"count": ndp.Array.from_list([1, 2])})
-	>>> small_counts = small_counts.convert(ndp.TableConversion(column="count", dtype=ndp.Type.UINT8))
+	>>> small_counts = small_counts.convert(ndp.TableConversion(columns=["count"], dtype=ndp.Type.UINT8))
 	>>> try:
 	... 	small_counts.column("count") - 5
 	... except ndp.IntegerOverflowError as error:

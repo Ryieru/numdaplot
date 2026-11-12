@@ -44,13 +44,13 @@ class CustomDateFormat:
 	--------
 	>>> import numdaplot as ndp
 	>>> days = ndp.Table.from_arrays({"day": ndp.Array.from_list(["31 Dec 2026", "1 Feb 2026"])})
-	>>> days.convert(ndp.TableConversion(column="day", dtype=ndp.Type.DATE, format=ndp.CustomDateFormat("%d %b %Y")))
+	>>> days.convert(ndp.TableConversion(columns=["day"], dtype=ndp.Type.DATE, format=ndp.CustomDateFormat("%d %b %Y")))
 	         day
 	        DATE
 	0 2026-12-31
 	1 2026-02-01
 	>>> hours = ndp.Table.from_arrays({"hrmn": ndp.Array.from_list(["1535", "0805"])})
-	>>> hours.convert(ndp.TableConversion(column="hrmn", dtype=ndp.Type.TIME, format=ndp.CustomDateFormat("%H%M")))
+	>>> hours.convert(ndp.TableConversion(columns=["hrmn"], dtype=ndp.Type.TIME, format=ndp.CustomDateFormat("%H%M")))
 	       hrmn
 	       TIME
 	0  15:35:00

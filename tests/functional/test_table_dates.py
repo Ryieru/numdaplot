@@ -59,7 +59,7 @@ def test_texts_written_day_first_become_dates() -> None:
 	.. versionadded:: 0.1.0
 	"""
 	text_days = build_text_days(DAY_TEXTS)
-	day_first = ndp.TableConversion(column="day", dtype=ndp.Type.DATE, format=ndp.DateFormat.DAY_MONTH_YEAR)
+	day_first = ndp.TableConversion(columns=["day"], dtype=ndp.Type.DATE, format=ndp.DateFormat.DAY_MONTH_YEAR)
 
 	days = text_days.convert(day_first)
 
@@ -76,7 +76,7 @@ def test_texts_without_format_are_read_year_first() -> None:
 	"""
 	text_days = build_text_days(ISO_DAY_TEXTS)
 
-	days = text_days.convert(ndp.TableConversion(column="day", dtype=ndp.Type.DATE))
+	days = text_days.convert(ndp.TableConversion(columns=["day"], dtype=ndp.Type.DATE))
 
 	day_array = days.column("day")
 	day_list = day_array.to_list()
@@ -90,7 +90,7 @@ def test_an_impossible_date_is_cited() -> None:
 	.. versionadded:: 0.1.0
 	"""
 	text_days = build_text_days([IMPOSSIBLE_DAY])
-	day_first = ndp.TableConversion(column="day", dtype=ndp.Type.DATE, format=ndp.DateFormat.DAY_MONTH_YEAR)
+	day_first = ndp.TableConversion(columns=["day"], dtype=ndp.Type.DATE, format=ndp.DateFormat.DAY_MONTH_YEAR)
 
 	with pytest.raises(ndp.ValueConversionError) as caught:
 		text_days.convert(day_first)
@@ -105,8 +105,8 @@ def test_dates_are_written_in_a_format() -> None:
 	.. versionadded:: 0.1.0
 	"""
 	text_days = build_text_days(ISO_DAY_TEXTS)
-	days = text_days.convert(ndp.TableConversion(column="day", dtype=ndp.Type.DATE))
-	day_first = ndp.TableConversion(column="day", dtype=ndp.Type.TEXT, format=ndp.DateFormat.DAY_MONTH_YEAR)
+	days = text_days.convert(ndp.TableConversion(columns=["day"], dtype=ndp.Type.DATE))
+	day_first = ndp.TableConversion(columns=["day"], dtype=ndp.Type.TEXT, format=ndp.DateFormat.DAY_MONTH_YEAR)
 
 	written_days = days.convert(day_first)
 
@@ -122,7 +122,7 @@ def test_a_format_on_numbers_is_refused() -> None:
 	.. versionadded:: 0.1.0
 	"""
 	prices = ndp.Table.from_arrays({"price": ndp.Array.from_list(SALE_PRICES)})
-	price_texts = ndp.TableConversion(column="price", dtype=ndp.Type.TEXT, format=ndp.DateFormat.DAY_MONTH_YEAR)
+	price_texts = ndp.TableConversion(columns=["price"], dtype=ndp.Type.TEXT, format=ndp.DateFormat.DAY_MONTH_YEAR)
 
 	with pytest.raises(ndp.InvalidConversionError):
 		prices.convert(price_texts)
@@ -160,7 +160,7 @@ def test_datetime_texts_without_format_keep_their_time_or_become_midnight() -> N
 	pickups = ndp.Array.from_list(PICKUP_TEXTS)
 	trips = ndp.Table.from_arrays({"pickup": pickups})
 
-	converted = trips.convert(ndp.TableConversion(column="pickup", dtype=ndp.Type.DATETIME))
+	converted = trips.convert(ndp.TableConversion(columns=["pickup"], dtype=ndp.Type.DATETIME))
 
 	pickup_list = converted.column("pickup").to_list()
 	assert pickup_list == EXPECTED_PICKUPS
@@ -175,7 +175,7 @@ def test_a_given_time_format_refuses_a_text_without_time() -> None:
 	pickups = ndp.Array.from_list([PICKUP_DAY])
 	trips = ndp.Table.from_arrays({"pickup": pickups})
 	conversion = ndp.TableConversion(
-		column="pickup", dtype=ndp.Type.DATETIME, format=ndp.DateFormat.YEAR_MONTH_DAY_TIME
+		columns=["pickup"], dtype=ndp.Type.DATETIME, format=ndp.DateFormat.YEAR_MONTH_DAY_TIME
 	)
 
 	with pytest.raises(ndp.ValueConversionError, match="YEAR_MONTH_DAY_TIME") as caught_error:
@@ -194,7 +194,7 @@ def test_date_texts_with_a_time_are_refused_without_format() -> None:
 	trips = ndp.Table.from_arrays({"pickup": pickups})
 
 	with pytest.raises(ndp.ValueConversionError, match="YEAR_MONTH_DAY") as caught_error:
-		trips.convert(ndp.TableConversion(column="pickup", dtype=ndp.Type.DATE))
+		trips.convert(ndp.TableConversion(columns=["pickup"], dtype=ndp.Type.DATE))
 
 	assert caught_error.value.rejected_value == PICKUP_TIME
 
@@ -212,7 +212,7 @@ def test_datetimes_written_in_a_csv_file_are_read_back_without_format(tmp_path: 
 	trips.to_csv(csv_path)
 
 	read_trips = ndp.Table.from_csv(csv_path)
-	converted = read_trips.convert(ndp.TableConversion(column="pickup", dtype=ndp.Type.DATETIME))
+	converted = read_trips.convert(ndp.TableConversion(columns=["pickup"], dtype=ndp.Type.DATETIME))
 
 	pickup_list = converted.column("pickup").to_list()
 	assert pickup_list == pickups
@@ -225,7 +225,7 @@ def test_a_time_format_on_dates_points_to_a_conversion_through_datetimes() -> No
 	.. versionadded:: 0.1.0
 	"""
 	trips = ndp.Table.from_arrays({"pickup": ndp.Array.from_list([PICKUP_TIME])})
-	conversion = ndp.TableConversion(column="pickup", dtype=ndp.Type.DATE, format=ndp.DateFormat.YEAR_MONTH_DAY_TIME)
+	conversion = ndp.TableConversion(columns=["pickup"], dtype=ndp.Type.DATE, format=ndp.DateFormat.YEAR_MONTH_DAY_TIME)
 
 	with pytest.raises(ndp.InvalidConversionError, match=THROUGH_DATETIME_HINT):
 		trips.convert(conversion)

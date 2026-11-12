@@ -68,7 +68,7 @@ REQUIRED_SETTINGS = dict[str, dict[str, object]](
 		"SortKey": {"column": "a"},
 		"Spacing": {"start": 0, "stop": 1, "count": 2},
 		"TableApplication": {"function": ndp.SquareRoot(), "columns": ["a"]},
-		"TableConversion": {"column": "a", "dtype": ndp.Type.TEXT},
+		"TableConversion": {"columns": ["a"], "dtype": ndp.Type.TEXT},
 		"TableSorting": {"keys": [ndp.SortKey(column="a")]},
 		"TimeZone": {"name": "UTC"},
 		"TimeZoneChange": {"mode": ndp.TimeZoneMode.REMOVE},

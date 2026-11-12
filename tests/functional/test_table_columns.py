@@ -19,6 +19,12 @@ WRONG_ZIP_CODES = ["06000", "Nice"]
 EXPECTED_CONVERSION_MESSAGE = (
 	"Cannot store the TEXT value 'Nice' of the column 'zip_code' as INT32 without losing information."
 )
+DEPARTMENT_CODES = ["06", "75"]
+WRONG_DEPARTMENT_CODES = ["06", "2A"]
+EXPECTED_PLACE_TYPES = {"zip_code": ndp.Type.INT32, "department": ndp.Type.INT32}
+EXPECTED_DEPARTMENT_MESSAGE = (
+	"Cannot store the TEXT value '2A' of the column 'department' as INT32 without losing information."
+)
 SALE_DAY = date(2026, 12, 31)
 EXPECTED_SALE_DAY_TEXT = "31/12/2026 00:00:00"
 THROUGH_DATETIME_HINT = "Convert the values to DATETIME first, then to TEXT"
@@ -93,11 +99,43 @@ def test_zip_codes_written_as_texts_become_numbers() -> None:
 	"""
 	shops = build_shops()
 
-	converted_shops = shops.convert(ndp.TableConversion(column="zip_code", dtype=ndp.Type.INT32))
+	converted_shops = shops.convert(ndp.TableConversion(columns=["zip_code"], dtype=ndp.Type.INT32))
 
 	zip_numbers = converted_shops.column("zip_code")
 	zip_list = zip_numbers.to_list()
 	assert zip_list == EXPECTED_ZIP_NUMBERS
+
+
+def test_several_columns_become_numbers_in_one_call() -> None:
+	"""
+	Check that every listed column of texts converts to INT32 with one conversion.
+
+	.. versionadded:: 0.2.0
+	"""
+	zip_codes = ndp.Array.from_list(ZIP_CODES)
+	department_codes = ndp.Array.from_list(DEPARTMENT_CODES)
+	places = ndp.Table.from_arrays({"zip_code": zip_codes, "department": department_codes})
+
+	converted_places = places.convert(ndp.TableConversion(columns=["zip_code", "department"], dtype=ndp.Type.INT32))
+
+	assert converted_places.column_types == EXPECTED_PLACE_TYPES
+
+
+def test_the_second_column_that_fails_is_named_in_the_error() -> None:
+	"""
+	Check that a failing column after a converted one is named in the error.
+
+	.. versionadded:: 0.2.0
+	"""
+	zip_codes = ndp.Array.from_list(ZIP_CODES)
+	department_codes = ndp.Array.from_list(WRONG_DEPARTMENT_CODES)
+	places = ndp.Table.from_arrays({"zip_code": zip_codes, "department": department_codes})
+
+	with pytest.raises(ndp.ValueConversionError) as error_info:
+		places.convert(ndp.TableConversion(columns=["zip_code", "department"], dtype=ndp.Type.INT32))
+
+	error_text = str(error_info.value)
+	assert error_text == EXPECTED_DEPARTMENT_MESSAGE
 
 
 def test_a_text_that_is_not_a_number_is_named_in_the_error() -> None:
@@ -111,7 +149,7 @@ def test_a_text_that_is_not_a_number_is_named_in_the_error() -> None:
 	shops = ndp.Table.from_arrays({"city": cities, "zip_code": wrong_codes})
 
 	with pytest.raises(ndp.ValueConversionError) as error_info:
-		shops.convert(ndp.TableConversion(column="zip_code", dtype=ndp.Type.INT32))
+		shops.convert(ndp.TableConversion(columns=["zip_code"], dtype=ndp.Type.INT32))
 
 	error_text = str(error_info.value)
 	assert error_text == EXPECTED_CONVERSION_MESSAGE
@@ -125,7 +163,7 @@ def test_numbers_become_texts() -> None:
 	"""
 	shops = build_shops()
 
-	text_shops = shops.convert(ndp.TableConversion(column="price", dtype=ndp.Type.TEXT))
+	text_shops = shops.convert(ndp.TableConversion(columns=["price"], dtype=ndp.Type.TEXT))
 
 	price_texts = text_shops.column("price")
 	text_list = price_texts.to_list()
@@ -192,12 +230,12 @@ def test_dates_written_with_a_time_format_point_to_a_conversion_through_datetime
 	"""
 	days = ndp.Table.from_arrays({"day": ndp.Array.from_list([SALE_DAY])})
 	day_and_time = ndp.DateFormat.DAY_MONTH_YEAR_TIME
-	to_text = ndp.TableConversion(column="day", dtype=ndp.Type.TEXT, format=day_and_time)
+	to_text = ndp.TableConversion(columns=["day"], dtype=ndp.Type.TEXT, format=day_and_time)
 
 	with pytest.raises(ndp.InvalidConversionError, match=THROUGH_DATETIME_HINT):
 		days.convert(to_text)
 
-	datetimes = days.convert(ndp.TableConversion(column="day", dtype=ndp.Type.DATETIME))
+	datetimes = days.convert(ndp.TableConversion(columns=["day"], dtype=ndp.Type.DATETIME))
 	texts = datetimes.convert(to_text)
 	text_list = texts.column("day").to_list()
 	assert text_list == [EXPECTED_SALE_DAY_TEXT]
@@ -212,7 +250,7 @@ def test_booleans_become_numbers_for_a_share() -> None:
 	paid = ndp.Array.from_list(PAID_FLAGS)
 	sales = ndp.Table.from_arrays({"paid": paid})
 
-	numbers = sales.convert(ndp.TableConversion(column="paid", dtype=ndp.Type.FLOAT64))
+	numbers = sales.convert(ndp.TableConversion(columns=["paid"], dtype=ndp.Type.FLOAT64))
 
 	paid_numbers = numbers.column("paid")
 	paid_share_array = paid_numbers.compute(ndp.Mean())
@@ -229,7 +267,7 @@ def test_zeros_and_ones_become_booleans() -> None:
 	codes = ndp.Array.from_list(SEVERITY_CODES)
 	accidents = ndp.Table.from_arrays({"severe": codes})
 
-	flags = accidents.convert(ndp.TableConversion(column="severe", dtype=ndp.Type.BOOL))
+	flags = accidents.convert(ndp.TableConversion(columns=["severe"], dtype=ndp.Type.BOOL))
 
 	severe_flags = flags.column("severe")
 	severe_values = severe_flags.to_list()
@@ -246,7 +284,7 @@ def test_another_number_than_zero_or_one_is_named_in_the_error() -> None:
 	shops = ndp.Table.from_arrays({"visits": counts})
 
 	with pytest.raises(ndp.ValueConversionError) as error_info:
-		shops.convert(ndp.TableConversion(column="visits", dtype=ndp.Type.BOOL))
+		shops.convert(ndp.TableConversion(columns=["visits"], dtype=ndp.Type.BOOL))
 
 	error_text = str(error_info.value)
 	assert error_text == EXPECTED_VISIT_MESSAGE
@@ -260,7 +298,7 @@ def test_every_number_but_zero_is_true_with_its_rule() -> None:
 	"""
 	counts = ndp.Array.from_list(VISIT_COUNTS)
 	shops = ndp.Table.from_arrays({"visits": counts})
-	conversion = ndp.TableConversion(column="visits", dtype=ndp.Type.BOOL, booleans=ndp.BooleanRule.NONZERO_TRUE)
+	conversion = ndp.TableConversion(columns=["visits"], dtype=ndp.Type.BOOL, booleans=ndp.BooleanRule.NONZERO_TRUE)
 
 	flags = shops.convert(conversion)
 
@@ -277,7 +315,7 @@ def test_a_boolean_rule_on_texts_is_refused() -> None:
 	"""
 	answers = ndp.Array.from_list(["true", "false"])
 	survey = ndp.Table.from_arrays({"answer": answers})
-	conversion = ndp.TableConversion(column="answer", dtype=ndp.Type.BOOL, booleans=ndp.BooleanRule.NONZERO_TRUE)
+	conversion = ndp.TableConversion(columns=["answer"], dtype=ndp.Type.BOOL, booleans=ndp.BooleanRule.NONZERO_TRUE)
 
 	with pytest.raises(ndp.InvalidConversionError) as error_info:
 		survey.convert(conversion)

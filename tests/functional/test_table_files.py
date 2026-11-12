@@ -154,7 +154,7 @@ def test_a_parquet_file_keeps_every_type(tmp_path: Path) -> None:
 	"""
 	path = tmp_path / PARQUET_NAME
 	sales = build_sales()
-	category_sales = sales.convert(ndp.TableConversion(column="city", dtype=ndp.Type.CATEGORY))
+	category_sales = sales.convert(ndp.TableConversion(columns=["city"], dtype=ndp.Type.CATEGORY))
 
 	category_sales.to_parquet(path)
 	read_sales = ndp.Table.from_parquet(path)

@@ -50,7 +50,7 @@ def cut(values: list[int] | list[float], brackets: ndp.Brackets) -> ndp.Table:
 	"""
 	numbers = ndp.Array.from_list(values)
 	table = ndp.Table.from_arrays({"value": numbers})
-	conversion = ndp.TableConversion(column="value", dtype=ndp.Type.CATEGORY, format=brackets)
+	conversion = ndp.TableConversion(columns=["value"], dtype=ndp.Type.CATEGORY, format=brackets)
 	cut_table = table.convert(conversion)
 
 	return cut_table
@@ -127,7 +127,7 @@ def test_brackets_are_refused_on_texts() -> None:
 	"""
 	road_names = ndp.Array.from_list(ROADS)
 	roads = ndp.Table.from_arrays({"road": road_names})
-	conversion = ndp.TableConversion(column="road", dtype=ndp.Type.CATEGORY, format=AGE_BRACKETS)
+	conversion = ndp.TableConversion(columns=["road"], dtype=ndp.Type.CATEGORY, format=AGE_BRACKETS)
 
 	with pytest.raises(ndp.InvalidConversionError):
 		roads.convert(conversion)

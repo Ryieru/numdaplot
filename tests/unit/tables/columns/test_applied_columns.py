@@ -15,16 +15,12 @@ from numdaplot.arrays.creation.list_conversion import convert_list
 from numdaplot.arrays.mapping.unmatched import Unmatched
 from numdaplot.arrays.mapping.value_change import ValueChange
 from numdaplot.arrays.mapping.value_mapping import ValueMapping
-from numdaplot.arrays.math_functions.math_function import MathFunction
 from numdaplot.arrays.math_functions.square_root import SquareRoot
 from numdaplot.data_types.type import Type
 from numdaplot.dates.date_part import DatePart
 from numdaplot.dates.date_part_unit import DatePartUnit
-from numdaplot.dates.time_function import TimeFunction
-from numdaplot.errors.column_not_found_error import ColumnNotFoundError
 from numdaplot.errors.out_of_domain_error import OutOfDomainError
 from numdaplot.errors.time_zone_mismatch_error import TimeZoneMismatchError
-from numdaplot.tables.columns import applied_columns
 from numdaplot.tables.columns.applied_columns import (
 	apply_frame_columns,
 	apply_to_column,
@@ -38,17 +34,12 @@ from numdaplot.tables.frames.column_values import build_column_with_missing, fin
 INTEGER_DTYPE = "Int64"
 AREA_NAME = "area"
 CITY_NAME = "city"
-UNKNOWN_NAME = "volume"
 FRAME = pandas.DataFrame({AREA_NAME: [4.0, 9.0], CITY_NAME: ["Pau", "Dax"]})
 EXPECTED_ROOTS = [2.0, 3.0]
-EXPECTED_AREAS = [4.0, 9.0]
 EXPECTED_CITIES = ["Pau", "Dax"]
 EXPECTED_COLUMN_NAMES = [AREA_NAME, CITY_NAME]
 NEGATIVE_FRAME = pandas.DataFrame({AREA_NAME: [4.0, -1.0]})
 ROOTS = TableApplication(function=SquareRoot(), columns=[AREA_NAME])
-UNKNOWN_ROOTS = TableApplication(function=SquareRoot(), columns=[AREA_NAME, UNKNOWN_NAME])
-REVERSED_COLUMN_NAMES = [CITY_NAME, AREA_NAME]
-REVERSED_ROOTS = TableApplication(function=SquareRoot(), columns=REVERSED_COLUMN_NAMES)
 SQUARES_WITH_MISSING = pandas.Series([1, None, 9], dtype=INTEGER_DTYPE)
 EXPECTED_ROOTS_WITH_MISSING = [1.0, None, 3.0]
 DAYS = convert_list([date(2026, 3, 14), date(2026, 7, 1)], None)
@@ -69,45 +60,6 @@ UTC_ZONE = "UTC"
 PICKUP_NAME = "pickup"
 PICKUP_TEXTS = ["2026-03-14 23:30"]
 EXPECTED_ZONE_MESSAGE = "Applying a function to 'pickup' needs datetimes without a time zone."
-
-
-class RecordedApplications:
-	"""
-	Fake application of a function to a column, recording the columns it receives.
-
-	.. versionadded:: 0.2.0
-	"""
-
-	def __init__(self) -> None:
-		"""
-		Start without any recorded column.
-
-		.. versionadded:: 0.2.0
-		"""
-		self.column_names = list[str]()
-
-	def record(self, column: Column, function: MathFunction | TimeFunction | ValueMapping) -> Column:
-		"""
-		Record the name of the column and return it unchanged.
-
-		.. versionadded:: 0.2.0
-
-		Parameters
-		----------
-		column
-			The column the function applies to.
-		function
-			The function, ignored.
-
-		Returns
-		-------
-		Column
-			The column itself.
-		"""
-		column_name = str(column.name)
-		self.column_names.append(column_name)
-
-		return column
 
 
 def read_values(column: Column) -> list[object]:
@@ -176,57 +128,6 @@ def test_apply_frame_columns_replaces_the_listed_columns_at_their_place() -> Non
 	assert column_names == EXPECTED_COLUMN_NAMES
 	assert roots == EXPECTED_ROOTS
 	assert cities == EXPECTED_CITIES
-
-
-def test_apply_frame_columns_leaves_the_given_columns_unchanged() -> None:
-	"""
-	Check that the source DataFrame keeps its values.
-
-	.. versionadded:: 0.2.0
-	"""
-	apply_frame_columns(FRAME, ROOTS)
-
-	areas = FRAME[AREA_NAME].tolist()
-	assert areas == EXPECTED_AREAS
-
-
-def test_apply_frame_columns_checks_every_column_before_applying(monkeypatch: pytest.MonkeyPatch) -> None:
-	"""
-	Check that an unknown column raises ColumnNotFoundError before the function applies to any column.
-
-	.. versionadded:: 0.2.0
-
-	Parameters
-	----------
-	monkeypatch
-		Replaces the application to one column with a recording fake.
-	"""
-	recorder = RecordedApplications()
-	monkeypatch.setattr(applied_columns, "apply_to_column", recorder.record)
-
-	with pytest.raises(ColumnNotFoundError):
-		apply_frame_columns(FRAME, UNKNOWN_ROOTS)
-
-	assert recorder.column_names == []
-
-
-def test_apply_frame_columns_hands_each_listed_column_in_order(monkeypatch: pytest.MonkeyPatch) -> None:
-	"""
-	Check that each listed column goes to the application to one column, in the order of the list.
-
-	.. versionadded:: 0.2.0
-
-	Parameters
-	----------
-	monkeypatch
-		Replaces the application to one column with a recording fake.
-	"""
-	recorder = RecordedApplications()
-	monkeypatch.setattr(applied_columns, "apply_to_column", recorder.record)
-
-	apply_frame_columns(FRAME, REVERSED_ROOTS)
-
-	assert recorder.column_names == REVERSED_COLUMN_NAMES
 
 
 def test_apply_frame_columns_names_the_failing_column() -> None:

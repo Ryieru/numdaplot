@@ -6,7 +6,7 @@ Column operations of a Table: choice, renaming, conversion, application of a fun
 
 from typing import Self
 
-from numdaplot.conversions.converted_column import convert_column
+from numdaplot.conversions.converted_frame import convert_frame_columns
 from numdaplot.conversions.table_conversion import TableConversion
 from numdaplot.settings.argument_types import checked_arguments
 from numdaplot.tables.columns.added_column import add_frame_column
@@ -17,7 +17,6 @@ from numdaplot.tables.columns.new_column import NewColumn
 from numdaplot.tables.columns.renamed_columns import rename_frame_columns
 from numdaplot.tables.columns.renaming import Renaming
 from numdaplot.tables.columns.table_application import TableApplication
-from numdaplot.tables.frames.named_column_errors import NamedColumnErrors
 from numdaplot.tables.table_data import TableData
 
 
@@ -109,14 +108,16 @@ class TableColumns(TableData):
 	@checked_arguments
 	def convert(self, conversion: TableConversion) -> Self:
 		"""
-		Return the Table with a column converted to another type, missing values staying missing.
+		Return the Table with columns converted to another type, missing values staying missing.
 
 		.. versionadded:: 0.1.0
+		.. versionchanged:: 0.2.0
+			Converts every column of ``TableConversion.columns``.
 
 		Parameters
 		----------
 		conversion
-			The column, its new type, and the date format or the time zone change. Accepted: between number
+			The columns, their new type, and the date format or the time zone change. Accepted: between number
 			types, from numbers, booleans, categories, dates, datetimes and durations to texts, from texts and
 			categories to numbers, booleans (``"true"`` or ``"false"`` in any case), dates or datetimes, from any
 			other type to categories, between dates and datetimes, and a time zone change of datetimes.
@@ -124,14 +125,14 @@ class TableColumns(TableData):
 		Returns
 		-------
 		Self
-			A new Table, the column at its place.
+			A new Table, each column at its place.
 
 		Raises
 		------
 		InvalidTypeError
 			When an argument is not of the type its annotation names.
 		ColumnNotFoundError
-			When the column does not exist.
+			When a column does not exist, before any column is converted.
 		IncompatibleTypesError
 			When the conversion is not accepted.
 		InvalidConversionError
@@ -149,22 +150,21 @@ class TableColumns(TableData):
 		TimeZoneMismatchError
 			When the time zone change does not apply to whether the datetimes have a zone.
 
+		The first column that fails stops the operation, and the error names it.
+
 		Examples
 		--------
 		>>> import numdaplot as ndp
-		>>> table = ndp.Table.from_arrays({"zip_code": ndp.Array.from_list(["06000", "75001"])})
-		>>> table.convert(ndp.TableConversion(column="zip_code", dtype=ndp.Type.INT32))
-		  zip_code
-		     INT32
-		0     6000
-		1    75001
+		>>> zip_codes = ndp.Array.from_list(["06000", "75001"])
+		>>> department_codes = ndp.Array.from_list(["06", "75"])
+		>>> places = ndp.Table.from_arrays({"zip_code": zip_codes, "department": department_codes})
+		>>> places.convert(ndp.TableConversion(columns=["zip_code", "department"], dtype=ndp.Type.INT32))
+		  zip_code department
+		     INT32      INT32
+		0     6000          6
+		1    75001         75
 		"""
-		column = self._read_column(conversion.column)
-		with NamedColumnErrors(column):
-			converted_column = convert_column(column, conversion)
-
-		converted_frame = self._frame.copy(deep=False)
-		converted_frame[conversion.column] = converted_column
+		converted_frame = convert_frame_columns(self._frame, conversion)
 		converted_table = self._wrap(converted_frame)
 
 		return converted_table

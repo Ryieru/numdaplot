@@ -29,26 +29,28 @@ CONVERTED_NAME = "value"
 UTC_ZONE = TimeZone("UTC")
 ATTRIBUTE_UTC = TimeZoneChange(mode=TimeZoneMode.ATTRIBUTE, zone=UTC_ZONE)
 REJECTED_SETTINGS = [
-	TableConversion(column=CONVERTED_NAME, dtype=Type.INT64, format=DateFormat.DAY_MONTH_YEAR),
-	TableConversion(column=CONVERTED_NAME, dtype=Type.DATE, format=DateFormat.DAY_MONTH_YEAR_TIME),
-	TableConversion(column=CONVERTED_NAME, dtype=Type.DATETIME, timezone=ATTRIBUTE_UTC),
-	TableConversion(column=CONVERTED_NAME, dtype=Type.BOOL, booleans=BooleanRule.NONZERO_TRUE),
+	TableConversion(columns=[CONVERTED_NAME], dtype=Type.INT64, format=DateFormat.DAY_MONTH_YEAR),
+	TableConversion(columns=[CONVERTED_NAME], dtype=Type.DATE, format=DateFormat.DAY_MONTH_YEAR_TIME),
+	TableConversion(columns=[CONVERTED_NAME], dtype=Type.DATETIME, timezone=ATTRIBUTE_UTC),
+	TableConversion(columns=[CONVERTED_NAME], dtype=Type.BOOL, booleans=BooleanRule.NONZERO_TRUE),
 ]
 FORMAT_AND_ZONE = TableConversion(
-	column=CONVERTED_NAME,
+	columns=[CONVERTED_NAME],
 	dtype=Type.DATETIME,
 	format=DateFormat.YEAR_MONTH_DAY_TIME,
 	timezone=ATTRIBUTE_UTC,
 )
 ACCEPTED_SETTINGS = [
-	TableConversion(column=CONVERTED_NAME, dtype=Type.DATE, format=DateFormat.DAY_MONTH_YEAR),
-	TableConversion(column=CONVERTED_NAME, dtype=Type.DATETIME, format=DateFormat.DAY_MONTH_YEAR),
-	TableConversion(column=CONVERTED_NAME, dtype=Type.DATETIME, format=DateFormat.DAY_MONTH_YEAR_TIME),
+	TableConversion(columns=[CONVERTED_NAME], dtype=Type.DATE, format=DateFormat.DAY_MONTH_YEAR),
+	TableConversion(columns=[CONVERTED_NAME], dtype=Type.DATETIME, format=DateFormat.DAY_MONTH_YEAR),
+	TableConversion(columns=[CONVERTED_NAME], dtype=Type.DATETIME, format=DateFormat.DAY_MONTH_YEAR_TIME),
 ]
-TIME_FORMAT_ON_DATE = TableConversion(column=CONVERTED_NAME, dtype=Type.DATE, format=DateFormat.YEAR_MONTH_DAY_TIME)
-CUSTOM_TIME_ON_DATE = TableConversion(column=CONVERTED_NAME, dtype=Type.DATE, format=CustomDateFormat("%d/%m/%Y %H:%M"))
+TIME_FORMAT_ON_DATE = TableConversion(columns=[CONVERTED_NAME], dtype=Type.DATE, format=DateFormat.YEAR_MONTH_DAY_TIME)
+CUSTOM_TIME_ON_DATE = TableConversion(
+	columns=[CONVERTED_NAME], dtype=Type.DATE, format=CustomDateFormat("%d/%m/%Y %H:%M")
+)
 TIME_FORMAT_WRITING_DATE = TableConversion(
-	column=CONVERTED_NAME, dtype=Type.TEXT, format=DateFormat.YEAR_MONTH_DAY_TIME
+	columns=[CONVERTED_NAME], dtype=Type.TEXT, format=DateFormat.YEAR_MONTH_DAY_TIME
 )
 EXPECTED_TIME_FORMAT_MESSAGE = (
 	"The format YEAR_MONTH_DAY_TIME has a time, which DATE cannot hold. "
@@ -62,14 +64,14 @@ EXPECTED_WRITING_MESSAGE = (
 	"Convert the values to DATETIME first, then to TEXT."
 )
 TIME_FORMAT_ON_DATE_TO_INTEGER = TableConversion(
-	column=CONVERTED_NAME, dtype=Type.INT64, format=DateFormat.YEAR_MONTH_DAY_TIME
+	columns=[CONVERTED_NAME], dtype=Type.INT64, format=DateFormat.YEAR_MONTH_DAY_TIME
 )
 EXPECTED_GENERAL_MESSAGE = "The setting format does not apply to a conversion from DATE to INT64."
 ARRAY_TIME_FORMAT_TO_INTEGER = ArrayConversion(dtype=Type.INT64, format=DateFormat.YEAR_MONTH_DAY_TIME)
 ARRAY_PLAIN_CONVERSION = ArrayConversion(dtype=Type.INT64)
-NONZERO_TO_BOOLEANS = TableConversion(column=CONVERTED_NAME, dtype=Type.BOOL, booleans=BooleanRule.NONZERO_TRUE)
-NONZERO_TO_INTEGERS = TableConversion(column=CONVERTED_NAME, dtype=Type.INT64, booleans=BooleanRule.NONZERO_TRUE)
-PLAIN_TO_BOOLEANS = TableConversion(column=CONVERTED_NAME, dtype=Type.BOOL)
+NONZERO_TO_BOOLEANS = TableConversion(columns=[CONVERTED_NAME], dtype=Type.BOOL, booleans=BooleanRule.NONZERO_TRUE)
+NONZERO_TO_INTEGERS = TableConversion(columns=[CONVERTED_NAME], dtype=Type.INT64, booleans=BooleanRule.NONZERO_TRUE)
+PLAIN_TO_BOOLEANS = TableConversion(columns=[CONVERTED_NAME], dtype=Type.BOOL)
 EXPECTED_BOOLEANS_MESSAGE = "The setting booleans does not apply to a conversion from TEXT to BOOL."
 TIME_PATTERN = CustomDateFormat("%H:%M")
 DATE_PATTERN = CustomDateFormat("%d/%m/%Y")
@@ -264,7 +266,7 @@ def test_require_time_zone_setting_rejects_a_change_of_texts() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	zone_change = TableConversion(column=CONVERTED_NAME, dtype=Type.DATETIME, timezone=ATTRIBUTE_UTC)
+	zone_change = TableConversion(columns=[CONVERTED_NAME], dtype=Type.DATETIME, timezone=ATTRIBUTE_UTC)
 
 	with pytest.raises(InvalidConversionError):
 		require_time_zone_setting(Type.TEXT, zone_change)
@@ -276,7 +278,7 @@ def test_require_format_setting_rejects_a_format_between_numbers() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	day_first = TableConversion(column=CONVERTED_NAME, dtype=Type.INT64, format=DateFormat.DAY_MONTH_YEAR)
+	day_first = TableConversion(columns=[CONVERTED_NAME], dtype=Type.INT64, format=DateFormat.DAY_MONTH_YEAR)
 
 	with pytest.raises(InvalidConversionError):
 		require_format_setting(Type.FLOAT64, day_first)
@@ -360,7 +362,7 @@ def test_require_conversion_settings_rejects_a_time_pattern_for_dates() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	conversion = TableConversion(column=CONVERTED_NAME, dtype=Type.DATETIME, format=TIME_PATTERN)
+	conversion = TableConversion(columns=[CONVERTED_NAME], dtype=Type.DATETIME, format=TIME_PATTERN)
 
 	with pytest.raises(InvalidConversionError):
 		require_conversion_settings(Type.TEXT, conversion)

@@ -173,7 +173,7 @@ def name_value_columns(pivot_column: Column, column_groups: list[NDArray[Any]], 
 		decimal_names = [write_decimal(decimal) for decimal in decimals]
 		return decimal_names
 
-	text_conversion = TableConversion(column=column_name, dtype=Type.TEXT)
+	text_conversion = TableConversion(columns=[column_name], dtype=Type.TEXT)
 	value_texts = convert_column(first_values, text_conversion)
 	value_names = cast(list[str], value_texts.tolist())
 

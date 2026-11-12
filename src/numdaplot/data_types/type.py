@@ -284,7 +284,7 @@ class Type(Enum):
 	>>> cities = ndp.Array.from_list(["Paris", "Lyon", "Paris"])
 	>>> prices = ndp.Array.from_list([120.0, 80.0, 150.0])
 	>>> sales = ndp.Table.from_arrays({"city": cities, "price": prices})
-	>>> categories = sales.convert(ndp.TableConversion(column="city", dtype=ndp.Type.CATEGORY))
+	>>> categories = sales.convert(ndp.TableConversion(columns=["city"], dtype=ndp.Type.CATEGORY))
 	>>> categories.column_types["city"], categories.column("city").dtype
 	(<Type.CATEGORY: 13>, <Type.TEXT: 12>)
 	"""

@@ -83,7 +83,7 @@ def convert_column(column: Column, conversion: ConversionSettings) -> Column:
 	>>> import numdaplot as ndp
 	>>> from numdaplot.conversions.converted_column import convert_column
 	>>> texts = pandas.Series(["1", None, "3"], dtype="string")
-	>>> convert_column(texts, ndp.TableConversion(column="count", dtype=ndp.Type.INT64)).tolist()
+	>>> convert_column(texts, ndp.TableConversion(columns=["count"], dtype=ndp.Type.INT64)).tolist()
 	[1, <NA>, 3]
 	"""
 	source_type = find_column_type(column)
@@ -278,7 +278,7 @@ def convert_plain_column(column: Column, source_type: Type, conversion: Conversi
 	>>> import pandas
 	>>> import numdaplot as ndp
 	>>> from numdaplot.conversions.converted_column import convert_plain_column
-	>>> to_text = ndp.TableConversion(column="price", dtype=ndp.Type.TEXT)
+	>>> to_text = ndp.TableConversion(columns=["price"], dtype=ndp.Type.TEXT)
 	>>> convert_plain_column(pandas.Series([1.5]), ndp.Type.FLOAT64, to_text).tolist()
 	['1.5']
 	"""
@@ -372,7 +372,7 @@ def read_plain_column(column: Column, source_type: Type, conversion: ConversionS
 	>>> import pandas
 	>>> import numdaplot as ndp
 	>>> from numdaplot.conversions.converted_column import read_plain_column
-	>>> to_integers = ndp.TableConversion(column="paid", dtype=ndp.Type.INT64)
+	>>> to_integers = ndp.TableConversion(columns=["paid"], dtype=ndp.Type.INT64)
 	>>> read_plain_column(pandas.Series([True, False]), ndp.Type.BOOL, to_integers).tolist()
 	[1, 0]
 	"""

@@ -201,7 +201,7 @@ def test_small_integer_codes_keep_their_type() -> None:
 	"""
 	codes = ndp.Array.from_list(SMALL_CODES)
 	table = ndp.Table.from_arrays({"code": codes})
-	small_table = table.convert(ndp.TableConversion(column="code", dtype=ndp.Type.INT8))
+	small_table = table.convert(ndp.TableConversion(columns=["code"], dtype=ndp.Type.INT8))
 	small_codes = small_table.column("code")
 
 	new_codes = small_codes.apply(SMALL_CODE_LABELS)
