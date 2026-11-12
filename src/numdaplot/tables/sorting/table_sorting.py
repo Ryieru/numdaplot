@@ -15,7 +15,7 @@ SORT_KEY_ITEM_NAME = "sort key"
 
 
 @dataclass(frozen=True)
-class Sorting:
+class TableSorting:
 	"""
 	Columns the rows of a Table are sorted by, used by ``Table.sort``.
 
@@ -23,6 +23,8 @@ class Sorting:
 	Rows equal on every key keep their order.
 
 	.. versionadded:: 0.1.0
+	.. versionchanged:: 0.2.0
+		Renamed from ``Sorting``.
 
 	Parameters
 	----------
@@ -46,7 +48,7 @@ class Sorting:
 	>>> sales = ndp.Table.from_arrays({"city": cities, "price": prices})
 	>>> by_city = ndp.SortKey(column="city")
 	>>> by_price = ndp.SortKey(column="price", order=ndp.Order.DESCENDING)
-	>>> sales.sort(ndp.Sorting(keys=[by_city, by_price]))
+	>>> sales.sort(ndp.TableSorting(keys=[by_city, by_price]))
 	    city   price
 	    TEXT FLOAT64
 	0   Lyon    80.0

@@ -70,7 +70,7 @@ def test_rows_are_sorted_by_several_keys() -> None:
 	by_email = ndp.SortKey(column="email")
 	by_amount = ndp.SortKey(column="amount", order=ndp.Order.DESCENDING)
 
-	sorted_visits = visits.sort(ndp.Sorting(keys=[by_email, by_amount]))
+	sorted_visits = visits.sort(ndp.TableSorting(keys=[by_email, by_amount]))
 
 	visit_numbers = read_visit_numbers(sorted_visits)
 	assert visit_numbers == EXPECTED_BY_EMAIL_THEN_AMOUNT
@@ -85,7 +85,7 @@ def test_missing_values_can_come_first() -> None:
 	visits = build_visits()
 	by_amount = ndp.SortKey(column="amount", missing=ndp.MissingPosition.FIRST)
 
-	sorted_visits = visits.sort(ndp.Sorting(keys=[by_amount]))
+	sorted_visits = visits.sort(ndp.TableSorting(keys=[by_amount]))
 
 	visit_numbers = read_visit_numbers(sorted_visits)
 	assert visit_numbers == EXPECTED_MISSING_AMOUNT_FIRST

@@ -10,7 +10,7 @@ from numdaplot.settings.argument_types import checked_arguments
 from numdaplot.tables.duplicates.deduplicated_frame import drop_duplicate_rows
 from numdaplot.tables.duplicates.deduplication import Deduplication
 from numdaplot.tables.sorting.sorted_frame import sort_frame
-from numdaplot.tables.sorting.sorting import Sorting
+from numdaplot.tables.sorting.table_sorting import TableSorting
 from numdaplot.tables.table_data import TableData
 
 
@@ -22,7 +22,7 @@ class TableLayout(TableData):
 	"""
 
 	@checked_arguments
-	def sort(self, sorting: Sorting) -> Self:
+	def sort(self, sorting: TableSorting) -> Self:
 		"""
 		Return the rows sorted by one or several columns.
 
@@ -49,7 +49,7 @@ class TableLayout(TableData):
 		--------
 		>>> import numdaplot as ndp
 		>>> table = ndp.Table.from_arrays({"price": ndp.Array.from_list([20.0, 10.0, 30.0])})
-		>>> table.sort(ndp.Sorting(keys=[ndp.SortKey(column="price", order=ndp.Order.DESCENDING)]))
+		>>> table.sort(ndp.TableSorting(keys=[ndp.SortKey(column="price", order=ndp.Order.DESCENDING)]))
 		    price
 		  FLOAT64
 		0    30.0

@@ -79,7 +79,7 @@ def test_sorting_and_grouping_follow_the_order_of_the_brackets() -> None:
 	cut_table = cut(LIFE_AGES, LIFE_BRACKETS)
 	count = ndp.Calculation(column="value", function=ndp.Count())
 
-	sorted_table = cut_table.sort(ndp.Sorting(keys=[ndp.SortKey(column="value")]))
+	sorted_table = cut_table.sort(ndp.TableSorting(keys=[ndp.SortKey(column="value")]))
 	counts = cut_table.aggregate(ndp.Aggregation(calculations=[count], group_by=["value"]))
 
 	sorted_column = sorted_table.column("value")

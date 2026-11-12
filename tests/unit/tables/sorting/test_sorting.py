@@ -1,5 +1,5 @@
 """
-Unit tests of SortKey, Sorting and the sort of the rows of a Table.
+Unit tests of SortKey, TableSorting and the sort of the rows of a Table.
 
 .. versionadded:: 0.1.0
 """
@@ -14,7 +14,7 @@ from numdaplot.ordering.missing_position import MissingPosition
 from numdaplot.ordering.order import Order
 from numdaplot.tables.sorting.sort_key import SortKey
 from numdaplot.tables.sorting.sorted_frame import sort_frame
-from numdaplot.tables.sorting.sorting import Sorting
+from numdaplot.tables.sorting.table_sorting import TableSorting
 
 SALES = pandas.DataFrame(
 	{
@@ -73,7 +73,7 @@ def test_sorting_rejects_no_key() -> None:
 	.. versionadded:: 0.1.0
 	"""
 	with pytest.raises(EmptyListError):
-		Sorting(keys=[])
+		TableSorting(keys=[])
 
 
 def test_sorting_rejects_two_keys_on_the_same_column() -> None:
@@ -83,7 +83,7 @@ def test_sorting_rejects_two_keys_on_the_same_column() -> None:
 	.. versionadded:: 0.1.0
 	"""
 	with pytest.raises(DuplicateColumnError):
-		Sorting(keys=[BY_PRICE_DESCENDING, BY_PRICE_MISSING_FIRST])
+		TableSorting(keys=[BY_PRICE_DESCENDING, BY_PRICE_MISSING_FIRST])
 
 
 def test_sort_frame_sorts_by_each_key_in_order() -> None:
@@ -92,7 +92,7 @@ def test_sort_frame_sorts_by_each_key_in_order() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	sorting = Sorting(keys=[BY_CITY, BY_PRICE_DESCENDING])
+	sorting = TableSorting(keys=[BY_CITY, BY_PRICE_DESCENDING])
 
 	sorted_frame = sort_frame(SALES, sorting)
 
@@ -106,7 +106,7 @@ def test_sort_frame_places_missing_values_first_when_asked() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	sorting = Sorting(keys=[BY_PRICE_MISSING_FIRST])
+	sorting = TableSorting(keys=[BY_PRICE_MISSING_FIRST])
 
 	sorted_frame = sort_frame(SALES, sorting)
 
@@ -120,7 +120,7 @@ def test_sort_frame_keeps_the_order_of_equal_rows() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	sorting = Sorting(keys=[BY_CITY])
+	sorting = TableSorting(keys=[BY_CITY])
 
 	sorted_frame = sort_frame(SALES, sorting)
 
@@ -134,7 +134,7 @@ def test_sort_frame_numbers_the_rows_from_zero() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	sorting = Sorting(keys=[BY_PRICE_DESCENDING])
+	sorting = TableSorting(keys=[BY_PRICE_DESCENDING])
 
 	sorted_frame = sort_frame(SALES, sorting)
 
@@ -148,7 +148,7 @@ def test_sort_frame_rejects_an_unknown_column() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	sorting = Sorting(keys=[SortKey(column="prise")])
+	sorting = TableSorting(keys=[SortKey(column="prise")])
 
 	with pytest.raises(ColumnNotFoundError):
 		sort_frame(SALES, sorting)

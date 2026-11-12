@@ -15,7 +15,7 @@ from numdaplot.tables.columns.column_names import require_column_name
 @dataclass(frozen=True)
 class SortKey:
 	"""
-	A column the rows of a Table are sorted by, used by ``Sorting``.
+	A column the rows of a Table are sorted by, used by ``TableSorting``.
 
 	.. versionadded:: 0.1.0
 
@@ -41,7 +41,7 @@ class SortKey:
 	>>> cities = ndp.Array.from_list(["Paris", "Lyon", "Paris"])
 	>>> prices = ndp.Array.from_list([120.0, 80.0, 150.0])
 	>>> sales = ndp.Table.from_arrays({"city": cities, "price": prices})
-	>>> sales.sort(ndp.Sorting(keys=[ndp.SortKey(column="price", order=ndp.Order.DESCENDING)]))
+	>>> sales.sort(ndp.TableSorting(keys=[ndp.SortKey(column="price", order=ndp.Order.DESCENDING)]))
 	    city   price
 	    TEXT FLOAT64
 	0  Paris   150.0

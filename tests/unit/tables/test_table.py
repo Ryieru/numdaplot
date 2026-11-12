@@ -8,7 +8,7 @@ import pytest
 
 from numdaplot.arrays.array import Array
 from numdaplot.tables.sorting.sort_key import SortKey
-from numdaplot.tables.sorting.sorting import Sorting
+from numdaplot.tables.sorting.table_sorting import TableSorting
 from numdaplot.tables.table import Table
 from numdaplot.tables.table_calculation import TableCalculation
 from numdaplot.tables.table_columns import TableColumns
@@ -59,6 +59,6 @@ def test_table_operations_return_tables() -> None:
 	"""
 	table = Table.from_arrays({"price": PRICES})
 
-	sorted_table = table.sort(Sorting(keys=[SortKey(column="price")]))
+	sorted_table = table.sort(TableSorting(keys=[SortKey(column="price")]))
 
 	assert type(sorted_table) is Table

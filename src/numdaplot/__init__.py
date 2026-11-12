@@ -241,7 +241,7 @@ from numdaplot.tables.preview.preview import Preview
 from numdaplot.tables.preview.shown_columns import ShownColumns
 from numdaplot.tables.preview.side import Side
 from numdaplot.tables.sorting.sort_key import SortKey
-from numdaplot.tables.sorting.sorting import Sorting
+from numdaplot.tables.sorting.table_sorting import TableSorting
 from numdaplot.tables.table import Table
 
 __version__ = find_package_version()
@@ -448,7 +448,7 @@ __all__ = [
 	"Size",
 	"SizeUnit",
 	"SortKey",
-	"Sorting",
+	"TableSorting",
 	"Spacing",
 	"SquareRoot",
 	"StandardDeviation",

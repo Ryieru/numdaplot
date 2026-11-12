@@ -11,7 +11,7 @@ import pandas
 from numdaplot.ordering.missing_position import MissingPosition
 from numdaplot.ordering.order import Order
 from numdaplot.tables.columns.column_names import require_known_columns
-from numdaplot.tables.sorting.sorting import Sorting
+from numdaplot.tables.sorting.table_sorting import TableSorting
 
 STABLE_SORT = "stable"
 MISSING_PLACES = dict[MissingPosition, Literal["first", "last"]](
@@ -22,7 +22,7 @@ MISSING_PLACES = dict[MissingPosition, Literal["first", "last"]](
 )
 
 
-def sort_frame(frame: pandas.DataFrame, sorting: Sorting) -> pandas.DataFrame:
+def sort_frame(frame: pandas.DataFrame, sorting: TableSorting) -> pandas.DataFrame:
 	"""
 	Return the rows of a Table sorted by several columns, each with its own order and place of missing values.
 
@@ -53,7 +53,7 @@ def sort_frame(frame: pandas.DataFrame, sorting: Sorting) -> pandas.DataFrame:
 	>>> frame = pandas.DataFrame({"city": ["Pau", "Lyon", "Pau"], "price": [1.0, 2.0, 3.0]})
 	>>> by_city = ndp.SortKey(column="city")
 	>>> by_price = ndp.SortKey(column="price", order=ndp.Order.DESCENDING)
-	>>> sort_frame(frame, ndp.Sorting(keys=[by_city, by_price]))
+	>>> sort_frame(frame, ndp.TableSorting(keys=[by_city, by_price]))
 	   city  price
 	0  Lyon    2.0
 	1   Pau    3.0

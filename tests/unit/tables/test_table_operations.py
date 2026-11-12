@@ -44,7 +44,7 @@ from numdaplot.tables.missing.missing_count import MissingCount
 from numdaplot.tables.missing.missing_drop import MissingDrop
 from numdaplot.tables.pivot.pivot_table import PivotTable
 from numdaplot.tables.sorting.sort_key import SortKey
-from numdaplot.tables.sorting.sorting import Sorting
+from numdaplot.tables.sorting.table_sorting import TableSorting
 from numdaplot.tables.table import Table
 
 FRAME = pandas.DataFrame({"price": [5.0, 12.0, 30.0]})
@@ -83,7 +83,7 @@ FRAME_OPERATIONS = list[tuple[ModuleType, str, TableOperation]](
 		),
 		(table_calculation, "describe_frame", lambda table: table.describe(Description())),
 		(table_calculation, "pivot_frame", lambda table: table.pivot_table(PRICE_PIVOT)),
-		(table_layout, "sort_frame", lambda table: table.sort(Sorting(keys=[SortKey(column="price")]))),
+		(table_layout, "sort_frame", lambda table: table.sort(TableSorting(keys=[SortKey(column="price")]))),
 		(table_layout, "drop_duplicate_rows", lambda table: table.drop_duplicates(Deduplication())),
 		(
 			table_missing,
