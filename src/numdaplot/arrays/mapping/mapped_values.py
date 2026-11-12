@@ -18,12 +18,15 @@ from numdaplot.arrays.operations.type_requirements import require_comparable
 from numdaplot.arrays.selection.missing_mask import find_missing
 from numdaplot.data_types.numpy_mapping import from_numpy_dtype
 from numdaplot.data_types.type import Type
+from numdaplot.data_types.value_type import find_common_type
 from numdaplot.errors.unmatched_value_error import UnmatchedValueError
 from numdaplot.errors.unsupported_missing_error import UnsupportedMissingError
 from numdaplot.rules.rule_values import ScalarValue
 
 DECIMAL_ADVICE = "Give decimal new values, such as 10.0, which can be missing."
 BOOLEAN_ADVICE = "Give texts as new values, which can be missing."
+KEPT_DECIMAL_ADVICE = "Give decimal new values, such as 10.0, or convert the Array to FLOAT64 first."
+KEPT_BOOLEAN_ADVICE = "Convert the Array to TEXT first."
 MIDNIGHT = time()
 INTEGER_TYPES = frozenset(
 	{Type.INT8, Type.INT16, Type.INT32, Type.INT64, Type.UINT8, Type.UINT16, Type.UINT32, Type.UINT64}
@@ -35,6 +38,8 @@ def map_values(values: NDArray[Any], mapping: ValueMapping) -> NDArray[Any]:
 	Return the values of an Array replaced by the new values of a mapping, in the same shape.
 
 	.. versionadded:: 0.1.0
+	.. versionchanged:: 0.2.0
+		Keeps the values without ``ValueChange`` when ``others`` is ``Unmatched.KEEP``.
 
 	Parameters
 	----------
@@ -46,12 +51,14 @@ def map_values(values: NDArray[Any], mapping: ValueMapping) -> NDArray[Any]:
 	Returns
 	-------
 	NDArray
-		The new values, stored with the type the new values share. Missing values stay missing.
+		The new values, stored with the type the new values share, which also holds the kept values with
+		``Unmatched.KEEP``. Missing values stay missing.
 
 	Raises
 	------
 	IncompatibleTypesError
-		When the old values are not of the type family of the Array.
+		When the old values are not of the type family of the Array, or the kept values and the new values are of
+		several families.
 	UnmatchedValueError
 		When a value has no new value and ``others`` is ``Unmatched.ERROR``.
 	UnsupportedMissingError
@@ -71,9 +78,10 @@ def map_values(values: NDArray[Any], mapping: ValueMapping) -> NDArray[Any]:
 
 	flat_values = values.ravel()
 	new_values = find_flat_new_values(flat_values, mapping)
-	new_type = find_new_type(mapping.changes)
-	require_missing_supported(new_values, new_type)
-	stored_values = convert_list(new_values, new_type)
+	array_type = from_numpy_dtype(values.dtype)
+	result_type = find_result_type(array_type, mapping)
+	require_missing_supported(new_values, result_type, mapping.others)
+	stored_values = convert_list(new_values, result_type)
 	shaped_values = stored_values.reshape(values.shape)
 
 	return shaped_values
@@ -84,6 +92,8 @@ def find_flat_new_values(flat_values: NDArray[Any], mapping: ValueMapping) -> li
 	Return the new value of each value of a flat Array, None for a missing one.
 
 	.. versionadded:: 0.1.0
+	.. versionchanged:: 0.2.0
+		Keeps a value without ``ValueChange`` when ``others`` is ``Unmatched.KEEP``.
 
 	Parameters
 	----------
@@ -95,7 +105,7 @@ def find_flat_new_values(flat_values: NDArray[Any], mapping: ValueMapping) -> li
 	Returns
 	-------
 	list[object]
-		The new Python values, in order.
+		The new Python values, in order, a value without ``ValueChange`` kept as it is with ``Unmatched.KEEP``.
 
 	Raises
 	------
@@ -135,16 +145,69 @@ def find_flat_new_values(flat_values: NDArray[Any], mapping: ValueMapping) -> li
 		if mapping.others == Unmatched.ERROR:
 			raise UnmatchedValueError(value)
 
+		if mapping.others == Unmatched.KEEP:
+			new_values.append(value)
+			continue
+
 		new_values.append(None)
 
 	return new_values
 
 
-def require_missing_supported(new_values: Sequence[object], new_type: Type | None) -> None:
+def find_result_type(array_type: Type, mapping: ValueMapping) -> Type | None:
+	"""
+	Return the type of the result of a mapping.
+
+	It is the type of the new values, widened to the type of the Array when the mapping keeps the values without
+	``ValueChange``.
+
+	.. versionadded:: 0.2.0
+
+	Parameters
+	----------
+	array_type
+		The type of the values of the Array.
+	mapping
+		The new value of each listed value, and what happens to the others.
+
+	Returns
+	-------
+	Type or None
+		The type holding every value of the result, or None when no value gives a type.
+
+	Raises
+	------
+	IncompatibleTypesError
+		When the kept values and the new values are of several families, such as numbers and texts.
+
+	Examples
+	--------
+	>>> import numdaplot as ndp
+	>>> from numdaplot.arrays.mapping.mapped_values import find_result_type
+	>>> mapping = ndp.ValueMapping(changes=[ndp.ValueChange(7, 7.5)], others=ndp.Unmatched.KEEP)
+	>>> find_result_type(ndp.Type.INT64, mapping)
+	<Type.FLOAT64: 10>
+	"""
+	new_type = find_new_type(mapping.changes)
+	if mapping.others != Unmatched.KEEP:
+		return new_type
+
+	if new_type is None:
+		return array_type
+
+	result_types = [array_type, new_type]
+	result_type = find_common_type(result_types, MAPPING_OPERATION)
+
+	return result_type
+
+
+def require_missing_supported(new_values: Sequence[object], new_type: Type | None, others: Unmatched) -> None:
 	"""
 	Check that a result of integers or booleans holds no missing value, with advice fitting a mapping.
 
 	.. versionadded:: 0.1.0
+	.. versionchanged:: 0.2.0
+		Takes ``others``, which chooses the advice.
 
 	Parameters
 	----------
@@ -152,6 +215,8 @@ def require_missing_supported(new_values: Sequence[object], new_type: Type | Non
 		The new Python values, None for a missing one.
 	new_type
 		The type the new values share, or None.
+	others
+		What happens to a value without ``ValueChange``, which chooses the advice.
 
 	Raises
 	------
@@ -163,20 +228,24 @@ def require_missing_supported(new_values: Sequence[object], new_type: Type | Non
 	>>> import numdaplot as ndp
 	>>> from numdaplot.arrays.mapping.mapped_values import require_missing_supported
 	>>> try:
-	... 	require_missing_supported([10, None], ndp.Type.INT64)
+	... 	require_missing_supported([10, None], ndp.Type.INT64, ndp.Unmatched.KEEP)
 	... except ndp.UnsupportedMissingError as error:
 	... 	print(error)
-	INT64 values cannot be missing in an Array. Give decimal new values, such as 10.0, which can be missing.
+	INT64 values cannot be missing in an Array. Give decimal new values, such as 10.0,
+	or convert the Array to FLOAT64 first.
 	"""
 	has_missing = None in new_values
 	if not has_missing:
 		return
 
+	keeps_others = others == Unmatched.KEEP
 	if new_type in INTEGER_TYPES:
-		raise UnsupportedMissingError(new_type.name, advice=DECIMAL_ADVICE)
+		integer_advice = KEPT_DECIMAL_ADVICE if keeps_others else DECIMAL_ADVICE
+		raise UnsupportedMissingError(new_type.name, advice=integer_advice)
 
 	if new_type == Type.BOOL:
-		raise UnsupportedMissingError(new_type.name, advice=BOOLEAN_ADVICE)
+		boolean_advice = KEPT_BOOLEAN_ADVICE if keeps_others else BOOLEAN_ADVICE
+		raise UnsupportedMissingError(new_type.name, advice=boolean_advice)
 
 
 def find_lookup_value(old_value: ScalarValue, array_type: Type) -> ScalarValue:

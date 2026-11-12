@@ -16,7 +16,8 @@ EXPECTED_SEX_LABELS = ["Masculin", "Feminin", "Feminin", None]
 GRAVITY_CODES = [1, 4, 9]
 GRAVITY_LABELS = [ndp.ValueChange(1, "Indemne"), ndp.ValueChange(4, "Blesse leger")]
 EXPECTED_UNMATCHED_MESSAGE = (
-	"The value 9 has no ValueChange. Add one, or give others=Unmatched.MISSING to make it missing."
+	"The value 9 has no ValueChange. Add one, or give others=Unmatched.MISSING to make it missing, or "
+	"others=Unmatched.KEEP to keep it."
 )
 EXPECTED_GRAVITY_LABELS = ["Indemne", "Blesse leger", None]
 RATE_MAPPING = ndp.ValueMapping(changes=[ndp.ValueChange(1, 10)], others=ndp.Unmatched.MISSING)
@@ -24,6 +25,17 @@ EXPECTED_RATE_MESSAGE = (
 	"INT64 values cannot be missing in an Array. Give decimal new values, such as 10.0, which can be missing."
 )
 DECIMAL_RATE_MAPPING = ndp.ValueMapping(changes=[ndp.ValueChange(1, 10.0)], others=ndp.Unmatched.MISSING)
+SURVEY_ANSWERS = [1.0, 7.0, 3.0, 9.0, 5.0]
+UNKNOWN_ANSWERS = ndp.ValueMapping(
+	changes=[ndp.ValueChange(7, None), ndp.ValueChange(9, None)], others=ndp.Unmatched.KEEP
+)
+EXPECTED_KNOWN_ANSWERS = [1.0, 3.0, 5.0]
+EXPECTED_UNKNOWN_COUNT = 2
+INTEGER_ANSWERS = [1, 7, 3]
+EXPECTED_KEPT_INTEGER_MESSAGE = (
+	"INT64 values cannot be missing in an Array. Give decimal new values, such as 10.0, or convert the Array to "
+	"FLOAT64 first."
+)
 
 
 def test_a_column_of_codes_gets_its_labels() -> None:
@@ -88,6 +100,41 @@ def test_integers_with_a_missing_value_point_to_decimal_new_values() -> None:
 	rate_type = rates.dtype
 	assert error_text == EXPECTED_RATE_MESSAGE
 	assert rate_type == ndp.Type.FLOAT64
+
+
+def test_only_listed_answers_become_missing_when_the_others_are_kept() -> None:
+	"""
+	Check that Unmatched.KEEP empties the unknown answers of a survey column and keeps the other answers.
+
+	.. versionadded:: 0.2.0
+	"""
+	health_answers = ndp.Array.from_list(SURVEY_ANSWERS)
+	survey = ndp.Table.from_arrays({"health": health_answers})
+	health_column = survey.column("health")
+
+	answers = health_column.apply(UNKNOWN_ANSWERS)
+
+	known_values = answers.select(ndp.IsPresent())
+	known_answers = known_values.to_list()
+	unknown_flags = answers.check(ndp.IsMissing())
+	unknown_count = unknown_flags.compute(ndp.Sum()).to_value()
+	assert known_answers == EXPECTED_KNOWN_ANSWERS
+	assert unknown_count == EXPECTED_UNKNOWN_COUNT
+
+
+def test_kept_integers_with_a_missing_value_point_to_a_conversion() -> None:
+	"""
+	Check that integers kept with a missing value raise an error advising to convert the Array to FLOAT64.
+
+	.. versionadded:: 0.2.0
+	"""
+	answers = ndp.Array.from_list(INTEGER_ANSWERS)
+
+	with pytest.raises(ndp.UnsupportedMissingError) as error_info:
+		answers.apply(UNKNOWN_ANSWERS)
+
+	error_text = str(error_info.value)
+	assert error_text == EXPECTED_KEPT_INTEGER_MESSAGE
 
 
 def test_an_old_value_given_twice_is_refused() -> None:

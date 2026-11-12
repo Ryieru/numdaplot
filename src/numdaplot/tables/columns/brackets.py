@@ -20,6 +20,7 @@ LIMIT_ITEM_NAME = "limit"
 BRACKETS_NAME = "Brackets"
 ACCEPTED_BOUNDS = frozenset({Bounds.LOW_ONLY, Bounds.HIGH_ONLY})
 REFUSED_BOUNDS_NAME = "Bounds.{bounds_name}"
+KEEP_SETTING_NAME = "Unmatched.KEEP"
 
 
 @dataclass(frozen=True)
@@ -30,6 +31,8 @@ class Brackets:
 	The categories keep the order of the brackets, so that sorting and plots follow it. A missing value stays missing.
 
 	.. versionadded:: 0.1.0
+	.. versionchanged:: 0.2.0
+		Refuses ``others=Unmatched.KEEP``.
 
 	Parameters
 	----------
@@ -50,7 +53,8 @@ class Brackets:
 		Whether the last bracket stops at the last limit, ``BracketEnd.CLOSED`` by default, or holds every value
 		above it with ``BracketEnd.OPEN``.
 	others
-		What happens to a value in no bracket, ``Unmatched.ERROR`` by default.
+		What happens to a value in no bracket, ``Unmatched.ERROR`` by default, or ``Unmatched.MISSING``.
+		``Unmatched.KEEP`` is refused, as a number cannot name a bracket.
 
 	Raises
 	------
@@ -59,7 +63,7 @@ class Brackets:
 	EmptyListError
 		When ``limits`` is an empty list.
 	RefusedSettingError
-		When ``bounds`` is ``Bounds.INCLUDED`` or ``Bounds.EXCLUDED``.
+		When ``bounds`` is ``Bounds.INCLUDED`` or ``Bounds.EXCLUDED``, or ``others`` is ``Unmatched.KEEP``.
 	InvalidLimitsError
 		When the limits do not strictly increase, or a single limit has no open end.
 	InvalidLabelCountError
@@ -94,6 +98,8 @@ class Brackets:
 		Check the limits, the bounds and the labels.
 
 		.. versionadded:: 0.1.0
+		.. versionchanged:: 0.2.0
+			Refuses ``others=Unmatched.KEEP``.
 
 		Raises
 		------
@@ -102,7 +108,7 @@ class Brackets:
 		EmptyListError
 			When ``limits`` is an empty list.
 		RefusedSettingError
-			When ``bounds`` is ``Bounds.INCLUDED`` or ``Bounds.EXCLUDED``.
+			When ``bounds`` is ``Bounds.INCLUDED`` or ``Bounds.EXCLUDED``, or ``others`` is ``Unmatched.KEEP``.
 		InvalidLimitsError
 			When the limits do not strictly increase, or a single limit has no open end.
 		InvalidLabelCountError
@@ -118,6 +124,9 @@ class Brackets:
 		if self.bounds not in ACCEPTED_BOUNDS:
 			bounds_name = REFUSED_BOUNDS_NAME.format(bounds_name=self.bounds.name)
 			raise RefusedSettingError(bounds_name, BRACKETS_NAME)
+
+		if self.others == Unmatched.KEEP:
+			raise RefusedSettingError(KEEP_SETTING_NAME, BRACKETS_NAME)
 
 		require_increasing_limits(self.limits)
 		bracket_count = self.count_brackets()

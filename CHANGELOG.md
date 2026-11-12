@@ -10,6 +10,12 @@ and numdaplot follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 ### Added
 
 - `Table.shape` gives the number of rows and columns of a table as a `Shape`, like `Array.shape`.
+- `Unmatched.KEEP` keeps the values a `ValueMapping` gives no new value, so that only the listed values change.
+  `Brackets` refuses it.
+
+### Changed
+
+- The message of `UnmatchedValueError` for a `ValueMapping` also offers `others=Unmatched.KEEP`.
 
 ## [0.1.2] - 2026-11-10
 

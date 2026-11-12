@@ -10,7 +10,8 @@ VALUE_MAPPING_NAME = "ValueMapping"
 BRACKETS_NAME = "Brackets"
 UNMATCHED_MESSAGES = {
 	VALUE_MAPPING_NAME: (
-		"The value {value!r} has no ValueChange. Add one, or give others=Unmatched.MISSING to make it missing."
+		"The value {value!r} has no ValueChange. Add one, or give others=Unmatched.MISSING to make it missing, or "
+		"others=Unmatched.KEEP to keep it."
 	),
 	BRACKETS_NAME: (
 		"The value {value!r} is in no bracket. Open the first or the last bracket, or give others=Unmatched.MISSING "
@@ -26,6 +27,8 @@ class UnmatchedValueError(NumdaplotError):
 	Both raise it while their ``others`` is ``Unmatched.ERROR``.
 
 	.. versionadded:: 0.1.0
+	.. versionchanged:: 0.2.0
+		The message of a ``ValueMapping`` also offers ``others=Unmatched.KEEP``.
 
 	Parameters
 	----------
@@ -49,7 +52,8 @@ class UnmatchedValueError(NumdaplotError):
 	... 	sexes.apply(ndp.ValueMapping(changes=[ndp.ValueChange(1, "Homme"), ndp.ValueChange(2, "Femme")]))
 	... except ndp.UnmatchedValueError as error:
 	... 	print(error)
-	The value 3 has no ValueChange. Add one, or give others=Unmatched.MISSING to make it missing.
+	The value 3 has no ValueChange. Add one, or give others=Unmatched.MISSING to make it missing,
+	or others=Unmatched.KEEP to keep it.
 	>>> ages = ndp.Table.from_arrays({"age": ndp.Array.from_list([5, 105])})
 	>>> brackets = ndp.Brackets(limits=[0, 18, 100])
 	>>> try:

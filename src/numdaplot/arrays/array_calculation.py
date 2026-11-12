@@ -83,6 +83,8 @@ class ArrayCalculation(ArrayData):
 		Return a math function, a time function or a value mapping applied to each value.
 
 		.. versionadded:: 0.1.0
+		.. versionchanged:: 0.2.0
+			Accepts a ``ValueMapping`` keeping the values it does not list, with ``others=Unmatched.KEEP``.
 
 		Parameters
 		----------
@@ -102,7 +104,8 @@ class ArrayCalculation(ArrayData):
 		InvalidTypeError
 			When an argument is not of the type its annotation names.
 		IncompatibleTypesError
-			When the function does not apply to the type of the values.
+			When the function does not apply to the type of the values, or a ``ValueMapping`` with
+			``Unmatched.KEEP`` gives new values of another family than the kept values, such as texts among numbers.
 		OutOfDomainError
 			When a value is outside the domain of a math function, such as the square root of -1.
 		UnmatchedValueError

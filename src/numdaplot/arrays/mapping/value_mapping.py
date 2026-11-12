@@ -25,9 +25,12 @@ class ValueMapping:
 	The new value of each listed value of an Array, used by ``Array.apply``, such as codes replaced by labels.
 
 	A missing value stays missing. The new values share one type, which the result takes: integers and decimals
-	give decimals.
+	give decimals. With ``others=Unmatched.KEEP``, the result takes the type holding both the values of the Array and
+	the new values.
 
 	.. versionadded:: 0.1.0
+	.. versionchanged:: 0.2.0
+		Accepts ``others=Unmatched.KEEP``, which keeps the values without ``ValueChange``.
 
 	Parameters
 	----------

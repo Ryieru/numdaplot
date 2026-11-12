@@ -87,6 +87,16 @@ def test_brackets_refuse_bounds_holding_both_or_no_limit(bounds: Bounds) -> None
 		Brackets(limits=AGE_LIMITS, bounds=bounds)
 
 
+def test_brackets_refuse_to_keep_unmatched_values() -> None:
+	"""
+	Check that Unmatched.KEEP is refused, as a number cannot name a bracket.
+
+	.. versionadded:: 0.2.0
+	"""
+	with pytest.raises(RefusedSettingError):
+		Brackets(limits=AGE_LIMITS, others=Unmatched.KEEP)
+
+
 def test_brackets_reject_a_single_limit_without_open_end() -> None:
 	"""
 	Check that one limit forms no bracket when both ends are closed.

@@ -13,6 +13,7 @@ from numdaplot.arrays.creation.list_conversion import convert_list
 from numdaplot.arrays.mapping.mapped_values import (
 	find_flat_new_values,
 	find_lookup_value,
+	find_result_type,
 	map_values,
 	require_missing_supported,
 	write_date_as_datetime,
@@ -48,6 +49,21 @@ MORNING_CHRISTMAS = datetime(2026, 12, 25, 10, 0)
 INTEGERS_WITH_MISSING = [10, None]
 BOOLEANS_WITH_MISSING = [True, None]
 TEXTS_WITH_MISSING = ["a", None]
+KEPT_CODES = ValueMapping(changes=[ValueChange(1, 10)], others=Unmatched.KEEP)
+EXPECTED_KEPT_CODES = [10, 9]
+DECIMAL_CHANGE_AMONG_KEPT = ValueMapping(changes=[ValueChange(1, 1.5)], others=Unmatched.KEEP)
+EXPECTED_WIDENED_CODES = [1.5, 9.0]
+TEXT_CHANGE_AMONG_KEPT = ValueMapping(changes=[ValueChange(1, "Homme")], others=Unmatched.KEEP)
+DECIMAL_ANSWERS = numpy.array([1.0, 7.0])
+UNKNOWN_ANSWER_REMOVAL = ValueMapping(changes=[ValueChange(7, None)], others=Unmatched.KEEP)
+EXPECTED_KEPT_ANSWER = 1.0
+UNKNOWN_ANSWER_POSITION = 1
+INTEGER_CHANGE = ValueMapping(changes=[ValueChange(1, 10)], others=Unmatched.MISSING)
+KEPT_INTEGER_MESSAGE = (
+	"INT64 values cannot be missing in an Array. Give decimal new values, such as 10.0, or convert the Array to "
+	"FLOAT64 first."
+)
+KEPT_BOOLEAN_MESSAGE = "BOOL values cannot be missing in an Array. Convert the Array to TEXT first."
 
 
 def test_map_values_keeps_the_shape() -> None:
@@ -135,6 +151,8 @@ def test_require_missing_supported_rejects_integers_and_booleans(new_values: lis
 	Check that integers and booleans cannot hold a missing value.
 
 	.. versionadded:: 0.1.0
+	.. versionchanged:: 0.2.0
+		Gives ``others`` to ``require_missing_supported``.
 
 	Parameters
 	----------
@@ -144,7 +162,7 @@ def test_require_missing_supported_rejects_integers_and_booleans(new_values: lis
 		Their type.
 	"""
 	with pytest.raises(UnsupportedMissingError):
-		require_missing_supported(new_values, new_type)
+		require_missing_supported(new_values, new_type, Unmatched.MISSING)
 
 
 def test_require_missing_supported_accepts_texts() -> None:
@@ -152,8 +170,117 @@ def test_require_missing_supported_accepts_texts() -> None:
 	Check that texts may hold a missing value.
 
 	.. versionadded:: 0.1.0
+	.. versionchanged:: 0.2.0
+		Gives ``others`` to ``require_missing_supported``.
 	"""
-	require_missing_supported(TEXTS_WITH_MISSING, Type.TEXT)
+	require_missing_supported(TEXTS_WITH_MISSING, Type.TEXT, Unmatched.KEEP)
+
+
+def test_require_missing_supported_advises_to_convert_kept_integers() -> None:
+	"""
+	Check that with Unmatched.KEEP, the advice for integers names the conversion to FLOAT64.
+
+	.. versionadded:: 0.2.0
+	"""
+	with pytest.raises(UnsupportedMissingError) as error_info:
+		require_missing_supported(INTEGERS_WITH_MISSING, Type.INT64, Unmatched.KEEP)
+
+	error_text = str(error_info.value)
+	assert error_text == KEPT_INTEGER_MESSAGE
+
+
+def test_require_missing_supported_advises_to_convert_kept_booleans() -> None:
+	"""
+	Check that with Unmatched.KEEP, the advice for booleans names the conversion to TEXT.
+
+	.. versionadded:: 0.2.0
+	"""
+	with pytest.raises(UnsupportedMissingError) as error_info:
+		require_missing_supported(BOOLEANS_WITH_MISSING, Type.BOOL, Unmatched.KEEP)
+
+	error_text = str(error_info.value)
+	assert error_text == KEPT_BOOLEAN_MESSAGE
+
+
+def test_find_flat_new_values_keeps_unmatched_values_with_keep() -> None:
+	"""
+	Check that Unmatched.KEEP keeps a value without change as it is.
+
+	.. versionadded:: 0.2.0
+	"""
+	new_values = find_flat_new_values(CODES_WITH_OTHER, KEPT_CODES)
+
+	assert new_values == EXPECTED_KEPT_CODES
+
+
+def test_map_values_widens_kept_integers_to_decimal_new_values() -> None:
+	"""
+	Check that kept integers become decimals when a new value is a decimal.
+
+	.. versionadded:: 0.2.0
+	"""
+	mapped_values = map_values(CODES_WITH_OTHER, DECIMAL_CHANGE_AMONG_KEPT)
+
+	widened_codes = mapped_values.tolist()
+	assert widened_codes == EXPECTED_WIDENED_CODES
+
+
+def test_map_values_rejects_texts_among_kept_numbers() -> None:
+	"""
+	Check that a text new value among kept numbers raises IncompatibleTypesError.
+
+	.. versionadded:: 0.2.0
+	"""
+	with pytest.raises(IncompatibleTypesError):
+		map_values(CODES_WITH_OTHER, TEXT_CHANGE_AMONG_KEPT)
+
+
+def test_map_values_makes_only_listed_decimals_missing_with_keep() -> None:
+	"""
+	Check that a decimal Array keeps its type when the only new value is missing.
+
+	.. versionadded:: 0.2.0
+	"""
+	mapped_values = map_values(DECIMAL_ANSWERS, UNKNOWN_ANSWER_REMOVAL)
+
+	kept_answer = mapped_values[0]
+	unknown_answer = mapped_values[UNKNOWN_ANSWER_POSITION]
+	is_unknown_missing = numpy.isnan(unknown_answer)
+	assert kept_answer == EXPECTED_KEPT_ANSWER
+	assert is_unknown_missing
+
+
+def test_find_result_type_gives_the_new_type_without_keep() -> None:
+	"""
+	Check that without Unmatched.KEEP, the type of the Array is ignored.
+
+	.. versionadded:: 0.2.0
+	"""
+	result_type = find_result_type(Type.FLOAT64, INTEGER_CHANGE)
+
+	assert result_type == Type.INT64
+
+
+def test_find_result_type_gives_the_array_type_when_every_new_value_is_missing() -> None:
+	"""
+	Check that with Unmatched.KEEP and only missing new values, the type of the Array is the result type.
+
+	.. versionadded:: 0.2.0
+	"""
+	result_type = find_result_type(Type.FLOAT64, UNKNOWN_ANSWER_REMOVAL)
+
+	assert result_type == Type.FLOAT64
+
+
+def test_find_result_type_widens_the_array_type_with_keep() -> None:
+	"""
+	Check that with Unmatched.KEEP, integers of the Array and decimal new values give decimals.
+
+	.. versionadded:: 0.2.0
+	"""
+	result_type = find_result_type(Type.INT64, DECIMAL_CHANGE_AMONG_KEPT)
+
+	assert result_type == Type.FLOAT64
 
 
 def test_find_flat_new_values_finds_a_date_among_datetimes_at_midnight() -> None:

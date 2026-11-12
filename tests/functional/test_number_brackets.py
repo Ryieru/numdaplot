@@ -26,6 +26,7 @@ EXPECTED_UNMATCHED_MESSAGE = (
 	"The value 105 is in no bracket. Open the first or the last bracket, or give others=Unmatched.MISSING to make it "
 	"missing."
 )
+KEEP_REFUSAL_MESSAGE = "Brackets does not accept Unmatched.KEEP."
 ROADS = ["A1", "N7"]
 
 
@@ -130,3 +131,16 @@ def test_brackets_are_refused_on_texts() -> None:
 
 	with pytest.raises(ndp.InvalidConversionError):
 		roads.convert(conversion)
+
+
+def test_brackets_refuse_to_keep_numbers_in_no_bracket() -> None:
+	"""
+	Check that Brackets refuses Unmatched.KEEP with a message naming it.
+
+	.. versionadded:: 0.2.0
+	"""
+	with pytest.raises(ndp.RefusedSettingError) as error_info:
+		ndp.Brackets(limits=[0, 18, 100], others=ndp.Unmatched.KEEP)
+
+	error_text = str(error_info.value)
+	assert error_text == KEEP_REFUSAL_MESSAGE

@@ -8,7 +8,10 @@ from numdaplot.errors.numdaplot_error import NumdaplotError
 from numdaplot.errors.unmatched_value_error import UnmatchedValueError
 
 VALUE = 2
-EXPECTED_MESSAGE = "The value 2 has no ValueChange. Add one, or give others=Unmatched.MISSING to make it missing."
+EXPECTED_MESSAGE = (
+	"The value 2 has no ValueChange. Add one, or give others=Unmatched.MISSING to make it missing, or "
+	"others=Unmatched.KEEP to keep it."
+)
 EXPECTED_BRACKETS_MESSAGE = (
 	"The value 2 is in no bracket. Open the first or the last bracket, or give others=Unmatched.MISSING to make it "
 	"missing."
