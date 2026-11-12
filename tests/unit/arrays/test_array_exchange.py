@@ -1,5 +1,5 @@
 """
-Unit tests of ArrayConversion.
+Unit tests of ArrayExchange.
 
 .. versionadded:: 0.1.0
 """
@@ -13,9 +13,9 @@ import numpy
 import pytest
 from numpy.typing import NDArray
 
-from numdaplot.arrays import array_conversion
+from numdaplot.arrays import array_exchange
 from numdaplot.arrays.array import Array
-from numdaplot.arrays.array_conversion import ArrayConversion
+from numdaplot.arrays.array_exchange import ArrayExchange
 from numdaplot.arrays.equality import Equality
 from numdaplot.arrays.type_match import TypeMatch
 from numdaplot.errors.invalid_type_error import InvalidTypeError
@@ -97,7 +97,7 @@ def test_to_list_nests_one_list_per_row() -> None:
 	.. versionadded:: 0.1.0
 	"""
 	values = numpy.array(GRID)
-	array = ArrayConversion._create(values)
+	array = ArrayExchange._create(values)
 
 	python_values = array.to_list()
 
@@ -111,7 +111,7 @@ def test_to_value_reads_the_single_value_whatever_the_dimensions() -> None:
 	.. versionadded:: 0.1.0
 	"""
 	values = numpy.array(SINGLE_GRID)
-	array = ArrayConversion._create(values)
+	array = ArrayExchange._create(values)
 
 	single_value = array.to_value()
 
@@ -125,7 +125,7 @@ def test_to_value_rejects_several_values() -> None:
 	.. versionadded:: 0.1.0
 	"""
 	values = numpy.array(GRID)
-	array = ArrayConversion._create(values)
+	array = ArrayExchange._create(values)
 
 	with pytest.raises(NotSingleValueError):
 		array.to_value()
@@ -143,10 +143,10 @@ def test_is_equal_gives_the_type_setting_to_the_comparison(monkeypatch: pytest.M
 		Replaces the comparison with a fake recording the type setting.
 	"""
 	recorder = EqualityRecorder()
-	monkeypatch.setattr(array_conversion, ARE_EQUAL_NAME, recorder.compare)
+	monkeypatch.setattr(array_exchange, ARE_EQUAL_NAME, recorder.compare)
 	values = numpy.array(GRID)
 	other_values = numpy.array(DECIMALS)
-	array = ArrayConversion._create(values)
+	array = ArrayExchange._create(values)
 	other = Array._create(other_values)
 	equality = Equality(other=other, types=TypeMatch.STRICT)
 
@@ -163,7 +163,7 @@ def test_is_equal_rejects_a_value_that_is_not_an_array() -> None:
 	.. versionadded:: 0.1.0
 	"""
 	values = numpy.array(GRID)
-	array = ArrayConversion._create(values)
+	array = ArrayExchange._create(values)
 	not_an_array = Table.from_arrays({"count": Array.from_list([1, 2])})
 	equality = Equality(other=not_an_array)
 
@@ -182,9 +182,9 @@ def test_repr_shows_the_formatted_text(monkeypatch: pytest.MonkeyPatch) -> None:
 	monkeypatch
 		Replaces the formatting with a fake.
 	"""
-	monkeypatch.setattr(array_conversion, FORMAT_ARRAY_NAME, format_fake_text)
+	monkeypatch.setattr(array_exchange, FORMAT_ARRAY_NAME, format_fake_text)
 	values = numpy.array(GRID)
-	array = ArrayConversion._create(values)
+	array = ArrayExchange._create(values)
 
 	array_text = repr(array)
 

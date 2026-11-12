@@ -12,8 +12,8 @@ from numdaplot.tables.sorting.sorting import Sorting
 from numdaplot.tables.table import Table
 from numdaplot.tables.table_calculation import TableCalculation
 from numdaplot.tables.table_columns import TableColumns
-from numdaplot.tables.table_conversion import TableConversion
 from numdaplot.tables.table_display import TableDisplay
+from numdaplot.tables.table_exchange import TableExchange
 from numdaplot.tables.table_layout import TableLayout
 from numdaplot.tables.table_missing import TableMissing
 from numdaplot.tables.table_reading import TableReading
@@ -24,7 +24,7 @@ from numdaplot.tables.table_writing import TableWriting
 METHOD_GROUPS = [
 	TableReading,
 	TableWriting,
-	TableConversion,
+	TableExchange,
 	TableSelection,
 	TableColumns,
 	TableCalculation,

@@ -1,5 +1,5 @@
 """
-Conversion of a Table to and from pandas, Arrays and Python values.
+Exchange of a Table with pandas, Arrays and Python values.
 
 .. versionadded:: 0.1.0
 """
@@ -35,9 +35,9 @@ EQUALITY_TARGET = "Table.is_equal other"
 EQUALITY_EXPECTED = "a Table"
 
 
-class TableConversion(TableData):
+class TableExchange(TableData):
 	"""
-	Conversion of a Table to and from pandas, Arrays and Python values.
+	Exchange of a Table with pandas, Arrays and Python values.
 
 	.. versionadded:: 0.1.0
 	"""

@@ -1,5 +1,5 @@
 """
-Unit tests of TableConversion.
+Unit tests of TableExchange.
 
 .. versionadded:: 0.1.0
 """
@@ -20,10 +20,10 @@ from numdaplot.data_types.type import Type
 from numdaplot.errors.invalid_type_error import InvalidTypeError
 from numdaplot.errors.not_single_value_error import NotSingleValueError
 from numdaplot.errors.time_zone_mismatch_error import TimeZoneMismatchError
-from numdaplot.tables import table_conversion
+from numdaplot.tables import table_exchange
 from numdaplot.tables.preview.shown_columns import ShownColumns
 from numdaplot.tables.table import Table
-from numdaplot.tables.table_conversion import TableConversion
+from numdaplot.tables.table_exchange import TableExchange
 
 SOURCE_FRAME = {"count": [1, 2]}
 CHANGED_COUNT = 99
@@ -152,7 +152,7 @@ def test_from_pandas_copies_the_dataframe() -> None:
 	.. versionadded:: 0.1.0
 	"""
 	frame = pandas.DataFrame(SOURCE_FRAME)
-	table = TableConversion.from_pandas(frame)
+	table = TableExchange.from_pandas(frame)
 
 	frame.loc[0, "count"] = CHANGED_COUNT
 
@@ -167,7 +167,7 @@ def test_from_arrays_builds_one_column_per_array() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	table = TableConversion.from_arrays({"price": PRICES})
+	table = TableExchange.from_arrays({"price": PRICES})
 
 	assert table.column_types == {"price": Type.FLOAT64}
 
@@ -178,7 +178,7 @@ def test_to_pandas_gives_a_copy() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	table = TableConversion._create(FRAME)
+	table = TableExchange._create(FRAME)
 	frame = table.to_pandas()
 
 	frame.loc[0, "price"] = CHANGED_COUNT
@@ -194,7 +194,7 @@ def test_column_gives_an_array_of_the_column() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	table = TableConversion._create(FRAME)
+	table = TableExchange._create(FRAME)
 
 	prices = table.column("price")
 
@@ -208,7 +208,7 @@ def test_to_value_reads_the_single_value() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	table = TableConversion._create(SINGLE_PRICE)
+	table = TableExchange._create(SINGLE_PRICE)
 
 	value = table.to_value()
 
@@ -221,7 +221,7 @@ def test_to_value_gives_none_for_a_missing_value() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	table = TableConversion._create(MISSING_COUNT)
+	table = TableExchange._create(MISSING_COUNT)
 
 	value = table.to_value()
 
@@ -234,7 +234,7 @@ def test_to_value_rejects_several_values() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	table = TableConversion._create(FRAME)
+	table = TableExchange._create(FRAME)
 
 	with pytest.raises(NotSingleValueError) as error_info:
 		table.to_value()
@@ -255,8 +255,8 @@ def test_is_equal_compares_the_frames_with_the_type_setting(monkeypatch: pytest.
 		Replaces the frame comparison with a fake.
 	"""
 	recorder = EqualityRecorder()
-	monkeypatch.setattr(table_conversion, ARE_FRAMES_EQUAL_NAME, recorder)
-	table = TableConversion._create(FRAME)
+	monkeypatch.setattr(table_exchange, ARE_FRAMES_EQUAL_NAME, recorder)
+	table = TableExchange._create(FRAME)
 	other_table = Table._create(FRAME)
 	equality = Equality(other=other_table, types=TypeMatch.STRICT)
 
@@ -272,7 +272,7 @@ def test_is_equal_rejects_an_array() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	table = TableConversion._create(FRAME)
+	table = TableExchange._create(FRAME)
 	equality = Equality(other=PRICES)
 
 	with pytest.raises(InvalidTypeError):
@@ -290,8 +290,8 @@ def test_repr_gives_the_text_of_the_table(monkeypatch: pytest.MonkeyPatch) -> No
 	monkeypatch
 		Replaces the text builder with a fake.
 	"""
-	monkeypatch.setattr(table_conversion, FORMAT_TABLE_NAME, format_fake_table)
-	table = TableConversion._create(FRAME)
+	monkeypatch.setattr(table_exchange, FORMAT_TABLE_NAME, format_fake_table)
+	table = TableExchange._create(FRAME)
 
 	table_text = repr(table)
 
@@ -310,8 +310,8 @@ def test_repr_html_gives_the_html_table_with_every_column(monkeypatch: pytest.Mo
 		Replaces the HTML builder with a fake.
 	"""
 	recorder = TableHtmlRecorder()
-	monkeypatch.setattr(table_conversion, FORMAT_TABLE_HTML_NAME, recorder.format_table_html)
-	table = TableConversion._create(FRAME)
+	monkeypatch.setattr(table_exchange, FORMAT_TABLE_HTML_NAME, recorder.format_table_html)
+	table = TableExchange._create(FRAME)
 
 	table_html = table._repr_html_()
 
@@ -325,7 +325,7 @@ def test_to_value_keeps_the_time_zone_of_a_datetime() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	table = TableConversion._create(TIME_FRAME)
+	table = TableExchange._create(TIME_FRAME)
 
 	single_value = table.to_value()
 
@@ -339,7 +339,7 @@ def test_column_rejects_a_datetime_column_with_a_time_zone() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	table = TableConversion._create(TIME_FRAME)
+	table = TableExchange._create(TIME_FRAME)
 
 	with pytest.raises(TimeZoneMismatchError):
 		table.column(TIME_COLUMN)

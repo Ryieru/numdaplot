@@ -10,8 +10,8 @@ import pytest
 from numdaplot.arrays.array import Array, create_array
 from numdaplot.arrays.array_arithmetic import ArrayArithmetic
 from numdaplot.arrays.array_calculation import ArrayCalculation
-from numdaplot.arrays.array_conversion import ArrayConversion
 from numdaplot.arrays.array_creation import ArrayCreation
+from numdaplot.arrays.array_exchange import ArrayExchange
 from numdaplot.arrays.array_layout import ArrayLayout
 from numdaplot.arrays.array_logic import ArrayLogic
 from numdaplot.arrays.array_reflected_arithmetic import ArrayReflectedArithmetic
@@ -21,7 +21,7 @@ from numdaplot.data_types.type import Type
 
 METHOD_GROUPS = [
 	ArrayCreation,
-	ArrayConversion,
+	ArrayExchange,
 	ArraySelection,
 	ArrayCalculation,
 	ArrayLayout,

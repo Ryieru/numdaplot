@@ -1,5 +1,5 @@
 """
-Conversion of an Array to Python values and text, and comparison of two Arrays.
+Exchange of an Array with Python values and text, and comparison of two Arrays.
 
 .. versionadded:: 0.1.0
 """
@@ -25,9 +25,9 @@ EQUALITY_TARGET = "Array.is_equal other"
 EQUALITY_EXPECTED = "an Array"
 
 
-class ArrayConversion(ArrayData):
+class ArrayExchange(ArrayData):
 	"""
-	Conversion of an Array with ``to_list`` and ``to_value``, comparison with ``is_equal``, and its text.
+	Exchange of an Array with Python values, comparison with ``is_equal``, and its text.
 
 	.. versionadded:: 0.1.0
 	"""

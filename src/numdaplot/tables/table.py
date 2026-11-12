@@ -6,8 +6,8 @@ The ``ndp.Table`` class: named columns, each holding values of one type.
 
 from numdaplot.tables.table_calculation import TableCalculation
 from numdaplot.tables.table_columns import TableColumns
-from numdaplot.tables.table_conversion import TableConversion
 from numdaplot.tables.table_display import TableDisplay
+from numdaplot.tables.table_exchange import TableExchange
 from numdaplot.tables.table_joining import TableJoining
 from numdaplot.tables.table_layout import TableLayout
 from numdaplot.tables.table_missing import TableMissing
@@ -20,7 +20,7 @@ from numdaplot.tables.table_writing import TableWriting
 class Table(
 	TableReading,
 	TableWriting,
-	TableConversion,
+	TableExchange,
 	TableSelection,
 	TableColumns,
 	TableCalculation,
