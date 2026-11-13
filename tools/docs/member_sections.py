@@ -3,14 +3,19 @@ Sections of the members of the Array, Table and Plot pages, taken from the class
 
 Array, Table and Plot are each built from classes named after them, such as ``TableCalculation``. Each of these classes
 gives one section of the page, titled after the end of its name, holding its methods in the order of the code. A new
-method appears in its section on its own. A new class needs its title in ``SECTION_TITLES``, or the build stops with a
-``KeyError``.
+method appears in its section on its own. Only the members written in the source of the class are shown, as
+mkdocstrings reads them from there: Python adds others at run time, such as ``__annotate_func__`` since 3.14.
+A new class needs its title in ``SECTION_TITLES``, or the build stops with a ``KeyError``.
 
 .. versionadded:: 0.2.0
 """
 
 import inspect
 from dataclasses import dataclass
+from functools import cache
+from pathlib import Path
+
+import griffe
 
 # The end of the name of each class, after the name of the class it builds, and the title of its section, in the
 # order of the page. The same end gives the same title on every page.
@@ -157,7 +162,7 @@ def find_part_members(built_class: type) -> dict[str, tuple[str, ...]]:
 
 def list_documented_members(part_class: type) -> tuple[str, ...]:
 	"""
-	Return the methods and attributes a class defines itself and the documentation shows, in the order of the code.
+	Return the methods and attributes written in a class that the documentation shows, in the order of the code.
 
 	.. versionadded:: 0.2.0
 
@@ -170,7 +175,7 @@ def list_documented_members(part_class: type) -> tuple[str, ...]:
 	-------
 	tuple[str, ...]
 		The public methods, attributes and special methods such as ``__add__``, without ``__init__``, the private
-		helpers and the plain values such as ``__array_ufunc__ = None``.
+		helpers, the plain values such as ``__array_ufunc__ = None`` and the members Python adds at run time.
 
 	Examples
 	--------
@@ -179,17 +184,56 @@ def list_documented_members(part_class: type) -> tuple[str, ...]:
 	>>> list_documented_members(TableJoining)
 	('join',)
 	"""
-	member_names = list[str]()
+	candidate_names = list[str]()
 
 	class_members = vars(part_class)
 	for member_name, member in class_members.items():
 		is_documented = is_documented_member(member_name, member)
 		if is_documented:
-			member_names.append(member_name)
+			candidate_names.append(member_name)
 
-	documented_members = tuple(member_names)
+	# A built-in class has no source file to read, and never holds a member to show.
+	if not candidate_names:
+		return ()
+
+	source_names = read_source_member_names(part_class)
+	documented_members = tuple(member_name for member_name in candidate_names if member_name in source_names)
 
 	return documented_members
+
+
+@cache
+def read_source_member_names(part_class: type) -> frozenset[str]:
+	"""
+	Return the names of the members written in the source of a class, as mkdocstrings finds them.
+
+	.. versionadded:: 0.2.0
+
+	Parameters
+	----------
+	part_class
+		A class Array, Table or Plot is built from.
+
+	Returns
+	-------
+	frozenset[str]
+		The names of the methods and values of the class body, without the members Python adds at run time.
+
+	Examples
+	--------
+	>>> from numdaplot.tables.table_joining import TableJoining
+	>>> from member_sections import read_source_member_names
+	>>> read_source_member_names(TableJoining)
+	frozenset({'join'})
+	"""
+	source_file = inspect.getfile(part_class)
+	source_path = Path(source_file)
+	source_code = source_path.read_text()
+	source_module = griffe.visit(part_class.__module__, source_path, source_code)
+	source_class = source_module[part_class.__qualname__]
+	source_names = frozenset(source_class.members)
+
+	return source_names
 
 
 def is_documented_member(member_name: str, member: object) -> bool:

@@ -4,6 +4,8 @@ Unit tests of the sections of the members of the Array, Table and Plot pages.
 .. versionadded:: 0.2.0
 """
 
+from dataclasses import dataclass
+
 import pytest
 from member_sections import (
 	MemberSection,
@@ -11,6 +13,7 @@ from member_sections import (
 	find_part_members,
 	is_documented_member,
 	list_documented_members,
+	read_source_member_names,
 )
 
 import numdaplot as ndp
@@ -28,6 +31,8 @@ PRIVATE_NAME = "_wrap"
 INIT_NAME = "__init__"
 PUBLIC_NAME = "pick"
 PRIVATE_MARK = "_"
+EXPECTED_RECORD_MEMBERS = ("keep",)
+EXPECTED_LAYOUT_SOURCE_NAMES = frozenset(EXPECTED_LAYOUT_MEMBERS)
 
 
 class ShapeData:
@@ -126,6 +131,22 @@ class ShapeSelection(ShapeData):
 			Always empty.
 		"""
 		return ""
+
+
+@dataclass
+class ShapeRecord:
+	"""
+	Fake part class whose ``__init__``, ``__repr__`` and ``__eq__`` are added at run time by ``dataclass``.
+
+	.. versionadded:: 0.2.0
+	"""
+
+	def keep(self) -> None:
+		"""
+		Fake method.
+
+		.. versionadded:: 0.2.0
+		"""
 
 
 class Shape(ShapeSelection, ShapeLayout):
@@ -269,6 +290,28 @@ def test_list_documented_members_keeps_the_order_of_the_code() -> None:
 	member_names = list_documented_members(ShapeSelection)
 
 	assert member_names == EXPECTED_SELECTION_MEMBERS
+
+
+def test_list_documented_members_leaves_out_the_members_added_at_run_time() -> None:
+	"""
+	Check that the ``__repr__`` and ``__eq__`` made by ``dataclass``, missing from the source, are hidden.
+
+	.. versionadded:: 0.2.0
+	"""
+	member_names = list_documented_members(ShapeRecord)
+
+	assert member_names == EXPECTED_RECORD_MEMBERS
+
+
+def test_read_source_member_names_gives_the_members_of_the_class_body() -> None:
+	"""
+	Check that only the method written in ShapeLayout is read, without the members of its base.
+
+	.. versionadded:: 0.2.0
+	"""
+	source_names = read_source_member_names(ShapeLayout)
+
+	assert source_names == EXPECTED_LAYOUT_SOURCE_NAMES
 
 
 def test_is_documented_member_keeps_a_special_method() -> None:
