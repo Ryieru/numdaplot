@@ -56,13 +56,14 @@ packages = ["src/numdaplot"]
 [tool.pytest.ini_options]
 testpaths = ["tests", "src", "tools"]
 pythonpath = ["tools/docs"]
-addopts = ["--doctest-modules", "--import-mode=importlib"]
+addopts = ["--doctest-modules", "--import-mode=importlib", "--ignore=tools/checks"]
 doctest_optionflags = ["NORMALIZE_WHITESPACE"]
 filterwarnings = ["ignore::numdaplot.errors.display_warning.DisplayWarning"]
 
 [tool.coverage.run]
 branch = true
 source = ["."]
+omit = ["tools/checks/*"]
 
 [tool.coverage.report]
 fail_under = 99.5

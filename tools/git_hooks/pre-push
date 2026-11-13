@@ -1,0 +1,4 @@
+#!/bin/sh
+# Runs the checks of the repository before each push: python tools/checks/run_checks.py push.
+cd "$(git rev-parse --show-toplevel)" || exit 1
+exec env -u VIRTUAL_ENV uv run --frozen python tools/checks/run_checks.py push
