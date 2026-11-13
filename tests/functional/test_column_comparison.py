@@ -37,6 +37,14 @@ PICKUP_TEXTS = ["2026-03-14 23:30"]
 PARIS_ZONE = "Europe/Paris"
 EXPECTED_ZONE_MESSAGE = "A rule comparing a column with an Array needs datetimes without a time zone."
 ROUND_TRIP_NAME = "round_trip"
+TEMPERATURES = [18.0, 25.0, 15.0, 12.0]
+LOW_TEMPERATURES = [10.0, 10.0, None, 0.0]
+HIGH_TEMPERATURES = [20.0, 20.0, 20.0, 15.0]
+EXPECTED_NORMAL_DAYS = [18.0, 12.0]
+FIXED_LOW = 0.0
+EXPECTED_BELOW_HIGHS = [True, False, True, True]
+REVERSED_HIGHS = [20.0, 5.0, 20.0, 15.0]
+EXPECTED_BOUNDS_MESSAGE = "Expected comparable bounds with low <= high, got low=10.0 and high=5.0."
 
 
 def build_trips() -> ndp.Table:
@@ -265,3 +273,79 @@ def test_a_column_with_a_time_zone_is_refused() -> None:
 
 	error_text = str(error_info.value)
 	assert error_text == EXPECTED_ZONE_MESSAGE
+
+
+def build_weather(high_temperatures: list[float]) -> ndp.Table:
+	"""
+	Return a Table of temperatures with the low and the high temperature expected each day.
+
+	.. versionadded:: 0.2.0
+
+	Parameters
+	----------
+	high_temperatures
+		The high temperature expected each day.
+
+	Returns
+	-------
+	ndp.Table
+		The columns temperature, low and high.
+	"""
+	temperatures = ndp.Array.from_list(TEMPERATURES)
+	lows = ndp.Array.from_list(LOW_TEMPERATURES)
+	highs = ndp.Array.from_list(high_temperatures)
+	weather = ndp.Table.from_arrays({"temperature": temperatures, "low": lows, "high": highs})
+
+	return weather
+
+
+def test_values_between_two_columns_are_kept() -> None:
+	"""
+	Check that a filter keeps the temperatures between the low and the high of their day, a missing low left out.
+
+	.. versionadded:: 0.2.0
+	"""
+	weather = build_weather(HIGH_TEMPERATURES)
+	lows = weather.column("low")
+	highs = weather.column("high")
+	condition = ndp.Condition(rule=ndp.Between(lows, highs), columns=["temperature"])
+
+	normal_days = weather.filter(ndp.Filter(conditions=[condition]))
+
+	temperature_values = normal_days.column("temperature")
+	normal_temperatures = temperature_values.to_list()
+	assert normal_temperatures == EXPECTED_NORMAL_DAYS
+
+
+def test_a_single_bound_goes_with_a_bound_given_by_an_array() -> None:
+	"""
+	Check that a fixed low bound and a high bound given by an Array apply together.
+
+	.. versionadded:: 0.2.0
+	"""
+	weather = build_weather(HIGH_TEMPERATURES)
+	temperatures = weather.column("temperature")
+	highs = weather.column("high")
+
+	below_highs = temperatures.check(ndp.Between(FIXED_LOW, highs))
+
+	below_high_list = below_highs.to_list()
+	assert below_high_list == EXPECTED_BELOW_HIGHS
+
+
+def test_a_low_bound_above_its_high_bound_is_refused() -> None:
+	"""
+	Check that a row whose low bound is above its high bound raises InvalidBoundsError naming both bounds.
+
+	.. versionadded:: 0.2.0
+	"""
+	weather = build_weather(REVERSED_HIGHS)
+	temperatures = weather.column("temperature")
+	lows = weather.column("low")
+	highs = weather.column("high")
+
+	with pytest.raises(ndp.InvalidBoundsError) as error_info:
+		temperatures.check(ndp.Between(lows, highs))
+
+	error_text = str(error_info.value)
+	assert error_text == EXPECTED_BOUNDS_MESSAGE

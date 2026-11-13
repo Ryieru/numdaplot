@@ -11,8 +11,15 @@ import pytest
 
 from numdaplot.arrays.array import Array
 from numdaplot.arrays.array_data import read_stored_values
-from numdaplot.arrays.selection.comparison_masks import build_between_mask, build_comparison_mask
+from numdaplot.arrays.selection.comparison_masks import (
+	build_between_mask,
+	build_comparison_mask,
+	compare_with_bound,
+	read_bound_value,
+	require_ordered_bounds,
+)
 from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
+from numdaplot.errors.invalid_bounds_error import InvalidBoundsError
 from numdaplot.rules.between import Between
 from numdaplot.rules.bounds import Bounds
 from numdaplot.rules.equal import Equal
@@ -24,6 +31,16 @@ from numdaplot.rules.not_equal import NotEqual
 from numdaplot.rules.value_rule import ValueRule
 
 ARRAY_PRICES = Array.from_list([10.0, 5.0, None])
+TEMPERATURES = numpy.array([18.0, 25.0, 15.0])
+LOW_TEMPERATURES = Array.from_list([10.0, 10.0, None])
+HIGH_TEMPERATURES = Array.from_list([20.0, 20.0, 20.0])
+EXPECTED_IN_RANGE = [True, False, False]
+EXPECTED_BELOW_HIGHS = [True, False, True]
+REVERSED_LOWS = Array.from_list([10.0, 30.0, None])
+REVERSED_HIGHS = Array.from_list([30.0, 5.0, None])
+FIXED_HIGH = 20.0
+FIXED_LOW = 10.0
+EXPECTED_REVERSED_LOW = 30.0
 ARRAY_COSTS = Array.from_list([8.0, 7.0, 1.0])
 EXPECTED_ABOVE_COSTS = [True, False, False]
 VALUES = [1.0, 5.0, 9.0, numpy.nan]
@@ -140,3 +157,71 @@ def test_build_comparison_mask_compares_each_value_with_an_array() -> None:
 
 	mask_list = mask.tolist()
 	assert mask_list == EXPECTED_ABOVE_COSTS
+
+
+def test_build_between_mask_gives_each_value_its_bounds() -> None:
+	"""
+	Check that bounds given by Arrays apply position by position, a missing bound matching nothing.
+
+	.. versionadded:: 0.2.0
+	"""
+	mask = build_between_mask(TEMPERATURES, Between(LOW_TEMPERATURES, HIGH_TEMPERATURES))
+
+	mask_list = mask.tolist()
+	assert mask_list == EXPECTED_IN_RANGE
+
+
+def test_compare_with_bound_compares_with_a_single_bound() -> None:
+	"""
+	Check that a single bound is compared with every value.
+
+	.. versionadded:: 0.2.0
+	"""
+	below_high = compare_with_bound(TEMPERATURES, FIXED_HIGH, numpy.less_equal)
+
+	below_list = below_high.tolist()
+	assert below_list == EXPECTED_BELOW_HIGHS
+
+
+def test_require_ordered_bounds_rejects_a_low_array_above_its_high_bound() -> None:
+	"""
+	Check that a low bound given by an Array above the single high bound raises InvalidBoundsError.
+
+	.. versionadded:: 0.2.0
+	"""
+	with pytest.raises(InvalidBoundsError) as error_info:
+		require_ordered_bounds(Between(REVERSED_LOWS, FIXED_HIGH))
+
+	assert error_info.value.low == EXPECTED_REVERSED_LOW
+
+
+def test_require_ordered_bounds_rejects_a_high_array_below_its_low_bound() -> None:
+	"""
+	Check that a high bound given by an Array below the single low bound raises InvalidBoundsError.
+
+	.. versionadded:: 0.2.0
+	"""
+	with pytest.raises(InvalidBoundsError):
+		require_ordered_bounds(Between(FIXED_LOW, REVERSED_HIGHS))
+
+
+def test_require_ordered_bounds_accepts_ordered_and_missing_bounds() -> None:
+	"""
+	Check that ordered bounds, and positions with a missing bound, are accepted.
+
+	.. versionadded:: 0.2.0
+	"""
+	require_ordered_bounds(Between(LOW_TEMPERATURES, HIGH_TEMPERATURES))
+
+
+def test_read_bound_value_reads_the_bound_at_a_position() -> None:
+	"""
+	Check that the bound of an Array at a position is a Python value, and a single bound stays itself.
+
+	.. versionadded:: 0.2.0
+	"""
+	array_bound = read_bound_value(REVERSED_LOWS, 1)
+	single_bound = read_bound_value(FIXED_HIGH, 1)
+
+	assert array_bound == EXPECTED_REVERSED_LOW
+	assert single_bound == FIXED_HIGH

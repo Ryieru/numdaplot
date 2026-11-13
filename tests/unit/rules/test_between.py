@@ -9,12 +9,14 @@ from typing import Any, TypeVar, cast
 
 import pytest
 
+from numdaplot.arrays.array import Array
 from numdaplot.errors.invalid_bounds_error import InvalidBoundsError
 from numdaplot.errors.invalid_type_error import InvalidTypeError
 from numdaplot.rules.between import Between
 from numdaplot.rules.bounds import Bounds
 from numdaplot.rules.rule_values import OrderedValue
 
+FIXED_LOW_BOUND = 5.0
 LOW_BOUND = 10
 HIGH_BOUND = 20
 DECIMAL_HIGH_BOUND = 20.5
@@ -109,3 +111,16 @@ def test_between_rejects_a_bound_that_is_not_single() -> None:
 
 	with pytest.raises(InvalidTypeError):
 		untyped_between(low=None, high=HIGH_BOUND)
+
+
+def test_between_leaves_bounds_given_by_arrays_unchecked() -> None:
+	"""
+	Check that bounds given by Arrays are accepted when created, their order being checked when the rule is used.
+
+	.. versionadded:: 0.2.0
+	"""
+	high_bounds = Array.from_list([1.0, 2.0])
+
+	rule = Between(FIXED_LOW_BOUND, high_bounds)
+
+	assert rule.high is high_bounds

@@ -24,8 +24,9 @@ and numdaplot follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
   group columns. `calculations` becomes optional, and `EmptyAggregationError` is raised when neither is given.
 - `Equal`, `NotEqual`, `Greater`, `GreaterOrEqual`, `Less` and `LessOrEqual` accept an Array as reference value,
   which compares each value with the value at its position, such as the rows whose city of departure is also their
-  city of arrival with `ndp.Equal(table.column("arrival"))`. It works in `check`, `select`, `filter` and in a
-  `Share`, by group in `aggregate`, `pivot_table` and `describe` too.
+  city of arrival with `ndp.Equal(table.column("arrival"))`. `Between` accepts Arrays as bounds, and raises
+  `InvalidBoundsError` at the first position whose low bound is above its high bound. It works in `check`,
+  `select`, `filter` and in a `Share`, by group in `aggregate`, `pivot_table` and `describe` too.
 - `First` and `Last` choose the first or the last positions in a `Region`, such as the first 10 rows of a sorted
   Table with `table.take(ndp.Region(rows=ndp.First(10)))`. A dimension shorter than the count gives every position.
 - `BarChart(value_labels=ValueLabels(decimals=2))` writes the value of each bar past its end, or in the middle of

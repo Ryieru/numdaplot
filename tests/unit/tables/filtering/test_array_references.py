@@ -4,6 +4,8 @@ Unit tests of the rules comparing a Table column with an Array, kept to the rows
 .. versionadded:: 0.2.0
 """
 
+from typing import cast
+
 import numpy
 import pytest
 
@@ -11,9 +13,11 @@ from numdaplot.arrays.array import Array
 from numdaplot.dates.time_zone import TimeZone
 from numdaplot.errors.shape_mismatch_error import ShapeMismatchError
 from numdaplot.errors.time_zone_mismatch_error import TimeZoneMismatchError
+from numdaplot.rules.between import Between
 from numdaplot.rules.contains import Contains
 from numdaplot.rules.equal import Equal
-from numdaplot.tables.filtering.array_references import keep_present_reference
+from numdaplot.rules.rule import Rule
+from numdaplot.tables.filtering.array_references import keep_present_reference, keep_present_rows
 
 ARRIVALS = Array.from_list(["Pau", "Nice", "Dax"])
 PRESENT = numpy.array([True, False, True])
@@ -22,6 +26,10 @@ SHORT_PRESENT = numpy.array([True, True])
 PARIS_ZONE = TimeZone("Europe/Paris")
 TEXT_RULE = Contains("a")
 VALUE_RULE = Equal("Pau")
+LOWS = Array.from_list([10.0, 15.0, 20.0])
+HIGHS = Array.from_list([30.0, 35.0, 40.0])
+EXPECTED_PRESENT_LOWS = [10.0, 20.0]
+EXPECTED_PRESENT_HIGHS = [30.0, 40.0]
 
 
 def test_keep_present_reference_keeps_the_rows_holding_a_value() -> None:
@@ -69,3 +77,54 @@ def test_keep_present_reference_rejects_a_column_with_a_time_zone() -> None:
 	"""
 	with pytest.raises(TimeZoneMismatchError):
 		keep_present_reference(Equal(ARRIVALS), PRESENT, PARIS_ZONE)
+
+
+def test_keep_present_reference_keeps_the_rows_of_both_bounds() -> None:
+	"""
+	Check that both bounds of Between given by Arrays keep the rows holding a value.
+
+	.. versionadded:: 0.2.0
+	"""
+	present_rule = keep_present_reference(Between(LOWS, HIGHS), PRESENT, None)
+
+	assert isinstance(present_rule, Between)
+	between_rule = cast(Between[float], present_rule)
+	low_bounds = between_rule.low
+	high_bounds = between_rule.high
+	assert isinstance(low_bounds, Array)
+	assert isinstance(high_bounds, Array)
+	present_lows = low_bounds.to_list()
+	present_highs = high_bounds.to_list()
+	assert present_lows == EXPECTED_PRESENT_LOWS
+	assert present_highs == EXPECTED_PRESENT_HIGHS
+
+
+def test_keep_present_rows_rejects_an_array_of_another_length() -> None:
+	"""
+	Check that an Array without one value per row raises ShapeMismatchError.
+
+	.. versionadded:: 0.2.0
+	"""
+	with pytest.raises(ShapeMismatchError):
+		keep_present_rows(LOWS, SHORT_PRESENT)
+
+
+class OwnRule(Rule):
+	"""
+	A rule written outside numdaplot, which is not a dataclass.
+
+	.. versionadded:: 0.2.0
+	"""
+
+
+def test_keep_present_reference_keeps_a_rule_that_is_not_a_dataclass() -> None:
+	"""
+	Check that a rule written outside numdaplot is returned as it is, for the refusal that follows.
+
+	.. versionadded:: 0.2.0
+	"""
+	own_rule = OwnRule()
+
+	kept_rule = keep_present_reference(own_rule, PRESENT, None)
+
+	assert kept_rule is own_rule
