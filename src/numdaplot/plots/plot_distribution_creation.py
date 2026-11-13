@@ -16,6 +16,7 @@ from numdaplot.plots.data.pie_values import read_pie_values
 from numdaplot.plots.data.sample_values import read_sample_values
 from numdaplot.plots.drawing.histogram_drawing import require_bins_on_values
 from numdaplot.plots.drawing.series_colors import require_color_count
+from numdaplot.plots.layer_reading import build_series_layer
 from numdaplot.plots.plot_data import PlotData
 from numdaplot.plots.style.axis_settings import require_no_axis_settings
 from numdaplot.plots.style.plot_style import PlotStyle
@@ -93,9 +94,7 @@ class PlotDistributionCreation(PlotData):
 
 		values = read_sample_values(data, chart.columns, None, HISTOGRAM_CHART_NAME)
 		require_bins_on_values(chart.bins, values.value_type)
-		series_count = len(values.series)
-		require_color_count(chart.colors, series_count)
-		layer = ChartLayer(chart, values)
+		layer = build_series_layer(chart, values)
 		plot = cls._create_from_layer(layer, style)
 
 		return plot
@@ -157,9 +156,7 @@ class PlotDistributionCreation(PlotData):
 			chart = BoxChart()
 
 		values = read_sample_values(data, chart.columns, chart.group_by, BOX_CHART_NAME)
-		series_count = len(values.series)
-		require_color_count(chart.colors, series_count)
-		layer = ChartLayer(chart, values)
+		layer = build_series_layer(chart, values)
 		plot = cls._create_from_layer(layer, style)
 
 		return plot

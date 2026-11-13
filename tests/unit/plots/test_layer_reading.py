@@ -7,7 +7,8 @@ Unit tests of the reading of the charts a Plot draws on its axes.
 import pytest
 
 import numdaplot as ndp
-from numdaplot.plots.layer_reading import read_bar_layer, read_line_layer, read_scatter_layer
+from numdaplot.plots.data.sample_values import read_sample_values
+from numdaplot.plots.layer_reading import build_series_layer, read_bar_layer, read_line_layer, read_scatter_layer
 
 DAYS = ndp.Array.from_list([1, 2, 3])
 PRICES = ndp.Array.from_list([12.0, 15.5, 14.0])
@@ -15,6 +16,7 @@ CITIES = ndp.Array.from_list(["Paris", "Lyon", "Paris"])
 SALES = ndp.Table.from_arrays({"day": DAYS, "price": PRICES, "city": CITIES})
 GRID = ndp.Array.from_list([[1.0, 2.0], [3.0, 4.0]])
 TWO_COLORS = [ndp.Color.RED, ndp.Color.BLUE]
+HISTOGRAM_NAME = "HistogramChart"
 
 
 def test_read_line_layer_reads_the_columns_of_a_table() -> None:
@@ -84,3 +86,31 @@ def test_read_scatter_layer_accepts_one_color_for_a_single_array_column() -> Non
 	layer = read_scatter_layer(PRICES, ndp.ScatterChart(color=ndp.Color.RED))
 
 	assert layer.points is None
+
+
+def test_build_series_layer_keeps_the_chart_and_its_values() -> None:
+	"""
+	Check that the layer holds the chart and the series it was given.
+
+	.. versionadded:: 0.2.0
+	"""
+	chart = ndp.HistogramChart(columns=["price"])
+	values = read_sample_values(SALES, chart.columns, None, HISTOGRAM_NAME)
+
+	layer = build_series_layer(chart, values)
+
+	assert layer.chart is chart
+	assert layer.values is values
+
+
+def test_build_series_layer_rejects_colors_not_one_per_series() -> None:
+	"""
+	Check that two colors for one column raise InvalidColorCountError.
+
+	.. versionadded:: 0.2.0
+	"""
+	chart = ndp.HistogramChart(columns=["price"], colors=TWO_COLORS)
+	values = read_sample_values(SALES, chart.columns, None, HISTOGRAM_NAME)
+
+	with pytest.raises(ndp.InvalidColorCountError):
+		build_series_layer(chart, values)

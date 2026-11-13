@@ -1,13 +1,14 @@
 """
-Unit tests of are_equal.
+Unit tests of match_types and are_equal.
 
 .. versionadded:: 0.1.0
 """
 
 import numpy
 
-from numdaplot.arrays.conversion.equality_check import are_equal
+from numdaplot.arrays.conversion.equality_check import are_equal, match_types
 from numdaplot.arrays.type_match import TypeMatch
+from numdaplot.types.type import Type
 
 INTEGERS = [1, 2]
 DECIMALS = [1.0, 2.0]
@@ -100,3 +101,47 @@ def test_are_equal_detects_different_shapes() -> None:
 	is_equal = are_equal(integers, grid, TypeMatch.IGNORED)
 
 	assert not is_equal
+
+
+def test_match_types_accepts_two_types_of_one_family_when_ignored() -> None:
+	"""
+	Check that integers and decimals may be equal with TypeMatch.IGNORED.
+
+	.. versionadded:: 0.2.0
+	"""
+	types_match = match_types(Type.INT64, Type.FLOAT64, TypeMatch.IGNORED)
+
+	assert types_match
+
+
+def test_match_types_rejects_two_types_when_strict() -> None:
+	"""
+	Check that integers and decimals are never equal with TypeMatch.STRICT.
+
+	.. versionadded:: 0.2.0
+	"""
+	types_match = match_types(Type.INT64, Type.FLOAT64, TypeMatch.STRICT)
+
+	assert not types_match
+
+
+def test_match_types_rejects_two_families() -> None:
+	"""
+	Check that numbers and texts are never equal, even with TypeMatch.IGNORED.
+
+	.. versionadded:: 0.2.0
+	"""
+	types_match = match_types(Type.INT64, Type.TEXT, TypeMatch.IGNORED)
+
+	assert not types_match
+
+
+def test_match_types_accepts_the_same_type_when_strict() -> None:
+	"""
+	Check that the same type may be equal with TypeMatch.STRICT.
+
+	.. versionadded:: 0.2.0
+	"""
+	types_match = match_types(Type.INT64, Type.INT64, TypeMatch.STRICT)
+
+	assert types_match
