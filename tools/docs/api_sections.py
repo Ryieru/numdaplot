@@ -40,7 +40,7 @@ class Section:
 # The first section whose prefix matches a module wins, so the most precise prefixes come first.
 SECTIONS = (
 	Section("numdaplot.arrays.creation", "Arrays", "arrays", "Creation settings"),
-	Section("numdaplot.arrays.math_functions", "Arrays", "arrays", "Math functions"),
+	Section("numdaplot.math_functions", "Arrays", "arrays", "Math functions"),
 	Section("numdaplot.arrays.mapping", "Arrays", "arrays", "Value mapping"),
 	Section("numdaplot.arrays", "Arrays", "arrays"),
 	Section("numdaplot.tables.files", "Tables", "tables", "File settings"),

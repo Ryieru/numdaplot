@@ -9,7 +9,7 @@ from typing import Any
 import numpy
 from numpy.typing import NDArray
 
-from numdaplot.arrays.calculation.statistic_values import compute_statistic
+from numdaplot.arrays.statistics.statistic_values import compute_statistic
 from numdaplot.errors.empty_array_error import EmptyArrayError
 from numdaplot.statistics.count import Count
 from numdaplot.statistics.counted_missing import CountedMissing

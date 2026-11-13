@@ -10,9 +10,9 @@ from typing import TYPE_CHECKING, Self
 
 from numdaplot.argument_checks.argument_types import checked_arguments
 from numdaplot.arrays.array_data import ArrayData
+from numdaplot.arrays.rules.rule_mask import build_rule_mask
 from numdaplot.arrays.selection.region_index import build_region_index
 from numdaplot.arrays.selection.replaced_values import replace_region
-from numdaplot.arrays.selection.rule_mask import build_rule_mask
 from numdaplot.positions.region import Region
 from numdaplot.rules.rule import Rule
 

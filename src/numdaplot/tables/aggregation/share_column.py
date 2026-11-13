@@ -6,7 +6,7 @@ Column whose mean is the share of the values of a Table column satisfying a rule
 
 import numpy
 
-from numdaplot.arrays.calculation.share_values import mark_share_values
+from numdaplot.arrays.statistics.share_values import mark_share_values
 from numdaplot.statistics.mean import Mean
 from numdaplot.statistics.share import Share
 from numdaplot.tables.filtering.column_mask import build_column_mask

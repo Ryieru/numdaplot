@@ -1,5 +1,5 @@
 """
-The ``ndp.Array`` class and its settings: shapes, distributions, math functions, sorting and replacement.
+The ``ndp.Array`` class, its settings, and the computation of rules, statistics, math and time functions on its values.
 
 .. versionadded:: 0.1.0
 """

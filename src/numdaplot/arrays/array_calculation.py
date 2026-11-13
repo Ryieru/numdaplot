@@ -8,13 +8,13 @@ from typing import Self
 
 from numdaplot.argument_checks.argument_types import checked_arguments
 from numdaplot.arrays.array_data import ArrayData
-from numdaplot.arrays.calculation.math_function_values import apply_math_function
-from numdaplot.arrays.calculation.statistic_values import compute_statistic
-from numdaplot.arrays.calculation.time_function_values import apply_time_function
+from numdaplot.arrays.dates.time_function_values import apply_time_function
 from numdaplot.arrays.mapping.mapped_values import map_values
 from numdaplot.arrays.mapping.value_mapping import ValueMapping
-from numdaplot.arrays.math_functions.math_function import MathFunction
+from numdaplot.arrays.math_functions.math_function_values import apply_math_function
+from numdaplot.arrays.statistics.statistic_values import compute_statistic
 from numdaplot.dates.time_function import TimeFunction
+from numdaplot.math_functions.math_function import MathFunction
 from numdaplot.positions.axis import Axis
 from numdaplot.statistics.statistic import Statistic
 

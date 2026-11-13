@@ -7,7 +7,7 @@ Rows of a Table column satisfying a rule.
 import numpy
 from numpy.typing import NDArray
 
-from numdaplot.arrays.selection.rule_mask import build_rule_mask
+from numdaplot.arrays.rules.rule_mask import build_rule_mask
 from numdaplot.rules.is_missing import IsMissing
 from numdaplot.rules.is_present import IsPresent
 from numdaplot.rules.rule import Rule

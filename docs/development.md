@@ -110,7 +110,7 @@ The hooks run every check a program can make. A reader still checks the followin
 ```
 src/numdaplot/
 	__init__.py     every public name, available as ndp.*
-	arrays/         Array and its settings: Spacing, distributions, math functions...
+	arrays/         Array, its settings (Spacing, distributions...) and the computation of rules, statistics, math and time functions on its values, in folders named after these notions
 	tables/         Table and its settings: file options, Filter, Aggregation, PivotTable, TableSorting, Preview...
 	conversions/    TableConversion, ArrayConversion, BooleanRule and the conversion of values to another type
 	dates/          DateFormat, TimeZone, TimeZoneChange, DatePart, DatePeriod, DurationIn, ToDuration...
@@ -120,6 +120,7 @@ src/numdaplot/
 	measures/       the Measure enum, the validation of fractions between 0 and 1 and the division of counts
 	rules/          tests applied to each value: Equal, Greater, Between, IsIn, Contains, IsMissing...
 	statistics/     Sum, Mean, Median, Quantile, StandardDeviation...
+	math_functions/ Absolute, Round, SquareRoot, Logarithm, Exponential, Sine, Cosine
 	positions/      Region, Index, Range, First, Last, Axis and Shape, the dimensions of an Array or a Table
 	ordering/       Order, MissingPosition and the natural order of texts
 	argument_checks/ check of the settings and arguments against their annotations, raising InvalidTypeError

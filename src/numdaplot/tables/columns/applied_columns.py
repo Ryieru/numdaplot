@@ -11,14 +11,14 @@ import numpy
 import pandas
 from numpy.typing import NDArray
 
-from numdaplot.arrays.calculation.math_function_values import apply_math_function
-from numdaplot.arrays.calculation.time_function_values import apply_time_function
 from numdaplot.arrays.creation.list_conversion import convert_list
+from numdaplot.arrays.dates.time_function_values import apply_time_function
 from numdaplot.arrays.mapping.mapped_values import find_mapping_result
 from numdaplot.arrays.mapping.value_mapping import ValueMapping
-from numdaplot.arrays.math_functions.math_function import MathFunction
+from numdaplot.arrays.math_functions.math_function_values import apply_math_function
 from numdaplot.dates.time_function import TimeFunction
 from numdaplot.errors.time_zone_mismatch_error import TimeZoneMismatchError
+from numdaplot.math_functions.math_function import MathFunction
 from numdaplot.tables.columns.replaced_columns import replace_frame_columns
 from numdaplot.tables.columns.table_application import TableApplication
 from numdaplot.tables.frames.column import Column

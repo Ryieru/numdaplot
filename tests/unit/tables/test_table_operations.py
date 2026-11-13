@@ -20,8 +20,8 @@ import pytest
 from numpy.typing import NDArray
 
 from numdaplot.arrays.array import Array
-from numdaplot.arrays.math_functions.square_root import SquareRoot
 from numdaplot.conversions.table_conversion import TableConversion
+from numdaplot.math_functions.square_root import SquareRoot
 from numdaplot.positions.axis import Axis
 from numdaplot.positions.index import Index
 from numdaplot.positions.region import Region

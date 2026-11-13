@@ -15,11 +15,11 @@ from numdaplot.arrays.creation.list_conversion import convert_list
 from numdaplot.arrays.mapping.unmatched import Unmatched
 from numdaplot.arrays.mapping.value_change import ValueChange
 from numdaplot.arrays.mapping.value_mapping import ValueMapping
-from numdaplot.arrays.math_functions.square_root import SquareRoot
 from numdaplot.dates.date_part import DatePart
 from numdaplot.dates.date_part_unit import DatePartUnit
 from numdaplot.errors.out_of_domain_error import OutOfDomainError
 from numdaplot.errors.time_zone_mismatch_error import TimeZoneMismatchError
+from numdaplot.math_functions.square_root import SquareRoot
 from numdaplot.tables.columns.applied_columns import (
 	apply_frame_columns,
 	apply_to_column,

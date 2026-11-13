@@ -16,11 +16,11 @@ from numpy.typing import NDArray
 from numdaplot.arrays import array_calculation
 from numdaplot.arrays.array_calculation import ArrayCalculation
 from numdaplot.arrays.array_data import read_stored_values
-from numdaplot.arrays.math_functions.math_function import MathFunction
-from numdaplot.arrays.math_functions.square_root import SquareRoot
 from numdaplot.dates.date_part import DatePart
 from numdaplot.dates.date_part_unit import DatePartUnit
 from numdaplot.dates.time_function import TimeFunction
+from numdaplot.math_functions.math_function import MathFunction
+from numdaplot.math_functions.square_root import SquareRoot
 from numdaplot.positions.axis import Axis
 from numdaplot.statistics.mean import Mean
 from numdaplot.statistics.statistic import Statistic
