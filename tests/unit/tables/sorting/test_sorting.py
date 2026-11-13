@@ -7,9 +7,9 @@ Unit tests of SortKey, TableSorting and the sort of the rows of a Table.
 import pandas
 import pytest
 
-from numdaplot.errors.column_not_found_error import ColumnNotFoundError
-from numdaplot.errors.duplicate_column_error import DuplicateColumnError
-from numdaplot.errors.empty_list_error import EmptyListError
+from numdaplot.errors.settings.empty_list_error import EmptyListError
+from numdaplot.errors.tables.column_not_found_error import ColumnNotFoundError
+from numdaplot.errors.tables.duplicate_column_error import DuplicateColumnError
 from numdaplot.ordering.missing_position import MissingPosition
 from numdaplot.ordering.order import Order
 from numdaplot.tables.sorting.sort_key import SortKey

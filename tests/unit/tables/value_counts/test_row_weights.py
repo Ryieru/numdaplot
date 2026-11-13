@@ -8,9 +8,9 @@ import numpy
 import pandas
 import pytest
 
-from numdaplot.errors.column_not_found_error import ColumnNotFoundError
-from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
-from numdaplot.errors.invalid_weight_error import InvalidWeightError
+from numdaplot.errors.tables.column_not_found_error import ColumnNotFoundError
+from numdaplot.errors.tables.invalid_weight_error import InvalidWeightError
+from numdaplot.errors.types.incompatible_types_error import IncompatibleTypesError
 from numdaplot.tables.value_counts.row_weights import (
 	read_row_weights,
 	require_number_weights,

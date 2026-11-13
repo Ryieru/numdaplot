@@ -8,7 +8,7 @@ from dataclasses import dataclass
 
 from numdaplot.argument_checks.column_names import copy_column_names
 from numdaplot.argument_checks.field_types import require_field_types
-from numdaplot.errors.empty_region_error import EmptyRegionError
+from numdaplot.errors.positions.empty_region_error import EmptyRegionError
 from numdaplot.positions.first import First
 from numdaplot.positions.index import Index
 from numdaplot.positions.last import Last

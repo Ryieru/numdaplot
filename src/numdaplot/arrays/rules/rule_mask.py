@@ -12,7 +12,7 @@ from numpy.typing import NDArray
 from numdaplot.arrays.rules.comparison_masks import build_between_mask, build_comparison_mask
 from numdaplot.arrays.rules.membership_masks import build_contains_mask, build_membership_mask
 from numdaplot.arrays.selection.missing_mask import find_missing
-from numdaplot.errors.refused_operation_error import RefusedOperationError
+from numdaplot.errors.settings.refused_operation_error import RefusedOperationError
 from numdaplot.rules.between import Between
 from numdaplot.rules.contains import Contains
 from numdaplot.rules.is_in import IsIn

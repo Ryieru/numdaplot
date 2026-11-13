@@ -20,8 +20,8 @@ from numdaplot.arrays.creation.date_parts_values import (
 	require_real_dates,
 	require_whole_parts,
 )
-from numdaplot.errors.rejected_dates import RejectedDate, RejectedDatePart
-from numdaplot.errors.value_conversion_error import ValueConversionError
+from numdaplot.errors.dates.rejected_dates import RejectedDate, RejectedDatePart
+from numdaplot.errors.types.value_conversion_error import ValueConversionError
 
 GRID_YEARS = ndp.Array.from_list([[2025, 2025], [2024, 1]])
 GRID_MONTHS = ndp.Array.from_list([[1, 12], [2, 1]])

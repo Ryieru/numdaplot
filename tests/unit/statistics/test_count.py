@@ -6,7 +6,7 @@ Unit tests of Count.
 
 import pytest
 
-from numdaplot.errors.invalid_type_error import InvalidTypeError
+from numdaplot.errors.types.invalid_type_error import InvalidTypeError
 from numdaplot.statistics.count import Count
 from numdaplot.statistics.counted_missing import CountedMissing
 

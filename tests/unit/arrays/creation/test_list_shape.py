@@ -7,7 +7,7 @@ Unit tests of find_list_shape and flatten_list.
 import pytest
 
 from numdaplot.arrays.creation.list_shape import find_list_shape, flatten_list
-from numdaplot.errors.irregular_list_error import IrregularListError
+from numdaplot.errors.positions.irregular_list_error import IrregularListError
 
 FLAT_VALUES = list[object]([1, 2, 3])
 GRID_VALUES = list[object]([[1, 2, 3], [4, 5, 6]])

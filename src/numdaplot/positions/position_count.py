@@ -4,7 +4,7 @@ Check of the number of positions taken from the start or the end of a dimension.
 .. versionadded:: 0.2.0
 """
 
-from numdaplot.errors.invalid_count_error import InvalidCountError
+from numdaplot.errors.settings.invalid_count_error import InvalidCountError
 
 MINIMUM_POSITION_COUNT = 1
 

@@ -6,7 +6,7 @@ Unit tests of CsvReadOptions.
 
 import pytest
 
-from numdaplot.errors.invalid_separator_error import InvalidSeparatorError
+from numdaplot.errors.files.invalid_separator_error import InvalidSeparatorError
 from numdaplot.tables.files.column_names import ColumnNames
 from numdaplot.tables.files.csv.csv_read_options import CsvReadOptions
 from numdaplot.tables.files.encoding import Encoding

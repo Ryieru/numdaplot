@@ -10,7 +10,7 @@ import numpy
 import pytest
 
 from numdaplot.arrays.operations.type_requirements import require_comparable, require_family
-from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
+from numdaplot.errors.types.incompatible_types_error import IncompatibleTypesError
 from numdaplot.types.value_family import ValueFamily
 
 OPERATION = "Mean"

@@ -12,9 +12,9 @@ from pathlib import Path
 import pytest
 from matplotlib.figure import Figure, FigureBase
 
-from numdaplot.errors.file_exists_error import FileExistsError
-from numdaplot.errors.refused_setting_error import RefusedSettingError
-from numdaplot.errors.unsupported_image_format_error import UnsupportedImageFormatError
+from numdaplot.errors.files.file_exists_error import FileExistsError
+from numdaplot.errors.files.unsupported_image_format_error import UnsupportedImageFormatError
+from numdaplot.errors.settings.refused_setting_error import RefusedSettingError
 from numdaplot.files.conflict import Conflict
 from numdaplot.plots.drawing.plot_drawing import FigureDrawing
 from numdaplot.plots.output.image_saving import choose_resolution, find_image_format, save_figure, write_image

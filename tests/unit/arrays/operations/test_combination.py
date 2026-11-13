@@ -10,9 +10,9 @@ import numpy
 import pytest
 
 from numdaplot.arrays.operations.combination import check_shapes, combine_values
-from numdaplot.errors.broadcast_warning import BroadcastWarning
-from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
-from numdaplot.errors.shape_mismatch_error import ShapeMismatchError
+from numdaplot.errors.positions.shape_mismatch_error import ShapeMismatchError
+from numdaplot.errors.types.incompatible_types_error import IncompatibleTypesError
+from numdaplot.errors.warnings.broadcast_warning import BroadcastWarning
 
 ADDITION_SYMBOL = "+"
 SUBTRACTION_SYMBOL = "-"

@@ -10,7 +10,7 @@ import numpy
 import pandas
 import pytest
 
-from numdaplot.errors.column_not_found_error import ColumnNotFoundError
+from numdaplot.errors.tables.column_not_found_error import ColumnNotFoundError
 from numdaplot.positions.axis import Axis
 from numdaplot.tables.missing.missing_drop import MissingDrop
 from numdaplot.tables.missing.missing_mode import MissingMode

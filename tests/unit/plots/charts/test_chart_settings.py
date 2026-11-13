@@ -6,7 +6,7 @@ Unit tests of the column and color checks shared by the charts.
 
 import pytest
 
-from numdaplot.errors.empty_list_error import EmptyListError
+from numdaplot.errors.settings.empty_list_error import EmptyListError
 from numdaplot.plots.charts.chart_settings import copy_colors
 from numdaplot.plots.style.color import Color
 from numdaplot.plots.style.custom_color import CustomColor

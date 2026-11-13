@@ -18,7 +18,7 @@ from numdaplot.column_storage.column_values import (
 	read_present_values,
 )
 from numdaplot.column_storage.pandas_decimals import restore_exact_decimals
-from numdaplot.errors.value_conversion_error import ValueConversionError
+from numdaplot.errors.types.value_conversion_error import ValueConversionError
 from numdaplot.types.numpy_mapping import to_numpy_dtype
 from numdaplot.types.type import Type
 

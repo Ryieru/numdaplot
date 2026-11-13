@@ -7,7 +7,7 @@ Unit tests of the cleaning of the column names a Table reads.
 import pandas
 import pytest
 
-from numdaplot.errors.duplicate_column_error import DuplicateColumnError
+from numdaplot.errors.tables.duplicate_column_error import DuplicateColumnError
 from numdaplot.tables.files.column_names import ColumnNames
 from numdaplot.tables.frames.cleaned_names import clean_frame_names, clean_names, require_distinct_cleaned_names
 

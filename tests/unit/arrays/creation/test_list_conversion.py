@@ -19,9 +19,9 @@ from numdaplot.arrays.creation.list_conversion import (
 	store_time_values,
 	store_values,
 )
-from numdaplot.errors.missing_type_error import MissingTypeError
-from numdaplot.errors.unsupported_missing_error import UnsupportedMissingError
-from numdaplot.errors.value_conversion_error import ValueConversionError
+from numdaplot.errors.types.missing_type_error import MissingTypeError
+from numdaplot.errors.types.unsupported_missing_error import UnsupportedMissingError
+from numdaplot.errors.types.value_conversion_error import ValueConversionError
 from numdaplot.types.type import Type
 
 GRID_VALUES = list[object]([[1, 2], [3, 4]])

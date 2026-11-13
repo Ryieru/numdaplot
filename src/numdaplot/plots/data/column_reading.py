@@ -12,7 +12,7 @@ from numpy.typing import NDArray
 from numdaplot.column_storage.column import Column
 from numdaplot.column_storage.column_values import find_column_missing, find_column_type
 from numdaplot.column_storage.time_zones import find_column_time_zone
-from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
+from numdaplot.errors.types.incompatible_types_error import IncompatibleTypesError
 from numdaplot.plots.charts.box_chart import BoxChart
 from numdaplot.plots.charts.histogram_chart import HistogramChart
 from numdaplot.plots.charts.line_chart import LineChart

@@ -11,7 +11,7 @@ from types import TracebackType
 
 import numpy
 
-from numdaplot.errors.calculation_warning import CalculationWarning
+from numdaplot.errors.warnings.calculation_warning import CalculationWarning
 
 CALL_MODE = "call"
 IGNORE_MODE = "ignore"

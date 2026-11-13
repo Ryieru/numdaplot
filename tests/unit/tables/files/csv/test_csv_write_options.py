@@ -6,8 +6,8 @@ Unit tests of CsvWriteOptions.
 
 import pytest
 
-from numdaplot.errors.invalid_count_error import InvalidCountError
-from numdaplot.errors.invalid_separator_error import InvalidSeparatorError
+from numdaplot.errors.files.invalid_separator_error import InvalidSeparatorError
+from numdaplot.errors.settings.invalid_count_error import InvalidCountError
 from numdaplot.tables.files.csv.csv_write_options import CsvWriteOptions
 from numdaplot.tables.files.encoding import Encoding
 

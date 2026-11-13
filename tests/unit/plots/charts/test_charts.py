@@ -6,10 +6,10 @@ Unit tests of the chart settings.
 
 import pytest
 
-from numdaplot.errors.conflicting_settings_error import ConflictingSettingsError
-from numdaplot.errors.duplicate_column_error import DuplicateColumnError
-from numdaplot.errors.empty_list_error import EmptyListError
-from numdaplot.errors.refused_setting_error import RefusedSettingError
+from numdaplot.errors.settings.conflicting_settings_error import ConflictingSettingsError
+from numdaplot.errors.settings.empty_list_error import EmptyListError
+from numdaplot.errors.settings.refused_setting_error import RefusedSettingError
+from numdaplot.errors.tables.duplicate_column_error import DuplicateColumnError
 from numdaplot.measures.measure import Measure
 from numdaplot.plots.charts.bar_chart import BarChart
 from numdaplot.plots.charts.bar_layout import BarLayout

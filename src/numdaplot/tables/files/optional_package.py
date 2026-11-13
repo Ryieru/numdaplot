@@ -6,7 +6,7 @@ Packages that only some file formats need.
 
 from importlib.util import find_spec
 
-from numdaplot.errors.missing_dependency_error import MissingDependencyError
+from numdaplot.errors.files.missing_dependency_error import MissingDependencyError
 
 
 def require_package(package_name: str, extra_name: str) -> None:

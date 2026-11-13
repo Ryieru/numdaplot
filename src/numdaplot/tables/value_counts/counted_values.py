@@ -13,7 +13,7 @@ from numpy.typing import NDArray
 from numdaplot.argument_checks.column_names import require_known_columns
 from numdaplot.column_storage.column import Column
 from numdaplot.column_storage.column_values import build_column, find_column_missing
-from numdaplot.errors.duplicate_column_error import DuplicateColumnError
+from numdaplot.errors.tables.duplicate_column_error import DuplicateColumnError
 from numdaplot.measures.count_division import divide_counts
 from numdaplot.measures.measure import Measure
 from numdaplot.tables.aggregation.aggregated_frame import take_group_keys

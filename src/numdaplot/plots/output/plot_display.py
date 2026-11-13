@@ -16,7 +16,7 @@ from matplotlib.figure import Figure
 
 from numdaplot.arrays.operations.float_errors import INTERNAL_FILES
 from numdaplot.display.notebook import is_notebook
-from numdaplot.errors.display_warning import DisplayWarning
+from numdaplot.errors.warnings.display_warning import DisplayWarning
 from numdaplot.plots.drawing.plot_drawing import FIGURE_LAYOUT, FigureDrawing, build_figure, draw_on_figure
 from numdaplot.plots.output.shown_object import ShownObject
 from numdaplot.plots.style.image_options import DEFAULT_DPI

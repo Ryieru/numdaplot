@@ -13,10 +13,10 @@ from numdaplot.arrays.operations.operand import Operand, convert_time_value, fin
 from numdaplot.arrays.operations.time_bounds import require_nanoseconds_fit
 from numdaplot.arrays.operations.time_result_bounds import require_time_result_fits, widen_large_integers
 from numdaplot.column_storage.time_text import format_durations
-from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
-from numdaplot.errors.refused_operation_error import RefusedOperationError
-from numdaplot.errors.time_overflow_error import TimeOverflowError
-from numdaplot.errors.value_conversion_error import ValueConversionError
+from numdaplot.errors.dates.time_overflow_error import TimeOverflowError
+from numdaplot.errors.settings.refused_operation_error import RefusedOperationError
+from numdaplot.errors.types.incompatible_types_error import IncompatibleTypesError
+from numdaplot.errors.types.value_conversion_error import ValueConversionError
 from numdaplot.types.numpy_mapping import to_numpy_dtype
 from numdaplot.types.type import Type
 from numdaplot.types.value_family import ValueFamily, find_family

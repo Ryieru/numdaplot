@@ -9,7 +9,7 @@ import pytest
 
 from numdaplot.arrays.array_sorting import ArraySorting
 from numdaplot.arrays.layout.sorting_values import sort_slice, sort_values
-from numdaplot.errors.dimension_error import DimensionError
+from numdaplot.errors.positions.dimension_error import DimensionError
 from numdaplot.ordering.missing_position import MissingPosition
 from numdaplot.ordering.order import Order
 from numdaplot.positions.axis import Axis

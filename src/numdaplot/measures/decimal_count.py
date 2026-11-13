@@ -4,7 +4,7 @@ Check of the number of decimals a number is written with, in a file or in a labe
 .. versionadded:: 0.1.0
 """
 
-from numdaplot.errors.invalid_count_error import InvalidCountError
+from numdaplot.errors.settings.invalid_count_error import InvalidCountError
 
 MINIMUM_DECIMAL_COUNT = 0
 

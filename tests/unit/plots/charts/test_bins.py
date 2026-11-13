@@ -8,8 +8,8 @@ from datetime import timedelta
 
 import pytest
 
-from numdaplot.errors.invalid_bin_width_error import InvalidBinWidthError
-from numdaplot.errors.invalid_count_error import InvalidCountError
+from numdaplot.errors.plots.invalid_bin_width_error import InvalidBinWidthError
+from numdaplot.errors.settings.invalid_count_error import InvalidCountError
 from numdaplot.plots.charts.bin_count import BinCount
 from numdaplot.plots.charts.bin_width import BinWidth
 

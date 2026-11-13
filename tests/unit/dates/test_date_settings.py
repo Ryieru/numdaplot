@@ -18,9 +18,9 @@ from numdaplot.dates.time_zone import TimeZone
 from numdaplot.dates.time_zone_change import TimeZoneChange
 from numdaplot.dates.time_zone_mode import TimeZoneMode
 from numdaplot.dates.to_duration import ToDuration
-from numdaplot.errors.invalid_date_format_error import InvalidDateFormatError
-from numdaplot.errors.invalid_time_zone_change_error import InvalidTimeZoneChangeError
-from numdaplot.errors.unknown_time_zone_error import UnknownTimeZoneError
+from numdaplot.errors.dates.invalid_date_format_error import InvalidDateFormatError
+from numdaplot.errors.dates.invalid_time_zone_change_error import InvalidTimeZoneChangeError
+from numdaplot.errors.dates.unknown_time_zone_error import UnknownTimeZoneError
 
 DATE_PATTERN = "%d %b %Y"
 REJECTED_PATTERNS = ["%Y-%m-%d %z", "%H:%M %Z", "day"]

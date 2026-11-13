@@ -8,10 +8,10 @@ import numpy
 import pytest
 
 from numdaplot.arrays.statistics.statistic_values import compute_statistic, require_present_values
-from numdaplot.errors.dimension_error import DimensionError
-from numdaplot.errors.empty_array_error import EmptyArrayError
-from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
-from numdaplot.errors.refused_operation_error import RefusedOperationError
+from numdaplot.errors.positions.dimension_error import DimensionError
+from numdaplot.errors.positions.empty_array_error import EmptyArrayError
+from numdaplot.errors.settings.refused_operation_error import RefusedOperationError
+from numdaplot.errors.types.incompatible_types_error import IncompatibleTypesError
 from numdaplot.positions.axis import Axis
 from numdaplot.rules.greater import Greater
 from numdaplot.statistics.counted_missing import CountedMissing

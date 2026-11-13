@@ -11,8 +11,8 @@ from numpy.typing import NDArray
 
 from numdaplot.arrays.operations.integer_bounds import find_result_bounds, find_sum_bounds, find_value_bounds
 from numdaplot.arrays.operations.operand import Operand
-from numdaplot.errors.integer_overflow_error import IntegerOverflowError
-from numdaplot.errors.out_of_domain_error import OutOfDomainError
+from numdaplot.errors.types.integer_overflow_error import IntegerOverflowError
+from numdaplot.errors.types.out_of_domain_error import OutOfDomainError
 from numdaplot.types.numpy_mapping import from_numpy_dtype
 
 SIGNED_KIND = "i"

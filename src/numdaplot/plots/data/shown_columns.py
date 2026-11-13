@@ -6,8 +6,8 @@ Columns shown by the charts of a Plot, and the checks of the names they are show
 
 from typing import cast
 
-from numdaplot.errors.column_not_found_error import ColumnNotFoundError
-from numdaplot.errors.duplicate_column_error import DuplicateColumnError
+from numdaplot.errors.tables.column_not_found_error import ColumnNotFoundError
+from numdaplot.errors.tables.duplicate_column_error import DuplicateColumnError
 from numdaplot.plots.data.chart_values import ChartValues
 from numdaplot.plots.data.missing_cells import MissingCounts
 from numdaplot.plots.data.point_values import PointValues

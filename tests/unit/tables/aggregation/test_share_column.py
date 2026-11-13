@@ -11,7 +11,7 @@ import pandas
 import pytest
 
 from numdaplot.column_storage.time_zones import normalize_time_zone_column
-from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
+from numdaplot.errors.types.incompatible_types_error import IncompatibleTypesError
 from numdaplot.rules.between import Between
 from numdaplot.rules.greater import Greater
 from numdaplot.statistics.counted_missing import CountedMissing

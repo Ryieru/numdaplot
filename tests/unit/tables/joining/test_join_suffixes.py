@@ -6,7 +6,7 @@ Unit tests of JoinSuffixes.
 
 import pytest
 
-from numdaplot.errors.invalid_suffixes_error import InvalidSuffixesError
+from numdaplot.errors.tables.invalid_suffixes_error import InvalidSuffixesError
 from numdaplot.tables.joining.join_suffixes import JoinSuffixes
 
 LEFT_SUFFIX = "_2024"

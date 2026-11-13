@@ -13,8 +13,8 @@ from numpy.typing import NDArray
 from numdaplot.argument_checks.column_names import require_known_columns
 from numdaplot.column_storage.column import Column
 from numdaplot.column_storage.column_values import find_column_type
-from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
-from numdaplot.errors.invalid_weight_error import InvalidWeightError
+from numdaplot.errors.tables.invalid_weight_error import InvalidWeightError
+from numdaplot.errors.types.incompatible_types_error import IncompatibleTypesError
 from numdaplot.types.value_family import ValueFamily, find_family
 
 WEIGHTS_OPERATION = "ValueCount weights"

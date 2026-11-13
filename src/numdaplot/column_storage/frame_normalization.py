@@ -16,7 +16,7 @@ from numdaplot.column_storage.column import Column
 from numdaplot.column_storage.time_columns import is_time_column, read_object_values, store_time_column
 from numdaplot.column_storage.time_range_errors import TimeRangeErrors
 from numdaplot.column_storage.time_zones import normalize_time_zone_column
-from numdaplot.errors.unsupported_index_error import UnsupportedIndexError
+from numdaplot.errors.tables.unsupported_index_error import UnsupportedIndexError
 from numdaplot.types.numpy_mapping import from_numpy_dtype
 from numdaplot.types.pandas_mapping import TYPES_BY_PANDAS_NAME, from_pandas_dtype, to_pandas_dtype
 from numdaplot.types.time_of_day import holds_only_times

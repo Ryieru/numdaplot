@@ -8,8 +8,8 @@ from typing import Any, cast
 
 import pytest
 
-from numdaplot.errors.invalid_shape_error import InvalidShapeError
-from numdaplot.errors.invalid_type_error import InvalidTypeError
+from numdaplot.errors.positions.invalid_shape_error import InvalidShapeError
+from numdaplot.errors.types.invalid_type_error import InvalidTypeError
 from numdaplot.positions.shape import Shape
 
 GRID_DIMENSIONS = [3, 4]

@@ -117,7 +117,7 @@ src/numdaplot/
 	brackets/       Brackets, BracketEnd and Unmatched, and the cutting of numbers into labeled brackets
 	dates/          DateFormat, TimeZone, TimeZoneChange, DatePart, DatePeriod, DurationIn, ToDuration...
 	plots/          Plot and its creation methods, the charts, the PlotStyle and Figure
-	errors/         NumdaplotError, the precise errors, NumdaplotWarning and the precise warnings
+	errors/         NumdaplotError, NumdaplotWarning and their bases, then the precise errors and warnings in one folder per notion
 	types/          the Type enum and its conversion to numpy and pandas dtypes
 	measures/       the Measure enum, the validation of fractions and decimal counts, and the division of counts
 	rules/          tests applied to each value: Equal, Greater, Between, IsIn, Contains, IsMissing...

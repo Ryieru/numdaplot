@@ -8,7 +8,7 @@ import pytest
 
 from numdaplot.arrays.creation.distribution import Distribution
 from numdaplot.arrays.creation.uniform import Uniform
-from numdaplot.errors.refused_operation_error import RefusedOperationError
+from numdaplot.errors.settings.refused_operation_error import RefusedOperationError
 
 
 class CustomDistribution(Distribution):

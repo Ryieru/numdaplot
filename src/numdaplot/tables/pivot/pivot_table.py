@@ -8,8 +8,8 @@ from dataclasses import dataclass
 
 from numdaplot.argument_checks.column_names import require_column_name, require_column_names, require_unique_names
 from numdaplot.argument_checks.field_types import require_field_types
-from numdaplot.errors.empty_list_error import EmptyListError
-from numdaplot.errors.refused_setting_error import RefusedSettingError
+from numdaplot.errors.settings.empty_list_error import EmptyListError
+from numdaplot.errors.settings.refused_setting_error import RefusedSettingError
 from numdaplot.tables.aggregation.calculation import Calculation
 
 ROW_COLUMN_ITEM_NAME = "row column"

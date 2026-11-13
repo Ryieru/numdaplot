@@ -16,7 +16,7 @@ import pytest
 from numdaplot.arrays.array_arithmetic import ArrayArithmetic
 from numdaplot.arrays.array_data import read_stored_values
 from numdaplot.arrays.array_reflected_arithmetic import ArrayReflectedArithmetic
-from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
+from numdaplot.errors.types.incompatible_types_error import IncompatibleTypesError
 
 COMBINE_NAME = "_combine"
 COMBINE_REFLECTED_NAME = "_combine_reflected"

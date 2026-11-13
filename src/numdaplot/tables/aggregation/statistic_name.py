@@ -5,7 +5,7 @@ Names of the statistics in the column names of an aggregation and in a descripti
 """
 
 from numdaplot.arrays.statistics.statistic_values import UNKNOWN_STATISTIC_ALTERNATIVE, UNKNOWN_STATISTIC_OPERATION
-from numdaplot.errors.refused_operation_error import RefusedOperationError
+from numdaplot.errors.settings.refused_operation_error import RefusedOperationError
 from numdaplot.statistics.count import Count
 from numdaplot.statistics.count_distinct import CountDistinct
 from numdaplot.statistics.counted_missing import CountedMissing

@@ -6,7 +6,7 @@ Unit tests of the check of the separator of a CSV file.
 
 import pytest
 
-from numdaplot.errors.invalid_separator_error import InvalidSeparatorError
+from numdaplot.errors.files.invalid_separator_error import InvalidSeparatorError
 from numdaplot.tables.files.csv.csv_separator import require_separator
 
 SEMICOLON = ";"

@@ -12,7 +12,7 @@ import warnings
 from matplotlib.axes import Axes
 from matplotlib.figure import Figure
 
-from numdaplot.errors.readability_warning import ReadabilityWarning
+from numdaplot.errors.warnings.readability_warning import ReadabilityWarning
 from numdaplot.plots.drawing.labels.bar_label_reading import read_bar_labels
 from numdaplot.plots.drawing.labels.bar_value_labels import LabelPlace, write_value_labels
 from numdaplot.plots.drawing.labels.label_room import RIGHT_ANGLE

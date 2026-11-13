@@ -10,8 +10,8 @@ from pathlib import Path
 import pandas
 import pytest
 
-from numdaplot.errors.duplicate_column_error import DuplicateColumnError
-from numdaplot.errors.invalid_column_name_error import InvalidColumnNameError
+from numdaplot.errors.tables.duplicate_column_error import DuplicateColumnError
+from numdaplot.errors.tables.invalid_column_name_error import InvalidColumnNameError
 from numdaplot.tables.files.csv.csv_file import (
 	find_mixed_columns,
 	read_csv_file,

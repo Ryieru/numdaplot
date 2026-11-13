@@ -16,9 +16,9 @@ import pytest
 from numdaplot.arrays.array import Array
 from numdaplot.arrays.equality.equality import Equality
 from numdaplot.arrays.equality.type_match import TypeMatch
-from numdaplot.errors.invalid_type_error import InvalidTypeError
-from numdaplot.errors.not_single_value_error import NotSingleValueError
-from numdaplot.errors.time_zone_mismatch_error import TimeZoneMismatchError
+from numdaplot.errors.dates.time_zone_mismatch_error import TimeZoneMismatchError
+from numdaplot.errors.positions.not_single_value_error import NotSingleValueError
+from numdaplot.errors.types.invalid_type_error import InvalidTypeError
 from numdaplot.tables import table_exchange
 from numdaplot.tables.table import Table
 from numdaplot.tables.table_exchange import TableExchange

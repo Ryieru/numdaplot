@@ -12,7 +12,7 @@ from collections.abc import Callable
 import pandas
 import pytest
 
-from numdaplot.errors.refused_operation_error import RefusedOperationError
+from numdaplot.errors.settings.refused_operation_error import RefusedOperationError
 from numdaplot.tables.table_refusals import TableRefusals, refuse_table_comparison
 
 FRAME = pandas.DataFrame({"price": [1.5]})

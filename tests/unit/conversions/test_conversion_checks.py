@@ -22,7 +22,7 @@ from numdaplot.dates.date_format import DateFormat
 from numdaplot.dates.time_zone import TimeZone
 from numdaplot.dates.time_zone_change import TimeZoneChange
 from numdaplot.dates.time_zone_mode import TimeZoneMode
-from numdaplot.errors.invalid_conversion_error import InvalidConversionError
+from numdaplot.errors.types.invalid_conversion_error import InvalidConversionError
 from numdaplot.types.type import Type
 
 CONVERTED_NAME = "value"

@@ -17,7 +17,7 @@ from numdaplot.column_storage.column_values import (
 )
 from numdaplot.conversions.array_conversion import ArrayConversion
 from numdaplot.conversions.converted_column import convert_column
-from numdaplot.errors.unsupported_missing_error import UnsupportedMissingError
+from numdaplot.errors.types.unsupported_missing_error import UnsupportedMissingError
 from numdaplot.types.number_types import INTEGER_TYPES
 from numdaplot.types.type import Type
 

@@ -7,7 +7,7 @@ Unit tests of ValueChange.
 import pytest
 
 from numdaplot.arrays.mapping.value_change import ValueChange
-from numdaplot.errors.invalid_type_error import InvalidTypeError
+from numdaplot.errors.types.invalid_type_error import InvalidTypeError
 
 OLD_CODE = -1
 NEW_LABEL = "Femme"

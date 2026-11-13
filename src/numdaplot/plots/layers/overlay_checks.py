@@ -6,8 +6,8 @@ Checks of a chart added to a Plot with ``add_line``, ``add_bar`` or ``add_scatte
 
 from typing import cast
 
-from numdaplot.errors.incompatible_charts_error import IncompatibleChartsError
-from numdaplot.errors.refused_setting_error import RefusedSettingError
+from numdaplot.errors.plots.incompatible_charts_error import IncompatibleChartsError
+from numdaplot.errors.settings.refused_setting_error import RefusedSettingError
 from numdaplot.plots.charts.bar_chart import BarChart
 from numdaplot.plots.charts.chart import Chart
 from numdaplot.plots.charts.line_chart import LineChart

@@ -4,7 +4,7 @@ Check of the name of an Excel sheet.
 .. versionadded:: 0.1.0
 """
 
-from numdaplot.errors.invalid_sheet_name_error import InvalidSheetNameError
+from numdaplot.errors.files.invalid_sheet_name_error import InvalidSheetNameError
 
 MAXIMUM_SHEET_LENGTH = 31
 FORBIDDEN_SHEET_CHARACTERS = frozenset("[]:*?/\\")

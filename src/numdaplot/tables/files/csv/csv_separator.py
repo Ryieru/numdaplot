@@ -4,7 +4,7 @@ Check of the separator of a CSV file.
 .. versionadded:: 0.1.0
 """
 
-from numdaplot.errors.invalid_separator_error import InvalidSeparatorError
+from numdaplot.errors.files.invalid_separator_error import InvalidSeparatorError
 
 DEFAULT_SEPARATOR = ","
 SEPARATOR_LENGTH = 1

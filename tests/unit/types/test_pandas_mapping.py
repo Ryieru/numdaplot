@@ -8,7 +8,7 @@ import numpy
 import pandas
 import pytest
 
-from numdaplot.errors.unsupported_type_error import UnsupportedTypeError
+from numdaplot.errors.types.unsupported_type_error import UnsupportedTypeError
 from numdaplot.types.pandas_mapping import from_pandas_dtype, to_pandas_dtype
 from numdaplot.types.type import Type
 

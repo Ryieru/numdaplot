@@ -9,8 +9,8 @@ from collections.abc import Sequence
 from itertools import cycle, islice
 
 from numdaplot.arrays.operations.float_errors import INTERNAL_FILES
-from numdaplot.errors.invalid_color_count_error import InvalidColorCountError
-from numdaplot.errors.readability_warning import ReadabilityWarning
+from numdaplot.errors.plots.invalid_color_count_error import InvalidColorCountError
+from numdaplot.errors.warnings.readability_warning import ReadabilityWarning
 from numdaplot.plots.drawing.colors.colored_parts import ColoredParts
 from numdaplot.plots.style.color import Color
 from numdaplot.plots.style.custom_color import CustomColor

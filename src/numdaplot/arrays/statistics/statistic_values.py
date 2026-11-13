@@ -32,8 +32,8 @@ from numdaplot.arrays.statistics.location_statistics import (
 	compute_sum,
 )
 from numdaplot.arrays.statistics.share_values import build_share_values
-from numdaplot.errors.empty_array_error import EmptyArrayError
-from numdaplot.errors.refused_operation_error import RefusedOperationError
+from numdaplot.errors.positions.empty_array_error import EmptyArrayError
+from numdaplot.errors.settings.refused_operation_error import RefusedOperationError
 from numdaplot.positions.axis import Axis
 from numdaplot.positions.axis_number import find_numpy_axis
 from numdaplot.statistics.count import Count

@@ -13,7 +13,7 @@ from numdaplot.arrays.creation.normal import Normal
 from numdaplot.arrays.creation.random_integers import RandomIntegers
 from numdaplot.arrays.creation.random_values import draw_random_values, require_valid_seed
 from numdaplot.arrays.creation.uniform import Uniform
-from numdaplot.errors.invalid_seed_error import InvalidSeedError
+from numdaplot.errors.settings.invalid_seed_error import InvalidSeedError
 from numdaplot.positions.shape import Shape
 from numdaplot.rules.bounds import Bounds
 

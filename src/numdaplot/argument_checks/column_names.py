@@ -6,10 +6,10 @@ Checks of the column names given to a setting or an operation.
 
 from collections.abc import Sequence
 
-from numdaplot.errors.column_not_found_error import ColumnNotFoundError
-from numdaplot.errors.duplicate_column_error import DuplicateColumnError
-from numdaplot.errors.empty_list_error import EmptyListError
-from numdaplot.errors.invalid_column_name_error import InvalidColumnNameError
+from numdaplot.errors.settings.empty_list_error import EmptyListError
+from numdaplot.errors.tables.column_not_found_error import ColumnNotFoundError
+from numdaplot.errors.tables.duplicate_column_error import DuplicateColumnError
+from numdaplot.errors.tables.invalid_column_name_error import InvalidColumnNameError
 
 COLUMN_ITEM_NAME = "column"
 

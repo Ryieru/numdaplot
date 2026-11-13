@@ -10,7 +10,7 @@ from collections.abc import Sequence
 from typing import TYPE_CHECKING
 
 from numdaplot.argument_checks.column_names import copy_optional_column_names, require_optional_column_name
-from numdaplot.errors.empty_list_error import EmptyListError
+from numdaplot.errors.settings.empty_list_error import EmptyListError
 from numdaplot.plots.style.color import Color
 from numdaplot.plots.style.custom_color import CustomColor
 

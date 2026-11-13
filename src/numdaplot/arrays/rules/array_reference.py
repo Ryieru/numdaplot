@@ -11,8 +11,8 @@ from numpy.typing import NDArray
 
 from numdaplot.arrays.array_data import ArrayData, read_stored_values
 from numdaplot.arrays.selection.missing_mask import find_missing
-from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
-from numdaplot.errors.shape_mismatch_error import ShapeMismatchError
+from numdaplot.errors.positions.shape_mismatch_error import ShapeMismatchError
+from numdaplot.errors.types.incompatible_types_error import IncompatibleTypesError
 from numdaplot.types.numpy_mapping import from_numpy_dtype
 from numdaplot.types.value_family import find_family
 

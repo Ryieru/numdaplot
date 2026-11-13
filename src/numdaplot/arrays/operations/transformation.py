@@ -10,7 +10,7 @@ import numpy
 from numpy.typing import NDArray
 
 from numdaplot.arrays.operations.operand import find_operand_type_names
-from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
+from numdaplot.errors.types.incompatible_types_error import IncompatibleTypesError
 
 
 def transform_values(values: NDArray[Any], function: numpy.ufunc, name: str) -> NDArray[Any]:

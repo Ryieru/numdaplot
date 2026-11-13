@@ -17,7 +17,7 @@ from numdaplot.conversions.number_conversion import (
 	require_no_lost_value,
 	store_numbers,
 )
-from numdaplot.errors.value_conversion_error import ValueConversionError
+from numdaplot.errors.types.value_conversion_error import ValueConversionError
 from numdaplot.types.type import Type
 
 WHOLE_DECIMALS = pandas.Series([2.0, None])

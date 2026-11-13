@@ -18,7 +18,7 @@ import numdaplot as ndp
 from numdaplot.arrays import array_data
 from numdaplot.arrays.array_data import ArrayData, read_stored_values
 from numdaplot.arrays.operations.operand import Operand
-from numdaplot.errors.refused_operation_error import RefusedOperationError
+from numdaplot.errors.settings.refused_operation_error import RefusedOperationError
 from numdaplot.positions.shape import Shape
 from numdaplot.types.type import Type
 

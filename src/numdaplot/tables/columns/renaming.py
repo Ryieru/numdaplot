@@ -8,7 +8,7 @@ from dataclasses import dataclass
 
 from numdaplot.argument_checks.column_names import require_unique_names
 from numdaplot.argument_checks.field_types import require_field_types
-from numdaplot.errors.empty_list_error import EmptyListError
+from numdaplot.errors.settings.empty_list_error import EmptyListError
 from numdaplot.tables.columns.name_change import NameChange
 
 CHANGE_ITEM_NAME = "name change"

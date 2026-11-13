@@ -8,7 +8,7 @@ import pandas
 import pytest
 
 from numdaplot.conversions.text_conversion import parse_booleans
-from numdaplot.errors.value_conversion_error import ValueConversionError
+from numdaplot.errors.types.value_conversion_error import ValueConversionError
 
 WORD_TEXTS = pandas.Series(["yes"], dtype="string")
 REJECTED_WORD = "yes"

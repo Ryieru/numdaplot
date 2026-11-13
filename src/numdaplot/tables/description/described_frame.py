@@ -18,8 +18,8 @@ from numdaplot.column_storage.column import Column
 from numdaplot.column_storage.column_values import build_column, find_column_type, read_present_values
 from numdaplot.column_storage.time_zones import attribute_source_time_zone, find_column_time_zone
 from numdaplot.dates.time_zone import TimeZone
-from numdaplot.errors.duplicate_column_error import DuplicateColumnError
-from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
+from numdaplot.errors.tables.duplicate_column_error import DuplicateColumnError
+from numdaplot.errors.types.incompatible_types_error import IncompatibleTypesError
 from numdaplot.statistics.share import Share
 from numdaplot.statistics.statistic import Statistic
 from numdaplot.tables.aggregation.result_column import build_result_column, compute_cell

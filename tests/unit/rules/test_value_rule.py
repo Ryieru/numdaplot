@@ -11,8 +11,8 @@ import pytest
 
 from numdaplot.argument_checks.annotation_kinds import read_annotations
 from numdaplot.arrays.array import Array
-from numdaplot.errors.invalid_type_error import InvalidTypeError
-from numdaplot.errors.refused_operation_error import RefusedOperationError
+from numdaplot.errors.settings.refused_operation_error import RefusedOperationError
+from numdaplot.errors.types.invalid_type_error import InvalidTypeError
 from numdaplot.rules.equal import Equal
 from numdaplot.rules.greater import Greater
 from numdaplot.rules.greater_or_equal import GreaterOrEqual

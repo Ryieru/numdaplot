@@ -14,7 +14,7 @@ import pytest
 
 from numdaplot.arrays.array_data import read_stored_values
 from numdaplot.arrays.array_logic import ArrayLogic
-from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
+from numdaplot.errors.types.incompatible_types_error import IncompatibleTypesError
 
 LEFT_BOOLEANS = [True, True, False]
 RIGHT_BOOLEANS = [True, False, False]

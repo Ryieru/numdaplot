@@ -13,8 +13,8 @@ import pytest
 
 from numdaplot.column_storage.column import Column
 from numdaplot.dates.time_zone import TimeZone
-from numdaplot.errors.column_not_found_error import ColumnNotFoundError
-from numdaplot.errors.refused_operation_error import RefusedOperationError
+from numdaplot.errors.settings.refused_operation_error import RefusedOperationError
+from numdaplot.errors.tables.column_not_found_error import ColumnNotFoundError
 from numdaplot.positions.shape import Shape
 from numdaplot.tables.files.column_names import ColumnNames
 from numdaplot.tables.table_data import TableData, read_stored_frame

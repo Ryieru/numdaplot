@@ -8,9 +8,9 @@ from datetime import date, datetime, time, timedelta
 
 import numpy
 
-from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
-from numdaplot.errors.time_zone_mismatch_error import TimeZoneMismatchError
-from numdaplot.errors.unsupported_type_error import UnsupportedTypeError
+from numdaplot.errors.dates.time_zone_mismatch_error import TimeZoneMismatchError
+from numdaplot.errors.types.incompatible_types_error import IncompatibleTypesError
+from numdaplot.errors.types.unsupported_type_error import UnsupportedTypeError
 from numdaplot.types.library import Library
 from numdaplot.types.type import Type
 from numdaplot.types.value_family import find_family

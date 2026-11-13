@@ -12,7 +12,7 @@ from numpy.typing import NDArray
 from numdaplot.arrays.creation.normal import Normal
 from numdaplot.arrays.creation.random_integers import RandomIntegers, find_drawn_interval
 from numdaplot.arrays.creation.uniform import Uniform
-from numdaplot.errors.invalid_seed_error import InvalidSeedError
+from numdaplot.errors.settings.invalid_seed_error import InvalidSeedError
 from numdaplot.positions.shape import Shape
 
 LOWEST_SEED = 0

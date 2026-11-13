@@ -12,7 +12,7 @@ from numpy.typing import NDArray
 
 from numdaplot.arrays.rules import rule_mask
 from numdaplot.arrays.rules.rule_mask import build_rule_mask
-from numdaplot.errors.refused_operation_error import RefusedOperationError
+from numdaplot.errors.settings.refused_operation_error import RefusedOperationError
 from numdaplot.rules.between import Between
 from numdaplot.rules.contains import Contains
 from numdaplot.rules.greater import Greater

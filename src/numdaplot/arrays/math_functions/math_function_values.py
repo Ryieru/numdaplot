@@ -12,8 +12,8 @@ from numpy.typing import NDArray
 from numdaplot.arrays.operations.float_errors import FloatErrorWarnings
 from numdaplot.arrays.operations.integer_rules import require_absolute_fits
 from numdaplot.arrays.operations.type_requirements import require_family
-from numdaplot.errors.out_of_domain_error import OutOfDomainError
-from numdaplot.errors.refused_operation_error import RefusedOperationError
+from numdaplot.errors.settings.refused_operation_error import RefusedOperationError
+from numdaplot.errors.types.out_of_domain_error import OutOfDomainError
 from numdaplot.math_functions.absolute import Absolute
 from numdaplot.math_functions.cosine import Cosine
 from numdaplot.math_functions.exponential import Exponential

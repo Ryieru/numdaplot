@@ -10,9 +10,9 @@ import numpy
 from numpy.typing import NDArray
 
 from numdaplot.arrays.creation.range_values import compute_range_values
-from numdaplot.errors.dimension_error import DimensionError
-from numdaplot.errors.invalid_position_error import InvalidPositionError
-from numdaplot.errors.refused_operation_error import RefusedOperationError
+from numdaplot.errors.positions.dimension_error import DimensionError
+from numdaplot.errors.positions.invalid_position_error import InvalidPositionError
+from numdaplot.errors.settings.refused_operation_error import RefusedOperationError
 from numdaplot.positions.first import First
 from numdaplot.positions.index import Index
 from numdaplot.positions.last import Last

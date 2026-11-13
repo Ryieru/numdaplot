@@ -6,7 +6,7 @@ Unit tests of ExcelReadOptions.
 
 import pytest
 
-from numdaplot.errors.invalid_sheet_name_error import InvalidSheetNameError
+from numdaplot.errors.files.invalid_sheet_name_error import InvalidSheetNameError
 from numdaplot.tables.files.column_names import ColumnNames
 from numdaplot.tables.files.excel.excel_read_options import ExcelReadOptions
 

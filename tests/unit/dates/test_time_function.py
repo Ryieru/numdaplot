@@ -9,7 +9,7 @@ import pytest
 from numdaplot.dates.date_part import DatePart
 from numdaplot.dates.date_part_unit import DatePartUnit
 from numdaplot.dates.time_function import TimeFunction
-from numdaplot.errors.refused_operation_error import RefusedOperationError
+from numdaplot.errors.settings.refused_operation_error import RefusedOperationError
 
 
 class CustomTimeFunction(TimeFunction):

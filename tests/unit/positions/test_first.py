@@ -8,8 +8,8 @@ from typing import Any, cast
 
 import pytest
 
-from numdaplot.errors.invalid_count_error import InvalidCountError
-from numdaplot.errors.invalid_type_error import InvalidTypeError
+from numdaplot.errors.settings.invalid_count_error import InvalidCountError
+from numdaplot.errors.types.invalid_type_error import InvalidTypeError
 from numdaplot.positions.first import First
 
 COUNT = 10

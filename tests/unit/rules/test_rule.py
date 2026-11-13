@@ -6,7 +6,7 @@ Unit tests of Rule.
 
 import pytest
 
-from numdaplot.errors.refused_operation_error import RefusedOperationError
+from numdaplot.errors.settings.refused_operation_error import RefusedOperationError
 from numdaplot.rules.greater import Greater
 from numdaplot.rules.rule import Rule
 

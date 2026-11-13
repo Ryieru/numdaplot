@@ -10,7 +10,7 @@ import numpy
 import pytest
 
 from numdaplot.arrays.rules.membership_masks import build_contains_mask, build_membership_mask
-from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
+from numdaplot.errors.types.incompatible_types_error import IncompatibleTypesError
 from numdaplot.rules.case import Case
 from numdaplot.rules.contains import Contains
 from numdaplot.rules.is_in import IsIn

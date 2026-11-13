@@ -7,9 +7,9 @@ Unit tests of ColumnChoice, NameChange, Renaming and NewColumn.
 import pytest
 
 from numdaplot.arrays.array import Array
-from numdaplot.errors.duplicate_column_error import DuplicateColumnError
-from numdaplot.errors.empty_list_error import EmptyListError
-from numdaplot.errors.invalid_column_name_error import InvalidColumnNameError
+from numdaplot.errors.settings.empty_list_error import EmptyListError
+from numdaplot.errors.tables.duplicate_column_error import DuplicateColumnError
+from numdaplot.errors.tables.invalid_column_name_error import InvalidColumnNameError
 from numdaplot.files.conflict import Conflict
 from numdaplot.tables.columns.column_choice import ColumnChoice
 from numdaplot.tables.columns.column_mode import ColumnMode

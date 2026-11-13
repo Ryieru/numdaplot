@@ -8,7 +8,7 @@ from typing import Any
 
 from numpy.typing import NDArray
 
-from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
+from numdaplot.errors.types.incompatible_types_error import IncompatibleTypesError
 from numdaplot.rules.rule_values import ScalarValue
 from numdaplot.types.numpy_mapping import from_numpy_dtype
 from numdaplot.types.value_family import ValueFamily, find_family

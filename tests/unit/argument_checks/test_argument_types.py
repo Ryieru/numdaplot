@@ -18,7 +18,7 @@ from numdaplot.argument_checks.argument_types import (
 	replace_self,
 	require_argument_type,
 )
-from numdaplot.errors.invalid_type_error import InvalidTypeError
+from numdaplot.errors.types.invalid_type_error import InvalidTypeError
 
 ANSWER = 42
 DOUBLED_ANSWER = 84

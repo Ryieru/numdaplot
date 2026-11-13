@@ -6,10 +6,10 @@ Unit tests of TableApplication.
 
 import pytest
 
-from numdaplot.errors.duplicate_column_error import DuplicateColumnError
-from numdaplot.errors.empty_list_error import EmptyListError
-from numdaplot.errors.invalid_column_name_error import InvalidColumnNameError
-from numdaplot.errors.invalid_type_error import InvalidTypeError
+from numdaplot.errors.settings.empty_list_error import EmptyListError
+from numdaplot.errors.tables.duplicate_column_error import DuplicateColumnError
+from numdaplot.errors.tables.invalid_column_name_error import InvalidColumnNameError
+from numdaplot.errors.types.invalid_type_error import InvalidTypeError
 from numdaplot.math_functions.square_root import SquareRoot
 from numdaplot.tables.columns.table_application import TableApplication
 

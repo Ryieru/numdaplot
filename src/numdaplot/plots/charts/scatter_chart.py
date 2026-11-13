@@ -9,10 +9,10 @@ from dataclasses import dataclass
 
 from numdaplot.argument_checks.column_names import require_optional_column_name
 from numdaplot.argument_checks.field_types import require_field_types
-from numdaplot.errors.conflicting_settings_error import ConflictingSettingsError
-from numdaplot.errors.invalid_opacity_error import InvalidOpacityError
-from numdaplot.errors.invalid_point_size_error import InvalidPointSizeError
-from numdaplot.errors.refused_setting_error import RefusedSettingError
+from numdaplot.errors.plots.invalid_opacity_error import InvalidOpacityError
+from numdaplot.errors.plots.invalid_point_size_error import InvalidPointSizeError
+from numdaplot.errors.settings.conflicting_settings_error import ConflictingSettingsError
+from numdaplot.errors.settings.refused_setting_error import RefusedSettingError
 from numdaplot.plots.charts.chart import Chart
 from numdaplot.plots.charts.color_scale import ColorScale
 from numdaplot.plots.charts.marker_shape import MarkerShape

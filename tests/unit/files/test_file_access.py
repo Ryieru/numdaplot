@@ -8,8 +8,8 @@ from pathlib import Path
 
 import pytest
 
-from numdaplot.errors.file_access_error import FileAccessError
-from numdaplot.errors.file_exists_error import FileExistsError as NumdaplotFileExistsError
+from numdaplot.errors.files.file_access_error import FileAccessError
+from numdaplot.errors.files.file_exists_error import FileExistsError as NumdaplotFileExistsError
 from numdaplot.files.file_access import (
 	READ_OPERATION,
 	WRITE_OPERATION,

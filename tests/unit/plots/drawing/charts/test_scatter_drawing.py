@@ -12,7 +12,7 @@ import pytest
 from matplotlib.figure import Figure
 
 import numdaplot as ndp
-from numdaplot.errors.invalid_color_count_error import InvalidColorCountError
+from numdaplot.errors.plots.invalid_color_count_error import InvalidColorCountError
 from numdaplot.plots.data.array_values import read_array_values
 from numdaplot.plots.data.point_values import read_point_values
 from numdaplot.plots.data.table_values import read_table_values

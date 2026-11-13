@@ -11,8 +11,8 @@ from numdaplot.column_storage.column_values import find_column_missing
 from numdaplot.column_storage.time_zones import find_column_time_zone
 from numdaplot.dates.time_zone_change import TimeZoneChange
 from numdaplot.dates.time_zone_mode import TimeZoneMode
-from numdaplot.errors.time_zone_mismatch_error import TimeZoneMismatchError
-from numdaplot.errors.value_conversion_error import ValueConversionError
+from numdaplot.errors.dates.time_zone_mismatch_error import TimeZoneMismatchError
+from numdaplot.errors.types.value_conversion_error import ValueConversionError
 from numdaplot.types.type import Type
 
 MODE_OPERATIONS = {

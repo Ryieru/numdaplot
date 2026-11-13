@@ -7,7 +7,7 @@ Unit tests of the checks of the column settings of a chart against the data it d
 import pytest
 
 import numdaplot as ndp
-from numdaplot.errors.invalid_chart_data_error import InvalidChartDataError
+from numdaplot.errors.plots.invalid_chart_data_error import InvalidChartDataError
 from numdaplot.plots.data.chart_data import (
 	read_chart_values,
 	require_column_setting,

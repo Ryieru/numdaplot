@@ -7,7 +7,7 @@ Unit tests of build_filled_values.
 import pytest
 
 from numdaplot.arrays.creation.filled_values import build_filled_values
-from numdaplot.errors.value_conversion_error import ValueConversionError
+from numdaplot.errors.types.value_conversion_error import ValueConversionError
 from numdaplot.positions.shape import Shape
 from numdaplot.types.type import Type
 

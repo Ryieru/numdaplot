@@ -7,9 +7,9 @@ Unit tests of Join.
 import pytest
 
 import numdaplot as ndp
-from numdaplot.errors.duplicate_column_error import DuplicateColumnError
-from numdaplot.errors.empty_list_error import EmptyListError
-from numdaplot.errors.invalid_column_name_error import InvalidColumnNameError
+from numdaplot.errors.settings.empty_list_error import EmptyListError
+from numdaplot.errors.tables.duplicate_column_error import DuplicateColumnError
+from numdaplot.errors.tables.invalid_column_name_error import InvalidColumnNameError
 from numdaplot.tables.joining.join import Join
 
 IDS = ndp.Array.from_list([1, 2])

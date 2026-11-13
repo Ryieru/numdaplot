@@ -6,7 +6,7 @@ Unit tests of JsonWriteOptions.
 
 import pytest
 
-from numdaplot.errors.invalid_count_error import InvalidCountError
+from numdaplot.errors.settings.invalid_count_error import InvalidCountError
 from numdaplot.tables.files.json.json_layout import JsonLayout
 from numdaplot.tables.files.json.json_write_options import JsonWriteOptions
 

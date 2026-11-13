@@ -16,8 +16,8 @@ from numdaplot.conversions.date_formats import DEFAULT_READ_PATTERNS, READ_PATTE
 from numdaplot.conversions.date_range import is_text_out_of_range
 from numdaplot.dates.custom_date_format import CustomDateFormat
 from numdaplot.dates.date_format import DateFormat
-from numdaplot.errors.time_overflow_error import TimeOverflowError
-from numdaplot.errors.value_conversion_error import ValueConversionError
+from numdaplot.errors.dates.time_overflow_error import TimeOverflowError
+from numdaplot.errors.types.value_conversion_error import ValueConversionError
 from numdaplot.types.type import Type
 
 FULL_TEXT = "^{pattern}$"

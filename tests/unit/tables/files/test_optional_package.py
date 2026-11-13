@@ -6,7 +6,7 @@ Unit tests of the check of optional packages.
 
 import pytest
 
-from numdaplot.errors.missing_dependency_error import MissingDependencyError
+from numdaplot.errors.files.missing_dependency_error import MissingDependencyError
 from numdaplot.tables.files.optional_package import require_package
 
 INSTALLED_PACKAGE = "numpy"

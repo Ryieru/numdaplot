@@ -5,7 +5,7 @@ Check that the operands of a boolean operator are booleans.
 """
 
 from numdaplot.arrays.operations.operand import Operand, find_operand_type, find_operand_type_names
-from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
+from numdaplot.errors.types.incompatible_types_error import IncompatibleTypesError
 from numdaplot.types.type import Type
 
 

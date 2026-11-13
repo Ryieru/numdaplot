@@ -11,10 +11,10 @@ import numpy
 import pandas
 import pytest
 
-from numdaplot.errors.column_not_found_error import ColumnNotFoundError
-from numdaplot.errors.duplicate_column_error import DuplicateColumnError
-from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
-from numdaplot.errors.refused_operation_error import RefusedOperationError
+from numdaplot.errors.settings.refused_operation_error import RefusedOperationError
+from numdaplot.errors.tables.column_not_found_error import ColumnNotFoundError
+from numdaplot.errors.tables.duplicate_column_error import DuplicateColumnError
+from numdaplot.errors.types.incompatible_types_error import IncompatibleTypesError
 from numdaplot.statistics.count import Count
 from numdaplot.statistics.counted_missing import CountedMissing
 from numdaplot.statistics.mean import Mean

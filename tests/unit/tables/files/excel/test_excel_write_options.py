@@ -6,7 +6,7 @@ Unit tests of ExcelWriteOptions.
 
 import pytest
 
-from numdaplot.errors.invalid_sheet_name_error import InvalidSheetNameError
+from numdaplot.errors.files.invalid_sheet_name_error import InvalidSheetNameError
 from numdaplot.tables.files.excel.excel_write_options import ExcelWriteOptions
 
 SHEET_NAME = "Sales"

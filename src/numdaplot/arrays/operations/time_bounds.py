@@ -12,7 +12,7 @@ from numpy.typing import NDArray
 from numdaplot.arrays.operations.integer_bounds import find_value_bounds
 from numdaplot.arrays.operations.operand import Operand
 from numdaplot.column_storage.time_range import is_python_time_in_range
-from numdaplot.errors.time_overflow_error import TimeOverflowError
+from numdaplot.errors.dates.time_overflow_error import TimeOverflowError
 from numdaplot.types.type import Type
 
 NANOSECOND_TYPES = frozenset({Type.DATETIME, Type.DURATION})

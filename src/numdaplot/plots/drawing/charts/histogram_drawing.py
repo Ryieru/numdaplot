@@ -15,7 +15,7 @@ import numpy
 from matplotlib.axes import Axes
 from numpy.typing import NDArray
 
-from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
+from numdaplot.errors.types.incompatible_types_error import IncompatibleTypesError
 from numdaplot.measures.measure import Measure
 from numdaplot.plots.charts.bin_count import BinCount
 from numdaplot.plots.charts.bin_width import BinWidth

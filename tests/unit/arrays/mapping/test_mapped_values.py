@@ -25,10 +25,10 @@ from numdaplot.arrays.mapping.mapped_values import (
 from numdaplot.arrays.mapping.value_change import ValueChange
 from numdaplot.arrays.mapping.value_mapping import ValueMapping
 from numdaplot.brackets.unmatched import Unmatched
-from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
-from numdaplot.errors.unmatched_value_error import UnmatchedValueError
-from numdaplot.errors.unsupported_missing_error import UnsupportedMissingError
-from numdaplot.errors.value_conversion_error import ValueConversionError
+from numdaplot.errors.settings.unmatched_value_error import UnmatchedValueError
+from numdaplot.errors.types.incompatible_types_error import IncompatibleTypesError
+from numdaplot.errors.types.unsupported_missing_error import UnsupportedMissingError
+from numdaplot.errors.types.value_conversion_error import ValueConversionError
 from numdaplot.types.type import Type
 
 LABELS = ValueMapping(changes=[ValueChange(1, "Homme"), ValueChange(2, "Femme")])

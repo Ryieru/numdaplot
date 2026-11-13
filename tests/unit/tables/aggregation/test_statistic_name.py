@@ -6,7 +6,7 @@ Unit tests of the names of statistics.
 
 import pytest
 
-from numdaplot.errors.refused_operation_error import RefusedOperationError
+from numdaplot.errors.settings.refused_operation_error import RefusedOperationError
 from numdaplot.rules.is_missing import IsMissing
 from numdaplot.statistics.count import Count
 from numdaplot.statistics.count_distinct import CountDistinct

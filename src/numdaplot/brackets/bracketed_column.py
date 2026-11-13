@@ -17,7 +17,7 @@ from numdaplot.brackets.unmatched import Unmatched
 from numdaplot.column_storage.column import Column
 from numdaplot.column_storage.column_values import find_column_missing, find_column_type
 from numdaplot.column_storage.frame_normalization import convert_to_type
-from numdaplot.errors.unmatched_value_error import BRACKETS_NAME, UnmatchedValueError
+from numdaplot.errors.settings.unmatched_value_error import BRACKETS_NAME, UnmatchedValueError
 from numdaplot.rules.bounds import Bounds
 from numdaplot.types.number_types import INTEGER_TYPES
 from numdaplot.types.pandas_mapping import to_pandas_dtype

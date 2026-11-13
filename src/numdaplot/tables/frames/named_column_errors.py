@@ -7,7 +7,7 @@ Name of the Table column in the errors about its values raised by a block.
 from numdaplot.column_storage.column import Column
 from numdaplot.errors.column_value_error import ColumnValueError
 from numdaplot.errors.error_translation import ErrorTranslation
-from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
+from numdaplot.errors.types.incompatible_types_error import IncompatibleTypesError
 
 NAMED_ERROR_TYPES = (IncompatibleTypesError, ColumnValueError)
 

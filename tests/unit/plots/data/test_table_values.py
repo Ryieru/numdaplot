@@ -11,8 +11,8 @@ import pandas
 import pytest
 
 import numdaplot as ndp
-from numdaplot.errors.column_not_found_error import ColumnNotFoundError
-from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
+from numdaplot.errors.tables.column_not_found_error import ColumnNotFoundError
+from numdaplot.errors.types.incompatible_types_error import IncompatibleTypesError
 from numdaplot.plots.data.position_kind import PositionKind
 from numdaplot.plots.data.table_values import name_columns, read_series, read_table_values
 from numdaplot.tables.table_data import read_stored_frame

@@ -6,7 +6,7 @@ Check that the values of a chart have different labels.
 
 from collections.abc import Iterable
 
-from numdaplot.errors.duplicate_label_error import DuplicateLabelError
+from numdaplot.errors.plots.duplicate_label_error import DuplicateLabelError
 
 
 def require_unique_labels(labels: Iterable[str]) -> None:

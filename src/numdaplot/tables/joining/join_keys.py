@@ -11,9 +11,9 @@ from numdaplot.argument_checks.column_names import require_known_columns
 from numdaplot.column_storage.column import Column
 from numdaplot.column_storage.column_values import find_column_type
 from numdaplot.column_storage.time_zones import find_column_time_zone
-from numdaplot.errors.column_not_found_error import ColumnNotFoundError
-from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
-from numdaplot.errors.time_zone_mismatch_error import TimeZoneMismatchError
+from numdaplot.errors.dates.time_zone_mismatch_error import TimeZoneMismatchError
+from numdaplot.errors.tables.column_not_found_error import ColumnNotFoundError
+from numdaplot.errors.types.incompatible_types_error import IncompatibleTypesError
 from numdaplot.tables.frames.named_column_errors import NamedColumnErrors
 from numdaplot.tables.joining.key_types import KeyTypes
 from numdaplot.types.numpy_mapping import from_numpy_dtype, to_numpy_dtype

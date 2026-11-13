@@ -20,7 +20,7 @@ from numdaplot.column_storage.column import Column
 from numdaplot.column_storage.column_values import build_column_with_missing, find_column_missing, read_present_values
 from numdaplot.column_storage.time_zones import find_column_time_zone
 from numdaplot.dates.time_function import TimeFunction
-from numdaplot.errors.time_zone_mismatch_error import TimeZoneMismatchError
+from numdaplot.errors.dates.time_zone_mismatch_error import TimeZoneMismatchError
 from numdaplot.math_functions.math_function import MathFunction
 from numdaplot.tables.columns.replaced_columns import replace_frame_columns
 from numdaplot.tables.columns.table_application import TableApplication

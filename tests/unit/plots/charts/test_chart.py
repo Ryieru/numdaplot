@@ -6,7 +6,7 @@ Unit tests of Chart.
 
 import pytest
 
-from numdaplot.errors.refused_operation_error import RefusedOperationError
+from numdaplot.errors.settings.refused_operation_error import RefusedOperationError
 from numdaplot.plots.charts.chart import Chart
 from numdaplot.plots.charts.line_chart import LineChart
 

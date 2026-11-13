@@ -14,7 +14,7 @@ from matplotlib.axes import Axes
 from matplotlib.dates import AutoDateLocator
 from matplotlib.figure import Figure
 
-from numdaplot.errors.readability_warning import ReadabilityWarning
+from numdaplot.errors.warnings.readability_warning import ReadabilityWarning
 from numdaplot.plots.drawing.labels.label_thinning import (
 	find_label_step,
 	is_number_text,

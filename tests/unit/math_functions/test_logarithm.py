@@ -6,7 +6,7 @@ Unit tests of Logarithm.
 
 import pytest
 
-from numdaplot.errors.invalid_base_error import InvalidBaseError
+from numdaplot.errors.settings.invalid_base_error import InvalidBaseError
 from numdaplot.math_functions.logarithm import Logarithm
 
 DECIMAL_BASE = 10

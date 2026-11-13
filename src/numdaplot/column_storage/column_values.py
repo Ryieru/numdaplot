@@ -12,8 +12,8 @@ from numpy.typing import NDArray
 
 from numdaplot.column_storage.column import Column
 from numdaplot.column_storage.time_zones import find_column_time_zone, remove_utc_zone
-from numdaplot.errors.time_zone_mismatch_error import TimeZoneMismatchError
-from numdaplot.errors.unsupported_missing_error import UnsupportedMissingError
+from numdaplot.errors.dates.time_zone_mismatch_error import TimeZoneMismatchError
+from numdaplot.errors.types.unsupported_missing_error import UnsupportedMissingError
 from numdaplot.types.numpy_mapping import from_numpy_dtype, to_numpy_dtype
 from numdaplot.types.pandas_mapping import from_pandas_dtype, to_pandas_dtype
 from numdaplot.types.type import Type

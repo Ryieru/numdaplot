@@ -7,7 +7,7 @@ A pattern describing how dates are written as texts.
 from dataclasses import dataclass
 
 from numdaplot.argument_checks.field_types import require_field_types
-from numdaplot.errors.invalid_date_format_error import InvalidDateFormatError
+from numdaplot.errors.dates.invalid_date_format_error import InvalidDateFormatError
 
 DATE_CODES = ("%d", "%m", "%Y", "%y", "%b", "%B", "%j")
 TIME_ZONE_CODES = ("%z", "%Z")

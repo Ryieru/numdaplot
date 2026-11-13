@@ -9,7 +9,7 @@ from pathlib import Path
 import pandas
 import pytest
 
-from numdaplot.errors.missing_dependency_error import MissingDependencyError
+from numdaplot.errors.files.missing_dependency_error import MissingDependencyError
 from numdaplot.tables.files.parquet import parquet_file
 from numdaplot.tables.files.parquet.parquet_file import read_parquet_file, write_parquet_file
 

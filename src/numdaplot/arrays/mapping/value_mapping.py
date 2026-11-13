@@ -9,8 +9,8 @@ from dataclasses import dataclass
 from numdaplot.argument_checks.field_types import require_field_types
 from numdaplot.arrays.mapping.value_change import ValueChange
 from numdaplot.brackets.unmatched import Unmatched
-from numdaplot.errors.duplicate_value_error import DuplicateValueError
-from numdaplot.errors.empty_list_error import EmptyListError
+from numdaplot.errors.settings.duplicate_value_error import DuplicateValueError
+from numdaplot.errors.settings.empty_list_error import EmptyListError
 from numdaplot.rules.rule_values import ScalarValue
 from numdaplot.types.type import Type
 from numdaplot.types.value_type import find_common_type, find_value_type

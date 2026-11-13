@@ -8,7 +8,7 @@ from collections.abc import Hashable
 
 import pandas
 
-from numdaplot.errors.duplicate_column_error import DuplicateColumnError
+from numdaplot.errors.tables.duplicate_column_error import DuplicateColumnError
 from numdaplot.tables.files.column_names import ColumnNames
 
 

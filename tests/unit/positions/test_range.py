@@ -6,7 +6,7 @@ Unit tests of Range.
 
 import pytest
 
-from numdaplot.errors.invalid_step_error import InvalidStepError
+from numdaplot.errors.settings.invalid_step_error import InvalidStepError
 from numdaplot.positions.range import DEFAULT_STEP, Range
 from numdaplot.rules.bounds import Bounds
 

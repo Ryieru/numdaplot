@@ -19,8 +19,8 @@ from numdaplot.arrays.array import Array
 from numdaplot.arrays.array_exchange import ArrayExchange
 from numdaplot.arrays.equality.equality import Equality
 from numdaplot.arrays.equality.type_match import TypeMatch
-from numdaplot.errors.invalid_type_error import InvalidTypeError
-from numdaplot.errors.not_single_value_error import NotSingleValueError
+from numdaplot.errors.positions.not_single_value_error import NotSingleValueError
+from numdaplot.errors.types.invalid_type_error import InvalidTypeError
 from numdaplot.tables.table import Table
 
 ARE_EQUAL_NAME = "are_equal"

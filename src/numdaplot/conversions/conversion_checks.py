@@ -10,7 +10,7 @@ from numdaplot.conversions.date_formats import find_format_name, has_date, has_t
 from numdaplot.conversions.table_conversion import TableConversion
 from numdaplot.dates.custom_date_format import CustomDateFormat
 from numdaplot.dates.date_format import DateFormat
-from numdaplot.errors.invalid_conversion_error import InvalidConversionError
+from numdaplot.errors.types.invalid_conversion_error import InvalidConversionError
 from numdaplot.types.type import Type
 from numdaplot.types.value_family import ValueFamily, find_family
 

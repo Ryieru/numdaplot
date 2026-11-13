@@ -9,8 +9,8 @@ from pathlib import Path
 
 import pytest
 
-from numdaplot.errors.file_exists_error import FileExistsError
-from numdaplot.errors.file_not_found_error import FileNotFoundError
+from numdaplot.errors.files.file_exists_error import FileExistsError
+from numdaplot.errors.files.file_not_found_error import FileNotFoundError
 from numdaplot.files.conflict import Conflict
 from numdaplot.files.file_paths import require_existing_file, require_free_path
 

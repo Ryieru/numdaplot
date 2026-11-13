@@ -19,7 +19,7 @@ from numdaplot.arrays.operations.time_bounds import (
 	require_whole_durations_fit,
 )
 from numdaplot.column_storage.time_range import HIGHEST_DATETIME, LOWEST_DATETIME
-from numdaplot.errors.time_overflow_error import TimeOverflowError
+from numdaplot.errors.dates.time_overflow_error import TimeOverflowError
 from numdaplot.types.type import Type
 
 OPERATION_NAME = "+"

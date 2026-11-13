@@ -6,10 +6,10 @@ Unit tests of Calculation and Aggregation.
 
 import pytest
 
-from numdaplot.errors.duplicate_column_error import RESULT_NAME_ADVICE, DuplicateColumnError
-from numdaplot.errors.empty_aggregation_error import EmptyAggregationError
-from numdaplot.errors.empty_list_error import EmptyListError
-from numdaplot.errors.invalid_column_name_error import InvalidColumnNameError
+from numdaplot.errors.settings.empty_list_error import EmptyListError
+from numdaplot.errors.tables.duplicate_column_error import RESULT_NAME_ADVICE, DuplicateColumnError
+from numdaplot.errors.tables.empty_aggregation_error import EmptyAggregationError
+from numdaplot.errors.tables.invalid_column_name_error import InvalidColumnNameError
 from numdaplot.statistics.maximum import Max
 from numdaplot.statistics.mean import Mean
 from numdaplot.tables.aggregation.aggregation import Aggregation, require_unique_result_names

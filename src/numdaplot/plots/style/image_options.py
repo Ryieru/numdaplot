@@ -7,7 +7,7 @@ Settings of a PNG image of a Plot.
 from dataclasses import dataclass
 
 from numdaplot.argument_checks.field_types import require_field_types
-from numdaplot.errors.invalid_resolution_error import InvalidResolutionError
+from numdaplot.errors.files.invalid_resolution_error import InvalidResolutionError
 
 DEFAULT_DPI = 100
 MINIMUM_DPI = 1

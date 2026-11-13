@@ -8,7 +8,7 @@ import pytest
 
 from numdaplot.arrays.creation.distribution import Distribution
 from numdaplot.arrays.creation.uniform import Uniform
-from numdaplot.errors.invalid_bounds_error import InvalidBoundsError
+from numdaplot.errors.settings.invalid_bounds_error import InvalidBoundsError
 
 LOW = 0.0
 HIGH = 1.0

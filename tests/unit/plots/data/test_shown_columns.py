@@ -8,8 +8,8 @@ import numpy
 import pytest
 
 import numdaplot as ndp
-from numdaplot.errors.column_not_found_error import ColumnNotFoundError
-from numdaplot.errors.duplicate_column_error import DuplicateColumnError
+from numdaplot.errors.tables.column_not_found_error import ColumnNotFoundError
+from numdaplot.errors.tables.duplicate_column_error import DuplicateColumnError
 from numdaplot.plots.data.chart_values import Series
 from numdaplot.plots.data.missing_cells import read_missing_counts
 from numdaplot.plots.data.point_values import PointValues

@@ -8,7 +8,7 @@ import pandas
 import pytest
 
 from numdaplot.column_storage.time_range_errors import TimeRangeErrors
-from numdaplot.errors.time_overflow_error import TimeOverflowError
+from numdaplot.errors.dates.time_overflow_error import TimeOverflowError
 
 OPERATION_NAME = "from_arrays"
 COLUMN_NAME = "when"

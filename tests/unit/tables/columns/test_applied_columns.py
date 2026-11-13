@@ -19,8 +19,8 @@ from numdaplot.column_storage.column import Column
 from numdaplot.column_storage.column_values import build_column_with_missing, find_column_missing, find_column_type
 from numdaplot.dates.date_part import DatePart
 from numdaplot.dates.date_part_unit import DatePartUnit
-from numdaplot.errors.out_of_domain_error import OutOfDomainError
-from numdaplot.errors.time_zone_mismatch_error import TimeZoneMismatchError
+from numdaplot.errors.dates.time_zone_mismatch_error import TimeZoneMismatchError
+from numdaplot.errors.types.out_of_domain_error import OutOfDomainError
 from numdaplot.math_functions.square_root import SquareRoot
 from numdaplot.tables.columns.applied_columns import (
 	apply_frame_columns,

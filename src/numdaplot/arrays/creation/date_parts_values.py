@@ -13,8 +13,8 @@ import numpy
 from numpy.typing import NDArray
 
 from numdaplot.arrays.creation.date_parts import DateParts
-from numdaplot.errors.rejected_dates import RejectedDate, RejectedDatePart
-from numdaplot.errors.value_conversion_error import ValueConversionError
+from numdaplot.errors.dates.rejected_dates import RejectedDate, RejectedDatePart
+from numdaplot.errors.types.value_conversion_error import ValueConversionError
 from numdaplot.types.type import Type
 
 if TYPE_CHECKING:

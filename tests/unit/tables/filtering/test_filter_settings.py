@@ -6,8 +6,8 @@ Unit tests of Condition and Filter.
 
 import pytest
 
-from numdaplot.errors.duplicate_column_error import DuplicateColumnError
-from numdaplot.errors.empty_list_error import EmptyListError
+from numdaplot.errors.settings.empty_list_error import EmptyListError
+from numdaplot.errors.tables.duplicate_column_error import DuplicateColumnError
 from numdaplot.rules.greater import Greater
 from numdaplot.tables.filtering.column_match import ColumnMatch
 from numdaplot.tables.filtering.condition import Condition

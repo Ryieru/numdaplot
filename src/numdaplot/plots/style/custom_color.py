@@ -8,7 +8,7 @@ import re
 from dataclasses import dataclass
 
 from numdaplot.argument_checks.field_types import require_field_types
-from numdaplot.errors.invalid_color_error import InvalidColorError
+from numdaplot.errors.plots.invalid_color_error import InvalidColorError
 
 COLOR_PATTERN = re.compile(r"#[0-9a-fA-F]{6}")
 

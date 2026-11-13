@@ -17,8 +17,8 @@ from numdaplot.arrays.operations.integer_rules import (
 	require_opposite_fits,
 	require_sum_fits,
 )
-from numdaplot.errors.integer_overflow_error import IntegerOverflowError
-from numdaplot.errors.out_of_domain_error import OutOfDomainError
+from numdaplot.errors.types.integer_overflow_error import IntegerOverflowError
+from numdaplot.errors.types.out_of_domain_error import OutOfDomainError
 
 INTEGERS = numpy.array([1, 2])
 DECIMALS = numpy.array([1.0, 2.0])

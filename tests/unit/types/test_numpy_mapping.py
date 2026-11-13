@@ -9,7 +9,7 @@ from typing import Any, cast
 import numpy
 import pytest
 
-from numdaplot.errors.unsupported_type_error import UnsupportedTypeError
+from numdaplot.errors.types.unsupported_type_error import UnsupportedTypeError
 from numdaplot.types.library import Library
 from numdaplot.types.numpy_mapping import find_datetime_type, find_duration_type, from_numpy_dtype, to_numpy_dtype
 from numdaplot.types.type import Type

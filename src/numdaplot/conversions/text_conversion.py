@@ -13,7 +13,7 @@ from numdaplot.column_storage.column_values import (
 	find_column_type,
 	read_present_values,
 )
-from numdaplot.errors.value_conversion_error import ValueConversionError
+from numdaplot.errors.types.value_conversion_error import ValueConversionError
 from numdaplot.types.type import Type
 
 TRUE_TEXT = "true"

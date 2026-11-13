@@ -7,10 +7,10 @@ Unit tests of the name of a Table column in the errors about its values raised b
 import pandas
 import pytest
 
-from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
-from numdaplot.errors.out_of_domain_error import OutOfDomainError
-from numdaplot.errors.unmatched_value_error import UnmatchedValueError
-from numdaplot.errors.value_conversion_error import ValueConversionError
+from numdaplot.errors.settings.unmatched_value_error import UnmatchedValueError
+from numdaplot.errors.types.incompatible_types_error import IncompatibleTypesError
+from numdaplot.errors.types.out_of_domain_error import OutOfDomainError
+from numdaplot.errors.types.value_conversion_error import ValueConversionError
 from numdaplot.tables.frames.named_column_errors import NamedColumnErrors
 
 COLUMN_NAME = "price"

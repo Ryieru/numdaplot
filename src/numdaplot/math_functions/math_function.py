@@ -4,7 +4,7 @@ Base class of every math function.
 .. versionadded:: 0.1.0
 """
 
-from numdaplot.errors.refused_operation_error import RefusedOperationError
+from numdaplot.errors.settings.refused_operation_error import RefusedOperationError
 
 CONSTRUCTOR_OPERATION = "Creating a MathFunction with ndp.MathFunction()"
 CONSTRUCTOR_ALTERNATIVE = "a math function such as ndp.SquareRoot"

@@ -18,7 +18,7 @@ from numdaplot.arrays.operations.time_result_bounds import (
 	to_counts,
 	widen_large_integers,
 )
-from numdaplot.errors.time_overflow_error import TimeOverflowError
+from numdaplot.errors.dates.time_overflow_error import TimeOverflowError
 from numdaplot.types.type import Type
 
 OPERATION_NAME = "+"

@@ -15,7 +15,7 @@ from matplotlib.axis import Axis
 from matplotlib.ticker import FixedLocator
 
 from numdaplot.arrays.operations.float_errors import INTERNAL_FILES
-from numdaplot.errors.readability_warning import ReadabilityWarning
+from numdaplot.errors.warnings.readability_warning import ReadabilityWarning
 from numdaplot.plots.drawing.labels.label_room import (
 	estimate_final_length,
 	find_needed_room,

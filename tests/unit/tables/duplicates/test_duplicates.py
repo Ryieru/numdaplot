@@ -7,9 +7,9 @@ Unit tests of Deduplication and the removal of duplicated rows.
 import pandas
 import pytest
 
-from numdaplot.errors.column_not_found_error import ColumnNotFoundError
-from numdaplot.errors.duplicate_column_error import DuplicateColumnError
-from numdaplot.errors.empty_list_error import EmptyListError
+from numdaplot.errors.settings.empty_list_error import EmptyListError
+from numdaplot.errors.tables.column_not_found_error import ColumnNotFoundError
+from numdaplot.errors.tables.duplicate_column_error import DuplicateColumnError
 from numdaplot.tables.duplicates.deduplicated_frame import drop_duplicate_rows
 from numdaplot.tables.duplicates.deduplication import Deduplication
 from numdaplot.tables.duplicates.keep import Keep

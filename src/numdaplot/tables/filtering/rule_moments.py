@@ -9,7 +9,7 @@ from datetime import UTC, date, datetime
 from typing import Any, cast
 
 from numdaplot.dates.time_zone import TimeZone
-from numdaplot.errors.time_zone_mismatch_error import TimeZoneMismatchError
+from numdaplot.errors.dates.time_zone_mismatch_error import TimeZoneMismatchError
 from numdaplot.rules.rule import Rule
 
 NAIVE_COLUMN_OPERATION = "A rule on a column without time zone"

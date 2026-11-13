@@ -6,10 +6,10 @@ Unit tests of Description.
 
 import pytest
 
-from numdaplot.errors.duplicate_column_error import DuplicateColumnError
-from numdaplot.errors.duplicate_statistic_error import DuplicateStatisticError
-from numdaplot.errors.empty_list_error import EmptyListError
-from numdaplot.errors.refused_operation_error import RefusedOperationError
+from numdaplot.errors.settings.empty_list_error import EmptyListError
+from numdaplot.errors.settings.refused_operation_error import RefusedOperationError
+from numdaplot.errors.tables.duplicate_column_error import DuplicateColumnError
+from numdaplot.errors.tables.duplicate_statistic_error import DuplicateStatisticError
 from numdaplot.rules.greater import Greater
 from numdaplot.rules.is_in import IsIn
 from numdaplot.rules.less import Less

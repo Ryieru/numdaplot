@@ -4,7 +4,7 @@ Base class of every random distribution.
 .. versionadded:: 0.1.0
 """
 
-from numdaplot.errors.refused_operation_error import RefusedOperationError
+from numdaplot.errors.settings.refused_operation_error import RefusedOperationError
 
 CONSTRUCTOR_OPERATION = "Creating a Distribution with ndp.Distribution()"
 CONSTRUCTOR_ALTERNATIVE = "a distribution such as ndp.Uniform"

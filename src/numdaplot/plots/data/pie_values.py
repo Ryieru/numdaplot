@@ -13,10 +13,10 @@ from numpy.typing import NDArray
 
 from numdaplot.argument_checks.column_names import require_known_columns
 from numdaplot.column_storage.column_values import find_column_type
-from numdaplot.errors.empty_total_error import EmptyTotalError
-from numdaplot.errors.missing_value_error import MissingValueError
-from numdaplot.errors.out_of_domain_error import OutOfDomainError
-from numdaplot.errors.readability_warning import ReadabilityWarning
+from numdaplot.errors.plots.empty_total_error import EmptyTotalError
+from numdaplot.errors.plots.missing_value_error import MissingValueError
+from numdaplot.errors.types.out_of_domain_error import OutOfDomainError
+from numdaplot.errors.warnings.readability_warning import ReadabilityWarning
 from numdaplot.plots.charts.pie_chart import PieChart
 from numdaplot.plots.data.chart_values import ChartValues, Positions, Series
 from numdaplot.plots.data.column_reading import read_numbers, read_texts

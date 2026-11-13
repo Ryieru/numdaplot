@@ -7,7 +7,7 @@ Unit tests of Spacing.
 import pytest
 
 from numdaplot.arrays.creation.spacing import Spacing
-from numdaplot.errors.invalid_count_error import InvalidCountError
+from numdaplot.errors.settings.invalid_count_error import InvalidCountError
 from numdaplot.rules.bounds import Bounds
 
 START = 0.0

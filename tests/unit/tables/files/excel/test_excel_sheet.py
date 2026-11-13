@@ -6,7 +6,7 @@ Unit tests of the check of the name of an Excel sheet.
 
 import pytest
 
-from numdaplot.errors.invalid_sheet_name_error import InvalidSheetNameError
+from numdaplot.errors.files.invalid_sheet_name_error import InvalidSheetNameError
 from numdaplot.tables.files.excel.excel_sheet import require_sheet_name
 
 SHEET_NAME = "Sales"

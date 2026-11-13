@@ -20,8 +20,8 @@ from numdaplot.dates.duration_unit import DurationUnit
 from numdaplot.dates.period_unit import PeriodUnit
 from numdaplot.dates.time_function import TimeFunction
 from numdaplot.dates.to_duration import ToDuration
-from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
-from numdaplot.errors.refused_operation_error import RefusedOperationError
+from numdaplot.errors.settings.refused_operation_error import RefusedOperationError
+from numdaplot.errors.types.incompatible_types_error import IncompatibleTypesError
 from numdaplot.types.numpy_mapping import from_numpy_dtype, to_numpy_dtype
 from numdaplot.types.type import Type
 from numdaplot.types.value_family import ValueFamily

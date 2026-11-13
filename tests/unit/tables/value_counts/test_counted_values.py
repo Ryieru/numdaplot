@@ -9,8 +9,8 @@ import pandas
 import pytest
 
 from numdaplot.column_storage.column_values import find_column_type
-from numdaplot.errors.column_not_found_error import ColumnNotFoundError
-from numdaplot.errors.duplicate_column_error import DuplicateColumnError
+from numdaplot.errors.tables.column_not_found_error import ColumnNotFoundError
+from numdaplot.errors.tables.duplicate_column_error import DuplicateColumnError
 from numdaplot.measures.measure import Measure
 from numdaplot.tables.value_counts.counted_values import count_frame_values, measure_groups, order_by_size
 from numdaplot.tables.value_counts.value_count import ValueCount

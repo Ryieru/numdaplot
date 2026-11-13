@@ -6,7 +6,7 @@ Unit tests of Layout.
 
 import pytest
 
-from numdaplot.errors.invalid_count_error import InvalidCountError
+from numdaplot.errors.settings.invalid_count_error import InvalidCountError
 from numdaplot.plots.figure.layout import Layout
 
 

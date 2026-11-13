@@ -8,7 +8,7 @@ import numpy
 import pytest
 
 from numdaplot.arrays.operations.boolean_operands import require_booleans
-from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
+from numdaplot.errors.types.incompatible_types_error import IncompatibleTypesError
 
 AND_SYMBOL = "&"
 BOOLEANS = [True, False]

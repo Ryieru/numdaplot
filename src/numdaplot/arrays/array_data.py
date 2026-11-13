@@ -11,7 +11,7 @@ import numpy.typing
 
 from numdaplot.arrays.operations.combination import combine_values
 from numdaplot.arrays.operations.operand import Operand
-from numdaplot.errors.refused_operation_error import RefusedOperationError
+from numdaplot.errors.settings.refused_operation_error import RefusedOperationError
 from numdaplot.positions.shape import Shape
 from numdaplot.rules.rule_values import ScalarValue
 from numdaplot.types.numpy_mapping import from_numpy_dtype

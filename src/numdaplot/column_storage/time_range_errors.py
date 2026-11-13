@@ -6,8 +6,8 @@ Refusal of the dates and durations pandas cannot store in a Table column.
 
 import pandas
 
+from numdaplot.errors.dates.time_overflow_error import TimeOverflowError
 from numdaplot.errors.error_translation import ErrorTranslation
-from numdaplot.errors.time_overflow_error import TimeOverflowError
 from numdaplot.types.type import Type
 
 

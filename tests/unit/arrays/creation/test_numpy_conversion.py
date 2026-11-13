@@ -11,8 +11,8 @@ import numpy
 import pytest
 
 from numdaplot.arrays.creation.numpy_conversion import copy_numpy_values, normalize_durations, normalize_text
-from numdaplot.errors.time_overflow_error import TimeOverflowError
-from numdaplot.errors.unsupported_type_error import UnsupportedTypeError
+from numdaplot.errors.dates.time_overflow_error import TimeOverflowError
+from numdaplot.errors.types.unsupported_type_error import UnsupportedTypeError
 
 # Some versions of the numpy stubs leave out the missing value marker of StringDType.
 STRING_DTYPE_CLASS = cast(Any, numpy.dtypes.StringDType)

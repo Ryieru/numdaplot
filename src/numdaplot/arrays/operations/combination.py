@@ -14,10 +14,10 @@ from numdaplot.arrays.operations.float_errors import FloatErrorWarnings, TimeErr
 from numdaplot.arrays.operations.integer_rules import require_combination_fits, require_defined_integers
 from numdaplot.arrays.operations.operand import Operand, find_array_operand_type, find_operand_type_names
 from numdaplot.arrays.operations.time_arithmetic import combine_time_values, involves_time
-from numdaplot.errors.broadcast_warning import BroadcastWarning
-from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
-from numdaplot.errors.integer_overflow_error import IntegerOverflowError
-from numdaplot.errors.shape_mismatch_error import ShapeMismatchError
+from numdaplot.errors.positions.shape_mismatch_error import ShapeMismatchError
+from numdaplot.errors.types.incompatible_types_error import IncompatibleTypesError
+from numdaplot.errors.types.integer_overflow_error import IntegerOverflowError
+from numdaplot.errors.warnings.broadcast_warning import BroadcastWarning
 
 PYTHON_OBJECT_KIND = "O"
 BROADCAST_MESSAGE = "Shapes {left_dimensions} and {right_dimensions} differ, values are repeated to match."

@@ -20,7 +20,7 @@ from numdaplot.conversions.time_conversion import (
 	write_times,
 )
 from numdaplot.dates.custom_date_format import CustomDateFormat
-from numdaplot.errors.value_conversion_error import ValueConversionError
+from numdaplot.errors.types.value_conversion_error import ValueConversionError
 from numdaplot.types.time_of_day import read_times as read_times_of_day
 
 TIME_DTYPE_NAME = "timedelta64[us]"

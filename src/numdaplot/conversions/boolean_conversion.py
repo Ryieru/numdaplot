@@ -17,7 +17,7 @@ from numdaplot.column_storage.column_values import (
 )
 from numdaplot.column_storage.frame_normalization import convert_to_type
 from numdaplot.conversions.boolean_rule import BooleanRule
-from numdaplot.errors.value_conversion_error import ValueConversionError
+from numdaplot.errors.types.value_conversion_error import ValueConversionError
 from numdaplot.types.type import Type
 
 FALSE_NUMBER = 0

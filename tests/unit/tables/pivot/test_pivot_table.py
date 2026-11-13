@@ -6,11 +6,11 @@ Unit tests of PivotTable.
 
 import pytest
 
-from numdaplot.errors.duplicate_column_error import DuplicateColumnError
-from numdaplot.errors.empty_list_error import EmptyListError
-from numdaplot.errors.invalid_column_name_error import InvalidColumnNameError
-from numdaplot.errors.invalid_type_error import InvalidTypeError
-from numdaplot.errors.refused_setting_error import RefusedSettingError
+from numdaplot.errors.settings.empty_list_error import EmptyListError
+from numdaplot.errors.settings.refused_setting_error import RefusedSettingError
+from numdaplot.errors.tables.duplicate_column_error import DuplicateColumnError
+from numdaplot.errors.tables.invalid_column_name_error import InvalidColumnNameError
+from numdaplot.errors.types.invalid_type_error import InvalidTypeError
 from numdaplot.statistics.sum import Sum
 from numdaplot.tables.aggregation.calculation import Calculation
 from numdaplot.tables.pivot.pivot_table import PivotTable

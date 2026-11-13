@@ -9,9 +9,9 @@ from datetime import UTC, date, datetime, time, timedelta
 import numpy
 import pytest
 
-from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
-from numdaplot.errors.time_zone_mismatch_error import TimeZoneMismatchError
-from numdaplot.errors.unsupported_type_error import UnsupportedTypeError
+from numdaplot.errors.dates.time_zone_mismatch_error import TimeZoneMismatchError
+from numdaplot.errors.types.incompatible_types_error import IncompatibleTypesError
+from numdaplot.errors.types.unsupported_type_error import UnsupportedTypeError
 from numdaplot.types.type import Type
 from numdaplot.types.value_type import find_common_type, find_type_width, find_value_type
 

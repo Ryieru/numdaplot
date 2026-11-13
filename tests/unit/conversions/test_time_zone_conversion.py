@@ -12,8 +12,8 @@ from numdaplot.conversions.time_zone_conversion import attribute_time_zone, chan
 from numdaplot.dates.time_zone import TimeZone
 from numdaplot.dates.time_zone_change import TimeZoneChange
 from numdaplot.dates.time_zone_mode import TimeZoneMode
-from numdaplot.errors.time_zone_mismatch_error import TimeZoneMismatchError
-from numdaplot.errors.value_conversion_error import ValueConversionError
+from numdaplot.errors.dates.time_zone_mismatch_error import TimeZoneMismatchError
+from numdaplot.errors.types.value_conversion_error import ValueConversionError
 
 PARIS_NAME = "Europe/Paris"
 PARIS = TimeZone(PARIS_NAME)

@@ -12,8 +12,8 @@ import pytest
 from numdaplot.arrays.array import Array
 from numdaplot.arrays.array_data import read_stored_values
 from numdaplot.arrays.rules.array_reference import compare_with_array, require_comparable_values
-from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
-from numdaplot.errors.shape_mismatch_error import ShapeMismatchError
+from numdaplot.errors.positions.shape_mismatch_error import ShapeMismatchError
+from numdaplot.errors.types.incompatible_types_error import IncompatibleTypesError
 
 DEPARTURES = Array.from_list(["Pau", "Lyon", "Nice"])
 ARRIVALS = Array.from_list(["Pau", None, "Dax"])

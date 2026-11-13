@@ -9,7 +9,7 @@ from typing import Any
 import numpy
 from numpy.typing import NDArray
 
-from numdaplot.errors.time_overflow_error import TimeOverflowError
+from numdaplot.errors.dates.time_overflow_error import TimeOverflowError
 from numdaplot.types.numpy_mapping import from_numpy_dtype, to_numpy_dtype
 from numdaplot.types.time_of_day import TIME_DTYPE, holds_only_times, store_time_objects
 from numdaplot.types.type import Type

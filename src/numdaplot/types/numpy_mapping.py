@@ -8,7 +8,7 @@ from typing import Any, cast
 
 import numpy
 
-from numdaplot.errors.unsupported_type_error import UnsupportedTypeError
+from numdaplot.errors.types.unsupported_type_error import UnsupportedTypeError
 from numdaplot.types.library import Library
 from numdaplot.types.type import Type
 

@@ -6,8 +6,8 @@ Paths of the files numdaplot reads and writes: Tables, and images of Plots and F
 
 from pathlib import Path
 
-from numdaplot.errors.file_exists_error import FileExistsError
-from numdaplot.errors.file_not_found_error import FileNotFoundError
+from numdaplot.errors.files.file_exists_error import FileExistsError
+from numdaplot.errors.files.file_not_found_error import FileNotFoundError
 from numdaplot.files.conflict import Conflict
 
 type FilePath = str | Path

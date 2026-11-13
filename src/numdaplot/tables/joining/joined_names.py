@@ -5,7 +5,7 @@ Names of the columns of a join that are not keys.
 """
 
 from numdaplot.argument_checks.column_names import require_unique_names
-from numdaplot.errors.duplicate_column_error import DuplicateColumnError
+from numdaplot.errors.tables.duplicate_column_error import DuplicateColumnError
 from numdaplot.tables.joining.join_suffixes import JoinSuffixes
 
 

@@ -8,7 +8,7 @@ from typing import Any, cast
 
 import pytest
 
-from numdaplot.errors.invalid_type_error import InvalidTypeError
+from numdaplot.errors.types.invalid_type_error import InvalidTypeError
 from numdaplot.positions.index import Index
 
 LAST_POSITION = -1

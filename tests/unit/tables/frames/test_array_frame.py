@@ -7,10 +7,10 @@ Unit tests of the columns built from Arrays.
 import pytest
 
 from numdaplot.arrays.array import Array
-from numdaplot.errors.dimension_error import DimensionError
-from numdaplot.errors.empty_list_error import EmptyListError
-from numdaplot.errors.invalid_column_name_error import InvalidColumnNameError
-from numdaplot.errors.shape_mismatch_error import ShapeMismatchError
+from numdaplot.errors.positions.dimension_error import DimensionError
+from numdaplot.errors.positions.shape_mismatch_error import ShapeMismatchError
+from numdaplot.errors.settings.empty_list_error import EmptyListError
+from numdaplot.errors.tables.invalid_column_name_error import InvalidColumnNameError
 from numdaplot.tables.frames.array_frame import build_array_frame
 
 CITIES = Array.from_list(["Pau", "Lyon"])

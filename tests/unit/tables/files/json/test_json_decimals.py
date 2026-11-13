@@ -8,7 +8,7 @@ import numpy
 import pandas
 import pytest
 
-from numdaplot.errors.value_conversion_error import ValueConversionError
+from numdaplot.errors.types.value_conversion_error import ValueConversionError
 from numdaplot.tables.files.json.json_decimals import (
 	has_decimal_column,
 	is_decimal_column,

@@ -8,10 +8,10 @@ import pandas
 import pytest
 
 from numdaplot.arrays.array import Array
-from numdaplot.errors.column_not_found_error import ColumnNotFoundError
-from numdaplot.errors.dimension_error import DimensionError
-from numdaplot.errors.duplicate_column_error import DuplicateColumnError
-from numdaplot.errors.shape_mismatch_error import ShapeMismatchError
+from numdaplot.errors.positions.dimension_error import DimensionError
+from numdaplot.errors.positions.shape_mismatch_error import ShapeMismatchError
+from numdaplot.errors.tables.column_not_found_error import ColumnNotFoundError
+from numdaplot.errors.tables.duplicate_column_error import DuplicateColumnError
 from numdaplot.files.conflict import Conflict
 from numdaplot.tables.columns.added_column import add_frame_column
 from numdaplot.tables.columns.chosen_columns import choose_frame_columns

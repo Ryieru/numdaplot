@@ -4,7 +4,7 @@ Base class of every chart.
 .. versionadded:: 0.1.0
 """
 
-from numdaplot.errors.refused_operation_error import RefusedOperationError
+from numdaplot.errors.settings.refused_operation_error import RefusedOperationError
 
 CONSTRUCTOR_OPERATION = "Creating a Chart with ndp.Chart()"
 CONSTRUCTOR_ALTERNATIVE = "a chart such as ndp.LineChart"

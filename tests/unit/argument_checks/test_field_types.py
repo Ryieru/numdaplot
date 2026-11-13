@@ -18,7 +18,7 @@ from numdaplot.argument_checks.field_types import (
 	find_rejected_value,
 	require_field_types,
 )
-from numdaplot.errors.invalid_type_error import InvalidTypeError
+from numdaplot.errors.types.invalid_type_error import InvalidTypeError
 from numdaplot.rules.rule_values import ScalarValue
 
 ACCEPTED_TEXTS = ["a", "b"]

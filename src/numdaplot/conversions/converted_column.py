@@ -24,8 +24,8 @@ from numdaplot.conversions.time_conversion import keep_time_of_day, parse_times,
 from numdaplot.conversions.time_zone_conversion import change_time_zone
 from numdaplot.dates.custom_date_format import CustomDateFormat
 from numdaplot.dates.date_format import DateFormat
-from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
-from numdaplot.errors.time_overflow_error import TimeOverflowError
+from numdaplot.errors.dates.time_overflow_error import TimeOverflowError
+from numdaplot.errors.types.incompatible_types_error import IncompatibleTypesError
 from numdaplot.types.type import Type
 from numdaplot.types.value_family import ValueFamily, find_family
 

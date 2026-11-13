@@ -8,7 +8,7 @@ from dataclasses import dataclass
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 from numdaplot.argument_checks.field_types import require_field_types
-from numdaplot.errors.unknown_time_zone_error import UnknownTimeZoneError
+from numdaplot.errors.dates.unknown_time_zone_error import UnknownTimeZoneError
 
 
 @dataclass(frozen=True)

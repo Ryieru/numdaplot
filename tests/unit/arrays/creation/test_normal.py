@@ -7,7 +7,7 @@ Unit tests of Normal.
 import pytest
 
 from numdaplot.arrays.creation.normal import Normal
-from numdaplot.errors.invalid_deviation_error import InvalidDeviationError
+from numdaplot.errors.settings.invalid_deviation_error import InvalidDeviationError
 
 MEAN = 170.0
 DEVIATION = 10.0

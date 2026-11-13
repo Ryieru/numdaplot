@@ -9,7 +9,7 @@ import warnings
 import pytest
 
 import numdaplot as ndp
-from numdaplot.errors.readability_warning import ReadabilityWarning
+from numdaplot.errors.warnings.readability_warning import ReadabilityWarning
 from numdaplot.plots.charts.bar_chart import BarChart
 from numdaplot.plots.charts.line_chart import LineChart
 from numdaplot.plots.charts.scatter_chart import ScatterChart

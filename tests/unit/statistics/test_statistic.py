@@ -6,7 +6,7 @@ Unit tests of Statistic.
 
 import pytest
 
-from numdaplot.errors.refused_operation_error import RefusedOperationError
+from numdaplot.errors.settings.refused_operation_error import RefusedOperationError
 from numdaplot.statistics.mean import Mean
 from numdaplot.statistics.statistic import Statistic
 

@@ -7,7 +7,7 @@ Number of values along each dimension of an Array or a Table.
 from dataclasses import dataclass
 
 from numdaplot.argument_checks.field_types import require_field_types
-from numdaplot.errors.invalid_shape_error import InvalidShapeError
+from numdaplot.errors.positions.invalid_shape_error import InvalidShapeError
 
 LOWEST_DIMENSION = 0
 

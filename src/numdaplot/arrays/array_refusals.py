@@ -8,7 +8,7 @@ from collections.abc import Iterator
 from typing import NoReturn
 
 from numdaplot.arrays.array_data import ArrayData
-from numdaplot.errors.refused_operation_error import RefusedOperationError
+from numdaplot.errors.settings.refused_operation_error import RefusedOperationError
 from numdaplot.rules.greater import Greater
 from numdaplot.rules.greater_or_equal import GreaterOrEqual
 from numdaplot.rules.less import Less

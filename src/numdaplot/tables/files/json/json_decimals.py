@@ -14,7 +14,7 @@ import pandas
 from numpy.typing import NDArray
 
 from numdaplot.column_storage.column import Column
-from numdaplot.errors.value_conversion_error import ValueConversionError
+from numdaplot.errors.types.value_conversion_error import ValueConversionError
 from numdaplot.tables.frames.named_column_errors import NamedColumnErrors
 from numdaplot.types.numpy_mapping import from_numpy_dtype
 

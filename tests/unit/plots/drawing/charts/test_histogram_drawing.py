@@ -15,8 +15,8 @@ from matplotlib.figure import Figure
 from matplotlib.patches import Rectangle
 
 import numdaplot as ndp
-from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
-from numdaplot.errors.invalid_color_count_error import InvalidColorCountError
+from numdaplot.errors.plots.invalid_color_count_error import InvalidColorCountError
+from numdaplot.errors.types.incompatible_types_error import IncompatibleTypesError
 from numdaplot.plots.data.sample_values import read_sample_values
 from numdaplot.plots.drawing.axes.grid_axes import GridAxes
 from numdaplot.plots.drawing.charts.histogram_drawing import (

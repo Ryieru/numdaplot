@@ -10,7 +10,7 @@ from zoneinfo import ZoneInfo
 import pytest
 
 from numdaplot.dates.time_zone import TimeZone
-from numdaplot.errors.time_zone_mismatch_error import TimeZoneMismatchError
+from numdaplot.errors.dates.time_zone_mismatch_error import TimeZoneMismatchError
 from numdaplot.rules.between import Between
 from numdaplot.rules.greater import Greater
 from numdaplot.rules.is_in import IsIn

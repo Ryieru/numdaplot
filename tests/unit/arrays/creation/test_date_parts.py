@@ -8,8 +8,8 @@ import pytest
 
 import numdaplot as ndp
 from numdaplot.arrays.creation.date_parts import DateParts
-from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
-from numdaplot.errors.shape_mismatch_error import ShapeMismatchError
+from numdaplot.errors.positions.shape_mismatch_error import ShapeMismatchError
+from numdaplot.errors.types.incompatible_types_error import IncompatibleTypesError
 
 YEARS = ndp.Array.from_list([2025, 2026])
 MONTHS = ndp.Array.from_list([3, 12])

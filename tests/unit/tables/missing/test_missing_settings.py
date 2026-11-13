@@ -8,9 +8,9 @@ import math
 
 import pytest
 
-from numdaplot.errors.duplicate_column_error import DuplicateColumnError
-from numdaplot.errors.empty_list_error import EmptyListError
-from numdaplot.errors.invalid_fraction_error import InvalidFractionError
+from numdaplot.errors.settings.empty_list_error import EmptyListError
+from numdaplot.errors.settings.invalid_fraction_error import InvalidFractionError
+from numdaplot.errors.tables.duplicate_column_error import DuplicateColumnError
 from numdaplot.measures.measure import Measure
 from numdaplot.tables.missing.missing_count import MissingCount
 from numdaplot.tables.missing.missing_drop import MissingDrop

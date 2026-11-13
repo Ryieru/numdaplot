@@ -23,10 +23,10 @@ from numdaplot.arrays.operations.time_arithmetic import (
 	store_time_result,
 	to_nanoseconds,
 )
-from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
-from numdaplot.errors.refused_operation_error import RefusedOperationError
-from numdaplot.errors.time_overflow_error import TimeOverflowError
-from numdaplot.errors.value_conversion_error import ValueConversionError
+from numdaplot.errors.dates.time_overflow_error import TimeOverflowError
+from numdaplot.errors.settings.refused_operation_error import RefusedOperationError
+from numdaplot.errors.types.incompatible_types_error import IncompatibleTypesError
+from numdaplot.errors.types.value_conversion_error import ValueConversionError
 from numdaplot.types.numpy_mapping import from_numpy_dtype
 from numdaplot.types.type import Type
 from numdaplot.types.value_family import ValueFamily

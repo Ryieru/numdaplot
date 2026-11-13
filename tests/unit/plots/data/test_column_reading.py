@@ -8,7 +8,7 @@ import numpy
 import pandas
 import pytest
 
-from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
+from numdaplot.errors.types.incompatible_types_error import IncompatibleTypesError
 from numdaplot.plots.data.column_reading import (
 	count_hours,
 	find_value_families,

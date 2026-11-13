@@ -12,8 +12,8 @@ import pytest
 from numpy.typing import NDArray
 
 from numdaplot.arrays.array import Array
-from numdaplot.errors.column_not_found_error import ColumnNotFoundError
-from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
+from numdaplot.errors.tables.column_not_found_error import ColumnNotFoundError
+from numdaplot.errors.types.incompatible_types_error import IncompatibleTypesError
 from numdaplot.rules.contains import Contains
 from numdaplot.rules.greater import Greater
 from numdaplot.rules.is_missing import IsMissing

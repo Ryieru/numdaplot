@@ -8,8 +8,8 @@ import pandas
 import pytest
 
 from numdaplot.column_storage.column import Column
-from numdaplot.errors.column_not_found_error import ColumnNotFoundError
-from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
+from numdaplot.errors.tables.column_not_found_error import ColumnNotFoundError
+from numdaplot.errors.types.incompatible_types_error import IncompatibleTypesError
 from numdaplot.tables.columns.replaced_columns import replace_frame_columns
 
 AREA_NAME = "area"

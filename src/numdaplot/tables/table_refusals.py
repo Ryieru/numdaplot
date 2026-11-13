@@ -7,7 +7,7 @@ Python operations refused by a Table, each pointing to the numdaplot way of doin
 from collections.abc import Iterator
 from typing import NoReturn
 
-from numdaplot.errors.refused_operation_error import RefusedOperationError
+from numdaplot.errors.settings.refused_operation_error import RefusedOperationError
 from numdaplot.tables.table_data import TableData
 
 COMPARISON_OPERATION = "Comparing a Table with {symbol}"

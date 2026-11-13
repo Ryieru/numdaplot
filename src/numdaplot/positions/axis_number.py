@@ -4,7 +4,7 @@ Conversion of an ``ndp.Axis`` to a numpy axis number.
 .. versionadded:: 0.1.0
 """
 
-from numdaplot.errors.dimension_error import DimensionError
+from numdaplot.errors.positions.dimension_error import DimensionError
 from numdaplot.positions.axis import Axis
 
 AXIS_DIMENSION_COUNT = 2

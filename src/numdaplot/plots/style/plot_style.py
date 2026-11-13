@@ -7,7 +7,7 @@ Look of a whole Plot.
 from dataclasses import dataclass
 
 from numdaplot.argument_checks.field_types import require_field_types
-from numdaplot.errors.invalid_rotation_error import InvalidRotationError
+from numdaplot.errors.plots.invalid_rotation_error import InvalidRotationError
 from numdaplot.plots.style.grid_lines import GridLines
 from numdaplot.plots.style.legend_position import LegendPosition
 from numdaplot.plots.style.size import Size

@@ -12,7 +12,7 @@ from numdaplot.arrays.array_data import ArrayData
 from numdaplot.arrays.array_sorting import ArraySorting
 from numdaplot.arrays.layout.sorting_values import sort_values
 from numdaplot.arrays.layout.unique_values import find_unique_values
-from numdaplot.errors.shape_mismatch_error import ShapeMismatchError
+from numdaplot.errors.positions.shape_mismatch_error import ShapeMismatchError
 from numdaplot.positions.axis import Axis
 from numdaplot.positions.shape import Shape
 

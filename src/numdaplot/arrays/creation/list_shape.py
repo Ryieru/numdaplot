@@ -6,7 +6,7 @@ Shape and values of nested Python lists.
 
 from typing import cast
 
-from numdaplot.errors.irregular_list_error import IrregularListError
+from numdaplot.errors.positions.irregular_list_error import IrregularListError
 
 EMPTY_LIST_DIMENSIONS = (0,)
 

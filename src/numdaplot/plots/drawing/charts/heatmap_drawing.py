@@ -17,7 +17,7 @@ from matplotlib.image import AxesImage
 from numpy.typing import NDArray
 
 from numdaplot.arrays.operations.float_errors import INTERNAL_FILES
-from numdaplot.errors.readability_warning import ReadabilityWarning
+from numdaplot.errors.warnings.readability_warning import ReadabilityWarning
 from numdaplot.plots.charts.cell_values import CellValues
 from numdaplot.plots.charts.heatmap_chart import HeatmapChart
 from numdaplot.plots.data.chart_values import ChartValues, Series

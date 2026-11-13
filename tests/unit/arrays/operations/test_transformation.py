@@ -8,7 +8,7 @@ import numpy
 import pytest
 
 from numdaplot.arrays.operations.transformation import transform_values
-from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
+from numdaplot.errors.types.incompatible_types_error import IncompatibleTypesError
 
 NEGATION_SYMBOL = "-"
 VALUES = [1, -2]

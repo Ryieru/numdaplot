@@ -15,8 +15,8 @@ from numdaplot.argument_checks.argument_types import checked_arguments
 from numdaplot.arrays.array_data import ArrayData
 from numdaplot.arrays.equality.equality_check import are_equal
 from numdaplot.arrays.export.python_values import to_python_list
-from numdaplot.errors.invalid_type_error import InvalidTypeError
-from numdaplot.errors.not_single_value_error import NotSingleValueError
+from numdaplot.errors.positions.not_single_value_error import NotSingleValueError
+from numdaplot.errors.types.invalid_type_error import InvalidTypeError
 from numdaplot.types.numpy_mapping import from_numpy_dtype
 from numdaplot.types.time_of_day import read_time_objects
 from numdaplot.types.type import Type

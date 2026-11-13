@@ -5,7 +5,7 @@ Checks of the column settings of a chart against the data it draws.
 """
 
 from numdaplot.arrays.array import Array
-from numdaplot.errors.invalid_chart_data_error import InvalidChartDataError
+from numdaplot.errors.plots.invalid_chart_data_error import InvalidChartDataError
 from numdaplot.plots.data.array_values import read_array_values
 from numdaplot.plots.data.chart_values import ChartValues
 from numdaplot.plots.data.table_values import read_table_values

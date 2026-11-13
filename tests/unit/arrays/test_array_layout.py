@@ -17,7 +17,7 @@ from numdaplot.arrays import array_layout
 from numdaplot.arrays.array_data import read_stored_values
 from numdaplot.arrays.array_layout import ArrayLayout
 from numdaplot.arrays.array_sorting import ArraySorting
-from numdaplot.errors.shape_mismatch_error import ShapeMismatchError
+from numdaplot.errors.positions.shape_mismatch_error import ShapeMismatchError
 from numdaplot.positions.axis import Axis
 from numdaplot.positions.shape import Shape
 

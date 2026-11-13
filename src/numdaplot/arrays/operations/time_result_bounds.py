@@ -21,8 +21,8 @@ from numdaplot.arrays.operations.time_bounds import (
 	TIME_KINDS,
 	find_present_bounds,
 )
-from numdaplot.errors.integer_overflow_error import IntegerOverflowError
-from numdaplot.errors.time_overflow_error import TimeOverflowError
+from numdaplot.errors.dates.time_overflow_error import TimeOverflowError
+from numdaplot.errors.types.integer_overflow_error import IntegerOverflowError
 from numdaplot.types.type import Type
 
 DECIMAL_KIND = "f"

@@ -15,7 +15,7 @@ from numdaplot.column_storage.frame_normalization import normalize_frame
 from numdaplot.column_storage.time_columns import convert_outside_durations
 from numdaplot.column_storage.time_zones import find_column_time_zone
 from numdaplot.dates.time_zone import TimeZone
-from numdaplot.errors.refused_operation_error import RefusedOperationError
+from numdaplot.errors.settings.refused_operation_error import RefusedOperationError
 from numdaplot.positions.shape import Shape
 from numdaplot.tables.files.column_names import ColumnNames
 from numdaplot.tables.frames.cleaned_names import clean_frame_names

@@ -11,8 +11,8 @@ from pathlib import Path
 
 from matplotlib.figure import Figure
 
-from numdaplot.errors.refused_setting_error import RefusedSettingError
-from numdaplot.errors.unsupported_image_format_error import UnsupportedImageFormatError
+from numdaplot.errors.files.unsupported_image_format_error import UnsupportedImageFormatError
+from numdaplot.errors.settings.refused_setting_error import RefusedSettingError
 from numdaplot.files.conflict import Conflict
 from numdaplot.files.file_access import WRITE_OPERATION, FileAccessErrors
 from numdaplot.files.file_paths import FilePath, require_free_path

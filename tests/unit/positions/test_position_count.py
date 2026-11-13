@@ -6,7 +6,7 @@ Unit tests of the check of the number of positions taken from the start or the e
 
 import pytest
 
-from numdaplot.errors.invalid_count_error import InvalidCountError
+from numdaplot.errors.settings.invalid_count_error import InvalidCountError
 from numdaplot.positions.position_count import MINIMUM_POSITION_COUNT, require_position_count
 
 NO_COUNT = 0

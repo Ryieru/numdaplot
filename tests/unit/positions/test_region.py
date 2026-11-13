@@ -8,11 +8,11 @@ from typing import Any, cast
 
 import pytest
 
-from numdaplot.errors.duplicate_column_error import DuplicateColumnError
-from numdaplot.errors.empty_list_error import EmptyListError
-from numdaplot.errors.empty_region_error import EmptyRegionError
-from numdaplot.errors.invalid_column_name_error import InvalidColumnNameError
-from numdaplot.errors.invalid_type_error import InvalidTypeError
+from numdaplot.errors.positions.empty_region_error import EmptyRegionError
+from numdaplot.errors.settings.empty_list_error import EmptyListError
+from numdaplot.errors.tables.duplicate_column_error import DuplicateColumnError
+from numdaplot.errors.tables.invalid_column_name_error import InvalidColumnNameError
+from numdaplot.errors.types.invalid_type_error import InvalidTypeError
 from numdaplot.positions.index import Index
 from numdaplot.positions.range import Range
 from numdaplot.positions.region import Region

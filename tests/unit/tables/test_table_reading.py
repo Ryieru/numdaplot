@@ -11,7 +11,7 @@ from pathlib import Path
 import pandas
 import pytest
 
-from numdaplot.errors.file_not_found_error import FileNotFoundError
+from numdaplot.errors.files.file_not_found_error import FileNotFoundError
 from numdaplot.tables import table_reading
 from numdaplot.tables.files.csv.csv_read_options import CsvReadOptions
 from numdaplot.tables.files.excel.excel_read_options import ExcelReadOptions

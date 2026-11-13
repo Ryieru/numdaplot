@@ -13,9 +13,9 @@ from numdaplot.arrays.math_functions.math_function_values import (
 	find_decimal_values,
 	require_domain,
 )
-from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
-from numdaplot.errors.out_of_domain_error import OutOfDomainError
-from numdaplot.errors.refused_operation_error import RefusedOperationError
+from numdaplot.errors.settings.refused_operation_error import RefusedOperationError
+from numdaplot.errors.types.incompatible_types_error import IncompatibleTypesError
+from numdaplot.errors.types.out_of_domain_error import OutOfDomainError
 from numdaplot.math_functions.absolute import Absolute
 from numdaplot.math_functions.cosine import Cosine
 from numdaplot.math_functions.exponential import Exponential

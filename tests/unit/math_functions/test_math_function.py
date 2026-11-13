@@ -6,7 +6,7 @@ Unit tests of MathFunction.
 
 import pytest
 
-from numdaplot.errors.refused_operation_error import RefusedOperationError
+from numdaplot.errors.settings.refused_operation_error import RefusedOperationError
 from numdaplot.math_functions.math_function import MathFunction
 from numdaplot.math_functions.square_root import SquareRoot
 

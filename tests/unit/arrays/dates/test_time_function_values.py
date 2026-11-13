@@ -24,8 +24,8 @@ from numdaplot.dates.date_part_unit import DatePartUnit
 from numdaplot.dates.duration_unit import DurationUnit
 from numdaplot.dates.period_unit import PeriodUnit
 from numdaplot.dates.time_function import TimeFunction
-from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
-from numdaplot.errors.refused_operation_error import RefusedOperationError
+from numdaplot.errors.settings.refused_operation_error import RefusedOperationError
+from numdaplot.errors.types.incompatible_types_error import IncompatibleTypesError
 
 DATETIMES = numpy.array(["2026-12-31T14:30:15", "NaT"], dtype="datetime64[ns]")
 DATES = numpy.array(["2026-12-31", "2027-01-09"], dtype="datetime64[D]")

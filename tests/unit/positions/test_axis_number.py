@@ -6,7 +6,7 @@ Unit tests of find_numpy_axis.
 
 import pytest
 
-from numdaplot.errors.dimension_error import DimensionError
+from numdaplot.errors.positions.dimension_error import DimensionError
 from numdaplot.positions.axis import Axis
 from numdaplot.positions.axis_number import find_numpy_axis
 

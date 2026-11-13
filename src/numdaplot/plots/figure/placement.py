@@ -6,8 +6,8 @@ A Plot placed in the grid of a Figure, and the checks of its place.
 
 from dataclasses import dataclass
 
-from numdaplot.errors.cell_out_of_range_error import CellOutOfRangeError
-from numdaplot.errors.occupied_cell_error import OccupiedCellError
+from numdaplot.errors.plots.cell_out_of_range_error import CellOutOfRangeError
+from numdaplot.errors.plots.occupied_cell_error import OccupiedCellError
 from numdaplot.plots.figure.cell import Cell
 from numdaplot.plots.figure.layout import Layout
 from numdaplot.plots.plot import Plot

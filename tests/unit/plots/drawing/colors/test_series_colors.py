@@ -8,8 +8,8 @@ import warnings
 
 import pytest
 
-from numdaplot.errors.invalid_color_count_error import InvalidColorCountError
-from numdaplot.errors.readability_warning import ReadabilityWarning
+from numdaplot.errors.plots.invalid_color_count_error import InvalidColorCountError
+from numdaplot.errors.warnings.readability_warning import ReadabilityWarning
 from numdaplot.plots.drawing.colors.colored_parts import ColoredParts
 from numdaplot.plots.drawing.colors.series_colors import (
 	COLOR_CODES,

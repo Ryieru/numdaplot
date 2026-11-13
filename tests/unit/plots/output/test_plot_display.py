@@ -15,7 +15,7 @@ import pytest
 from matplotlib import pyplot
 from matplotlib.figure import Figure, FigureBase
 
-from numdaplot.errors.display_warning import DisplayWarning
+from numdaplot.errors.warnings.display_warning import DisplayWarning
 from numdaplot.plots.drawing.plot_drawing import FigureDrawing
 from numdaplot.plots.drawing.style_drawing import BEST_LEGEND_ID
 from numdaplot.plots.output import plot_display

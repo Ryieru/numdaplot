@@ -9,7 +9,7 @@ from pathlib import Path
 import pandas
 import pytest
 
-from numdaplot.errors.time_zone_mismatch_error import TimeZoneMismatchError
+from numdaplot.errors.dates.time_zone_mismatch_error import TimeZoneMismatchError
 from numdaplot.tables.files.statistical.stata_file import read_stata_file, write_stata_file
 
 FILE_NAME = "sales.dta"

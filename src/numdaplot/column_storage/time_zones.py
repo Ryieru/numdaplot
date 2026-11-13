@@ -10,9 +10,9 @@ import pandas
 
 from numdaplot.column_storage.column import Column
 from numdaplot.dates.time_zone import TimeZone
-from numdaplot.errors.time_zone_mismatch_error import TimeZoneMismatchError
-from numdaplot.errors.unknown_time_zone_error import UnknownTimeZoneError
-from numdaplot.errors.unsupported_type_error import UnsupportedTypeError
+from numdaplot.errors.dates.time_zone_mismatch_error import TimeZoneMismatchError
+from numdaplot.errors.dates.unknown_time_zone_error import UnknownTimeZoneError
+from numdaplot.errors.types.unsupported_type_error import UnsupportedTypeError
 from numdaplot.types.library import Library
 from numdaplot.types.type import Type
 

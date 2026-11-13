@@ -11,9 +11,9 @@ import pandas
 import pytest
 
 import numdaplot as ndp
-from numdaplot.errors.column_not_found_error import ColumnNotFoundError
-from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
-from numdaplot.errors.invalid_chart_data_error import InvalidChartDataError
+from numdaplot.errors.plots.invalid_chart_data_error import InvalidChartDataError
+from numdaplot.errors.tables.column_not_found_error import ColumnNotFoundError
+from numdaplot.errors.types.incompatible_types_error import IncompatibleTypesError
 from numdaplot.plots.data.sample_values import drop_missing_numbers, read_sample_values
 
 CHART_NAME = "BoxChart"

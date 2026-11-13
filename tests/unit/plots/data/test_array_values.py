@@ -10,8 +10,8 @@ import numpy
 import pytest
 
 import numdaplot as ndp
-from numdaplot.errors.dimension_error import DimensionError
-from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
+from numdaplot.errors.positions.dimension_error import DimensionError
+from numdaplot.errors.types.incompatible_types_error import IncompatibleTypesError
 from numdaplot.plots.data.array_values import read_array_numbers, read_array_values
 
 CHART_NAME = "LineChart"

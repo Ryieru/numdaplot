@@ -11,8 +11,8 @@ import pytest
 
 from numdaplot.arrays.array import Array
 from numdaplot.dates.time_zone import TimeZone
-from numdaplot.errors.shape_mismatch_error import ShapeMismatchError
-from numdaplot.errors.time_zone_mismatch_error import TimeZoneMismatchError
+from numdaplot.errors.dates.time_zone_mismatch_error import TimeZoneMismatchError
+from numdaplot.errors.positions.shape_mismatch_error import ShapeMismatchError
 from numdaplot.rules.between import Between
 from numdaplot.rules.contains import Contains
 from numdaplot.rules.equal import Equal

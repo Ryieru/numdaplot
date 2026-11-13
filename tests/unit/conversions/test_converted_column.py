@@ -27,8 +27,8 @@ from numdaplot.conversions.table_conversion import TableConversion
 from numdaplot.dates.time_zone import TimeZone
 from numdaplot.dates.time_zone_change import TimeZoneChange
 from numdaplot.dates.time_zone_mode import TimeZoneMode
-from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
-from numdaplot.errors.value_conversion_error import ValueConversionError
+from numdaplot.errors.types.incompatible_types_error import IncompatibleTypesError
+from numdaplot.errors.types.value_conversion_error import ValueConversionError
 from numdaplot.types.type import Type
 
 INTEGERS = pandas.Series([1, None, 3], dtype="Int64")

@@ -13,7 +13,7 @@ import numpy
 import pytest
 
 from numdaplot.arrays.array_refusals import ArrayRefusals, refuse_comparison
-from numdaplot.errors.refused_operation_error import RefusedOperationError
+from numdaplot.errors.settings.refused_operation_error import RefusedOperationError
 
 VALUES = [1, 2]
 OTHER = 1

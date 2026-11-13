@@ -8,7 +8,7 @@ from dataclasses import dataclass
 
 from numdaplot.argument_checks.column_names import require_unique_names
 from numdaplot.argument_checks.field_types import require_field_types
-from numdaplot.errors.empty_list_error import EmptyListError
+from numdaplot.errors.settings.empty_list_error import EmptyListError
 from numdaplot.tables.sorting.sort_key import SortKey
 
 SORT_KEY_ITEM_NAME = "sort key"

@@ -9,10 +9,10 @@ from pathlib import Path
 import pandas
 import pytest
 
-from numdaplot.errors.duplicate_column_error import DuplicateColumnError
-from numdaplot.errors.invalid_column_name_error import InvalidColumnNameError
-from numdaplot.errors.missing_dependency_error import MissingDependencyError
-from numdaplot.errors.time_zone_mismatch_error import TimeZoneMismatchError
+from numdaplot.errors.dates.time_zone_mismatch_error import TimeZoneMismatchError
+from numdaplot.errors.files.missing_dependency_error import MissingDependencyError
+from numdaplot.errors.tables.duplicate_column_error import DuplicateColumnError
+from numdaplot.errors.tables.invalid_column_name_error import InvalidColumnNameError
 from numdaplot.tables.files.excel import excel_file
 from numdaplot.tables.files.excel.excel_file import find_read_sheet, read_excel_file, write_excel_file
 from numdaplot.tables.files.excel.excel_read_options import ExcelReadOptions

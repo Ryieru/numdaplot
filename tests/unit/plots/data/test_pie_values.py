@@ -13,11 +13,11 @@ import pytest
 from numpy.typing import NDArray
 
 import numdaplot as ndp
-from numdaplot.errors.empty_total_error import EmptyTotalError
-from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
-from numdaplot.errors.missing_value_error import MissingValueError
-from numdaplot.errors.out_of_domain_error import OutOfDomainError
-from numdaplot.errors.readability_warning import ReadabilityWarning
+from numdaplot.errors.plots.empty_total_error import EmptyTotalError
+from numdaplot.errors.plots.missing_value_error import MissingValueError
+from numdaplot.errors.types.incompatible_types_error import IncompatibleTypesError
+from numdaplot.errors.types.out_of_domain_error import OutOfDomainError
+from numdaplot.errors.warnings.readability_warning import ReadabilityWarning
 from numdaplot.plots.data.pie_values import (
 	read_pie_values,
 	require_present_values,

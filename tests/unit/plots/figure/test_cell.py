@@ -6,8 +6,8 @@ Unit tests of Cell.
 
 import pytest
 
-from numdaplot.errors.invalid_count_error import InvalidCountError
-from numdaplot.errors.invalid_position_error import InvalidPositionError
+from numdaplot.errors.positions.invalid_position_error import InvalidPositionError
+from numdaplot.errors.settings.invalid_count_error import InvalidCountError
 from numdaplot.plots.figure.cell import Cell
 
 

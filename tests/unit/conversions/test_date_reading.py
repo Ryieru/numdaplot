@@ -15,8 +15,8 @@ from numdaplot.conversions.date_formats import YEAR_FIRST
 from numdaplot.conversions.date_reading import parse_dates, read_common_format, read_date_pattern, read_moments
 from numdaplot.dates.custom_date_format import CustomDateFormat
 from numdaplot.dates.date_format import DateFormat
-from numdaplot.errors.time_overflow_error import TimeOverflowError
-from numdaplot.errors.value_conversion_error import ValueConversionError
+from numdaplot.errors.dates.time_overflow_error import TimeOverflowError
+from numdaplot.errors.types.value_conversion_error import ValueConversionError
 from numdaplot.types.type import Type
 
 FEBRUARY_FIRST = pandas.Timestamp("2026-02-01")

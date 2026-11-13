@@ -4,7 +4,7 @@ Check of the style of a chart without axes.
 .. versionadded:: 0.1.0
 """
 
-from numdaplot.errors.refused_setting_error import RefusedSettingError
+from numdaplot.errors.settings.refused_setting_error import RefusedSettingError
 from numdaplot.plots.style.plot_style import PlotStyle
 
 CHART_NAME = "PieChart"

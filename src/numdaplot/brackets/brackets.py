@@ -9,11 +9,11 @@ from dataclasses import dataclass
 from numdaplot.argument_checks.field_types import require_field_types
 from numdaplot.brackets.bracket_end import BracketEnd
 from numdaplot.brackets.unmatched import Unmatched
-from numdaplot.errors.duplicate_label_error import DuplicateLabelError
-from numdaplot.errors.empty_list_error import EmptyListError
-from numdaplot.errors.invalid_label_count_error import InvalidLabelCountError
-from numdaplot.errors.invalid_limits_error import InvalidLimitsError
-from numdaplot.errors.refused_setting_error import RefusedSettingError
+from numdaplot.errors.plots.duplicate_label_error import DuplicateLabelError
+from numdaplot.errors.settings.empty_list_error import EmptyListError
+from numdaplot.errors.settings.invalid_label_count_error import InvalidLabelCountError
+from numdaplot.errors.settings.invalid_limits_error import InvalidLimitsError
+from numdaplot.errors.settings.refused_setting_error import RefusedSettingError
 from numdaplot.rules.bounds import Bounds
 
 LIMIT_ITEM_NAME = "limit"

@@ -6,8 +6,8 @@ Unit tests of ValueLabels.
 
 import pytest
 
-from numdaplot.errors.invalid_count_error import InvalidCountError
-from numdaplot.errors.invalid_type_error import InvalidTypeError
+from numdaplot.errors.settings.invalid_count_error import InvalidCountError
+from numdaplot.errors.types.invalid_type_error import InvalidTypeError
 from numdaplot.plots.charts.value_labels import ValueLabels
 
 DEFAULT_DECIMALS = 2

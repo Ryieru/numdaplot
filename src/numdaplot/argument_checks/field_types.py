@@ -13,7 +13,7 @@ from typing import cast
 
 from numdaplot.argument_checks.annotation_kinds import AcceptedKinds, read_accepted_kinds, read_annotations
 from numdaplot.argument_checks.kind_descriptions import describe_kinds
-from numdaplot.errors.invalid_type_error import InvalidTypeError
+from numdaplot.errors.types.invalid_type_error import InvalidTypeError
 
 SETTING_NAME_FORMAT = "{owner_name} {field_name}"
 

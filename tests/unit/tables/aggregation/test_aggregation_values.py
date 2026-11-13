@@ -11,8 +11,8 @@ import pandas
 import pytest
 from numpy.typing import NDArray
 
-from numdaplot.errors.column_not_found_error import ColumnNotFoundError
-from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
+from numdaplot.errors.tables.column_not_found_error import ColumnNotFoundError
+from numdaplot.errors.types.incompatible_types_error import IncompatibleTypesError
 from numdaplot.rules.greater import Greater
 from numdaplot.statistics.count import Count
 from numdaplot.statistics.counted_missing import CountedMissing

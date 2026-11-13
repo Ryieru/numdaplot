@@ -15,7 +15,7 @@ import numpy
 import pandas
 import pytest
 
-from numdaplot.errors.file_exists_error import FileExistsError
+from numdaplot.errors.files.file_exists_error import FileExistsError
 from numdaplot.files.conflict import Conflict
 from numdaplot.tables import table_writing
 from numdaplot.tables.files.csv.csv_write_options import CsvWriteOptions

@@ -7,7 +7,7 @@ A regular sequence of numbers between two bounds.
 from dataclasses import dataclass
 
 from numdaplot.argument_checks.field_types import require_field_types
-from numdaplot.errors.invalid_step_error import InvalidStepError
+from numdaplot.errors.settings.invalid_step_error import InvalidStepError
 from numdaplot.rules.bounds import Bounds
 
 DEFAULT_STEP = 1

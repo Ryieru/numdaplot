@@ -6,10 +6,10 @@ Unit tests of CustomColor, Size, ImageOptions and PlotStyle.
 
 import pytest
 
-from numdaplot.errors.invalid_color_error import InvalidColorError
-from numdaplot.errors.invalid_resolution_error import InvalidResolutionError
-from numdaplot.errors.invalid_rotation_error import InvalidRotationError
-from numdaplot.errors.invalid_size_error import InvalidSizeError
+from numdaplot.errors.files.invalid_resolution_error import InvalidResolutionError
+from numdaplot.errors.plots.invalid_color_error import InvalidColorError
+from numdaplot.errors.plots.invalid_rotation_error import InvalidRotationError
+from numdaplot.errors.plots.invalid_size_error import InvalidSizeError
 from numdaplot.plots.style.custom_color import CustomColor
 from numdaplot.plots.style.grid_lines import GridLines
 from numdaplot.plots.style.image_options import ImageOptions

@@ -12,8 +12,8 @@ from numpy.typing import NDArray
 from numdaplot.arrays.operations.operand import Operand, find_operand_type
 from numdaplot.arrays.operations.time_bounds import NANOSECOND_TYPES, require_nanoseconds_fit
 from numdaplot.arrays.selection.region_index import build_region_index
-from numdaplot.errors.shape_mismatch_error import ShapeMismatchError
-from numdaplot.errors.value_conversion_error import ValueConversionError
+from numdaplot.errors.positions.shape_mismatch_error import ShapeMismatchError
+from numdaplot.errors.types.value_conversion_error import ValueConversionError
 from numdaplot.positions.region import Region
 from numdaplot.types.numpy_mapping import from_numpy_dtype, to_numpy_dtype
 

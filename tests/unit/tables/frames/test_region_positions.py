@@ -10,9 +10,9 @@ import numpy
 import pandas
 import pytest
 
-from numdaplot.errors.column_not_found_error import ColumnNotFoundError
-from numdaplot.errors.duplicate_column_error import DuplicateColumnError
-from numdaplot.errors.invalid_position_error import InvalidPositionError
+from numdaplot.errors.positions.invalid_position_error import InvalidPositionError
+from numdaplot.errors.tables.column_not_found_error import ColumnNotFoundError
+from numdaplot.errors.tables.duplicate_column_error import DuplicateColumnError
 from numdaplot.positions.first import First
 from numdaplot.positions.index import Index
 from numdaplot.positions.last import Last

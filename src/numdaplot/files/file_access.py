@@ -7,7 +7,7 @@ Errors of the file system while reading or writing a file.
 from pathlib import Path
 
 from numdaplot.errors.error_translation import ErrorTranslation
-from numdaplot.errors.file_access_error import FileAccessError
+from numdaplot.errors.files.file_access_error import FileAccessError
 from numdaplot.errors.numdaplot_error import NumdaplotError
 
 READ_OPERATION = "read"

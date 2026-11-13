@@ -11,7 +11,7 @@ from pandas import DatetimeTZDtype
 from pandas.api.extensions import ExtensionDtype
 from pandas.api.types import pandas_dtype
 
-from numdaplot.errors.unsupported_type_error import UnsupportedTypeError
+from numdaplot.errors.types.unsupported_type_error import UnsupportedTypeError
 from numdaplot.types.library import Library
 from numdaplot.types.type import Type
 

@@ -10,7 +10,7 @@ import numpy
 import pytest
 
 from numdaplot.arrays.operations.float_errors import FloatErrorWarnings
-from numdaplot.errors.calculation_warning import CalculationWarning
+from numdaplot.errors.warnings.calculation_warning import CalculationWarning
 
 OPERATION_NAME = "/"
 ZEROS = numpy.array([0.0])

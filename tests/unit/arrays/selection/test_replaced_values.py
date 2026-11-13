@@ -8,8 +8,8 @@ import numpy
 import pytest
 
 from numdaplot.arrays.selection.replaced_values import replace_region, require_storable
-from numdaplot.errors.shape_mismatch_error import ShapeMismatchError
-from numdaplot.errors.value_conversion_error import ValueConversionError
+from numdaplot.errors.positions.shape_mismatch_error import ShapeMismatchError
+from numdaplot.errors.types.value_conversion_error import ValueConversionError
 from numdaplot.positions.index import Index
 from numdaplot.positions.region import Region
 

@@ -9,8 +9,8 @@ import pandas
 import pytest
 
 import numdaplot as ndp
-from numdaplot.errors.column_not_found_error import ColumnNotFoundError
-from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
+from numdaplot.errors.tables.column_not_found_error import ColumnNotFoundError
+from numdaplot.errors.types.incompatible_types_error import IncompatibleTypesError
 from numdaplot.plots.data.point_values import (
 	hide_missing_points,
 	read_category_order,
