@@ -64,11 +64,11 @@ src/numdaplot/
 	rules/          tests applied to each value: Equal, Greater, Between, IsIn, Contains, IsMissing...
 	statistics/     Sum, Mean, Median, Quantile, StandardDeviation...
 	shapes/         Shape, the dimensions of an Array or a Table
-	positions/      Region, Index, Range and Axis
-	ordering/       Order and MissingPosition
+	positions/      Region, Index, Range, First, Last and Axis
+	ordering/       Order, MissingPosition and the natural order of texts
 	settings/       check of the settings against their annotations, InvalidTypeError being raised
 tests/
-	unit/           one test file per source file, mirroring src/numdaplot
+	unit/           mirroring src/numdaplot, the small objects of a notion tested together
 	functional/     one test file per notion, using the library as ndp
 docs/               pages, images and stylesheet of the documentation site
 tools/docs/         griffe extensions and MkDocs hooks building the documentation site and its API pages
