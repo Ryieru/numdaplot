@@ -20,7 +20,7 @@ from numdaplot.plots.data.chart_values import ChartValues, Positions, Series
 from numdaplot.plots.data.point_values import PointValues
 from numdaplot.plots.data.position_kind import PositionKind
 from numdaplot.plots.data.unique_labels import require_unique_labels
-from numdaplot.plots.drawing.position_axis import write_position_labels
+from numdaplot.plots.drawing.axes.position_axis import write_position_labels
 
 MINIMUM_SHARING_LAYERS = 2
 NO_SOURCE = -1

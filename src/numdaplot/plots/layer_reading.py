@@ -20,7 +20,7 @@ from numdaplot.plots.data.chart_values import ChartValues
 from numdaplot.plots.data.point_values import hide_missing_points, read_point_values, require_scale_on_numbers
 from numdaplot.plots.data.sample_values import SampleValues
 from numdaplot.plots.data.table_values import read_table_values
-from numdaplot.plots.drawing.series_colors import require_color_count
+from numdaplot.plots.drawing.colors.series_colors import require_color_count
 from numdaplot.tables.table import Table
 
 LINE_NAME = "LineChart"

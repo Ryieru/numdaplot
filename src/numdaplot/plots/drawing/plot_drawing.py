@@ -29,23 +29,23 @@ from numdaplot.plots.charts.scatter_chart import ScatterChart
 from numdaplot.plots.charts.value_axis import ValueAxis
 from numdaplot.plots.data.renamed_layers import rename_layers
 from numdaplot.plots.data.shown_columns import require_renamed_columns_shown
-from numdaplot.plots.drawing.bar_drawing import draw_bar_chart
-from numdaplot.plots.drawing.box_drawing import draw_box_chart
+from numdaplot.plots.drawing.axes.plot_axes import PlotAxes
+from numdaplot.plots.drawing.axes.time_axis import place_value_hours
+from numdaplot.plots.drawing.charts.bar_drawing import draw_bar_chart
+from numdaplot.plots.drawing.charts.box_drawing import draw_box_chart
+from numdaplot.plots.drawing.charts.heatmap_drawing import draw_heatmap_chart
+from numdaplot.plots.drawing.charts.histogram_drawing import draw_histogram_chart
+from numdaplot.plots.drawing.charts.line_drawing import draw_line_chart
+from numdaplot.plots.drawing.charts.missing_drawing import draw_missing_chart, draw_missing_map
+from numdaplot.plots.drawing.charts.pie_drawing import draw_pie_chart
+from numdaplot.plots.drawing.charts.scatter_drawing import draw_scatter_chart
+from numdaplot.plots.drawing.colors.layer_colors import continue_color_cycle
 from numdaplot.plots.drawing.drawn_chart import DrawnChart
-from numdaplot.plots.drawing.heatmap_drawing import draw_heatmap_chart
-from numdaplot.plots.drawing.histogram_drawing import draw_histogram_chart
+from numdaplot.plots.drawing.labels.value_label_fitting import fit_value_labels
 from numdaplot.plots.drawing.layer_alignment import align_layers
-from numdaplot.plots.drawing.layer_colors import continue_color_cycle
 from numdaplot.plots.drawing.legend_overlap import move_hiding_legends
-from numdaplot.plots.drawing.line_drawing import draw_line_chart
-from numdaplot.plots.drawing.missing_drawing import draw_missing_chart, draw_missing_map
-from numdaplot.plots.drawing.pie_drawing import draw_pie_chart
-from numdaplot.plots.drawing.plot_axes import PlotAxes
 from numdaplot.plots.drawing.plot_theme import BACKGROUND_COLOR, THEME
-from numdaplot.plots.drawing.scatter_drawing import draw_scatter_chart
 from numdaplot.plots.drawing.style_drawing import apply_style
-from numdaplot.plots.drawing.time_axis import place_value_hours
-from numdaplot.plots.drawing.value_label_fitting import fit_value_labels
 from numdaplot.plots.style.image_options import DEFAULT_DPI
 from numdaplot.plots.style.plot_style import PlotStyle
 

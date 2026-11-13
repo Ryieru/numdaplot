@@ -17,12 +17,12 @@ from matplotlib.container import Container
 from matplotlib.figure import Figure
 from matplotlib.transforms import ScaledTranslation, Transform
 
-from numdaplot.plots.drawing.chart_texts import choose_label, choose_title
+from numdaplot.plots.drawing.axes.grid_axes import GridAxes
+from numdaplot.plots.drawing.axes.plot_axes import PlotAxes
+from numdaplot.plots.drawing.axes.tick_rotation import rotate_x_labels, rotate_y_labels
 from numdaplot.plots.drawing.drawn_chart import DrawnChart
-from numdaplot.plots.drawing.grid_axes import GridAxes
-from numdaplot.plots.drawing.plot_axes import PlotAxes
-from numdaplot.plots.drawing.plot_title import write_title
-from numdaplot.plots.drawing.tick_rotation import rotate_x_labels, rotate_y_labels
+from numdaplot.plots.drawing.labels.chart_texts import choose_label, choose_title
+from numdaplot.plots.drawing.labels.plot_title import write_title
 from numdaplot.plots.style.grid_lines import GridLines
 from numdaplot.plots.style.legend_position import LegendPosition
 from numdaplot.plots.style.plot_style import PlotStyle
@@ -76,8 +76,8 @@ def apply_style(plot_axes: PlotAxes, drawn_chart: DrawnChart, style: PlotStyle) 
 	>>> import numdaplot as ndp
 	>>> from matplotlib.figure import Figure
 	>>> from numdaplot.plots.drawing.drawn_chart import DrawnChart
-	>>> from numdaplot.plots.drawing.grid_axes import GridAxes
-	>>> from numdaplot.plots.drawing.plot_axes import PlotAxes
+	>>> from numdaplot.plots.drawing.axes.grid_axes import GridAxes
+	>>> from numdaplot.plots.drawing.axes.plot_axes import PlotAxes
 	>>> from numdaplot.plots.drawing.style_drawing import apply_style
 	>>> figure = Figure()
 	>>> axes = figure.add_subplot()
@@ -120,7 +120,7 @@ def write_axis_labels(axes: Axes, drawn_chart: DrawnChart, style: PlotStyle) -> 
 	>>> import numdaplot as ndp
 	>>> from matplotlib.figure import Figure
 	>>> from numdaplot.plots.drawing.drawn_chart import DrawnChart
-	>>> from numdaplot.plots.drawing.grid_axes import GridAxes
+	>>> from numdaplot.plots.drawing.axes.grid_axes import GridAxes
 	>>> from numdaplot.plots.drawing.style_drawing import write_axis_labels
 	>>> axes = Figure().add_subplot()
 	>>> drawn_chart = DrawnChart("city", "price", True, GridAxes.VALUES, None)
@@ -156,7 +156,7 @@ def draw_grid_lines(axes: Axes, drawn_chart: DrawnChart) -> None:
 	--------
 	>>> from matplotlib.figure import Figure
 	>>> from numdaplot.plots.drawing.drawn_chart import DrawnChart
-	>>> from numdaplot.plots.drawing.grid_axes import GridAxes
+	>>> from numdaplot.plots.drawing.axes.grid_axes import GridAxes
 	>>> from numdaplot.plots.drawing.style_drawing import draw_grid_lines
 	>>> axes = Figure().add_subplot()
 	>>> draw_grid_lines(axes, DrawnChart(None, None, False, GridAxes.VALUES, None))
@@ -191,7 +191,7 @@ def write_right_label(plot_axes: PlotAxes, style: PlotStyle) -> None:
 	--------
 	>>> import numdaplot as ndp
 	>>> from matplotlib.figure import Figure
-	>>> from numdaplot.plots.drawing.plot_axes import PlotAxes
+	>>> from numdaplot.plots.drawing.axes.plot_axes import PlotAxes
 	>>> from numdaplot.plots.drawing.style_drawing import write_right_label
 	>>> axes = Figure().add_subplot()
 	>>> right_axes = axes.twinx()
@@ -236,8 +236,8 @@ def place_legend(plot_axes: PlotAxes, drawn_chart: DrawnChart, legend_position: 
 	>>> import numdaplot as ndp
 	>>> from matplotlib.figure import Figure
 	>>> from numdaplot.plots.drawing.drawn_chart import DrawnChart
-	>>> from numdaplot.plots.drawing.grid_axes import GridAxes
-	>>> from numdaplot.plots.drawing.plot_axes import PlotAxes
+	>>> from numdaplot.plots.drawing.axes.grid_axes import GridAxes
+	>>> from numdaplot.plots.drawing.axes.plot_axes import PlotAxes
 	>>> from numdaplot.plots.drawing.style_drawing import place_legend
 	>>> axes = Figure().add_subplot()
 	>>> price_lines = axes.plot([1.0, 2.0], label="price")

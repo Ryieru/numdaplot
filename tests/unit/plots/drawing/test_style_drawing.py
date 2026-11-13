@@ -12,9 +12,9 @@ from matplotlib.collections import PathCollection
 from matplotlib.figure import Figure
 
 import numdaplot as ndp
+from numdaplot.plots.drawing.axes.grid_axes import GridAxes
+from numdaplot.plots.drawing.axes.plot_axes import PlotAxes
 from numdaplot.plots.drawing.drawn_chart import DrawnChart
-from numdaplot.plots.drawing.grid_axes import GridAxes
-from numdaplot.plots.drawing.plot_axes import PlotAxes
 from numdaplot.plots.drawing.style_drawing import (
 	BEST_LEGEND_ID,
 	LEGEND_POINT_AREA,

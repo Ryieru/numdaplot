@@ -21,6 +21,7 @@ from numdaplot.plots.charts.chart import Chart
 from numdaplot.plots.charts.missing_map_chart import MissingMapChart
 from numdaplot.plots.data.array_values import read_array_values
 from numdaplot.plots.data.table_values import read_table_values
+from numdaplot.plots.drawing.colors.series_colors import COLOR_CODES
 from numdaplot.plots.drawing.plot_drawing import (
 	CHART_DRAWERS,
 	FigureDrawing,
@@ -30,7 +31,6 @@ from numdaplot.plots.drawing.plot_drawing import (
 	find_right_axes,
 )
 from numdaplot.plots.drawing.plot_theme import BACKGROUND_COLOR
-from numdaplot.plots.drawing.series_colors import COLOR_CODES
 
 PRICES = ndp.Array.from_list([12.0, 15.5, 14.0])
 LAYER = ChartLayer(ndp.LineChart(), read_array_values(PRICES, "LineChart"))

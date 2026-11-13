@@ -6,7 +6,7 @@ What a drawn chart tells the style of its Plot.
 
 from dataclasses import dataclass
 
-from numdaplot.plots.drawing.grid_axes import GridAxes
+from numdaplot.plots.drawing.axes.grid_axes import GridAxes
 
 
 @dataclass(frozen=True)
@@ -43,7 +43,7 @@ class DrawnChart:
 	Examples
 	--------
 	>>> from numdaplot.plots.drawing.drawn_chart import DrawnChart
-	>>> from numdaplot.plots.drawing.grid_axes import GridAxes
+	>>> from numdaplot.plots.drawing.axes.grid_axes import GridAxes
 	>>> DrawnChart("day", "price", False, GridAxes.BOTH, None).grid_axes
 	<GridAxes.BOTH: 1>
 	"""

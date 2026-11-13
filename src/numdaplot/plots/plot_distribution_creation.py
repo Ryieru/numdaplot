@@ -14,8 +14,8 @@ from numdaplot.plots.charts.histogram_chart import HistogramChart
 from numdaplot.plots.charts.pie_chart import PieChart
 from numdaplot.plots.data.pie_values import read_pie_values
 from numdaplot.plots.data.sample_values import read_sample_values
-from numdaplot.plots.drawing.histogram_drawing import require_bins_on_values
-from numdaplot.plots.drawing.series_colors import require_color_count
+from numdaplot.plots.drawing.charts.histogram_drawing import require_bins_on_values
+from numdaplot.plots.drawing.colors.series_colors import require_color_count
 from numdaplot.plots.layer_reading import build_series_layer
 from numdaplot.plots.plot_data import PlotData
 from numdaplot.plots.style.axis_settings import require_no_axis_settings
