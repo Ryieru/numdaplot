@@ -6,12 +6,12 @@ A rectangular part of an Array or a Table, chosen by position.
 
 from dataclasses import dataclass
 
+from numdaplot.argument_checks.field_types import require_field_types
 from numdaplot.errors.empty_region_error import EmptyRegionError
 from numdaplot.positions.first import First
 from numdaplot.positions.index import Index
 from numdaplot.positions.last import Last
 from numdaplot.positions.range import Range
-from numdaplot.settings.field_types import require_field_types
 from numdaplot.tables.columns.column_names import copy_column_names
 
 

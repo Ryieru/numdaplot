@@ -11,7 +11,7 @@ import pytest
 from numdaplot.errors.duplicate_column_error import DuplicateColumnError
 from numdaplot.errors.empty_list_error import EmptyListError
 from numdaplot.errors.invalid_fraction_error import InvalidFractionError
-from numdaplot.ratios.measure import Measure
+from numdaplot.measures.measure import Measure
 from numdaplot.tables.missing.missing_count import MissingCount
 from numdaplot.tables.missing.missing_drop import MissingDrop
 from numdaplot.tables.missing.missing_mode import MissingMode

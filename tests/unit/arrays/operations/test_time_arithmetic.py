@@ -23,13 +23,13 @@ from numdaplot.arrays.operations.time_arithmetic import (
 	store_time_result,
 	to_nanoseconds,
 )
-from numdaplot.data_types.numpy_mapping import from_numpy_dtype
-from numdaplot.data_types.type import Type
-from numdaplot.data_types.value_family import ValueFamily
 from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
 from numdaplot.errors.refused_operation_error import RefusedOperationError
 from numdaplot.errors.time_overflow_error import TimeOverflowError
 from numdaplot.errors.value_conversion_error import ValueConversionError
+from numdaplot.types.numpy_mapping import from_numpy_dtype
+from numdaplot.types.type import Type
+from numdaplot.types.value_family import ValueFamily
 
 DATES = numpy.array(["2026-01-31", "NaT"], dtype="datetime64[D]")
 DATETIMES = numpy.array(["2026-01-31T12:00"], dtype="datetime64[ns]")

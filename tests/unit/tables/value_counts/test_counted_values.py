@@ -8,13 +8,13 @@ import numpy
 import pandas
 import pytest
 
-from numdaplot.data_types.type import Type
 from numdaplot.errors.column_not_found_error import ColumnNotFoundError
 from numdaplot.errors.duplicate_column_error import DuplicateColumnError
-from numdaplot.ratios.measure import Measure
+from numdaplot.measures.measure import Measure
 from numdaplot.tables.frames.column_values import find_column_type
 from numdaplot.tables.value_counts.counted_values import count_frame_values, measure_groups, order_by_size
 from numdaplot.tables.value_counts.value_count import ValueCount
+from numdaplot.types.type import Type
 
 CODE_COLUMN = "code"
 COUNT_NAME = "value_count"

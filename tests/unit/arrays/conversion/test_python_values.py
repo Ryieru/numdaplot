@@ -9,8 +9,8 @@ from datetime import date, datetime, time, timedelta
 import numpy
 
 from numdaplot.arrays.conversion.python_values import to_python_list
-from numdaplot.data_types.numpy_mapping import to_numpy_dtype
-from numdaplot.data_types.type import Type
+from numdaplot.types.numpy_mapping import to_numpy_dtype
+from numdaplot.types.type import Type
 
 DATETIMES = numpy.array(["2026-01-31T08:30", "NaT"], dtype="datetime64[ns]")
 EXPECTED_DATETIMES = [datetime(2026, 1, 31, 8, 30), None]

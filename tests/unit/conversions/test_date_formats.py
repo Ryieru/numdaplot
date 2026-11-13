@@ -7,9 +7,9 @@ Unit tests of what a date format holds, and how it is read and named.
 import pytest
 
 from numdaplot.conversions.date_formats import find_format_name, has_date, has_time
-from numdaplot.data_types.type import Type
 from numdaplot.dates.custom_date_format import CustomDateFormat
 from numdaplot.dates.date_format import DateFormat
+from numdaplot.types.type import Type
 
 DAY_MONTH_PATTERN = CustomDateFormat("%d %b %Y")
 DAY_TIME_PATTERN = CustomDateFormat("%d/%m/%Y %H:%M")

@@ -6,13 +6,13 @@ Output of a Plot: display, image files and matplotlib figures.
 
 from matplotlib.figure import Figure
 
+from numdaplot.argument_checks.argument_types import checked_arguments
 from numdaplot.plots.drawing.plot_drawing import build_figure
 from numdaplot.plots.output.image_saving import write_image
 from numdaplot.plots.output.plot_display import show_drawing
 from numdaplot.plots.output.shown_object import ShownObject
 from numdaplot.plots.plot_data import PlotData
 from numdaplot.plots.style.image_options import ImageOptions
-from numdaplot.settings.argument_types import checked_arguments
 from numdaplot.tables.conflict import Conflict
 from numdaplot.tables.files.file_paths import FilePath
 

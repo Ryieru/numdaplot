@@ -10,8 +10,6 @@ import numpy
 import pandas
 from numpy.typing import NDArray
 
-from numdaplot.data_types.numpy_mapping import to_numpy_dtype
-from numdaplot.data_types.type import Type
 from numdaplot.errors.value_conversion_error import ValueConversionError
 from numdaplot.tables.frames.column import Column
 from numdaplot.tables.frames.column_values import (
@@ -21,6 +19,8 @@ from numdaplot.tables.frames.column_values import (
 	read_present_values,
 )
 from numdaplot.tables.frames.pandas_decimals import restore_exact_decimals
+from numdaplot.types.numpy_mapping import to_numpy_dtype
+from numdaplot.types.type import Type
 
 DECIMAL_KIND = "f"
 FAILED_PARSE = "coerce"

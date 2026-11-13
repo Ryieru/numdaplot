@@ -6,9 +6,9 @@ A given count of evenly spaced numbers between two bounds.
 
 from dataclasses import dataclass
 
+from numdaplot.argument_checks.field_types import require_field_types
 from numdaplot.errors.invalid_count_error import InvalidCountError
 from numdaplot.rules.bounds import Bounds
-from numdaplot.settings.field_types import require_field_types
 
 LOWEST_COUNT_WITH_BOTH_BOUNDS = 2
 LOWEST_COUNT = 1

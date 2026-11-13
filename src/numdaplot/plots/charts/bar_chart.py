@@ -7,6 +7,7 @@ Chart drawing each value as a bar.
 from collections.abc import Sequence
 from dataclasses import dataclass
 
+from numdaplot.argument_checks.field_types import require_field_types
 from numdaplot.plots.charts.bar_layout import BarLayout
 from numdaplot.plots.charts.chart import Chart
 from numdaplot.plots.charts.chart_settings import copy_series_settings
@@ -14,7 +15,6 @@ from numdaplot.plots.charts.orientation import Orientation
 from numdaplot.plots.charts.value_labels import ValueLabels
 from numdaplot.plots.style.color import Color
 from numdaplot.plots.style.custom_color import CustomColor
-from numdaplot.settings.field_types import require_field_types
 
 
 @dataclass(frozen=True)

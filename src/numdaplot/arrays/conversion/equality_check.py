@@ -11,8 +11,8 @@ from numpy.typing import NDArray
 
 from numdaplot.arrays.selection.missing_mask import find_missing
 from numdaplot.arrays.type_match import TypeMatch
-from numdaplot.data_types.numpy_mapping import from_numpy_dtype
-from numdaplot.data_types.value_family import find_family
+from numdaplot.types.numpy_mapping import from_numpy_dtype
+from numdaplot.types.value_family import find_family
 
 
 def are_equal(left: NDArray[Any], right: NDArray[Any], types: TypeMatch) -> bool:

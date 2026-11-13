@@ -9,8 +9,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
+from numdaplot.argument_checks.field_types import require_field_types
 from numdaplot.errors.empty_list_error import EmptyListError
-from numdaplot.settings.field_types import require_field_types
 from numdaplot.tables.columns.column_names import require_column_names
 from numdaplot.tables.joining.join_mode import JoinMode
 from numdaplot.tables.joining.join_suffixes import JoinSuffixes

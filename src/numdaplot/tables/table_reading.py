@@ -7,7 +7,7 @@ Creation of a Table from a file.
 from pathlib import Path
 from typing import Self
 
-from numdaplot.settings.argument_types import checked_arguments
+from numdaplot.argument_checks.argument_types import checked_arguments
 from numdaplot.tables.files.csv_file import read_csv_file
 from numdaplot.tables.files.csv_read_options import CsvReadOptions
 from numdaplot.tables.files.excel_file import read_excel_file

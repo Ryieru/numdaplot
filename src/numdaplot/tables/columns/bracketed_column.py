@@ -11,9 +11,6 @@ import pandas
 from numpy.typing import NDArray
 
 from numdaplot.arrays.mapping.unmatched import Unmatched
-from numdaplot.data_types.number_types import INTEGER_TYPES
-from numdaplot.data_types.pandas_mapping import to_pandas_dtype
-from numdaplot.data_types.type import Type
 from numdaplot.errors.unmatched_value_error import BRACKETS_NAME, UnmatchedValueError
 from numdaplot.rules.bounds import Bounds
 from numdaplot.tables.columns.bracket_end import BracketEnd
@@ -22,6 +19,9 @@ from numdaplot.tables.columns.brackets import Brackets
 from numdaplot.tables.frames.column import Column
 from numdaplot.tables.frames.column_values import find_column_missing, find_column_type
 from numdaplot.tables.frames.frame_normalization import convert_to_type
+from numdaplot.types.number_types import INTEGER_TYPES
+from numdaplot.types.pandas_mapping import to_pandas_dtype
+from numdaplot.types.type import Type
 
 NO_CATEGORY = -1
 DECIMAL_DTYPE = numpy.float64

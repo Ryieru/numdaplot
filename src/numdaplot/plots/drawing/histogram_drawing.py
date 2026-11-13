@@ -15,8 +15,8 @@ import numpy
 from matplotlib.axes import Axes
 from numpy.typing import NDArray
 
-from numdaplot.data_types.type import Type
 from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
+from numdaplot.measures.measure import Measure
 from numdaplot.plots.chart_layer import ChartLayer
 from numdaplot.plots.charts.bin_count import BinCount
 from numdaplot.plots.charts.bin_width import BinWidth
@@ -30,7 +30,7 @@ from numdaplot.plots.drawing.plot_theme import BACKGROUND_COLOR
 from numdaplot.plots.drawing.series_colors import choose_series_colors
 from numdaplot.plots.drawing.time_axis import measures_times, place_hour_ticks
 from numdaplot.plots.drawing.whole_numbers import place_whole_ticks
-from numdaplot.ratios.measure import Measure
+from numdaplot.types.type import Type
 
 CHART_NAME = "HistogramChart"
 MEASURE_LABELS = {

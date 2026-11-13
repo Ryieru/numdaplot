@@ -5,8 +5,8 @@ Check that the operands of a boolean operator are booleans.
 """
 
 from numdaplot.arrays.operations.operand import Operand, find_operand_type, find_operand_type_names
-from numdaplot.data_types.type import Type
 from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
+from numdaplot.types.type import Type
 
 
 def require_booleans(operands: list[Operand], symbol: str) -> None:

@@ -6,9 +6,9 @@ Chart drawing the missing values of each column of a Table as bars.
 
 from dataclasses import dataclass
 
+from numdaplot.argument_checks.field_types import require_field_types
+from numdaplot.measures.measure import Measure
 from numdaplot.plots.charts.chart import Chart
-from numdaplot.ratios.measure import Measure
-from numdaplot.settings.field_types import require_field_types
 
 
 @dataclass(frozen=True)

@@ -6,10 +6,10 @@ Change of the type of the values of an Array.
 
 from typing import Self
 
+from numdaplot.argument_checks.argument_types import checked_arguments
 from numdaplot.arrays.array_data import ArrayData
 from numdaplot.conversions.array_conversion import ArrayConversion
 from numdaplot.conversions.converted_array import convert_array_values
-from numdaplot.settings.argument_types import checked_arguments
 
 
 class ArrayTypeChange(ArrayData):

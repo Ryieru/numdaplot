@@ -16,13 +16,13 @@ import pytest
 from numdaplot.arrays.array import Array
 from numdaplot.arrays.equality import Equality
 from numdaplot.arrays.type_match import TypeMatch
-from numdaplot.data_types.type import Type
 from numdaplot.errors.invalid_type_error import InvalidTypeError
 from numdaplot.errors.not_single_value_error import NotSingleValueError
 from numdaplot.errors.time_zone_mismatch_error import TimeZoneMismatchError
 from numdaplot.tables import table_exchange
 from numdaplot.tables.table import Table
 from numdaplot.tables.table_exchange import TableExchange
+from numdaplot.types.type import Type
 
 SOURCE_FRAME = {"count": [1, 2]}
 CHANGED_COUNT = 99

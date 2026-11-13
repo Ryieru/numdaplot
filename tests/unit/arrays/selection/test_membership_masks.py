@@ -10,12 +10,12 @@ import numpy
 import pytest
 
 from numdaplot.arrays.selection.membership_masks import build_contains_mask, build_membership_mask
-from numdaplot.data_types.numpy_mapping import to_numpy_dtype
-from numdaplot.data_types.type import Type
 from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
 from numdaplot.rules.case import Case
 from numdaplot.rules.contains import Contains
 from numdaplot.rules.is_in import IsIn
+from numdaplot.types.numpy_mapping import to_numpy_dtype
+from numdaplot.types.type import Type
 
 TEXT_DTYPE = "T"
 COUNTRIES = ["FR", "DE", "IT"]

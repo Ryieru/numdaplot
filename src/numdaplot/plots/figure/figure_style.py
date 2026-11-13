@@ -6,8 +6,8 @@ Look of a whole Figure.
 
 from dataclasses import dataclass
 
+from numdaplot.argument_checks.field_types import require_field_types
 from numdaplot.plots.style.size import Size
-from numdaplot.settings.field_types import require_field_types
 
 
 @dataclass(frozen=True)

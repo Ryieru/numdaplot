@@ -11,14 +11,14 @@ import numpy
 import pandas
 import pytest
 
-from numdaplot.data_types.type import Type
 from numdaplot.dates.time_zone import TimeZone
 from numdaplot.errors.column_not_found_error import ColumnNotFoundError
 from numdaplot.errors.refused_operation_error import RefusedOperationError
-from numdaplot.shapes.shape import Shape
+from numdaplot.positions.shape import Shape
 from numdaplot.tables.files.column_names import ColumnNames
 from numdaplot.tables.frames.column import Column
 from numdaplot.tables.table_data import TableData, read_stored_frame
+from numdaplot.types.type import Type
 
 FRAME = pandas.DataFrame({"city": pandas.Series(["Pau", "Lyon"], dtype="string"), "price": [1.5, 8.0]})
 NO_COLUMN_FRAME = pandas.DataFrame()

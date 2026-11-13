@@ -6,9 +6,9 @@ Place of a Plot in the grid of a Figure.
 
 from dataclasses import dataclass
 
+from numdaplot.argument_checks.field_types import require_field_types
 from numdaplot.errors.invalid_count_error import InvalidCountError
 from numdaplot.errors.invalid_position_error import InvalidPositionError
-from numdaplot.settings.field_types import require_field_types
 
 MINIMUM_SPAN = 1
 FIRST_POSITION = 0

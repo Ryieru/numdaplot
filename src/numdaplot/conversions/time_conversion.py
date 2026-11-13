@@ -9,8 +9,6 @@ from typing import Any, cast
 import numpy
 import pandas
 
-from numdaplot.data_types.time_of_day import TIME_DTYPE
-from numdaplot.data_types.type import Type
 from numdaplot.dates.custom_date_format import CustomDateFormat
 from numdaplot.errors.value_conversion_error import ValueConversionError
 from numdaplot.tables.frames.column import Column
@@ -18,6 +16,8 @@ from numdaplot.tables.frames.column_values import find_column_missing, find_colu
 from numdaplot.tables.frames.frame_normalization import convert_to_type
 from numdaplot.tables.frames.time_columns import write_time_texts_column
 from numdaplot.tables.frames.time_zones import find_column_time_zone
+from numdaplot.types.time_of_day import TIME_DTYPE
+from numdaplot.types.type import Type
 
 DEFAULT_TIME_FORMAT_NAME = "HH:MM:SS"
 CLOCK_PATTERN = r"^(?P<hour>\d{1,2}):(?P<minute>\d{2})(?::(?P<second>\d{2})(?:\.(?P<fraction>\d{1,6}))?)?$"

@@ -6,7 +6,7 @@ Order and uniqueness of the rows of a Table.
 
 from typing import Self
 
-from numdaplot.settings.argument_types import checked_arguments
+from numdaplot.argument_checks.argument_types import checked_arguments
 from numdaplot.tables.duplicates.deduplicated_frame import drop_duplicate_rows
 from numdaplot.tables.duplicates.deduplication import Deduplication
 from numdaplot.tables.sorting.sorted_frame import sort_frame

@@ -6,7 +6,7 @@ The new values a ValueMapping gives, before they are stored.
 
 from dataclasses import dataclass
 
-from numdaplot.data_types.type import Type
+from numdaplot.types.type import Type
 
 
 @dataclass(frozen=True)

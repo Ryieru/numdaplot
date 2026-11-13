@@ -6,8 +6,8 @@ Settings of the filter of the rows of a Table.
 
 from dataclasses import dataclass
 
+from numdaplot.argument_checks.field_types import require_field_types
 from numdaplot.errors.empty_list_error import EmptyListError
-from numdaplot.settings.field_types import require_field_types
 from numdaplot.tables.filtering.condition import Condition
 from numdaplot.tables.filtering.filter_mode import FilterMode
 

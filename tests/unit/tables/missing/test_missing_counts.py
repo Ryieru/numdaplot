@@ -10,9 +10,8 @@ import numpy
 import pandas
 import pytest
 
-from numdaplot.data_types.type import Type
+from numdaplot.measures.measure import Measure
 from numdaplot.positions.axis import Axis
-from numdaplot.ratios.measure import Measure
 from numdaplot.tables.frames.column_values import find_column_type
 from numdaplot.tables.missing.missing_count import MissingCount
 from numdaplot.tables.missing.missing_counts import (
@@ -21,6 +20,7 @@ from numdaplot.tables.missing.missing_counts import (
 	count_frame_missing,
 	find_frame_missing,
 )
+from numdaplot.types.type import Type
 
 FRAME = pandas.DataFrame(
 	{

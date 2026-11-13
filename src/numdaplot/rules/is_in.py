@@ -7,9 +7,9 @@ Rule keeping the values that belong to a list.
 from dataclasses import dataclass
 from datetime import date, datetime, time, timedelta
 
+from numdaplot.argument_checks.field_types import require_field_types
 from numdaplot.errors.empty_values_error import EmptyValuesError
 from numdaplot.rules.rule import Rule
-from numdaplot.settings.field_types import require_field_types
 
 
 # The type parameter has the name of the alias holding the same types: the documentation shows the alias,

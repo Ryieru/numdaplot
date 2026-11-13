@@ -6,9 +6,9 @@ Settings of the sort of an Array.
 
 from dataclasses import dataclass
 
+from numdaplot.argument_checks.field_types import require_field_types
 from numdaplot.ordering.missing_position import MissingPosition
 from numdaplot.ordering.order import Order
-from numdaplot.settings.field_types import require_field_types
 
 
 @dataclass(frozen=True)

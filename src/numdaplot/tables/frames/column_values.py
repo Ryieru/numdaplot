@@ -10,13 +10,13 @@ import numpy
 import pandas
 from numpy.typing import NDArray
 
-from numdaplot.data_types.numpy_mapping import from_numpy_dtype, to_numpy_dtype
-from numdaplot.data_types.pandas_mapping import from_pandas_dtype, to_pandas_dtype
-from numdaplot.data_types.type import Type
 from numdaplot.errors.time_zone_mismatch_error import TimeZoneMismatchError
 from numdaplot.errors.unsupported_missing_error import UnsupportedMissingError
 from numdaplot.tables.frames.column import Column
 from numdaplot.tables.frames.time_zones import find_column_time_zone, remove_utc_zone
+from numdaplot.types.numpy_mapping import from_numpy_dtype, to_numpy_dtype
+from numdaplot.types.pandas_mapping import from_pandas_dtype, to_pandas_dtype
+from numdaplot.types.type import Type
 
 MISSING_CAPABLE_TYPES = frozenset(
 	{Type.FLOAT32, Type.FLOAT64, Type.TEXT, Type.CATEGORY, Type.DATE, Type.DATETIME, Type.DURATION, Type.TIME}

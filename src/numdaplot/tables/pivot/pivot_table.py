@@ -6,9 +6,9 @@ Settings of a pivot table.
 
 from dataclasses import dataclass
 
+from numdaplot.argument_checks.field_types import require_field_types
 from numdaplot.errors.empty_list_error import EmptyListError
 from numdaplot.errors.refused_setting_error import RefusedSettingError
-from numdaplot.settings.field_types import require_field_types
 from numdaplot.tables.aggregation.calculation import Calculation
 from numdaplot.tables.columns.column_names import require_column_name, require_column_names, require_unique_names
 

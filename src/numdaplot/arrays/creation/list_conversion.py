@@ -11,13 +11,13 @@ from numpy.typing import NDArray
 
 from numdaplot.arrays.creation.list_shape import find_list_shape, flatten_list
 from numdaplot.arrays.operations.time_bounds import require_stored_times_fit
-from numdaplot.data_types.numpy_mapping import to_numpy_dtype
-from numdaplot.data_types.time_of_day import MISSING_TIME, store_times
-from numdaplot.data_types.type import Type
-from numdaplot.data_types.value_type import find_common_type, find_value_type
 from numdaplot.errors.missing_type_error import MissingTypeError
 from numdaplot.errors.unsupported_missing_error import UnsupportedMissingError
 from numdaplot.errors.value_conversion_error import ValueConversionError
+from numdaplot.types.numpy_mapping import to_numpy_dtype
+from numdaplot.types.time_of_day import MISSING_TIME, store_times
+from numdaplot.types.type import Type
+from numdaplot.types.value_type import find_common_type, find_value_type
 
 FROM_LIST_OPERATION = "from_list"
 SAFE_CASTING = "same_kind"

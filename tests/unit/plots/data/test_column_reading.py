@@ -8,8 +8,6 @@ import numpy
 import pandas
 import pytest
 
-from numdaplot.data_types.type import Type
-from numdaplot.data_types.value_family import ValueFamily
 from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
 from numdaplot.plots.data.column_reading import (
 	count_hours,
@@ -24,6 +22,8 @@ from numdaplot.plots.data.column_reading import (
 	write_hour_labels,
 )
 from numdaplot.plots.data.position_kind import PositionKind
+from numdaplot.types.type import Type
+from numdaplot.types.value_family import ValueFamily
 
 CHART_NAME = "LineChart"
 INTEGERS = pandas.Series([3, None, 5], dtype="Int64")

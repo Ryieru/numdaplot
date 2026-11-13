@@ -116,14 +116,13 @@ src/numdaplot/
 	dates/          DateFormat, TimeZone, TimeZoneChange, DatePart, DatePeriod, DurationIn, ToDuration...
 	plots/          Plot and its creation methods, the charts, the PlotStyle and Figure
 	errors/         NumdaplotError, the precise errors, NumdaplotWarning and the precise warnings
-	data_types/     the Type enum and its conversion to numpy and pandas dtypes
-	ratios/         validation of fractions between 0 and 1, and the Measure enum
+	types/          the Type enum and its conversion to numpy and pandas dtypes
+	measures/       the Measure enum, the validation of fractions between 0 and 1 and the division of counts
 	rules/          tests applied to each value: Equal, Greater, Between, IsIn, Contains, IsMissing...
 	statistics/     Sum, Mean, Median, Quantile, StandardDeviation...
-	shapes/         Shape, the dimensions of an Array or a Table
-	positions/      Region, Index, Range, First, Last and Axis
+	positions/      Region, Index, Range, First, Last, Axis and Shape, the dimensions of an Array or a Table
 	ordering/       Order, MissingPosition and the natural order of texts
-	settings/       check of the settings against their annotations, InvalidTypeError being raised
+	argument_checks/ check of the settings and arguments against their annotations, raising InvalidTypeError
 tests/
 	unit/           mirroring src/numdaplot, the small objects of a notion tested together
 	functional/     one test file per notion, using the library as ndp

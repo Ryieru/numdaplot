@@ -10,8 +10,8 @@ import numpy
 from numpy.typing import NDArray
 
 from numdaplot.arrays.conversion.time_text import format_datetimes, format_durations, format_times
-from numdaplot.data_types.numpy_mapping import from_numpy_dtype
-from numdaplot.data_types.type import Type
+from numdaplot.types.numpy_mapping import from_numpy_dtype
+from numdaplot.types.type import Type
 
 ARRAY_PREFIX = "Array("
 ARRAY_TEXT = ARRAY_PREFIX + "{values}, dtype={type_name})"

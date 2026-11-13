@@ -17,13 +17,13 @@ from numdaplot.conversions.conversion_checks import (
 	require_time_zone_setting,
 )
 from numdaplot.conversions.table_conversion import TableConversion
-from numdaplot.data_types.type import Type
 from numdaplot.dates.custom_date_format import CustomDateFormat
 from numdaplot.dates.date_format import DateFormat
 from numdaplot.dates.time_zone import TimeZone
 from numdaplot.dates.time_zone_change import TimeZoneChange
 from numdaplot.dates.time_zone_mode import TimeZoneMode
 from numdaplot.errors.invalid_conversion_error import InvalidConversionError
+from numdaplot.types.type import Type
 
 CONVERTED_NAME = "value"
 UTC_ZONE = TimeZone("UTC")

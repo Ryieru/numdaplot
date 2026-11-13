@@ -6,8 +6,8 @@ Settings of the choice of the columns of a Table.
 
 from dataclasses import dataclass
 
+from numdaplot.argument_checks.field_types import require_field_types
 from numdaplot.errors.empty_list_error import EmptyListError
-from numdaplot.settings.field_types import require_field_types
 from numdaplot.tables.columns.column_mode import ColumnMode
 from numdaplot.tables.columns.column_names import require_column_names
 

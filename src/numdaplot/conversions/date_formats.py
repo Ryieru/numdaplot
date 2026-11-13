@@ -4,9 +4,9 @@ What a date format holds, and how it is read and named.
 .. versionadded:: 0.2.0
 """
 
-from numdaplot.data_types.type import Type
 from numdaplot.dates.custom_date_format import DATE_CODES, TIME_CODES, CustomDateFormat
 from numdaplot.dates.date_format import DateFormat
+from numdaplot.types.type import Type
 
 DAY_FIRST = r"(?P<day>\d{1,2})(?P<separator>[/.-])(?P<month>\d{1,2})(?P=separator)(?P<year>\d{4})"
 MONTH_FIRST = r"(?P<month>\d{1,2})(?P<separator>[/.-])(?P<day>\d{1,2})(?P=separator)(?P<year>\d{4})"

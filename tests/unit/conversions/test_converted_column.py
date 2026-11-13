@@ -21,7 +21,6 @@ from numdaplot.conversions.converted_column import (
 	write_plain_column,
 )
 from numdaplot.conversions.table_conversion import TableConversion
-from numdaplot.data_types.type import Type
 from numdaplot.dates.time_zone import TimeZone
 from numdaplot.dates.time_zone_change import TimeZoneChange
 from numdaplot.dates.time_zone_mode import TimeZoneMode
@@ -30,6 +29,7 @@ from numdaplot.errors.value_conversion_error import ValueConversionError
 from numdaplot.tables.frames.column import Column
 from numdaplot.tables.frames.column_values import find_column_type
 from numdaplot.tables.frames.time_zones import find_column_time_zone
+from numdaplot.types.type import Type
 
 INTEGERS = pandas.Series([1, None, 3], dtype="Int64")
 EXPECTED_DECIMALS = [1.0, None, 3.0]

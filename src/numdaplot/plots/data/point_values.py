@@ -11,8 +11,6 @@ import numpy
 import pandas
 from numpy.typing import NDArray
 
-from numdaplot.data_types.type import Type
-from numdaplot.data_types.value_family import ValueFamily
 from numdaplot.errors.refused_setting_error import RefusedSettingError
 from numdaplot.plots.charts.color_scale import ColorScale
 from numdaplot.plots.data.chart_values import ChartValues, Series
@@ -22,6 +20,8 @@ from numdaplot.tables.frames.column import Column
 from numdaplot.tables.frames.column_values import find_column_type
 from numdaplot.tables.table import Table
 from numdaplot.tables.table_data import read_stored_frame
+from numdaplot.types.type import Type
+from numdaplot.types.value_family import ValueFamily
 
 CHART_NAME = "ScatterChart"
 NUMBER_COLORS_DTYPE = numpy.dtype(numpy.float64)

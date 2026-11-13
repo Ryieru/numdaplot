@@ -12,10 +12,10 @@ from matplotlib.axis import Axis
 from matplotlib.ticker import FuncFormatter, MultipleLocator
 from numpy.typing import NDArray
 
-from numdaplot.data_types.type import Type
-from numdaplot.data_types.value_family import ValueFamily, find_family
 from numdaplot.plots.chart_layer import ChartLayer
 from numdaplot.plots.data.chart_values import ChartValues
+from numdaplot.types.type import Type
+from numdaplot.types.value_family import ValueFamily, find_family
 
 MINUTES_PER_HOUR = 60
 MINUTES_PER_DAY = 1440

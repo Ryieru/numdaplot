@@ -7,12 +7,12 @@ Chart sharing out a total as slices of a disc.
 from collections.abc import Sequence
 from dataclasses import dataclass
 
+from numdaplot.argument_checks.field_types import require_field_types
 from numdaplot.plots.charts.chart import Chart
 from numdaplot.plots.charts.chart_settings import copy_colors
 from numdaplot.plots.charts.percentages import Percentages
 from numdaplot.plots.style.color import Color
 from numdaplot.plots.style.custom_color import CustomColor
-from numdaplot.settings.field_types import require_field_types
 from numdaplot.tables.columns.column_names import require_column_name
 
 

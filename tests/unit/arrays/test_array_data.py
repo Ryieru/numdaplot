@@ -18,9 +18,9 @@ import numdaplot as ndp
 from numdaplot.arrays import array_data
 from numdaplot.arrays.array_data import ArrayData, read_stored_values
 from numdaplot.arrays.operations.operand import Operand
-from numdaplot.data_types.type import Type
 from numdaplot.errors.refused_operation_error import RefusedOperationError
-from numdaplot.shapes.shape import Shape
+from numdaplot.positions.shape import Shape
+from numdaplot.types.type import Type
 
 GRID = [[1, 2, 3], [4, 5, 6]]
 GRID_SHAPE = Shape([2, 3])

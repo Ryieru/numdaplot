@@ -12,7 +12,6 @@ import pytest
 from matplotlib.axes import Axes
 from matplotlib.figure import Figure
 
-from numdaplot.data_types.type import Type
 from numdaplot.plots.charts.value_labels import ValueLabels
 from numdaplot.plots.drawing.bar_value_labels import (
 	LABELED_BAR_ID,
@@ -22,6 +21,7 @@ from numdaplot.plots.drawing.bar_value_labels import (
 	write_value_labels,
 )
 from numdaplot.plots.drawing.text_contrast import DARK_TEXT_COLOR, LIGHT_TEXT_COLOR
+from numdaplot.types.type import Type
 
 SHARES = numpy.array([0.523, 0.18])
 EXPECTED_SHARE_TEXTS = ["0.52", "0.18"]

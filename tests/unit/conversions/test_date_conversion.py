@@ -8,10 +8,10 @@ import numpy
 import pandas
 
 from numdaplot.conversions.date_conversion import convert_moments, write_dates, write_durations
-from numdaplot.data_types.type import Type
 from numdaplot.dates.custom_date_format import CustomDateFormat
 from numdaplot.dates.date_format import DateFormat
 from numdaplot.tables.frames.column_values import find_column_type
+from numdaplot.types.type import Type
 
 DAY_MONTH_PATTERN = CustomDateFormat("%d %b %Y")
 DAY_VALUES = numpy.array(["2026-12-31", "NaT"], dtype="datetime64[s]")

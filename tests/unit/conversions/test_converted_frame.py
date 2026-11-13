@@ -9,9 +9,9 @@ import pytest
 
 from numdaplot.conversions.converted_frame import convert_frame_columns
 from numdaplot.conversions.table_conversion import TableConversion
-from numdaplot.data_types.type import Type
 from numdaplot.errors.value_conversion_error import ValueConversionError
 from numdaplot.tables.frames.column_values import find_column_type
+from numdaplot.types.type import Type
 
 LOW_NAME = "low"
 HIGH_NAME = "high"

@@ -19,9 +19,9 @@ from numdaplot.conversions.time_conversion import (
 	read_times,
 	write_times,
 )
-from numdaplot.data_types.time_of_day import read_times as read_times_of_day
 from numdaplot.dates.custom_date_format import CustomDateFormat
 from numdaplot.errors.value_conversion_error import ValueConversionError
+from numdaplot.types.time_of_day import read_times as read_times_of_day
 
 TIME_DTYPE_NAME = "timedelta64[us]"
 CLOCK_TEXTS = pandas.Series([" 15:35 ", "8:05:30", "23:59:59.999999", None], dtype="string")

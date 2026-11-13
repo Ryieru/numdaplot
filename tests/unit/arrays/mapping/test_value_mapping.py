@@ -9,11 +9,11 @@ import pytest
 from numdaplot.arrays.mapping.unmatched import Unmatched
 from numdaplot.arrays.mapping.value_change import ValueChange
 from numdaplot.arrays.mapping.value_mapping import ValueMapping, find_new_type, require_unique_values
-from numdaplot.data_types.type import Type
 from numdaplot.errors.duplicate_value_error import DuplicateValueError
 from numdaplot.errors.empty_list_error import EmptyListError
 from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
 from numdaplot.rules.rule_values import ScalarValue
+from numdaplot.types.type import Type
 
 LABEL_CHANGES = [ValueChange(1, "Homme"), ValueChange(2, "Femme")]
 NO_CHANGE = list[ValueChange]()

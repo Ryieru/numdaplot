@@ -13,9 +13,6 @@ import pandas
 from numpy.typing import NDArray
 
 from numdaplot.arrays.conversion.python_values import to_python_list
-from numdaplot.data_types.numpy_mapping import from_numpy_dtype, to_numpy_dtype
-from numdaplot.data_types.type import Type
-from numdaplot.data_types.value_family import ValueFamily, find_family
 from numdaplot.dates.time_zone import TimeZone
 from numdaplot.errors.duplicate_column_error import DuplicateColumnError
 from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
@@ -29,6 +26,9 @@ from numdaplot.tables.description.description import DEFAULT_FUNCTIONS, Descript
 from numdaplot.tables.frames.column import Column
 from numdaplot.tables.frames.column_values import build_column, find_column_type, read_present_values
 from numdaplot.tables.frames.time_zones import attribute_source_time_zone, find_column_time_zone
+from numdaplot.types.numpy_mapping import from_numpy_dtype, to_numpy_dtype
+from numdaplot.types.type import Type
+from numdaplot.types.value_family import ValueFamily, find_family
 
 STATISTIC_COLUMN_NAME = "statistic"
 SINGLE_FAMILY_COUNT = 1

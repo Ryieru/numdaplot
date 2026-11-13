@@ -6,9 +6,9 @@ Normal distribution of decimals.
 
 from dataclasses import dataclass
 
+from numdaplot.argument_checks.field_types import require_field_types
 from numdaplot.arrays.creation.distribution import Distribution
 from numdaplot.errors.invalid_deviation_error import InvalidDeviationError
-from numdaplot.settings.field_types import require_field_types
 
 LOWEST_DEVIATION = 0
 

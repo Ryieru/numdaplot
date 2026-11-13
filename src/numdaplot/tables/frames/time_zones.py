@@ -8,13 +8,13 @@ from typing import cast
 
 import pandas
 
-from numdaplot.data_types.library import Library
-from numdaplot.data_types.type import Type
 from numdaplot.dates.time_zone import TimeZone
 from numdaplot.errors.time_zone_mismatch_error import TimeZoneMismatchError
 from numdaplot.errors.unknown_time_zone_error import UnknownTimeZoneError
 from numdaplot.errors.unsupported_type_error import UnsupportedTypeError
 from numdaplot.tables.frames.column import Column
+from numdaplot.types.library import Library
+from numdaplot.types.type import Type
 
 UTC_ZONE_NAME = "UTC"
 NANOSECOND_UNIT = "ns"

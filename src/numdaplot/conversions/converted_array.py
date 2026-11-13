@@ -10,8 +10,6 @@ from numpy.typing import NDArray
 
 from numdaplot.conversions.array_conversion import ArrayConversion
 from numdaplot.conversions.converted_column import convert_column
-from numdaplot.data_types.number_types import INTEGER_TYPES
-from numdaplot.data_types.type import Type
 from numdaplot.errors.unsupported_missing_error import UnsupportedMissingError
 from numdaplot.tables.frames.column import Column
 from numdaplot.tables.frames.column_values import (
@@ -20,6 +18,8 @@ from numdaplot.tables.frames.column_values import (
 	find_column_type,
 	read_array_values,
 )
+from numdaplot.types.number_types import INTEGER_TYPES
+from numdaplot.types.type import Type
 
 INTEGER_ADVICE = "Convert to FLOAT64 instead, which can be missing."
 BOOLEAN_ADVICE = (

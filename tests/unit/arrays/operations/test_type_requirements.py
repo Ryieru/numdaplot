@@ -10,8 +10,8 @@ import numpy
 import pytest
 
 from numdaplot.arrays.operations.type_requirements import require_comparable, require_family
-from numdaplot.data_types.value_family import ValueFamily
 from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
+from numdaplot.types.value_family import ValueFamily
 
 OPERATION = "Mean"
 NUMBER_FAMILIES = frozenset({ValueFamily.NUMBER})

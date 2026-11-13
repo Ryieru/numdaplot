@@ -10,11 +10,11 @@ from dataclasses import dataclass
 from datetime import date, datetime, time, timedelta
 from typing import TYPE_CHECKING
 
+from numdaplot.argument_checks.field_types import require_field_types
 from numdaplot.arrays.array_data import ArrayData
 from numdaplot.errors.invalid_bounds_error import InvalidBoundsError
 from numdaplot.rules.bounds import Bounds
 from numdaplot.rules.rule import Rule
-from numdaplot.settings.field_types import require_field_types
 
 if TYPE_CHECKING:
 	from numdaplot.arrays.array import Array

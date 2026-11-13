@@ -13,10 +13,10 @@ from numdaplot.arrays.operations.operand import convert_time_value
 from numdaplot.arrays.operations.type_requirements import require_comparable, require_family
 from numdaplot.arrays.selection.missing_mask import find_missing
 from numdaplot.arrays.selection.time_reference import remove_far_references
-from numdaplot.data_types.value_family import ValueFamily
 from numdaplot.rules.case import Case
 from numdaplot.rules.contains import Contains
 from numdaplot.rules.is_in import IsIn
+from numdaplot.types.value_family import ValueFamily
 
 IS_IN_NAME = "IsIn"
 CONTAINS_NAME = "Contains"

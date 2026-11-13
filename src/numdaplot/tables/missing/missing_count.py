@@ -6,8 +6,8 @@ Settings of the count of the missing values of a Table.
 
 from dataclasses import dataclass
 
-from numdaplot.ratios.measure import Measure
-from numdaplot.settings.field_types import require_field_types
+from numdaplot.argument_checks.field_types import require_field_types
+from numdaplot.measures.measure import Measure
 
 
 @dataclass(frozen=True)

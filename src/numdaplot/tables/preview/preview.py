@@ -6,10 +6,10 @@ Settings of the preview of a Table.
 
 from dataclasses import dataclass
 
+from numdaplot.argument_checks.field_types import require_field_types
 from numdaplot.arrays.creation.random_values import require_valid_seed
 from numdaplot.errors.invalid_count_error import InvalidCountError
 from numdaplot.errors.refused_setting_error import RefusedSettingError
-from numdaplot.settings.field_types import require_field_types
 from numdaplot.tables.preview.shown_columns import ShownColumns
 from numdaplot.tables.preview.side import Side
 

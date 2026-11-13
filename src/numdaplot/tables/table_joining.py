@@ -6,7 +6,7 @@ Join of a Table with another Table.
 
 from typing import Self
 
-from numdaplot.settings.argument_types import checked_arguments
+from numdaplot.argument_checks.argument_types import checked_arguments
 from numdaplot.tables.joining.join import Join
 from numdaplot.tables.joining.joined_frame import join_frames
 from numdaplot.tables.table_data import TableData

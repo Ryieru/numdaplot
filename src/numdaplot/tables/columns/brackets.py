@@ -6,6 +6,7 @@ Brackets cutting a number column into categories.
 
 from dataclasses import dataclass
 
+from numdaplot.argument_checks.field_types import require_field_types
 from numdaplot.arrays.mapping.unmatched import Unmatched
 from numdaplot.errors.duplicate_label_error import DuplicateLabelError
 from numdaplot.errors.empty_list_error import EmptyListError
@@ -13,7 +14,6 @@ from numdaplot.errors.invalid_label_count_error import InvalidLabelCountError
 from numdaplot.errors.invalid_limits_error import InvalidLimitsError
 from numdaplot.errors.refused_setting_error import RefusedSettingError
 from numdaplot.rules.bounds import Bounds
-from numdaplot.settings.field_types import require_field_types
 from numdaplot.tables.columns.bracket_end import BracketEnd
 
 LIMIT_ITEM_NAME = "limit"

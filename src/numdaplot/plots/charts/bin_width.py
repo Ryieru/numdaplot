@@ -7,8 +7,8 @@ Bins of a histogram given by their width.
 from dataclasses import dataclass
 from datetime import timedelta
 
+from numdaplot.argument_checks.field_types import require_field_types
 from numdaplot.errors.invalid_bin_width_error import InvalidBinWidthError
-from numdaplot.settings.field_types import require_field_types
 
 NO_DURATION = timedelta(0)
 LONGEST_DURATION = timedelta(days=1)

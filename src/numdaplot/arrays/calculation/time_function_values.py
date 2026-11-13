@@ -12,9 +12,6 @@ from numpy.typing import NDArray
 
 from numdaplot.arrays.operations.time_bounds import require_decimal_durations_fit, require_whole_durations_fit
 from numdaplot.arrays.operations.type_requirements import require_family
-from numdaplot.data_types.numpy_mapping import from_numpy_dtype, to_numpy_dtype
-from numdaplot.data_types.type import Type
-from numdaplot.data_types.value_family import ValueFamily
 from numdaplot.dates.date_part import DatePart
 from numdaplot.dates.date_part_unit import DatePartUnit
 from numdaplot.dates.date_period import DatePeriod
@@ -25,6 +22,9 @@ from numdaplot.dates.time_function import TimeFunction
 from numdaplot.dates.to_duration import ToDuration
 from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
 from numdaplot.errors.refused_operation_error import RefusedOperationError
+from numdaplot.types.numpy_mapping import from_numpy_dtype, to_numpy_dtype
+from numdaplot.types.type import Type
+from numdaplot.types.value_family import ValueFamily
 
 MOMENT_FAMILIES = frozenset({ValueFamily.MOMENT})
 DURATION_FAMILIES = frozenset({ValueFamily.DURATION})

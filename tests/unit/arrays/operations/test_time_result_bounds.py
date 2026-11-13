@@ -18,8 +18,8 @@ from numdaplot.arrays.operations.time_result_bounds import (
 	to_counts,
 	widen_large_integers,
 )
-from numdaplot.data_types.type import Type
 from numdaplot.errors.time_overflow_error import TimeOverflowError
+from numdaplot.types.type import Type
 
 OPERATION_NAME = "+"
 NANOSECOND_DURATION_DTYPE = "timedelta64[ns]"

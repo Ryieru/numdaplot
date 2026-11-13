@@ -9,6 +9,7 @@ from typing import Any, cast
 
 import pytest
 
+from numdaplot.argument_checks.annotation_kinds import read_annotations
 from numdaplot.arrays.array import Array
 from numdaplot.errors.invalid_type_error import InvalidTypeError
 from numdaplot.errors.refused_operation_error import RefusedOperationError
@@ -20,7 +21,6 @@ from numdaplot.rules.less_or_equal import LessOrEqual
 from numdaplot.rules.not_equal import NotEqual
 from numdaplot.rules.rule_values import OrderedValue, ScalarValue
 from numdaplot.rules.value_rule import ValueRule, refuse_missing_value
-from numdaplot.settings.annotation_kinds import read_annotations
 
 REFERENCE_VALUE = 100
 OTHER_VALUE = 200

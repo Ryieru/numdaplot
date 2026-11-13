@@ -13,9 +13,9 @@ import numpy
 from numpy.typing import NDArray
 
 from numdaplot.arrays.creation.date_parts import DateParts
-from numdaplot.data_types.type import Type
 from numdaplot.errors.rejected_dates import RejectedDate, RejectedDatePart
 from numdaplot.errors.value_conversion_error import ValueConversionError
+from numdaplot.types.type import Type
 
 if TYPE_CHECKING:
 	from numdaplot.arrays.array import Array

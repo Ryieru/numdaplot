@@ -6,12 +6,12 @@ A new type for the values of an Array.
 
 from dataclasses import dataclass
 
+from numdaplot.argument_checks.field_types import require_field_types
 from numdaplot.conversions.boolean_rule import BooleanRule
-from numdaplot.data_types.type import Type
 from numdaplot.dates.custom_date_format import CustomDateFormat
 from numdaplot.dates.date_format import DateFormat
 from numdaplot.errors.refused_setting_error import RefusedSettingError
-from numdaplot.settings.field_types import require_field_types
+from numdaplot.types.type import Type
 
 ARRAY_CONVERSION_NAME = "ArrayConversion"
 CATEGORY_SETTING_NAME = "Type.CATEGORY"

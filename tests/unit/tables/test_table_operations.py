@@ -22,7 +22,6 @@ from numpy.typing import NDArray
 from numdaplot.arrays.array import Array
 from numdaplot.arrays.math_functions.square_root import SquareRoot
 from numdaplot.conversions.table_conversion import TableConversion
-from numdaplot.data_types.type import Type
 from numdaplot.positions.axis import Axis
 from numdaplot.positions.index import Index
 from numdaplot.positions.region import Region
@@ -48,6 +47,7 @@ from numdaplot.tables.sorting.sort_key import SortKey
 from numdaplot.tables.sorting.table_sorting import TableSorting
 from numdaplot.tables.table import Table
 from numdaplot.tables.value_counts.value_count import ValueCount
+from numdaplot.types.type import Type
 
 FRAME = pandas.DataFrame({"price": [5.0, 12.0, 30.0]})
 FAKE_FRAME = pandas.DataFrame({"result": [1.0]})

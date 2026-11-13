@@ -6,7 +6,7 @@ The value written on each bar of a BarChart.
 
 from dataclasses import dataclass
 
-from numdaplot.settings.field_types import require_field_types
+from numdaplot.argument_checks.field_types import require_field_types
 from numdaplot.tables.files.decimal_count import require_decimal_count
 
 

@@ -6,7 +6,7 @@ Writing of a Table in a file.
 
 from pathlib import Path
 
-from numdaplot.settings.argument_types import checked_arguments
+from numdaplot.argument_checks.argument_types import checked_arguments
 from numdaplot.tables.conflict import Conflict
 from numdaplot.tables.files.csv_file import write_csv_file
 from numdaplot.tables.files.csv_write_options import CsvWriteOptions

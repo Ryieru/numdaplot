@@ -6,8 +6,8 @@ Missing values of a Table: count, summary and removal.
 
 from typing import Self
 
+from numdaplot.argument_checks.argument_types import checked_arguments
 from numdaplot.positions.axis import Axis
-from numdaplot.settings.argument_types import checked_arguments
 from numdaplot.tables.missing.missing_count import MissingCount
 from numdaplot.tables.missing.missing_counts import count_frame_missing
 from numdaplot.tables.missing.missing_drop import MissingDrop

@@ -13,10 +13,10 @@ import numpy
 import pandas
 from numpy.typing import NDArray
 
-from numdaplot.data_types.numpy_mapping import from_numpy_dtype
 from numdaplot.errors.value_conversion_error import ValueConversionError
 from numdaplot.tables.frames.column import Column
 from numdaplot.tables.frames.named_column_errors import NamedColumnErrors
+from numdaplot.types.numpy_mapping import from_numpy_dtype
 
 DECIMAL_KIND = "f"
 DOUBLE_DTYPE = numpy.dtype(numpy.float64)

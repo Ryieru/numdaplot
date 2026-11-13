@@ -10,9 +10,9 @@ import numpy
 from numpy.typing import NDArray
 
 from numdaplot.arrays.creation.list_conversion import convert_list
-from numdaplot.data_types.type import Type
+from numdaplot.positions.shape import Shape
 from numdaplot.rules.rule_values import ScalarValue
-from numdaplot.shapes.shape import Shape
+from numdaplot.types.type import Type
 
 
 def build_filled_values(shape: Shape, value: ScalarValue, dtype: Type | None) -> NDArray[Any]:

@@ -4,8 +4,8 @@ Error raised when a type has no equivalent between numdaplot and an underlying l
 .. versionadded:: 0.1.0
 """
 
-from numdaplot.data_types.library import Library
 from numdaplot.errors.numdaplot_error import NumdaplotError
+from numdaplot.types.library import Library
 
 UNSUPPORTED_TYPE_MESSAGE = "The type {type_name} has no equivalent between numdaplot and {library_name}."
 

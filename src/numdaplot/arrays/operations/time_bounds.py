@@ -12,8 +12,8 @@ from numpy.typing import NDArray
 
 from numdaplot.arrays.operations.integer_bounds import find_value_bounds
 from numdaplot.arrays.operations.operand import Operand
-from numdaplot.data_types.type import Type
 from numdaplot.errors.time_overflow_error import TimeOverflowError
+from numdaplot.types.type import Type
 
 NANOSECOND_TYPES = frozenset({Type.DATETIME, Type.DURATION})
 TIME_KINDS = frozenset({"M", "m"})

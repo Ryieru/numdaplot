@@ -6,9 +6,9 @@ Column operations of a Table: choice, renaming, conversion, application of a fun
 
 from typing import Self
 
+from numdaplot.argument_checks.argument_types import checked_arguments
 from numdaplot.conversions.converted_frame import convert_frame_columns
 from numdaplot.conversions.table_conversion import TableConversion
-from numdaplot.settings.argument_types import checked_arguments
 from numdaplot.tables.columns.added_column import add_frame_column
 from numdaplot.tables.columns.applied_columns import apply_frame_columns
 from numdaplot.tables.columns.chosen_columns import choose_frame_columns

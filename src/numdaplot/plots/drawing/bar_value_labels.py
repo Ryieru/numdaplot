@@ -16,10 +16,10 @@ from matplotlib.colors import to_rgba
 from matplotlib.container import BarContainer
 from numpy.typing import NDArray
 
-from numdaplot.data_types.number_types import INTEGER_TYPES
-from numdaplot.data_types.type import Type
 from numdaplot.plots.charts.value_labels import ValueLabels
 from numdaplot.plots.drawing.text_contrast import DARK_TEXT_COLOR, choose_text_color
+from numdaplot.types.number_types import INTEGER_TYPES
+from numdaplot.types.type import Type
 
 BAR_LABEL_FONT_SIZE = 9
 BAR_LABEL_PADDING = 3

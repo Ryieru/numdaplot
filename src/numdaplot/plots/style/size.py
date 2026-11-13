@@ -6,9 +6,9 @@ Width and height of a Plot.
 
 from dataclasses import dataclass
 
+from numdaplot.argument_checks.field_types import require_field_types
 from numdaplot.errors.invalid_size_error import InvalidSizeError
 from numdaplot.plots.style.size_unit import SizeUnit
-from numdaplot.settings.field_types import require_field_types
 
 DEFAULT_WIDTH = 6.4
 DEFAULT_HEIGHT = 4.8

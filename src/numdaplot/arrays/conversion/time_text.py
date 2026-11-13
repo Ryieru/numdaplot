@@ -9,7 +9,7 @@ from typing import Any, Literal, cast
 import numpy
 from numpy.typing import NDArray
 
-from numdaplot.data_types.time_of_day import read_times, write_time
+from numdaplot.types.time_of_day import read_times, write_time
 
 type DatetimeUnit = Literal["s", "ms", "us", "ns"]
 DATETIME_UNITS = tuple[DatetimeUnit, ...](("s", "ms", "us", "ns"))

@@ -8,10 +8,10 @@ from typing import Self
 
 import numpy
 
+from numdaplot.argument_checks.argument_types import checked_arguments
 from numdaplot.arrays.array_data import ArrayData
 from numdaplot.arrays.operations.boolean_operands import require_booleans
 from numdaplot.arrays.operations.transformation import transform_values
-from numdaplot.settings.argument_types import checked_arguments
 
 AND_SYMBOL = "&"
 OR_SYMBOL = "|"

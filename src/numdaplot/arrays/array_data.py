@@ -11,11 +11,11 @@ import numpy.typing
 
 from numdaplot.arrays.operations.combination import combine_values
 from numdaplot.arrays.operations.operand import Operand
-from numdaplot.data_types.numpy_mapping import from_numpy_dtype
-from numdaplot.data_types.type import Type
 from numdaplot.errors.refused_operation_error import RefusedOperationError
+from numdaplot.positions.shape import Shape
 from numdaplot.rules.rule_values import ScalarValue
-from numdaplot.shapes.shape import Shape
+from numdaplot.types.numpy_mapping import from_numpy_dtype
+from numdaplot.types.type import Type
 
 CONSTRUCTOR_OPERATION = "Creating an Array with ndp.Array(...)"
 CONSTRUCTOR_ALTERNATIVE = "ndp.Array.from_list, from_numpy, filled, from_range, from_spacing or random"

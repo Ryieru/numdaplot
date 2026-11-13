@@ -8,7 +8,6 @@ import numpy
 import pandas
 import pytest
 
-from numdaplot.data_types.value_family import ValueFamily
 from numdaplot.dates.time_zone import TimeZone
 from numdaplot.errors.column_not_found_error import ColumnNotFoundError
 from numdaplot.errors.duplicate_column_error import DuplicateColumnError
@@ -29,6 +28,7 @@ from numdaplot.tables.description.described_frame import (
 	find_result_family,
 )
 from numdaplot.tables.description.description import Description
+from numdaplot.types.value_family import ValueFamily
 
 FRAME = pandas.DataFrame(
 	{

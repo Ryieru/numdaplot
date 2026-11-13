@@ -6,8 +6,8 @@ The last positions of one dimension.
 
 from dataclasses import dataclass
 
+from numdaplot.argument_checks.field_types import require_field_types
 from numdaplot.positions.position_count import require_position_count
-from numdaplot.settings.field_types import require_field_types
 
 
 @dataclass(frozen=True)

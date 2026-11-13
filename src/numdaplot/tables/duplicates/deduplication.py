@@ -6,7 +6,7 @@ Settings of the removal of duplicated rows of a Table.
 
 from dataclasses import dataclass
 
-from numdaplot.settings.field_types import require_field_types
+from numdaplot.argument_checks.field_types import require_field_types
 from numdaplot.tables.columns.column_names import copy_optional_column_names
 from numdaplot.tables.duplicates.keep import Keep
 

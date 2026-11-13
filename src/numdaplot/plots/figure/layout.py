@@ -6,8 +6,8 @@ Grid of cells of a Figure.
 
 from dataclasses import dataclass
 
+from numdaplot.argument_checks.field_types import require_field_types
 from numdaplot.errors.invalid_count_error import InvalidCountError
-from numdaplot.settings.field_types import require_field_types
 
 MINIMUM_LINE_COUNT = 1
 

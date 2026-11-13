@@ -6,7 +6,6 @@ Change of the time zone of a datetime column of a Table.
 
 import numpy
 
-from numdaplot.data_types.type import Type
 from numdaplot.dates.time_zone_change import TimeZoneChange
 from numdaplot.dates.time_zone_mode import TimeZoneMode
 from numdaplot.errors.time_zone_mismatch_error import TimeZoneMismatchError
@@ -14,6 +13,7 @@ from numdaplot.errors.value_conversion_error import ValueConversionError
 from numdaplot.tables.frames.column import Column
 from numdaplot.tables.frames.column_values import find_column_missing
 from numdaplot.tables.frames.time_zones import find_column_time_zone
+from numdaplot.types.type import Type
 
 MODE_OPERATIONS = {
 	TimeZoneMode.ATTRIBUTE: "Attributing a time zone",

@@ -6,6 +6,7 @@ Creation of a Plot giving an overview of the values of a Table or an Array.
 
 from typing import Self
 
+from numdaplot.argument_checks.argument_types import checked_arguments
 from numdaplot.arrays.array import Array
 from numdaplot.plots.chart_layer import ChartLayer
 from numdaplot.plots.charts.heatmap_chart import HeatmapChart
@@ -15,7 +16,6 @@ from numdaplot.plots.data.heatmap_values import read_heatmap_values
 from numdaplot.plots.data.missing_cells import read_missing_cells, read_missing_counts
 from numdaplot.plots.plot_data import PlotData
 from numdaplot.plots.style.plot_style import PlotStyle
-from numdaplot.settings.argument_types import checked_arguments
 from numdaplot.tables.table import Table
 
 

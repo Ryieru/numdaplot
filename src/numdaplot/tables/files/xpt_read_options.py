@@ -6,7 +6,7 @@ Settings of the SAS transport (XPT) files a Table reads.
 
 from dataclasses import dataclass
 
-from numdaplot.settings.field_types import require_field_types
+from numdaplot.argument_checks.field_types import require_field_types
 from numdaplot.tables.files.column_names import ColumnNames
 from numdaplot.tables.files.encoding import Encoding
 

@@ -8,10 +8,9 @@ from typing import Never, Self
 
 import pandas
 
-from numdaplot.data_types.type import Type
 from numdaplot.dates.time_zone import TimeZone
 from numdaplot.errors.refused_operation_error import RefusedOperationError
-from numdaplot.shapes.shape import Shape
+from numdaplot.positions.shape import Shape
 from numdaplot.tables.columns.column_names import require_known_columns
 from numdaplot.tables.files.column_names import ColumnNames
 from numdaplot.tables.frames.cleaned_names import clean_frame_names
@@ -20,6 +19,7 @@ from numdaplot.tables.frames.column_values import find_column_type
 from numdaplot.tables.frames.frame_normalization import normalize_frame
 from numdaplot.tables.frames.time_columns import convert_outside_durations
 from numdaplot.tables.frames.time_zones import find_column_time_zone
+from numdaplot.types.type import Type
 
 CONSTRUCTOR_OPERATION = "Creating a Table with ndp.Table(...)"
 CONSTRUCTOR_ALTERNATIVE = "ndp.Table.from_arrays, from_pandas or a file method such as from_csv"

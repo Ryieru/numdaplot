@@ -6,8 +6,8 @@ The new names of columns of a Table, applied at once.
 
 from dataclasses import dataclass
 
+from numdaplot.argument_checks.field_types import require_field_types
 from numdaplot.errors.empty_list_error import EmptyListError
-from numdaplot.settings.field_types import require_field_types
 from numdaplot.tables.columns.column_names import require_unique_names
 from numdaplot.tables.columns.name_change import NameChange
 

@@ -9,9 +9,6 @@ from typing import Any
 import numpy
 from numpy.typing import NDArray
 
-from numdaplot.data_types.time_of_day import read_times
-from numdaplot.data_types.type import Type
-from numdaplot.data_types.value_family import ValueFamily, find_family
 from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
 from numdaplot.plots.charts.box_chart import BoxChart
 from numdaplot.plots.charts.histogram_chart import HistogramChart
@@ -22,6 +19,9 @@ from numdaplot.tables.frames.column import Column
 from numdaplot.tables.frames.column_values import find_column_missing, find_column_type
 from numdaplot.tables.frames.named_column_errors import NamedColumnErrors
 from numdaplot.tables.frames.time_zones import find_column_time_zone
+from numdaplot.types.time_of_day import read_times
+from numdaplot.types.type import Type
+from numdaplot.types.value_family import ValueFamily, find_family
 
 POSITION_KINDS = {
 	ValueFamily.NUMBER: PositionKind.NUMBERS,

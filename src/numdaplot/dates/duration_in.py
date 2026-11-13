@@ -6,9 +6,9 @@ Each duration counted in a unit.
 
 from dataclasses import dataclass
 
+from numdaplot.argument_checks.field_types import require_field_types
 from numdaplot.dates.duration_unit import DurationUnit
 from numdaplot.dates.time_function import TimeFunction
-from numdaplot.settings.field_types import require_field_types
 
 
 @dataclass(frozen=True)

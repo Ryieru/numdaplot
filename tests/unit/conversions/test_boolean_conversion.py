@@ -16,9 +16,9 @@ from numdaplot.conversions.boolean_conversion import (
 	require_zero_or_one,
 )
 from numdaplot.conversions.boolean_rule import BooleanRule
-from numdaplot.data_types.type import Type
 from numdaplot.errors.value_conversion_error import ValueConversionError
 from numdaplot.tables.frames.column_values import find_column_type
+from numdaplot.types.type import Type
 
 BOOLEANS = pandas.Series([True, None, False], dtype="boolean")
 EXPECTED_INTEGERS = [1, pandas.NA, 0]

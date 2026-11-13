@@ -18,7 +18,7 @@ from numdaplot.arrays.array_reflected_arithmetic import ArrayReflectedArithmetic
 from numdaplot.arrays.array_refusals import ArrayRefusals
 from numdaplot.arrays.array_selection import ArraySelection
 from numdaplot.arrays.array_type_change import ArrayTypeChange
-from numdaplot.data_types.type import Type
+from numdaplot.types.type import Type
 
 METHOD_GROUPS = [
 	ArrayCreation,

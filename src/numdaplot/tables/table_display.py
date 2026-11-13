@@ -4,7 +4,7 @@ Display of a Table: its text, its notebook table and a few of its rows.
 .. versionadded:: 0.1.0
 """
 
-from numdaplot.settings.argument_types import checked_arguments
+from numdaplot.argument_checks.argument_types import checked_arguments
 from numdaplot.tables.frames.table_text import format_table
 from numdaplot.tables.preview.notebook_display import format_table_html, show_frame
 from numdaplot.tables.preview.preview import Preview

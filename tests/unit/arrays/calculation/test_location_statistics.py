@@ -20,8 +20,6 @@ from numdaplot.arrays.calculation.location_statistics import (
 	compute_standard_deviation,
 	compute_sum,
 )
-from numdaplot.data_types.numpy_mapping import to_numpy_dtype
-from numdaplot.data_types.type import Type
 from numdaplot.statistics.maximum import Max
 from numdaplot.statistics.mean import Mean
 from numdaplot.statistics.median import Median
@@ -30,6 +28,8 @@ from numdaplot.statistics.quantile import Quantile
 from numdaplot.statistics.standard_deviation import StandardDeviation
 from numdaplot.statistics.statistic import Statistic
 from numdaplot.statistics.sum import Sum
+from numdaplot.types.numpy_mapping import to_numpy_dtype
+from numdaplot.types.type import Type
 
 type StatisticFunction = Callable[[NDArray[Any], int | None, Statistic], Any]
 DECIMALS_WITH_MISSING = [1.0, numpy.nan, 3.0, 8.0]

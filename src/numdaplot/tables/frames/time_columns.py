@@ -11,9 +11,9 @@ import pandas
 from numpy.typing import NDArray
 
 from numdaplot.arrays.conversion.time_text import format_times
-from numdaplot.data_types.time_of_day import TIME_DTYPE, read_time_objects, store_time_objects
 from numdaplot.tables.frames.column import Column
 from numdaplot.tables.frames.time_range_errors import TimeRangeErrors
+from numdaplot.types.time_of_day import TIME_DTYPE, read_time_objects, store_time_objects
 
 DURATION_KIND = "m"
 NANOSECOND_DURATION_DTYPE = numpy.dtype("timedelta64[ns]")

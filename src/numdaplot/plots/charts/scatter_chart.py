@@ -7,6 +7,7 @@ Chart drawing each row as a point.
 import math
 from dataclasses import dataclass
 
+from numdaplot.argument_checks.field_types import require_field_types
 from numdaplot.errors.conflicting_settings_error import ConflictingSettingsError
 from numdaplot.errors.invalid_opacity_error import InvalidOpacityError
 from numdaplot.errors.invalid_point_size_error import InvalidPointSizeError
@@ -16,7 +17,6 @@ from numdaplot.plots.charts.color_scale import ColorScale
 from numdaplot.plots.charts.marker_shape import MarkerShape
 from numdaplot.plots.style.color import Color
 from numdaplot.plots.style.custom_color import CustomColor
-from numdaplot.settings.field_types import require_field_types
 from numdaplot.tables.columns.column_names import require_optional_column_name
 
 CHART_NAME = "ScatterChart"

@@ -9,9 +9,9 @@ from typing import Any, cast
 from numpy.typing import NDArray
 
 from numdaplot.arrays.selection.missing_mask import find_missing
-from numdaplot.data_types.numpy_mapping import from_numpy_dtype
-from numdaplot.data_types.time_of_day import read_time_objects
-from numdaplot.data_types.type import Type
+from numdaplot.types.numpy_mapping import from_numpy_dtype
+from numdaplot.types.time_of_day import read_time_objects
+from numdaplot.types.type import Type
 
 # Python datetimes and timedeltas stop at the microsecond; finer numpy units would become integers.
 PYTHON_TIME_DTYPES = {

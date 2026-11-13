@@ -33,7 +33,6 @@ from numdaplot.arrays.operations.float_errors import FloatErrorWarnings
 from numdaplot.arrays.operations.integer_rules import require_sum_fits
 from numdaplot.arrays.operations.type_requirements import require_family
 from numdaplot.arrays.selection.missing_mask import find_missing
-from numdaplot.data_types.value_family import ValueFamily
 from numdaplot.errors.empty_array_error import EmptyArrayError
 from numdaplot.errors.refused_operation_error import RefusedOperationError
 from numdaplot.positions.axis import Axis
@@ -50,6 +49,7 @@ from numdaplot.statistics.share import Share
 from numdaplot.statistics.standard_deviation import StandardDeviation
 from numdaplot.statistics.statistic import Statistic
 from numdaplot.statistics.sum import Sum
+from numdaplot.types.value_family import ValueFamily
 
 type StatisticFunction = Callable[[NDArray[Any], int | None, Statistic], Any]
 

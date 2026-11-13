@@ -9,8 +9,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
+from numdaplot.argument_checks.field_types import require_field_types
 from numdaplot.arrays.type_match import TypeMatch
-from numdaplot.settings.field_types import require_field_types
 
 if TYPE_CHECKING:
 	from numdaplot.arrays.array import Array

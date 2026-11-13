@@ -15,6 +15,7 @@ from matplotlib.colors import ListedColormap
 from matplotlib.container import BarContainer
 from matplotlib.patches import Rectangle
 
+from numdaplot.measures.measure import Measure
 from numdaplot.plots.chart_layer import ChartLayer
 from numdaplot.plots.charts.bar_chart import BarChart
 from numdaplot.plots.charts.missing_chart import MissingChart
@@ -35,7 +36,6 @@ from numdaplot.plots.drawing.heatmap_drawing import (
 )
 from numdaplot.plots.drawing.plot_theme import GRID_COLOR
 from numdaplot.plots.drawing.whole_numbers import place_whole_ticks
-from numdaplot.ratios.measure import Measure
 
 MISSING_COLOR = "#33415c"
 PRESENT_COLOR = GRID_COLOR

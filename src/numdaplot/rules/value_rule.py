@@ -7,9 +7,9 @@ Base class of the rules that compare each value to a single reference value.
 from dataclasses import dataclass
 from typing import ClassVar, cast
 
+from numdaplot.argument_checks.field_types import require_field_types
 from numdaplot.errors.refused_operation_error import RefusedOperationError
 from numdaplot.rules.rule import Rule
-from numdaplot.settings.field_types import require_field_types
 
 MISSING_VALUE_OPERATION = "{rule_name}(None)"
 

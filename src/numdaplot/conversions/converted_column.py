@@ -17,8 +17,6 @@ from numdaplot.conversions.table_conversion import TableConversion
 from numdaplot.conversions.text_conversion import parse_booleans
 from numdaplot.conversions.time_conversion import keep_time_of_day, parse_times, write_times
 from numdaplot.conversions.time_zone_conversion import change_time_zone
-from numdaplot.data_types.type import Type
-from numdaplot.data_types.value_family import ValueFamily, find_family
 from numdaplot.dates.custom_date_format import CustomDateFormat
 from numdaplot.dates.date_format import DateFormat
 from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
@@ -28,6 +26,8 @@ from numdaplot.tables.columns.brackets import Brackets
 from numdaplot.tables.frames.column import Column
 from numdaplot.tables.frames.column_values import find_column_type
 from numdaplot.tables.frames.frame_normalization import convert_to_type
+from numdaplot.types.type import Type
+from numdaplot.types.value_family import ValueFamily, find_family
 
 CONVERT_OPERATION = "convert"
 WRITABLE_FAMILIES = frozenset({ValueFamily.NUMBER, ValueFamily.BOOL, ValueFamily.TEXT})

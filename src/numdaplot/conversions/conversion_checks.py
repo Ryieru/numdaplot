@@ -7,12 +7,12 @@ Checks of the settings of a conversion against the types it converts between.
 from numdaplot.conversions.conversion_settings import ConversionSettings
 from numdaplot.conversions.date_formats import find_format_name, has_date, has_time
 from numdaplot.conversions.table_conversion import TableConversion
-from numdaplot.data_types.type import Type
-from numdaplot.data_types.value_family import ValueFamily, find_family
 from numdaplot.dates.custom_date_format import CustomDateFormat
 from numdaplot.dates.date_format import DateFormat
 from numdaplot.errors.invalid_conversion_error import InvalidConversionError
 from numdaplot.tables.columns.brackets import Brackets
+from numdaplot.types.type import Type
+from numdaplot.types.value_family import ValueFamily, find_family
 
 WRITTEN_TYPES = frozenset({Type.TEXT, Type.CATEGORY})
 FORMAT_SETTING = "format"

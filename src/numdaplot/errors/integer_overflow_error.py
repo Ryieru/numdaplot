@@ -6,9 +6,9 @@ Error raised when the result of a calculation does not fit an integer type.
 
 import numpy
 
-from numdaplot.data_types.numpy_mapping import to_numpy_dtype
-from numdaplot.data_types.type import Type
 from numdaplot.errors.numdaplot_error import NumdaplotError
+from numdaplot.types.numpy_mapping import to_numpy_dtype
+from numdaplot.types.type import Type
 
 INTEGER_OVERFLOW_MESSAGE = (
 	"The operation {operation_name} gives values outside the range of {type_name}, from {lowest} to {highest}. {advice}"

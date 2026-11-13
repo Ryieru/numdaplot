@@ -6,9 +6,9 @@ A part of each date, such as its month.
 
 from dataclasses import dataclass
 
+from numdaplot.argument_checks.field_types import require_field_types
 from numdaplot.dates.date_part_unit import DatePartUnit
 from numdaplot.dates.time_function import TimeFunction
-from numdaplot.settings.field_types import require_field_types
 
 
 @dataclass(frozen=True)

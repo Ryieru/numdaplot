@@ -9,10 +9,10 @@ from typing import Any
 import numpy
 from numpy.typing import NDArray
 
-from numdaplot.data_types.numpy_mapping import from_numpy_dtype, to_numpy_dtype
-from numdaplot.data_types.time_of_day import TIME_DTYPE, holds_only_times, store_time_objects
-from numdaplot.data_types.type import Type
 from numdaplot.errors.time_overflow_error import TimeOverflowError
+from numdaplot.types.numpy_mapping import from_numpy_dtype, to_numpy_dtype
+from numdaplot.types.time_of_day import TIME_DTYPE, holds_only_times, store_time_objects
+from numdaplot.types.type import Type
 
 TEXT_KINDS = frozenset({"U", "T"})
 NANOSECOND_DURATION_DTYPE = numpy.dtype("timedelta64[ns]")

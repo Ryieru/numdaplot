@@ -25,11 +25,11 @@ from numdaplot.arrays.mapping.mapped_values import (
 from numdaplot.arrays.mapping.unmatched import Unmatched
 from numdaplot.arrays.mapping.value_change import ValueChange
 from numdaplot.arrays.mapping.value_mapping import ValueMapping
-from numdaplot.data_types.type import Type
 from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
 from numdaplot.errors.unmatched_value_error import UnmatchedValueError
 from numdaplot.errors.unsupported_missing_error import UnsupportedMissingError
 from numdaplot.errors.value_conversion_error import ValueConversionError
+from numdaplot.types.type import Type
 
 LABELS = ValueMapping(changes=[ValueChange(1, "Homme"), ValueChange(2, "Femme")])
 GRID = numpy.array([[1, 2], [2, 1]])

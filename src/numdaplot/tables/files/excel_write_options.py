@@ -6,7 +6,7 @@ Settings of the Excel files a Table writes.
 
 from dataclasses import dataclass
 
-from numdaplot.settings.field_types import require_field_types
+from numdaplot.argument_checks.field_types import require_field_types
 from numdaplot.tables.files.excel_sheet import require_sheet_name
 
 

@@ -7,10 +7,6 @@ Checks and alignment of the key columns of a join.
 import numpy
 import pandas
 
-from numdaplot.data_types.numpy_mapping import from_numpy_dtype, to_numpy_dtype
-from numdaplot.data_types.pandas_mapping import to_pandas_dtype
-from numdaplot.data_types.type import Type
-from numdaplot.data_types.value_family import ValueFamily, find_family
 from numdaplot.errors.column_not_found_error import ColumnNotFoundError
 from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
 from numdaplot.errors.time_zone_mismatch_error import TimeZoneMismatchError
@@ -20,6 +16,10 @@ from numdaplot.tables.frames.column_values import find_column_type
 from numdaplot.tables.frames.named_column_errors import NamedColumnErrors
 from numdaplot.tables.frames.time_zones import find_column_time_zone
 from numdaplot.tables.joining.key_types import KeyTypes
+from numdaplot.types.numpy_mapping import from_numpy_dtype, to_numpy_dtype
+from numdaplot.types.pandas_mapping import to_pandas_dtype
+from numdaplot.types.type import Type
+from numdaplot.types.value_family import ValueFamily, find_family
 
 OTHER_TABLE_NAME = "the other Table"
 JOIN_OPERATION = "Join"

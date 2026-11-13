@@ -19,7 +19,7 @@ from numdaplot.arrays.array_layout import ArrayLayout
 from numdaplot.arrays.array_sorting import ArraySorting
 from numdaplot.errors.shape_mismatch_error import ShapeMismatchError
 from numdaplot.positions.axis import Axis
-from numdaplot.shapes.shape import Shape
+from numdaplot.positions.shape import Shape
 
 SORT_VALUES_NAME = "sort_values"
 FIND_UNIQUE_VALUES_NAME = "find_unique_values"

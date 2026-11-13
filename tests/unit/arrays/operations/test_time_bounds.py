@@ -22,8 +22,8 @@ from numdaplot.arrays.operations.time_bounds import (
 	require_stored_times_fit,
 	require_whole_durations_fit,
 )
-from numdaplot.data_types.type import Type
 from numdaplot.errors.time_overflow_error import TimeOverflowError
+from numdaplot.types.type import Type
 
 OPERATION_NAME = "+"
 ONE_MICROSECOND = timedelta(microseconds=1)

@@ -8,11 +8,11 @@ from typing import Any
 
 from numpy.typing import NDArray
 
-from numdaplot.data_types.numpy_mapping import from_numpy_dtype
-from numdaplot.data_types.value_family import ValueFamily, find_family
-from numdaplot.data_types.value_type import find_value_type
 from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
 from numdaplot.rules.rule_values import ScalarValue
+from numdaplot.types.numpy_mapping import from_numpy_dtype
+from numdaplot.types.value_family import ValueFamily, find_family
+from numdaplot.types.value_type import find_value_type
 
 
 def require_family(values: NDArray[Any], accepted_families: frozenset[ValueFamily], operation: str) -> None:
@@ -40,7 +40,7 @@ def require_family(values: NDArray[Any], accepted_families: frozenset[ValueFamil
 	>>> import numpy
 	>>> import numdaplot as ndp
 	>>> from numdaplot.arrays.operations.type_requirements import require_family
-	>>> from numdaplot.data_types.value_family import ValueFamily
+	>>> from numdaplot.types.value_family import ValueFamily
 	>>> try:
 	... 	require_family(numpy.array(["a"]), frozenset({ValueFamily.NUMBER}), "Mean")
 	... except ndp.IncompatibleTypesError as error:

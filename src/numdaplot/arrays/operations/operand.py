@@ -10,11 +10,11 @@ from typing import Any
 import numpy
 from numpy.typing import NDArray
 
-from numdaplot.data_types.numpy_mapping import from_numpy_dtype
-from numdaplot.data_types.time_of_day import to_time_since_midnight
-from numdaplot.data_types.type import Type
-from numdaplot.data_types.value_type import find_value_type
 from numdaplot.rules.rule_values import ScalarValue
+from numdaplot.types.numpy_mapping import from_numpy_dtype
+from numdaplot.types.time_of_day import to_time_since_midnight
+from numdaplot.types.type import Type
+from numdaplot.types.value_type import find_value_type
 
 MICROSECONDS_IN_COUNT = 2**63 - 1
 LONGEST_MICROSECOND_DURATION = timedelta(microseconds=MICROSECONDS_IN_COUNT)

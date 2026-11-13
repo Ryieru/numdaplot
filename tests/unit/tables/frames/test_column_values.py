@@ -10,7 +10,6 @@ import numpy
 import pandas
 import pytest
 
-from numdaplot.data_types.type import Type
 from numdaplot.errors.time_zone_mismatch_error import TimeZoneMismatchError
 from numdaplot.errors.unsupported_missing_error import UnsupportedMissingError
 from numdaplot.tables.frames.column import Column
@@ -23,6 +22,7 @@ from numdaplot.tables.frames.column_values import (
 	read_array_values,
 	read_present_values,
 )
+from numdaplot.types.type import Type
 
 INTEGERS_WITH_MISSING = pandas.Series([1, None, 3], dtype="Int64")
 EXPECTED_MISSING = [False, True, False]

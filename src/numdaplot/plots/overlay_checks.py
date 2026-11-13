@@ -6,7 +6,6 @@ Checks of a chart added to a Plot with ``add_line``, ``add_bar`` or ``add_scatte
 
 from typing import cast
 
-from numdaplot.data_types.value_family import ValueFamily, find_family
 from numdaplot.errors.incompatible_charts_error import IncompatibleChartsError
 from numdaplot.errors.refused_setting_error import RefusedSettingError
 from numdaplot.plots.chart_layer import ChartLayer
@@ -18,6 +17,7 @@ from numdaplot.plots.charts.scatter_chart import ScatterChart
 from numdaplot.plots.charts.value_axis import ValueAxis
 from numdaplot.plots.data.chart_values import ChartValues
 from numdaplot.plots.data.position_kind import PositionKind
+from numdaplot.types.value_family import ValueFamily, find_family
 
 OVERLAID_CHARTS = (LineChart, BarChart, ScatterChart)
 POSITION_NAMES = {

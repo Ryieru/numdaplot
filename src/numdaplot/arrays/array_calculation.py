@@ -6,6 +6,7 @@ Statistics, math functions and time functions computed on an Array.
 
 from typing import Self
 
+from numdaplot.argument_checks.argument_types import checked_arguments
 from numdaplot.arrays.array_data import ArrayData
 from numdaplot.arrays.calculation.math_function_values import apply_math_function
 from numdaplot.arrays.calculation.statistic_values import compute_statistic
@@ -15,7 +16,6 @@ from numdaplot.arrays.mapping.value_mapping import ValueMapping
 from numdaplot.arrays.math_functions.math_function import MathFunction
 from numdaplot.dates.time_function import TimeFunction
 from numdaplot.positions.axis import Axis
-from numdaplot.settings.argument_types import checked_arguments
 from numdaplot.statistics.statistic import Statistic
 
 

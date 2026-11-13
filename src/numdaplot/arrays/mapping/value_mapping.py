@@ -6,14 +6,14 @@ Replacement of each value of an Array by a new value.
 
 from dataclasses import dataclass
 
+from numdaplot.argument_checks.field_types import require_field_types
 from numdaplot.arrays.mapping.unmatched import Unmatched
 from numdaplot.arrays.mapping.value_change import ValueChange
-from numdaplot.data_types.type import Type
-from numdaplot.data_types.value_type import find_common_type, find_value_type
 from numdaplot.errors.duplicate_value_error import DuplicateValueError
 from numdaplot.errors.empty_list_error import EmptyListError
 from numdaplot.rules.rule_values import ScalarValue
-from numdaplot.settings.field_types import require_field_types
+from numdaplot.types.type import Type
+from numdaplot.types.value_type import find_common_type, find_value_type
 
 CHANGE_ITEM_NAME = "value change"
 MAPPING_OPERATION = "ValueMapping"

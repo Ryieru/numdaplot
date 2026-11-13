@@ -7,8 +7,8 @@ Unit tests of find_missing.
 import numpy
 
 from numdaplot.arrays.selection.missing_mask import find_missing
-from numdaplot.data_types.numpy_mapping import to_numpy_dtype
-from numdaplot.data_types.type import Type
+from numdaplot.types.numpy_mapping import to_numpy_dtype
+from numdaplot.types.type import Type
 
 DECIMALS = [1.0, numpy.nan]
 DATES = numpy.array(["2026-01-31", "NaT"], dtype="datetime64[D]")

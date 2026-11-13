@@ -14,7 +14,7 @@ from numdaplot.arrays.operations.operand import (
 	find_operand_type,
 	find_operand_type_names,
 )
-from numdaplot.data_types.type import Type
+from numdaplot.types.type import Type
 
 SINGLE_VALUES = [True, 3, 2.5, "Paris", date(2026, 1, 31), timedelta(hours=1)]
 REJECTED_OPERANDS = [[1, 2], (1, 2), numpy.array([1, 2]), None]

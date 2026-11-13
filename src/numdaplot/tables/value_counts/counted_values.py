@@ -11,8 +11,8 @@ import pandas
 from numpy.typing import NDArray
 
 from numdaplot.errors.duplicate_column_error import DuplicateColumnError
-from numdaplot.ratios.count_division import divide_counts
-from numdaplot.ratios.measure import Measure
+from numdaplot.measures.count_division import divide_counts
+from numdaplot.measures.measure import Measure
 from numdaplot.tables.aggregation.aggregated_frame import take_group_keys
 from numdaplot.tables.aggregation.row_groups import STABLE_SORT, find_row_groups, measure_group_sizes
 from numdaplot.tables.columns.column_names import require_known_columns

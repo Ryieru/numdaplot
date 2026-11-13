@@ -9,11 +9,10 @@ from dataclasses import dataclass
 import numpy
 from numpy.typing import NDArray
 
-from numdaplot.data_types.type import Type
+from numdaplot.measures.measure import Measure
 from numdaplot.plots.data.chart_values import ChartValues, Positions, Series
 from numdaplot.plots.data.position_kind import PositionKind
 from numdaplot.positions.axis import Axis
-from numdaplot.ratios.measure import Measure
 from numdaplot.tables.missing.missing_count import MissingCount
 from numdaplot.tables.missing.missing_counts import (
 	COLUMN_NAMES_COLUMN,
@@ -23,6 +22,7 @@ from numdaplot.tables.missing.missing_counts import (
 )
 from numdaplot.tables.table import Table
 from numdaplot.tables.table_data import read_stored_frame
+from numdaplot.types.type import Type
 
 MEASURE_LABELS = {
 	Measure.COUNT: "Missing count",

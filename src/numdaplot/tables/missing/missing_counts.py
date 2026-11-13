@@ -8,14 +8,14 @@ import numpy
 import pandas
 from numpy.typing import NDArray
 
-from numdaplot.data_types.numpy_mapping import to_numpy_dtype
-from numdaplot.data_types.type import Type
+from numdaplot.measures.count_division import divide_counts
+from numdaplot.measures.measure import Measure
 from numdaplot.positions.axis import Axis
-from numdaplot.ratios.count_division import divide_counts
-from numdaplot.ratios.measure import Measure
 from numdaplot.tables.frames.column import Column
 from numdaplot.tables.frames.column_values import build_column
 from numdaplot.tables.missing.missing_count import MissingCount
+from numdaplot.types.numpy_mapping import to_numpy_dtype
+from numdaplot.types.type import Type
 
 COLUMN_NAMES_COLUMN = "column"
 MEASURE_COLUMN_NAMES = {

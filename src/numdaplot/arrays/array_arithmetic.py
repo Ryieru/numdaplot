@@ -8,11 +8,11 @@ from typing import Self
 
 import numpy
 
+from numdaplot.argument_checks.argument_types import checked_arguments
 from numdaplot.arrays.array_data import ArrayData
 from numdaplot.arrays.operations.integer_rules import require_opposite_fits
 from numdaplot.arrays.operations.transformation import transform_values
 from numdaplot.rules.rule_values import ScalarValue
-from numdaplot.settings.argument_types import checked_arguments
 
 ADDITION_SYMBOL = "+"
 SUBTRACTION_SYMBOL = "-"

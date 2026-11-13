@@ -6,10 +6,10 @@ A change of the time zone of a datetime column.
 
 from dataclasses import dataclass
 
+from numdaplot.argument_checks.field_types import require_field_types
 from numdaplot.dates.time_zone import TimeZone
 from numdaplot.dates.time_zone_mode import TimeZoneMode
 from numdaplot.errors.invalid_time_zone_change_error import InvalidTimeZoneChangeError
-from numdaplot.settings.field_types import require_field_types
 
 
 @dataclass(frozen=True)

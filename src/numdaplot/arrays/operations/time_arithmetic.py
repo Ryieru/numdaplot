@@ -13,13 +13,13 @@ from numdaplot.arrays.conversion.time_text import format_durations
 from numdaplot.arrays.operations.operand import Operand, convert_time_value, find_operand_type
 from numdaplot.arrays.operations.time_bounds import require_nanoseconds_fit
 from numdaplot.arrays.operations.time_result_bounds import require_time_result_fits, widen_large_integers
-from numdaplot.data_types.numpy_mapping import to_numpy_dtype
-from numdaplot.data_types.type import Type
-from numdaplot.data_types.value_family import ValueFamily, find_family
 from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
 from numdaplot.errors.refused_operation_error import RefusedOperationError
 from numdaplot.errors.time_overflow_error import TimeOverflowError
 from numdaplot.errors.value_conversion_error import ValueConversionError
+from numdaplot.types.numpy_mapping import to_numpy_dtype
+from numdaplot.types.type import Type
+from numdaplot.types.value_family import ValueFamily, find_family
 
 TIME_FAMILIES = frozenset({ValueFamily.MOMENT, ValueFamily.DURATION, ValueFamily.TIME})
 # The family of the result of each accepted operation, by function and families of the left and right operands.
@@ -335,7 +335,7 @@ def find_time_result_type(result_family: ValueFamily, keeps_date: bool) -> Type:
 	Examples
 	--------
 	>>> from numdaplot.arrays.operations.time_arithmetic import find_time_result_type
-	>>> from numdaplot.data_types.value_family import ValueFamily
+	>>> from numdaplot.types.value_family import ValueFamily
 	>>> find_time_result_type(ValueFamily.MOMENT, True)
 	<Type.DATE: 14>
 	"""
@@ -378,7 +378,7 @@ def require_time_operation(left: Operand, right: Operand, operation_key: TimeOpe
 	>>> import numpy
 	>>> import numdaplot as ndp
 	>>> from numdaplot.arrays.operations.time_arithmetic import require_time_operation
-	>>> from numdaplot.data_types.value_family import ValueFamily
+	>>> from numdaplot.types.value_family import ValueFamily
 	>>> key = (numpy.multiply, ValueFamily.NUMBER, ValueFamily.DURATION)
 	>>> try:
 	... 	require_time_operation(numpy.array([3]), timedelta(days=1), key)
@@ -422,7 +422,7 @@ def to_nanoseconds(operand: Operand, family: ValueFamily) -> Any:
 	--------
 	>>> from datetime import date
 	>>> from numdaplot.arrays.operations.time_arithmetic import to_nanoseconds
-	>>> from numdaplot.data_types.value_family import ValueFamily
+	>>> from numdaplot.types.value_family import ValueFamily
 	>>> to_nanoseconds(date(2026, 1, 31), ValueFamily.MOMENT)
 	np.datetime64('2026-01-31T00:00:00.000000000')
 	"""

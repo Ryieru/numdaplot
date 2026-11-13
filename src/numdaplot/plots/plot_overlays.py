@@ -7,6 +7,7 @@ Charts drawn over the charts of a Plot.
 from dataclasses import replace
 from typing import Self
 
+from numdaplot.argument_checks.argument_types import checked_arguments
 from numdaplot.arrays.array import Array
 from numdaplot.plots.chart_layer import ChartLayer
 from numdaplot.plots.charts.bar_chart import BarChart
@@ -22,7 +23,6 @@ from numdaplot.plots.overlay_checks import (
 	require_vertical_bars,
 )
 from numdaplot.plots.plot_data import PlotData
-from numdaplot.settings.argument_types import checked_arguments
 from numdaplot.tables.table import Table
 
 ADD_LINE_NAME = "add_line"

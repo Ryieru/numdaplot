@@ -10,13 +10,13 @@ import pandas
 
 from numdaplot.arrays.conversion.time_text import format_durations
 from numdaplot.conversions.date_formats import DEFAULT_FORMATS, TIME_FORMATS, WRITE_PATTERNS
-from numdaplot.data_types.type import Type
 from numdaplot.dates.custom_date_format import CustomDateFormat
 from numdaplot.dates.date_format import DateFormat
 from numdaplot.tables.frames.column import Column
 from numdaplot.tables.frames.column_values import find_column_missing, find_column_type
 from numdaplot.tables.frames.frame_normalization import convert_to_type
 from numdaplot.tables.frames.time_zones import find_column_time_zone
+from numdaplot.types.type import Type
 
 OFFSET_CODE = "%z"
 COMPACT_OFFSET = r"([+-]\d{2})(\d{2})$"

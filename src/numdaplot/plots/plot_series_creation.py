@@ -6,6 +6,7 @@ Creation of a Plot of lines, bars or points, the charts ``add_*`` can also draw 
 
 from typing import Self
 
+from numdaplot.argument_checks.argument_types import checked_arguments
 from numdaplot.arrays.array import Array
 from numdaplot.plots.charts.bar_chart import BarChart
 from numdaplot.plots.charts.line_chart import LineChart
@@ -13,7 +14,6 @@ from numdaplot.plots.charts.scatter_chart import ScatterChart
 from numdaplot.plots.layer_reading import read_bar_layer, read_line_layer, read_scatter_layer
 from numdaplot.plots.plot_data import PlotData
 from numdaplot.plots.style.plot_style import PlotStyle
-from numdaplot.settings.argument_types import checked_arguments
 from numdaplot.tables.table import Table
 
 

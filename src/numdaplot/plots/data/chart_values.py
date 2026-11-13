@@ -10,8 +10,8 @@ from typing import Any
 import numpy
 from numpy.typing import NDArray
 
-from numdaplot.data_types.type import Type
 from numdaplot.plots.data.position_kind import PositionKind
+from numdaplot.types.type import Type
 
 
 @dataclass(frozen=True, eq=False)

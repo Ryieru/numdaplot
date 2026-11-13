@@ -6,6 +6,7 @@ Creation of a Plot showing how values are spread or shared out.
 
 from typing import Self
 
+from numdaplot.argument_checks.argument_types import checked_arguments
 from numdaplot.arrays.array import Array
 from numdaplot.plots.chart_layer import ChartLayer
 from numdaplot.plots.charts.box_chart import BoxChart
@@ -18,7 +19,6 @@ from numdaplot.plots.drawing.series_colors import require_color_count
 from numdaplot.plots.plot_data import PlotData
 from numdaplot.plots.style.axis_settings import require_no_axis_settings
 from numdaplot.plots.style.plot_style import PlotStyle
-from numdaplot.settings.argument_types import checked_arguments
 from numdaplot.tables.table import Table
 
 HISTOGRAM_CHART_NAME = "HistogramChart"

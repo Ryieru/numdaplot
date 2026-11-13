@@ -8,6 +8,7 @@ from typing import Self
 
 import numpy
 
+from numdaplot.argument_checks.argument_types import checked_arguments
 from numdaplot.arrays.array_arithmetic import (
 	ADDITION_SYMBOL,
 	DIVISION_SYMBOL,
@@ -19,7 +20,6 @@ from numdaplot.arrays.array_arithmetic import (
 )
 from numdaplot.arrays.array_data import ArrayData
 from numdaplot.rules.rule_values import ScalarValue
-from numdaplot.settings.argument_types import checked_arguments
 
 
 class ArrayReflectedArithmetic(ArrayData):

@@ -12,13 +12,13 @@ from numpy.typing import NDArray
 from numdaplot.arrays.array import Array
 from numdaplot.arrays.array_data import read_stored_values
 from numdaplot.arrays.operations.type_requirements import require_family
-from numdaplot.data_types.numpy_mapping import from_numpy_dtype
-from numdaplot.data_types.type import Type
-from numdaplot.data_types.value_family import ValueFamily, find_family
 from numdaplot.errors.dimension_error import DimensionError
 from numdaplot.plots.data.chart_values import ChartValues, Positions, Series
 from numdaplot.plots.data.column_reading import count_hours, find_value_families
 from numdaplot.plots.data.position_kind import PositionKind
+from numdaplot.types.numpy_mapping import from_numpy_dtype
+from numdaplot.types.type import Type
+from numdaplot.types.value_family import ValueFamily, find_family
 
 ONE_DIMENSION = 1
 TWO_DIMENSIONS = 2

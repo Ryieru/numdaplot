@@ -7,9 +7,9 @@ Unit tests of TableConversion.
 import pytest
 
 from numdaplot.conversions.table_conversion import TableConversion
-from numdaplot.data_types.type import Type
 from numdaplot.errors.duplicate_column_error import DuplicateColumnError
 from numdaplot.errors.empty_list_error import EmptyListError
+from numdaplot.types.type import Type
 
 COLUMN_NAME = "price"
 COLUMN_NAMES = [COLUMN_NAME]

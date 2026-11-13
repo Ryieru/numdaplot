@@ -6,8 +6,8 @@ Rounding math function.
 
 from dataclasses import dataclass
 
+from numdaplot.argument_checks.field_types import require_field_types
 from numdaplot.arrays.math_functions.math_function import MathFunction
-from numdaplot.settings.field_types import require_field_types
 
 
 @dataclass(frozen=True)

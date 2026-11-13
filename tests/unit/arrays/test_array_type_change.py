@@ -17,8 +17,8 @@ from numdaplot.arrays import array_type_change
 from numdaplot.arrays.array_type_change import ArrayTypeChange
 from numdaplot.conversions.array_conversion import ArrayConversion
 from numdaplot.conversions.table_conversion import TableConversion
-from numdaplot.data_types.type import Type
 from numdaplot.errors.invalid_type_error import InvalidTypeError
+from numdaplot.types.type import Type
 
 CONVERT_VALUES_NAME = "convert_array_values"
 COUNTS = numpy.array([1, 2])

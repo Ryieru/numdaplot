@@ -6,8 +6,8 @@ Suffixes telling apart the columns that two joined Tables both have.
 
 from dataclasses import dataclass
 
+from numdaplot.argument_checks.field_types import require_field_types
 from numdaplot.errors.invalid_suffixes_error import InvalidSuffixesError
-from numdaplot.settings.field_types import require_field_types
 
 
 @dataclass(frozen=True)

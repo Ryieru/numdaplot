@@ -16,7 +16,7 @@ from numdaplot.arrays.array_data import read_stored_values
 from numdaplot.arrays.creation.random_integers import RandomIntegers
 from numdaplot.arrays.creation.spacing import Spacing
 from numdaplot.positions.range import Range
-from numdaplot.shapes.shape import Shape
+from numdaplot.positions.shape import Shape
 
 FAKE_VALUES = numpy.array([7, 8, 9])
 EXPECTED_FAKE_VALUES = [7, 8, 9]

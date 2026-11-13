@@ -254,10 +254,10 @@ def find_source_lines(found_object: griffe.Object) -> SourceLines | None:
 	Examples
 	--------
 	>>> from source_links import find_object, find_source_lines, load_package
-	>>> int8 = find_object(load_package(), "data_types.type.Type.INT8")
+	>>> int8 = find_object(load_package(), "types.type.Type.INT8")
 	>>> int8_lines = find_source_lines(int8)
 	>>> int8_lines.file_path, int8_lines.last_line > int8_lines.first_line
-	('src/numdaplot/data_types/type.py', True)
+	('src/numdaplot/types/type.py', True)
 	"""
 	first_line = found_object.lineno
 	last_line = found_object.endlineno

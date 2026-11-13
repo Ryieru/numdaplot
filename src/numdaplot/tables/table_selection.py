@@ -6,9 +6,9 @@ Selection of the rows and columns of a Table, by conditions and by position, and
 
 from typing import Self
 
+from numdaplot.argument_checks.argument_types import checked_arguments
 from numdaplot.positions.region import Region
 from numdaplot.rules.rule import Rule
-from numdaplot.settings.argument_types import checked_arguments
 from numdaplot.tables.filtering.checked_frame import check_frame
 from numdaplot.tables.filtering.filter import Filter
 from numdaplot.tables.filtering.row_mask import build_filter_mask

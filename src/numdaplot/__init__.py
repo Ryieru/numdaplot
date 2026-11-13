@@ -40,8 +40,6 @@ from numdaplot.arrays.type_match import TypeMatch
 from numdaplot.conversions.array_conversion import ArrayConversion
 from numdaplot.conversions.boolean_rule import BooleanRule
 from numdaplot.conversions.table_conversion import TableConversion
-from numdaplot.data_types.library import Library
-from numdaplot.data_types.type import Type
 from numdaplot.dates.custom_date_format import CustomDateFormat
 from numdaplot.dates.date_format import DateFormat
 from numdaplot.dates.date_part import DatePart
@@ -131,6 +129,7 @@ from numdaplot.errors.unsupported_index_error import UnsupportedIndexError
 from numdaplot.errors.unsupported_missing_error import UnsupportedMissingError
 from numdaplot.errors.unsupported_type_error import UnsupportedTypeError
 from numdaplot.errors.value_conversion_error import ValueConversionError
+from numdaplot.measures.measure import Measure
 from numdaplot.ordering.missing_position import MissingPosition
 from numdaplot.ordering.order import Order
 from numdaplot.package_version import find_package_version
@@ -174,7 +173,7 @@ from numdaplot.positions.index import Index
 from numdaplot.positions.last import Last
 from numdaplot.positions.range import Range
 from numdaplot.positions.region import Region
-from numdaplot.ratios.measure import Measure
+from numdaplot.positions.shape import Shape
 from numdaplot.rules.between import Between
 from numdaplot.rules.bounds import Bounds
 from numdaplot.rules.case import Case
@@ -189,7 +188,6 @@ from numdaplot.rules.less import Less
 from numdaplot.rules.less_or_equal import LessOrEqual
 from numdaplot.rules.not_equal import NotEqual
 from numdaplot.rules.rule import Rule
-from numdaplot.shapes.shape import Shape
 from numdaplot.statistics.count import Count
 from numdaplot.statistics.count_distinct import CountDistinct
 from numdaplot.statistics.counted_missing import CountedMissing
@@ -253,6 +251,8 @@ from numdaplot.tables.sorting.sort_key import SortKey
 from numdaplot.tables.sorting.table_sorting import TableSorting
 from numdaplot.tables.table import Table
 from numdaplot.tables.value_counts.value_count import ValueCount
+from numdaplot.types.library import Library
+from numdaplot.types.type import Type
 
 __version__ = find_package_version()
 

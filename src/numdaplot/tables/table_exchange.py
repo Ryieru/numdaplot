@@ -10,11 +10,11 @@ from typing import TYPE_CHECKING, Any, Self, cast
 
 import pandas
 
+from numdaplot.argument_checks.argument_types import checked_arguments
 from numdaplot.arrays.array import Array, create_array
 from numdaplot.arrays.conversion.python_values import to_python_list
 from numdaplot.errors.invalid_type_error import InvalidTypeError
 from numdaplot.errors.not_single_value_error import NotSingleValueError
-from numdaplot.settings.argument_types import checked_arguments
 from numdaplot.tables.files.column_names import ColumnNames
 from numdaplot.tables.frames.array_frame import build_array_frame
 from numdaplot.tables.frames.column_values import convert_column_values, find_column_missing, read_array_values

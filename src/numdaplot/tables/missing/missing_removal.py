@@ -8,8 +8,8 @@ import numpy
 import pandas
 from numpy.typing import NDArray
 
+from numdaplot.measures.count_division import divide_counts
 from numdaplot.positions.axis import Axis
-from numdaplot.ratios.count_division import divide_counts
 from numdaplot.tables.columns.column_names import require_known_columns
 from numdaplot.tables.missing.missing_counts import COLUMN_SUM_AXIS, ROW_SUM_AXIS, find_frame_missing
 from numdaplot.tables.missing.missing_drop import MissingDrop

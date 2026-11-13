@@ -6,8 +6,8 @@ A ratio of missing values from which a row or a column is removed.
 
 from dataclasses import dataclass
 
-from numdaplot.ratios.fraction import require_fraction
-from numdaplot.settings.field_types import require_field_types
+from numdaplot.argument_checks.field_types import require_field_types
+from numdaplot.measures.fraction import require_fraction
 from numdaplot.tables.missing.ratio_comparison import RatioComparison
 
 

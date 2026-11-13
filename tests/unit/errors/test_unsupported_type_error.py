@@ -4,9 +4,9 @@ Unit tests of UnsupportedTypeError.
 .. versionadded:: 0.1.0
 """
 
-from numdaplot.data_types.library import Library
 from numdaplot.errors.numdaplot_error import NumdaplotError
 from numdaplot.errors.unsupported_type_error import UnsupportedTypeError
+from numdaplot.types.library import Library
 
 TYPE_NAME = "CATEGORY"
 EXPECTED_MESSAGE = "The type CATEGORY has no equivalent between numdaplot and numpy."

@@ -6,7 +6,7 @@ Statistics of a Table: aggregation, pivot table, description and count of values
 
 from typing import Self
 
-from numdaplot.settings.argument_types import checked_arguments
+from numdaplot.argument_checks.argument_types import checked_arguments
 from numdaplot.tables.aggregation.aggregated_frame import aggregate_frame
 from numdaplot.tables.aggregation.aggregation import Aggregation
 from numdaplot.tables.description.described_frame import describe_frame

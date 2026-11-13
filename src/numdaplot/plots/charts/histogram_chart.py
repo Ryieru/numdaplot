@@ -7,14 +7,14 @@ Chart counting the values of each bin.
 from collections.abc import Sequence
 from dataclasses import dataclass
 
+from numdaplot.argument_checks.field_types import require_field_types
+from numdaplot.measures.measure import Measure
 from numdaplot.plots.charts.bin_count import BinCount
 from numdaplot.plots.charts.bin_width import BinWidth
 from numdaplot.plots.charts.chart import Chart
 from numdaplot.plots.charts.chart_settings import copy_colors
 from numdaplot.plots.style.color import Color
 from numdaplot.plots.style.custom_color import CustomColor
-from numdaplot.ratios.measure import Measure
-from numdaplot.settings.field_types import require_field_types
 from numdaplot.tables.columns.column_names import copy_optional_column_names
 
 

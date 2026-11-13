@@ -6,8 +6,8 @@ Share of the values satisfying a rule statistic.
 
 from dataclasses import dataclass
 
+from numdaplot.argument_checks.field_types import require_field_types
 from numdaplot.rules.rule import Rule
-from numdaplot.settings.field_types import require_field_types
 from numdaplot.statistics.counted_missing import CountedMissing
 from numdaplot.statistics.statistic import Statistic
 

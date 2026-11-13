@@ -8,10 +8,10 @@ import numpy
 import pandas
 
 from numdaplot.arrays.type_match import TypeMatch
-from numdaplot.data_types.value_family import find_family
 from numdaplot.tables.frames.column import Column
 from numdaplot.tables.frames.column_values import find_column_missing, find_column_type, read_present_values
 from numdaplot.tables.frames.time_zones import find_column_time_zone
+from numdaplot.types.value_family import find_family
 
 
 def are_frames_equal(left: pandas.DataFrame, right: pandas.DataFrame, types: TypeMatch) -> bool:

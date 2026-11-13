@@ -10,6 +10,7 @@ from numdaplot.errors.conflicting_settings_error import ConflictingSettingsError
 from numdaplot.errors.duplicate_column_error import DuplicateColumnError
 from numdaplot.errors.empty_list_error import EmptyListError
 from numdaplot.errors.refused_setting_error import RefusedSettingError
+from numdaplot.measures.measure import Measure
 from numdaplot.plots.charts.bar_chart import BarChart
 from numdaplot.plots.charts.bar_layout import BarLayout
 from numdaplot.plots.charts.box_chart import BoxChart
@@ -29,7 +30,6 @@ from numdaplot.plots.charts.percentages import Percentages
 from numdaplot.plots.charts.pie_chart import PieChart
 from numdaplot.plots.charts.scatter_chart import ScatterChart
 from numdaplot.plots.style.color import Color
-from numdaplot.ratios.measure import Measure
 
 Y_COLUMNS = ["price", "cost"]
 COLORS = [Color.BLUE, Color.ORANGE]

@@ -10,12 +10,12 @@ import numpy
 import pandas
 from numpy.typing import NDArray
 
-from numdaplot.data_types.value_family import ValueFamily, find_family
 from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
 from numdaplot.errors.invalid_weight_error import InvalidWeightError
 from numdaplot.tables.columns.column_names import require_known_columns
 from numdaplot.tables.frames.column import Column
 from numdaplot.tables.frames.column_values import find_column_type
+from numdaplot.types.value_family import ValueFamily, find_family
 
 WEIGHTS_OPERATION = "ValueCount weights"
 LOWEST_WEIGHT = 0.0

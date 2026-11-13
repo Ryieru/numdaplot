@@ -38,8 +38,8 @@ EXPECTED_ARRAY_LINK = (
 INHERITED_METHOD_PATH = "arrays.array.Array.convert"
 DEFINING_CLASS = "ArrayTypeChange"
 GROUP_PATH = "arrays.array.Array--creation"
-ENUM_MEMBER_PATH = "data_types.type.Type.INT8"
-TYPE_FILE = "src/numdaplot/data_types/type.py"
+ENUM_MEMBER_PATH = "types.type.Type.INT8"
+TYPE_FILE = "src/numdaplot/types/type.py"
 ATTRIBUTE_NAME = "price"
 CONVERT_HEADING = (
 	'<h3 id="numdaplot.arrays.array.Array.convert" class="doc doc-heading"><code>convert</code>'

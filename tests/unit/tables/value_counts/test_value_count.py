@@ -8,7 +8,7 @@ import pytest
 
 from numdaplot.errors.invalid_column_name_error import InvalidColumnNameError
 from numdaplot.errors.invalid_type_error import InvalidTypeError
-from numdaplot.ratios.measure import Measure
+from numdaplot.measures.measure import Measure
 from numdaplot.tables.value_counts.value_count import ValueCount
 
 COUNTED_COLUMN = "sex"

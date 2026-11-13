@@ -21,9 +21,9 @@ from numdaplot.arrays.operations.time_bounds import (
 	TIME_KINDS,
 	find_present_bounds,
 )
-from numdaplot.data_types.type import Type
 from numdaplot.errors.integer_overflow_error import IntegerOverflowError
 from numdaplot.errors.time_overflow_error import TimeOverflowError
+from numdaplot.types.type import Type
 
 DECIMAL_KIND = "f"
 UNSIGNED_KIND = "u"

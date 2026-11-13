@@ -20,11 +20,11 @@ from numdaplot.arrays.math_functions.square_root import SquareRoot
 from numdaplot.arrays.operations.float_errors import FloatErrorWarnings
 from numdaplot.arrays.operations.integer_rules import require_absolute_fits
 from numdaplot.arrays.operations.type_requirements import require_family
-from numdaplot.data_types.number_types import INTEGER_TYPES
-from numdaplot.data_types.numpy_mapping import from_numpy_dtype
-from numdaplot.data_types.value_family import ValueFamily
 from numdaplot.errors.out_of_domain_error import OutOfDomainError
 from numdaplot.errors.refused_operation_error import RefusedOperationError
+from numdaplot.types.number_types import INTEGER_TYPES
+from numdaplot.types.numpy_mapping import from_numpy_dtype
+from numdaplot.types.value_family import ValueFamily
 
 NUMBER_FAMILIES = frozenset({ValueFamily.NUMBER})
 DOMAIN_LIMIT = 0

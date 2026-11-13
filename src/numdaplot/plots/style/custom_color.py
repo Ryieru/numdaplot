@@ -7,8 +7,8 @@ A color of a chart written as ``#rrggbb``.
 import re
 from dataclasses import dataclass
 
+from numdaplot.argument_checks.field_types import require_field_types
 from numdaplot.errors.invalid_color_error import InvalidColorError
-from numdaplot.settings.field_types import require_field_types
 
 COLOR_PATTERN = re.compile(r"#[0-9a-fA-F]{6}")
 

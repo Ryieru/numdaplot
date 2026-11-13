@@ -17,14 +17,14 @@ from numdaplot.arrays.mapping.unmatched import Unmatched
 from numdaplot.arrays.mapping.value_mapping import MAPPING_OPERATION, ValueMapping, find_new_type
 from numdaplot.arrays.operations.type_requirements import require_comparable
 from numdaplot.arrays.selection.missing_mask import find_missing
-from numdaplot.data_types.number_types import DECIMAL_TYPES, INTEGER_TYPES
-from numdaplot.data_types.numpy_mapping import from_numpy_dtype
-from numdaplot.data_types.type import Type
-from numdaplot.data_types.value_family import ValueFamily, find_family
-from numdaplot.data_types.value_type import find_common_type
 from numdaplot.errors.unmatched_value_error import UnmatchedValueError
 from numdaplot.errors.unsupported_missing_error import UnsupportedMissingError
 from numdaplot.rules.rule_values import ScalarValue
+from numdaplot.types.number_types import DECIMAL_TYPES, INTEGER_TYPES
+from numdaplot.types.numpy_mapping import from_numpy_dtype
+from numdaplot.types.type import Type
+from numdaplot.types.value_family import ValueFamily, find_family
+from numdaplot.types.value_type import find_common_type
 
 DECIMAL_ADVICE = "Give decimal new values, such as 10.0, which can be missing."
 BOOLEAN_ADVICE = "Give texts as new values, which can be missing."

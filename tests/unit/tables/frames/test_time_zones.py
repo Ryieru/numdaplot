@@ -7,7 +7,6 @@ Unit tests of the time zones of the datetime columns of a Table.
 import pandas
 import pytest
 
-from numdaplot.data_types.type import Type
 from numdaplot.dates.time_zone import TimeZone
 from numdaplot.errors.time_zone_mismatch_error import TimeZoneMismatchError
 from numdaplot.errors.unsupported_type_error import UnsupportedTypeError
@@ -20,6 +19,7 @@ from numdaplot.tables.frames.time_zones import (
 	remove_utc_zone,
 	require_no_time_zone,
 )
+from numdaplot.types.type import Type
 
 PARIS_NAME = "Europe/Paris"
 PARIS = TimeZone(PARIS_NAME)
