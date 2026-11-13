@@ -11,14 +11,14 @@ from numdaplot.column_storage.time_columns import read_time_objects_frame, write
 from numdaplot.files.conflict import Conflict
 from numdaplot.files.file_access import WRITE_OPERATION, FileAccessErrors
 from numdaplot.files.file_paths import FilePath, require_free_path
-from numdaplot.tables.files.csv_file import write_csv_file
-from numdaplot.tables.files.csv_write_options import CsvWriteOptions
-from numdaplot.tables.files.excel_file import write_excel_file
-from numdaplot.tables.files.excel_write_options import ExcelWriteOptions
-from numdaplot.tables.files.json_file import write_json_file
-from numdaplot.tables.files.json_write_options import JsonWriteOptions
-from numdaplot.tables.files.parquet_file import write_parquet_file
-from numdaplot.tables.files.stata_file import write_stata_file
+from numdaplot.tables.files.csv.csv_file import write_csv_file
+from numdaplot.tables.files.csv.csv_write_options import CsvWriteOptions
+from numdaplot.tables.files.excel.excel_file import write_excel_file
+from numdaplot.tables.files.excel.excel_write_options import ExcelWriteOptions
+from numdaplot.tables.files.json.json_file import write_json_file
+from numdaplot.tables.files.json.json_write_options import JsonWriteOptions
+from numdaplot.tables.files.parquet.parquet_file import write_parquet_file
+from numdaplot.tables.files.statistical.stata_file import write_stata_file
 from numdaplot.tables.table_data import TableData
 
 

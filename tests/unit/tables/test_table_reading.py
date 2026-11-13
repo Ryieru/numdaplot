@@ -13,11 +13,11 @@ import pytest
 
 from numdaplot.errors.file_not_found_error import FileNotFoundError
 from numdaplot.tables import table_reading
-from numdaplot.tables.files.csv_read_options import CsvReadOptions
-from numdaplot.tables.files.excel_read_options import ExcelReadOptions
-from numdaplot.tables.files.json_read_options import JsonReadOptions
-from numdaplot.tables.files.sas_read_options import SasReadOptions
-from numdaplot.tables.files.xpt_read_options import XptReadOptions
+from numdaplot.tables.files.csv.csv_read_options import CsvReadOptions
+from numdaplot.tables.files.excel.excel_read_options import ExcelReadOptions
+from numdaplot.tables.files.json.json_read_options import JsonReadOptions
+from numdaplot.tables.files.statistical.sas_read_options import SasReadOptions
+from numdaplot.tables.files.statistical.xpt_read_options import XptReadOptions
 from numdaplot.tables.table_reading import TableReading
 
 FILE_NAME = "sales.data"

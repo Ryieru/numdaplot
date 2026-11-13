@@ -10,19 +10,19 @@ from typing import Self
 from numdaplot.argument_checks.argument_types import checked_arguments
 from numdaplot.files.file_access import READ_OPERATION, FileAccessErrors
 from numdaplot.files.file_paths import FilePath, require_existing_file
-from numdaplot.tables.files.csv_file import read_csv_file
-from numdaplot.tables.files.csv_read_options import CsvReadOptions
-from numdaplot.tables.files.excel_file import read_excel_file
-from numdaplot.tables.files.excel_read_options import ExcelReadOptions
-from numdaplot.tables.files.json_file import read_json_file
-from numdaplot.tables.files.json_read_options import JsonReadOptions
-from numdaplot.tables.files.parquet_file import read_parquet_file
-from numdaplot.tables.files.parquet_read_options import ParquetReadOptions
-from numdaplot.tables.files.sas_file import read_sas_file, read_xpt_file
-from numdaplot.tables.files.sas_read_options import SasReadOptions
-from numdaplot.tables.files.stata_file import read_stata_file
-from numdaplot.tables.files.stata_read_options import StataReadOptions
-from numdaplot.tables.files.xpt_read_options import XptReadOptions
+from numdaplot.tables.files.csv.csv_file import read_csv_file
+from numdaplot.tables.files.csv.csv_read_options import CsvReadOptions
+from numdaplot.tables.files.excel.excel_file import read_excel_file
+from numdaplot.tables.files.excel.excel_read_options import ExcelReadOptions
+from numdaplot.tables.files.json.json_file import read_json_file
+from numdaplot.tables.files.json.json_read_options import JsonReadOptions
+from numdaplot.tables.files.parquet.parquet_file import read_parquet_file
+from numdaplot.tables.files.parquet.parquet_read_options import ParquetReadOptions
+from numdaplot.tables.files.statistical.sas_file import read_sas_file, read_xpt_file
+from numdaplot.tables.files.statistical.sas_read_options import SasReadOptions
+from numdaplot.tables.files.statistical.stata_file import read_stata_file
+from numdaplot.tables.files.statistical.stata_read_options import StataReadOptions
+from numdaplot.tables.files.statistical.xpt_read_options import XptReadOptions
 from numdaplot.tables.table_data import TableData
 
 

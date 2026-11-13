@@ -25,7 +25,7 @@ from mkdocs.structure.files import Files
 import numdaplot
 
 RULES_MODULE = "numdaplot.rules.greater"
-FILES_MODULE = "numdaplot.tables.files.csv_read_options"
+FILES_MODULE = "numdaplot.tables.files.csv.csv_read_options"
 EXPECTED_FILE_GROUP = "File settings"
 GREATER_SECTION = find_section(RULES_MODULE)
 GREATER = PublicObject("Greater", "numdaplot.rules.greater.Greater", GREATER_SECTION)
@@ -33,7 +33,7 @@ RULE = PublicObject("Rule", "numdaplot.rules.rule.Rule", GREATER_SECTION)
 TABLE_SECTION = find_section("numdaplot.tables.table")
 TABLE = PublicObject("Table", "numdaplot.tables.table.Table", TABLE_SECTION)
 CSV_SECTION = find_section(FILES_MODULE)
-CSV_OPTIONS = PublicObject("CsvReadOptions", "numdaplot.tables.files.csv_read_options.CsvReadOptions", CSV_SECTION)
+CSV_OPTIONS = PublicObject("CsvReadOptions", "numdaplot.tables.files.csv.csv_read_options.CsvReadOptions", CSV_SECTION)
 EXPECTED_GREATER_PATH = "api/rules/greater.md"
 EXPECTED_GREATER_PAGE = "::: numdaplot.rules.greater.Greater\n    options:\n      heading_level: 1\n"
 TABLE_SECTION_TITLE = "## Reading files { .api-section }"

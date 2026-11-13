@@ -7,7 +7,7 @@ Unit tests of the sections of the navigation of the API pages.
 import pytest
 from api_sections import find_section
 
-FILES_MODULE = "numdaplot.tables.files.csv_read_options"
+FILES_MODULE = "numdaplot.tables.files.csv.csv_read_options"
 EXPECTED_FILE_GROUP = "File settings"
 UNKNOWN_MODULE = "numdaplot.reports.report"
 TABLES_TITLE = "Tables"

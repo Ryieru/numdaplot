@@ -18,9 +18,9 @@ import pytest
 from numdaplot.errors.file_exists_error import FileExistsError
 from numdaplot.files.conflict import Conflict
 from numdaplot.tables import table_writing
-from numdaplot.tables.files.csv_write_options import CsvWriteOptions
-from numdaplot.tables.files.excel_write_options import ExcelWriteOptions
-from numdaplot.tables.files.json_write_options import JsonWriteOptions
+from numdaplot.tables.files.csv.csv_write_options import CsvWriteOptions
+from numdaplot.tables.files.excel.excel_write_options import ExcelWriteOptions
+from numdaplot.tables.files.json.json_write_options import JsonWriteOptions
 from numdaplot.tables.table_writing import TableWriting
 
 FILE_NAME = "sales.data"
