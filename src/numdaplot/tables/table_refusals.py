@@ -8,9 +8,18 @@ from collections.abc import Iterator
 from typing import NoReturn
 
 from numdaplot.errors.settings.refused_operation_error import RefusedOperationError
+from numdaplot.errors.settings.refused_operations import (
+	EQUAL_SYMBOL,
+	GREATER_OR_EQUAL_SYMBOL,
+	GREATER_SYMBOL,
+	LESS_OR_EQUAL_SYMBOL,
+	LESS_SYMBOL,
+	NOT_EQUAL_SYMBOL,
+	refuse_comparison,
+)
 from numdaplot.tables.table_data import TableData
 
-COMPARISON_OPERATION = "Comparing a Table with {symbol}"
+OWNER = "a Table"
 EQUALITY_ALTERNATIVE = "is_equal with ndp.Equality"
 ORDER_ALTERNATIVE = "filter with a rule such as ndp.Greater"
 BRACKETS_OPERATION = "Brackets on a Table"
@@ -23,12 +32,6 @@ LENGTH_OPERATION = "len of a Table"
 LENGTH_ALTERNATIVE = "the row_count attribute"
 TRUTH_OPERATION = "Testing a Table as a boolean"
 TRUTH_ALTERNATIVE = "the row_count attribute, or is_equal"
-EQUAL_SYMBOL = "=="
-NOT_EQUAL_SYMBOL = "!="
-LESS_SYMBOL = "<"
-LESS_OR_EQUAL_SYMBOL = "<="
-GREATER_SYMBOL = ">"
-GREATER_OR_EQUAL_SYMBOL = ">="
 
 
 class TableRefusals(TableData):
@@ -56,7 +59,7 @@ class TableRefusals(TableData):
 		RefusedOperationError
 			Always.
 		"""
-		refuse_table_comparison(EQUAL_SYMBOL, EQUALITY_ALTERNATIVE)
+		refuse_comparison(OWNER, EQUAL_SYMBOL, EQUALITY_ALTERNATIVE)
 
 	def __ne__(self, other: object) -> NoReturn:
 		"""
@@ -74,7 +77,7 @@ class TableRefusals(TableData):
 		RefusedOperationError
 			Always.
 		"""
-		refuse_table_comparison(NOT_EQUAL_SYMBOL, EQUALITY_ALTERNATIVE)
+		refuse_comparison(OWNER, NOT_EQUAL_SYMBOL, EQUALITY_ALTERNATIVE)
 
 	def __lt__(self, other: object) -> NoReturn:
 		"""
@@ -102,7 +105,7 @@ class TableRefusals(TableData):
 		... 	print(error)
 		Comparing a Table with < is not available, use filter with a rule such as ndp.Greater instead.
 		"""
-		refuse_table_comparison(LESS_SYMBOL, ORDER_ALTERNATIVE)
+		refuse_comparison(OWNER, LESS_SYMBOL, ORDER_ALTERNATIVE)
 
 	def __le__(self, other: object) -> NoReturn:
 		"""
@@ -120,7 +123,7 @@ class TableRefusals(TableData):
 		RefusedOperationError
 			Always.
 		"""
-		refuse_table_comparison(LESS_OR_EQUAL_SYMBOL, ORDER_ALTERNATIVE)
+		refuse_comparison(OWNER, LESS_OR_EQUAL_SYMBOL, ORDER_ALTERNATIVE)
 
 	def __gt__(self, other: object) -> NoReturn:
 		"""
@@ -138,7 +141,7 @@ class TableRefusals(TableData):
 		RefusedOperationError
 			Always.
 		"""
-		refuse_table_comparison(GREATER_SYMBOL, ORDER_ALTERNATIVE)
+		refuse_comparison(OWNER, GREATER_SYMBOL, ORDER_ALTERNATIVE)
 
 	def __ge__(self, other: object) -> NoReturn:
 		"""
@@ -156,7 +159,7 @@ class TableRefusals(TableData):
 		RefusedOperationError
 			Always.
 		"""
-		refuse_table_comparison(GREATER_OR_EQUAL_SYMBOL, ORDER_ALTERNATIVE)
+		refuse_comparison(OWNER, GREATER_OR_EQUAL_SYMBOL, ORDER_ALTERNATIVE)
 
 	def __getitem__(self, key: object) -> NoReturn:
 		"""
@@ -261,35 +264,3 @@ class TableRefusals(TableData):
 			Always.
 		"""
 		raise RefusedOperationError(TRUTH_OPERATION, TRUTH_ALTERNATIVE)
-
-
-def refuse_table_comparison(symbol: str, alternative: str) -> NoReturn:
-	"""
-	Raise the error refusing a comparison operator on a Table.
-
-	.. versionadded:: 0.1.0
-
-	Parameters
-	----------
-	symbol
-		The comparison operator, such as ``"<"``.
-	alternative
-		What to use instead.
-
-	Raises
-	------
-	RefusedOperationError
-		Always.
-
-	Examples
-	--------
-	>>> import numdaplot as ndp
-	>>> from numdaplot.tables.table_refusals import refuse_table_comparison
-	>>> try:
-	... 	refuse_table_comparison("==", "is_equal")
-	... except ndp.RefusedOperationError as error:
-	... 	print(error)
-	Comparing a Table with == is not available, use is_equal instead.
-	"""
-	operation = COMPARISON_OPERATION.format(symbol=symbol)
-	raise RefusedOperationError(operation, alternative)

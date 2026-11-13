@@ -9,12 +9,21 @@ from typing import NoReturn
 
 from numdaplot.arrays.array_data import ArrayData
 from numdaplot.errors.settings.refused_operation_error import RefusedOperationError
+from numdaplot.errors.settings.refused_operations import (
+	EQUAL_SYMBOL,
+	GREATER_OR_EQUAL_SYMBOL,
+	GREATER_SYMBOL,
+	LESS_OR_EQUAL_SYMBOL,
+	LESS_SYMBOL,
+	NOT_EQUAL_SYMBOL,
+	refuse_comparison,
+)
 from numdaplot.rules.greater import Greater
 from numdaplot.rules.greater_or_equal import GreaterOrEqual
 from numdaplot.rules.less import Less
 from numdaplot.rules.less_or_equal import LessOrEqual
 
-COMPARISON_OPERATION = "Comparing an Array with {symbol}"
+OWNER = "an Array"
 EQUALITY_ALTERNATIVE = "is_equal with ndp.Equality, or check with ndp.Equal for each value"
 ORDER_ALTERNATIVE = "select or check with a rule such as ndp.{rule_name}"
 BRACKETS_OPERATION = "Brackets on an Array"
@@ -29,12 +38,6 @@ TRUTH_OPERATION = "Testing an Array as a boolean"
 TRUTH_ALTERNATIVE = "compute with ndp.Count, or is_equal"
 MATRIX_PRODUCT_OPERATION = "The matrix product @ of an Array"
 MATRIX_PRODUCT_ALTERNATIVE = "to_numpy and numpy"
-EQUAL_SYMBOL = "=="
-NOT_EQUAL_SYMBOL = "!="
-LESS_SYMBOL = "<"
-LESS_OR_EQUAL_SYMBOL = "<="
-GREATER_SYMBOL = ">"
-GREATER_OR_EQUAL_SYMBOL = ">="
 
 
 class ArrayRefusals(ArrayData):
@@ -62,7 +65,7 @@ class ArrayRefusals(ArrayData):
 		RefusedOperationError
 			Always.
 		"""
-		refuse_comparison(EQUAL_SYMBOL, EQUALITY_ALTERNATIVE)
+		refuse_comparison(OWNER, EQUAL_SYMBOL, EQUALITY_ALTERNATIVE)
 
 	def __ne__(self, other: object) -> NoReturn:
 		"""
@@ -80,7 +83,7 @@ class ArrayRefusals(ArrayData):
 		RefusedOperationError
 			Always.
 		"""
-		refuse_comparison(NOT_EQUAL_SYMBOL, EQUALITY_ALTERNATIVE)
+		refuse_comparison(OWNER, NOT_EQUAL_SYMBOL, EQUALITY_ALTERNATIVE)
 
 	def __lt__(self, other: object) -> NoReturn:
 		"""
@@ -108,7 +111,7 @@ class ArrayRefusals(ArrayData):
 		Comparing an Array with < is not available, use select or check with a rule such as ndp.Less instead.
 		"""
 		alternative = ORDER_ALTERNATIVE.format(rule_name=Less.__name__)
-		refuse_comparison(LESS_SYMBOL, alternative)
+		refuse_comparison(OWNER, LESS_SYMBOL, alternative)
 
 	def __le__(self, other: object) -> NoReturn:
 		"""
@@ -127,7 +130,7 @@ class ArrayRefusals(ArrayData):
 			Always.
 		"""
 		alternative = ORDER_ALTERNATIVE.format(rule_name=LessOrEqual.__name__)
-		refuse_comparison(LESS_OR_EQUAL_SYMBOL, alternative)
+		refuse_comparison(OWNER, LESS_OR_EQUAL_SYMBOL, alternative)
 
 	def __gt__(self, other: object) -> NoReturn:
 		"""
@@ -146,7 +149,7 @@ class ArrayRefusals(ArrayData):
 			Always.
 		"""
 		alternative = ORDER_ALTERNATIVE.format(rule_name=Greater.__name__)
-		refuse_comparison(GREATER_SYMBOL, alternative)
+		refuse_comparison(OWNER, GREATER_SYMBOL, alternative)
 
 	def __ge__(self, other: object) -> NoReturn:
 		"""
@@ -165,7 +168,7 @@ class ArrayRefusals(ArrayData):
 			Always.
 		"""
 		alternative = ORDER_ALTERNATIVE.format(rule_name=GreaterOrEqual.__name__)
-		refuse_comparison(GREATER_OR_EQUAL_SYMBOL, alternative)
+		refuse_comparison(OWNER, GREATER_OR_EQUAL_SYMBOL, alternative)
 
 	def __getitem__(self, key: object) -> NoReturn:
 		"""
@@ -305,35 +308,3 @@ class ArrayRefusals(ArrayData):
 			Always.
 		"""
 		raise RefusedOperationError(MATRIX_PRODUCT_OPERATION, MATRIX_PRODUCT_ALTERNATIVE)
-
-
-def refuse_comparison(symbol: str, alternative: str) -> NoReturn:
-	"""
-	Raise the error refusing a comparison operator.
-
-	.. versionadded:: 0.1.0
-
-	Parameters
-	----------
-	symbol
-		The comparison operator, such as ``"<"``.
-	alternative
-		What to use instead.
-
-	Raises
-	------
-	RefusedOperationError
-		Always.
-
-	Examples
-	--------
-	>>> import numdaplot as ndp
-	>>> from numdaplot.arrays.array_refusals import refuse_comparison
-	>>> try:
-	... 	refuse_comparison("<", "select")
-	... except ndp.RefusedOperationError as error:
-	... 	print(error)
-	Comparing an Array with < is not available, use select instead.
-	"""
-	operation = COMPARISON_OPERATION.format(symbol=symbol)
-	raise RefusedOperationError(operation, alternative)

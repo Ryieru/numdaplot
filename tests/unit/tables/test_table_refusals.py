@@ -13,13 +13,11 @@ import pandas
 import pytest
 
 from numdaplot.errors.settings.refused_operation_error import RefusedOperationError
-from numdaplot.tables.table_refusals import TableRefusals, refuse_table_comparison
+from numdaplot.tables.table_refusals import TableRefusals
 
 FRAME = pandas.DataFrame({"price": [1.5]})
 OTHER = 1
-EQUAL_SYMBOL = "=="
-ALTERNATIVE = "is_equal"
-EXPECTED_COMPARISON_MESSAGE = "Comparing a Table with == is not available, use is_equal instead."
+EXPECTED_EQUAL_MESSAGE = "Comparing a Table with == is not available, use is_equal with ndp.Equality instead."
 EXPECTED_LENGTH_MESSAGE = "len of a Table is not available, use the row_count attribute instead."
 type RefusedOperation = Callable[[TableRefusals], object]
 REFUSED_OPERATIONS = list[RefusedOperation](
@@ -73,14 +71,16 @@ def test_len_points_to_row_count() -> None:
 	assert error_text == EXPECTED_LENGTH_MESSAGE
 
 
-def test_refuse_table_comparison_names_the_operator_and_the_alternative() -> None:
+def test_equality_names_the_table_and_is_equal() -> None:
 	"""
-	Check the message of a refused comparison.
+	Check that ``table == value`` names the Table and points to ``is_equal``.
 
-	.. versionadded:: 0.1.0
+	.. versionadded:: 0.2.0
 	"""
-	with pytest.raises(RefusedOperationError) as error_info:
-		refuse_table_comparison(EQUAL_SYMBOL, ALTERNATIVE)
+	table = TableRefusals._create(FRAME)
 
-	error_text = str(error_info.value)
-	assert error_text == EXPECTED_COMPARISON_MESSAGE
+	with pytest.raises(RefusedOperationError) as error_information:
+		table.__eq__(OTHER)
+
+	error_text = str(error_information.value)
+	assert error_text == EXPECTED_EQUAL_MESSAGE

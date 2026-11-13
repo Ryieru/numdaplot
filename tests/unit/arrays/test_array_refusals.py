@@ -12,14 +12,14 @@ from collections.abc import Callable
 import numpy
 import pytest
 
-from numdaplot.arrays.array_refusals import ArrayRefusals, refuse_comparison
+from numdaplot.arrays.array_refusals import ArrayRefusals
 from numdaplot.errors.settings.refused_operation_error import RefusedOperationError
 
 VALUES = [1, 2]
 OTHER = 1
-LESS_SYMBOL = "<"
-ALTERNATIVE = "select"
-EXPECTED_COMPARISON_MESSAGE = "Comparing an Array with < is not available, use select instead."
+EXPECTED_LESS_MESSAGE = (
+	"Comparing an Array with < is not available, use select or check with a rule such as ndp.Less instead."
+)
 type RefusedOperation = Callable[[ArrayRefusals], object]
 REFUSED_OPERATIONS = list[RefusedOperation](
 	[
@@ -60,19 +60,6 @@ def test_array_refusals_refuse_each_python_operation(refused_operation: RefusedO
 		refused_operation(array)
 
 
-def test_refuse_comparison_names_the_operator_and_the_alternative() -> None:
-	"""
-	Check the message of a refused comparison.
-
-	.. versionadded:: 0.1.0
-	"""
-	with pytest.raises(RefusedOperationError) as error_information:
-		refuse_comparison(LESS_SYMBOL, ALTERNATIVE)
-
-	error_text = str(error_information.value)
-	assert error_text == EXPECTED_COMPARISON_MESSAGE
-
-
 def test_array_refusals_are_not_hashable() -> None:
 	"""
 	Check that an Array cannot be a dictionary key, since == is refused.
@@ -80,3 +67,19 @@ def test_array_refusals_are_not_hashable() -> None:
 	.. versionadded:: 0.1.0
 	"""
 	assert ArrayRefusals.__hash__ is None
+
+
+def test_less_than_names_the_array_and_the_rule_to_use() -> None:
+	"""
+	Check that ``array < value`` names the Array and points to the ``Less`` rule.
+
+	.. versionadded:: 0.2.0
+	"""
+	values = numpy.array(VALUES)
+	array = ArrayRefusals._create(values)
+
+	with pytest.raises(RefusedOperationError) as error_information:
+		array.__lt__(OTHER)
+
+	error_text = str(error_information.value)
+	assert error_text == EXPECTED_LESS_MESSAGE
