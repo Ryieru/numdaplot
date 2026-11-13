@@ -1,5 +1,6 @@
 """Results of the checks of the repository, and their report."""
 
+import re
 from dataclasses import dataclass, field
 from enum import Enum
 
@@ -7,6 +8,11 @@ PASSED_MARK = "ok"
 BLOCKING_MARK = "FAILED"
 WARNING_MARK = "warning"
 PROBLEM_PREFIX = "    - "
+PLACED_PROBLEM = re.compile(r"^(?P<path>[^\s:]+):(?P<line>\d+) (?P<text>.*)$")
+PLACED_ANNOTATION = "::{level} file={path},line={line}::{name}: {text}"
+ANNOTATION = "::{level}::{name}: {problem}"
+# GitHub reads these characters of an annotation as escapes, so they are escaped first.
+ANNOTATION_ESCAPES = (("%", "%25"), ("\r", "%0D"), ("\n", "%0A"))
 SUMMARY_BLOCKED = "{count} blocking check(s) failed: the git action is stopped."
 SUMMARY_PASSED = "Every blocking check passed."
 SUMMARY_WARNINGS = "{count} warning(s) to read before going on."
@@ -20,6 +26,9 @@ class Severity(Enum):
 
 	WARNING = "warning"
 	"""The check may be wrong, so its problems are only shown."""
+
+
+ANNOTATION_LEVELS = {Severity.BLOCKING: "error", Severity.WARNING: "warning"}
 
 
 @dataclass(frozen=True)
@@ -71,6 +80,70 @@ def write_result(result: CheckResult) -> list[str]:
 		lines.append(PROBLEM_PREFIX + problem)
 
 	return lines
+
+
+def escape_annotation(text: str) -> str:
+	r"""
+	Return a text written so that GitHub shows it as it is in an annotation.
+
+	Parameters
+	----------
+	text
+		The text of a problem, which may hold line breaks.
+
+	Returns
+	-------
+	str
+		The text with its percent signs and line breaks escaped.
+
+	Examples
+	--------
+	>>> escape_annotation("100%\nok")
+	'100%25%0Aok'
+	"""
+	escaped_text = text
+
+	for character, escape in ANNOTATION_ESCAPES:
+		escaped_text = escaped_text.replace(character, escape)
+
+	return escaped_text
+
+
+def write_annotation(result: CheckResult, problem: str) -> str:
+	"""
+	Return the GitHub workflow command showing one problem of a check, on its line when the problem names one.
+
+	Parameters
+	----------
+	result
+		The check that found the problem.
+	problem
+		The problem, starting with ``path:line`` when it is placed in a file.
+
+	Returns
+	-------
+	str
+		An ``::error`` command for a blocking check, a ``::warning`` command for a warning.
+
+	Examples
+	--------
+	>>> nested = CheckResult("nested calls", Severity.WARNING)
+	>>> write_annotation(nested, "src/a.py:3 call in a call: print(len(users))")
+	'::warning file=src/a.py,line=3::nested calls: call in a call: print(len(users))'
+	>>> write_annotation(CheckResult("pages", Severity.BLOCKING), "Share: no page")
+	'::error::pages: Share: no page'
+	"""
+	level = ANNOTATION_LEVELS[result.severity]
+	escaped_problem = escape_annotation(problem)
+	placed_problem = PLACED_PROBLEM.match(escaped_problem)
+	if placed_problem is None:
+		annotation = ANNOTATION.format(level=level, name=result.name, problem=escaped_problem)
+		return annotation
+
+	problem_parts = placed_problem.groupdict()
+	annotation = PLACED_ANNOTATION.format(level=level, name=result.name, **problem_parts)
+
+	return annotation
 
 
 def count_blocking_failures(results: list[CheckResult]) -> int:

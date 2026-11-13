@@ -14,7 +14,8 @@ PACKAGE_NAME = "numdaplot"
 PACKAGE_INIT = "src/numdaplot/__init__.py"
 PACKAGE_INIT_PATH = Path(PACKAGE_INIT)
 CHANGELOG_PATH = Path("CHANGELOG.md")
-SITE_API_PATH = SITE_CONFIGURATION.folder / "site" / "api"
+PUSH_SITE_API_PATH = SITE_CONFIGURATION.folder / "site" / "api"
+CI_SITE_API_PATH = Path("site", "api")
 RELEASE_TAG_PATTERN = "v*"
 CANDIDATE_TAG_PATTERN = "*rc*"
 TAG_PREFIX = "v"
@@ -274,9 +275,9 @@ def check_changelog_entries(changes: PublicNameChanges) -> CheckResult:
 	return result
 
 
-def check_pages(changes: PublicNameChanges) -> CheckResult:
+def check_pages(changes: PublicNameChanges, site_api_path: Path) -> CheckResult:
 	"""
-	Return the added names without a page in the site that mkdocs builds in the copy of ``SITE_CONFIGURATION``.
+	Return the added names without a page in a site built by mkdocs.
 
 	The page of a name is named after its file, which holds one notion named like it.
 
@@ -284,20 +285,22 @@ def check_pages(changes: PublicNameChanges) -> CheckResult:
 	----------
 	changes
 		The added names.
+	site_api_path
+		The API folder of the built site: ``PUSH_SITE_API_PATH`` before a push, ``CI_SITE_API_PATH`` in the CI.
 
 	Returns
 	-------
 	CheckResult
 		One problem per name without page.
 	"""
-	built_pages = {page.parent.name for page in SITE_API_PATH.rglob("index.html")}
+	built_pages = {page.parent.name for page in site_api_path.rglob("index.html")}
 	problems = list[str]()
 
 	for name in changes.added_names:
 		snake_name = CAMEL_BOUNDARY.sub(WORD_SEPARATOR, name)
 		page_name = snake_name.lower()
 		if page_name not in built_pages:
-			page_problem = NO_PAGE_PROBLEM.format(name=name, page_name=page_name, site_path=SITE_API_PATH)
+			page_problem = NO_PAGE_PROBLEM.format(name=name, page_name=page_name, site_path=site_api_path)
 			problems.append(page_problem)
 
 	result = CheckResult(PAGE_CHECK_NAME, Severity.BLOCKING, problems)

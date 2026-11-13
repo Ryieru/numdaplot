@@ -8,6 +8,8 @@ from pathlib import Path
 
 UPSTREAM_REF = "@{upstream}"
 DEFAULT_BASE_REF = "origin/main"
+INDEX_NAME = "index"
+MISSING_COMMIT_MARK = "0"
 CHANGED_FILTER = "--diff-filter=ACMR"
 PYTHON_SUFFIX = ".py"
 CHECKED_ROOTS = ("src", "tests", "tools")
@@ -27,6 +29,9 @@ class GitAction(Enum):
 
 	PUSH = "push"
 	"""A push: every file changed since the remote branch is checked, with every check."""
+
+	CI = "ci"
+	"""A CI run: every file changed since a given commit is checked, without the tools the CI jobs already run."""
 
 
 class GitCommandError(Exception):
@@ -125,14 +130,44 @@ def find_base_ref() -> str:
 	return upstream_name
 
 
-def read_scope(action: GitAction) -> CheckScope:
+def find_ci_base_ref(given_base_ref: str) -> str:
+	"""
+	Return the commit a CI run is compared with: the given one, else origin/main.
+
+	Parameters
+	----------
+	given_base_ref
+		The commit before the push or the base of the pull request. GitHub gives a commit made of zeros, or nothing,
+		when there is none.
+
+	Returns
+	-------
+	str
+		A git reference.
+
+	Examples
+	--------
+	>>> find_ci_base_ref("93c40c3"), find_ci_base_ref("0000000"), find_ci_base_ref("")
+	('93c40c3', 'origin/main', 'origin/main')
+	"""
+	stripped_base_ref = given_base_ref.strip(MISSING_COMMIT_MARK)
+	if stripped_base_ref == "":
+		return DEFAULT_BASE_REF
+
+	return given_base_ref
+
+
+def read_scope(action: GitAction, given_base_ref: str) -> CheckScope:
 	"""
 	Return the files and the lines a git action brings.
 
 	Parameters
 	----------
 	action
-		A commit, which brings the staged changes, or a push, which brings the commits after the remote branch.
+		A commit, which brings the staged changes, a push, which brings the commits after the remote branch, or a CI
+		run, which brings the commits after the given commit.
+	given_base_ref
+		The commit a CI run is compared with, unused by the other actions.
 
 	Returns
 	-------
@@ -140,9 +175,13 @@ def read_scope(action: GitAction) -> CheckScope:
 		The changed Python files and the added lines.
 	"""
 	diff_target = ["--cached"]
-	base_ref = "index"
+	base_ref = INDEX_NAME
 	if action == GitAction.PUSH:
 		base_ref = find_base_ref()
+		diff_target = [f"{base_ref}..HEAD"]
+
+	if action == GitAction.CI:
+		base_ref = find_ci_base_ref(given_base_ref)
 		diff_target = [f"{base_ref}..HEAD"]
 
 	name_output = run_git(["diff", "--name-only", CHANGED_FILTER, *diff_target])
