@@ -64,9 +64,9 @@ uv run --frozen python tools/checks/run_checks.py push
 
 `git commit --no-verify` or `git push --no-verify` skips the hook once.
 
-The CI jobs "Coding style rules" and "Public API documentation" run the same checks on the commits of each push to
-`main` and of each pull request, without the tools the other jobs already run, so a commit made without the hooks is
-checked too. Their problems are also shown on the lines of the commits in GitHub.
+The CI workflow "Style and API documentation", with its jobs "Coding style rules" and "Public API documentation",
+runs the same checks on the commits of each push to `main` and of each pull request, without the tools the workflow
+"Tests" already runs, so a commit made without the hooks is checked too. Their problems are also shown on the lines of the commits in GitHub.
 
 ## Documentation
 

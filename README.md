@@ -4,7 +4,7 @@
 | --- | --- |
 | About | [![Author](https://img.shields.io/badge/author-Ryieru-673ab7?logo=github)](https://github.com/Ryieru) [![License](https://img.shields.io/pypi/l/numdaplot)](https://github.com/Ryieru/numdaplot/blob/main/LICENSE) |
 | Package | [![PyPI version](https://img.shields.io/pypi/v/numdaplot)](https://pypi.org/project/numdaplot/) [![Python versions](https://img.shields.io/pypi/pyversions/numdaplot)](https://pypi.org/project/numdaplot/) [![Typed](https://img.shields.io/badge/typing-typed-blue)](https://peps.python.org/pep-0561/) |
-| Testing | [![CI](https://img.shields.io/github/actions/workflow/status/Ryieru/numdaplot/checks.yml?branch=main&label=CI&logo=github)](https://github.com/Ryieru/numdaplot/actions/workflows/checks.yml) [![Coverage](https://img.shields.io/codecov/c/github/Ryieru/numdaplot?logo=codecov)](https://codecov.io/gh/Ryieru/numdaplot) |
+| Testing | [![CI](https://img.shields.io/github/actions/workflow/status/Ryieru/numdaplot/tests.yml?branch=main&label=CI&logo=github)](https://github.com/Ryieru/numdaplot/actions/workflows/tests.yml) [![Coverage](https://img.shields.io/codecov/c/github/Ryieru/numdaplot?logo=codecov)](https://codecov.io/gh/Ryieru/numdaplot) |
 
 Numdaplot is a typed API for arrays, tables and plots, built on numpy, pandas and matplotlib.
 

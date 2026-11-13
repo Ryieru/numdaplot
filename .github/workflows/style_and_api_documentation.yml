@@ -1,0 +1,38 @@
+name: Style and API documentation
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  style_and_api_documentation:
+    name: ${{ matrix.name }}
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: Coding style rules
+            family: style
+            builds_site: false
+          - name: Public API documentation
+            family: api
+            builds_site: true
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+      - uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # v10.3.3
+        with:
+          version: "0.12.23"
+          python-version: "3.13"
+      - name: Install
+        run: uv sync --frozen --all-extras
+      - name: Documentation
+        if: ${{ matrix.builds_site }}
+        run: uv run --frozen mkdocs build --strict
+      - name: ${{ matrix.name }}
+        run: uv run --frozen python tools/checks/run_checks.py ci ${{ matrix.family }} "$BASE_REF"
+        env:
+          BASE_REF: ${{ github.event.pull_request.base.sha || github.event.before }}
