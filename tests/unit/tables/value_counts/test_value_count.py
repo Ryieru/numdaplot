@@ -45,3 +45,24 @@ def test_value_count_rejects_a_column_that_is_not_a_name() -> None:
 	"""
 	with pytest.raises(InvalidTypeError):
 		ValueCount(column=COLUMN_POSITION)  # pyright: ignore[reportArgumentType]
+
+
+def test_value_count_counts_every_row_once_by_default() -> None:
+	"""
+	Check that no column of weights is set by default.
+
+	.. versionadded:: 0.2.0
+	"""
+	value_count = ValueCount(column=COUNTED_COLUMN)
+
+	assert value_count.weights is None
+
+
+def test_value_count_rejects_an_empty_weights_name() -> None:
+	"""
+	Check that an empty name of weights raises InvalidColumnNameError.
+
+	.. versionadded:: 0.2.0
+	"""
+	with pytest.raises(InvalidColumnNameError):
+		ValueCount(column=COUNTED_COLUMN, weights=EMPTY_COLUMN_NAME)

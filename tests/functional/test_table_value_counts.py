@@ -17,6 +17,17 @@ RATIO_NAME = "value_ratio"
 TIME_COLUMN = "visit_time"
 PARIS_ZONE = "Europe/Paris"
 UNKNOWN_COLUMN = "age"
+WEIGHT_COLUMN = "weight"
+WEIGHTED_RATIO_NAME = "weighted_ratio"
+WEIGHTED_COUNT_NAME = "weighted_count"
+SURVEY_SEXES = [2, 1, 2]
+SURVEY_WEIGHTS = [100.0, 300.0, 100.0]
+EXPECTED_SAMPLE_RATIOS = [2 / 3, 1 / 3]
+EXPECTED_WEIGHTED_SEXES = [1, 2]
+EXPECTED_WEIGHTED_RATIOS = [0.6, 0.4]
+EXPECTED_POPULATION = [300.0, 200.0]
+NEGATIVE_WEIGHTS = [100.0, -300.0, 100.0]
+EXPECTED_NEGATIVE_MESSAGE = "Expected weights of at least 0 in the column 'weight', got -300.0."
 ANSWERS = pandas.DataFrame({SEX_COLUMN: pandas.Series([2, 1, 2, None, 2, 1, 9], dtype="Int64")})
 EXPECTED_PRESENT_SEXES = [2, 1, 9]
 EXPECTED_MISSING_SEXES = [False, False, False, True]
@@ -123,3 +134,80 @@ def test_count_values_rejects_an_unknown_column() -> None:
 
 	with pytest.raises(ndp.ColumnNotFoundError):
 		answers.count_values(ndp.ValueCount(column=UNKNOWN_COLUMN))
+
+
+def build_survey(weights: list[float]) -> ndp.Table:
+	"""
+	Return survey answers with the weight of each person.
+
+	.. versionadded:: 0.2.0
+
+	Parameters
+	----------
+	weights
+		The weight of each answer.
+
+	Returns
+	-------
+	ndp.Table
+		The columns sex and weight.
+	"""
+	sexes = ndp.Array.from_list(SURVEY_SEXES)
+	weight_values = ndp.Array.from_list(weights)
+	survey = ndp.Table.from_arrays({SEX_COLUMN: sexes, WEIGHT_COLUMN: weight_values})
+
+	return survey
+
+
+def test_weighted_shares_estimate_the_population() -> None:
+	"""
+	Check that weights turn the shares of the sample into the shares of the population.
+
+	.. versionadded:: 0.2.0
+	"""
+	survey = build_survey(SURVEY_WEIGHTS)
+	sample_count = ndp.ValueCount(column=SEX_COLUMN, measure=ndp.Measure.RATIO)
+	weighted_count = ndp.ValueCount(column=SEX_COLUMN, measure=ndp.Measure.RATIO, weights=WEIGHT_COLUMN)
+
+	sample_shares = survey.count_values(sample_count)
+	weighted_shares = survey.count_values(weighted_count)
+
+	sample_ratio_values = sample_shares.column(RATIO_NAME)
+	weighted_sex_values = weighted_shares.column(SEX_COLUMN)
+	weighted_ratio_values = weighted_shares.column(WEIGHTED_RATIO_NAME)
+	sample_ratios = sample_ratio_values.to_list()
+	weighted_sexes = weighted_sex_values.to_list()
+	weighted_ratios = weighted_ratio_values.to_list()
+	assert sample_ratios == EXPECTED_SAMPLE_RATIOS
+	assert weighted_sexes == EXPECTED_WEIGHTED_SEXES
+	assert weighted_ratios == EXPECTED_WEIGHTED_RATIOS
+
+
+def test_weighted_counts_sum_the_weights() -> None:
+	"""
+	Check that a weighted count gives the number of people each value stands for.
+
+	.. versionadded:: 0.2.0
+	"""
+	survey = build_survey(SURVEY_WEIGHTS)
+
+	population = survey.count_values(ndp.ValueCount(column=SEX_COLUMN, weights=WEIGHT_COLUMN))
+
+	population_values = population.column(WEIGHTED_COUNT_NAME)
+	population_counts = population_values.to_list()
+	assert population_counts == EXPECTED_POPULATION
+
+
+def test_a_negative_weight_is_named_in_the_error() -> None:
+	"""
+	Check that a negative weight raises InvalidWeightError naming the weight and its column.
+
+	.. versionadded:: 0.2.0
+	"""
+	survey = build_survey(NEGATIVE_WEIGHTS)
+
+	with pytest.raises(ndp.InvalidWeightError) as error_info:
+		survey.count_values(ndp.ValueCount(column=SEX_COLUMN, weights=WEIGHT_COLUMN))
+
+	error_text = str(error_info.value)
+	assert error_text == EXPECTED_NEGATIVE_MESSAGE

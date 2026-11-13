@@ -13,7 +13,7 @@ from numdaplot.errors.column_not_found_error import ColumnNotFoundError
 from numdaplot.errors.duplicate_column_error import DuplicateColumnError
 from numdaplot.ratios.measure import Measure
 from numdaplot.tables.frames.column_values import find_column_type
-from numdaplot.tables.value_counts.counted_values import count_frame_values, order_by_size
+from numdaplot.tables.value_counts.counted_values import count_frame_values, measure_groups, order_by_size
 from numdaplot.tables.value_counts.value_count import ValueCount
 
 CODE_COLUMN = "code"
@@ -32,6 +32,24 @@ GROUP_SIZES = numpy.array([1, 3, 1, 5], dtype=numpy.int64)
 EXPECTED_ORDER_WITH_MISSING_GROUP = [1, 0, 2, 3]
 EXPECTED_ORDER_WITHOUT_MISSING_GROUP = [3, 1, 0, 2]
 NO_GROUP_SIZES = numpy.array([], dtype=numpy.int64)
+WEIGHT_COLUMN = "weight"
+WEIGHTED_COUNT_NAME = "weighted_count"
+WEIGHTED_RATIO_NAME = "weighted_ratio"
+WEIGHTED_FRAME = pandas.DataFrame(
+	{
+		CODE_COLUMN: pandas.Series([2, 1, 2, 9], dtype="Int64"),
+		WEIGHT_COLUMN: [100.0, 300.0, 100.0, None],
+	}
+)
+EXPECTED_WEIGHTED_CODES = [1, 2]
+EXPECTED_WEIGHTED_NAMES = [CODE_COLUMN, WEIGHTED_COUNT_NAME]
+EXPECTED_WEIGHTED_COUNTS = [300.0, 200.0]
+EXPECTED_WEIGHTED_RATIOS = [0.6, 0.4]
+ZERO_WEIGHT_FRAME = pandas.DataFrame({CODE_COLUMN: [1, 2], WEIGHT_COLUMN: [0.0, 0.0]})
+ROW_GROUPS = [numpy.array([0, 2]), numpy.array([1])]
+GROUP_WEIGHTS = numpy.array([100.0, 300.0, 50.0])
+EXPECTED_GROUP_SIZES = [2, 1]
+EXPECTED_GROUP_WEIGHTS = [150.0, 300.0]
 
 
 def test_count_frame_values_goes_from_the_most_frequent_value_to_the_missing_value() -> None:
@@ -165,3 +183,78 @@ def test_order_by_size_gives_no_group_without_group() -> None:
 
 	group_count = len(group_order)
 	assert group_count == 0
+
+
+def test_count_frame_values_sums_the_weights_of_each_value() -> None:
+	"""
+	Check that weights give the sum of the weights of each value, the largest first, rows without weight left out.
+
+	.. versionadded:: 0.2.0
+	"""
+	value_count = ValueCount(column=CODE_COLUMN, weights=WEIGHT_COLUMN)
+
+	counted_frame = count_frame_values(WEIGHTED_FRAME, value_count)
+
+	column_names = counted_frame.columns.tolist()
+	code_column = counted_frame[CODE_COLUMN]
+	count_column = counted_frame[WEIGHTED_COUNT_NAME]
+	codes = code_column.tolist()
+	weighted_counts = count_column.tolist()
+	assert column_names == EXPECTED_WEIGHTED_NAMES
+	assert codes == EXPECTED_WEIGHTED_CODES
+	assert weighted_counts == EXPECTED_WEIGHTED_COUNTS
+
+
+def test_count_frame_values_divides_by_the_sum_of_the_weights() -> None:
+	"""
+	Check that weighted ratios divide by the sum of the weights of the rows that count.
+
+	.. versionadded:: 0.2.0
+	"""
+	value_count = ValueCount(column=CODE_COLUMN, measure=Measure.RATIO, weights=WEIGHT_COLUMN)
+
+	counted_frame = count_frame_values(WEIGHTED_FRAME, value_count)
+
+	ratio_column = counted_frame[WEIGHTED_RATIO_NAME]
+	weighted_ratios = ratio_column.tolist()
+	assert weighted_ratios == EXPECTED_WEIGHTED_RATIOS
+
+
+def test_count_frame_values_gives_no_ratio_when_every_weight_is_zero() -> None:
+	"""
+	Check that weights summing to 0 give missing ratios.
+
+	.. versionadded:: 0.2.0
+	"""
+	value_count = ValueCount(column=CODE_COLUMN, measure=Measure.RATIO, weights=WEIGHT_COLUMN)
+
+	counted_frame = count_frame_values(ZERO_WEIGHT_FRAME, value_count)
+
+	ratio_column = counted_frame[WEIGHTED_RATIO_NAME]
+	missing_ratios = ratio_column.isna()
+	all_missing = bool(missing_ratios.all())
+	assert all_missing
+
+
+def test_measure_groups_counts_the_rows_without_weights() -> None:
+	"""
+	Check that each group measures its number of rows without weights.
+
+	.. versionadded:: 0.2.0
+	"""
+	group_sizes = measure_groups(ROW_GROUPS, None)
+
+	size_list = group_sizes.tolist()
+	assert size_list == EXPECTED_GROUP_SIZES
+
+
+def test_measure_groups_sums_the_weights_of_each_group() -> None:
+	"""
+	Check that each group measures the sum of the weights of its rows.
+
+	.. versionadded:: 0.2.0
+	"""
+	group_sizes = measure_groups(ROW_GROUPS, GROUP_WEIGHTS)
+
+	size_list = group_sizes.tolist()
+	assert size_list == EXPECTED_GROUP_WEIGHTS

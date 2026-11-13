@@ -15,7 +15,9 @@ and numdaplot follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 - `Array.convert` changes the type of the values of an Array with an `ArrayConversion`, as `Table.convert` does
   for columns.
 - `Table.count_values` gives how many rows hold each value of a column with a `ValueCount`, as a number or,
-  with `Measure.RATIO`, as a fraction of every row, from the most frequent value to the least frequent.
+  with `Measure.RATIO`, as a fraction of every row, from the most frequent value to the least frequent. With
+  `ValueCount(weights="weight")`, each row counts as much as its weight, such as the weights of a survey, and a
+  negative weight raises `InvalidWeightError`.
 - `Share` gives the fraction of the values satisfying a rule, of an Array or of each group in `aggregate`,
   `pivot_table` and `describe`, without the missing values unless `missing=CountedMissing.INCLUDED`.
 - `Aggregation(row_count=...)` adds the number of rows of each group, without choosing a column, right after the

@@ -184,28 +184,36 @@ class TableCalculation(TableData):
 		"""
 		Return how many rows hold each value of a column, as a number or as a fraction of every row.
 
+		With ``weights``, each row counts as much as its weight, such as the people of a population a survey answer
+		stands for.
+
 		.. versionadded:: 0.2.0
 
 		Parameters
 		----------
 		value_count
-			The counted column, and the measure: a number of rows by default.
+			The counted column, the measure, a number of rows by default, and the column of weights.
 
 		Returns
 		-------
 		Self
 			A new Table: the counted column holding each value once, then ``value_count``, or ``value_ratio`` for
-			``Measure.RATIO``. Rows go from the most frequent value to the least frequent, values with the same
-			count sorted by value. The missing value has a row of its own, last, so the ratios add up to 1.
+			``Measure.RATIO``, or with weights ``weighted_count`` or ``weighted_ratio``. Rows go from the most
+			frequent value to the least frequent, values with the same count sorted by value. The missing value has
+			a row of its own, last, so the ratios add up to 1.
 
 		Raises
 		------
 		InvalidTypeError
 			When an argument is not of the type its annotation names.
 		ColumnNotFoundError
-			When the counted column does not exist.
+			When the counted column or the column of weights does not exist.
 		DuplicateColumnError
-			When the counted column is named ``value_count`` or ``value_ratio``, like the measure column.
+			When the counted column is named like the measure column, such as ``value_count``.
+		IncompatibleTypesError
+			When the column of weights does not hold numbers.
+		InvalidWeightError
+			When a weight is negative.
 
 		Examples
 		--------

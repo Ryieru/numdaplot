@@ -107,6 +107,7 @@ from numdaplot.errors.invalid_step_error import InvalidStepError
 from numdaplot.errors.invalid_suffixes_error import InvalidSuffixesError
 from numdaplot.errors.invalid_time_zone_change_error import InvalidTimeZoneChangeError
 from numdaplot.errors.invalid_type_error import InvalidTypeError
+from numdaplot.errors.invalid_weight_error import InvalidWeightError
 from numdaplot.errors.irregular_list_error import IrregularListError
 from numdaplot.errors.join_relation_error import JoinRelationError
 from numdaplot.errors.missing_dependency_error import MissingDependencyError
@@ -374,6 +375,7 @@ __all__ = [
 	"InvalidSuffixesError",
 	"InvalidTimeZoneChangeError",
 	"InvalidTypeError",
+	"InvalidWeightError",
 	"IrregularListError",
 	"IsIn",
 	"IsMissing",
