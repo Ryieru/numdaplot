@@ -72,6 +72,7 @@ and numdaplot follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
   `Table.join` included, in sections that follow the code: the same notion has the same title on every page, such
   as Calculation and Layout.
 - The documentation links each object to its source on GitHub instead of showing the code.
+- The documentation groups the errors and warnings by notion, such as File errors, Type errors and Plot errors.
 - The advice of `ValueConversionError` and `InvalidConversionError` about formats speaks of the values, which fits an
   Array as well as a column.
 - Each member of `Type` gives the rules of its type with examples, such as the type of a sum or of a division, and
