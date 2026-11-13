@@ -14,11 +14,11 @@ from typing import Any, cast
 import numpy
 from numpy.typing import NDArray
 
+from numdaplot.argument_checks.unique_labels import require_unique_labels
 from numdaplot.plots.charts.bar_chart import BarChart
 from numdaplot.plots.data.chart_values import ChartValues, Positions, Series
 from numdaplot.plots.data.point_values import PointValues
 from numdaplot.plots.data.position_kind import PositionKind
-from numdaplot.plots.data.unique_labels import require_unique_labels
 from numdaplot.plots.drawing.axes.position_axis import write_position_labels
 from numdaplot.plots.layers.chart_layer import ChartLayer
 

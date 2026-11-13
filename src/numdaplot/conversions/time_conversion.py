@@ -14,6 +14,7 @@ from numdaplot.column_storage.column_values import find_column_missing, find_col
 from numdaplot.column_storage.frame_normalization import convert_to_type
 from numdaplot.column_storage.time_columns import write_time_texts_column
 from numdaplot.column_storage.time_zones import find_column_time_zone
+from numdaplot.conversions.unread_texts import find_first_unread_text
 from numdaplot.dates.custom_date_format import CustomDateFormat
 from numdaplot.errors.types.value_conversion_error import ValueConversionError
 from numdaplot.types.time_of_day import TIME_DTYPE
@@ -74,13 +75,8 @@ def parse_times(column: Column, time_format: CustomDateFormat | None) -> Column:
 	stripped_texts = text_column.str.strip()
 	times = read_times(stripped_texts, time_format)
 	missing = find_column_missing(column)
-	unread_times = times.isna()
-	unread = unread_times.to_numpy(dtype=numpy.bool_)
-	rejected = unread & ~missing
-	has_rejected = bool(rejected.any())
-	if has_rejected:
-		rejected_texts = text_column[rejected]
-		first_rejected_text = rejected_texts.iloc[0]
+	first_rejected_text = find_first_unread_text(text_column, times, missing)
+	if first_rejected_text is not None:
 		format_name = find_time_format_name(time_format)
 		raise ValueConversionError(source_type.name, Type.TIME.name, first_rejected_text, format_name)
 

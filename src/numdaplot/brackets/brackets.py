@@ -7,11 +7,11 @@ Brackets cutting a number column into categories.
 from dataclasses import dataclass
 
 from numdaplot.argument_checks.field_types import require_field_types
+from numdaplot.argument_checks.unique_labels import require_unique_labels
 from numdaplot.brackets.bracket_end import BracketEnd
 from numdaplot.brackets.unmatched import Unmatched
 from numdaplot.errors.brackets.invalid_label_count_error import InvalidLabelCountError
 from numdaplot.errors.brackets.invalid_limits_error import InvalidLimitsError
-from numdaplot.errors.plots.duplicate_label_error import DuplicateLabelError
 from numdaplot.errors.settings.empty_list_error import EmptyListError
 from numdaplot.errors.settings.refused_setting_error import RefusedSettingError
 from numdaplot.rules.bounds import Bounds
@@ -235,9 +235,4 @@ def require_bracket_labels(labels: list[str], bracket_count: int) -> None:
 	if label_count != bracket_count:
 		raise InvalidLabelCountError(bracket_count, label_count)
 
-	seen_labels = set[str]()
-	for label in labels:
-		if label in seen_labels:
-			raise DuplicateLabelError(label)
-
-		seen_labels.add(label)
+	require_unique_labels(labels)

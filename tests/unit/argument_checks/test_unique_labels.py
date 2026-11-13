@@ -6,8 +6,8 @@ Unit tests of the check that the values of a chart have different labels.
 
 import pytest
 
+from numdaplot.argument_checks.unique_labels import require_unique_labels
 from numdaplot.errors.plots.duplicate_label_error import DuplicateLabelError
-from numdaplot.plots.data.unique_labels import require_unique_labels
 
 UNIQUE_LABELS = ["Paris", "Lyon", "Pau"]
 REPEATED_LABELS = ["Paris", "Lyon", "Paris", "Lyon"]

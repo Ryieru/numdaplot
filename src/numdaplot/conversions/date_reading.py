@@ -14,6 +14,7 @@ from numdaplot.column_storage.column_values import find_column_missing, find_col
 from numdaplot.column_storage.frame_normalization import convert_to_type
 from numdaplot.conversions.date_formats import DEFAULT_READ_PATTERNS, READ_PATTERNS, find_format_name, find_read_format
 from numdaplot.conversions.date_range import is_text_out_of_range
+from numdaplot.conversions.unread_texts import find_first_unread_text
 from numdaplot.dates.custom_date_format import CustomDateFormat
 from numdaplot.dates.date_format import DateFormat
 from numdaplot.errors.dates.time_overflow_error import TimeOverflowError
@@ -75,13 +76,8 @@ def parse_dates(column: Column, target_type: Type, date_format: DateFormat | Cus
 	stripped_texts = text_column.str.strip()
 	moments = read_moments(stripped_texts, target_type, date_format)
 	missing = find_column_missing(column)
-	unread_moments = moments.isna()
-	unread = unread_moments.to_numpy(dtype=numpy.bool_)
-	rejected = unread & ~missing
-	has_rejected = bool(rejected.any())
-	if has_rejected:
-		rejected_texts = text_column[rejected]
-		first_rejected_text = rejected_texts.iloc[0]
+	first_rejected_text = find_first_unread_text(text_column, moments, missing)
+	if first_rejected_text is not None:
 		read_format = find_read_format(target_type, date_format)
 		is_out_of_range = is_text_out_of_range(first_rejected_text, read_format)
 		if is_out_of_range:

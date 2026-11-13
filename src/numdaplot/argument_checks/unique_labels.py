@@ -1,5 +1,5 @@
 """
-Check that the values of a chart have different labels.
+Check that labels are all different, such as the slices of a PieChart or the brackets of Brackets.
 
 .. versionadded:: 0.1.0
 """
@@ -11,7 +11,7 @@ from numdaplot.errors.plots.duplicate_label_error import DuplicateLabelError
 
 def require_unique_labels(labels: Iterable[str]) -> None:
 	"""
-	Check that every value of a chart has its own label, such as the slices of a PieChart.
+	Check that every labeled value has its own label, such as the slices of a PieChart or the brackets of Brackets.
 
 	.. versionadded:: 0.1.0
 
@@ -29,7 +29,7 @@ def require_unique_labels(labels: Iterable[str]) -> None:
 	--------
 	>>> import numpy
 	>>> import numdaplot as ndp
-	>>> from numdaplot.plots.data.unique_labels import require_unique_labels
+	>>> from numdaplot.argument_checks.unique_labels import require_unique_labels
 	>>> try:
 	... 	require_unique_labels(numpy.array(["Paris", "Lyon", "Paris"], dtype=object))
 	... except ndp.DuplicateLabelError as error:
