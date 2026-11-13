@@ -16,7 +16,7 @@ from numpy.typing import NDArray
 from numdaplot.arrays import array_selection
 from numdaplot.arrays.array_data import read_stored_values
 from numdaplot.arrays.array_selection import ArraySelection
-from numdaplot.arrays.replacement import Replacement
+from numdaplot.arrays.selection.replacement import Replacement
 from numdaplot.positions.index import Index
 from numdaplot.positions.region import Region
 from numdaplot.rules.greater import Greater

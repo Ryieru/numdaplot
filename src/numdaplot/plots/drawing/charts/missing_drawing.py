@@ -16,7 +16,6 @@ from matplotlib.container import BarContainer
 from matplotlib.patches import Rectangle
 
 from numdaplot.measures.measure import Measure
-from numdaplot.plots.chart_layer import ChartLayer
 from numdaplot.plots.charts.bar_chart import BarChart
 from numdaplot.plots.charts.missing_chart import MissingChart
 from numdaplot.plots.data.chart_values import ChartValues
@@ -36,6 +35,7 @@ from numdaplot.plots.drawing.drawn_chart import DrawnChart
 from numdaplot.plots.drawing.labels.bar_value_labels import BAR_LABEL_FONT_SIZE, BAR_LABEL_PADDING
 from numdaplot.plots.drawing.labels.default_labels import COLUMN_LABEL, ROW_LABEL
 from numdaplot.plots.drawing.plot_theme import GRID_COLOR
+from numdaplot.plots.layers.chart_layer import ChartLayer
 
 MISSING_COLOR = "#33415c"
 PRESENT_COLOR = GRID_COLOR
@@ -87,7 +87,7 @@ def draw_missing_chart(axes: Axes, layer: ChartLayer) -> DrawnChart:
 	--------
 	>>> import numdaplot as ndp
 	>>> from matplotlib.figure import Figure
-	>>> from numdaplot.plots.chart_layer import ChartLayer
+	>>> from numdaplot.plots.layers.chart_layer import ChartLayer
 	>>> from numdaplot.plots.data.missing_cells import read_missing_counts
 	>>> from numdaplot.plots.drawing.charts.missing_drawing import draw_missing_chart
 	>>> prices = ndp.Array.from_list([12.0, None])
@@ -146,7 +146,7 @@ def write_bar_labels(axes: Axes, values: MissingCounts) -> float:
 	--------
 	>>> import numdaplot as ndp
 	>>> from matplotlib.figure import Figure
-	>>> from numdaplot.plots.chart_layer import ChartLayer
+	>>> from numdaplot.plots.layers.chart_layer import ChartLayer
 	>>> from numdaplot.plots.data.missing_cells import read_missing_counts
 	>>> from numdaplot.plots.drawing.charts.bar_drawing import draw_bar_chart
 	>>> from numdaplot.plots.drawing.charts.missing_drawing import write_bar_labels
@@ -286,7 +286,7 @@ def draw_missing_map(axes: Axes, layer: ChartLayer) -> DrawnChart:
 	--------
 	>>> import numdaplot as ndp
 	>>> from matplotlib.figure import Figure
-	>>> from numdaplot.plots.chart_layer import ChartLayer
+	>>> from numdaplot.plots.layers.chart_layer import ChartLayer
 	>>> from numdaplot.plots.charts.missing_map_chart import MissingMapChart
 	>>> from numdaplot.plots.data.missing_cells import read_missing_cells
 	>>> from numdaplot.plots.drawing.charts.missing_drawing import draw_missing_map

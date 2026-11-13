@@ -43,7 +43,7 @@ def find_numpy_axis(axis: Axis | None, dimension_count: int) -> int | None:
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> from numdaplot.arrays.axis_number import find_numpy_axis
+	>>> from numdaplot.positions.axis_number import find_numpy_axis
 	>>> find_numpy_axis(ndp.Axis.EACH_COLUMN, 2)
 	0
 	"""

@@ -10,7 +10,7 @@ import numpy
 from numpy.typing import NDArray
 
 from numdaplot.arrays.array_data import ArrayData, read_stored_values
-from numdaplot.arrays.conversion.python_values import to_python_list
+from numdaplot.arrays.export.python_values import to_python_list
 from numdaplot.arrays.operations.type_requirements import require_comparable
 from numdaplot.arrays.rules.array_reference import compare_with_array
 from numdaplot.arrays.rules.time_reference import compare_with_reference

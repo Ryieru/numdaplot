@@ -16,7 +16,6 @@ from matplotlib.patches import Rectangle
 from numpy.typing import NDArray
 
 import numdaplot as ndp
-from numdaplot.plots.chart_layer import ChartLayer
 from numdaplot.plots.charts.missing_map_chart import MissingMapChart
 from numdaplot.plots.data.missing_cells import read_missing_cells, read_missing_counts
 from numdaplot.plots.drawing.axes.grid_axes import GridAxes
@@ -29,6 +28,7 @@ from numdaplot.plots.drawing.charts.missing_drawing import (
 	find_axis_top,
 	format_bar_labels,
 )
+from numdaplot.plots.layers.chart_layer import ChartLayer
 
 FLATS_FRAME = pandas.DataFrame(
 	{

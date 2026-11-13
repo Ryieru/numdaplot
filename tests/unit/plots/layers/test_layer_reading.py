@@ -8,7 +8,7 @@ import pytest
 
 import numdaplot as ndp
 from numdaplot.plots.data.sample_values import read_sample_values
-from numdaplot.plots.layer_reading import build_series_layer, read_bar_layer, read_line_layer, read_scatter_layer
+from numdaplot.plots.layers.layer_reading import build_series_layer, read_bar_layer, read_line_layer, read_scatter_layer
 
 DAYS = ndp.Array.from_list([1, 2, 3])
 PRICES = ndp.Array.from_list([12.0, 15.5, 14.0])

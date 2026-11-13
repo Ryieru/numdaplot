@@ -9,8 +9,8 @@ from typing import Any
 import numpy
 from numpy.typing import NDArray
 
+from numdaplot.arrays.equality.type_match import TypeMatch
 from numdaplot.arrays.selection.missing_mask import find_missing
-from numdaplot.arrays.type_match import TypeMatch
 from numdaplot.types.numpy_mapping import from_numpy_dtype
 from numdaplot.types.type import Type
 from numdaplot.types.value_family import find_family
@@ -39,7 +39,7 @@ def match_types(left_type: Type, right_type: Type, types: TypeMatch) -> bool:
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> from numdaplot.arrays.conversion.equality_check import match_types
+	>>> from numdaplot.arrays.equality.equality_check import match_types
 	>>> match_types(ndp.Type.INT64, ndp.Type.FLOAT64, ndp.TypeMatch.IGNORED)
 	True
 	>>> match_types(ndp.Type.INT64, ndp.Type.FLOAT64, ndp.TypeMatch.STRICT)
@@ -84,7 +84,7 @@ def are_equal(left: NDArray[Any], right: NDArray[Any], types: TypeMatch) -> bool
 	--------
 	>>> import numpy
 	>>> import numdaplot as ndp
-	>>> from numdaplot.arrays.conversion.equality_check import are_equal
+	>>> from numdaplot.arrays.equality.equality_check import are_equal
 	>>> are_equal(numpy.array([1, 2]), numpy.array([1.0, 2.0]), ndp.TypeMatch.IGNORED)
 	True
 	"""

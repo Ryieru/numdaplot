@@ -5,7 +5,7 @@ Display of an Array: its text.
 """
 
 from numdaplot.arrays.array_data import ArrayData
-from numdaplot.arrays.conversion.array_text import format_array
+from numdaplot.arrays.export.array_text import format_array
 
 
 class ArrayDisplay(ArrayData):

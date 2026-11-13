@@ -41,7 +41,7 @@ def format_array(values: NDArray[Any]) -> str:
 	Examples
 	--------
 	>>> import numpy
-	>>> from numdaplot.arrays.conversion.array_text import format_array
+	>>> from numdaplot.arrays.export.array_text import format_array
 	>>> format_array(numpy.array([1, 2, 3]))
 	'Array([1, 2, 3], dtype=INT64)'
 	"""

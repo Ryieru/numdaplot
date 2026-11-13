@@ -11,7 +11,6 @@ from typing import cast
 
 from matplotlib.axes import Axes
 
-from numdaplot.plots.chart_layer import ChartLayer
 from numdaplot.plots.charts.line_chart import LineChart
 from numdaplot.plots.charts.line_type import LineType
 from numdaplot.plots.data.chart_values import ChartValues
@@ -22,6 +21,7 @@ from numdaplot.plots.drawing.colors.colored_parts import ColoredParts
 from numdaplot.plots.drawing.colors.series_colors import choose_series_colors
 from numdaplot.plots.drawing.drawn_chart import DrawnChart
 from numdaplot.plots.drawing.labels.default_labels import find_position_label, find_value_label
+from numdaplot.plots.layers.chart_layer import ChartLayer
 
 CHART_NAME = "LineChart"
 LINE_STYLES = {
@@ -61,7 +61,7 @@ def draw_line_chart(axes: Axes, layer: ChartLayer) -> DrawnChart:
 	--------
 	>>> import numdaplot as ndp
 	>>> from matplotlib.figure import Figure
-	>>> from numdaplot.plots.chart_layer import ChartLayer
+	>>> from numdaplot.plots.layers.chart_layer import ChartLayer
 	>>> from numdaplot.plots.data.array_values import read_array_values
 	>>> from numdaplot.plots.drawing.charts.line_drawing import draw_line_chart
 	>>> prices = ndp.Array.from_list([12.0, 15.5])

@@ -18,7 +18,6 @@ from numpy.typing import NDArray
 
 from numdaplot.arrays.operations.float_errors import INTERNAL_FILES
 from numdaplot.errors.readability_warning import ReadabilityWarning
-from numdaplot.plots.chart_layer import ChartLayer
 from numdaplot.plots.charts.cell_values import CellValues
 from numdaplot.plots.charts.heatmap_chart import HeatmapChart
 from numdaplot.plots.data.chart_values import ChartValues, Series
@@ -31,6 +30,7 @@ from numdaplot.plots.drawing.colors.text_contrast import choose_text_color
 from numdaplot.plots.drawing.drawn_chart import DrawnChart
 from numdaplot.plots.drawing.labels.default_labels import COLUMN_LABEL, find_position_label
 from numdaplot.plots.drawing.plot_theme import GRID_COLOR
+from numdaplot.plots.layers.chart_layer import ChartLayer
 
 CELL_DECIMALS = 2
 CELL_ASPECT = "auto"
@@ -73,7 +73,7 @@ def draw_heatmap_chart(axes: Axes, layer: ChartLayer) -> DrawnChart:
 	--------
 	>>> import numdaplot as ndp
 	>>> from matplotlib.figure import Figure
-	>>> from numdaplot.plots.chart_layer import ChartLayer
+	>>> from numdaplot.plots.layers.chart_layer import ChartLayer
 	>>> from numdaplot.plots.data.array_values import read_array_values
 	>>> from numdaplot.plots.drawing.charts.heatmap_drawing import draw_heatmap_chart
 	>>> grid = ndp.Array.from_list([[1.0, 2.0], [3.0, None]])

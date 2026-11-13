@@ -10,8 +10,8 @@ from typing import Any, cast
 
 from numpy.typing import NDArray
 
-from numdaplot.arrays.conversion.python_values import to_python_list
 from numdaplot.arrays.creation.list_conversion import convert_list
+from numdaplot.arrays.export.python_values import to_python_list
 from numdaplot.arrays.mapping.mapping_result import MappingResult
 from numdaplot.arrays.mapping.value_mapping import MAPPING_OPERATION, ValueMapping, find_new_type
 from numdaplot.arrays.operations.type_requirements import require_comparable

@@ -6,7 +6,7 @@ Unit tests of format_array.
 
 import numpy
 
-from numdaplot.arrays.conversion.array_text import format_array
+from numdaplot.arrays.export.array_text import format_array
 
 LINE = [1, 2, 3]
 EXPECTED_LINE_TEXT = "Array([1, 2, 3], dtype=INT64)"

@@ -5,7 +5,7 @@ Unit tests of Replacement.
 """
 
 from numdaplot.arrays.array import Array
-from numdaplot.arrays.replacement import Replacement
+from numdaplot.arrays.selection.replacement import Replacement
 from numdaplot.positions.index import Index
 from numdaplot.positions.region import Region
 

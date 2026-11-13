@@ -10,7 +10,6 @@ import pytest
 import numdaplot as ndp
 from numdaplot.errors.column_not_found_error import ColumnNotFoundError
 from numdaplot.errors.duplicate_column_error import DuplicateColumnError
-from numdaplot.plots.chart_layer import ChartLayer
 from numdaplot.plots.data.chart_values import Series
 from numdaplot.plots.data.missing_cells import read_missing_counts
 from numdaplot.plots.data.point_values import PointValues
@@ -24,6 +23,7 @@ from numdaplot.plots.data.shown_columns import (
 	require_renamed_columns_shown,
 )
 from numdaplot.plots.data.table_values import read_table_values
+from numdaplot.plots.layers.chart_layer import ChartLayer
 
 DAYS = ndp.Array.from_list([1, 2])
 PRICES = ndp.Array.from_list([12.0, None])

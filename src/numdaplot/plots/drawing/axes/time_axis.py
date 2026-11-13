@@ -12,8 +12,8 @@ from matplotlib.axis import Axis
 from matplotlib.ticker import FuncFormatter, MultipleLocator
 from numpy.typing import NDArray
 
-from numdaplot.plots.chart_layer import ChartLayer
 from numdaplot.plots.data.chart_values import ChartValues
+from numdaplot.plots.layers.chart_layer import ChartLayer
 from numdaplot.types.type import Type
 from numdaplot.types.value_family import ValueFamily, find_family
 
@@ -182,7 +182,7 @@ def place_value_hours(axes: Axes, layers: list[ChartLayer]) -> None:
 	>>> from datetime import time
 	>>> from matplotlib.figure import Figure
 	>>> import numdaplot as ndp
-	>>> from numdaplot.plots.chart_layer import ChartLayer
+	>>> from numdaplot.plots.layers.chart_layer import ChartLayer
 	>>> from numdaplot.plots.data.array_values import read_array_values
 	>>> from numdaplot.plots.drawing.axes.time_axis import place_value_hours
 	>>> hours = ndp.Array.from_list([time(8), time(14)])

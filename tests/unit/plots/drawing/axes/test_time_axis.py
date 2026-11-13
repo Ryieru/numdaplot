@@ -12,7 +12,6 @@ from matplotlib.figure import Figure
 from numpy.typing import NDArray
 
 import numdaplot as ndp
-from numdaplot.plots.chart_layer import ChartLayer
 from numdaplot.plots.data.array_values import read_array_values
 from numdaplot.plots.data.sample_values import read_sample_values
 from numdaplot.plots.drawing.axes.time_axis import (
@@ -22,6 +21,7 @@ from numdaplot.plots.drawing.axes.time_axis import (
 	place_hour_ticks,
 	place_value_hours,
 )
+from numdaplot.plots.layers.chart_layer import ChartLayer
 
 DAY_HOURS = numpy.array([8.0, 23.0])
 HALF_HOUR = numpy.array([8.0, 8.5])

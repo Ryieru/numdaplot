@@ -9,10 +9,10 @@ from typing import Never, Self
 from matplotlib.figure import FigureBase
 
 from numdaplot.errors.refused_operation_error import RefusedOperationError
-from numdaplot.plots.chart_layer import ChartLayer
 from numdaplot.plots.data.shown_columns import require_distinct_shown_names
 from numdaplot.plots.drawing.plot_drawing import FigureDrawing, draw_plot
 from numdaplot.plots.drawing.size_inches import convert_size_to_inches
+from numdaplot.plots.layers.chart_layer import ChartLayer
 from numdaplot.plots.style.plot_style import PlotStyle
 
 CONSTRUCTOR_OPERATION = "Creating a Plot with ndp.Plot(...)"

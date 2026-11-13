@@ -9,14 +9,14 @@ from typing import Self
 
 from numdaplot.argument_checks.argument_types import checked_arguments
 from numdaplot.arrays.array import Array
-from numdaplot.plots.chart_layer import ChartLayer
 from numdaplot.plots.charts.bar_chart import BarChart
 from numdaplot.plots.charts.line_chart import LineChart
 from numdaplot.plots.charts.scatter_chart import ScatterChart
 from numdaplot.plots.charts.value_axis import ValueAxis
 from numdaplot.plots.drawing.layer_alignment import align_layers
-from numdaplot.plots.layer_reading import read_bar_layer, read_line_layer, read_scatter_layer
-from numdaplot.plots.overlay_checks import (
+from numdaplot.plots.layers.chart_layer import ChartLayer
+from numdaplot.plots.layers.layer_reading import read_bar_layer, read_line_layer, read_scatter_layer
+from numdaplot.plots.layers.overlay_checks import (
 	require_overlay_base,
 	require_same_positions,
 	require_same_values,

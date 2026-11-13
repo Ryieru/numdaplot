@@ -13,11 +13,11 @@ from matplotlib.figure import Figure
 
 import numdaplot as ndp
 from numdaplot.errors.invalid_color_count_error import InvalidColorCountError
-from numdaplot.plots.chart_layer import ChartLayer
 from numdaplot.plots.data.array_values import read_array_values
 from numdaplot.plots.data.point_values import read_point_values
 from numdaplot.plots.data.table_values import read_table_values
 from numdaplot.plots.drawing.charts.scatter_drawing import choose_areas, draw_scatter_chart, order_color_groups
+from numdaplot.plots.layers.chart_layer import ChartLayer
 
 SURFACES = ndp.Array.from_list([30.0, 45.0, 60.0])
 PRICES = ndp.Array.from_list([150.0, 210.0, 260.0])

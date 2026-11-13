@@ -11,7 +11,6 @@ import pandas
 import pytest
 
 import numdaplot as ndp
-from numdaplot.plots.chart_layer import ChartLayer
 from numdaplot.plots.data.array_values import read_array_values
 from numdaplot.plots.data.chart_values import ChartValues
 from numdaplot.plots.data.point_values import PointValues, read_point_values
@@ -26,6 +25,7 @@ from numdaplot.plots.drawing.layer_alignment import (
 	pick_values,
 	write_layer_labels,
 )
+from numdaplot.plots.layers.chart_layer import ChartLayer
 
 SALES = ndp.Table.from_arrays(
 	{"city": ndp.Array.from_list(["Paris", "Lyon"]), "sales": ndp.Array.from_list([120.0, 80.0])}

@@ -10,8 +10,8 @@ Unit tests of the charts and the style stored by a Plot.
 import pytest
 
 import numdaplot as ndp
-from numdaplot.plots.chart_layer import ChartLayer
 from numdaplot.plots.data.array_values import read_array_values
+from numdaplot.plots.layers.chart_layer import ChartLayer
 from numdaplot.plots.plot import Plot
 
 PRICES = ndp.Array.from_list([12.0, 15.5, 14.0])

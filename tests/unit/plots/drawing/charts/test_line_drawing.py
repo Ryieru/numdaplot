@@ -11,10 +11,10 @@ import numpy
 from matplotlib.figure import Figure
 
 import numdaplot as ndp
-from numdaplot.plots.chart_layer import ChartLayer
 from numdaplot.plots.data.table_values import read_table_values
 from numdaplot.plots.drawing.axes.grid_axes import GridAxes
 from numdaplot.plots.drawing.charts.line_drawing import draw_line_chart
+from numdaplot.plots.layers.chart_layer import ChartLayer
 
 DAYS = ndp.Array.from_list([1, 2, 3])
 PRICES = ndp.Array.from_list([12.0, 15.5, 14.0])

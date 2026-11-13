@@ -34,7 +34,7 @@ class ChartLayer:
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> from numdaplot.plots.chart_layer import ChartLayer
+	>>> from numdaplot.plots.layers.chart_layer import ChartLayer
 	>>> from numdaplot.plots.data.array_values import read_array_values
 	>>> prices = ndp.Array.from_list([12.0, 15.5])
 	>>> ChartLayer(ndp.LineChart(), read_array_values(prices, "LineChart")).points is None

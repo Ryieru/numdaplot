@@ -7,8 +7,8 @@ Comparison of the columns of two Tables.
 import numpy
 import pandas
 
-from numdaplot.arrays.conversion.equality_check import match_types
-from numdaplot.arrays.type_match import TypeMatch
+from numdaplot.arrays.equality.equality_check import match_types
+from numdaplot.arrays.equality.type_match import TypeMatch
 from numdaplot.column_storage.column import Column
 from numdaplot.column_storage.column_values import find_column_missing, find_column_type, read_present_values
 from numdaplot.column_storage.time_zones import find_column_time_zone

@@ -8,7 +8,6 @@ from typing import cast
 
 from numdaplot.errors.incompatible_charts_error import IncompatibleChartsError
 from numdaplot.errors.refused_setting_error import RefusedSettingError
-from numdaplot.plots.chart_layer import ChartLayer
 from numdaplot.plots.charts.bar_chart import BarChart
 from numdaplot.plots.charts.chart import Chart
 from numdaplot.plots.charts.line_chart import LineChart
@@ -17,6 +16,7 @@ from numdaplot.plots.charts.scatter_chart import ScatterChart
 from numdaplot.plots.charts.value_axis import ValueAxis
 from numdaplot.plots.data.chart_values import ChartValues
 from numdaplot.plots.data.position_kind import PositionKind
+from numdaplot.plots.layers.chart_layer import ChartLayer
 from numdaplot.types.value_family import ValueFamily, find_family
 
 OVERLAID_CHARTS = (LineChart, BarChart, ScatterChart)
@@ -61,9 +61,9 @@ def require_overlay_base(first_layer: ChartLayer, method_name: str) -> None:
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> from numdaplot.plots.chart_layer import ChartLayer
+	>>> from numdaplot.plots.layers.chart_layer import ChartLayer
 	>>> from numdaplot.plots.data.sample_values import read_sample_values
-	>>> from numdaplot.plots.overlay_checks import require_overlay_base
+	>>> from numdaplot.plots.layers.overlay_checks import require_overlay_base
 	>>> prices = ndp.Array.from_list([12.0, 15.5])
 	>>> layer = ChartLayer(ndp.BoxChart(), read_sample_values(prices, None, None, "BoxChart"))
 	>>> try:
@@ -104,7 +104,7 @@ def require_vertical_bars(chart: BarChart, method_name: str) -> None:
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> from numdaplot.plots.overlay_checks import require_vertical_bars
+	>>> from numdaplot.plots.layers.overlay_checks import require_vertical_bars
 	>>> try:
 	... 	require_vertical_bars(ndp.BarChart(orientation=ndp.Orientation.HORIZONTAL), "add_bar")
 	... except ndp.RefusedSettingError as error:
@@ -136,9 +136,9 @@ def require_same_positions(first_layer: ChartLayer, added_layer: ChartLayer) -> 
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> from numdaplot.plots.chart_layer import ChartLayer
+	>>> from numdaplot.plots.layers.chart_layer import ChartLayer
 	>>> from numdaplot.plots.data.array_values import read_array_values
-	>>> from numdaplot.plots.overlay_checks import require_same_positions
+	>>> from numdaplot.plots.layers.overlay_checks import require_same_positions
 	>>> prices = ndp.Array.from_list([12.0, 15.5])
 	>>> layer = ChartLayer(ndp.LineChart(), read_array_values(prices, "LineChart"))
 	>>> require_same_positions(layer, layer)
@@ -180,9 +180,9 @@ def require_same_values(layers: list[ChartLayer], added_layer: ChartLayer, axis:
 	--------
 	>>> from datetime import time
 	>>> import numdaplot as ndp
-	>>> from numdaplot.plots.chart_layer import ChartLayer
+	>>> from numdaplot.plots.layers.chart_layer import ChartLayer
 	>>> from numdaplot.plots.data.array_values import read_array_values
-	>>> from numdaplot.plots.overlay_checks import require_same_values
+	>>> from numdaplot.plots.layers.overlay_checks import require_same_values
 	>>> counts = ndp.Array.from_list([3.0, 5.0])
 	>>> hours = ndp.Array.from_list([time(8), time(9)])
 	>>> count_line = ChartLayer(ndp.LineChart(), read_array_values(counts, "LineChart"))
@@ -233,7 +233,7 @@ def is_horizontal_bar_chart(chart: Chart) -> bool:
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> from numdaplot.plots.overlay_checks import is_horizontal_bar_chart
+	>>> from numdaplot.plots.layers.overlay_checks import is_horizontal_bar_chart
 	>>> is_horizontal_bar_chart(ndp.BarChart(orientation=ndp.Orientation.HORIZONTAL))
 	True
 	"""

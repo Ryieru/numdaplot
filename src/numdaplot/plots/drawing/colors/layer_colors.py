@@ -7,13 +7,13 @@ Colors of the charts overlaid on a Plot.
 from dataclasses import replace
 from typing import cast
 
-from numdaplot.plots.chart_layer import ChartLayer
 from numdaplot.plots.charts.bar_chart import BarChart
 from numdaplot.plots.charts.line_chart import LineChart
 from numdaplot.plots.charts.scatter_chart import ScatterChart
 from numdaplot.plots.data.chart_values import ChartValues
 from numdaplot.plots.drawing.colors.colored_parts import ColoredParts
 from numdaplot.plots.drawing.colors.series_colors import take_cycle_colors, warn_shared_colors
+from numdaplot.plots.layers.chart_layer import ChartLayer
 
 SINGLE_SERIES = 1
 SINGLE_CHART = 1
@@ -50,7 +50,7 @@ def continue_color_cycle(layers: list[ChartLayer]) -> list[ChartLayer]:
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> from numdaplot.plots.chart_layer import ChartLayer
+	>>> from numdaplot.plots.layers.chart_layer import ChartLayer
 	>>> from numdaplot.plots.data.array_values import read_array_values
 	>>> from numdaplot.plots.drawing.colors.layer_colors import continue_color_cycle
 	>>> prices = ndp.Array.from_list([12.0, 15.5])
@@ -101,7 +101,7 @@ def give_cycle_colors(layer: ChartLayer, start: int, series_count: int) -> Chart
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> from numdaplot.plots.chart_layer import ChartLayer
+	>>> from numdaplot.plots.layers.chart_layer import ChartLayer
 	>>> from numdaplot.plots.data.array_values import read_array_values
 	>>> from numdaplot.plots.drawing.colors.layer_colors import give_cycle_colors
 	>>> prices = ndp.Array.from_list([12.0, 15.5])

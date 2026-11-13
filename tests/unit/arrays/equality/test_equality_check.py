@@ -6,8 +6,8 @@ Unit tests of match_types and are_equal.
 
 import numpy
 
-from numdaplot.arrays.conversion.equality_check import are_equal, match_types
-from numdaplot.arrays.type_match import TypeMatch
+from numdaplot.arrays.equality.equality_check import are_equal, match_types
+from numdaplot.arrays.equality.type_match import TypeMatch
 from numdaplot.types.type import Type
 
 INTEGERS = [1, 2]

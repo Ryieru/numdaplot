@@ -17,8 +17,8 @@ from numpy.typing import NDArray
 from numdaplot.arrays import array_exchange
 from numdaplot.arrays.array import Array
 from numdaplot.arrays.array_exchange import ArrayExchange
-from numdaplot.arrays.equality import Equality
-from numdaplot.arrays.type_match import TypeMatch
+from numdaplot.arrays.equality.equality import Equality
+from numdaplot.arrays.equality.type_match import TypeMatch
 from numdaplot.errors.invalid_type_error import InvalidTypeError
 from numdaplot.errors.not_single_value_error import NotSingleValueError
 from numdaplot.tables.table import Table

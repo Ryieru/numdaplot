@@ -15,7 +15,6 @@ import matplotlib
 from matplotlib.axes import Axes
 from matplotlib.figure import Figure, FigureBase
 
-from numdaplot.plots.chart_layer import ChartLayer
 from numdaplot.plots.charts.bar_chart import BarChart
 from numdaplot.plots.charts.box_chart import BoxChart
 from numdaplot.plots.charts.chart import Chart
@@ -46,6 +45,7 @@ from numdaplot.plots.drawing.layer_alignment import align_layers
 from numdaplot.plots.drawing.legend_overlap import move_hiding_legends
 from numdaplot.plots.drawing.plot_theme import BACKGROUND_COLOR, THEME
 from numdaplot.plots.drawing.style_drawing import apply_style
+from numdaplot.plots.layers.chart_layer import ChartLayer
 from numdaplot.plots.style.image_options import DEFAULT_DPI
 from numdaplot.plots.style.plot_style import PlotStyle
 
@@ -190,7 +190,7 @@ def draw_plot(figure: FigureBase, layers: list[ChartLayer], style: PlotStyle) ->
 	--------
 	>>> import numdaplot as ndp
 	>>> from matplotlib.figure import Figure, FigureBase
-	>>> from numdaplot.plots.chart_layer import ChartLayer
+	>>> from numdaplot.plots.layers.chart_layer import ChartLayer
 	>>> from numdaplot.plots.data.array_values import read_array_values
 	>>> from numdaplot.plots.drawing.plot_drawing import draw_plot
 	>>> prices = ndp.Array.from_list([12.0, 15.5])
@@ -240,7 +240,7 @@ def draw_layers(left_axes: Axes, layers: list[ChartLayer]) -> tuple[PlotAxes, Dr
 	>>> import numdaplot as ndp
 	>>> from dataclasses import replace
 	>>> from matplotlib.figure import Figure, FigureBase
-	>>> from numdaplot.plots.chart_layer import ChartLayer
+	>>> from numdaplot.plots.layers.chart_layer import ChartLayer
 	>>> from numdaplot.plots.data.table_values import read_table_values
 	>>> from numdaplot.plots.drawing.plot_drawing import draw_layers
 	>>> sales = ndp.Table.from_arrays(

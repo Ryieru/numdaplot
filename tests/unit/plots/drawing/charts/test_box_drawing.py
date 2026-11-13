@@ -16,11 +16,11 @@ from matplotlib.figure import Figure
 from matplotlib.patches import PathPatch
 
 import numdaplot as ndp
-from numdaplot.plots.chart_layer import ChartLayer
 from numdaplot.plots.data.sample_values import read_sample_values
 from numdaplot.plots.drawing.axes.grid_axes import GridAxes
 from numdaplot.plots.drawing.charts.box_drawing import OUTLIER_MARKER, BoxLook, draw_box_chart, draw_boxes, sort_groups
 from numdaplot.plots.drawing.colors.series_colors import COLOR_CODES
+from numdaplot.plots.layers.chart_layer import ChartLayer
 
 CHART_NAME = "BoxChart"
 FLATS_FRAME = pandas.DataFrame(

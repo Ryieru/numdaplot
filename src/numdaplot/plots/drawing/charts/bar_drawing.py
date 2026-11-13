@@ -15,7 +15,6 @@ from matplotlib.axes import Axes
 from matplotlib.container import BarContainer
 from numpy.typing import NDArray
 
-from numdaplot.plots.chart_layer import ChartLayer
 from numdaplot.plots.charts.bar_chart import BarChart
 from numdaplot.plots.charts.bar_layout import BarLayout
 from numdaplot.plots.charts.orientation import Orientation
@@ -27,6 +26,7 @@ from numdaplot.plots.drawing.colors.series_colors import choose_series_colors
 from numdaplot.plots.drawing.drawn_chart import DrawnChart
 from numdaplot.plots.drawing.labels.bar_value_labels import find_label_place, format_value_labels, write_value_labels
 from numdaplot.plots.drawing.labels.default_labels import find_position_label, find_value_label
+from numdaplot.plots.layers.chart_layer import ChartLayer
 
 CHART_NAME = "BarChart"
 GROUP_WIDTH = 0.8
@@ -151,7 +151,7 @@ def draw_bar_chart(axes: Axes, layer: ChartLayer) -> DrawnChart:
 	--------
 	>>> import numdaplot as ndp
 	>>> from matplotlib.figure import Figure
-	>>> from numdaplot.plots.chart_layer import ChartLayer
+	>>> from numdaplot.plots.layers.chart_layer import ChartLayer
 	>>> from numdaplot.plots.data.array_values import read_array_values
 	>>> from numdaplot.plots.drawing.charts.bar_drawing import draw_bar_chart
 	>>> prices = ndp.Array.from_list([12.0, None, 15.5])

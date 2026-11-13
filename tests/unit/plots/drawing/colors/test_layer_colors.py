@@ -10,12 +10,12 @@ import pytest
 
 import numdaplot as ndp
 from numdaplot.errors.readability_warning import ReadabilityWarning
-from numdaplot.plots.chart_layer import ChartLayer
 from numdaplot.plots.charts.bar_chart import BarChart
 from numdaplot.plots.charts.line_chart import LineChart
 from numdaplot.plots.charts.scatter_chart import ScatterChart
 from numdaplot.plots.data.array_values import read_array_values
 from numdaplot.plots.drawing.colors.layer_colors import continue_color_cycle, give_cycle_colors
+from numdaplot.plots.layers.chart_layer import ChartLayer
 
 PRICES = ndp.Array.from_list([12.0, 15.5])
 GRID = ndp.Array.from_list([[1.0, 2.0], [3.0, 4.0]])

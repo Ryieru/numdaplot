@@ -8,11 +8,11 @@ from typing import cast
 
 from numdaplot.errors.column_not_found_error import ColumnNotFoundError
 from numdaplot.errors.duplicate_column_error import DuplicateColumnError
-from numdaplot.plots.chart_layer import ChartLayer
 from numdaplot.plots.data.chart_values import ChartValues
 from numdaplot.plots.data.missing_cells import MissingCounts
 from numdaplot.plots.data.point_values import PointValues
 from numdaplot.plots.data.sample_values import SampleValues
+from numdaplot.plots.layers.chart_layer import ChartLayer
 from numdaplot.tables.columns.renaming import Renaming
 
 
@@ -36,7 +36,7 @@ def find_shown_columns(layers: list[ChartLayer]) -> set[str]:
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> from numdaplot.plots.chart_layer import ChartLayer
+	>>> from numdaplot.plots.layers.chart_layer import ChartLayer
 	>>> from numdaplot.plots.data.table_values import read_table_values
 	>>> from numdaplot.plots.data.shown_columns import find_shown_columns
 	>>> days = ndp.Array.from_list([1, 2])
@@ -182,7 +182,7 @@ def require_distinct_shown_names(layers: list[ChartLayer], renaming: Renaming | 
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> from numdaplot.plots.chart_layer import ChartLayer
+	>>> from numdaplot.plots.layers.chart_layer import ChartLayer
 	>>> from numdaplot.plots.data.table_values import read_table_values
 	>>> from numdaplot.plots.data.shown_columns import require_distinct_shown_names
 	>>> days = ndp.Array.from_list([1, 2])
@@ -228,7 +228,7 @@ def require_renamed_columns_shown(layers: list[ChartLayer], renaming: Renaming |
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> from numdaplot.plots.chart_layer import ChartLayer
+	>>> from numdaplot.plots.layers.chart_layer import ChartLayer
 	>>> from numdaplot.plots.data.array_values import read_array_values
 	>>> from numdaplot.plots.data.shown_columns import require_renamed_columns_shown
 	>>> layer = ChartLayer(ndp.LineChart(), read_array_values(ndp.Array.from_list([12.0]), "LineChart"))

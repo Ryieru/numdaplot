@@ -14,13 +14,13 @@ from typing import Any, cast
 import numpy
 from numpy.typing import NDArray
 
-from numdaplot.plots.chart_layer import ChartLayer
 from numdaplot.plots.charts.bar_chart import BarChart
 from numdaplot.plots.data.chart_values import ChartValues, Positions, Series
 from numdaplot.plots.data.point_values import PointValues
 from numdaplot.plots.data.position_kind import PositionKind
 from numdaplot.plots.data.unique_labels import require_unique_labels
 from numdaplot.plots.drawing.axes.position_axis import write_position_labels
+from numdaplot.plots.layers.chart_layer import ChartLayer
 
 MINIMUM_SHARING_LAYERS = 2
 NO_SOURCE = -1
@@ -51,7 +51,7 @@ def align_layers(layers: list[ChartLayer]) -> list[ChartLayer]:
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> from numdaplot.plots.chart_layer import ChartLayer
+	>>> from numdaplot.plots.layers.chart_layer import ChartLayer
 	>>> from numdaplot.plots.data.table_values import read_table_values
 	>>> from numdaplot.plots.drawing.layer_alignment import align_layers
 	>>> sales = ndp.Table.from_arrays(
@@ -97,7 +97,7 @@ def needs_shared_labels(layers: list[ChartLayer]) -> bool:
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> from numdaplot.plots.chart_layer import ChartLayer
+	>>> from numdaplot.plots.layers.chart_layer import ChartLayer
 	>>> from numdaplot.plots.data.array_values import read_array_values
 	>>> from numdaplot.plots.drawing.layer_alignment import needs_shared_labels
 	>>> prices = ndp.Array.from_list([12.0, 15.5])
@@ -144,7 +144,7 @@ def write_layer_labels(layer: ChartLayer) -> list[str]:
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> from numdaplot.plots.chart_layer import ChartLayer
+	>>> from numdaplot.plots.layers.chart_layer import ChartLayer
 	>>> from numdaplot.plots.data.array_values import read_array_values
 	>>> from numdaplot.plots.drawing.layer_alignment import write_layer_labels
 	>>> prices = ndp.Array.from_list([12.0, 15.5])
@@ -214,7 +214,7 @@ def align_layer(layer: ChartLayer, labels: list[str], merged_labels: list[str]) 
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> from numdaplot.plots.chart_layer import ChartLayer
+	>>> from numdaplot.plots.layers.chart_layer import ChartLayer
 	>>> from numdaplot.plots.data.array_values import read_array_values
 	>>> from numdaplot.plots.drawing.layer_alignment import align_layer
 	>>> prices = ndp.Array.from_list([12.0, 15.5])

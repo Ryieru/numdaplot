@@ -11,7 +11,6 @@ from typing import Any
 import numpy
 from numpy.typing import NDArray
 
-from numdaplot.arrays.axis_number import find_numpy_axis
 from numdaplot.arrays.creation.numpy_conversion import normalize_text
 from numdaplot.arrays.operations.float_errors import FloatErrorWarnings
 from numdaplot.arrays.operations.integer_rules import require_sum_fits
@@ -36,6 +35,7 @@ from numdaplot.arrays.statistics.share_values import build_share_values
 from numdaplot.errors.empty_array_error import EmptyArrayError
 from numdaplot.errors.refused_operation_error import RefusedOperationError
 from numdaplot.positions.axis import Axis
+from numdaplot.positions.axis_number import find_numpy_axis
 from numdaplot.statistics.count import Count
 from numdaplot.statistics.count_distinct import CountDistinct
 from numdaplot.statistics.maximum import Max

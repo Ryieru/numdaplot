@@ -5,8 +5,8 @@ Unit tests of Equality.
 """
 
 from numdaplot.arrays.array import Array
-from numdaplot.arrays.equality import Equality
-from numdaplot.arrays.type_match import TypeMatch
+from numdaplot.arrays.equality.equality import Equality
+from numdaplot.arrays.equality.type_match import TypeMatch
 
 COMPARED_VALUES = [1, 2]
 

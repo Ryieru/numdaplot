@@ -17,7 +17,6 @@ from numpy.typing import NDArray
 
 from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
 from numdaplot.measures.measure import Measure
-from numdaplot.plots.chart_layer import ChartLayer
 from numdaplot.plots.charts.bin_count import BinCount
 from numdaplot.plots.charts.bin_width import BinWidth
 from numdaplot.plots.charts.histogram_chart import HistogramChart
@@ -30,6 +29,7 @@ from numdaplot.plots.drawing.colors.series_colors import choose_series_colors
 from numdaplot.plots.drawing.drawn_chart import DrawnChart
 from numdaplot.plots.drawing.labels.default_labels import find_value_label
 from numdaplot.plots.drawing.plot_theme import BACKGROUND_COLOR
+from numdaplot.plots.layers.chart_layer import ChartLayer
 from numdaplot.types.type import Type
 
 CHART_NAME = "HistogramChart"
@@ -83,7 +83,7 @@ def draw_histogram_chart(axes: Axes, layer: ChartLayer) -> DrawnChart:
 	--------
 	>>> import numdaplot as ndp
 	>>> from matplotlib.figure import Figure
-	>>> from numdaplot.plots.chart_layer import ChartLayer
+	>>> from numdaplot.plots.layers.chart_layer import ChartLayer
 	>>> from numdaplot.plots.data.sample_values import read_sample_values
 	>>> from numdaplot.plots.drawing.charts.histogram_drawing import draw_histogram_chart
 	>>> prices = ndp.Array.from_list([12.0, 13.0, 17.0, None])

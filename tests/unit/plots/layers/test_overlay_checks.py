@@ -9,11 +9,11 @@ from datetime import date, time
 import pytest
 
 import numdaplot as ndp
-from numdaplot.plots.chart_layer import ChartLayer
 from numdaplot.plots.data.array_values import read_array_values
 from numdaplot.plots.data.sample_values import read_sample_values
 from numdaplot.plots.data.table_values import read_table_values
-from numdaplot.plots.overlay_checks import (
+from numdaplot.plots.layers.chart_layer import ChartLayer
+from numdaplot.plots.layers.overlay_checks import (
 	is_horizontal_bar_chart,
 	require_overlay_base,
 	require_same_positions,

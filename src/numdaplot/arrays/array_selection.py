@@ -17,7 +17,7 @@ from numdaplot.positions.region import Region
 from numdaplot.rules.rule import Rule
 
 if TYPE_CHECKING:
-	from numdaplot.arrays.replacement import Replacement
+	from numdaplot.arrays.selection.replacement import Replacement
 
 
 class ArraySelection(ArrayData):

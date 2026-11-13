@@ -13,7 +13,7 @@ import pandas
 from numpy.typing import NDArray
 
 from numdaplot.argument_checks.column_names import require_known_columns
-from numdaplot.arrays.conversion.python_values import to_python_list
+from numdaplot.arrays.export.python_values import to_python_list
 from numdaplot.column_storage.column import Column
 from numdaplot.column_storage.column_values import build_column, find_column_type, read_present_values
 from numdaplot.column_storage.time_zones import attribute_source_time_zone, find_column_time_zone

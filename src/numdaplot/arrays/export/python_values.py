@@ -43,7 +43,7 @@ def to_python_list(values: NDArray[Any]) -> list[Any]:
 	Examples
 	--------
 	>>> import numpy
-	>>> from numdaplot.arrays.conversion.python_values import to_python_list
+	>>> from numdaplot.arrays.export.python_values import to_python_list
 	>>> to_python_list(numpy.array(["2026-01-31T08:30", "NaT"], dtype="datetime64[ns]"))
 	[datetime.datetime(2026, 1, 31, 8, 30), None]
 	>>> to_python_list(numpy.array(["a", numpy.nan], dtype=numpy.dtypes.StringDType(na_object=numpy.nan)))

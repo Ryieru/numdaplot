@@ -12,10 +12,10 @@ from matplotlib.figure import Figure
 from matplotlib.patches import Rectangle
 
 import numdaplot as ndp
-from numdaplot.plots.chart_layer import ChartLayer
 from numdaplot.plots.data.table_values import read_table_values
 from numdaplot.plots.drawing.axes.grid_axes import GridAxes
 from numdaplot.plots.drawing.charts.bar_drawing import StackTops, draw_bar_chart, find_group_coordinates, stack_bars
+from numdaplot.plots.layers.chart_layer import ChartLayer
 
 CITIES = ndp.Array.from_list(["Paris", "Lyon"])
 SALES_2025 = ndp.Array.from_list([120.0, -10.0])

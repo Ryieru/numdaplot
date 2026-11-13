@@ -10,11 +10,11 @@ import numpy
 from numpy.typing import NDArray
 
 from numdaplot.arrays.array_sorting import ArraySorting
-from numdaplot.arrays.axis_number import find_numpy_axis
 from numdaplot.arrays.selection.missing_mask import find_missing
 from numdaplot.ordering.missing_position import MissingPosition
 from numdaplot.ordering.order import Order
 from numdaplot.positions.axis import Axis
+from numdaplot.positions.axis_number import find_numpy_axis
 
 LAST_AXIS = -1
 

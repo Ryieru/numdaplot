@@ -17,7 +17,7 @@ class GridAxes(Enum):
 	--------
 	>>> import numdaplot as ndp
 	>>> from matplotlib.figure import Figure
-	>>> from numdaplot.plots.chart_layer import ChartLayer
+	>>> from numdaplot.plots.layers.chart_layer import ChartLayer
 	>>> from numdaplot.plots.data.array_values import read_array_values
 	>>> from numdaplot.plots.drawing.charts.line_drawing import draw_line_chart
 	>>> prices = ndp.Array.from_list([12.0, 15.5])

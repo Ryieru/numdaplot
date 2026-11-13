@@ -16,7 +16,6 @@ from matplotlib.colors import to_rgba
 from matplotlib.patches import Wedge
 from numpy.typing import NDArray
 
-from numdaplot.plots.chart_layer import ChartLayer
 from numdaplot.plots.charts.percentages import Percentages
 from numdaplot.plots.charts.pie_chart import PieChart
 from numdaplot.plots.data.chart_values import ChartValues
@@ -26,6 +25,7 @@ from numdaplot.plots.drawing.colors.series_colors import choose_series_colors
 from numdaplot.plots.drawing.colors.text_contrast import choose_text_color
 from numdaplot.plots.drawing.drawn_chart import DrawnChart
 from numdaplot.plots.drawing.plot_theme import BACKGROUND_COLOR
+from numdaplot.plots.layers.chart_layer import ChartLayer
 
 CHART_NAME = "PieChart"
 # matplotlib measures angles counterclockwise from the right, so 90 degrees is the top of the disc.
@@ -66,7 +66,7 @@ def draw_pie_chart(axes: Axes, layer: ChartLayer) -> DrawnChart:
 	--------
 	>>> import numdaplot as ndp
 	>>> from matplotlib.figure import Figure
-	>>> from numdaplot.plots.chart_layer import ChartLayer
+	>>> from numdaplot.plots.layers.chart_layer import ChartLayer
 	>>> from numdaplot.plots.data.pie_values import read_pie_values
 	>>> from numdaplot.plots.drawing.charts.pie_drawing import draw_pie_chart
 	>>> cities = ndp.Array.from_list(["Paris", "Lyon"])

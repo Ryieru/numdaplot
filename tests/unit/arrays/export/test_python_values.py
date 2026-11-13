@@ -8,7 +8,7 @@ from datetime import date, datetime, time, timedelta
 
 import numpy
 
-from numdaplot.arrays.conversion.python_values import to_python_list
+from numdaplot.arrays.export.python_values import to_python_list
 from numdaplot.types.numpy_mapping import to_numpy_dtype
 from numdaplot.types.type import Type
 

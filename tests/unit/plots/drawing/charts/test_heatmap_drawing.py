@@ -15,7 +15,6 @@ from matplotlib.colors import to_rgba
 from matplotlib.figure import Figure
 
 import numdaplot as ndp
-from numdaplot.plots.chart_layer import ChartLayer
 from numdaplot.plots.data.chart_values import Series
 from numdaplot.plots.data.table_values import read_table_values
 from numdaplot.plots.drawing.axes.grid_axes import GridAxes
@@ -29,6 +28,7 @@ from numdaplot.plots.drawing.charts.heatmap_drawing import (
 )
 from numdaplot.plots.drawing.colors.color_scale_values import find_scale_limits
 from numdaplot.plots.drawing.plot_theme import GRID_COLOR
+from numdaplot.plots.layers.chart_layer import ChartLayer
 
 CHART_NAME = "HeatmapChart"
 TEMPERATURES_FRAME = pandas.DataFrame(

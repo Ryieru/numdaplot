@@ -14,11 +14,11 @@ from matplotlib.patches import Wedge
 
 import numdaplot as ndp
 from numdaplot.errors.invalid_color_count_error import InvalidColorCountError
-from numdaplot.plots.chart_layer import ChartLayer
 from numdaplot.plots.data.pie_values import read_pie_values
 from numdaplot.plots.drawing.axes.grid_axes import GridAxes
 from numdaplot.plots.drawing.charts.pie_drawing import draw_pie_chart, find_percentage_place, write_percentages
 from numdaplot.plots.drawing.colors.text_contrast import DARK_TEXT_COLOR, LIGHT_TEXT_COLOR
+from numdaplot.plots.layers.chart_layer import ChartLayer
 
 CITIES = ndp.Array.from_list(["Paris", "Lyon"])
 SALES = ndp.Array.from_list([150.0, 50.0])

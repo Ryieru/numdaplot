@@ -8,7 +8,6 @@ Reading of the charts a Plot draws on its axes: lines, bars and points.
 """
 
 from numdaplot.arrays.array import Array
-from numdaplot.plots.chart_layer import ChartLayer
 from numdaplot.plots.charts.bar_chart import BarChart
 from numdaplot.plots.charts.box_chart import BoxChart
 from numdaplot.plots.charts.histogram_chart import HistogramChart
@@ -21,6 +20,7 @@ from numdaplot.plots.data.point_values import hide_missing_points, read_point_va
 from numdaplot.plots.data.sample_values import SampleValues
 from numdaplot.plots.data.table_values import read_table_values
 from numdaplot.plots.drawing.colors.series_colors import require_color_count
+from numdaplot.plots.layers.chart_layer import ChartLayer
 from numdaplot.tables.table import Table
 
 LINE_NAME = "LineChart"
@@ -62,7 +62,7 @@ def build_series_layer(chart: SeriesChart, values: ChartValues | SampleValues) -
 	--------
 	>>> import numdaplot as ndp
 	>>> from numdaplot.plots.data.array_values import read_array_values
-	>>> from numdaplot.plots.layer_reading import build_series_layer
+	>>> from numdaplot.plots.layers.layer_reading import build_series_layer
 	>>> prices = ndp.Array.from_list([12.0, 15.5])
 	>>> layer = build_series_layer(ndp.BarChart(), read_array_values(prices, "BarChart"))
 	>>> len(layer.values.series)
@@ -103,7 +103,7 @@ def read_line_layer(data: Table | Array, chart: LineChart) -> ChartLayer:
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> from numdaplot.plots.layer_reading import read_line_layer
+	>>> from numdaplot.plots.layers.layer_reading import read_line_layer
 	>>> grid = ndp.Array.from_list([[1.0, 2.0], [3.0, 4.0]])
 	>>> len(read_line_layer(grid, ndp.LineChart()).values.series)
 	2
@@ -142,7 +142,7 @@ def read_bar_layer(data: Table | Array, chart: BarChart) -> ChartLayer:
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> from numdaplot.plots.layer_reading import read_bar_layer
+	>>> from numdaplot.plots.layers.layer_reading import read_bar_layer
 	>>> prices = ndp.Array.from_list([12.0, 15.5])
 	>>> read_bar_layer(prices, ndp.BarChart()).values.series[0].values
 	array([12. , 15.5])
@@ -181,7 +181,7 @@ def read_scatter_layer(data: Table | Array, chart: ScatterChart) -> ChartLayer:
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> from numdaplot.plots.layer_reading import read_scatter_layer
+	>>> from numdaplot.plots.layers.layer_reading import read_scatter_layer
 	>>> grid = ndp.Array.from_list([[1.0, 2.0], [3.0, 4.0]])
 	>>> len(read_scatter_layer(grid, ndp.ScatterChart()).values.series)
 	2

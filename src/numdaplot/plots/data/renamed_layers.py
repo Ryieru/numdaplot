@@ -9,12 +9,12 @@ from typing import cast
 
 import numpy
 
-from numdaplot.plots.chart_layer import ChartLayer
 from numdaplot.plots.data.chart_values import ChartValues, Series
 from numdaplot.plots.data.missing_cells import MissingCounts
 from numdaplot.plots.data.point_values import PointValues
 from numdaplot.plots.data.sample_values import SampleValues
 from numdaplot.plots.data.table_values import name_columns
+from numdaplot.plots.layers.chart_layer import ChartLayer
 from numdaplot.tables.columns.renaming import Renaming
 
 
@@ -39,7 +39,7 @@ def rename_layers(layers: list[ChartLayer], renaming: Renaming | None) -> list[C
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> from numdaplot.plots.chart_layer import ChartLayer
+	>>> from numdaplot.plots.layers.chart_layer import ChartLayer
 	>>> from numdaplot.plots.data.array_values import read_array_values
 	>>> from numdaplot.plots.data.renamed_layers import rename_layers
 	>>> grid = ndp.Array.from_list([[12.0, 8.0]])
@@ -81,7 +81,7 @@ def rename_layer(layer: ChartLayer, new_names: dict[str, str]) -> ChartLayer:
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> from numdaplot.plots.chart_layer import ChartLayer
+	>>> from numdaplot.plots.layers.chart_layer import ChartLayer
 	>>> from numdaplot.plots.data.array_values import read_array_values
 	>>> from numdaplot.plots.data.renamed_layers import rename_layer
 	>>> layer = ChartLayer(ndp.LineChart(), read_array_values(ndp.Array.from_list([12.0]), "LineChart"))

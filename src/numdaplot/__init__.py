@@ -23,11 +23,11 @@ from numdaplot.arrays.creation.normal import Normal
 from numdaplot.arrays.creation.random_integers import RandomIntegers
 from numdaplot.arrays.creation.spacing import Spacing
 from numdaplot.arrays.creation.uniform import Uniform
-from numdaplot.arrays.equality import Equality
+from numdaplot.arrays.equality.equality import Equality
+from numdaplot.arrays.equality.type_match import TypeMatch
 from numdaplot.arrays.mapping.value_change import ValueChange
 from numdaplot.arrays.mapping.value_mapping import ValueMapping
-from numdaplot.arrays.replacement import Replacement
-from numdaplot.arrays.type_match import TypeMatch
+from numdaplot.arrays.selection.replacement import Replacement
 from numdaplot.brackets.bracket_end import BracketEnd
 from numdaplot.brackets.brackets import Brackets
 from numdaplot.brackets.unmatched import Unmatched

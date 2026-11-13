@@ -7,7 +7,6 @@ Unit tests of the charts of a Plot shown under new column names.
 import numpy
 
 import numdaplot as ndp
-from numdaplot.plots.chart_layer import ChartLayer
 from numdaplot.plots.data.array_values import read_array_values
 from numdaplot.plots.data.chart_values import ChartValues, Series
 from numdaplot.plots.data.missing_cells import read_missing_counts
@@ -24,6 +23,7 @@ from numdaplot.plots.data.renamed_layers import (
 )
 from numdaplot.plots.data.sample_values import SampleValues
 from numdaplot.plots.data.table_values import read_table_values
+from numdaplot.plots.layers.chart_layer import ChartLayer
 
 DAYS = ndp.Array.from_list([1, 2])
 PRICES = ndp.Array.from_list([12.0, None])

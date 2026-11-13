@@ -8,12 +8,12 @@ from typing import Self
 
 from numdaplot.argument_checks.argument_types import checked_arguments
 from numdaplot.arrays.array import Array
-from numdaplot.plots.chart_layer import ChartLayer
 from numdaplot.plots.charts.heatmap_chart import HeatmapChart
 from numdaplot.plots.charts.missing_chart import MissingChart
 from numdaplot.plots.charts.missing_map_chart import MissingMapChart
 from numdaplot.plots.data.heatmap_values import read_heatmap_values
 from numdaplot.plots.data.missing_cells import read_missing_cells, read_missing_counts
+from numdaplot.plots.layers.chart_layer import ChartLayer
 from numdaplot.plots.plot_data import PlotData
 from numdaplot.plots.style.plot_style import PlotStyle
 from numdaplot.tables.table import Table

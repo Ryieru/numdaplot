@@ -10,7 +10,7 @@ from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
 from numdaplot.argument_checks.field_types import require_field_types
-from numdaplot.arrays.type_match import TypeMatch
+from numdaplot.arrays.equality.type_match import TypeMatch
 
 if TYPE_CHECKING:
 	from numdaplot.arrays.array import Array

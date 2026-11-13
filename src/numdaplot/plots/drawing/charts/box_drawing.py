@@ -15,7 +15,6 @@ import pandas
 from matplotlib.axes import Axes
 from numpy.typing import NDArray
 
-from numdaplot.plots.chart_layer import ChartLayer
 from numdaplot.plots.charts.box_chart import BoxChart
 from numdaplot.plots.charts.outliers import Outliers
 from numdaplot.plots.data.chart_values import Positions, Series
@@ -30,6 +29,7 @@ from numdaplot.plots.drawing.colors.series_colors import choose_series_colors
 from numdaplot.plots.drawing.drawn_chart import DrawnChart
 from numdaplot.plots.drawing.labels.default_labels import COLUMN_LABEL, find_value_label
 from numdaplot.plots.drawing.plot_theme import BACKGROUND_COLOR
+from numdaplot.plots.layers.chart_layer import ChartLayer
 
 CHART_NAME = "BoxChart"
 # Share of its place a box fills, leaving a gap between two boxes side by side.
@@ -106,7 +106,7 @@ def draw_box_chart(axes: Axes, layer: ChartLayer) -> DrawnChart:
 	--------
 	>>> import numdaplot as ndp
 	>>> from matplotlib.figure import Figure
-	>>> from numdaplot.plots.chart_layer import ChartLayer
+	>>> from numdaplot.plots.layers.chart_layer import ChartLayer
 	>>> from numdaplot.plots.data.sample_values import read_sample_values
 	>>> from numdaplot.plots.drawing.charts.box_drawing import draw_box_chart
 	>>> prices = ndp.Array.from_list([[12.0, 9.5], [14.0, 10.0], [13.5, 8.0]])

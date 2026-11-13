@@ -17,7 +17,6 @@ from matplotlib.patches import Rectangle
 import numdaplot as ndp
 from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
 from numdaplot.errors.invalid_color_count_error import InvalidColorCountError
-from numdaplot.plots.chart_layer import ChartLayer
 from numdaplot.plots.data.sample_values import read_sample_values
 from numdaplot.plots.drawing.axes.grid_axes import GridAxes
 from numdaplot.plots.drawing.charts.histogram_drawing import (
@@ -29,6 +28,7 @@ from numdaplot.plots.drawing.charts.histogram_drawing import (
 	read_width_hours,
 	require_bins_on_values,
 )
+from numdaplot.plots.layers.chart_layer import ChartLayer
 
 CHART_NAME = "HistogramChart"
 PRICES = ndp.Array.from_list([12.0, 13.0, 17.0, None])

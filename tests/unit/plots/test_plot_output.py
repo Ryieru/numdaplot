@@ -16,9 +16,9 @@ from matplotlib.figure import Figure
 
 import numdaplot as ndp
 from numdaplot.plots import plot_output as plot_module
-from numdaplot.plots.chart_layer import ChartLayer
 from numdaplot.plots.data.array_values import read_array_values
 from numdaplot.plots.drawing.plot_drawing import FigureDrawing, build_figure
+from numdaplot.plots.layers.chart_layer import ChartLayer
 from numdaplot.plots.output import image_saving
 from numdaplot.plots.output.shown_object import ShownObject
 from numdaplot.plots.plot import Plot

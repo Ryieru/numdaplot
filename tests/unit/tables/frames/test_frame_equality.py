@@ -6,7 +6,7 @@ Unit tests of the comparison of Table columns.
 
 import pandas
 
-from numdaplot.arrays.type_match import TypeMatch
+from numdaplot.arrays.equality.type_match import TypeMatch
 from numdaplot.tables.frames.frame_equality import are_columns_equal, are_frames_equal
 
 INTEGER_PRICES = pandas.DataFrame({"price": pandas.Series([1, None], dtype="Int64")})
