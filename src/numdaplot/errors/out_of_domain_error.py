@@ -4,17 +4,15 @@ Error raised when a math function is applied to a value it is not defined for.
 .. versionadded:: 0.1.0
 """
 
-from numdaplot.errors.numdaplot_error import NumdaplotError
+from numdaplot.errors.column_value_error import NO_COLUMN_TEXT, ColumnValueError
 
 OUT_OF_DOMAIN_MESSAGE = "{function_name} is not defined for {value}{column_text}."
 BETWEEN_INTEGERS_MESSAGE = (
 	"{function_name} is not defined for {value} between integers{column_text}. Convert the values to FLOAT64 first."
 )
-COLUMN_TEXT = " in the column {column_name!r}"
-NO_COLUMN_TEXT = ""
 
 
-class OutOfDomainError(NumdaplotError):
+class OutOfDomainError(ColumnValueError):
 	"""
 	Raised when a math function or an operator receives a value it is not defined for.
 
@@ -54,6 +52,8 @@ class OutOfDomainError(NumdaplotError):
 	... 	print(error)
 	SquareRoot is not defined for -9.
 	"""
+
+	COLUMN_TEXT = " in the column {column_name!r}"
 
 	def __init__(self, function_name: str, value: float, between_integers: bool = False) -> None:
 		"""
@@ -103,30 +103,3 @@ class OutOfDomainError(NumdaplotError):
 		message = message_format.format(function_name=self.function_name, value=self.value, column_text=column_text)
 
 		return message
-
-	def name_column(self, column_name: str) -> None:
-		"""
-		Name the Table column holding the value in the message, unless a column is already named.
-
-		.. versionadded:: 0.2.0
-
-		Parameters
-		----------
-		column_name
-			The name of the column.
-
-		Examples
-		--------
-		>>> import numdaplot as ndp
-		>>> error = ndp.OutOfDomainError("SquareRoot", -9)
-		>>> error.name_column("score")
-		>>> print(error)
-		SquareRoot is not defined for -9 in the column 'score'.
-		"""
-		if self.column_name is not None:
-			return
-
-		self.column_name = column_name
-		column_text = COLUMN_TEXT.format(column_name=column_name)
-		message = self.write_message(column_text)
-		self.args = (message,)

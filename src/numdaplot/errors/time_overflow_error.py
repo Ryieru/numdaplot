@@ -4,11 +4,9 @@ Error raised when dates, datetimes or durations leave the range a count of nanos
 .. versionadded:: 0.1.0
 """
 
-from numdaplot.errors.numdaplot_error import NumdaplotError
+from numdaplot.errors.column_value_error import NO_COLUMN_TEXT, ColumnValueError
 
 TIME_OVERFLOW_MESSAGE = "The operation {operation_name} gives values{column_text} outside the range of {range_text}."
-COLUMN_TEXT = " of the column {column_name!r}"
-NO_COLUMN_TEXT = ""
 TYPE_RANGES = {
 	"DATE": "DATE, from 1677 to 2262 in a calculation",
 	"DATETIME": "DATETIME, from 1677 to 2262",
@@ -17,7 +15,7 @@ TYPE_RANGES = {
 }
 
 
-class TimeOverflowError(NumdaplotError):
+class TimeOverflowError(ColumnValueError):
 	"""
 	Raised when a value does not fit the nanoseconds counting datetimes and durations.
 
@@ -102,30 +100,3 @@ class TimeOverflowError(NumdaplotError):
 		)
 
 		return message
-
-	def name_column(self, column_name: str) -> None:
-		"""
-		Name the Table column holding the values in the message, unless a column is already named.
-
-		.. versionadded:: 0.1.0
-
-		Parameters
-		----------
-		column_name
-			The name of the column.
-
-		Examples
-		--------
-		>>> import numdaplot as ndp
-		>>> error = ndp.TimeOverflowError("convert", "DATETIME")
-		>>> error.name_column("day")
-		>>> print(error)
-		The operation convert gives values of the column 'day' outside the range of DATETIME, from 1677 to 2262.
-		"""
-		if self.column_name is not None:
-			return
-
-		self.column_name = column_name
-		column_text = COLUMN_TEXT.format(column_name=column_name)
-		message = self.write_message(column_text)
-		self.args = (message,)

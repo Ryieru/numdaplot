@@ -4,14 +4,20 @@ Checks shared by the column and color settings of the charts.
 .. versionadded:: 0.1.0
 """
 
+from __future__ import annotations
+
 from collections.abc import Sequence
+from typing import TYPE_CHECKING
 
 from numdaplot.errors.empty_list_error import EmptyListError
 from numdaplot.plots.style.color import Color
 from numdaplot.plots.style.custom_color import CustomColor
-from numdaplot.tables.columns.column_names import require_column_names
+from numdaplot.tables.columns.column_names import copy_column_names, require_optional_column_name
 
-COLUMN_ITEM_NAME = "column"
+if TYPE_CHECKING:
+	from numdaplot.plots.charts.bar_chart import BarChart
+	from numdaplot.plots.charts.line_chart import LineChart
+
 COLOR_ITEM_NAME = "color"
 
 
@@ -53,11 +59,7 @@ def copy_columns(columns: list[str] | None) -> list[str] | None:
 	if columns is None:
 		return None
 
-	if columns == []:
-		raise EmptyListError(COLUMN_ITEM_NAME)
-
-	require_column_names(columns)
-	columns_copy = list(columns)
+	columns_copy = copy_column_names(columns)
 
 	return columns_copy
 
@@ -103,3 +105,40 @@ def copy_colors(colors: Sequence[Color | CustomColor] | None) -> list[Color | Cu
 	colors_copy = list(colors)
 
 	return colors_copy
+
+
+def copy_series_settings(chart: BarChart | LineChart) -> None:
+	"""
+	Check the columns and the colors of a chart drawing series, and replace them with copies that only it holds.
+
+	.. versionadded:: 0.2.0
+
+	Parameters
+	----------
+	chart
+		A chart whose ``x`` column labels the positions, whose ``y`` columns are the series and whose ``colors`` are
+		one per series.
+
+	Raises
+	------
+	InvalidColumnNameError
+		When ``x`` or a name in ``y`` is an empty text.
+	EmptyListError
+		When ``y`` or ``colors`` is an empty list.
+	DuplicateColumnError
+		When a column name appears twice in ``y``.
+
+	Examples
+	--------
+	>>> import numdaplot as ndp
+	>>> from numdaplot.plots.charts.chart_settings import copy_series_settings
+	>>> chart = ndp.LineChart(x="day", y=["price"])
+	>>> copy_series_settings(chart)
+	>>> chart.y
+	['price']
+	"""
+	require_optional_column_name(chart.x)
+	columns_copy = copy_columns(chart.y)
+	colors_copy = copy_colors(chart.colors)
+	object.__setattr__(chart, "y", columns_copy)
+	object.__setattr__(chart, "colors", colors_copy)

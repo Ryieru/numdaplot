@@ -11,12 +11,9 @@ from numdaplot.data_types.type import Type
 from numdaplot.dates.custom_date_format import CustomDateFormat
 from numdaplot.dates.date_format import DateFormat
 from numdaplot.dates.time_zone_change import TimeZoneChange
-from numdaplot.errors.empty_list_error import EmptyListError
 from numdaplot.settings.field_types import require_field_types
 from numdaplot.tables.columns.brackets import Brackets
-from numdaplot.tables.columns.column_names import require_column_names
-
-COLUMN_ITEM_NAME = "column"
+from numdaplot.tables.columns.column_names import copy_column_names
 
 
 @dataclass(frozen=True)
@@ -117,9 +114,5 @@ class TableConversion:
 		"""
 		require_field_types(self)
 
-		if self.columns == []:
-			raise EmptyListError(COLUMN_ITEM_NAME)
-
-		require_column_names(self.columns)
-		columns_copy = list(self.columns)
+		columns_copy = copy_column_names(self.columns)
 		object.__setattr__(self, "columns", columns_copy)

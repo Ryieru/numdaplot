@@ -121,7 +121,8 @@ def read_accepted_kinds(annotation: object, open_aliases: frozenset[object] = fr
 	for member in members:
 		origin = typing.get_origin(member)
 		if origin in LIST_ORIGINS:
-			item_annotation = typing.get_args(member)[0]
+			member_arguments = typing.get_args(member)
+			item_annotation = member_arguments[0]
 			list_items = read_accepted_kinds(item_annotation, expanded_aliases)
 			continue
 
@@ -130,7 +131,11 @@ def read_accepted_kinds(annotation: object, open_aliases: frozenset[object] = fr
 		member_name = find_member_name(member)
 		names.append(member_name)
 
-	return AcceptedKinds(tuple(classes), list_items, tuple(names))
+	class_tuple = tuple(classes)
+	name_tuple = tuple(names)
+	accepted_kinds = AcceptedKinds(class_tuple, list_items, name_tuple)
+
+	return accepted_kinds
 
 
 def list_annotation_members(annotation: object, open_aliases: frozenset[object] = frozenset()) -> list[object]:

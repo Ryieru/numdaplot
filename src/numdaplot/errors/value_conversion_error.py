@@ -4,7 +4,7 @@ Error raised when values cannot be stored in a type without losing information, 
 .. versionadded:: 0.1.0
 """
 
-from numdaplot.errors.numdaplot_error import NumdaplotError
+from numdaplot.errors.column_value_error import NO_COLUMN_TEXT, ColumnValueError
 from numdaplot.errors.rejected_dates import RejectedDate, RejectedDatePart
 
 VALUE_CONVERSION_MESSAGE = (
@@ -31,11 +31,9 @@ UNREADABLE_TIME_MESSAGE = (
 	"{date_format_name}. Give the format of the values with format=, using a CustomDateFormat of a time only."
 )
 TIME_TYPE_NAME = "TIME"
-COLUMN_TEXT = " of the column {column_name!r}"
-NO_COLUMN_TEXT = ""
 
 
-class ValueConversionError(NumdaplotError):
+class ValueConversionError(ColumnValueError):
 	"""
 	Raised when values cannot be stored in a type without losing information, or texts cannot be read as dates.
 
@@ -188,30 +186,3 @@ class ValueConversionError(NumdaplotError):
 			return UNREADABLE_TIME_MESSAGE
 
 		return UNREADABLE_DATE_MESSAGE
-
-	def name_column(self, column_name: str) -> None:
-		"""
-		Name the Table column holding the values in the message, unless a column is already named.
-
-		.. versionadded:: 0.1.0
-
-		Parameters
-		----------
-		column_name
-			The name of the column.
-
-		Examples
-		--------
-		>>> import numdaplot as ndp
-		>>> error = ndp.ValueConversionError("TEXT", "FLOAT64", "abc")
-		>>> error.name_column("payment")
-		>>> print(error)
-		Cannot store the TEXT value 'abc' of the column 'payment' as FLOAT64 without losing information.
-		"""
-		if self.column_name is not None:
-			return
-
-		self.column_name = column_name
-		column_text = COLUMN_TEXT.format(column_name=column_name)
-		message = self.write_message(column_text)
-		self.args = (message,)

@@ -4,7 +4,7 @@ Error raised when a value has no new value in a ValueMapping, or is in no bracke
 .. versionadded:: 0.1.0
 """
 
-from numdaplot.errors.numdaplot_error import NumdaplotError
+from numdaplot.errors.column_value_error import NO_COLUMN_TEXT, ColumnValueError
 
 VALUE_MAPPING_NAME = "ValueMapping"
 BRACKETS_NAME = "Brackets"
@@ -18,11 +18,9 @@ UNMATCHED_MESSAGES = {
 		"others=Unmatched.MISSING to make it missing."
 	),
 }
-COLUMN_TEXT = " of the column {column_name!r}"
-NO_COLUMN_TEXT = ""
 
 
-class UnmatchedValueError(NumdaplotError):
+class UnmatchedValueError(ColumnValueError):
 	"""
 	Raised when a value has no new value in a ``ValueMapping``, or is in no bracket of ``Brackets``.
 
@@ -115,31 +113,3 @@ class UnmatchedValueError(NumdaplotError):
 		message = message_template.format(value=self.value, column_text=column_text)
 
 		return message
-
-	def name_column(self, column_name: str) -> None:
-		"""
-		Name the Table column holding the value in the message, unless a column is already named.
-
-		.. versionadded:: 0.2.0
-
-		Parameters
-		----------
-		column_name
-			The name of the column.
-
-		Examples
-		--------
-		>>> import numdaplot as ndp
-		>>> error = ndp.UnmatchedValueError(3)
-		>>> error.name_column("sex")
-		>>> print(error)
-		The value 3 of the column 'sex' has no ValueChange. Add one,
-		or give others=Unmatched.MISSING to make it missing, or others=Unmatched.KEEP to keep it.
-		"""
-		if self.column_name is not None:
-			return
-
-		self.column_name = column_name
-		column_text = COLUMN_TEXT.format(column_name=column_name)
-		message = self.write_message(column_text)
-		self.args = (message,)

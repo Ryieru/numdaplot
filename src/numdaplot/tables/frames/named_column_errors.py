@@ -6,20 +6,11 @@ Name of the Table column in the errors about its values raised by a block.
 
 from types import TracebackType
 
+from numdaplot.errors.column_value_error import ColumnValueError
 from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
-from numdaplot.errors.out_of_domain_error import OutOfDomainError
-from numdaplot.errors.time_overflow_error import TimeOverflowError
-from numdaplot.errors.unmatched_value_error import UnmatchedValueError
-from numdaplot.errors.value_conversion_error import ValueConversionError
 from numdaplot.tables.frames.column import Column
 
-NAMED_ERROR_TYPES = (
-	IncompatibleTypesError,
-	OutOfDomainError,
-	TimeOverflowError,
-	UnmatchedValueError,
-	ValueConversionError,
-)
+NAMED_ERROR_TYPES = (IncompatibleTypesError, ColumnValueError)
 
 
 class NamedColumnErrors:

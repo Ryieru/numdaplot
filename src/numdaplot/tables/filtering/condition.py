@@ -6,13 +6,10 @@ A rule applied to one or several columns of a Table.
 
 from dataclasses import dataclass
 
-from numdaplot.errors.empty_list_error import EmptyListError
 from numdaplot.rules.rule import Rule
 from numdaplot.settings.field_types import require_field_types
-from numdaplot.tables.columns.column_names import require_column_names
+from numdaplot.tables.columns.column_names import copy_column_names
 from numdaplot.tables.filtering.column_match import ColumnMatch
-
-COLUMN_ITEM_NAME = "column"
 
 
 @dataclass(frozen=True)
@@ -86,9 +83,5 @@ class Condition:
 		if self.columns is None:
 			return
 
-		if self.columns == []:
-			raise EmptyListError(COLUMN_ITEM_NAME)
-
-		require_column_names(self.columns)
-		columns_copy = list(self.columns)
+		columns_copy = copy_column_names(self.columns)
 		object.__setattr__(self, "columns", columns_copy)

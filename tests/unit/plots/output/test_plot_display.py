@@ -7,6 +7,7 @@ Unit tests of the display of a Plot or a Figure.
 # The matplotlib stubs leave the keyword arguments of most drawing methods untyped.
 # pyright: reportUnknownMemberType=false
 
+from collections.abc import Callable
 from types import SimpleNamespace
 from typing import Any
 
@@ -203,9 +204,9 @@ def describe_plot_drawing() -> FigureDrawing:
 	return drawing
 
 
-def answer_value(answer: bool) -> Any:
+def answer_always(answer: bool) -> Callable[..., bool]:
 	"""
-	Return a fake notebook check giving one answer.
+	Return a fake check giving one answer, whatever it is given, such as the notebook or the backend check.
 
 	.. versionadded:: 0.1.0
 
@@ -216,44 +217,11 @@ def answer_value(answer: bool) -> Any:
 
 	Returns
 	-------
-	Any
-		A function without arguments returning the answer.
+	Callable[..., bool]
+		A function returning the answer for any arguments.
 	"""
 
-	def check() -> bool:
-		"""
-		Return the fixed answer.
-
-		.. versionadded:: 0.1.0
-
-		Returns
-		-------
-		bool
-			The answer.
-		"""
-		return answer
-
-	return check
-
-
-def answer_backend(answer: bool) -> Any:
-	"""
-	Return a fake backend check giving one answer.
-
-	.. versionadded:: 0.1.0
-
-	Parameters
-	----------
-	answer
-		Whether the backend opens windows.
-
-	Returns
-	-------
-	Any
-		A function taking a backend name and returning the answer.
-	"""
-
-	def check(backend_name: str) -> bool:
+	def check(*arguments: object) -> bool:
 		"""
 		Return the fixed answer.
 
@@ -261,8 +229,8 @@ def answer_backend(answer: bool) -> Any:
 
 		Parameters
 		----------
-		backend_name
-			The backend name, ignored.
+		*arguments
+			The arguments of the replaced check, ignored.
 
 		Returns
 		-------
@@ -326,7 +294,7 @@ def test_show_drawing_opens_a_window_outside_a_notebook(monkeypatch: pytest.Monk
 		Replaces the notebook check and the window display with fakes.
 	"""
 	window_display = Recorder()
-	monkeypatch.setattr(plot_display, IS_NOTEBOOK_NAME, answer_value(False))
+	monkeypatch.setattr(plot_display, IS_NOTEBOOK_NAME, answer_always(False))
 	monkeypatch.setattr(plot_display, SHOW_IN_WINDOW_NAME, window_display)
 
 	drawing = describe_plot_drawing()
@@ -348,7 +316,7 @@ def test_show_drawing_displays_an_image_in_a_notebook(monkeypatch: pytest.Monkey
 		Replaces the notebook check and the notebook display with fakes.
 	"""
 	notebook_display = Recorder()
-	monkeypatch.setattr(plot_display, IS_NOTEBOOK_NAME, answer_value(True))
+	monkeypatch.setattr(plot_display, IS_NOTEBOOK_NAME, answer_always(True))
 	monkeypatch.setattr(plot_display, SHOW_IN_NOTEBOOK_NAME, notebook_display)
 
 	drawing = describe_plot_drawing()
@@ -373,7 +341,7 @@ def test_show_drawing_in_window_closes_the_figure_once_shown(monkeypatch: pytest
 		Replaces the backend check and the pyplot display with fakes.
 	"""
 	figure_numbers = pyplot.get_fignums()
-	monkeypatch.setattr(plot_display, IS_WINDOW_BACKEND_NAME, answer_backend(True))
+	monkeypatch.setattr(plot_display, IS_WINDOW_BACKEND_NAME, answer_always(True))
 	monkeypatch.setattr(pyplot, SHOW_NAME, Recorder())
 	drawing = describe_plot_drawing()
 
@@ -406,7 +374,7 @@ def test_show_drawing_in_window_warns_without_window_backend(
 		The advice the message gives.
 	"""
 	window_display = Recorder()
-	monkeypatch.setattr(plot_display, IS_WINDOW_BACKEND_NAME, answer_backend(False))
+	monkeypatch.setattr(plot_display, IS_WINDOW_BACKEND_NAME, answer_always(False))
 	monkeypatch.setattr(pyplot, SHOW_NAME, window_display)
 	figure_numbers = pyplot.get_fignums()
 	drawing = describe_plot_drawing()
@@ -478,9 +446,9 @@ def test_show_drawing_in_window_keeps_the_figure_when_matplotlib_runs_interactiv
 	monkeypatch
 		Replaces the backend check, the pyplot display and the interactive check with fakes.
 	"""
-	monkeypatch.setattr(plot_display, IS_WINDOW_BACKEND_NAME, answer_backend(True))
+	monkeypatch.setattr(plot_display, IS_WINDOW_BACKEND_NAME, answer_always(True))
 	monkeypatch.setattr(pyplot, SHOW_NAME, Recorder())
-	monkeypatch.setattr(pyplot, IS_INTERACTIVE_NAME, answer_value(True))
+	monkeypatch.setattr(pyplot, IS_INTERACTIVE_NAME, answer_always(True))
 	figure_numbers = pyplot.get_fignums()
 	drawing = describe_plot_drawing()
 
@@ -506,7 +474,7 @@ def test_show_drawing_in_window_moves_a_best_legend_hiding_values(monkeypatch: p
 		Replaces the backend check and the pyplot display with fakes.
 	"""
 	figure_catcher = ShownFigureCatcher()
-	monkeypatch.setattr(plot_display, IS_WINDOW_BACKEND_NAME, answer_backend(True))
+	monkeypatch.setattr(plot_display, IS_WINDOW_BACKEND_NAME, answer_always(True))
 	monkeypatch.setattr(pyplot, SHOW_NAME, figure_catcher)
 	drawing = FigureDrawing(draw_crowded_legend, DRAWING_SIZE)
 

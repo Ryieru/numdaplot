@@ -8,7 +8,10 @@ from collections.abc import Sequence
 
 from numdaplot.errors.column_not_found_error import ColumnNotFoundError
 from numdaplot.errors.duplicate_column_error import DuplicateColumnError
+from numdaplot.errors.empty_list_error import EmptyListError
 from numdaplot.errors.invalid_column_name_error import InvalidColumnNameError
+
+COLUMN_ITEM_NAME = "column"
 
 
 def require_column_name(column_name: object) -> None:
@@ -149,6 +152,54 @@ def require_column_names(column_names: Sequence[object]) -> None:
 		text_names.append(text_name)
 
 	require_unique_names(text_names)
+
+
+def copy_column_names(column_names: list[str]) -> list[str]:
+	"""
+	Return a copy of a list of column names given to a setting, after checking it.
+
+	A setting keeps its own copy, so that changing the given list afterwards leaves the setting unchanged.
+
+	.. versionadded:: 0.2.0
+
+	Parameters
+	----------
+	column_names
+		The names given, at least one.
+
+	Returns
+	-------
+	list[str]
+		A new list holding the same names.
+
+	Raises
+	------
+	EmptyListError
+		When the list is empty.
+	InvalidColumnNameError
+		At the first name that is not a non-empty text.
+	DuplicateColumnError
+		At the first name that appears a second time.
+
+	Examples
+	--------
+	>>> import numdaplot as ndp
+	>>> from numdaplot.tables.columns.column_names import copy_column_names
+	>>> copy_column_names(["city", "price"])
+	['city', 'price']
+	>>> try:
+	... 	copy_column_names([])
+	... except ndp.EmptyListError as error:
+	... 	print(error)
+	Expected at least one column, got an empty list.
+	"""
+	if column_names == []:
+		raise EmptyListError(COLUMN_ITEM_NAME)
+
+	require_column_names(column_names)
+	names_copy = list(column_names)
+
+	return names_copy
 
 
 def require_known_columns(requested_names: Sequence[str], column_names: Sequence[str]) -> None:

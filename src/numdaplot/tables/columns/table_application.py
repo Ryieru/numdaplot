@@ -9,11 +9,8 @@ from dataclasses import dataclass
 from numdaplot.arrays.mapping.value_mapping import ValueMapping
 from numdaplot.arrays.math_functions.math_function import MathFunction
 from numdaplot.dates.time_function import TimeFunction
-from numdaplot.errors.empty_list_error import EmptyListError
 from numdaplot.settings.field_types import require_field_types
-from numdaplot.tables.columns.column_names import require_column_names
-
-COLUMN_ITEM_NAME = "column"
+from numdaplot.tables.columns.column_names import copy_column_names
 
 
 @dataclass(frozen=True)
@@ -83,9 +80,5 @@ class TableApplication:
 		"""
 		require_field_types(self)
 
-		if self.columns == []:
-			raise EmptyListError(COLUMN_ITEM_NAME)
-
-		require_column_names(self.columns)
-		columns_copy = list(self.columns)
+		columns_copy = copy_column_names(self.columns)
 		object.__setattr__(self, "columns", columns_copy)

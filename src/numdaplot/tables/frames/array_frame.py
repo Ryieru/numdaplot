@@ -12,9 +12,8 @@ import pandas
 
 from numdaplot.arrays.array_data import read_stored_values
 from numdaplot.errors.dimension_error import DimensionError
-from numdaplot.errors.empty_list_error import EmptyListError
 from numdaplot.errors.shape_mismatch_error import ShapeMismatchError
-from numdaplot.tables.columns.column_names import require_column_names
+from numdaplot.tables.columns.column_names import copy_column_names
 from numdaplot.tables.frames.column import Column
 from numdaplot.tables.frames.column_values import build_column
 from numdaplot.tables.frames.time_range_errors import TimeRangeErrors
@@ -23,7 +22,6 @@ if TYPE_CHECKING:
 	from numdaplot.arrays.array import Array
 
 FROM_ARRAYS_OPERATION = "from_arrays"
-COLUMN_ITEM_NAME = "column"
 ONE_DIMENSION = 1
 
 
@@ -64,15 +62,13 @@ def build_array_frame(columns: dict[str, Array]) -> pandas.DataFrame:
 	  city  price
 	0  Pau    1.5
 	"""
-	if columns == {}:
-		raise EmptyListError(COLUMN_ITEM_NAME)
-
-	column_names = list(columns)
-	require_column_names(column_names)
+	given_names = list(columns)
+	column_names = copy_column_names(given_names)
 	built_columns = dict[str, Column]()
 	value_counts = list[int]()
 
-	for column_name, array in columns.items():
+	for column_name in column_names:
+		array = columns[column_name]
 		values = read_stored_values(array)
 		if values.ndim != ONE_DIMENSION:
 			raise DimensionError(FROM_ARRAYS_OPERATION, values.ndim)

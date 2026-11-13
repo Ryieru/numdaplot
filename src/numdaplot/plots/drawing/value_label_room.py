@@ -230,7 +230,8 @@ def read_anchor_value(text: Annotation, is_horizontal: bool) -> float:
 	2.0
 	"""
 	anchor_x, anchor_y = text.xy
-	anchor_value = float(anchor_x) if is_horizontal else float(anchor_y)
+	anchor_coordinate = anchor_x if is_horizontal else anchor_y
+	anchor_value = float(anchor_coordinate)
 
 	return anchor_value
 
@@ -268,7 +269,8 @@ def find_anchor_pixel(axes: Axes, text: Annotation, is_horizontal: bool) -> floa
 	# Some versions of the matplotlib stubs leave the points given by transform untyped.
 	anchor_point = cast(NDArray[numpy.float64], axes.transData.transform(text.xy))
 	anchor_x, anchor_y = anchor_point
-	anchor_pixel = float(anchor_x) if is_horizontal else float(anchor_y)
+	anchor_coordinate = anchor_x if is_horizontal else anchor_y
+	anchor_pixel = float(anchor_coordinate)
 
 	return anchor_pixel
 

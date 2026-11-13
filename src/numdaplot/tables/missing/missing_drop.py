@@ -6,13 +6,10 @@ Settings of the removal of the rows or the columns of a Table holding missing va
 
 from dataclasses import dataclass
 
-from numdaplot.errors.empty_list_error import EmptyListError
 from numdaplot.settings.field_types import require_field_types
-from numdaplot.tables.columns.column_names import require_column_names
+from numdaplot.tables.columns.column_names import copy_column_names
 from numdaplot.tables.missing.missing_mode import MissingMode
 from numdaplot.tables.missing.missing_ratio import MissingRatio
-
-COLUMN_ITEM_NAME = "column"
 
 
 @dataclass(frozen=True)
@@ -90,9 +87,5 @@ class MissingDrop:
 		if self.columns is None:
 			return
 
-		if self.columns == []:
-			raise EmptyListError(COLUMN_ITEM_NAME)
-
-		require_column_names(self.columns)
-		columns_copy = list(self.columns)
+		columns_copy = copy_column_names(self.columns)
 		object.__setattr__(self, "columns", columns_copy)
