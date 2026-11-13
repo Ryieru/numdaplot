@@ -1,5 +1,5 @@
 """
-Check of the number of decimals written in a file.
+Check of the number of decimals a number is written with, in a file or in a label.
 
 .. versionadded:: 0.1.0
 """
@@ -28,7 +28,7 @@ def require_decimal_count(decimals: int | None) -> None:
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> from numdaplot.tables.files.decimal_count import require_decimal_count
+	>>> from numdaplot.measures.decimal_count import require_decimal_count
 	>>> try:
 	... 	require_decimal_count(-1)
 	... except ndp.InvalidCountError as error:

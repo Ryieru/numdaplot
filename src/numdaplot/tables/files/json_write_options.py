@@ -7,7 +7,7 @@ Settings of the JSON files a Table writes.
 from dataclasses import dataclass
 
 from numdaplot.argument_checks.field_types import require_field_types
-from numdaplot.tables.files.decimal_count import require_decimal_count
+from numdaplot.measures.decimal_count import require_decimal_count
 from numdaplot.tables.files.json_layout import JsonLayout
 
 

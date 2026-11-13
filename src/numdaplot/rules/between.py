@@ -11,13 +11,14 @@ from datetime import date, datetime, time, timedelta
 from typing import TYPE_CHECKING
 
 from numdaplot.argument_checks.field_types import require_field_types
-from numdaplot.arrays.array_data import ArrayData
 from numdaplot.errors.invalid_bounds_error import InvalidBoundsError
 from numdaplot.rules.bounds import Bounds
 from numdaplot.rules.rule import Rule
 
 if TYPE_CHECKING:
 	from numdaplot.arrays.array import Array
+
+ORDERED_TYPES = (int, float, str, date, datetime, timedelta, time)
 
 
 # The type parameter has the name of the alias holding the same types: the documentation shows the alias,
@@ -90,8 +91,10 @@ class Between[OrderedValue: (int, float, str, date, datetime, timedelta, time) =
 		"""
 		require_field_types(self)
 
-		has_array_bound = isinstance(self.low, ArrayData) or isinstance(self.high, ArrayData)
-		if has_array_bound:
+		low_is_value = isinstance(self.low, ORDERED_TYPES)
+		high_is_value = isinstance(self.high, ORDERED_TYPES)
+		has_value_bounds = low_is_value and high_is_value
+		if not has_value_bounds:
 			return
 
 		try:

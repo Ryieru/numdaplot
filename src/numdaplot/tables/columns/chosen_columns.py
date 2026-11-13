@@ -6,9 +6,9 @@ Choice of the columns of a Table.
 
 import pandas
 
+from numdaplot.argument_checks.column_names import require_known_columns
 from numdaplot.tables.columns.column_choice import ColumnChoice
 from numdaplot.tables.columns.column_mode import ColumnMode
-from numdaplot.tables.columns.column_names import require_known_columns
 
 
 def choose_frame_columns(frame: pandas.DataFrame, choice: ColumnChoice) -> pandas.DataFrame:

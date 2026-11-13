@@ -10,6 +10,8 @@ from matplotlib.figure import Figure as MatplotlibFigure
 from matplotlib.figure import FigureBase
 
 from numdaplot.argument_checks.argument_types import checked_arguments
+from numdaplot.files.conflict import Conflict
+from numdaplot.files.file_paths import FilePath
 from numdaplot.plots.drawing.plot_drawing import FigureDrawing, build_figure
 from numdaplot.plots.figure.cell import Cell
 from numdaplot.plots.figure.figure_drawing import choose_figure_size, draw_figure
@@ -21,8 +23,6 @@ from numdaplot.plots.output.plot_display import show_drawing
 from numdaplot.plots.output.shown_object import ShownObject
 from numdaplot.plots.plot import Plot
 from numdaplot.plots.style.image_options import ImageOptions
-from numdaplot.tables.conflict import Conflict
-from numdaplot.tables.files.file_paths import FilePath
 
 
 class Figure:

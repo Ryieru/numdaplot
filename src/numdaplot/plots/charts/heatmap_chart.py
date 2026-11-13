@@ -6,11 +6,11 @@ Chart coloring each value of a grid of numbers.
 
 from dataclasses import dataclass
 
+from numdaplot.argument_checks.column_names import copy_optional_column_names, require_optional_column_name
 from numdaplot.argument_checks.field_types import require_field_types
 from numdaplot.plots.charts.cell_values import CellValues
 from numdaplot.plots.charts.chart import Chart
 from numdaplot.plots.charts.color_scale import ColorScale
-from numdaplot.tables.columns.column_names import copy_optional_column_names, require_optional_column_name
 
 
 @dataclass(frozen=True)

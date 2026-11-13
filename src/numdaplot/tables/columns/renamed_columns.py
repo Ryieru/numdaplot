@@ -6,7 +6,7 @@ Renaming of the columns of a Table.
 
 import pandas
 
-from numdaplot.tables.columns.column_names import require_known_columns, require_unique_names
+from numdaplot.argument_checks.column_names import require_known_columns, require_unique_names
 from numdaplot.tables.columns.renaming import Renaming
 
 

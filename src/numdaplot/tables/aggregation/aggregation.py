@@ -6,12 +6,12 @@ Settings of the aggregation of the rows of a Table.
 
 from dataclasses import dataclass
 
+from numdaplot.argument_checks.column_names import require_column_name, require_column_names, require_unique_names
 from numdaplot.argument_checks.field_types import require_field_types
 from numdaplot.errors.duplicate_column_error import RESULT_NAME_ADVICE, DuplicateColumnError
 from numdaplot.errors.empty_aggregation_error import EmptyAggregationError
 from numdaplot.errors.empty_list_error import EmptyListError
 from numdaplot.tables.aggregation.calculation import Calculation, find_result_name
-from numdaplot.tables.columns.column_names import require_column_name, require_column_names, require_unique_names
 
 CALCULATION_ITEM_NAME = "calculation"
 GROUP_COLUMN_ITEM_NAME = "group column"

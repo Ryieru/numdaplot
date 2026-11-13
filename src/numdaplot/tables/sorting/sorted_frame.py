@@ -8,9 +8,9 @@ from typing import Literal
 
 import pandas
 
+from numdaplot.argument_checks.column_names import require_known_columns
 from numdaplot.ordering.missing_position import MissingPosition
 from numdaplot.ordering.order import Order
-from numdaplot.tables.columns.column_names import require_known_columns
 from numdaplot.tables.sorting.table_sorting import TableSorting
 
 STABLE_SORT = "stable"

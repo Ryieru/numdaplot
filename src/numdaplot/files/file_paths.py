@@ -1,5 +1,5 @@
 """
-Paths of the files a Table reads and writes.
+Paths of the files numdaplot reads and writes: Tables, and images of Plots and Figures.
 
 .. versionadded:: 0.1.0
 """
@@ -8,7 +8,7 @@ from pathlib import Path
 
 from numdaplot.errors.file_exists_error import FileExistsError
 from numdaplot.errors.file_not_found_error import FileNotFoundError
-from numdaplot.tables.conflict import Conflict
+from numdaplot.files.conflict import Conflict
 
 type FilePath = str | Path
 """
@@ -53,7 +53,7 @@ def require_existing_file(path: Path) -> None:
 	--------
 	>>> import numdaplot as ndp
 	>>> from pathlib import Path
-	>>> from numdaplot.tables.files.file_paths import require_existing_file
+	>>> from numdaplot.files.file_paths import require_existing_file
 	>>> try:
 	... 	require_existing_file(Path("missing.csv"))
 	... except ndp.FileNotFoundError as error:
@@ -89,7 +89,7 @@ def require_free_path(path: Path, on_conflict: Conflict) -> None:
 	>>> import tempfile
 	>>> from pathlib import Path
 	>>> import numdaplot as ndp
-	>>> from numdaplot.tables.files.file_paths import require_free_path
+	>>> from numdaplot.files.file_paths import require_free_path
 	>>> with tempfile.NamedTemporaryFile(suffix=".csv") as file:
 	... 	path = Path(file.name)
 	... 	require_free_path(path, ndp.Conflict.REPLACE)

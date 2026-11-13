@@ -6,9 +6,9 @@ A rule applied to one or several columns of a Table.
 
 from dataclasses import dataclass
 
+from numdaplot.argument_checks.column_names import copy_optional_column_names
 from numdaplot.argument_checks.field_types import require_field_types
 from numdaplot.rules.rule import Rule
-from numdaplot.tables.columns.column_names import copy_optional_column_names
 from numdaplot.tables.filtering.column_match import ColumnMatch
 
 

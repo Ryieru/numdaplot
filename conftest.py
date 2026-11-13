@@ -5,6 +5,7 @@ pytest settings shared by every test and every docstring example.
 """
 
 from pathlib import Path
+from types import SimpleNamespace
 from typing import Any
 
 import matplotlib
@@ -165,3 +166,62 @@ def wrapping_durations() -> Any:
 	durations = FarDurations(False)
 
 	return durations
+
+
+class ModuleGiver:
+	"""
+	Fake module import giving the same module whatever its name.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	module
+		The module to give.
+	"""
+
+	def __init__(self, module: SimpleNamespace) -> None:
+		"""
+		Keep the module to give.
+
+		.. versionadded:: 0.1.0
+
+		Parameters
+		----------
+		module
+			The module to give.
+		"""
+		self.module = module
+
+	def __call__(self, module_name: str) -> SimpleNamespace:
+		"""
+		Give the module.
+
+		.. versionadded:: 0.1.0
+
+		Parameters
+		----------
+		module_name
+			The imported name, ignored.
+
+		Returns
+		-------
+		SimpleNamespace
+			The kept module.
+		"""
+		return self.module
+
+
+@pytest.fixture
+def module_giver() -> Any:
+	"""
+	Return the fake module import giving the same module whatever its name, to replace ``import_module``.
+
+	.. versionadded:: 0.2.0
+
+	Returns
+	-------
+	Any
+		The ``ModuleGiver`` class, called with the module to give.
+	"""
+	return ModuleGiver

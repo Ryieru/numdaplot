@@ -117,13 +117,15 @@ src/numdaplot/
 	plots/          Plot and its creation methods, the charts, the PlotStyle and Figure
 	errors/         NumdaplotError, the precise errors, NumdaplotWarning and the precise warnings
 	types/          the Type enum and its conversion to numpy and pandas dtypes
-	measures/       the Measure enum, the validation of fractions between 0 and 1 and the division of counts
+	measures/       the Measure enum, the validation of fractions and decimal counts, and the division of counts
 	rules/          tests applied to each value: Equal, Greater, Between, IsIn, Contains, IsMissing...
 	statistics/     Sum, Mean, Median, Quantile, StandardDeviation...
 	math_functions/ Absolute, Round, SquareRoot, Logarithm, Exponential, Sine, Cosine
 	positions/      Region, Index, Range, First, Last, Axis and Shape, the dimensions of an Array or a Table
 	ordering/       Order, MissingPosition and the natural order of texts
-	argument_checks/ check of the settings and arguments against their annotations, raising InvalidTypeError
+	argument_checks/ check of the settings and arguments against their annotations, and of column names
+	files/          FilePath, Conflict and the access to the files read and written by Tables, Plots and Figures
+	display/        detection of a Jupyter notebook, where Tables and Plots are shown inside the page
 tests/
 	unit/           mirroring src/numdaplot, the small objects of a notion tested together
 	functional/     one test file per notion, using the library as ndp

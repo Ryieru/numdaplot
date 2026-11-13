@@ -8,10 +8,10 @@ from typing import Never, Self
 
 import pandas
 
+from numdaplot.argument_checks.column_names import require_known_columns
 from numdaplot.dates.time_zone import TimeZone
 from numdaplot.errors.refused_operation_error import RefusedOperationError
 from numdaplot.positions.shape import Shape
-from numdaplot.tables.columns.column_names import require_known_columns
 from numdaplot.tables.files.column_names import ColumnNames
 from numdaplot.tables.frames.cleaned_names import clean_frame_names
 from numdaplot.tables.frames.column import Column

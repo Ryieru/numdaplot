@@ -1,5 +1,5 @@
 """
-Checks of the column names of a Table.
+Checks of the column names given to a setting or an operation.
 
 .. versionadded:: 0.1.0
 """
@@ -33,7 +33,7 @@ def require_column_name(column_name: object) -> None:
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> from numdaplot.tables.columns.column_names import require_column_name
+	>>> from numdaplot.argument_checks.column_names import require_column_name
 	>>> try:
 	... 	require_column_name(2024)
 	... except ndp.InvalidColumnNameError as error:
@@ -67,7 +67,7 @@ def require_optional_column_name(column_name: object) -> None:
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> from numdaplot.tables.columns.column_names import require_optional_column_name
+	>>> from numdaplot.argument_checks.column_names import require_optional_column_name
 	>>> require_optional_column_name(None)
 	>>> try:
 	... 	require_optional_column_name("")
@@ -100,7 +100,7 @@ def require_unique_names(column_names: Sequence[str]) -> None:
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> from numdaplot.tables.columns.column_names import require_unique_names
+	>>> from numdaplot.argument_checks.column_names import require_unique_names
 	>>> try:
 	... 	require_unique_names(["city", "price", "city"])
 	... except ndp.DuplicateColumnError as error:
@@ -137,7 +137,7 @@ def require_column_names(column_names: Sequence[object]) -> None:
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> from numdaplot.tables.columns.column_names import require_column_names
+	>>> from numdaplot.argument_checks.column_names import require_column_names
 	>>> try:
 	... 	require_column_names(["city", ""])
 	... except ndp.InvalidColumnNameError as error:
@@ -184,7 +184,7 @@ def copy_column_names(column_names: list[str]) -> list[str]:
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> from numdaplot.tables.columns.column_names import copy_column_names
+	>>> from numdaplot.argument_checks.column_names import copy_column_names
 	>>> copy_column_names(["city", "price"])
 	['city', 'price']
 	>>> try:
@@ -230,7 +230,7 @@ def copy_optional_column_names(column_names: list[str] | None) -> list[str] | No
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> from numdaplot.tables.columns.column_names import copy_optional_column_names
+	>>> from numdaplot.argument_checks.column_names import copy_optional_column_names
 	>>> copy_optional_column_names(None) is None
 	True
 	>>> try:
@@ -268,7 +268,7 @@ def require_known_columns(requested_names: Sequence[str], column_names: Sequence
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> from numdaplot.tables.columns.column_names import require_known_columns
+	>>> from numdaplot.argument_checks.column_names import require_known_columns
 	>>> try:
 	... 	require_known_columns(["prise"], ["city", "price"])
 	... except ndp.ColumnNotFoundError as error:

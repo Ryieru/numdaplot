@@ -6,8 +6,8 @@ Settings of the removal of the rows or the columns of a Table holding missing va
 
 from dataclasses import dataclass
 
+from numdaplot.argument_checks.column_names import copy_optional_column_names
 from numdaplot.argument_checks.field_types import require_field_types
-from numdaplot.tables.columns.column_names import copy_optional_column_names
 from numdaplot.tables.missing.missing_mode import MissingMode
 from numdaplot.tables.missing.missing_ratio import MissingRatio
 

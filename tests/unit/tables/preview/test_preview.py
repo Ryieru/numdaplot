@@ -15,7 +15,7 @@ from numdaplot.errors.invalid_seed_error import InvalidSeedError
 from numdaplot.errors.invalid_type_error import InvalidTypeError
 from numdaplot.errors.refused_setting_error import RefusedSettingError
 from numdaplot.tables.preview import notebook_display
-from numdaplot.tables.preview.notebook_display import is_notebook, show_frame, show_pandas_frame
+from numdaplot.tables.preview.notebook_display import show_frame, show_pandas_frame
 from numdaplot.tables.preview.preview import Preview
 from numdaplot.tables.preview.preview_rows import choose_preview_rows
 from numdaplot.tables.preview.shown_columns import ShownColumns
@@ -33,116 +33,10 @@ LARGE_COUNT = 10
 EXPECTED_ROW_COUNT = 6
 IS_NOTEBOOK_NAME = "is_notebook"
 IMPORT_MODULE_NAME = "import_module"
-FIND_SPEC_NAME = "find_spec"
 EXPECTED_TEXT_START = "price"
 EXPECTED_PLAIN_TEXT = "price\n0    1.0"
 PLAIN_FRAME = pandas.DataFrame({"price": [1.0]})
 EXPECTED_HTML_START = "<table"
-NOTEBOOK_CONFIG = dict[str, object]({"IPKernelApp": None})
-TERMINAL_CONFIG = dict[str, object]()
-FOUND_PACKAGE = object()
-
-
-class ModuleGiver:
-	"""
-	Fake module import giving the same module whatever its name.
-
-	.. versionadded:: 0.1.0
-
-	Parameters
-	----------
-	module
-		The module to give.
-	"""
-
-	def __init__(self, module: SimpleNamespace) -> None:
-		"""
-		Keep the module to give.
-
-		.. versionadded:: 0.1.0
-
-		Parameters
-		----------
-		module
-			The module to give.
-		"""
-		self.module = module
-
-	def __call__(self, module_name: str) -> SimpleNamespace:
-		"""
-		Give the module.
-
-		.. versionadded:: 0.1.0
-
-		Parameters
-		----------
-		module_name
-			The imported name, ignored.
-
-		Returns
-		-------
-		SimpleNamespace
-			The kept module.
-		"""
-		return self.module
-
-
-def build_fake_ipython(config: dict[str, object] | None) -> SimpleNamespace:
-	"""
-	Return a fake IPython module whose shell has a configuration, or no shell.
-
-	.. versionadded:: 0.1.0
-
-	Parameters
-	----------
-	config
-		The configuration of the shell, or ``None`` for no shell.
-
-	Returns
-	-------
-	SimpleNamespace
-		A module with a ``get_ipython`` function.
-	"""
-	shell = None
-	if config is not None:
-		shell = SimpleNamespace(config=config)
-
-	fake_module = SimpleNamespace(get_ipython=lambda: shell)
-
-	return fake_module
-
-
-def find_no_package(package_name: str) -> None:
-	"""
-	Fake package lookup that finds nothing.
-
-	.. versionadded:: 0.1.0
-
-	Parameters
-	----------
-	package_name
-		The searched package, ignored.
-	"""
-	return None
-
-
-def find_any_package(package_name: str) -> object:
-	"""
-	Fake package lookup that finds every package.
-
-	.. versionadded:: 0.1.0
-
-	Parameters
-	----------
-	package_name
-		The searched package, ignored.
-
-	Returns
-	-------
-	object
-		A found package.
-	"""
-	return FOUND_PACKAGE
 
 
 def answer_true() -> bool:
@@ -270,7 +164,7 @@ def test_show_frame_prints_text_outside_a_notebook(capsys: pytest.CaptureFixture
 	assert printed_text.startswith(EXPECTED_TEXT_START)
 
 
-def test_show_frame_displays_html_in_a_notebook(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_show_frame_displays_html_in_a_notebook(monkeypatch: pytest.MonkeyPatch, module_giver: Any) -> None:
 	"""
 	Check that a notebook receives an HTML table.
 
@@ -280,11 +174,14 @@ def test_show_frame_displays_html_in_a_notebook(monkeypatch: pytest.MonkeyPatch)
 	----------
 	monkeypatch
 		Replaces the notebook check and the IPython display module with fakes.
+	module_giver
+		Builds the fake import giving the display module.
 	"""
 	shown_objects = list[str]()
 	display_module = SimpleNamespace(HTML=str, display=shown_objects.append)
 	monkeypatch.setattr(notebook_display, IS_NOTEBOOK_NAME, answer_true)
-	monkeypatch.setattr(notebook_display, IMPORT_MODULE_NAME, ModuleGiver(display_module))
+	fake_import = module_giver(display_module)
+	monkeypatch.setattr(notebook_display, IMPORT_MODULE_NAME, fake_import)
 
 	show_frame(FRAME, ShownColumns.ALL)
 
@@ -310,7 +207,7 @@ def test_show_pandas_frame_prints_the_frame_without_types(capsys: pytest.Capture
 	assert printed_text == EXPECTED_PLAIN_TEXT
 
 
-def test_show_pandas_frame_displays_html_in_a_notebook(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_show_pandas_frame_displays_html_in_a_notebook(monkeypatch: pytest.MonkeyPatch, module_giver: Any) -> None:
 	"""
 	Check that a notebook receives an HTML table.
 
@@ -320,70 +217,19 @@ def test_show_pandas_frame_displays_html_in_a_notebook(monkeypatch: pytest.Monke
 	----------
 	monkeypatch
 		Replaces the notebook check and the IPython display module with fakes.
+	module_giver
+		Builds the fake import giving the display module.
 	"""
 	shown_objects = list[str]()
 	display_module = SimpleNamespace(HTML=str, display=shown_objects.append)
 	monkeypatch.setattr(notebook_display, IS_NOTEBOOK_NAME, answer_true)
-	monkeypatch.setattr(notebook_display, IMPORT_MODULE_NAME, ModuleGiver(display_module))
+	fake_import = module_giver(display_module)
+	monkeypatch.setattr(notebook_display, IMPORT_MODULE_NAME, fake_import)
 
 	show_pandas_frame(PLAIN_FRAME)
 
 	shown_html = shown_objects[0]
 	assert shown_html.startswith(EXPECTED_HTML_START)
-
-
-def test_is_notebook_is_false_without_ipython(monkeypatch: pytest.MonkeyPatch) -> None:
-	"""
-	Check that a missing IPython means no notebook.
-
-	.. versionadded:: 0.1.0
-
-	Parameters
-	----------
-	monkeypatch
-		Replaces the package lookup with one that finds nothing.
-	"""
-	monkeypatch.setattr(notebook_display, FIND_SPEC_NAME, find_no_package)
-
-	runs_in_notebook = is_notebook()
-
-	assert not runs_in_notebook
-
-
-@pytest.mark.parametrize(
-	("config", "expected_answer"),
-	[
-		(None, False),
-		(TERMINAL_CONFIG, False),
-		(NOTEBOOK_CONFIG, True),
-	],
-)
-def test_is_notebook_checks_for_a_jupyter_kernel(
-	monkeypatch: pytest.MonkeyPatch,
-	config: dict[str, object] | None,
-	expected_answer: bool,
-) -> None:
-	"""
-	Check the answer without shell, in an IPython terminal and in a Jupyter kernel.
-
-	.. versionadded:: 0.1.0
-
-	Parameters
-	----------
-	monkeypatch
-		Replaces IPython with a fake.
-	config
-		The configuration of the fake shell, or None for no shell.
-	expected_answer
-		Whether it is a notebook.
-	"""
-	fake_ipython = build_fake_ipython(config)
-	monkeypatch.setattr(notebook_display, FIND_SPEC_NAME, find_any_package)
-	monkeypatch.setattr(notebook_display, IMPORT_MODULE_NAME, ModuleGiver(fake_ipython))
-
-	runs_in_notebook = is_notebook()
-
-	assert runs_in_notebook == expected_answer
 
 
 def test_preview_rejects_a_side_written_as_text() -> None:

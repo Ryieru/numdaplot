@@ -6,10 +6,10 @@ A column the rows of a Table are sorted by.
 
 from dataclasses import dataclass
 
+from numdaplot.argument_checks.column_names import require_column_name
 from numdaplot.argument_checks.field_types import require_field_types
 from numdaplot.ordering.missing_position import MissingPosition
 from numdaplot.ordering.order import Order
-from numdaplot.tables.columns.column_names import require_column_name
 
 
 @dataclass(frozen=True)

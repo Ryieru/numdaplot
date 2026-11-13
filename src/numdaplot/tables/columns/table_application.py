@@ -6,11 +6,11 @@ A function applied to columns of a Table.
 
 from dataclasses import dataclass
 
+from numdaplot.argument_checks.column_names import copy_column_names
 from numdaplot.argument_checks.field_types import require_field_types
 from numdaplot.arrays.mapping.value_mapping import ValueMapping
 from numdaplot.dates.time_function import TimeFunction
 from numdaplot.math_functions.math_function import MathFunction
-from numdaplot.tables.columns.column_names import copy_column_names
 
 
 @dataclass(frozen=True)

@@ -11,8 +11,8 @@ import pytest
 
 from numdaplot.errors.file_exists_error import FileExistsError
 from numdaplot.errors.file_not_found_error import FileNotFoundError
-from numdaplot.tables.conflict import Conflict
-from numdaplot.tables.files.file_paths import require_existing_file, require_free_path
+from numdaplot.files.conflict import Conflict
+from numdaplot.files.file_paths import require_existing_file, require_free_path
 
 FILE_NAME = "sales.csv"
 FILE_CONTENT = "price\n1\n"

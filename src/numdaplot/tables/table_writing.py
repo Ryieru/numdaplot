@@ -7,13 +7,13 @@ Writing of a Table in a file.
 from pathlib import Path
 
 from numdaplot.argument_checks.argument_types import checked_arguments
-from numdaplot.tables.conflict import Conflict
+from numdaplot.files.conflict import Conflict
+from numdaplot.files.file_access import WRITE_OPERATION, FileAccessErrors
+from numdaplot.files.file_paths import FilePath, require_free_path
 from numdaplot.tables.files.csv_file import write_csv_file
 from numdaplot.tables.files.csv_write_options import CsvWriteOptions
 from numdaplot.tables.files.excel_file import write_excel_file
 from numdaplot.tables.files.excel_write_options import ExcelWriteOptions
-from numdaplot.tables.files.file_access import WRITE_OPERATION, FileAccessErrors
-from numdaplot.tables.files.file_paths import FilePath, require_free_path
 from numdaplot.tables.files.json_file import write_json_file
 from numdaplot.tables.files.json_write_options import JsonWriteOptions
 from numdaplot.tables.files.parquet_file import write_parquet_file

@@ -11,8 +11,8 @@ import numpy
 import pandas
 from pandas.api.types import infer_dtype
 
+from numdaplot.argument_checks.column_names import require_column_names
 from numdaplot.errors.unsupported_index_error import UnsupportedIndexError
-from numdaplot.tables.columns.column_names import require_column_names
 from numdaplot.tables.frames.column import Column
 from numdaplot.tables.frames.time_columns import is_time_column, read_object_values, store_time_column
 from numdaplot.tables.frames.time_range_errors import TimeRangeErrors

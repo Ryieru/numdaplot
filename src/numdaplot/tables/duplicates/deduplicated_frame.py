@@ -8,7 +8,7 @@ from typing import Literal
 
 import pandas
 
-from numdaplot.tables.columns.column_names import require_known_columns
+from numdaplot.argument_checks.column_names import require_known_columns
 from numdaplot.tables.duplicates.deduplication import Deduplication
 from numdaplot.tables.duplicates.keep import Keep
 

@@ -15,7 +15,7 @@ VALUE_TYPE_PATHS = {
 	"OrderedValue": "numdaplot.rules.rule_values.OrderedValue",
 	"ListValue": "numdaplot.arrays.array_creation.ListValue",
 	"NestedValues": "numdaplot.arrays.array_creation.NestedValues",
-	"FilePath": "numdaplot.tables.files.file_paths.FilePath",
+	"FilePath": "numdaplot.files.file_paths.FilePath",
 }
 VALUE_TYPES_TITLE = "Value types"
 VALUE_TYPES_SECTION = "Types"

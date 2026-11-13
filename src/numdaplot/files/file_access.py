@@ -34,7 +34,7 @@ class FileAccessErrors(ErrorTranslation):
 	--------
 	>>> from pathlib import Path
 	>>> import numdaplot as ndp
-	>>> from numdaplot.tables.files.file_access import FileAccessErrors, WRITE_OPERATION
+	>>> from numdaplot.files.file_access import FileAccessErrors, WRITE_OPERATION
 	>>> path = Path("missing_folder/sales.csv")
 	>>> try:
 	... 	with FileAccessErrors(WRITE_OPERATION, path):
@@ -108,7 +108,7 @@ def find_access_reason(path: Path, error: OSError) -> str:
 	Examples
 	--------
 	>>> from pathlib import Path
-	>>> from numdaplot.tables.files.file_access import find_access_reason
+	>>> from numdaplot.files.file_access import find_access_reason
 	>>> find_access_reason(Path("missing_folder/sales.csv"), OSError("Disk is full"))
 	'the folder missing_folder does not exist'
 	>>> find_access_reason(Path("sales.csv"), OSError(28, "No space left on device"))

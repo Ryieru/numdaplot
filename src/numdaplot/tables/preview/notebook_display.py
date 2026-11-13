@@ -5,16 +5,14 @@ Display of a Table in a terminal or in a Jupyter notebook.
 """
 
 from importlib import import_module
-from importlib.util import find_spec
 
 import pandas
 
+from numdaplot.display.notebook import is_notebook
 from numdaplot.tables.frames.table_text import build_typed_frame, format_table, write_empty_table_note
 from numdaplot.tables.preview.shown_columns import ShownColumns
 
-IPYTHON_PACKAGE = "IPython"
 IPYTHON_DISPLAY_MODULE = "IPython.display"
-NOTEBOOK_KERNEL = "IPKernelApp"
 COMPACT_NOTEBOOK_COLUMN_COUNT = 10
 NOTE_HTML = "<p>{note}</p>"
 MAX_ROWS_OPTION = "display.max_rows"
@@ -196,43 +194,11 @@ def display_html(frame_html: str) -> None:
 
 	Examples
 	--------
-	>>> from numdaplot.tables.preview.notebook_display import display_html, is_notebook
+	>>> from numdaplot.display.notebook import is_notebook
+	>>> from numdaplot.tables.preview.notebook_display import display_html
 	>>> if is_notebook():
 	... 	display_html("<table></table>")
 	"""
 	display_module = import_module(IPYTHON_DISPLAY_MODULE)
 	html_object = display_module.HTML(frame_html)
 	display_module.display(html_object)
-
-
-def is_notebook() -> bool:
-	"""
-	Return whether the code runs in a Jupyter notebook.
-
-	IPython is optional: without it, the code never runs in a notebook.
-
-	.. versionadded:: 0.1.0
-
-	Returns
-	-------
-	bool
-		True inside a Jupyter kernel, False in a terminal or a script.
-
-	Examples
-	--------
-	>>> from numdaplot.tables.preview.notebook_display import is_notebook
-	>>> is_notebook()
-	False
-	"""
-	ipython_spec = find_spec(IPYTHON_PACKAGE)
-	if ipython_spec is None:
-		return False
-
-	ipython_module = import_module(IPYTHON_PACKAGE)
-	shell = ipython_module.get_ipython()
-	if shell is None:
-		return False
-
-	runs_in_kernel = NOTEBOOK_KERNEL in shell.config
-
-	return runs_in_kernel

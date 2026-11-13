@@ -12,6 +12,7 @@ import numpy
 import pandas
 from numpy.typing import NDArray
 
+from numdaplot.argument_checks.column_names import require_known_columns
 from numdaplot.arrays.conversion.python_values import to_python_list
 from numdaplot.dates.time_zone import TimeZone
 from numdaplot.errors.duplicate_column_error import DuplicateColumnError
@@ -21,7 +22,6 @@ from numdaplot.statistics.statistic import Statistic
 from numdaplot.tables.aggregation.result_column import build_result_column, compute_cell
 from numdaplot.tables.aggregation.share_column import SHARE_MEAN, build_share_column
 from numdaplot.tables.aggregation.statistic_name import name_statistic
-from numdaplot.tables.columns.column_names import require_known_columns
 from numdaplot.tables.description.description import DEFAULT_FUNCTIONS, Description
 from numdaplot.tables.frames.column import Column
 from numdaplot.tables.frames.column_values import build_column, find_column_type, read_present_values

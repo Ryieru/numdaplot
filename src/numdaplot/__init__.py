@@ -121,6 +121,7 @@ from numdaplot.errors.unsupported_index_error import UnsupportedIndexError
 from numdaplot.errors.unsupported_missing_error import UnsupportedMissingError
 from numdaplot.errors.unsupported_type_error import UnsupportedTypeError
 from numdaplot.errors.value_conversion_error import ValueConversionError
+from numdaplot.files.conflict import Conflict
 from numdaplot.math_functions.absolute import Absolute
 from numdaplot.math_functions.cosine import Cosine
 from numdaplot.math_functions.exponential import Exponential
@@ -212,7 +213,6 @@ from numdaplot.tables.columns.name_change import NameChange
 from numdaplot.tables.columns.new_column import NewColumn
 from numdaplot.tables.columns.renaming import Renaming
 from numdaplot.tables.columns.table_application import TableApplication
-from numdaplot.tables.conflict import Conflict
 from numdaplot.tables.description.description import Description
 from numdaplot.tables.duplicates.deduplication import Deduplication
 from numdaplot.tables.duplicates.keep import Keep

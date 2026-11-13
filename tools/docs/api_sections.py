@@ -44,7 +44,7 @@ SECTIONS = (
 	Section("numdaplot.arrays.mapping", "Arrays", "arrays", "Value mapping"),
 	Section("numdaplot.arrays", "Arrays", "arrays"),
 	Section("numdaplot.tables.files", "Tables", "tables", "File settings"),
-	Section("numdaplot.tables.conflict", "Tables", "tables", "File settings"),
+	Section("numdaplot.files.conflict", "Tables", "tables", "File settings"),
 	Section("numdaplot.tables.filtering", "Tables", "tables", "Filter settings"),
 	Section("numdaplot.tables.aggregation", "Tables", "tables", "Statistic settings"),
 	Section("numdaplot.tables.pivot", "Tables", "tables", "Statistic settings"),

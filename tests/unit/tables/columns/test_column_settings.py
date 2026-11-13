@@ -10,12 +10,12 @@ from numdaplot.arrays.array import Array
 from numdaplot.errors.duplicate_column_error import DuplicateColumnError
 from numdaplot.errors.empty_list_error import EmptyListError
 from numdaplot.errors.invalid_column_name_error import InvalidColumnNameError
+from numdaplot.files.conflict import Conflict
 from numdaplot.tables.columns.column_choice import ColumnChoice
 from numdaplot.tables.columns.column_mode import ColumnMode
 from numdaplot.tables.columns.name_change import NameChange
 from numdaplot.tables.columns.new_column import NewColumn
 from numdaplot.tables.columns.renaming import Renaming
-from numdaplot.tables.conflict import Conflict
 
 COLUMN_NAMES = ["city", "price"]
 REPEATED_NAMES = ["city", "city"]

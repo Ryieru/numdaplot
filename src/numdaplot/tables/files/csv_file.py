@@ -12,7 +12,7 @@ from typing import Any, cast
 import pandas
 from pandas.api.types import infer_dtype
 
-from numdaplot.tables.columns.column_names import require_column_names
+from numdaplot.argument_checks.column_names import require_column_names
 from numdaplot.tables.files.csv_read_options import CsvReadOptions
 from numdaplot.tables.files.csv_write_options import CsvWriteOptions
 from numdaplot.tables.files.missing_texts import find_missing_settings

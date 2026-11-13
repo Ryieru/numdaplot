@@ -6,8 +6,8 @@ A new name for one column of a Table.
 
 from dataclasses import dataclass
 
+from numdaplot.argument_checks.column_names import require_column_name
 from numdaplot.argument_checks.field_types import require_field_types
-from numdaplot.tables.columns.column_names import require_column_name
 
 
 @dataclass(frozen=True)

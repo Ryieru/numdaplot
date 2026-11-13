@@ -15,10 +15,10 @@ from matplotlib.figure import Figure, FigureBase
 from numdaplot.errors.file_exists_error import FileExistsError
 from numdaplot.errors.refused_setting_error import RefusedSettingError
 from numdaplot.errors.unsupported_image_format_error import UnsupportedImageFormatError
+from numdaplot.files.conflict import Conflict
 from numdaplot.plots.drawing.plot_drawing import FigureDrawing
 from numdaplot.plots.output.image_saving import choose_resolution, find_image_format, save_figure, write_image
 from numdaplot.plots.style.image_options import ImageOptions
-from numdaplot.tables.conflict import Conflict
 
 PNG_PATH = Path("sales.png")
 SVG_PATH = Path("sales.svg")

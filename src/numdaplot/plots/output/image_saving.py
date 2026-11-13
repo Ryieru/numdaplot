@@ -13,11 +13,11 @@ from matplotlib.figure import Figure
 
 from numdaplot.errors.refused_setting_error import RefusedSettingError
 from numdaplot.errors.unsupported_image_format_error import UnsupportedImageFormatError
+from numdaplot.files.conflict import Conflict
+from numdaplot.files.file_access import WRITE_OPERATION, FileAccessErrors
+from numdaplot.files.file_paths import FilePath, require_free_path
 from numdaplot.plots.drawing.plot_drawing import FigureDrawing, build_figure
 from numdaplot.plots.style.image_options import DEFAULT_DPI, ImageOptions
-from numdaplot.tables.conflict import Conflict
-from numdaplot.tables.files.file_access import WRITE_OPERATION, FileAccessErrors
-from numdaplot.tables.files.file_paths import FilePath, require_free_path
 
 IMAGE_FORMATS = {".png": "png", ".svg": "svg", ".pdf": "pdf"}
 RESOLUTION_EXTENSION = ".png"

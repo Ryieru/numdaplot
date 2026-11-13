@@ -6,6 +6,7 @@ Settings of the description of the columns of a Table.
 
 from dataclasses import dataclass
 
+from numdaplot.argument_checks.column_names import copy_optional_column_names
 from numdaplot.argument_checks.field_types import require_field_types
 from numdaplot.errors.duplicate_statistic_error import DuplicateStatisticError
 from numdaplot.errors.empty_list_error import EmptyListError
@@ -18,7 +19,6 @@ from numdaplot.statistics.quantile import Quantile
 from numdaplot.statistics.standard_deviation import StandardDeviation
 from numdaplot.statistics.statistic import Statistic
 from numdaplot.tables.aggregation.statistic_name import name_statistic
-from numdaplot.tables.columns.column_names import copy_optional_column_names
 
 LOWER_QUARTILE = 0.25
 UPPER_QUARTILE = 0.75

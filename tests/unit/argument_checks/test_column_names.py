@@ -6,11 +6,7 @@ Unit tests of the checks of column names.
 
 import pytest
 
-from numdaplot.errors.column_not_found_error import ColumnNotFoundError
-from numdaplot.errors.duplicate_column_error import DuplicateColumnError
-from numdaplot.errors.empty_list_error import EmptyListError
-from numdaplot.errors.invalid_column_name_error import InvalidColumnNameError
-from numdaplot.tables.columns.column_names import (
+from numdaplot.argument_checks.column_names import (
 	copy_column_names,
 	copy_optional_column_names,
 	require_column_name,
@@ -19,6 +15,10 @@ from numdaplot.tables.columns.column_names import (
 	require_optional_column_name,
 	require_unique_names,
 )
+from numdaplot.errors.column_not_found_error import ColumnNotFoundError
+from numdaplot.errors.duplicate_column_error import DuplicateColumnError
+from numdaplot.errors.empty_list_error import EmptyListError
+from numdaplot.errors.invalid_column_name_error import InvalidColumnNameError
 
 GIVEN_NAMES = ["city", "price"]
 EXPECTED_NAMES = ["city", "price"]

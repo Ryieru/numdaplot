@@ -7,10 +7,10 @@ Checks and alignment of the key columns of a join.
 import numpy
 import pandas
 
+from numdaplot.argument_checks.column_names import require_known_columns
 from numdaplot.errors.column_not_found_error import ColumnNotFoundError
 from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
 from numdaplot.errors.time_zone_mismatch_error import TimeZoneMismatchError
-from numdaplot.tables.columns.column_names import require_known_columns
 from numdaplot.tables.frames.column import Column
 from numdaplot.tables.frames.column_values import find_column_type
 from numdaplot.tables.frames.named_column_errors import NamedColumnErrors

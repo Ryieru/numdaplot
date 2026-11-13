@@ -10,13 +10,13 @@ import numpy
 import pandas
 from numpy.typing import NDArray
 
+from numdaplot.argument_checks.column_names import require_known_columns, require_unique_names
 from numdaplot.arrays.selection.region_index import find_positions
 from numdaplot.positions.first import First
 from numdaplot.positions.index import Index
 from numdaplot.positions.last import Last
 from numdaplot.positions.range import Range
 from numdaplot.positions.region import Region
-from numdaplot.tables.columns.column_names import require_known_columns, require_unique_names
 
 POSITION_DTYPE = numpy.int64
 

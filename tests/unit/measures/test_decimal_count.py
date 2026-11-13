@@ -7,7 +7,7 @@ Unit tests of the check of the number of decimals written in a file.
 import pytest
 
 from numdaplot.errors.invalid_count_error import InvalidCountError
-from numdaplot.tables.files.decimal_count import require_decimal_count
+from numdaplot.measures.decimal_count import require_decimal_count
 
 NEGATIVE_DECIMALS = -1
 

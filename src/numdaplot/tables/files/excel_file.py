@@ -9,7 +9,7 @@ from typing import Any, cast
 
 import pandas
 
-from numdaplot.tables.columns.column_names import require_column_names
+from numdaplot.argument_checks.column_names import require_column_names
 from numdaplot.tables.files.excel_read_options import ExcelReadOptions
 from numdaplot.tables.files.excel_time_cells import restore_time_columns
 from numdaplot.tables.files.excel_write_options import ExcelWriteOptions

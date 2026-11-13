@@ -10,6 +10,7 @@ import numpy
 import pandas
 from numpy.typing import NDArray
 
+from numdaplot.argument_checks.column_names import require_known_columns
 from numdaplot.statistics.share import Share
 from numdaplot.statistics.statistic import Statistic
 from numdaplot.tables.aggregation.aggregation import Aggregation
@@ -17,7 +18,6 @@ from numdaplot.tables.aggregation.calculation import Calculation, find_result_na
 from numdaplot.tables.aggregation.result_column import build_result_column, compute_cell
 from numdaplot.tables.aggregation.row_groups import find_row_groups, measure_group_sizes
 from numdaplot.tables.aggregation.share_column import SHARE_MEAN, build_share_column
-from numdaplot.tables.columns.column_names import require_known_columns
 from numdaplot.tables.frames.column import Column
 from numdaplot.tables.frames.column_values import build_column, find_column_missing, read_present_values
 from numdaplot.tables.frames.named_column_errors import NamedColumnErrors

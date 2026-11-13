@@ -8,7 +8,7 @@ import numpy
 import pandas
 from numpy.typing import NDArray
 
-from numdaplot.tables.columns.column_names import require_known_columns
+from numdaplot.argument_checks.column_names import require_known_columns
 from numdaplot.tables.filtering.column_mask import build_column_mask
 from numdaplot.tables.filtering.column_match import ColumnMatch
 from numdaplot.tables.filtering.condition import Condition

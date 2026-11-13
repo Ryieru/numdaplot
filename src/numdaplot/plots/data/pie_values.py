@@ -11,6 +11,7 @@ import numpy
 import pandas
 from numpy.typing import NDArray
 
+from numdaplot.argument_checks.column_names import require_known_columns
 from numdaplot.errors.empty_total_error import EmptyTotalError
 from numdaplot.errors.missing_value_error import MissingValueError
 from numdaplot.errors.out_of_domain_error import OutOfDomainError
@@ -20,7 +21,6 @@ from numdaplot.plots.data.chart_values import ChartValues, Positions, Series
 from numdaplot.plots.data.column_reading import read_numbers, read_texts
 from numdaplot.plots.data.position_kind import PositionKind
 from numdaplot.plots.data.unique_labels import require_unique_labels
-from numdaplot.tables.columns.column_names import require_known_columns
 from numdaplot.tables.frames.column_values import find_column_type
 from numdaplot.tables.table import Table
 from numdaplot.tables.table_data import read_stored_frame

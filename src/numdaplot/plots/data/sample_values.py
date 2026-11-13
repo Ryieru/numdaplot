@@ -10,13 +10,13 @@ from typing import Any
 import numpy
 from numpy.typing import NDArray
 
+from numdaplot.argument_checks.column_names import require_known_columns
 from numdaplot.arrays.array import Array
 from numdaplot.plots.data.array_values import read_array_values
 from numdaplot.plots.data.chart_data import require_column_setting, require_no_column_settings
 from numdaplot.plots.data.chart_values import Series
 from numdaplot.plots.data.column_reading import read_texts
 from numdaplot.plots.data.table_values import name_columns, read_series
-from numdaplot.tables.columns.column_names import require_known_columns
 from numdaplot.tables.table import Table
 from numdaplot.tables.table_data import read_stored_frame
 from numdaplot.types.type import Type

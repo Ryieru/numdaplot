@@ -12,6 +12,7 @@ from numdaplot.errors.column_not_found_error import ColumnNotFoundError
 from numdaplot.errors.dimension_error import DimensionError
 from numdaplot.errors.duplicate_column_error import DuplicateColumnError
 from numdaplot.errors.shape_mismatch_error import ShapeMismatchError
+from numdaplot.files.conflict import Conflict
 from numdaplot.tables.columns.added_column import add_frame_column
 from numdaplot.tables.columns.chosen_columns import choose_frame_columns
 from numdaplot.tables.columns.column_choice import ColumnChoice
@@ -20,7 +21,6 @@ from numdaplot.tables.columns.name_change import NameChange
 from numdaplot.tables.columns.new_column import NewColumn
 from numdaplot.tables.columns.renamed_columns import rename_frame_columns
 from numdaplot.tables.columns.renaming import Renaming
-from numdaplot.tables.conflict import Conflict
 
 FRAME = pandas.DataFrame({"city": ["Pau", "Lyon"], "price": [1.5, 8.0], "count": [1, 2]})
 EXPECTED_KEPT_NAMES = ["count", "city"]

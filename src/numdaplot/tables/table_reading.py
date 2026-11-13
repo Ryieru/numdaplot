@@ -8,12 +8,12 @@ from pathlib import Path
 from typing import Self
 
 from numdaplot.argument_checks.argument_types import checked_arguments
+from numdaplot.files.file_access import READ_OPERATION, FileAccessErrors
+from numdaplot.files.file_paths import FilePath, require_existing_file
 from numdaplot.tables.files.csv_file import read_csv_file
 from numdaplot.tables.files.csv_read_options import CsvReadOptions
 from numdaplot.tables.files.excel_file import read_excel_file
 from numdaplot.tables.files.excel_read_options import ExcelReadOptions
-from numdaplot.tables.files.file_access import READ_OPERATION, FileAccessErrors
-from numdaplot.tables.files.file_paths import FilePath, require_existing_file
 from numdaplot.tables.files.json_file import read_json_file
 from numdaplot.tables.files.json_read_options import JsonReadOptions
 from numdaplot.tables.files.parquet_file import read_parquet_file
