@@ -1,8 +1,7 @@
-"""Code repeated in the source: identical function bodies, and identical blocks of lines."""
+"""Code repeated in the source: identical function bodies, and the files compared."""
 
 import ast
 from collections import defaultdict
-from dataclasses import dataclass
 from pathlib import Path
 
 from check_report import CheckResult, Severity
@@ -10,34 +9,10 @@ from check_report import CheckResult, Severity
 COMPARED_ROOTS = ("src", "tools")
 PYTHON_PATTERN = "*.py"
 MINIMUM_BODY_STATEMENTS = 4
-BLOCK_LINE_COUNT = 6
-SKIPPED_STARTS = ("#", "from ", "import ", ")", "]", "}")
 BODY_CHECK_NAME = "identical function bodies (at least 4 statements)"
-BLOCK_CHECK_NAME = "identical blocks of 6 code lines"
 BODY_PROBLEM = "same body: {places}"
-BLOCK_PROBLEM = "same lines: {places}, starting with {first_line!r}"
 PLACE_SEPARATOR = " | "
 PLACE_PATH_END = ":"
-
-
-@dataclass(frozen=True)
-class CodeLine:
-	"""
-	A line of code, out of any docstring or comment.
-
-	Parameters
-	----------
-	path
-		The file.
-	number
-		The number of the line, from 1.
-	text
-		The line without its indentation.
-	"""
-
-	path: str
-	number: int
-	text: str
 
 
 def list_compared_files() -> list[Path]:
@@ -138,115 +113,3 @@ def describe_body(function: ast.FunctionDef) -> str:
 	body_key = "\n".join(statement_dumps)
 
 	return body_key
-
-
-def check_identical_blocks(scope_files: list[Path]) -> CheckResult:
-	"""
-	Return the blocks of 6 code lines found twice, when a changed file holds one of them.
-
-	Parameters
-	----------
-	scope_files
-		The changed files.
-
-	Returns
-	-------
-	CheckResult
-		One warning per group of identical blocks: some are only alike, such as similar checks of settings.
-	"""
-	scope_names = {str(path) for path in scope_files}
-	starts_by_block = defaultdict[tuple[str, ...], list[CodeLine]](list)
-
-	for path in list_compared_files():
-		code_lines = read_code_lines(path)
-		code_line_count = len(code_lines)
-		start_count = code_line_count - BLOCK_LINE_COUNT + 1
-
-		for start in range(start_count):
-			window = code_lines[start : start + BLOCK_LINE_COUNT]
-			block = tuple(code_line.text for code_line in window)
-			starts_by_block[block].append(window[0])
-
-	problems = list[str]()
-
-	for block, starts in starts_by_block.items():
-		start_paths = {start.path for start in starts}
-		is_repeated = len(starts) > 1 and bool(start_paths & scope_names)
-		if is_repeated:
-			places = ", ".join(f"{start.path}:{start.number}" for start in starts)
-			first_line = block[0]
-			block_problem = BLOCK_PROBLEM.format(places=places, first_line=first_line)
-			problems.append(block_problem)
-
-	result = CheckResult(BLOCK_CHECK_NAME, Severity.WARNING, problems)
-
-	return result
-
-
-def read_code_lines(path: Path) -> list[CodeLine]:
-	"""
-	Return the lines of code of a file, without docstrings, comments, imports, blank lines and closing brackets.
-
-	Parameters
-	----------
-	path
-		The file.
-
-	Returns
-	-------
-	list[CodeLine]
-		The kept lines, in order.
-	"""
-	text = path.read_text()
-	tree = ast.parse(text)
-	docstring_lines = find_docstring_lines(tree)
-	code_lines = list[CodeLine]()
-
-	path_text = str(path)
-	text_lines = text.splitlines()
-
-	for number, line in enumerate(text_lines, start=1):
-		stripped_line = line.strip()
-		is_skipped = number in docstring_lines or stripped_line == "" or stripped_line.startswith(SKIPPED_STARTS)
-		if not is_skipped:
-			code_line = CodeLine(path_text, number, stripped_line)
-			code_lines.append(code_line)
-
-	return code_lines
-
-
-def find_docstring_lines(tree: ast.Module) -> set[int]:
-	r"""
-	Return the numbers of the lines that belong to a docstring, of a module, a class, a function or an attribute.
-
-	An attribute docstring, such as the one of an enum member, is a text alone right after an assignment.
-
-	Parameters
-	----------
-	tree
-		The parsed file.
-
-	Returns
-	-------
-	set[int]
-		The line numbers, from 1.
-
-	Examples
-	--------
-	>>> sorted(find_docstring_lines(ast.parse("'''\nDoc.\n'''\nvalue = 1\n'''Value.'''\n")))
-	[1, 2, 3, 5]
-	"""
-	docstring_lines = set[int]()
-
-	statements = [node for node in ast.walk(tree) if isinstance(node, ast.Expr)]
-
-	for statement in statements:
-		value = statement.value
-		is_text = isinstance(value, ast.Constant) and isinstance(value.value, str)
-		if is_text:
-			last_line = statement.end_lineno or statement.lineno
-			line_after = last_line + 1
-			statement_lines = range(statement.lineno, line_after)
-			docstring_lines.update(statement_lines)
-
-	return docstring_lines

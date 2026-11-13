@@ -1,10 +1,11 @@
 """The checks run before each git action: the fast ones before a commit, every one before a push, some in the CI."""
 
+from block_checks import check_identical_blocks
 from changed_files import CheckScope, GitAction, GitCommandError, read_scope
 from check_report import CheckResult, count_blocking_failures, write_annotation, write_result, write_summary
 from check_request import CheckFamily, CheckRequest
 from configurations import check_configurations
-from duplicate_checks import check_identical_blocks, check_identical_bodies
+from duplicate_checks import check_identical_bodies
 from public_name_checks import (
 	CI_SITE_API_PATH,
 	PUSH_SITE_API_PATH,
