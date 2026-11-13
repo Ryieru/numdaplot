@@ -223,7 +223,7 @@ def read_series(frame: pandas.DataFrame, column_names: list[str], chart_name: st
 
 def name_columns(column_names: list[str]) -> str:
 	"""
-	Return the names of the columns a chart draws, the default label of the axis of its values.
+	Return the names of the columns a chart draws, which name its values in the default title.
 
 	.. versionadded:: 0.1.0
 

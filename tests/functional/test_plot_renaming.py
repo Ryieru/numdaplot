@@ -117,7 +117,7 @@ def read_x_tick_texts(figure: Figure) -> list[str]:
 	[
 		(
 			ndp.Plot.line(SHOP, TWO_LINES, style_renaming(["month", "sales", "cost"])),
-			("Ventes, Couts by Mois", "Mois", "Ventes, Couts"),
+			("Ventes, Couts by Mois", "Mois", "Value"),
 		),
 		(
 			ndp.Plot.scatter(SHOP, ndp.ScatterChart(x="units", y="sales"), style_renaming(["units", "sales"])),

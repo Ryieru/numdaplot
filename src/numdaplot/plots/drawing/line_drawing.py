@@ -16,7 +16,7 @@ from numdaplot.plots.charts.line_chart import LineChart
 from numdaplot.plots.charts.line_type import LineType
 from numdaplot.plots.data.chart_values import ChartValues
 from numdaplot.plots.drawing.colored_parts import ColoredParts
-from numdaplot.plots.drawing.default_labels import find_position_label
+from numdaplot.plots.drawing.default_labels import find_position_label, find_value_label
 from numdaplot.plots.drawing.drawn_chart import DrawnChart
 from numdaplot.plots.drawing.grid_axes import GridAxes
 from numdaplot.plots.drawing.marker_codes import MARKER_CODES
@@ -37,6 +37,8 @@ def draw_line_chart(axes: Axes, layer: ChartLayer) -> DrawnChart:
 	Draw each series of a LineChart as a line.
 
 	.. versionadded:: 0.1.0
+	.. versionchanged:: 0.2.0
+		Labels the axis of several series ``Value``, their names staying in the default title.
 
 	Parameters
 	----------
@@ -82,6 +84,7 @@ def draw_line_chart(axes: Axes, layer: ChartLayer) -> DrawnChart:
 		)
 
 	x_label = find_position_label(values.positions)
-	drawn_chart = DrawnChart(x_label, values.value_name, False, GridAxes.BOTH, None)
+	value_label = find_value_label(values)
+	drawn_chart = DrawnChart(x_label, value_label, False, GridAxes.BOTH, None, y_title_name=values.value_name)
 
 	return drawn_chart

@@ -41,7 +41,8 @@ class SampleValues:
 	group_name
 		The ``group_by`` column, or None.
 	value_name
-		The default label of the axis of the values: the name of the single column of a Table, None otherwise.
+		The name of the values: the names of the columns of a Table as ``name_columns`` writes them, or ``Value``
+		for an Array. It labels the axis of a single series, and names the values in the default title.
 	value_type
 		The type of the first series, of the family of every series: numbers or times of day.
 

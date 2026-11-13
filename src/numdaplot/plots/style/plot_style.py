@@ -27,20 +27,23 @@ class PlotStyle:
 	.. versionadded:: 0.1.0
 
 	.. versionchanged:: 0.2.0
-		The title is centered above the whole Plot, and goes on several lines when it is too wide.
+		The title is centered above the whole Plot, and goes on several lines when it is too wide. The axis of several
+		series is labeled ``Value`` by default, their names staying in the legend and the title.
 
 	Parameters
 	----------
 	title
 		The title, centered above the whole Plot and broken into lines when it is too wide: when omitted, the ``y``
 		label by the ``x`` label such as ``sales by month``, and for a map of missing values ``Map of missing values``.
-		An empty text draws no title.
+		Several columns labeled ``Value`` are named in the title one after the other, the first 3 and the number of
+		the others beyond 3, such as ``price, cost by month``. An empty text draws no title.
 	x_label
 		The label of the axis of the ``x`` values: when omitted, the name of the ``x`` column, else ``Row``, or
-		``Column`` for a box or a heatmap without group. An empty text draws no label.
+		``Column`` for a box or a heatmap without group. For a histogram, whose values are on this axis, the name of
+		its single column, else ``Value``. An empty text draws no label.
 	y_label
-		The label of the axis of the ``y`` values: when omitted, the names of the ``y`` columns one after the other, the
-		first 3 and the number of the others beyond 3, or ``Value`` for an Array. An empty text draws no label.
+		The label of the axis of the ``y`` values: when omitted, the name of the single ``y`` column, else ``Value`` for
+		several columns, which the legend names, and for an Array. An empty text draws no label.
 	right_label
 		The label of the axis on the right, drawn when a chart is added with ``ValueAxis.RIGHT``: when omitted, written
 		as ``y_label`` for the first chart on the right. An empty text draws no label. It has no effect while no chart

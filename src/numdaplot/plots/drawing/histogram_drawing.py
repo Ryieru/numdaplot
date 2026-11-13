@@ -23,6 +23,7 @@ from numdaplot.plots.charts.bin_width import BinWidth
 from numdaplot.plots.charts.histogram_chart import HistogramChart
 from numdaplot.plots.data.sample_values import SampleValues, drop_missing_numbers
 from numdaplot.plots.drawing.colored_parts import ColoredParts
+from numdaplot.plots.drawing.default_labels import find_value_label
 from numdaplot.plots.drawing.drawn_chart import DrawnChart
 from numdaplot.plots.drawing.grid_axes import GridAxes
 from numdaplot.plots.drawing.plot_theme import BACKGROUND_COLOR
@@ -57,6 +58,8 @@ def draw_histogram_chart(axes: Axes, layer: ChartLayer) -> DrawnChart:
 	Several columns are drawn over each other, half transparent. Missing values are left out.
 
 	.. versionadded:: 0.1.0
+	.. versionchanged:: 0.2.0
+		Labels the axis of several series ``Value``, their names staying in the default title.
 
 	Parameters
 	----------
@@ -131,7 +134,8 @@ def draw_histogram_chart(axes: Axes, layer: ChartLayer) -> DrawnChart:
 		place_hour_ticks(axes.xaxis, bin_edges)
 
 	measure_label = MEASURE_LABELS[chart.measure]
-	drawn_chart = DrawnChart(values.value_name, measure_label, False, GridAxes.VALUES, None)
+	value_label = find_value_label(values)
+	drawn_chart = DrawnChart(value_label, measure_label, False, GridAxes.VALUES, None, x_title_name=values.value_name)
 
 	return drawn_chart
 

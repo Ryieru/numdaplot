@@ -33,6 +33,8 @@ and numdaplot follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 - `Sorting` is renamed `TableSorting`.
 - `TableConversion` takes `columns`, a list, in place of `column`, so that `Table.convert` converts several columns
   to the same type at once.
+- The default label of the axis of several series is `Value`, as for an Array, since the legend names them. The
+  default title still names them, such as `price, cost by month`. One series keeps its column name.
 - The legend and the colors of the groups of a `ScatterChart` `color_by` column follow the natural order of its
   values, such as `Cluster 2` before `Cluster 10` and without regard to case, or the order of the categories of a
   column of categories, instead of the order of the rows. A group keeps its color whatever the order of the rows.

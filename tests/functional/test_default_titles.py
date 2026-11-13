@@ -25,6 +25,9 @@ POINTS = ndp.ScatterChart(x="units", y="sales")
 GROUPED_BOXES = ndp.BoxChart(columns=["cost"], group_by="month")
 HEATMAP = ndp.HeatmapChart(columns=["sales", "cost"], labels="month")
 SHORTENED_NAMES = "sales, cost, tax and 1 more"
+VALUE_LABEL = "Value"
+TWO_HISTOGRAMS = ndp.HistogramChart(columns=["sales", "cost"])
+TWO_BOXES = ndp.BoxChart(columns=["sales", "cost"])
 REMOVED_TEXT = ""
 CHOSEN_TITLE = "Sales"
 CHOSEN_X_LABEL = "Period"
@@ -34,11 +37,13 @@ CHOSEN_X_LABEL = "Period"
 	("plot", "expected"),
 	[
 		(ndp.Plot.line(SHOP, ONE_LINE), ("sales by month", "month", "sales")),
-		(ndp.Plot.bar(SHOP, TWO_BARS), ("sales, cost by month", "month", "sales, cost")),
-		(ndp.Plot.line(SHOP, FOUR_LINES), (f"{SHORTENED_NAMES} by month", "month", SHORTENED_NAMES)),
+		(ndp.Plot.bar(SHOP, TWO_BARS), ("sales, cost by month", "month", VALUE_LABEL)),
+		(ndp.Plot.line(SHOP, FOUR_LINES), (f"{SHORTENED_NAMES} by month", "month", VALUE_LABEL)),
 		(ndp.Plot.scatter(SHOP, POINTS), ("sales by units", "units", "sales")),
 		(ndp.Plot.histogram(SHOP, ndp.HistogramChart(columns=["sales"])), ("Count by sales", "sales", "Count")),
+		(ndp.Plot.histogram(SHOP, TWO_HISTOGRAMS), ("Count by sales, cost", VALUE_LABEL, "Count")),
 		(ndp.Plot.box(SHOP, ndp.BoxChart(columns=["sales"])), ("sales by Column", "Column", "sales")),
+		(ndp.Plot.box(SHOP, TWO_BOXES), ("sales, cost by Column", "Column", VALUE_LABEL)),
 		(ndp.Plot.box(SHOP, GROUPED_BOXES), ("cost by month", "month", "cost")),
 		(ndp.Plot.heatmap(SHOP, HEATMAP), ("month by Column", "Column", "month")),
 		(ndp.Plot.line(COSTS), ("Value by Row", "Row", "Value")),

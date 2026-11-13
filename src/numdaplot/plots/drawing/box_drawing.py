@@ -23,7 +23,7 @@ from numdaplot.plots.data.position_kind import PositionKind
 from numdaplot.plots.data.sample_values import SampleValues, drop_missing_numbers
 from numdaplot.plots.drawing.bar_drawing import GROUP_WIDTH, find_group_coordinates
 from numdaplot.plots.drawing.colored_parts import ColoredParts
-from numdaplot.plots.drawing.default_labels import COLUMN_LABEL
+from numdaplot.plots.drawing.default_labels import COLUMN_LABEL, find_value_label
 from numdaplot.plots.drawing.drawn_chart import DrawnChart
 from numdaplot.plots.drawing.grid_axes import GridAxes
 from numdaplot.plots.drawing.plot_theme import BACKGROUND_COLOR
@@ -81,6 +81,8 @@ def draw_box_chart(axes: Axes, layer: ChartLayer) -> DrawnChart:
 	Each position is 1 wide, with half a position of margin at both ends, as for bars.
 
 	.. versionadded:: 0.1.0
+	.. versionchanged:: 0.2.0
+		Labels the axis of several series ``Value``, their names staying in the default title.
 
 	Parameters
 	----------
@@ -137,7 +139,8 @@ def draw_box_chart(axes: Axes, layer: ChartLayer) -> DrawnChart:
 	if values.group_name is not None:
 		x_label = values.group_name
 
-	drawn_chart = DrawnChart(x_label, values.value_name, False, GridAxes.VALUES, None)
+	value_label = find_value_label(values)
+	drawn_chart = DrawnChart(x_label, value_label, False, GridAxes.VALUES, None, y_title_name=values.value_name)
 
 	return drawn_chart
 

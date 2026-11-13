@@ -88,8 +88,8 @@ class ChartValues:
 	rows
 		The row numbers of the source kept for drawing, to read other columns of the same rows.
 	value_name
-		The default label of the axis of the series: the name of the single ``y`` column of a Table, None
-		otherwise.
+		The name of the series: the names of the ``y`` columns of a Table as ``name_columns`` writes them, or
+		``Value`` for an Array. It labels the axis of a single series, and names the series in the default title.
 	value_type
 		The type of the first series, of the family of every series: numbers or times of day.
 

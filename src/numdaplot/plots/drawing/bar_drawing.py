@@ -22,7 +22,7 @@ from numdaplot.plots.charts.orientation import Orientation
 from numdaplot.plots.data.chart_values import ChartValues
 from numdaplot.plots.drawing.bar_value_labels import find_label_place, format_value_labels, write_value_labels
 from numdaplot.plots.drawing.colored_parts import ColoredParts
-from numdaplot.plots.drawing.default_labels import find_position_label
+from numdaplot.plots.drawing.default_labels import find_position_label, find_value_label
 from numdaplot.plots.drawing.drawn_chart import DrawnChart
 from numdaplot.plots.drawing.grid_axes import GridAxes
 from numdaplot.plots.drawing.position_axis import place_categories
@@ -127,7 +127,8 @@ def draw_bar_chart(axes: Axes, layer: ChartLayer) -> DrawnChart:
 
 	.. versionadded:: 0.1.0
 	.. versionchanged:: 0.2.0
-		Writes the value of each bar when the chart has ``value_labels``.
+		Writes the value of each bar when the chart has ``value_labels``. Labels the axis of several series
+		``Value``, their names staying in the default title.
 
 	Parameters
 	----------
@@ -196,7 +197,8 @@ def draw_bar_chart(axes: Axes, layer: ChartLayer) -> DrawnChart:
 		axes.invert_yaxis()
 
 	x_label = find_position_label(values.positions)
-	drawn_chart = DrawnChart(x_label, values.value_name, is_horizontal, GridAxes.VALUES, None)
+	value_label = find_value_label(values)
+	drawn_chart = DrawnChart(x_label, value_label, is_horizontal, GridAxes.VALUES, None, y_title_name=values.value_name)
 
 	return drawn_chart
 
