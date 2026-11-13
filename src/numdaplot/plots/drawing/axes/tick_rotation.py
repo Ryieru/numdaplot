@@ -25,13 +25,11 @@ from numdaplot.plots.drawing.labels.label_room import (
 	find_widest_label,
 	read_label_texts,
 )
-from numdaplot.plots.drawing.labels.label_thinning import MINIMUM_TICKS, thin_labels
+from numdaplot.plots.drawing.labels.label_thinning import MINIMUM_TICKS, is_number_text, thin_labels
 
 TEXT_ROTATION = 45.0
 NO_ROTATION = 0.0
 ANCHOR_ROTATION_MODE = "anchor"
-MINUS_SIGN = "\N{MINUS SIGN}"
-HYPHEN_MINUS = "-"
 
 
 def rotate_x_labels(axes: Axes, drawn_chart: DrawnChart, rotation: float | None) -> None:
@@ -287,40 +285,6 @@ def has_text_labels(axis: Axis) -> bool:
 			return True
 
 	return False
-
-
-def is_number_text(text: str) -> bool:
-	"""
-	Return whether a label is a number, as matplotlib or numdaplot writes it.
-
-	.. versionadded:: 0.1.0
-
-	Parameters
-	----------
-	text
-		The text of a label.
-
-	Returns
-	-------
-	bool
-		True for a number, with the minus sign matplotlib writes, or for an empty label.
-
-	Examples
-	--------
-	>>> from numdaplot.plots.drawing.axes.tick_rotation import is_number_text
-	>>> is_number_text("2025"), is_number_text("-1.5"), is_number_text("Paris")
-	(True, True, False)
-	"""
-	if text == "":
-		return True
-
-	python_text = text.replace(MINUS_SIGN, HYPHEN_MINUS)
-	try:
-		float(python_text)
-	except ValueError:
-		return False
-
-	return True
 
 
 def choose_alignment(rotation: float) -> Literal["left", "center", "right"]:

@@ -17,6 +17,7 @@ from matplotlib.figure import Figure
 from numdaplot.errors.readability_warning import ReadabilityWarning
 from numdaplot.plots.drawing.labels.label_thinning import (
 	find_label_step,
+	is_number_text,
 	is_ordered_text,
 	thin_labels,
 	warn_hidden_labels,
@@ -28,6 +29,8 @@ DPI = 100
 SLANTED = 45.0
 MANY_TICKS = 60
 FEW_TICKS = 5
+NUMBER_TEXTS = ["2025", "-1.5", "\N{MINUS SIGN}1.5", ""]
+NOT_NUMBER_TEXTS = ["Paris", "2026-01-01", "12 h"]
 STACKED_TICK = 1.0
 STACKED_TEXTS = ["a", "b", "c", "d", "e"]
 STEP_AT_45 = 2
@@ -268,3 +271,23 @@ def test_find_label_step_keeps_every_label_of_ticks_at_the_same_place() -> None:
 	label_step = find_label_step(axes.xaxis, False, SLANTED)
 
 	assert label_step == 1
+
+
+@pytest.mark.parametrize("text", NUMBER_TEXTS)
+def test_is_number_text_accepts_numbers(text: str) -> None:
+	"""
+	Check numbers, the minus sign of matplotlib and an empty label.
+
+	.. versionadded:: 0.1.0
+	"""
+	assert is_number_text(text)
+
+
+@pytest.mark.parametrize("text", NOT_NUMBER_TEXTS)
+def test_is_number_text_refuses_other_texts(text: str) -> None:
+	"""
+	Check texts that are not numbers.
+
+	.. versionadded:: 0.1.0
+	"""
+	assert not is_number_text(text)

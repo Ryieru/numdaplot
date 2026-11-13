@@ -20,7 +20,6 @@ from numdaplot.plots.drawing.axes.tick_rotation import (
 	choose_rotation,
 	do_labels_touch,
 	has_text_labels,
-	is_number_text,
 	rotate_x_labels,
 	rotate_y_labels,
 )
@@ -35,8 +34,6 @@ CHOSEN_ROTATION = 30.0
 NEGATIVE_ROTATION = -30.0
 TEXT_ROTATION = 45.0
 NO_ROTATION = 0.0
-NUMBER_TEXTS = ["2025", "-1.5", "\N{MINUS SIGN}1.5", ""]
-OTHER_TEXTS = ["Paris", "2026-01-01", "12 h"]
 ALIGNMENTS = [(45.0, "right"), (-45.0, "left"), (0.0, "center")]
 FIRST_DAY = numpy.datetime64("2026-01-01")
 LAST_DAY = numpy.datetime64("2026-12-31")
@@ -228,26 +225,6 @@ def test_has_text_labels_finds_a_time_axis() -> None:
 	axes = build_date_axes()
 
 	assert has_text_labels(axes.xaxis)
-
-
-@pytest.mark.parametrize("text", NUMBER_TEXTS)
-def test_is_number_text_accepts_numbers(text: str) -> None:
-	"""
-	Check numbers, the minus sign of matplotlib and an empty label.
-
-	.. versionadded:: 0.1.0
-	"""
-	assert is_number_text(text)
-
-
-@pytest.mark.parametrize("text", OTHER_TEXTS)
-def test_is_number_text_refuses_other_texts(text: str) -> None:
-	"""
-	Check texts that are not numbers.
-
-	.. versionadded:: 0.1.0
-	"""
-	assert not is_number_text(text)
 
 
 @pytest.mark.parametrize(("rotation", "expected_alignment"), ALIGNMENTS)

@@ -88,6 +88,40 @@ def find_label_step(axis: Axis, on_vertical_axis: bool, rotation: float) -> int:
 	return label_step
 
 
+def is_number_text(text: str) -> bool:
+	"""
+	Return whether a label is a number, as matplotlib or numdaplot writes it.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	text
+		The text of a label.
+
+	Returns
+	-------
+	bool
+		True for a number, with the minus sign matplotlib writes, or for an empty label.
+
+	Examples
+	--------
+	>>> from numdaplot.plots.drawing.labels.label_thinning import is_number_text
+	>>> is_number_text("2025"), is_number_text("-1.5"), is_number_text("Paris")
+	(True, True, False)
+	"""
+	if text == "":
+		return True
+
+	python_text = text.replace(MINUS_SIGN, HYPHEN_MINUS)
+	try:
+		float(python_text)
+	except ValueError:
+		return False
+
+	return True
+
+
 def is_ordered_text(text: str) -> bool:
 	"""
 	Return whether a label is a number or a date, which a reader can find from its neighbors.
@@ -110,19 +144,12 @@ def is_ordered_text(text: str) -> bool:
 	>>> is_ordered_text("2025"), is_ordered_text("2026-01-31"), is_ordered_text("Paris")
 	(True, True, False)
 	"""
-	if text == "":
-		return True
-
-	python_text = text.replace(MINUS_SIGN, HYPHEN_MINUS)
-	try:
-		float(python_text)
-	except ValueError:
-		pass
-	else:
+	is_number = is_number_text(text)
+	if is_number:
 		return True
 
 	try:
-		numpy.datetime64(python_text)
+		numpy.datetime64(text)
 	except ValueError:
 		return False
 
