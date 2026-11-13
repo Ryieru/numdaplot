@@ -5,7 +5,7 @@ Unit tests of EmptyValuesError.
 """
 
 from numdaplot.errors.numdaplot_error import NumdaplotError
-from numdaplot.errors.settings.empty_values_error import EMPTY_VALUES_MESSAGE, EmptyValuesError
+from numdaplot.errors.rules.empty_values_error import EMPTY_VALUES_MESSAGE, EmptyValuesError
 
 
 def test_empty_values_error_is_a_numdaplot_error() -> None:

@@ -11,7 +11,7 @@ from datetime import date, datetime, time, timedelta
 from typing import TYPE_CHECKING
 
 from numdaplot.argument_checks.field_types import require_field_types
-from numdaplot.errors.settings.invalid_bounds_error import InvalidBoundsError
+from numdaplot.errors.rules.invalid_bounds_error import InvalidBoundsError
 from numdaplot.rules.bounds import Bounds
 from numdaplot.rules.rule import Rule
 

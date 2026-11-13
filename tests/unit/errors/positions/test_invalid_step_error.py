@@ -5,7 +5,7 @@ Unit tests of InvalidStepError.
 """
 
 from numdaplot.errors.numdaplot_error import NumdaplotError
-from numdaplot.errors.settings.invalid_step_error import InvalidStepError
+from numdaplot.errors.positions.invalid_step_error import InvalidStepError
 
 REJECTED_STEP = 0
 EXPECTED_MESSAGE = "Expected a non-zero step, got 0."

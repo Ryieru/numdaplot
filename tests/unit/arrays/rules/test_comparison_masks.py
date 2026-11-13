@@ -18,7 +18,7 @@ from numdaplot.arrays.rules.comparison_masks import (
 	read_bound_value,
 	require_ordered_bounds,
 )
-from numdaplot.errors.settings.invalid_bounds_error import InvalidBoundsError
+from numdaplot.errors.rules.invalid_bounds_error import InvalidBoundsError
 from numdaplot.errors.types.incompatible_types_error import IncompatibleTypesError
 from numdaplot.rules.between import Between
 from numdaplot.rules.bounds import Bounds

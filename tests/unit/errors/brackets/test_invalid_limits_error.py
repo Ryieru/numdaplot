@@ -4,8 +4,8 @@ Unit tests of InvalidLimitsError.
 .. versionadded:: 0.1.0
 """
 
+from numdaplot.errors.brackets.invalid_limits_error import InvalidLimitsError
 from numdaplot.errors.numdaplot_error import NumdaplotError
-from numdaplot.errors.settings.invalid_limits_error import InvalidLimitsError
 
 UNORDERED_LIMITS = list[int | float]([0, 10, 10])
 SINGLE_LIMIT = list[int | float]([0])

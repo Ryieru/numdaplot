@@ -80,6 +80,11 @@ SECTIONS = (
 	Section("numdaplot.errors.tables", "Errors", "errors", "Table errors"),
 	Section("numdaplot.errors.plots", "Errors", "errors", "Plot errors"),
 	Section("numdaplot.errors.settings", "Errors", "errors", "Setting errors"),
+	Section("numdaplot.errors.rules", "Errors", "errors", "Rule errors"),
+	Section("numdaplot.errors.brackets", "Errors", "errors", "Bracket errors"),
+	Section("numdaplot.errors.distributions", "Errors", "errors", "Distribution errors"),
+	Section("numdaplot.errors.measures", "Errors", "errors", "Measure errors"),
+	Section("numdaplot.errors.math_functions", "Errors", "errors", "Math function errors"),
 	Section("numdaplot.errors", "Errors", "errors"),
 )
 UNIQUE_SECTION_TITLES = dict.fromkeys(section.title for section in SECTIONS)

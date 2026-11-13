@@ -12,7 +12,7 @@ from numdaplot.brackets.bracket_end import BracketEnd
 from numdaplot.brackets.bracketed_column import cut_column, find_bracket_positions, require_matched_values
 from numdaplot.brackets.brackets import Brackets
 from numdaplot.brackets.unmatched import Unmatched
-from numdaplot.errors.settings.unmatched_value_error import UnmatchedValueError
+from numdaplot.errors.brackets.unmatched_value_error import UnmatchedValueError
 from numdaplot.rules.bounds import Bounds
 
 AGES = pandas.Series([4, None, 30, 70], dtype="Int64")

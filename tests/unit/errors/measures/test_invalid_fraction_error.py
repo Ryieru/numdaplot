@@ -4,8 +4,8 @@ Unit tests of InvalidFractionError.
 .. versionadded:: 0.1.0
 """
 
+from numdaplot.errors.measures.invalid_fraction_error import InvalidFractionError
 from numdaplot.errors.numdaplot_error import NumdaplotError
-from numdaplot.errors.settings.invalid_fraction_error import InvalidFractionError
 
 REJECTED_FRACTION = 1.5
 EXPECTED_MESSAGE = "Expected a fraction between 0 and 1, got 1.5."

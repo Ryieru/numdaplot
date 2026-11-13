@@ -7,7 +7,7 @@ Logarithm math function.
 from dataclasses import dataclass
 
 from numdaplot.argument_checks.field_types import require_field_types
-from numdaplot.errors.settings.invalid_base_error import InvalidBaseError
+from numdaplot.errors.math_functions.invalid_base_error import InvalidBaseError
 from numdaplot.math_functions.math_function import MathFunction
 
 LOWEST_EXCLUDED_BASE = 0

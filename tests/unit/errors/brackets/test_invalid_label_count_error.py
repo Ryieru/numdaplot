@@ -4,8 +4,8 @@ Unit tests of InvalidLabelCountError.
 .. versionadded:: 0.1.0
 """
 
+from numdaplot.errors.brackets.invalid_label_count_error import InvalidLabelCountError
 from numdaplot.errors.numdaplot_error import NumdaplotError
-from numdaplot.errors.settings.invalid_label_count_error import InvalidLabelCountError
 
 BRACKET_COUNT = 2
 LABEL_COUNT = 3

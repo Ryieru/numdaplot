@@ -5,7 +5,7 @@ Unit tests of InvalidBoundsError.
 """
 
 from numdaplot.errors.numdaplot_error import NumdaplotError
-from numdaplot.errors.settings.invalid_bounds_error import InvalidBoundsError
+from numdaplot.errors.rules.invalid_bounds_error import InvalidBoundsError
 
 LOW_BOUND = "b"
 HIGH_BOUND = "a"

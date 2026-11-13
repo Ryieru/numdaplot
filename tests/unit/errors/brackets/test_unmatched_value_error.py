@@ -4,8 +4,8 @@ Unit tests of UnmatchedValueError.
 .. versionadded:: 0.1.0
 """
 
+from numdaplot.errors.brackets.unmatched_value_error import UnmatchedValueError
 from numdaplot.errors.numdaplot_error import NumdaplotError
-from numdaplot.errors.settings.unmatched_value_error import UnmatchedValueError
 
 VALUE = 2
 EXPECTED_MESSAGE = (

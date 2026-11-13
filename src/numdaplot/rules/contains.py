@@ -7,7 +7,7 @@ Rule keeping the texts that contain a given text.
 from dataclasses import dataclass
 
 from numdaplot.argument_checks.field_types import require_field_types
-from numdaplot.errors.settings.empty_text_error import EmptyTextError
+from numdaplot.errors.rules.empty_text_error import EmptyTextError
 from numdaplot.rules.case import Case
 from numdaplot.rules.rule import Rule
 

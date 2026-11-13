@@ -25,7 +25,7 @@ from numdaplot.arrays.mapping.mapped_values import (
 from numdaplot.arrays.mapping.value_change import ValueChange
 from numdaplot.arrays.mapping.value_mapping import ValueMapping
 from numdaplot.brackets.unmatched import Unmatched
-from numdaplot.errors.settings.unmatched_value_error import UnmatchedValueError
+from numdaplot.errors.brackets.unmatched_value_error import UnmatchedValueError
 from numdaplot.errors.types.incompatible_types_error import IncompatibleTypesError
 from numdaplot.errors.types.unsupported_missing_error import UnsupportedMissingError
 from numdaplot.errors.types.value_conversion_error import ValueConversionError

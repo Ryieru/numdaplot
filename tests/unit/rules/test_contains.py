@@ -6,7 +6,7 @@ Unit tests of Contains.
 
 import pytest
 
-from numdaplot.errors.settings.empty_text_error import EmptyTextError
+from numdaplot.errors.rules.empty_text_error import EmptyTextError
 from numdaplot.rules.case import Case
 from numdaplot.rules.contains import Contains
 

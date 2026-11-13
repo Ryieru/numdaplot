@@ -4,8 +4,8 @@ Unit tests of InvalidBaseError.
 .. versionadded:: 0.1.0
 """
 
+from numdaplot.errors.math_functions.invalid_base_error import InvalidBaseError
 from numdaplot.errors.numdaplot_error import NumdaplotError
-from numdaplot.errors.settings.invalid_base_error import InvalidBaseError
 
 BASE = 1
 EXPECTED_MESSAGE = "Expected a logarithm base greater than 0 and different from 1, got 1."

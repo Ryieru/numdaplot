@@ -10,7 +10,7 @@ from typing import Any, TypeVar, cast
 import pytest
 
 from numdaplot.arrays.array import Array
-from numdaplot.errors.settings.invalid_bounds_error import InvalidBoundsError
+from numdaplot.errors.rules.invalid_bounds_error import InvalidBoundsError
 from numdaplot.errors.types.invalid_type_error import InvalidTypeError
 from numdaplot.rules.between import Between
 from numdaplot.rules.bounds import Bounds

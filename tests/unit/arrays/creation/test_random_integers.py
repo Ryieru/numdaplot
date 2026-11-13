@@ -7,7 +7,7 @@ Unit tests of RandomIntegers and find_drawn_interval.
 import pytest
 
 from numdaplot.arrays.creation.random_integers import RandomIntegers, find_drawn_interval
-from numdaplot.errors.settings.invalid_bounds_error import InvalidBoundsError
+from numdaplot.errors.rules.invalid_bounds_error import InvalidBoundsError
 from numdaplot.rules.bounds import Bounds
 
 DIE_LOW = 1

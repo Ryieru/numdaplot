@@ -18,7 +18,7 @@ from numdaplot.brackets.bracket_names import (
 	write_limit,
 )
 from numdaplot.brackets.brackets import Brackets
-from numdaplot.errors.settings.invalid_limits_error import InvalidLimitsError
+from numdaplot.errors.brackets.invalid_limits_error import InvalidLimitsError
 from numdaplot.rules.bounds import Bounds
 
 LOW = Bounds.LOW_ONLY

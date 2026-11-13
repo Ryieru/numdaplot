@@ -8,7 +8,7 @@ from typing import Any, TypeVar, cast
 
 import pytest
 
-from numdaplot.errors.settings.empty_values_error import EmptyValuesError
+from numdaplot.errors.rules.empty_values_error import EmptyValuesError
 from numdaplot.errors.types.invalid_type_error import InvalidTypeError
 from numdaplot.rules.is_in import IsIn
 from numdaplot.rules.rule_values import ScalarValue

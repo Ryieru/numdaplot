@@ -7,7 +7,7 @@ Unit tests of the name of a Table column in the errors about its values raised b
 import pandas
 import pytest
 
-from numdaplot.errors.settings.unmatched_value_error import UnmatchedValueError
+from numdaplot.errors.brackets.unmatched_value_error import UnmatchedValueError
 from numdaplot.errors.types.incompatible_types_error import IncompatibleTypesError
 from numdaplot.errors.types.out_of_domain_error import OutOfDomainError
 from numdaplot.errors.types.value_conversion_error import ValueConversionError

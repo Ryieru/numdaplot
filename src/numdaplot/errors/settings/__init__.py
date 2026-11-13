@@ -1,5 +1,5 @@
 """
-Errors of the settings of operations and rules: refused, conflicting, empty or out of their limits.
+Errors shared by the settings and operations of every notion: refused, conflicting, empty or repeated.
 
 .. versionadded:: 0.2.0
 """

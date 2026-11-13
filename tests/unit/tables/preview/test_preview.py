@@ -10,8 +10,8 @@ from typing import Any, cast
 import pandas
 import pytest
 
+from numdaplot.errors.distributions.invalid_seed_error import InvalidSeedError
 from numdaplot.errors.settings.invalid_count_error import InvalidCountError
-from numdaplot.errors.settings.invalid_seed_error import InvalidSeedError
 from numdaplot.errors.settings.refused_setting_error import RefusedSettingError
 from numdaplot.errors.types.invalid_type_error import InvalidTypeError
 from numdaplot.tables.preview import notebook_display

@@ -4,7 +4,7 @@ Check that a value is a fraction between 0 and 1.
 .. versionadded:: 0.1.0
 """
 
-from numdaplot.errors.settings.invalid_fraction_error import InvalidFractionError
+from numdaplot.errors.measures.invalid_fraction_error import InvalidFractionError
 
 MIN_FRACTION = 0.0
 MAX_FRACTION = 1.0

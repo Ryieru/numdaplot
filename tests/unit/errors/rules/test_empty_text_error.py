@@ -5,7 +5,7 @@ Unit tests of EmptyTextError.
 """
 
 from numdaplot.errors.numdaplot_error import NumdaplotError
-from numdaplot.errors.settings.empty_text_error import EMPTY_TEXT_MESSAGE, EmptyTextError
+from numdaplot.errors.rules.empty_text_error import EMPTY_TEXT_MESSAGE, EmptyTextError
 
 
 def test_empty_text_error_is_a_numdaplot_error() -> None:

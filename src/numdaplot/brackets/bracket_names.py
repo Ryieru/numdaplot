@@ -10,7 +10,7 @@ from typing import cast
 
 from numdaplot.brackets.bracket_end import BracketEnd
 from numdaplot.brackets.brackets import Brackets
-from numdaplot.errors.settings.invalid_limits_error import InvalidLimitsError
+from numdaplot.errors.brackets.invalid_limits_error import InvalidLimitsError
 from numdaplot.rules.bounds import Bounds
 
 CLOSED_INTEGERS = "{low} to {high}"

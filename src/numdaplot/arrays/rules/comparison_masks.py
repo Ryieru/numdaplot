@@ -15,7 +15,7 @@ from numdaplot.arrays.operations.type_requirements import require_comparable
 from numdaplot.arrays.rules.array_reference import compare_with_array
 from numdaplot.arrays.rules.time_reference import compare_with_reference
 from numdaplot.arrays.selection.missing_mask import find_missing
-from numdaplot.errors.settings.invalid_bounds_error import InvalidBoundsError
+from numdaplot.errors.rules.invalid_bounds_error import InvalidBoundsError
 from numdaplot.rules.between import Between
 from numdaplot.rules.bounds import HIGH_INCLUDED_BOUNDS, LOW_INCLUDED_BOUNDS
 from numdaplot.rules.equal import Equal

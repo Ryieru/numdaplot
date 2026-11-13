@@ -11,10 +11,10 @@ import pytest
 from numdaplot.brackets.bracket_end import BracketEnd
 from numdaplot.brackets.brackets import Brackets, require_bracket_labels, require_increasing_limits
 from numdaplot.brackets.unmatched import Unmatched
+from numdaplot.errors.brackets.invalid_label_count_error import InvalidLabelCountError
+from numdaplot.errors.brackets.invalid_limits_error import InvalidLimitsError
 from numdaplot.errors.plots.duplicate_label_error import DuplicateLabelError
 from numdaplot.errors.settings.empty_list_error import EmptyListError
-from numdaplot.errors.settings.invalid_label_count_error import InvalidLabelCountError
-from numdaplot.errors.settings.invalid_limits_error import InvalidLimitsError
 from numdaplot.errors.settings.refused_setting_error import RefusedSettingError
 from numdaplot.rules.bounds import Bounds
 

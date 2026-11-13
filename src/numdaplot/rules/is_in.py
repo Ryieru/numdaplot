@@ -8,7 +8,7 @@ from dataclasses import dataclass
 from datetime import date, datetime, time, timedelta
 
 from numdaplot.argument_checks.field_types import require_field_types
-from numdaplot.errors.settings.empty_values_error import EmptyValuesError
+from numdaplot.errors.rules.empty_values_error import EmptyValuesError
 from numdaplot.rules.rule import Rule
 
 

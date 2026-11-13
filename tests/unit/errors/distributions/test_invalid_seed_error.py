@@ -4,8 +4,8 @@ Unit tests of InvalidSeedError.
 .. versionadded:: 0.1.0
 """
 
+from numdaplot.errors.distributions.invalid_seed_error import InvalidSeedError
 from numdaplot.errors.numdaplot_error import NumdaplotError
-from numdaplot.errors.settings.invalid_seed_error import InvalidSeedError
 
 SEED = -1
 EXPECTED_MESSAGE = "Expected a seed of at least 0, got -1."

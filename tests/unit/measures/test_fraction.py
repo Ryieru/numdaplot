@@ -8,7 +8,7 @@ import math
 
 import pytest
 
-from numdaplot.errors.settings.invalid_fraction_error import InvalidFractionError
+from numdaplot.errors.measures.invalid_fraction_error import InvalidFractionError
 from numdaplot.measures.fraction import require_fraction
 
 ACCEPTED_FRACTIONS = [0.0, 0.25, 1.0]

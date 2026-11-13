@@ -90,7 +90,7 @@ def write_limits_message(limits: list[int | float], empty_bracket: list[int | fl
 
 	Examples
 	--------
-	>>> from numdaplot.errors.settings.invalid_limits_error import write_limits_message
+	>>> from numdaplot.errors.brackets.invalid_limits_error import write_limits_message
 	>>> write_limits_message([5.2, 5.8], [5.2, 5.8])
 	'The bracket from 5.2 to 5.8 holds no integer.'
 	"""

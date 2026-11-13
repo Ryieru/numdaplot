@@ -17,7 +17,7 @@ from numdaplot.arrays.mapping.value_mapping import MAPPING_OPERATION, ValueMappi
 from numdaplot.arrays.operations.type_requirements import require_comparable
 from numdaplot.arrays.selection.missing_mask import find_missing
 from numdaplot.brackets.unmatched import Unmatched
-from numdaplot.errors.settings.unmatched_value_error import UnmatchedValueError
+from numdaplot.errors.brackets.unmatched_value_error import UnmatchedValueError
 from numdaplot.errors.types.unsupported_missing_error import UnsupportedMissingError
 from numdaplot.rules.rule_values import ScalarValue
 from numdaplot.types.number_types import DECIMAL_TYPES, INTEGER_TYPES
