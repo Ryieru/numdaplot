@@ -1,9 +1,9 @@
 """
 Griffe extension showing a public base class in the place of a base class that numdaplot does not export.
 
-The rules comparing each value to a reference value share ``ValueRule``, and the errors naming the column of their
-values share ``ColumnValueError``: details of their code that have no page. Their pages show ``Rule`` and
-``NumdaplotError``, the classes a reader knows. This extension runs last: it only changes what the pages show.
+Some public classes share a base class that numdaplot does not export, a detail of its code that has no page. Their
+pages show the public class that ``HIDDEN_BASES`` gives for it, a class the reader knows. This extension runs last:
+it only changes what the pages show.
 
 .. versionadded:: 0.1.0
 """

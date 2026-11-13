@@ -3,8 +3,8 @@ MkDocs hook generating one API page per public class of numdaplot, and the navig
 
 Every name of ``ndp.__all__`` gets a page made at build time, so no page is written by hand and a new
 public class appears in the documentation on its own. The pages of ``Array``, ``Table`` and ``Plot`` list their
-members in sections taken from the classes they are built from, such as "Creation". The navigation groups the pages
-by section, such as "Rules", then by settings family, such as "File settings", and is placed after the home page.
+members in sections taken from the classes they are built from. The navigation groups the pages by section, then by
+settings family, and is placed after the home page.
 
 .. versionadded:: 0.1.0
 """

@@ -48,7 +48,7 @@ class ValueRule[ReferenceValue](Rule):
 	Array([120], dtype=INT64)
 	"""
 
-	# The rule testing missing values in place of this rule given None, such as IsMissing for Equal.
+	# The rule testing missing values, used in place of this rule when it is given None.
 	MISSING_VALUE_RULE: ClassVar[str | None] = None
 
 	value: ReferenceValue

@@ -30,7 +30,7 @@ MAXIMUM_READABLE_SLICES = 5
 READABILITY_START = "A PieChart with {slice_count} slices is hard to read."
 READABILITY_ADVICE = "Try ndp.Plot.bar with a BarChart, it may compare them better."
 READABILITY_MESSAGE = f"{READABILITY_START} {READABILITY_ADVICE}"
-# The warning points at the line calling Plot.pie, above warn_slice_count, read_pie_values, Plot.pie and its check.
+# Number of calls between the warning and the line of the user.
 READABILITY_STACK_LEVEL = 5
 
 

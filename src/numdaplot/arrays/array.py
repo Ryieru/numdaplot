@@ -91,7 +91,7 @@ def create_array(values: NDArray[Any]) -> Array:
 	>>> create_array(numpy.array([60000000], dtype="timedelta64[us]"))
 	Array(['00:01:00'], dtype=TIME)
 	"""
-	# The function lives next to the class to create Arrays on behalf of the rest of numdaplot.
+	# The only access of the rest of numdaplot to the private creation of the class.
 	created_array = Array._create(values)  # pyright: ignore[reportPrivateUsage]
 
 	return created_array

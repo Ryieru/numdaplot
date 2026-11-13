@@ -194,7 +194,7 @@ def write_shortest_texts(values: NDArray[Any]) -> list[str]:
 		python_values = cast(list[float], values.tolist())
 		texts = list(map(repr, python_values))
 	else:
-		# A Python float would write the value of a 32 bit decimal widened to 64 bits, such as 0.10000000149011612.
+		# A Python float would write a 32 bit decimal widened to 64 bits, with its rounding error.
 		numpy_texts = values.astype(str)
 		texts = cast(list[str], numpy_texts.tolist())
 

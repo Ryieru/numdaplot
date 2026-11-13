@@ -1,11 +1,10 @@
 """
 Griffe extension showing the value of the constants used as default values of parameters.
 
-numdaplot names every default value with a constant, such as ``separator: str = DEFAULT_SEPARATOR``.
-In the documentation, a reader needs the value itself, so this extension replaces such a default
-with the value of the constant, ``","``, once griffe has loaded the whole package. A constant given to a call,
-such as ``BinCount(DEFAULT_BIN_COUNT)``, is replaced the same way. The fields of dataclasses are resolved too,
-so the ``__init__`` griffe builds from them afterwards shows the values.
+numdaplot names every default value of a parameter with a constant. In the documentation, a reader needs the value
+itself, so this extension replaces such a default with the value of the constant, once griffe has loaded the whole
+package. A constant given to a call inside a default value is replaced the same way. The fields of dataclasses are
+resolved too, so the ``__init__`` griffe builds from them afterwards shows the values.
 
 .. versionadded:: 0.1.0
 """

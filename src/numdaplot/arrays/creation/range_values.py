@@ -13,7 +13,7 @@ from numpy.typing import NDArray
 from numdaplot.positions.range import Range
 from numdaplot.rules.bounds import HIGH_INCLUDED_BOUNDS, LOW_INCLUDED_BOUNDS
 
-# Decimal steps accumulate rounding errors: 0.1 * 10 gives 0.9999999999999999, not 1.
+# Decimal steps accumulate rounding errors, so the end of a range is compared with a tolerance.
 STEP_TOLERANCE = 1e-9
 
 

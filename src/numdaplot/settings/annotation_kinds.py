@@ -163,7 +163,7 @@ def list_annotation_members(annotation: object, open_aliases: frozenset[object] 
 	[<class 'int'>, <class 'NoneType'>]
 	"""
 	if isinstance(annotation, typing.TypeAliasType):
-		# An alias naming itself, such as nested lists, accepts anything at its deeper levels.
+		# An alias referring to itself accepts anything at its deeper levels.
 		if annotation in open_aliases:
 			return [typing.Any]
 

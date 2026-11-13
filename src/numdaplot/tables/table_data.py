@@ -336,7 +336,7 @@ def read_stored_frame(table: TableData) -> pandas.DataFrame:
 	>>> read_stored_frame(hours).dtypes.tolist()
 	[dtype('<m8[us]')]
 	"""
-	# The function lives next to the class to read its stored columns on behalf of the rest of numdaplot.
+	# The only access of the rest of numdaplot to the stored columns of the class.
 	stored_frame = table._frame  # pyright: ignore[reportPrivateUsage]
 
 	return stored_frame

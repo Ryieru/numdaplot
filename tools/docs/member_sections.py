@@ -1,10 +1,10 @@
 """
 Sections of the members of the Array, Table and Plot pages, taken from the classes they are built from.
 
-Array, Table and Plot are each built from classes named after them, such as ``TableCalculation``. Each of these classes
+Array, Table and Plot are each built from classes whose names start with their own. Each of these classes
 gives one section of the page, titled after the end of its name, holding its methods in the order of the code. A new
 method appears in its section on its own. Only the members written in the source of the class are shown, as
-mkdocstrings reads them from there: Python adds others at run time, such as ``__annotate_func__`` since 3.14.
+mkdocstrings reads them from there: Python adds other members at run time.
 A new class needs its title in ``SECTION_TITLES``, or the build stops with a ``KeyError``.
 
 .. versionadded:: 0.2.0
@@ -43,7 +43,7 @@ SECTION_TITLES = (
 	("Display", "Display"),
 	("Refusals", "Refused operations"),
 )
-# The creation with ndp.Array(...) is refused, and its refusal is told by the class itself.
+# The classes split into sections refuse their direct creation, and their class docstring tells it.
 HIDDEN_MEMBERS = frozenset({"__init__"})
 SPECIAL_MARK = "__"
 PRIVATE_MARK = "_"

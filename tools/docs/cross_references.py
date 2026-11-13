@@ -1,7 +1,7 @@
 """
 Griffe extension turning the names written in code in the docstrings into links to their documentation.
 
-Docstrings name objects in code, such as ``from_csv`` or ``ndp.Greater(10)``, which editors show as they are.
+Docstrings name objects in code, alone or in a call, which editors show as they are.
 In the documentation site, each name of such code that matches a documented object becomes a link to it:
 a member of the class being documented, a public ``ndp.*`` name, a member of a public class, an enum member
 that only one public class has, or the argument of a call to a public class. Texts between quotes stay as they

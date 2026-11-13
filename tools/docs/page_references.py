@@ -1,8 +1,8 @@
 """
-MkDocs hook turning the names written in code in the pages, such as the changelog, into links.
+MkDocs hook turning the names written in code in the Markdown pages into links.
 
 The docstrings get their links from the ``cross_references`` griffe extension. The other pages, written
-in Markdown, name the same objects in code, such as `Array` or `Table.filter`: this hook links each name
+in Markdown, name the same objects in code: this hook links each name
 that matches a public object, or a member that only one public class has, with the colors of its kind.
 
 .. versionadded:: 0.1.0

@@ -9,7 +9,7 @@ from collections.abc import Sequence
 from numdaplot.settings.annotation_kinds import NONE_NAME, AcceptedKinds
 
 VOWELS = "aeiouAEIOU"
-# These words start with a vowel letter but with a consonant sound, as in "a Uniform".
+# Name starts written with a vowel letter but spoken with a consonant sound, which take "a".
 CONSONANT_SOUND_PREFIXES = ("Uni",)
 ARTICLE_FORMAT = "{article} {name}"
 NAMES_SEPARATOR = ", "

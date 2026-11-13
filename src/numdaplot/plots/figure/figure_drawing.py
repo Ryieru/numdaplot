@@ -60,7 +60,7 @@ def draw_figure(target: FigureBase, layout: Layout, placements: list[Placement],
 		column_end = cell.column + cell.column_span
 		cell_area = cell_grid[cell.row : row_end, cell.column : column_end]
 		subfigure = target.add_subfigure(cell_area)
-		# A Figure draws its Plots with the drawing they use for themselves, which is not public.
+		# A Plot of a Figure is drawn by its own private drawing.
 		placement.plot._draw_on(subfigure)  # pyright: ignore[reportPrivateUsage]
 
 

@@ -245,7 +245,7 @@ def read_stored_values(array: ArrayData) -> numpy.typing.NDArray[Any]:
 	>>> read_stored_values(ndp.Array.from_list([time(0, 1)]))
 	array([60000000], dtype='timedelta64[us]')
 	"""
-	# The function lives next to the class to read its stored values on behalf of the rest of numdaplot.
+	# The only access of the rest of numdaplot to the stored values of the class.
 	stored_values = array._values  # pyright: ignore[reportPrivateUsage]
 
 	return stored_values

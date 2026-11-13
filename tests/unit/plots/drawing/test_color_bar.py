@@ -46,7 +46,7 @@ def test_add_color_bar_places_whole_ticks_for_whole_numbers() -> None:
 	add_color_bar(axes, scaled_points, "", WHOLE_NUMBERS)
 
 	locator = figure.axes[1].yaxis.get_major_locator()
-	# AutoLocator, the default one, also inherits MaxNLocator.
+	# The default locator also inherits MaxNLocator, so the type is compared exactly.
 	is_whole_locator = type(locator) is MaxNLocator
 	assert is_whole_locator
 
