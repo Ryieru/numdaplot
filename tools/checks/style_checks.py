@@ -289,7 +289,7 @@ def check_history_words(added_lines: list[AddedLine]) -> CheckResult:
 	Returns
 	-------
 	CheckResult
-		One warning per line holding a word such as "now" or "previously".
+		One warning per line holding one of the ``HISTORY_WORDS``.
 	"""
 	problems = list[str]()
 

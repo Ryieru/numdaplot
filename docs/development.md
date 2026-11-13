@@ -93,7 +93,7 @@ The hooks run every check a program can make. A reader still checks the followin
 1. The names used in `README.md` and in `docs/*.md` exist, with the settings they take today.
 2. The code organization below lists every folder and its main objects.
 3. For each behavior a commit changes, search the docstrings for the former wording of that behavior and rewrite what
-   is no longer true.
+   does not match the code.
 4. Every public object whose behavior or signature changes has `.. versionchanged::` with one sentence,
    enum members included. A new member gets its own `.. versionadded::`.
 5. Open the pages of the new and changed objects on the local site (`uv run mkdocs serve`): section, examples, images.

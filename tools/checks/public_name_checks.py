@@ -46,9 +46,9 @@ class PublicNameChanges:
 	released_version
 		The version of the latest final release, read in its tag.
 	added_names
-		The names exported now and not in the release.
+		The names the current code exports and the release does not.
 	removed_names
-		The names of the release no longer exported.
+		The names the release exports and the current code does not.
 	"""
 
 	released_version: str
@@ -155,7 +155,7 @@ def check_version_notes(changes: PublicNameChanges) -> CheckResult:
 	Returns
 	-------
 	CheckResult
-		One problem per name with a missing or old version note.
+		One problem per name whose version note is missing or not newer than the release.
 	"""
 	package = importlib.import_module(PACKAGE_NAME)
 	released_numbers = parse_version(changes.released_version)
