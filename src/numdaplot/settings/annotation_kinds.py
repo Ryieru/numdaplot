@@ -256,6 +256,7 @@ def find_member_name(member: object) -> str:
 
 	origin = typing.get_origin(member)
 	named_member = member if origin is None else origin
-	member_name = getattr(named_member, "__name__", str(named_member))
+	member_text = str(named_member)
+	member_name = getattr(named_member, "__name__", member_text)
 
 	return member_name

@@ -28,7 +28,8 @@ REPOSITORY_KEY = "repo_url"
 VERSION_TAG = "v{version}"
 SOURCE_URL = "{repository_url}/blob/{tag}/{file_path}#L{first_line}-L{last_line}"
 THEME_PACKAGE = "material"
-ICON_PATH = Path("templates") / ".icons" / "octicons" / "mark-github-16.svg"
+TEMPLATES_PATH = Path("templates")
+ICON_PATH = TEMPLATES_PATH / ".icons" / "octicons" / "mark-github-16.svg"
 SOURCE_LINK = (
 	'<a class="source-link" href="{url}" title="Source of {name} on GitHub" target="_blank" rel="noopener">'
 	"{icon}<span>Source</span></a>"
@@ -401,7 +402,8 @@ def on_page_content(html: str, page: Any, config: Any, **kwargs: Any) -> str:
 		The HTML with its source links, unchanged outside the API reference.
 	"""
 	source_path = page.file.src_uri
-	if not source_path.startswith(API_FOLDER):
+	is_api_page = source_path.startswith(API_FOLDER)
+	if not is_api_page:
 		return html
 
 	repository_url = config[REPOSITORY_KEY]

@@ -72,7 +72,8 @@ SECTIONS = (
 	Section("numdaplot.plots", "Plots", "plots"),
 	Section("numdaplot.errors", "Errors", "errors"),
 )
-SECTION_TITLES = tuple(dict.fromkeys(section.title for section in SECTIONS))
+UNIQUE_SECTION_TITLES = dict.fromkeys(section.title for section in SECTIONS)
+SECTION_TITLES = tuple(UNIQUE_SECTION_TITLES)
 # Classes without group come first in their section, then the groups in the order of SECTIONS.
 GROUP_ORDER = (None, *dict.fromkeys(section.group for section in SECTIONS if section.group is not None))
 

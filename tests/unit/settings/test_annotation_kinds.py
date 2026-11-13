@@ -61,7 +61,8 @@ def test_find_member_name_writes_none() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	member_name = find_member_name(type(None))
+	none_type = type(None)
+	member_name = find_member_name(none_type)
 
 	assert member_name == "None"
 

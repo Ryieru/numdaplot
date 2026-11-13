@@ -136,7 +136,8 @@ def test_fit_label_turns_upright_a_middle_value_too_wide_for_its_bar() -> None:
 	bars = axes.bar(MANY_POSITIONS, MANY_LENGTHS)
 	write_value_labels(axes, bars, WIDE_TEXTS, LabelPlace.VERTICAL_MIDDLE)
 	figure.draw_without_rendering()
-	first_label = read_bar_labels(axes)[0]
+	bar_labels = read_bar_labels(axes)
+	first_label = bar_labels[0]
 
 	is_fitted = fit_label(first_label)
 
@@ -155,7 +156,8 @@ def test_fit_label_refuses_a_middle_value_too_long_for_a_horizontal_bar() -> Non
 	bars = axes.barh(TWO_POSITIONS, SHORT_LENGTHS)
 	write_value_labels(axes, bars, SHORT_TEXTS, LabelPlace.HORIZONTAL_MIDDLE)
 	figure.draw_without_rendering()
-	short_label = read_bar_labels(axes)[1]
+	bar_labels = read_bar_labels(axes)
+	short_label = bar_labels[1]
 
 	is_fitted = fit_label(short_label)
 

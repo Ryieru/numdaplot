@@ -117,7 +117,8 @@ def test_place_legend_draws_no_legend_for_a_single_series() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	axes = Figure().add_subplot()
+	figure = Figure()
+	axes = figure.add_subplot()
 	axes.plot([1.0, 2.0], label="price")
 
 	place_legend(PlotAxes(axes, None, None), LINE_CHART, ndp.LegendPosition.BEST)
@@ -276,7 +277,8 @@ def test_place_legend_moves_best_outside_with_axes_on_the_right() -> None:
 
 	.. versionadded:: 0.1.0
 	"""
-	axes = Figure().add_subplot()
+	figure = Figure()
+	axes = figure.add_subplot()
 	axes.plot([1.0, 2.0], label="price")
 	right_axes = axes.twinx()
 	right_axes.plot([3.0, 1.0], label="cost")
@@ -331,7 +333,8 @@ def test_place_legend_marks_only_a_best_legend_inside_the_axes(
 	expected_id
 		The mark of the legend, None when it is not checked.
 	"""
-	axes = Figure().add_subplot()
+	figure = Figure()
+	axes = figure.add_subplot()
 	axes.plot([1.0, 2.0], label="price")
 	axes.plot([2.0, 1.0], label="cost")
 

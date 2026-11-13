@@ -20,8 +20,9 @@ PRICE_COLUMN = "price"
 VALUE_LABEL = "Value"
 GRID = ndp.Array.from_list([[1.0, 2.0], [3.0, 4.0]])
 CHART_NAME = "LineChart"
-UNNAMED_POSITIONS = Positions(PositionKind.NUMBERS, numpy.array([0.0]), None)
-NAMED_POSITIONS = Positions(PositionKind.NUMBERS, numpy.array([0.0]), PRICE_COLUMN)
+ORIGIN = numpy.array([0.0])
+UNNAMED_POSITIONS = Positions(PositionKind.NUMBERS, ORIGIN, None)
+NAMED_POSITIONS = Positions(PositionKind.NUMBERS, ORIGIN, PRICE_COLUMN)
 
 
 def test_find_value_label_names_a_single_series() -> None:

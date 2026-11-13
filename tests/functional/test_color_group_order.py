@@ -147,7 +147,7 @@ def test_a_group_keeps_its_color_when_the_rows_are_reversed() -> None:
 
 	.. versionadded:: 0.2.0
 	"""
-	reversed_names = list(reversed(CLUSTER_NAMES))
+	reversed_names = CLUSTER_NAMES[::-1]
 	points = build_points(CLUSTER_NAMES)
 	reversed_points = build_points(reversed_names)
 

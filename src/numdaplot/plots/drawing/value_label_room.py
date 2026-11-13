@@ -126,11 +126,15 @@ def read_value_limits(axes: Axes, is_horizontal: bool) -> ValueLimits:
 	"""
 	if is_horizontal:
 		lower_x, upper_x = axes.get_xlim()
-		horizontal_limits = ValueLimits(float(lower_x), float(upper_x))
+		lower_value = float(lower_x)
+		upper_value = float(upper_x)
+		horizontal_limits = ValueLimits(lower_value, upper_value)
 		return horizontal_limits
 
 	lower_y, upper_y = axes.get_ylim()
-	vertical_limits = ValueLimits(float(lower_y), float(upper_y))
+	lower_value = float(lower_y)
+	upper_value = float(upper_y)
+	vertical_limits = ValueLimits(lower_value, upper_value)
 
 	return vertical_limits
 

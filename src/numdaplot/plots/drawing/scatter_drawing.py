@@ -406,7 +406,8 @@ def order_color_groups(present_texts: NDArray[Any], color_order: list[str] | Non
 	['10 to 99']
 	"""
 	raw_texts = present_texts.tolist()
-	group_texts = set(cast(list[str], raw_texts))
+	text_list = cast(list[str], raw_texts)
+	group_texts = set(text_list)
 	if color_order is not None:
 		held_categories = [category for category in color_order if category in group_texts]
 		return held_categories

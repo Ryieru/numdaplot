@@ -25,7 +25,8 @@ RED_LINE = ChartLayer(ndp.LineChart(colors=[ndp.Color.RED]), read_array_values(P
 POINTS = ChartLayer(ndp.ScatterChart(), read_array_values(PRICES, "ScatterChart"))
 GRID_POINTS = ChartLayer(ndp.ScatterChart(), read_array_values(GRID, "ScatterChart"))
 WIDE_GRID = ndp.Array.filled(ndp.Shape([2, 20]), 1.0)
-WIDE_BARS = ChartLayer(ndp.BarChart(), read_array_values(WIDE_GRID, "BarChart"))
+WIDE_GRID_VALUES = read_array_values(WIDE_GRID, "BarChart")
+WIDE_BARS = ChartLayer(ndp.BarChart(), WIDE_GRID_VALUES)
 
 
 def test_continue_color_cycle_gives_the_next_colors_to_each_chart() -> None:

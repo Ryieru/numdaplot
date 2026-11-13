@@ -14,10 +14,15 @@ from numdaplot.dates.date_format import DateFormat
 from numdaplot.tables.frames.column_values import find_column_type
 
 DAY_MONTH_PATTERN = CustomDateFormat("%d %b %Y")
-DAYS = pandas.Series(numpy.array(["2026-12-31", "NaT"], dtype="datetime64[s]"))
-TIMES = pandas.Series(pandas.to_datetime(["2026-12-31 14:30:15"])).astype("datetime64[ns]")
+DAY_VALUES = numpy.array(["2026-12-31", "NaT"], dtype="datetime64[s]")
+DAYS = pandas.Series(DAY_VALUES)
+TIME_VALUES = pandas.to_datetime(["2026-12-31 14:30:15"])
+SECOND_TIMES = pandas.Series(TIME_VALUES)
+TIMES = SECOND_TIMES.astype("datetime64[ns]")
 PARIS_TIMES = TIMES.dt.tz_localize("Europe/Paris")
-DURATIONS = pandas.Series(numpy.array([36, "NaT", -12], dtype="timedelta64[h]").astype("timedelta64[ns]"))
+HOUR_DURATIONS = numpy.array([36, "NaT", -12], dtype="timedelta64[h]")
+NANOSECOND_DURATIONS = HOUR_DURATIONS.astype("timedelta64[ns]")
+DURATIONS = pandas.Series(NANOSECOND_DURATIONS)
 EXPECTED_DAY_TEXTS = ["31/12/2026", None]
 EXPECTED_DEFAULT_DAY_TEXTS = ["2026-12-31", None]
 EXPECTED_DEFAULT_TIME_TEXTS = ["2026-12-31 14:30:15"]

@@ -51,7 +51,11 @@ def move_hiding_legends(figure: Figure) -> None:
 
 	for axes in figure.axes:
 		legend = axes.get_legend()
-		if legend is not None and legend.get_gid() == BEST_LEGEND_ID:
+		if legend is None:
+			continue
+
+		legend_id = legend.get_gid()
+		if legend_id == BEST_LEGEND_ID:
 			checked_legends.append((axes, legend))
 
 	if not checked_legends:

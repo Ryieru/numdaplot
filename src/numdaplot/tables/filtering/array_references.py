@@ -60,7 +60,8 @@ def keep_present_reference(rule: Rule, present: NDArray[numpy.bool_], time_zone:
 	>>> keep_present_reference(ndp.Equal(arrivals), present, None).value
 	Array(['Pau', 'Dax'], dtype=TEXT)
 	"""
-	if not dataclasses.is_dataclass(rule):
+	is_dataclass_rule = dataclasses.is_dataclass(rule)
+	if not is_dataclass_rule:
 		return rule
 
 	rule_fields = dataclasses.fields(rule)

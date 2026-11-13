@@ -39,7 +39,8 @@ def find_natural_key(text: str) -> tuple[list[int | str], str]:
 	key_parts = list[int | str]()
 
 	for text_part in text_parts:
-		if text_part.isdecimal():
+		is_number = text_part.isdecimal()
+		if is_number:
 			number = int(text_part)
 			key_parts.append(number)
 			continue

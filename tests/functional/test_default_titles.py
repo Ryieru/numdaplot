@@ -84,7 +84,8 @@ def test_a_pie_takes_its_title_from_its_columns() -> None:
 	"""
 	chart = ndp.PieChart(labels="month", values="cost")
 
-	drawn_figure = ndp.Plot.pie(COMPLETE_SHOP, chart).to_matplotlib()
+	plot = ndp.Plot.pie(COMPLETE_SHOP, chart)
+	drawn_figure = plot.to_matplotlib()
 	axes = drawn_figure.axes[0]
 
 	plot_title = drawn_figure.get_suptitle()
@@ -100,7 +101,8 @@ def test_an_empty_text_removes_the_default_title_and_labels() -> None:
 	"""
 	style = ndp.PlotStyle(title=REMOVED_TEXT, x_label=REMOVED_TEXT, y_label=REMOVED_TEXT)
 
-	drawn_figure = ndp.Plot.line(SHOP, ONE_LINE, style).to_matplotlib()
+	plot = ndp.Plot.line(SHOP, ONE_LINE, style)
+	drawn_figure = plot.to_matplotlib()
 	axes = drawn_figure.axes[0]
 
 	shown_texts = (drawn_figure.get_suptitle(), axes.get_xlabel(), axes.get_ylabel())
@@ -115,7 +117,8 @@ def test_a_chosen_title_replaces_the_default_one() -> None:
 	"""
 	style = ndp.PlotStyle(title=CHOSEN_TITLE)
 
-	drawn_figure = ndp.Plot.line(SHOP, ONE_LINE, style).to_matplotlib()
+	plot = ndp.Plot.line(SHOP, ONE_LINE, style)
+	drawn_figure = plot.to_matplotlib()
 
 	plot_title = drawn_figure.get_suptitle()
 	assert plot_title == CHOSEN_TITLE
@@ -129,7 +132,8 @@ def test_the_default_title_uses_a_chosen_label() -> None:
 	"""
 	style = ndp.PlotStyle(x_label=CHOSEN_X_LABEL)
 
-	drawn_figure = ndp.Plot.line(SHOP, ONE_LINE, style).to_matplotlib()
+	plot = ndp.Plot.line(SHOP, ONE_LINE, style)
+	drawn_figure = plot.to_matplotlib()
 
 	plot_title = drawn_figure.get_suptitle()
 	assert plot_title == f"sales by {CHOSEN_X_LABEL}"
@@ -143,7 +147,8 @@ def test_the_default_title_keeps_the_name_of_a_removed_label() -> None:
 	"""
 	style = ndp.PlotStyle(x_label=REMOVED_TEXT)
 
-	drawn_figure = ndp.Plot.line(SHOP, ONE_LINE, style).to_matplotlib()
+	plot = ndp.Plot.line(SHOP, ONE_LINE, style)
+	drawn_figure = plot.to_matplotlib()
 	axes = drawn_figure.axes[0]
 
 	plot_title = drawn_figure.get_suptitle()

@@ -49,7 +49,8 @@ def describe_kinds(kinds: AcceptedKinds, value: object) -> str:
 	'an int or None'
 	"""
 	if kinds.list_items is not None and isinstance(value, str):
-		return LIST_SUCH_AS_FORMAT.format(text=value)
+		list_example = LIST_SUCH_AS_FORMAT.format(text=value)
+		return list_example
 
 	descriptions = [add_article(name) for name in kinds.names]
 	if kinds.list_items is not None:
@@ -90,7 +91,9 @@ def describe_list(list_items: AcceptedKinds) -> str:
 
 	item_names = join_names(list_items.names)
 
-	return LIST_OF_FORMAT.format(names=item_names)
+	list_description = LIST_OF_FORMAT.format(names=item_names)
+
+	return list_description
 
 
 def add_article(name: str) -> str:
@@ -121,7 +124,9 @@ def add_article(name: str) -> str:
 	starts_with_vowel_sound = name[0] in VOWELS and not name.startswith(CONSONANT_SOUND_PREFIXES)
 	article = "an" if starts_with_vowel_sound else "a"
 
-	return ARTICLE_FORMAT.format(article=article, name=name)
+	named_kind = ARTICLE_FORMAT.format(article=article, name=name)
+
+	return named_kind
 
 
 def join_names(names: Sequence[str]) -> str:
@@ -153,4 +158,6 @@ def join_names(names: Sequence[str]) -> str:
 
 	joined_names = NAMES_SEPARATOR.join(first_names)
 
-	return LAST_NAME_FORMAT.format(names=joined_names, last_name=last_name)
+	joined_text = LAST_NAME_FORMAT.format(names=joined_names, last_name=last_name)
+
+	return joined_text

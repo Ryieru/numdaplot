@@ -140,7 +140,8 @@ def test_shares_are_written_with_two_decimals() -> None:
 	clusters = build_clusters()
 	chart = ndp.BarChart(x="cluster", y=["diabetic"], value_labels=TWO_DECIMALS)
 
-	_, axes = draw(ndp.Plot.bar(clusters, chart))
+	plot = ndp.Plot.bar(clusters, chart)
+	_, axes = draw(plot)
 
 	shown_texts = read_shown_texts(axes)
 	assert shown_texts == EXPECTED_SHARE_TEXTS
@@ -155,7 +156,8 @@ def test_no_value_is_written_by_default() -> None:
 	clusters = build_clusters()
 	chart = ndp.BarChart(x="cluster", y=["diabetic"])
 
-	_, axes = draw(ndp.Plot.bar(clusters, chart))
+	plot = ndp.Plot.bar(clusters, chart)
+	_, axes = draw(plot)
 
 	shown_texts = read_shown_texts(axes)
 	assert shown_texts == []
@@ -170,7 +172,8 @@ def test_counts_are_written_without_decimals() -> None:
 	clusters = build_clusters()
 	chart = ndp.BarChart(x="cluster", y=["rows"], value_labels=TWO_DECIMALS)
 
-	_, axes = draw(ndp.Plot.bar(clusters, chart))
+	plot = ndp.Plot.bar(clusters, chart)
+	_, axes = draw(plot)
 
 	shown_texts = read_shown_texts(axes)
 	assert shown_texts == EXPECTED_COUNT_TEXTS
@@ -185,7 +188,8 @@ def test_every_value_stays_inside_the_axes() -> None:
 	clusters = build_clusters()
 	chart = ndp.BarChart(x="cluster", y=["change"], value_labels=TWO_DECIMALS)
 
-	_, axes = draw(ndp.Plot.bar(clusters, chart))
+	plot = ndp.Plot.bar(clusters, chart)
+	_, axes = draw(plot)
 
 	shown_texts = read_shown_texts(axes)
 	text_boxes = [text.get_window_extent() for text in axes.texts]
@@ -204,7 +208,8 @@ def test_horizontal_values_stay_inside_the_axes() -> None:
 	clusters = build_clusters()
 	chart = ndp.BarChart(x="cluster", y=["change"], orientation=ndp.Orientation.HORIZONTAL, value_labels=TWO_DECIMALS)
 
-	_, axes = draw(ndp.Plot.bar(clusters, chart))
+	plot = ndp.Plot.bar(clusters, chart)
+	_, axes = draw(plot)
 
 	text_boxes = [text.get_window_extent() for text in axes.texts]
 	axes_box = axes.get_window_extent()
@@ -221,7 +226,8 @@ def test_stacked_values_are_readable_on_their_colors() -> None:
 	clusters = build_clusters()
 	chart = ndp.BarChart(x="cluster", y=["diabetic", "senior"], layout=ndp.BarLayout.STACKED, value_labels=TWO_DECIMALS)
 
-	_, axes = draw(ndp.Plot.bar(clusters, chart))
+	plot = ndp.Plot.bar(clusters, chart)
+	_, axes = draw(plot)
 
 	value_count = len(CLUSTERS)
 	text_colors = [text.get_color() for text in axes.texts]

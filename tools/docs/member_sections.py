@@ -181,7 +181,8 @@ def list_documented_members(part_class: type) -> tuple[str, ...]:
 	"""
 	member_names = list[str]()
 
-	for member_name, member in vars(part_class).items():
+	class_members = vars(part_class)
+	for member_name, member in class_members.items():
 		is_documented = is_documented_member(member_name, member)
 		if is_documented:
 			member_names.append(member_name)

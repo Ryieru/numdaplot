@@ -160,7 +160,8 @@ def test_widen_for_label_gives_the_label_at_most_half_the_axis() -> None:
 	axes.set_xlim(LOWER_LIMIT, UPPER_LIMIT)
 	write_value_labels(axes, bars, [LONG_TEXT], LabelPlace.HORIZONTAL_END)
 	figure.draw_without_rendering()
-	bar_label = read_bar_labels(axes)[0]
+	bar_labels = read_bar_labels(axes)
+	bar_label = bar_labels[0]
 
 	widened_limits = widen_for_label(axes, ValueLimits(LOWER_LIMIT, UPPER_LIMIT), bar_label)
 

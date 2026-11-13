@@ -35,7 +35,8 @@ def build_clusters(group_count: int) -> ndp.Table:
 	ndp.Table
 		The columns ``x``, ``y`` and ``cluster``.
 	"""
-	numbers = list(range(group_count))
+	number_range = range(group_count)
+	numbers = list(number_range)
 	names = [CLUSTER_NAME.format(number=number) for number in numbers]
 	positions = [float(number) for number in numbers]
 	x_values = ndp.Array.from_list(positions)

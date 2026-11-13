@@ -34,8 +34,10 @@ def build_crowded_points() -> ndp.Table:
 	for i in range(GRID_SIZE):
 		for j in range(GRID_SIZE):
 			group_name = GROUP_NAME.format(number=i)
-			x_list.append(float(i))
-			y_list.append(float(j))
+			x_value = float(i)
+			y_value = float(j)
+			x_list.append(x_value)
+			y_list.append(y_value)
 			group_list.append(group_name)
 
 	x_values = ndp.Array.from_list(x_list)

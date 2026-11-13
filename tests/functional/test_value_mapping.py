@@ -126,7 +126,8 @@ def test_only_listed_answers_become_missing_when_the_others_are_kept() -> None:
 	known_values = answers.select(ndp.IsPresent())
 	known_answers = known_values.to_list()
 	unknown_flags = answers.check(ndp.IsMissing())
-	unknown_count = unknown_flags.compute(ndp.Sum()).to_value()
+	unknown_sum = unknown_flags.compute(ndp.Sum())
+	unknown_count = unknown_sum.to_value()
 	assert known_answers == EXPECTED_KNOWN_ANSWERS
 	assert unknown_count == EXPECTED_UNKNOWN_COUNT
 
@@ -157,7 +158,8 @@ def test_decimals_given_only_missing_values_stay_decimals() -> None:
 	cleared_answers = answers.apply(ONLY_UNKNOWN_ANSWERS)
 
 	missing_flags = cleared_answers.check(ndp.IsMissing())
-	missing_count = missing_flags.compute(ndp.Sum()).to_value()
+	missing_sum = missing_flags.compute(ndp.Sum())
+	missing_count = missing_sum.to_value()
 	assert cleared_answers.dtype == ndp.Type.FLOAT64
 	assert missing_count == EXPECTED_MISSING_ANSWER_COUNT
 

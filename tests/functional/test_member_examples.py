@@ -157,7 +157,8 @@ def find_all_member_docstrings() -> list[tuple[str, str]]:
 		The name and the docstring of each member, in the order of the files.
 	"""
 	all_docstrings = list[tuple[str, str]]()
-	source_paths = sorted(SOURCE_FOLDER.rglob("*.py"))
+	found_paths = SOURCE_FOLDER.rglob("*.py")
+	source_paths = sorted(found_paths)
 
 	for source_path in source_paths:
 		member_docstrings = find_member_docstrings(source_path)
@@ -226,7 +227,8 @@ def test_every_enum_member_has_an_example() -> None:
 		Looks for the ``Examples`` header through ``find_members_lacking``.
 	"""
 	missing_names = list[str]()
-	source_paths = sorted(SOURCE_FOLDER.rglob("*.py"))
+	found_paths = SOURCE_FOLDER.rglob("*.py")
+	source_paths = sorted(found_paths)
 
 	for source_path in source_paths:
 		file_missing_names = find_members_lacking(source_path, EXAMPLES_HEADER)
@@ -242,7 +244,8 @@ def test_every_enum_member_has_its_version() -> None:
 	.. versionadded:: 0.2.0
 	"""
 	missing_names = list[str]()
-	source_paths = sorted(SOURCE_FOLDER.rglob("*.py"))
+	found_paths = SOURCE_FOLDER.rglob("*.py")
+	source_paths = sorted(found_paths)
 
 	for source_path in source_paths:
 		file_missing_names = find_members_lacking(source_path, VERSION_ADDED_DIRECTIVE)

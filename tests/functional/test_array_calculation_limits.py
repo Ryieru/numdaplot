@@ -13,6 +13,7 @@ import pytest
 
 import numdaplot as ndp
 
+SMALL_ONES = ndp.Array.from_list([1], dtype=ndp.Type.INT8)
 HUGE_DECIMAL = 1e308
 LARGE_INTEGER = 2**62
 HIGHEST_INTEGER = 2**63 - 1
@@ -256,7 +257,7 @@ def test_the_advice_for_integers_works() -> None:
 		(lambda: 2 ** ndp.Array.from_list([64]), "**", "INT64"),
 		(lambda: ndp.Array.from_list([HIGHEST_INT8], dtype=ndp.Type.INT8) + 1, "+", "INT8"),
 		(lambda: ndp.Array.from_list([1], dtype=ndp.Type.INT8) * 1000, "*", "INT8"),
-		(lambda: 1000 * ndp.Array.from_list([1], dtype=ndp.Type.INT8), "*", "INT8"),
+		(lambda: 1000 * SMALL_ONES, "*", "INT8"),
 		(lambda: ndp.Array.from_list([1], dtype=ndp.Type.UINT8) - 2, "-", "UINT8"),
 		(lambda: ndp.Array.from_list([1, 2]) * 2**64, "*", "INT64"),
 		(lambda: ndp.Array.from_list([-(2**63)]) // -1, "//", "INT64"),

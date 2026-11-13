@@ -112,7 +112,8 @@ def test_draw_bar_chart_writes_the_value_of_each_present_bar() -> None:
 
 	.. versionadded:: 0.2.0
 	"""
-	axes = Figure().add_subplot()
+	figure = Figure()
+	axes = figure.add_subplot()
 
 	draw_bar_chart(axes, LABELED_LAYER)
 
@@ -126,7 +127,8 @@ def test_draw_bar_chart_writes_no_value_by_default() -> None:
 
 	.. versionadded:: 0.2.0
 	"""
-	axes = Figure().add_subplot()
+	figure = Figure()
+	axes = figure.add_subplot()
 
 	draw_bar_chart(axes, GROUPED_LAYER)
 
