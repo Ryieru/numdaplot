@@ -6,10 +6,8 @@ Unit tests of the names of brackets.
 
 import pytest
 
-from numdaplot.errors.invalid_limits_error import InvalidLimitsError
-from numdaplot.rules.bounds import Bounds
-from numdaplot.tables.columns.bracket_end import BracketEnd
-from numdaplot.tables.columns.bracket_names import (
+from numdaplot.brackets.bracket_end import BracketEnd
+from numdaplot.brackets.bracket_names import (
 	Bracket,
 	find_first_integer,
 	find_last_integer,
@@ -19,7 +17,9 @@ from numdaplot.tables.columns.bracket_names import (
 	write_integer_name,
 	write_limit,
 )
-from numdaplot.tables.columns.brackets import Brackets
+from numdaplot.brackets.brackets import Brackets
+from numdaplot.errors.invalid_limits_error import InvalidLimitsError
+from numdaplot.rules.bounds import Bounds
 
 LOW = Bounds.LOW_ONLY
 HIGH = Bounds.HIGH_ONLY

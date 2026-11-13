@@ -40,7 +40,7 @@ def convert_frame_columns(frame: pandas.DataFrame, conversion: TableConversion) 
 	--------
 	>>> import pandas
 	>>> import numdaplot as ndp
-	>>> from numdaplot.conversions.converted_frame import convert_frame_columns
+	>>> from numdaplot.tables.conversions.converted_frame import convert_frame_columns
 	>>> frame = pandas.DataFrame({"low": [1.0, 2.0], "high": [3.0, 4.0]}, dtype="float64")
 	>>> small_integers = ndp.TableConversion(columns=["low", "high"], dtype=ndp.Type.INT8)
 	>>> converted_frame = convert_frame_columns(frame, small_integers)

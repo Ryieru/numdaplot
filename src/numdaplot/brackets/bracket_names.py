@@ -8,10 +8,10 @@ import math
 from dataclasses import dataclass
 from typing import cast
 
+from numdaplot.brackets.bracket_end import BracketEnd
+from numdaplot.brackets.brackets import Brackets
 from numdaplot.errors.invalid_limits_error import InvalidLimitsError
 from numdaplot.rules.bounds import Bounds
-from numdaplot.tables.columns.bracket_end import BracketEnd
-from numdaplot.tables.columns.brackets import Brackets
 
 CLOSED_INTEGERS = "{low} to {high}"
 INTEGERS_OR_MORE = "{low} or more"
@@ -40,7 +40,7 @@ class Bracket:
 
 	Examples
 	--------
-	>>> from numdaplot.tables.columns.bracket_names import Bracket
+	>>> from numdaplot.brackets.bracket_names import Bracket
 	>>> Bracket(0, 10).high
 	10
 	"""
@@ -68,7 +68,7 @@ def list_brackets(brackets: Brackets) -> list[Bracket]:
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> from numdaplot.tables.columns.bracket_names import list_brackets
+	>>> from numdaplot.brackets.bracket_names import list_brackets
 	>>> list_brackets(ndp.Brackets(limits=[0, 10], last=ndp.BracketEnd.OPEN))
 	[Bracket(low=0, high=10), Bracket(low=10, high=None)]
 	"""
@@ -117,7 +117,7 @@ def write_bracket_names(brackets: Brackets, holds_integers: bool) -> list[str]:
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> from numdaplot.tables.columns.bracket_names import write_bracket_names
+	>>> from numdaplot.brackets.bracket_names import write_bracket_names
 	>>> write_bracket_names(ndp.Brackets(limits=[0, 10, 20], last=ndp.BracketEnd.OPEN), True)
 	['0 to 9', '10 to 19', '20 or more']
 	>>> write_bracket_names(ndp.Brackets(limits=[0, 10], bounds=ndp.Bounds.HIGH_ONLY), False)
@@ -164,7 +164,7 @@ def write_integer_name(bracket: Bracket, brackets: Brackets) -> str:
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> from numdaplot.tables.columns.bracket_names import Bracket, write_integer_name
+	>>> from numdaplot.brackets.bracket_names import Bracket, write_integer_name
 	>>> write_integer_name(Bracket(0.5, 10), ndp.Brackets(limits=[0.5, 10]))
 	'1 to 9'
 	"""
@@ -215,7 +215,7 @@ def find_first_integer(low: int | float, bounds: Bounds) -> int:
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> from numdaplot.tables.columns.bracket_names import find_first_integer
+	>>> from numdaplot.brackets.bracket_names import find_first_integer
 	>>> find_first_integer(10, ndp.Bounds.LOW_ONLY), find_first_integer(10, ndp.Bounds.HIGH_ONLY)
 	(10, 11)
 	"""
@@ -250,7 +250,7 @@ def find_last_integer(high: int | float, bounds: Bounds) -> int:
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> from numdaplot.tables.columns.bracket_names import find_last_integer
+	>>> from numdaplot.brackets.bracket_names import find_last_integer
 	>>> find_last_integer(10, ndp.Bounds.LOW_ONLY), find_last_integer(10, ndp.Bounds.HIGH_ONLY)
 	(9, 10)
 	"""
@@ -286,7 +286,7 @@ def write_decimal_name(bracket: Bracket, bounds: Bounds) -> str:
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> from numdaplot.tables.columns.bracket_names import Bracket, write_decimal_name
+	>>> from numdaplot.brackets.bracket_names import Bracket, write_decimal_name
 	>>> write_decimal_name(Bracket(0.5, None), ndp.Bounds.HIGH_ONLY)
 	'over 0.5'
 	"""
@@ -327,7 +327,7 @@ def write_limit(limit: int | float | None) -> str:
 
 	Examples
 	--------
-	>>> from numdaplot.tables.columns.bracket_names import write_limit
+	>>> from numdaplot.brackets.bracket_names import write_limit
 	>>> write_limit(10.0), write_limit(0.1), write_limit(-3)
 	('10', '0.1', '-3')
 	"""

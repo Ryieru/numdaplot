@@ -7,14 +7,14 @@ Brackets cutting a number column into categories.
 from dataclasses import dataclass
 
 from numdaplot.argument_checks.field_types import require_field_types
-from numdaplot.arrays.mapping.unmatched import Unmatched
+from numdaplot.brackets.bracket_end import BracketEnd
+from numdaplot.brackets.unmatched import Unmatched
 from numdaplot.errors.duplicate_label_error import DuplicateLabelError
 from numdaplot.errors.empty_list_error import EmptyListError
 from numdaplot.errors.invalid_label_count_error import InvalidLabelCountError
 from numdaplot.errors.invalid_limits_error import InvalidLimitsError
 from numdaplot.errors.refused_setting_error import RefusedSettingError
 from numdaplot.rules.bounds import Bounds
-from numdaplot.tables.columns.bracket_end import BracketEnd
 
 LIMIT_ITEM_NAME = "limit"
 BRACKETS_NAME = "Brackets"
@@ -188,7 +188,7 @@ def require_increasing_limits(limits: list[int | float]) -> None:
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> from numdaplot.tables.columns.brackets import require_increasing_limits
+	>>> from numdaplot.brackets.brackets import require_increasing_limits
 	>>> try:
 	... 	require_increasing_limits([20, 10])
 	... except ndp.InvalidLimitsError as error:
@@ -224,7 +224,7 @@ def require_bracket_labels(labels: list[str], bracket_count: int) -> None:
 	Examples
 	--------
 	>>> import numdaplot as ndp
-	>>> from numdaplot.tables.columns.brackets import require_bracket_labels
+	>>> from numdaplot.brackets.brackets import require_bracket_labels
 	>>> try:
 	... 	require_bracket_labels(["child", "child"], 2)
 	... except ndp.DuplicateLabelError as error:

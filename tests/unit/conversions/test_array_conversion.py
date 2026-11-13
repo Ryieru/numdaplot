@@ -8,12 +8,12 @@ from typing import Any, cast
 
 import pytest
 
+from numdaplot.brackets.brackets import Brackets
 from numdaplot.conversions.array_conversion import ArrayConversion
 from numdaplot.conversions.boolean_rule import BooleanRule
 from numdaplot.dates.date_format import DateFormat
 from numdaplot.errors.invalid_type_error import InvalidTypeError
 from numdaplot.errors.refused_setting_error import RefusedSettingError
-from numdaplot.tables.columns.brackets import Brackets
 from numdaplot.types.type import Type
 
 CATEGORY_REFUSAL = "ArrayConversion does not accept Type.CATEGORY."

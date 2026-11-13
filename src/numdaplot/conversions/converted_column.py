@@ -6,6 +6,11 @@ Conversion of a Table column to another type.
 
 import pandas
 
+from numdaplot.brackets.bracketed_column import cut_column
+from numdaplot.brackets.brackets import Brackets
+from numdaplot.column_storage.column import Column
+from numdaplot.column_storage.column_values import find_column_type
+from numdaplot.column_storage.frame_normalization import convert_to_type
 from numdaplot.conversions.boolean_conversion import convert_booleans_to_numbers, convert_numbers_to_booleans
 from numdaplot.conversions.boolean_rule import BooleanRule
 from numdaplot.conversions.conversion_checks import WRITTEN_TYPES, require_conversion_settings
@@ -21,11 +26,6 @@ from numdaplot.dates.custom_date_format import CustomDateFormat
 from numdaplot.dates.date_format import DateFormat
 from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
 from numdaplot.errors.time_overflow_error import TimeOverflowError
-from numdaplot.tables.columns.bracketed_column import cut_column
-from numdaplot.tables.columns.brackets import Brackets
-from numdaplot.tables.frames.column import Column
-from numdaplot.tables.frames.column_values import find_column_type
-from numdaplot.tables.frames.frame_normalization import convert_to_type
 from numdaplot.types.type import Type
 from numdaplot.types.value_family import ValueFamily, find_family
 

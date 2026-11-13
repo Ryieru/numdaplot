@@ -7,13 +7,13 @@ Unit tests of the change of the time zone of a datetime column.
 import pandas
 import pytest
 
+from numdaplot.column_storage.time_zones import find_column_time_zone
 from numdaplot.conversions.time_zone_conversion import attribute_time_zone, change_time_zone
 from numdaplot.dates.time_zone import TimeZone
 from numdaplot.dates.time_zone_change import TimeZoneChange
 from numdaplot.dates.time_zone_mode import TimeZoneMode
 from numdaplot.errors.time_zone_mismatch_error import TimeZoneMismatchError
 from numdaplot.errors.value_conversion_error import ValueConversionError
-from numdaplot.tables.frames.time_zones import find_column_time_zone
 
 PARIS_NAME = "Europe/Paris"
 PARIS = TimeZone(PARIS_NAME)

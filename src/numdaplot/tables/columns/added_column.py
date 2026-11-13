@@ -6,13 +6,13 @@ Addition of a column to a Table.
 
 import pandas
 
+from numdaplot.column_storage.column_values import build_column
+from numdaplot.column_storage.time_range_errors import TimeRangeErrors
 from numdaplot.errors.dimension_error import DimensionError
 from numdaplot.errors.duplicate_column_error import DuplicateColumnError
 from numdaplot.errors.shape_mismatch_error import ShapeMismatchError
 from numdaplot.files.conflict import Conflict
 from numdaplot.tables.columns.new_column import NewColumn
-from numdaplot.tables.frames.column_values import build_column
-from numdaplot.tables.frames.time_range_errors import TimeRangeErrors
 
 ADD_COLUMN_OPERATION = "add_column"
 ONE_DIMENSION = 1

@@ -10,6 +10,7 @@ import numpy
 import pandas
 import pytest
 
+from numdaplot.column_storage.column_values import find_column_type
 from numdaplot.conversions.boolean_conversion import (
 	convert_booleans_to_numbers,
 	convert_numbers_to_booleans,
@@ -17,7 +18,6 @@ from numdaplot.conversions.boolean_conversion import (
 )
 from numdaplot.conversions.boolean_rule import BooleanRule
 from numdaplot.errors.value_conversion_error import ValueConversionError
-from numdaplot.tables.frames.column_values import find_column_type
 from numdaplot.types.type import Type
 
 BOOLEANS = pandas.Series([True, None, False], dtype="boolean")

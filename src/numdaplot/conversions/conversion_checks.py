@@ -4,13 +4,13 @@ Checks of the settings of a conversion against the types it converts between.
 .. versionadded:: 0.2.0
 """
 
+from numdaplot.brackets.brackets import Brackets
 from numdaplot.conversions.conversion_settings import ConversionSettings
 from numdaplot.conversions.date_formats import find_format_name, has_date, has_time
 from numdaplot.conversions.table_conversion import TableConversion
 from numdaplot.dates.custom_date_format import CustomDateFormat
 from numdaplot.dates.date_format import DateFormat
 from numdaplot.errors.invalid_conversion_error import InvalidConversionError
-from numdaplot.tables.columns.brackets import Brackets
 from numdaplot.types.type import Type
 from numdaplot.types.value_family import ValueFamily, find_family
 

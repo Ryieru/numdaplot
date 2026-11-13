@@ -10,13 +10,13 @@ from zoneinfo import ZoneInfo
 import pandas
 import pytest
 
+from numdaplot.column_storage.time_zones import normalize_time_zone_column
 from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
 from numdaplot.rules.between import Between
 from numdaplot.rules.greater import Greater
 from numdaplot.statistics.counted_missing import CountedMissing
 from numdaplot.statistics.share import Share
 from numdaplot.tables.aggregation.share_column import build_share_column
-from numdaplot.tables.frames.time_zones import normalize_time_zone_column
 
 AGES = pandas.Series([70, None, 30], dtype="Int64")
 SENIOR_AGE = 65

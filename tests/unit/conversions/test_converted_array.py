@@ -8,13 +8,13 @@ import numpy
 import pandas
 import pytest
 
+from numdaplot.column_storage.column import Column
 from numdaplot.conversions import converted_array
 from numdaplot.conversions.array_conversion import ArrayConversion
 from numdaplot.conversions.converted_array import convert_array_values, require_missing_storable
 from numdaplot.conversions.converted_column import convert_column
 from numdaplot.conversions.table_conversion import TableConversion
 from numdaplot.errors.unsupported_missing_error import UnsupportedMissingError
-from numdaplot.tables.frames.column import Column
 from numdaplot.types.type import Type
 
 CONVERT_COLUMN_NAME = "convert_column"

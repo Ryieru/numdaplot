@@ -10,9 +10,9 @@ import numpy
 import pandas
 import pytest
 
+from numdaplot.column_storage.column_values import find_column_type
 from numdaplot.measures.measure import Measure
 from numdaplot.positions.axis import Axis
-from numdaplot.tables.frames.column_values import find_column_type
 from numdaplot.tables.missing.missing_count import MissingCount
 from numdaplot.tables.missing.missing_counts import (
 	build_name_column,

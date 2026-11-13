@@ -7,9 +7,9 @@ Summary of the missing values of each column of a Table.
 import numpy
 import pandas
 
+from numdaplot.column_storage.column_values import find_column_type
+from numdaplot.column_storage.time_zones import name_column_type
 from numdaplot.measures.count_division import divide_counts
-from numdaplot.tables.frames.column_values import find_column_type
-from numdaplot.tables.frames.time_zones import name_column_type
 from numdaplot.tables.missing.missing_counts import COLUMN_SUM_AXIS, find_frame_missing
 
 COLUMN_NAMES_COLUMN = "column"

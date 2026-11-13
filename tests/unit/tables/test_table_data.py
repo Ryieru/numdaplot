@@ -11,12 +11,12 @@ import numpy
 import pandas
 import pytest
 
+from numdaplot.column_storage.column import Column
 from numdaplot.dates.time_zone import TimeZone
 from numdaplot.errors.column_not_found_error import ColumnNotFoundError
 from numdaplot.errors.refused_operation_error import RefusedOperationError
 from numdaplot.positions.shape import Shape
 from numdaplot.tables.files.column_names import ColumnNames
-from numdaplot.tables.frames.column import Column
 from numdaplot.tables.table_data import TableData, read_stored_frame
 from numdaplot.types.type import Type
 

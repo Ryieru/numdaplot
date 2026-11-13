@@ -8,9 +8,9 @@ from shutil import get_terminal_size
 
 import pandas
 
-from numdaplot.tables.frames.column_values import find_column_type
-from numdaplot.tables.frames.time_columns import is_time_column, write_time_texts_column
-from numdaplot.tables.frames.time_zones import name_column_type
+from numdaplot.column_storage.column_values import find_column_type
+from numdaplot.column_storage.time_columns import is_time_column, write_time_texts_column
+from numdaplot.column_storage.time_zones import name_column_type
 from numdaplot.tables.preview.shown_columns import ShownColumns
 
 MAX_COLUMNS_OPTION = "display.max_columns"

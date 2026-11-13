@@ -8,7 +8,7 @@ from pathlib import Path
 
 import pandas
 
-from numdaplot.tables.frames.time_zones import require_no_time_zone
+from numdaplot.column_storage.time_zones import require_no_time_zone
 
 STATA_OPERATION = "A Stata file"
 

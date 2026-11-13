@@ -12,9 +12,11 @@ import pandas
 import pytest
 
 from numdaplot.arrays.creation.list_conversion import convert_list
-from numdaplot.arrays.mapping.unmatched import Unmatched
 from numdaplot.arrays.mapping.value_change import ValueChange
 from numdaplot.arrays.mapping.value_mapping import ValueMapping
+from numdaplot.brackets.unmatched import Unmatched
+from numdaplot.column_storage.column import Column
+from numdaplot.column_storage.column_values import build_column_with_missing, find_column_missing, find_column_type
 from numdaplot.dates.date_part import DatePart
 from numdaplot.dates.date_part_unit import DatePartUnit
 from numdaplot.errors.out_of_domain_error import OutOfDomainError
@@ -27,8 +29,6 @@ from numdaplot.tables.columns.applied_columns import (
 	require_column_without_time_zone,
 )
 from numdaplot.tables.columns.table_application import TableApplication
-from numdaplot.tables.frames.column import Column
-from numdaplot.tables.frames.column_values import build_column_with_missing, find_column_missing, find_column_type
 from numdaplot.types.type import Type
 
 INTEGER_DTYPE = "Int64"

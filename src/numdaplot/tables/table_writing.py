@@ -7,6 +7,7 @@ Writing of a Table in a file.
 from pathlib import Path
 
 from numdaplot.argument_checks.argument_types import checked_arguments
+from numdaplot.column_storage.time_columns import read_time_objects_frame, write_time_texts_frame
 from numdaplot.files.conflict import Conflict
 from numdaplot.files.file_access import WRITE_OPERATION, FileAccessErrors
 from numdaplot.files.file_paths import FilePath, require_free_path
@@ -18,7 +19,6 @@ from numdaplot.tables.files.json_file import write_json_file
 from numdaplot.tables.files.json_write_options import JsonWriteOptions
 from numdaplot.tables.files.parquet_file import write_parquet_file
 from numdaplot.tables.files.stata_file import write_stata_file
-from numdaplot.tables.frames.time_columns import read_time_objects_frame, write_time_texts_frame
 from numdaplot.tables.table_data import TableData
 
 

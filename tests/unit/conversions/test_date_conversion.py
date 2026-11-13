@@ -7,10 +7,10 @@ Unit tests of the conversion of Table columns between texts, dates, datetimes an
 import numpy
 import pandas
 
+from numdaplot.column_storage.column_values import find_column_type
 from numdaplot.conversions.date_conversion import convert_moments, write_dates, write_durations
 from numdaplot.dates.custom_date_format import CustomDateFormat
 from numdaplot.dates.date_format import DateFormat
-from numdaplot.tables.frames.column_values import find_column_type
 from numdaplot.types.type import Type
 
 DAY_MONTH_PATTERN = CustomDateFormat("%d %b %Y")

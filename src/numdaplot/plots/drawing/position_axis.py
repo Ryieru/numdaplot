@@ -16,7 +16,7 @@ from matplotlib.dates import AutoDateLocator
 from matplotlib.ticker import FixedFormatter, FixedLocator
 from numpy.typing import NDArray
 
-from numdaplot.arrays.conversion.time_text import format_datetimes
+from numdaplot.column_storage.time_text import format_datetimes
 from numdaplot.plots.data.chart_values import Positions
 from numdaplot.plots.data.position_kind import PositionKind
 from numdaplot.plots.drawing.moment_period_formatter import MomentPeriodFormatter

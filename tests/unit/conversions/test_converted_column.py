@@ -11,6 +11,9 @@ import numpy
 import pandas
 import pytest
 
+from numdaplot.column_storage.column import Column
+from numdaplot.column_storage.column_values import find_column_type
+from numdaplot.column_storage.time_zones import find_column_time_zone
 from numdaplot.conversions.array_conversion import ArrayConversion
 from numdaplot.conversions.boolean_rule import BooleanRule
 from numdaplot.conversions.converted_column import (
@@ -26,9 +29,6 @@ from numdaplot.dates.time_zone_change import TimeZoneChange
 from numdaplot.dates.time_zone_mode import TimeZoneMode
 from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
 from numdaplot.errors.value_conversion_error import ValueConversionError
-from numdaplot.tables.frames.column import Column
-from numdaplot.tables.frames.column_values import find_column_type
-from numdaplot.tables.frames.time_zones import find_column_time_zone
 from numdaplot.types.type import Type
 
 INTEGERS = pandas.Series([1, None, 3], dtype="Int64")

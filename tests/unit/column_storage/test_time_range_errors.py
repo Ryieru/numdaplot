@@ -7,8 +7,8 @@ Unit tests of the context refusing dates and durations out of range.
 import pandas
 import pytest
 
+from numdaplot.column_storage.time_range_errors import TimeRangeErrors
 from numdaplot.errors.time_overflow_error import TimeOverflowError
-from numdaplot.tables.frames.time_range_errors import TimeRangeErrors
 
 OPERATION_NAME = "from_arrays"
 COLUMN_NAME = "when"

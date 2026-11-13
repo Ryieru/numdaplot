@@ -8,15 +8,15 @@ import math
 
 import pytest
 
-from numdaplot.arrays.mapping.unmatched import Unmatched
+from numdaplot.brackets.bracket_end import BracketEnd
+from numdaplot.brackets.brackets import Brackets, require_bracket_labels, require_increasing_limits
+from numdaplot.brackets.unmatched import Unmatched
 from numdaplot.errors.duplicate_label_error import DuplicateLabelError
 from numdaplot.errors.empty_list_error import EmptyListError
 from numdaplot.errors.invalid_label_count_error import InvalidLabelCountError
 from numdaplot.errors.invalid_limits_error import InvalidLimitsError
 from numdaplot.errors.refused_setting_error import RefusedSettingError
 from numdaplot.rules.bounds import Bounds
-from numdaplot.tables.columns.bracket_end import BracketEnd
-from numdaplot.tables.columns.brackets import Brackets, require_bracket_labels, require_increasing_limits
 
 AGE_LIMITS = list[int | float]([0, 18, 65])
 SINGLE_LIMIT = list[int | float]([0])

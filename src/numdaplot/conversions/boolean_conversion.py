@@ -8,16 +8,16 @@ from typing import Any, cast
 
 import numpy
 
-from numdaplot.conversions.boolean_rule import BooleanRule
-from numdaplot.errors.value_conversion_error import ValueConversionError
-from numdaplot.tables.frames.column import Column
-from numdaplot.tables.frames.column_values import (
+from numdaplot.column_storage.column import Column
+from numdaplot.column_storage.column_values import (
 	build_column_with_missing,
 	find_column_missing,
 	find_column_type,
 	read_present_values,
 )
-from numdaplot.tables.frames.frame_normalization import convert_to_type
+from numdaplot.column_storage.frame_normalization import convert_to_type
+from numdaplot.conversions.boolean_rule import BooleanRule
+from numdaplot.errors.value_conversion_error import ValueConversionError
 from numdaplot.types.type import Type
 
 FALSE_NUMBER = 0

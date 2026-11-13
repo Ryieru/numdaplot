@@ -14,7 +14,8 @@ import numpy
 from numpy.typing import NDArray
 
 from numdaplot.arrays.operations.operand import LONGEST_MICROSECOND_DURATION, convert_time_value
-from numdaplot.arrays.operations.time_bounds import NANOSECOND_DTYPES, is_python_time_in_range
+from numdaplot.arrays.operations.time_bounds import NANOSECOND_DTYPES
+from numdaplot.column_storage.time_range import is_python_time_in_range
 
 MICROSECOND_DURATION_DTYPE = numpy.dtype("timedelta64[us]")
 AFTER_EVERY_VALUE = 1

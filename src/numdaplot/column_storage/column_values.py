@@ -10,10 +10,10 @@ import numpy
 import pandas
 from numpy.typing import NDArray
 
+from numdaplot.column_storage.column import Column
+from numdaplot.column_storage.time_zones import find_column_time_zone, remove_utc_zone
 from numdaplot.errors.time_zone_mismatch_error import TimeZoneMismatchError
 from numdaplot.errors.unsupported_missing_error import UnsupportedMissingError
-from numdaplot.tables.frames.column import Column
-from numdaplot.tables.frames.time_zones import find_column_time_zone, remove_utc_zone
 from numdaplot.types.numpy_mapping import from_numpy_dtype, to_numpy_dtype
 from numdaplot.types.pandas_mapping import from_pandas_dtype, to_pandas_dtype
 from numdaplot.types.type import Type
@@ -45,7 +45,7 @@ def find_column_type(column: Column) -> Type:
 	Examples
 	--------
 	>>> import pandas
-	>>> from numdaplot.tables.frames.column_values import find_column_type
+	>>> from numdaplot.column_storage.column_values import find_column_type
 	>>> find_column_type(pandas.Series([1.5], dtype="float64"))
 	<Type.FLOAT64: 10>
 	"""
@@ -73,7 +73,7 @@ def find_column_missing(column: Column) -> NDArray[numpy.bool_]:
 	Examples
 	--------
 	>>> import pandas
-	>>> from numdaplot.tables.frames.column_values import find_column_missing
+	>>> from numdaplot.column_storage.column_values import find_column_missing
 	>>> find_column_missing(pandas.Series([1, None], dtype="Int64"))
 	array([False,  True])
 	"""
@@ -103,7 +103,7 @@ def convert_column_values(column: Column) -> NDArray[Any]:
 	Examples
 	--------
 	>>> import pandas
-	>>> from numdaplot.tables.frames.column_values import convert_column_values
+	>>> from numdaplot.column_storage.column_values import convert_column_values
 	>>> convert_column_values(pandas.Series([1, 2], dtype="Int64"))
 	array([1, 2])
 	"""
@@ -145,7 +145,7 @@ def read_present_values(column: Column) -> NDArray[Any]:
 	Examples
 	--------
 	>>> import pandas
-	>>> from numdaplot.tables.frames.column_values import read_present_values
+	>>> from numdaplot.column_storage.column_values import read_present_values
 	>>> read_present_values(pandas.Series([1, None, 3], dtype="Int64"))
 	array([1, 3])
 	"""
@@ -181,7 +181,7 @@ def read_array_values(column: Column) -> NDArray[Any]:
 	Examples
 	--------
 	>>> import pandas
-	>>> from numdaplot.tables.frames.column_values import read_array_values
+	>>> from numdaplot.column_storage.column_values import read_array_values
 	>>> read_array_values(pandas.Series([1.5, None], dtype="float64"))
 	array([1.5, nan])
 	"""
@@ -221,7 +221,7 @@ def build_column(values: NDArray[Any]) -> Column:
 	Examples
 	--------
 	>>> import numpy
-	>>> from numdaplot.tables.frames.column_values import build_column
+	>>> from numdaplot.column_storage.column_values import build_column
 	>>> build_column(numpy.array([1, 2])).dtype
 	Int64Dtype()
 	"""
@@ -258,7 +258,7 @@ def build_column_with_missing(present_values: NDArray[Any], missing: NDArray[num
 	Examples
 	--------
 	>>> import numpy
-	>>> from numdaplot.tables.frames.column_values import build_column_with_missing
+	>>> from numdaplot.column_storage.column_values import build_column_with_missing
 	>>> build_column_with_missing(numpy.array([1, 3]), numpy.array([False, True, False])).tolist()
 	[1, <NA>, 3]
 	"""

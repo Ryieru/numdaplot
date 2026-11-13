@@ -8,11 +8,11 @@ from dataclasses import dataclass
 
 from numdaplot.argument_checks.column_names import copy_column_names
 from numdaplot.argument_checks.field_types import require_field_types
+from numdaplot.brackets.brackets import Brackets
 from numdaplot.conversions.boolean_rule import BooleanRule
 from numdaplot.dates.custom_date_format import CustomDateFormat
 from numdaplot.dates.date_format import DateFormat
 from numdaplot.dates.time_zone_change import TimeZoneChange
-from numdaplot.tables.columns.brackets import Brackets
 from numdaplot.types.type import Type
 
 

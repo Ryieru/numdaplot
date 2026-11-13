@@ -8,6 +8,7 @@ import numpy
 import pandas
 import pytest
 
+from numdaplot.column_storage.column import Column
 from numdaplot.conversions.number_conversion import (
 	convert_numbers,
 	find_lost_values,
@@ -17,7 +18,6 @@ from numdaplot.conversions.number_conversion import (
 	store_numbers,
 )
 from numdaplot.errors.value_conversion_error import ValueConversionError
-from numdaplot.tables.frames.column import Column
 from numdaplot.types.type import Type
 
 WHOLE_DECIMALS = pandas.Series([2.0, None])

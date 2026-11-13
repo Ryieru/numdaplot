@@ -50,7 +50,7 @@ def format_datetimes(values: NDArray[numpy.datetime64]) -> NDArray[numpy.str_]:
 	Examples
 	--------
 	>>> import numpy
-	>>> from numdaplot.arrays.conversion.time_text import format_datetimes
+	>>> from numdaplot.column_storage.time_text import format_datetimes
 	>>> format_datetimes(numpy.array(["2026-01-02T10:30:00.25", "NaT"], dtype="datetime64[ns]")).tolist()
 	['2026-01-02 10:30:00.250', 'NaT']
 	"""
@@ -82,7 +82,7 @@ def find_datetime_unit(values: NDArray[numpy.datetime64]) -> DatetimeUnit:
 	Examples
 	--------
 	>>> import numpy
-	>>> from numdaplot.arrays.conversion.time_text import find_datetime_unit
+	>>> from numdaplot.column_storage.time_text import find_datetime_unit
 	>>> find_datetime_unit(numpy.array(["2026-01-02T10:30:00.25"], dtype="datetime64[ns]"))
 	'ms'
 	"""
@@ -123,7 +123,7 @@ def format_durations(values: NDArray[numpy.timedelta64]) -> NDArray[numpy.str_]:
 	Examples
 	--------
 	>>> import numpy
-	>>> from numdaplot.arrays.conversion.time_text import format_durations
+	>>> from numdaplot.column_storage.time_text import format_durations
 	>>> format_durations(numpy.array([36, -12], dtype="timedelta64[h]")).tolist()
 	['1 days 12:00:00', '-1 days +12:00:00']
 	"""
@@ -167,7 +167,7 @@ def join_clock_parts(parts: list[NDArray[numpy.int64]]) -> NDArray[numpy.str_]:
 	Examples
 	--------
 	>>> import numpy
-	>>> from numdaplot.arrays.conversion.time_text import join_clock_parts
+	>>> from numdaplot.column_storage.time_text import join_clock_parts
 	>>> join_clock_parts([numpy.array([12]), numpy.array([5]), numpy.array([0])]).tolist()
 	['12:05:00']
 	"""
@@ -206,7 +206,7 @@ def format_fractions(fractions: NDArray[numpy.int64]) -> NDArray[Any]:
 	Examples
 	--------
 	>>> import numpy
-	>>> from numdaplot.arrays.conversion.time_text import format_fractions
+	>>> from numdaplot.column_storage.time_text import format_fractions
 	>>> format_fractions(numpy.array([0, 1500])).tolist()
 	['', '.000001500']
 	"""
@@ -240,7 +240,7 @@ def join_texts(left_texts: NDArray[Any] | str, right_texts: NDArray[Any] | str) 
 	Examples
 	--------
 	>>> import numpy
-	>>> from numdaplot.arrays.conversion.time_text import join_texts
+	>>> from numdaplot.column_storage.time_text import join_texts
 	>>> join_texts(numpy.array(["1", "2"]), " days").tolist()
 	['1 days', '2 days']
 	"""
@@ -270,7 +270,7 @@ def format_times(values: NDArray[numpy.timedelta64]) -> NDArray[numpy.str_]:
 	Examples
 	--------
 	>>> import numpy
-	>>> from numdaplot.arrays.conversion.time_text import format_times
+	>>> from numdaplot.column_storage.time_text import format_times
 	>>> format_times(numpy.array([56100000000, "NaT"], dtype="timedelta64[us]")).tolist()
 	['15:35:00', 'NaT']
 	"""

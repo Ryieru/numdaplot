@@ -12,12 +12,12 @@ import pandas
 from numpy.typing import NDArray
 
 from numdaplot.argument_checks.column_names import require_known_columns
+from numdaplot.column_storage.column import Column
+from numdaplot.column_storage.column_values import find_column_type
 from numdaplot.errors.refused_setting_error import RefusedSettingError
 from numdaplot.plots.charts.color_scale import ColorScale
 from numdaplot.plots.data.chart_values import ChartValues, Series
 from numdaplot.plots.data.column_reading import read_numbers, read_texts, require_column_family
-from numdaplot.tables.frames.column import Column
-from numdaplot.tables.frames.column_values import find_column_type
 from numdaplot.tables.table import Table
 from numdaplot.tables.table_data import read_stored_frame
 from numdaplot.types.type import Type

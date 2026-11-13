@@ -12,7 +12,7 @@ import pandas
 import pytest
 
 import numdaplot as ndp
-from numdaplot.tables.frames.column import Column
+from numdaplot.column_storage.column import Column
 
 COLUMN_NAME = "when"
 NEAR_DATE = date(2026, 1, 31)

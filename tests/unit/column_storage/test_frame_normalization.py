@@ -11,12 +11,8 @@ import numpy
 import pandas
 import pytest
 
-from numdaplot.errors.duplicate_column_error import DuplicateColumnError
-from numdaplot.errors.invalid_column_name_error import InvalidColumnNameError
-from numdaplot.errors.unsupported_index_error import UnsupportedIndexError
-from numdaplot.errors.unsupported_type_error import UnsupportedTypeError
-from numdaplot.tables.frames.column import Column
-from numdaplot.tables.frames.frame_normalization import (
+from numdaplot.column_storage.column import Column
+from numdaplot.column_storage.frame_normalization import (
 	convert_column_dtype,
 	convert_decimals,
 	convert_numpy_column,
@@ -28,6 +24,10 @@ from numdaplot.tables.frames.frame_normalization import (
 	normalize_frame,
 	require_plain_index,
 )
+from numdaplot.errors.duplicate_column_error import DuplicateColumnError
+from numdaplot.errors.invalid_column_name_error import InvalidColumnNameError
+from numdaplot.errors.unsupported_index_error import UnsupportedIndexError
+from numdaplot.errors.unsupported_type_error import UnsupportedTypeError
 from numdaplot.types.type import Type
 
 MIXED_FRAME = pandas.DataFrame({"count": [1, 2], "city": ["Pau", "Lyon"]})

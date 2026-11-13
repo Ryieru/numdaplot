@@ -7,7 +7,7 @@ Detection of texts holding a real date beyond what a count of nanoseconds can ho
 import re
 from datetime import datetime
 
-from numdaplot.arrays.operations.time_bounds import is_python_time_in_range
+from numdaplot.column_storage.time_range import is_python_time_in_range
 from numdaplot.dates.custom_date_format import CustomDateFormat
 
 NO_CLOCK_PART = "0"

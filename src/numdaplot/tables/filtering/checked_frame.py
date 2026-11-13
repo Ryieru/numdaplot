@@ -6,10 +6,10 @@ Values of a Table satisfying a rule.
 
 import pandas
 
+from numdaplot.column_storage.column import Column
+from numdaplot.column_storage.column_values import build_column
 from numdaplot.rules.rule import Rule
 from numdaplot.tables.filtering.column_mask import build_column_mask
-from numdaplot.tables.frames.column import Column
-from numdaplot.tables.frames.column_values import build_column
 
 
 def check_frame(frame: pandas.DataFrame, rule: Rule) -> pandas.DataFrame:

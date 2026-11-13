@@ -6,14 +6,14 @@ Conversion of text columns to booleans.
 
 import numpy
 
-from numdaplot.errors.value_conversion_error import ValueConversionError
-from numdaplot.tables.frames.column import Column
-from numdaplot.tables.frames.column_values import (
+from numdaplot.column_storage.column import Column
+from numdaplot.column_storage.column_values import (
 	build_column_with_missing,
 	find_column_missing,
 	find_column_type,
 	read_present_values,
 )
+from numdaplot.errors.value_conversion_error import ValueConversionError
 from numdaplot.types.type import Type
 
 TRUE_TEXT = "true"

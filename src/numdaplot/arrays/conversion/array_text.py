@@ -9,7 +9,7 @@ from typing import Any
 import numpy
 from numpy.typing import NDArray
 
-from numdaplot.arrays.conversion.time_text import format_datetimes, format_durations, format_times
+from numdaplot.column_storage.time_text import format_datetimes, format_durations, format_times
 from numdaplot.types.numpy_mapping import from_numpy_dtype
 from numdaplot.types.type import Type
 

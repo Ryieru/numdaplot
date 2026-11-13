@@ -7,8 +7,8 @@ Unit tests of the exact reading of decimals written as texts.
 import numpy
 import pytest
 
-from numdaplot.tables.frames import pandas_decimals
-from numdaplot.tables.frames.pandas_decimals import (
+from numdaplot.column_storage import pandas_decimals
+from numdaplot.column_storage.pandas_decimals import (
 	find_exact_csv_settings,
 	reads_exact_decimals,
 	restore_exact_decimals,

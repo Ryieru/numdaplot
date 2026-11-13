@@ -9,16 +9,16 @@ from typing import Never, Self
 import pandas
 
 from numdaplot.argument_checks.column_names import require_known_columns
+from numdaplot.column_storage.column import Column
+from numdaplot.column_storage.column_values import find_column_type
+from numdaplot.column_storage.frame_normalization import normalize_frame
+from numdaplot.column_storage.time_columns import convert_outside_durations
+from numdaplot.column_storage.time_zones import find_column_time_zone
 from numdaplot.dates.time_zone import TimeZone
 from numdaplot.errors.refused_operation_error import RefusedOperationError
 from numdaplot.positions.shape import Shape
 from numdaplot.tables.files.column_names import ColumnNames
 from numdaplot.tables.frames.cleaned_names import clean_frame_names
-from numdaplot.tables.frames.column import Column
-from numdaplot.tables.frames.column_values import find_column_type
-from numdaplot.tables.frames.frame_normalization import normalize_frame
-from numdaplot.tables.frames.time_columns import convert_outside_durations
-from numdaplot.tables.frames.time_zones import find_column_time_zone
 from numdaplot.types.type import Type
 
 CONSTRUCTOR_OPERATION = "Creating a Table with ndp.Table(...)"

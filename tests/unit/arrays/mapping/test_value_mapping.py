@@ -6,9 +6,9 @@ Unit tests of ValueMapping.
 
 import pytest
 
-from numdaplot.arrays.mapping.unmatched import Unmatched
 from numdaplot.arrays.mapping.value_change import ValueChange
 from numdaplot.arrays.mapping.value_mapping import ValueMapping, find_new_type, require_unique_values
+from numdaplot.brackets.unmatched import Unmatched
 from numdaplot.errors.duplicate_value_error import DuplicateValueError
 from numdaplot.errors.empty_list_error import EmptyListError
 from numdaplot.errors.incompatible_types_error import IncompatibleTypesError

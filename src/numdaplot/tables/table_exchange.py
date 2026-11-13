@@ -13,14 +13,14 @@ import pandas
 from numdaplot.argument_checks.argument_types import checked_arguments
 from numdaplot.arrays.array import Array, create_array
 from numdaplot.arrays.conversion.python_values import to_python_list
+from numdaplot.column_storage.column_values import convert_column_values, find_column_missing, read_array_values
+from numdaplot.column_storage.time_columns import read_time_objects_frame
+from numdaplot.column_storage.time_zones import find_column_time_zone
 from numdaplot.errors.invalid_type_error import InvalidTypeError
 from numdaplot.errors.not_single_value_error import NotSingleValueError
 from numdaplot.tables.files.column_names import ColumnNames
 from numdaplot.tables.frames.array_frame import build_array_frame
-from numdaplot.tables.frames.column_values import convert_column_values, find_column_missing, read_array_values
 from numdaplot.tables.frames.frame_equality import are_frames_equal
-from numdaplot.tables.frames.time_columns import read_time_objects_frame
-from numdaplot.tables.frames.time_zones import find_column_time_zone
 from numdaplot.tables.table_data import TableData
 
 if TYPE_CHECKING:

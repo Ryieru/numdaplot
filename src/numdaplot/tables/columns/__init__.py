@@ -1,5 +1,5 @@
 """
-Column operations of a Table: names, choice, renaming, number brackets and new columns.
+Column operations of a Table: choice, renaming, application of functions and new columns.
 
 .. versionadded:: 0.1.0
 """

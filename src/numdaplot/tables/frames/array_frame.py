@@ -12,11 +12,11 @@ import pandas
 
 from numdaplot.argument_checks.column_names import copy_column_names
 from numdaplot.arrays.array_data import read_stored_values
+from numdaplot.column_storage.column import Column
+from numdaplot.column_storage.column_values import build_column
+from numdaplot.column_storage.time_range_errors import TimeRangeErrors
 from numdaplot.errors.dimension_error import DimensionError
 from numdaplot.errors.shape_mismatch_error import ShapeMismatchError
-from numdaplot.tables.frames.column import Column
-from numdaplot.tables.frames.column_values import build_column
-from numdaplot.tables.frames.time_range_errors import TimeRangeErrors
 
 if TYPE_CHECKING:
 	from numdaplot.arrays.array import Array

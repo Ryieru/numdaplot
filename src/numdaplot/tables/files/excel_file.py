@@ -10,13 +10,13 @@ from typing import Any, cast
 import pandas
 
 from numdaplot.argument_checks.column_names import require_column_names
+from numdaplot.column_storage.time_zones import require_no_time_zone
 from numdaplot.tables.files.excel_read_options import ExcelReadOptions
 from numdaplot.tables.files.excel_time_cells import restore_time_columns
 from numdaplot.tables.files.excel_write_options import ExcelWriteOptions
 from numdaplot.tables.files.missing_texts import find_missing_settings
 from numdaplot.tables.files.optional_package import require_package
 from numdaplot.tables.files.pandas_backend import NULLABLE_DTYPE_BACKEND
-from numdaplot.tables.frames.time_zones import require_no_time_zone
 
 EXCEL_PACKAGE = "openpyxl"
 EXCEL_EXTRA = "excel"

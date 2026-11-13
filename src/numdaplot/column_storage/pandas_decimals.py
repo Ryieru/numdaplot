@@ -36,7 +36,7 @@ def reads_exact_decimals(pandas_version: str) -> bool:
 
 	Examples
 	--------
-	>>> from numdaplot.tables.frames.pandas_decimals import reads_exact_decimals
+	>>> from numdaplot.column_storage.pandas_decimals import reads_exact_decimals
 	>>> reads_exact_decimals("2.3.0"), reads_exact_decimals("3.1.0rc0")
 	(False, True)
 	"""
@@ -66,7 +66,7 @@ def find_exact_csv_settings() -> dict[str, str]:
 
 	Examples
 	--------
-	>>> from numdaplot.tables.frames.pandas_decimals import find_exact_csv_settings
+	>>> from numdaplot.column_storage.pandas_decimals import find_exact_csv_settings
 	>>> settings = find_exact_csv_settings()
 	>>> settings in ({}, {"float_precision": "round_trip"})
 	True
@@ -98,7 +98,7 @@ def restore_exact_decimals(texts: NDArray[Any], numbers: NDArray[Any]) -> NDArra
 	Examples
 	--------
 	>>> import numpy
-	>>> from numdaplot.tables.frames.pandas_decimals import restore_exact_decimals
+	>>> from numdaplot.column_storage.pandas_decimals import restore_exact_decimals
 	>>> texts = numpy.array(["0.5"], dtype=object)
 	>>> restore_exact_decimals(texts, numpy.array([0.5]))
 	array([0.5])

@@ -24,11 +24,13 @@ from numdaplot.arrays.creation.random_integers import RandomIntegers
 from numdaplot.arrays.creation.spacing import Spacing
 from numdaplot.arrays.creation.uniform import Uniform
 from numdaplot.arrays.equality import Equality
-from numdaplot.arrays.mapping.unmatched import Unmatched
 from numdaplot.arrays.mapping.value_change import ValueChange
 from numdaplot.arrays.mapping.value_mapping import ValueMapping
 from numdaplot.arrays.replacement import Replacement
 from numdaplot.arrays.type_match import TypeMatch
+from numdaplot.brackets.bracket_end import BracketEnd
+from numdaplot.brackets.brackets import Brackets
+from numdaplot.brackets.unmatched import Unmatched
 from numdaplot.conversions.array_conversion import ArrayConversion
 from numdaplot.conversions.boolean_rule import BooleanRule
 from numdaplot.conversions.table_conversion import TableConversion
@@ -205,8 +207,6 @@ from numdaplot.statistics.statistic import Statistic
 from numdaplot.statistics.sum import Sum
 from numdaplot.tables.aggregation.aggregation import Aggregation
 from numdaplot.tables.aggregation.calculation import Calculation
-from numdaplot.tables.columns.bracket_end import BracketEnd
-from numdaplot.tables.columns.brackets import Brackets
 from numdaplot.tables.columns.column_choice import ColumnChoice
 from numdaplot.tables.columns.column_mode import ColumnMode
 from numdaplot.tables.columns.name_change import NameChange

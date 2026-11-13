@@ -29,7 +29,7 @@ class TimeRangeErrors(ErrorTranslation):
 	>>> import numpy
 	>>> import pandas
 	>>> import numdaplot as ndp
-	>>> from numdaplot.tables.frames.time_range_errors import TimeRangeErrors
+	>>> from numdaplot.column_storage.time_range_errors import TimeRangeErrors
 	>>> far_moments = pandas.Series(numpy.array(["3000-01-01"], dtype="datetime64[s]"))
 	>>> try:
 	... 	with TimeRangeErrors("from_arrays", "day"):

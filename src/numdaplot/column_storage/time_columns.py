@@ -10,9 +10,9 @@ import numpy
 import pandas
 from numpy.typing import NDArray
 
-from numdaplot.arrays.conversion.time_text import format_times
-from numdaplot.tables.frames.column import Column
-from numdaplot.tables.frames.time_range_errors import TimeRangeErrors
+from numdaplot.column_storage.column import Column
+from numdaplot.column_storage.time_range_errors import TimeRangeErrors
+from numdaplot.column_storage.time_text import format_times
 from numdaplot.types.time_of_day import TIME_DTYPE, read_time_objects, store_time_objects
 
 DURATION_KIND = "m"
@@ -41,7 +41,7 @@ def is_time_column(column: Column) -> bool:
 	Examples
 	--------
 	>>> import pandas
-	>>> from numdaplot.tables.frames.time_columns import is_time_column
+	>>> from numdaplot.column_storage.time_columns import is_time_column
 	>>> import numpy
 	>>> is_time_column(pandas.Series(numpy.array([1], dtype="timedelta64[us]"))), is_time_column(pandas.Series([1]))
 	(True, False)
@@ -70,7 +70,7 @@ def read_time_objects_column(column: Column) -> Column:
 	Examples
 	--------
 	>>> import pandas
-	>>> from numdaplot.tables.frames.time_columns import read_time_objects_column
+	>>> from numdaplot.column_storage.time_columns import read_time_objects_column
 	>>> import numpy
 	>>> minutes = pandas.Series(numpy.array([60000000], dtype="timedelta64[us]"))
 	>>> read_time_objects_column(minutes).tolist()
@@ -103,7 +103,7 @@ def store_time_column(column: Column) -> Column:
 	--------
 	>>> from datetime import time
 	>>> import pandas
-	>>> from numdaplot.tables.frames.time_columns import store_time_column
+	>>> from numdaplot.column_storage.time_columns import store_time_column
 	>>> store_time_column(pandas.Series([time(0, 1), None], dtype=object)).tolist()
 	[Timedelta('0 days 00:01:00'), NaT]
 	"""
@@ -133,7 +133,7 @@ def read_object_values(column: Column) -> NDArray[Any]:
 	Examples
 	--------
 	>>> import pandas
-	>>> from numdaplot.tables.frames.time_columns import read_object_values
+	>>> from numdaplot.column_storage.time_columns import read_object_values
 	>>> read_object_values(pandas.Series(["a", float("nan")], dtype=object))
 	array(['a', None], dtype=object)
 	"""
@@ -172,7 +172,7 @@ def convert_outside_durations(frame: pandas.DataFrame) -> pandas.DataFrame:
 	Examples
 	--------
 	>>> import pandas
-	>>> from numdaplot.tables.frames.time_columns import convert_outside_durations
+	>>> from numdaplot.column_storage.time_columns import convert_outside_durations
 	>>> import numpy
 	>>> frame = pandas.DataFrame({"wait": numpy.array([5], dtype="timedelta64[us]")})
 	>>> convert_outside_durations(frame).dtypes.tolist()
@@ -219,7 +219,7 @@ def convert_to_nanoseconds(durations: NDArray[Any], column_name: str) -> NDArray
 	Examples
 	--------
 	>>> import numpy
-	>>> from numdaplot.tables.frames.time_columns import convert_to_nanoseconds
+	>>> from numdaplot.column_storage.time_columns import convert_to_nanoseconds
 	>>> convert_to_nanoseconds(numpy.array([2], dtype="timedelta64[s]"), "wait")
 	array([2000000000], dtype='timedelta64[ns]')
 	"""
@@ -258,7 +258,7 @@ def read_time_objects_frame(frame: pandas.DataFrame) -> pandas.DataFrame:
 	Examples
 	--------
 	>>> import pandas
-	>>> from numdaplot.tables.frames.time_columns import read_time_objects_frame
+	>>> from numdaplot.column_storage.time_columns import read_time_objects_frame
 	>>> import numpy
 	>>> frame = pandas.DataFrame({"hour": numpy.array([60000000], dtype="timedelta64[us]")})
 	>>> read_time_objects_frame(frame)["hour"].tolist()
@@ -293,7 +293,7 @@ def write_time_texts_column(column: Column) -> Column:
 	Examples
 	--------
 	>>> import pandas
-	>>> from numdaplot.tables.frames.time_columns import write_time_texts_column
+	>>> from numdaplot.column_storage.time_columns import write_time_texts_column
 	>>> import numpy
 	>>> hours = pandas.Series(numpy.array([56100000000, "NaT"], dtype="timedelta64[us]"))
 	>>> write_time_texts_column(hours).tolist()
@@ -326,7 +326,7 @@ def write_time_texts_frame(frame: pandas.DataFrame) -> pandas.DataFrame:
 	--------
 	>>> import numpy
 	>>> import pandas
-	>>> from numdaplot.tables.frames.time_columns import write_time_texts_frame
+	>>> from numdaplot.column_storage.time_columns import write_time_texts_frame
 	>>> frame = pandas.DataFrame({"hour": numpy.array([56100000000, "NaT"], dtype="timedelta64[us]")})
 	>>> write_time_texts_frame(frame)["hour"].tolist()
 	['15:35:00', <NA>]

@@ -8,16 +8,16 @@ from typing import Any
 
 from numpy.typing import NDArray
 
-from numdaplot.conversions.array_conversion import ArrayConversion
-from numdaplot.conversions.converted_column import convert_column
-from numdaplot.errors.unsupported_missing_error import UnsupportedMissingError
-from numdaplot.tables.frames.column import Column
-from numdaplot.tables.frames.column_values import (
+from numdaplot.column_storage.column import Column
+from numdaplot.column_storage.column_values import (
 	build_column,
 	find_column_missing,
 	find_column_type,
 	read_array_values,
 )
+from numdaplot.conversions.array_conversion import ArrayConversion
+from numdaplot.conversions.converted_column import convert_column
+from numdaplot.errors.unsupported_missing_error import UnsupportedMissingError
 from numdaplot.types.number_types import INTEGER_TYPES
 from numdaplot.types.type import Type
 

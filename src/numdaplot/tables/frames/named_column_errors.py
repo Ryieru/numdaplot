@@ -4,10 +4,10 @@ Name of the Table column in the errors about its values raised by a block.
 .. versionadded:: 0.1.0
 """
 
+from numdaplot.column_storage.column import Column
 from numdaplot.errors.column_value_error import ColumnValueError
 from numdaplot.errors.error_translation import ErrorTranslation
 from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
-from numdaplot.tables.frames.column import Column
 
 NAMED_ERROR_TYPES = (IncompatibleTypesError, ColumnValueError)
 

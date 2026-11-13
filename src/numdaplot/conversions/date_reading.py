@@ -9,15 +9,15 @@ from typing import Any, cast
 import numpy
 import pandas
 
+from numdaplot.column_storage.column import Column
+from numdaplot.column_storage.column_values import find_column_missing, find_column_type
+from numdaplot.column_storage.frame_normalization import convert_to_type
 from numdaplot.conversions.date_formats import DEFAULT_READ_PATTERNS, READ_PATTERNS, find_format_name, find_read_format
 from numdaplot.conversions.date_range import is_text_out_of_range
 from numdaplot.dates.custom_date_format import CustomDateFormat
 from numdaplot.dates.date_format import DateFormat
 from numdaplot.errors.time_overflow_error import TimeOverflowError
 from numdaplot.errors.value_conversion_error import ValueConversionError
-from numdaplot.tables.frames.column import Column
-from numdaplot.tables.frames.column_values import find_column_missing, find_column_type
-from numdaplot.tables.frames.frame_normalization import convert_to_type
 from numdaplot.types.type import Type
 
 FULL_TEXT = "^{pattern}$"

@@ -13,12 +13,12 @@ import pandas
 from pandas.api.types import infer_dtype
 
 from numdaplot.argument_checks.column_names import require_column_names
+from numdaplot.column_storage.frame_normalization import PYTHON_OBJECT_DTYPE
+from numdaplot.column_storage.pandas_decimals import find_exact_csv_settings
 from numdaplot.tables.files.csv_read_options import CsvReadOptions
 from numdaplot.tables.files.csv_write_options import CsvWriteOptions
 from numdaplot.tables.files.missing_texts import find_missing_settings
 from numdaplot.tables.files.pandas_backend import NULLABLE_DTYPE_BACKEND
-from numdaplot.tables.frames.frame_normalization import PYTHON_OBJECT_DTYPE
-from numdaplot.tables.frames.pandas_decimals import find_exact_csv_settings
 
 CSV_NEWLINE = ""
 DECIMAL_FORMAT = "%.{decimals}f"

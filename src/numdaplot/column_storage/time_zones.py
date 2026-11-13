@@ -8,11 +8,11 @@ from typing import cast
 
 import pandas
 
+from numdaplot.column_storage.column import Column
 from numdaplot.dates.time_zone import TimeZone
 from numdaplot.errors.time_zone_mismatch_error import TimeZoneMismatchError
 from numdaplot.errors.unknown_time_zone_error import UnknownTimeZoneError
 from numdaplot.errors.unsupported_type_error import UnsupportedTypeError
-from numdaplot.tables.frames.column import Column
 from numdaplot.types.library import Library
 from numdaplot.types.type import Type
 
@@ -41,7 +41,7 @@ def find_column_time_zone(column: Column) -> TimeZone | None:
 	Examples
 	--------
 	>>> import pandas
-	>>> from numdaplot.tables.frames.time_zones import find_column_time_zone
+	>>> from numdaplot.column_storage.time_zones import find_column_time_zone
 	>>> find_column_time_zone(pandas.Series(pandas.to_datetime(["2026-07-01 10:30"])).dt.tz_localize("Europe/Paris"))
 	TimeZone(name='Europe/Paris')
 	"""
@@ -77,7 +77,7 @@ def name_column_type(column: Column, column_type: Type) -> str:
 	--------
 	>>> import pandas
 	>>> import numdaplot as ndp
-	>>> from numdaplot.tables.frames.time_zones import name_column_type
+	>>> from numdaplot.column_storage.time_zones import name_column_type
 	>>> name_column_type(pandas.Series([1.5]), ndp.Type.FLOAT64)
 	'FLOAT64'
 	"""
@@ -114,7 +114,7 @@ def normalize_time_zone_column(column: Column) -> Column:
 	Examples
 	--------
 	>>> import pandas
-	>>> from numdaplot.tables.frames.time_zones import normalize_time_zone_column
+	>>> from numdaplot.column_storage.time_zones import normalize_time_zone_column
 	>>> times = pandas.Series(pandas.to_datetime(["2026-07-01 10:30"])).dt.tz_localize("UTC").dt.as_unit("s")
 	>>> str(normalize_time_zone_column(times).dtype)
 	'datetime64[ns, UTC]'
@@ -152,7 +152,7 @@ def remove_utc_zone(column: Column) -> Column:
 	Examples
 	--------
 	>>> import pandas
-	>>> from numdaplot.tables.frames.time_zones import remove_utc_zone
+	>>> from numdaplot.column_storage.time_zones import remove_utc_zone
 	>>> times = pandas.Series(pandas.to_datetime(["2026-07-01 10:30"])).dt.tz_localize("Europe/Paris")
 	>>> remove_utc_zone(times).tolist()
 	[Timestamp('2026-07-01 08:30:00')]
@@ -185,7 +185,7 @@ def attribute_utc_results(column: Column, time_zone: TimeZone) -> Column:
 	--------
 	>>> import pandas
 	>>> import numdaplot as ndp
-	>>> from numdaplot.tables.frames.time_zones import attribute_utc_results
+	>>> from numdaplot.column_storage.time_zones import attribute_utc_results
 	>>> times = pandas.Series(pandas.to_datetime(["2026-07-01 08:30"]))
 	>>> attribute_utc_results(times, ndp.TimeZone("Europe/Paris")).tolist()
 	[Timestamp('2026-07-01 10:30:00+0200', tz='Europe/Paris')]
@@ -217,7 +217,7 @@ def attribute_source_time_zone(results: Column, source: Column) -> Column:
 	Examples
 	--------
 	>>> import pandas
-	>>> from numdaplot.tables.frames.time_zones import attribute_source_time_zone
+	>>> from numdaplot.column_storage.time_zones import attribute_source_time_zone
 	>>> source = pandas.Series(pandas.to_datetime(["2026-07-01 10:30"])).dt.tz_localize("Europe/Paris")
 	>>> attribute_source_time_zone(pandas.Series(pandas.to_datetime(["2026-07-01 08:30"])), source).tolist()
 	[Timestamp('2026-07-01 10:30:00+0200', tz='Europe/Paris')]
@@ -257,7 +257,7 @@ def require_no_time_zone(frame: pandas.DataFrame, operation: str) -> None:
 	--------
 	>>> import pandas
 	>>> import numdaplot as ndp
-	>>> from numdaplot.tables.frames.time_zones import require_no_time_zone
+	>>> from numdaplot.column_storage.time_zones import require_no_time_zone
 	>>> times = pandas.Series(pandas.to_datetime(["2026-07-01 10:30"])).dt.tz_localize("UTC")
 	>>> try:
 	... 	require_no_time_zone(pandas.DataFrame({"time": times}), "An Excel file")

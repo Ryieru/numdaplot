@@ -9,16 +9,16 @@ from typing import Any
 import numpy
 from numpy.typing import NDArray
 
+from numdaplot.column_storage.column import Column
+from numdaplot.column_storage.column_values import find_column_missing, find_column_type
+from numdaplot.column_storage.time_zones import find_column_time_zone
 from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
 from numdaplot.plots.charts.box_chart import BoxChart
 from numdaplot.plots.charts.histogram_chart import HistogramChart
 from numdaplot.plots.charts.line_chart import LineChart
 from numdaplot.plots.charts.scatter_chart import ScatterChart
 from numdaplot.plots.data.position_kind import PositionKind
-from numdaplot.tables.frames.column import Column
-from numdaplot.tables.frames.column_values import find_column_missing, find_column_type
 from numdaplot.tables.frames.named_column_errors import NamedColumnErrors
-from numdaplot.tables.frames.time_zones import find_column_time_zone
 from numdaplot.types.time_of_day import read_times
 from numdaplot.types.type import Type
 from numdaplot.types.value_family import ValueFamily, find_family

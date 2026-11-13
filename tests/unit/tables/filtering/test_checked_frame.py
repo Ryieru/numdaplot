@@ -7,11 +7,11 @@ Unit tests of the check of every value of a Table against a rule.
 import pandas
 import pytest
 
+from numdaplot.column_storage.column_values import find_column_type
 from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
 from numdaplot.rules.greater import Greater
 from numdaplot.rules.is_missing import IsMissing
 from numdaplot.tables.filtering.checked_frame import check_frame
-from numdaplot.tables.frames.column_values import find_column_type
 from numdaplot.types.type import Type
 
 FRAME = pandas.DataFrame(

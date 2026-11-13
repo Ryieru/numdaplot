@@ -9,10 +9,10 @@ from typing import Any, cast
 import numpy
 from numpy.typing import NDArray
 
-from numdaplot.arrays.conversion.time_text import format_durations
 from numdaplot.arrays.operations.operand import Operand, convert_time_value, find_operand_type
 from numdaplot.arrays.operations.time_bounds import require_nanoseconds_fit
 from numdaplot.arrays.operations.time_result_bounds import require_time_result_fits, widen_large_integers
+from numdaplot.column_storage.time_text import format_durations
 from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
 from numdaplot.errors.refused_operation_error import RefusedOperationError
 from numdaplot.errors.time_overflow_error import TimeOverflowError

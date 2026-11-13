@@ -7,7 +7,6 @@ Column operations of a Table: choice, renaming, conversion, application of a fun
 from typing import Self
 
 from numdaplot.argument_checks.argument_types import checked_arguments
-from numdaplot.conversions.converted_frame import convert_frame_columns
 from numdaplot.conversions.table_conversion import TableConversion
 from numdaplot.tables.columns.added_column import add_frame_column
 from numdaplot.tables.columns.applied_columns import apply_frame_columns
@@ -17,6 +16,7 @@ from numdaplot.tables.columns.new_column import NewColumn
 from numdaplot.tables.columns.renamed_columns import rename_frame_columns
 from numdaplot.tables.columns.renaming import Renaming
 from numdaplot.tables.columns.table_application import TableApplication
+from numdaplot.tables.conversions.converted_frame import convert_frame_columns
 from numdaplot.tables.table_data import TableData
 
 

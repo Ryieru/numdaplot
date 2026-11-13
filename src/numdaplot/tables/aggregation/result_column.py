@@ -10,12 +10,12 @@ import numpy
 from numpy.typing import NDArray
 
 from numdaplot.arrays.statistics.statistic_values import compute_statistic
+from numdaplot.column_storage.column import Column
+from numdaplot.column_storage.column_values import build_column, build_column_with_missing
 from numdaplot.errors.empty_array_error import EmptyArrayError
 from numdaplot.statistics.count import Count
 from numdaplot.statistics.counted_missing import CountedMissing
 from numdaplot.statistics.statistic import Statistic
-from numdaplot.tables.frames.column import Column
-from numdaplot.tables.frames.column_values import build_column, build_column_with_missing
 
 MISSING_RESULT = numpy.nan
 

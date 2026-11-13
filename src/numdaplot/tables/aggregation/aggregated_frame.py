@@ -11,6 +11,9 @@ import pandas
 from numpy.typing import NDArray
 
 from numdaplot.argument_checks.column_names import require_known_columns
+from numdaplot.column_storage.column import Column
+from numdaplot.column_storage.column_values import build_column, find_column_missing, read_present_values
+from numdaplot.column_storage.time_zones import attribute_source_time_zone
 from numdaplot.statistics.share import Share
 from numdaplot.statistics.statistic import Statistic
 from numdaplot.tables.aggregation.aggregation import Aggregation
@@ -18,10 +21,7 @@ from numdaplot.tables.aggregation.calculation import Calculation, find_result_na
 from numdaplot.tables.aggregation.result_column import build_result_column, compute_cell
 from numdaplot.tables.aggregation.row_groups import find_row_groups, measure_group_sizes
 from numdaplot.tables.aggregation.share_column import SHARE_MEAN, build_share_column
-from numdaplot.tables.frames.column import Column
-from numdaplot.tables.frames.column_values import build_column, find_column_missing, read_present_values
 from numdaplot.tables.frames.named_column_errors import NamedColumnErrors
-from numdaplot.tables.frames.time_zones import attribute_source_time_zone
 
 FIRST_ROW = 0
 ROW_POSITION_DTYPE = numpy.int64

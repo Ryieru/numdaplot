@@ -10,15 +10,15 @@ import numpy
 import pandas
 from numpy.typing import NDArray
 
-from numdaplot.arrays.mapping.unmatched import Unmatched
+from numdaplot.brackets.bracket_end import BracketEnd
+from numdaplot.brackets.bracket_names import write_bracket_names
+from numdaplot.brackets.brackets import Brackets
+from numdaplot.brackets.unmatched import Unmatched
+from numdaplot.column_storage.column import Column
+from numdaplot.column_storage.column_values import find_column_missing, find_column_type
+from numdaplot.column_storage.frame_normalization import convert_to_type
 from numdaplot.errors.unmatched_value_error import BRACKETS_NAME, UnmatchedValueError
 from numdaplot.rules.bounds import Bounds
-from numdaplot.tables.columns.bracket_end import BracketEnd
-from numdaplot.tables.columns.bracket_names import write_bracket_names
-from numdaplot.tables.columns.brackets import Brackets
-from numdaplot.tables.frames.column import Column
-from numdaplot.tables.frames.column_values import find_column_missing, find_column_type
-from numdaplot.tables.frames.frame_normalization import convert_to_type
 from numdaplot.types.number_types import INTEGER_TYPES
 from numdaplot.types.pandas_mapping import to_pandas_dtype
 from numdaplot.types.type import Type
@@ -58,7 +58,7 @@ def cut_column(column: Column, brackets: Brackets) -> Column:
 	--------
 	>>> import pandas
 	>>> import numdaplot as ndp
-	>>> from numdaplot.tables.columns.bracketed_column import cut_column
+	>>> from numdaplot.brackets.bracketed_column import cut_column
 	>>> ages = pandas.Series([4, None, 30], dtype="Int64")
 	>>> cut_column(ages, ndp.Brackets(limits=[0, 18, 65])).tolist()
 	['0 to 17', <NA>, '18 to 64']
@@ -106,7 +106,7 @@ def find_bracket_positions(numbers: NDArray[numpy.float64], brackets: Brackets) 
 	--------
 	>>> import numpy
 	>>> import numdaplot as ndp
-	>>> from numdaplot.tables.columns.bracketed_column import find_bracket_positions
+	>>> from numdaplot.brackets.bracketed_column import find_bracket_positions
 	>>> brackets = ndp.Brackets(limits=[0, 10, 20], first=ndp.BracketEnd.OPEN)
 	>>> find_bracket_positions(numpy.array([-5.0, 0.0, 10.0, 25.0, numpy.nan]), brackets)
 	array([ 0,  1,  2, -1, -1])
@@ -156,7 +156,7 @@ def require_matched_values(column: Column, unmatched: NDArray[numpy.bool_], othe
 	>>> import numpy
 	>>> import pandas
 	>>> import numdaplot as ndp
-	>>> from numdaplot.tables.columns.bracketed_column import require_matched_values
+	>>> from numdaplot.brackets.bracketed_column import require_matched_values
 	>>> try:
 	... 	require_matched_values(pandas.Series([5, 105]), numpy.array([False, True]), ndp.Unmatched.ERROR)
 	... except ndp.UnmatchedValueError as error:

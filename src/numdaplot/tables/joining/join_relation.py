@@ -9,9 +9,9 @@ from typing import Any
 import pandas
 
 from numdaplot.arrays.conversion.python_values import to_python_list
+from numdaplot.column_storage.column_values import convert_column_values
 from numdaplot.errors.join_relation_error import JoinRelationError
 from numdaplot.errors.repeated_key import RepeatedKey
-from numdaplot.tables.frames.column_values import convert_column_values
 from numdaplot.tables.joining.relation import Relation
 
 UNIQUE_LEFT_RELATIONS = frozenset({Relation.ONE_TO_ONE, Relation.ONE_TO_MANY})

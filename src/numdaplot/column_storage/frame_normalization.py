@@ -12,11 +12,11 @@ import pandas
 from pandas.api.types import infer_dtype
 
 from numdaplot.argument_checks.column_names import require_column_names
+from numdaplot.column_storage.column import Column
+from numdaplot.column_storage.time_columns import is_time_column, read_object_values, store_time_column
+from numdaplot.column_storage.time_range_errors import TimeRangeErrors
+from numdaplot.column_storage.time_zones import normalize_time_zone_column
 from numdaplot.errors.unsupported_index_error import UnsupportedIndexError
-from numdaplot.tables.frames.column import Column
-from numdaplot.tables.frames.time_columns import is_time_column, read_object_values, store_time_column
-from numdaplot.tables.frames.time_range_errors import TimeRangeErrors
-from numdaplot.tables.frames.time_zones import normalize_time_zone_column
 from numdaplot.types.numpy_mapping import from_numpy_dtype
 from numdaplot.types.pandas_mapping import TYPES_BY_PANDAS_NAME, from_pandas_dtype, to_pandas_dtype
 from numdaplot.types.time_of_day import holds_only_times
@@ -73,7 +73,7 @@ def normalize_frame(frame: pandas.DataFrame) -> pandas.DataFrame:
 	Examples
 	--------
 	>>> import pandas
-	>>> from numdaplot.tables.frames.frame_normalization import normalize_frame
+	>>> from numdaplot.column_storage.frame_normalization import normalize_frame
 	>>> normalize_frame(pandas.DataFrame({"count": [1, 2]})).dtypes.tolist()
 	[Int64Dtype()]
 	"""
@@ -117,7 +117,7 @@ def require_plain_index(index: pandas.Index) -> None:
 	--------
 	>>> import numdaplot as ndp
 	>>> import pandas
-	>>> from numdaplot.tables.frames.frame_normalization import require_plain_index
+	>>> from numdaplot.column_storage.frame_normalization import require_plain_index
 	>>> try:
 	... 	require_plain_index(pandas.Index(["Paris", "Lyon"]))
 	... except ndp.UnsupportedIndexError as error:
@@ -157,7 +157,7 @@ def normalize_column(column: Column) -> Column:
 	Examples
 	--------
 	>>> import pandas
-	>>> from numdaplot.tables.frames.frame_normalization import normalize_column
+	>>> from numdaplot.column_storage.frame_normalization import normalize_column
 	>>> text_column = normalize_column(pandas.Series(["a", None], dtype=object))
 	>>> str(text_column.dtype)
 	'string'
@@ -198,7 +198,7 @@ def convert_column_dtype(column: Column) -> Column:
 	--------
 	>>> import numpy
 	>>> import pandas
-	>>> from numdaplot.tables.frames.frame_normalization import convert_column_dtype
+	>>> from numdaplot.column_storage.frame_normalization import convert_column_dtype
 	>>> convert_column_dtype(pandas.Series([1, 2], dtype=numpy.int32)).dtype
 	Int32Dtype()
 	"""
@@ -255,7 +255,7 @@ def convert_decimals(column: Column) -> Column:
 	Examples
 	--------
 	>>> import pandas
-	>>> from numdaplot.tables.frames.frame_normalization import convert_decimals
+	>>> from numdaplot.column_storage.frame_normalization import convert_decimals
 	>>> convert_decimals(pandas.Series([1.5, None], dtype="Float64")).tolist()
 	[1.5, nan]
 	"""
@@ -287,7 +287,7 @@ def convert_numpy_column(column: Column) -> Column:
 	Examples
 	--------
 	>>> import pandas
-	>>> from numdaplot.tables.frames.frame_normalization import convert_numpy_column
+	>>> from numdaplot.column_storage.frame_normalization import convert_numpy_column
 	>>> convert_numpy_column(pandas.Series([True, False])).dtype
 	BooleanDtype
 	"""
@@ -330,7 +330,7 @@ def infer_object_column(column: Column) -> Column:
 	Examples
 	--------
 	>>> import pandas
-	>>> from numdaplot.tables.frames.frame_normalization import infer_object_column
+	>>> from numdaplot.column_storage.frame_normalization import infer_object_column
 	>>> infer_object_column(pandas.Series([1, None, 3], dtype=object)).tolist()
 	[1, <NA>, 3]
 	"""
@@ -370,7 +370,7 @@ def find_moment_type(column: Column) -> Type:
 	--------
 	>>> from datetime import date, datetime
 	>>> import pandas
-	>>> from numdaplot.tables.frames.frame_normalization import find_moment_type
+	>>> from numdaplot.column_storage.frame_normalization import find_moment_type
 	>>> find_moment_type(pandas.Series([date(2026, 1, 31)], dtype=object))
 	<Type.DATE: 14>
 	>>> find_moment_type(pandas.Series([date(2026, 1, 31), datetime(2026, 1, 31, 8)], dtype=object))
@@ -408,7 +408,7 @@ def normalize_categories(column: Column) -> Column:
 	Examples
 	--------
 	>>> import pandas
-	>>> from numdaplot.tables.frames.frame_normalization import normalize_categories
+	>>> from numdaplot.column_storage.frame_normalization import normalize_categories
 	>>> categories = normalize_categories(pandas.Series([1, 2], dtype="category"))
 	>>> categories.tolist()
 	['1', '2']
@@ -449,7 +449,7 @@ def convert_to_type(column: Column, data_type: Type) -> Column:
 	--------
 	>>> import pandas
 	>>> import numdaplot as ndp
-	>>> from numdaplot.tables.frames.frame_normalization import convert_to_type
+	>>> from numdaplot.column_storage.frame_normalization import convert_to_type
 	>>> convert_to_type(pandas.Series([1, 2]), ndp.Type.TEXT).tolist()
 	['1', '2']
 	"""

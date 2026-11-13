@@ -9,7 +9,7 @@ from collections.abc import Callable
 import pandas
 
 from numdaplot.argument_checks.column_names import require_known_columns
-from numdaplot.tables.frames.column import Column
+from numdaplot.column_storage.column import Column
 from numdaplot.tables.frames.named_column_errors import NamedColumnErrors
 
 

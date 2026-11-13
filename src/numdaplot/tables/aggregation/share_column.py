@@ -7,11 +7,11 @@ Column whose mean is the share of the values of a Table column satisfying a rule
 import numpy
 
 from numdaplot.arrays.statistics.share_values import mark_share_values
+from numdaplot.column_storage.column import Column
+from numdaplot.column_storage.column_values import build_column_with_missing, find_column_missing
 from numdaplot.statistics.mean import Mean
 from numdaplot.statistics.share import Share
 from numdaplot.tables.filtering.column_mask import build_column_mask
-from numdaplot.tables.frames.column import Column
-from numdaplot.tables.frames.column_values import build_column_with_missing, find_column_missing
 
 # A share is the mean of the column built by build_share_column.
 SHARE_MEAN = Mean()

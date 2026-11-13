@@ -4,24 +4,21 @@ Unit tests of the refusal of times out of the range of nanoseconds.
 .. versionadded:: 0.1.0
 """
 
-from datetime import UTC, date, datetime, timedelta
+from datetime import date, datetime, timedelta
 
 import numpy
 import pytest
 
 from numdaplot.arrays.operations.time_bounds import (
 	FIRST_COUNT_TOO_LARGE,
-	HIGHEST_DATETIME,
 	HIGHEST_NANOSECONDS,
-	LONGEST_DURATION,
-	LOWEST_DATETIME,
 	find_present_bounds,
-	is_python_time_in_range,
 	require_decimal_durations_fit,
 	require_nanoseconds_fit,
 	require_stored_times_fit,
 	require_whole_durations_fit,
 )
+from numdaplot.column_storage.time_range import HIGHEST_DATETIME, LOWEST_DATETIME
 from numdaplot.errors.time_overflow_error import TimeOverflowError
 from numdaplot.types.type import Type
 
@@ -39,55 +36,6 @@ HIGHEST_NATIVE_TEXT = HIGHEST_DATETIME.isoformat()
 LOWEST_NATIVE_TEXT = LOWEST_DATETIME.isoformat()
 NANOSECOND_UNIT = "ns"
 COUNT_DTYPE = "int64"
-
-
-@pytest.mark.parametrize(
-	"value",
-	[HIGHEST_DATETIME, LOWEST_DATETIME, LONGEST_DURATION, -LONGEST_DURATION, CLOSE_DATE, 5, "text", None],
-)
-def test_is_python_time_in_range_accepts_the_limits_and_other_values(value: object) -> None:
-	"""
-	Check the limits of the range, and that other values are not concerned.
-
-	.. versionadded:: 0.1.0
-	"""
-	in_range = is_python_time_in_range(value)
-
-	assert in_range is True
-
-
-@pytest.mark.parametrize(
-	"value",
-	[
-		HIGHEST_DATETIME + ONE_MICROSECOND,
-		LOWEST_DATETIME - ONE_MICROSECOND,
-		LONGEST_DURATION + ONE_MICROSECOND,
-		-LONGEST_DURATION - ONE_MICROSECOND,
-		FAR_DATE,
-	],
-)
-def test_is_python_time_in_range_refuses_what_follows_the_limits(value: object) -> None:
-	"""
-	Check the first values out of range.
-
-	.. versionadded:: 0.1.0
-	"""
-	in_range = is_python_time_in_range(value)
-
-	assert in_range is False
-
-
-def test_is_python_time_in_range_reads_a_datetime_with_a_zone_by_its_clock_time() -> None:
-	"""
-	Check that a time zone does not stop the comparison.
-
-	.. versionadded:: 0.1.0
-	"""
-	far_with_zone = FAR_DATETIME.replace(tzinfo=UTC)
-
-	in_range = is_python_time_in_range(far_with_zone)
-
-	assert in_range is False
 
 
 def test_the_limits_match_the_nanoseconds_numpy_can_count() -> None:

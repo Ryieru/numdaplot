@@ -11,8 +11,7 @@ import numpy
 import pandas
 import pytest
 
-from numdaplot.errors.time_overflow_error import TimeOverflowError
-from numdaplot.tables.frames.time_columns import (
+from numdaplot.column_storage.time_columns import (
 	convert_outside_durations,
 	convert_to_nanoseconds,
 	is_time_column,
@@ -23,6 +22,7 @@ from numdaplot.tables.frames.time_columns import (
 	write_time_texts_column,
 	write_time_texts_frame,
 )
+from numdaplot.errors.time_overflow_error import TimeOverflowError
 
 TIME_COLUMN = pandas.Series(numpy.array([56100000000, "NaT"], dtype="timedelta64[us]"))
 NANOSECOND_COLUMN = pandas.Series(numpy.array([1], dtype="timedelta64[ns]"))

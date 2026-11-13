@@ -14,6 +14,9 @@ from numpy.typing import NDArray
 
 from numdaplot.argument_checks.column_names import require_known_columns
 from numdaplot.arrays.conversion.python_values import to_python_list
+from numdaplot.column_storage.column import Column
+from numdaplot.column_storage.column_values import build_column, find_column_type, read_present_values
+from numdaplot.column_storage.time_zones import attribute_source_time_zone, find_column_time_zone
 from numdaplot.dates.time_zone import TimeZone
 from numdaplot.errors.duplicate_column_error import DuplicateColumnError
 from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
@@ -23,9 +26,6 @@ from numdaplot.tables.aggregation.result_column import build_result_column, comp
 from numdaplot.tables.aggregation.share_column import SHARE_MEAN, build_share_column
 from numdaplot.tables.aggregation.statistic_name import name_statistic
 from numdaplot.tables.description.description import DEFAULT_FUNCTIONS, Description
-from numdaplot.tables.frames.column import Column
-from numdaplot.tables.frames.column_values import build_column, find_column_type, read_present_values
-from numdaplot.tables.frames.time_zones import attribute_source_time_zone, find_column_time_zone
 from numdaplot.types.numpy_mapping import from_numpy_dtype, to_numpy_dtype
 from numdaplot.types.type import Type
 from numdaplot.types.value_family import ValueFamily, find_family

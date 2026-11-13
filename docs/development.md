@@ -113,6 +113,8 @@ src/numdaplot/
 	arrays/         Array, its settings (Spacing, distributions...) and the computation of rules, statistics, math and time functions on its values, in folders named after these notions
 	tables/         Table and its settings: file options, Filter, Aggregation, PivotTable, TableSorting, Preview...
 	conversions/    TableConversion, ArrayConversion, BooleanRule and the conversion of values to another type
+	column_storage/ how a column of values is stored in pandas: type, missing values, time zone, time range
+	brackets/       Brackets, BracketEnd and Unmatched, and the cutting of numbers into labeled brackets
 	dates/          DateFormat, TimeZone, TimeZoneChange, DatePart, DatePeriod, DurationIn, ToDuration...
 	plots/          Plot and its creation methods, the charts, the PlotStyle and Figure
 	errors/         NumdaplotError, the precise errors, NumdaplotWarning and the precise warnings

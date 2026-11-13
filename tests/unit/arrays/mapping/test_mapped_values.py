@@ -22,9 +22,9 @@ from numdaplot.arrays.mapping.mapped_values import (
 	write_date_as_datetime,
 	write_midnight_as_date,
 )
-from numdaplot.arrays.mapping.unmatched import Unmatched
 from numdaplot.arrays.mapping.value_change import ValueChange
 from numdaplot.arrays.mapping.value_mapping import ValueMapping
+from numdaplot.brackets.unmatched import Unmatched
 from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
 from numdaplot.errors.unmatched_value_error import UnmatchedValueError
 from numdaplot.errors.unsupported_missing_error import UnsupportedMissingError

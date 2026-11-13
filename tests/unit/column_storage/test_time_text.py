@@ -6,7 +6,7 @@ Unit tests of the texts of datetimes and durations.
 
 import numpy
 
-from numdaplot.arrays.conversion.time_text import (
+from numdaplot.column_storage.time_text import (
 	find_datetime_unit,
 	format_datetimes,
 	format_durations,

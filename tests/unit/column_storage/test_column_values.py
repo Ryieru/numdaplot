@@ -10,10 +10,8 @@ import numpy
 import pandas
 import pytest
 
-from numdaplot.errors.time_zone_mismatch_error import TimeZoneMismatchError
-from numdaplot.errors.unsupported_missing_error import UnsupportedMissingError
-from numdaplot.tables.frames.column import Column
-from numdaplot.tables.frames.column_values import (
+from numdaplot.column_storage.column import Column
+from numdaplot.column_storage.column_values import (
 	build_column,
 	build_column_with_missing,
 	convert_column_values,
@@ -22,6 +20,8 @@ from numdaplot.tables.frames.column_values import (
 	read_array_values,
 	read_present_values,
 )
+from numdaplot.errors.time_zone_mismatch_error import TimeZoneMismatchError
+from numdaplot.errors.unsupported_missing_error import UnsupportedMissingError
 from numdaplot.types.type import Type
 
 INTEGERS_WITH_MISSING = pandas.Series([1, None, 3], dtype="Int64")
