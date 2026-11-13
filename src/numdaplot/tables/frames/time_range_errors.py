@@ -4,15 +4,14 @@ Refusal of the dates and durations pandas cannot store in a Table column.
 .. versionadded:: 0.1.0
 """
 
-from types import TracebackType
-
 import pandas
 
 from numdaplot.data_types.type import Type
+from numdaplot.errors.error_translation import ErrorTranslation
 from numdaplot.errors.time_overflow_error import TimeOverflowError
 
 
-class TimeRangeErrors:
+class TimeRangeErrors(ErrorTranslation):
 	"""
 	Context giving the out of range errors of pandas in a block as ``TimeOverflowError``, naming the column.
 
@@ -56,32 +55,16 @@ class TimeRangeErrors:
 		self.operation_name = operation_name
 		self.column_name = column_name
 
-	def __enter__(self) -> None:
-		"""
-		Start the block.
-
-		.. versionadded:: 0.1.0
-		"""
-
-	def __exit__(
-		self,
-		error_type: type[BaseException] | None,
-		error: BaseException | None,
-		traceback: TracebackType | None,
-	) -> None:
+	def translate_error(self, error: BaseException) -> None:
 		"""
 		Replace an out of range error of pandas raised by the block.
 
-		.. versionadded:: 0.1.0
+		.. versionadded:: 0.2.0
 
 		Parameters
 		----------
-		error_type
-			The type of the error raised by the block, or None.
 		error
-			The error raised by the block, or None.
-		traceback
-			Its traceback, or None.
+			The error raised by the block.
 
 		Raises
 		------

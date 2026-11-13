@@ -5,8 +5,8 @@ Errors of the file system while reading or writing a file.
 """
 
 from pathlib import Path
-from types import TracebackType
 
+from numdaplot.errors.error_translation import ErrorTranslation
 from numdaplot.errors.file_access_error import FileAccessError
 from numdaplot.errors.numdaplot_error import NumdaplotError
 
@@ -17,7 +17,7 @@ MISSING_FOLDER_REASON = "the folder {folder} does not exist"
 FOLDER_IS_FILE_REASON = "the folder {folder} is a file"
 
 
-class FileAccessErrors:
+class FileAccessErrors(ErrorTranslation):
 	"""
 	Context turning an error of the file system during a block into a ``FileAccessError``.
 
@@ -60,32 +60,16 @@ class FileAccessErrors:
 		self.operation = operation
 		self.path = path
 
-	def __enter__(self) -> None:
-		"""
-		Start the block.
-
-		.. versionadded:: 0.1.0
-		"""
-
-	def __exit__(
-		self,
-		error_type: type[BaseException] | None,
-		error: BaseException | None,
-		traceback: TracebackType | None,
-	) -> None:
+	def translate_error(self, error: BaseException) -> None:
 		"""
 		Raise a ``FileAccessError`` for an error of the file system. Any other error goes on unchanged.
 
-		.. versionadded:: 0.1.0
+		.. versionadded:: 0.2.0
 
 		Parameters
 		----------
-		error_type
-			The type of the error raised by the block, or None.
 		error
-			The error raised by the block, or None.
-		traceback
-			Its traceback, or None.
+			The error raised by the block.
 
 		Raises
 		------

@@ -4,16 +4,15 @@ Name of the Table column in the errors about its values raised by a block.
 .. versionadded:: 0.1.0
 """
 
-from types import TracebackType
-
 from numdaplot.errors.column_value_error import ColumnValueError
+from numdaplot.errors.error_translation import ErrorTranslation
 from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
 from numdaplot.tables.frames.column import Column
 
 NAMED_ERROR_TYPES = (IncompatibleTypesError, ColumnValueError)
 
 
-class NamedColumnErrors:
+class NamedColumnErrors(ErrorTranslation):
 	"""
 	Context adding the name of a Table column to the errors about its values raised by a block.
 
@@ -55,34 +54,16 @@ class NamedColumnErrors:
 		"""
 		self.column = column
 
-	def __enter__(self) -> None:
-		"""
-		Start the block.
-
-		.. versionadded:: 0.1.0
-		"""
-
-	def __exit__(
-		self,
-		error_type: type[BaseException] | None,
-		error: BaseException | None,
-		traceback: TracebackType | None,
-	) -> None:
+	def translate_error(self, error: BaseException) -> None:
 		"""
 		Name the column in an error of the block about its values, which then goes on.
 
-		.. versionadded:: 0.1.0
-		.. versionchanged:: 0.2.0
-			Also names the column in ``OutOfDomainError`` and ``UnmatchedValueError``.
+		.. versionadded:: 0.2.0
 
 		Parameters
 		----------
-		error_type
-			The type of the error raised by the block, or None.
 		error
-			The error raised by the block, or None.
-		traceback
-			Its traceback, or None.
+			The error raised by the block.
 		"""
 		column_name = self.column.name
 		if column_name is None:
