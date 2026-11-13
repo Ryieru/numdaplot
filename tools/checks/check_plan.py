@@ -2,6 +2,7 @@
 
 from changed_files import CheckScope, GitAction, GitCommandError, read_scope
 from check_report import CheckResult, count_blocking_failures, write_annotation, write_result, write_summary
+from check_request import CheckFamily, CheckRequest
 from configurations import check_configurations
 from duplicate_checks import check_identical_blocks, check_identical_bodies
 from public_name_checks import (
@@ -110,9 +111,9 @@ def run_public_name_checks(scope: CheckScope) -> list[CheckResult]:
 	return results
 
 
-def run_checks(scope: CheckScope, log_name: str) -> list[CheckResult]:
+def run_checks(scope: CheckScope, log_name: str, families: tuple[CheckFamily, ...]) -> list[CheckResult]:
 	"""
-	Return the results of every check a git action needs, the tools first so that the docs are built for the pages.
+	Return the results of the checks a git action needs, the tools first so that the docs are built for the pages.
 
 	Parameters
 	----------
@@ -120,30 +121,34 @@ def run_checks(scope: CheckScope, log_name: str) -> list[CheckResult]:
 		The git action, its changed files and its added lines.
 	log_name
 		The name of the log files of this run of the checks.
+	families
+		The families of checks to run after the tools.
 
 	Returns
 	-------
 	list[CheckResult]
 		Every result, in the order of the report.
 	"""
-	tool_results = run_tool_checks(scope, log_name)
-	code_results = run_code_checks(scope)
-	name_results = run_public_name_checks(scope)
-	results = [*tool_results, *code_results, *name_results]
+	results = run_tool_checks(scope, log_name)
+	if CheckFamily.CODING_STYLE in families:
+		code_results = run_code_checks(scope)
+		results.extend(code_results)
+
+	if CheckFamily.PUBLIC_API in families:
+		name_results = run_public_name_checks(scope)
+		results.extend(name_results)
 
 	return results
 
 
-def run_action_checks(action: GitAction, given_base_ref: str) -> list[CheckResult]:
+def run_action_checks(request: CheckRequest) -> list[CheckResult]:
 	"""
-	Read what a git action brings, print the header of the report, and run every check of the action.
+	Read what a git action brings, print the header of the report, and run the checks asked for it.
 
 	Parameters
 	----------
-	action
-		The git action about to happen.
-	given_base_ref
-		The commit a CI run is compared with, unused by the other actions.
+	request
+		The git action, the families of checks and the commit the CI compares with.
 
 	Returns
 	-------
@@ -155,7 +160,8 @@ def run_action_checks(action: GitAction, given_base_ref: str) -> list[CheckResul
 	GitCommandError
 		When a git command the checks need fails.
 	"""
-	scope = read_scope(action, given_base_ref)
+	action = request.action
+	scope = read_scope(action, request.given_base_ref)
 	file_count = len(scope.python_files)
 	header = HEADER.format(action=action.value, file_count=file_count, base_ref=scope.base_ref)
 	print(header)
@@ -164,7 +170,7 @@ def run_action_checks(action: GitAction, given_base_ref: str) -> list[CheckResul
 		log_header = LOG_HEADER.format(log_name=log_name)
 		print(log_header, flush=True)
 
-	results = run_checks(scope, log_name)
+	results = run_checks(scope, log_name, request.families)
 
 	return results
 
@@ -192,16 +198,14 @@ def write_annotations(results: list[CheckResult]) -> list[str]:
 	return annotations
 
 
-def report_checks(action: GitAction, given_base_ref: str) -> int:
+def report_checks(request: CheckRequest) -> int:
 	"""
-	Run the checks of a git action, print their report, and return whether git may go on.
+	Run the checks asked for a git action, print their report, and return whether git may go on.
 
 	Parameters
 	----------
-	action
-		The git action about to happen.
-	given_base_ref
-		The commit a CI run is compared with, unused by the other actions.
+	request
+		The git action, the families of checks and the commit the CI compares with.
 
 	Returns
 	-------
@@ -209,7 +213,7 @@ def report_checks(action: GitAction, given_base_ref: str) -> int:
 		1 when a blocking check failed or a git command failed, which stops the git action, else 0.
 	"""
 	try:
-		results = run_action_checks(action, given_base_ref)
+		results = run_action_checks(request)
 	except GitCommandError as error:
 		failure_line = GIT_FAILURE.format(error=error)
 		print(failure_line)
@@ -220,10 +224,11 @@ def report_checks(action: GitAction, given_base_ref: str) -> int:
 		result_text = "\n".join(result_lines)
 		print(result_text)
 
-	if action == GitAction.CI:
+	if request.action == GitAction.CI:
 		annotations = write_annotations(results)
-		annotation_text = "\n".join(annotations)
-		print(annotation_text)
+
+		for annotation in annotations:
+			print(annotation)
 
 	summary_lines = write_summary(results)
 	summary_text = "\n".join(summary_lines)
