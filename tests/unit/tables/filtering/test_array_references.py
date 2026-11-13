@@ -1,0 +1,71 @@
+"""
+Unit tests of the rules comparing a Table column with an Array, kept to the rows holding a value.
+
+.. versionadded:: 0.2.0
+"""
+
+import numpy
+import pytest
+
+from numdaplot.arrays.array import Array
+from numdaplot.dates.time_zone import TimeZone
+from numdaplot.errors.shape_mismatch_error import ShapeMismatchError
+from numdaplot.errors.time_zone_mismatch_error import TimeZoneMismatchError
+from numdaplot.rules.contains import Contains
+from numdaplot.rules.equal import Equal
+from numdaplot.tables.filtering.array_references import keep_present_reference
+
+ARRIVALS = Array.from_list(["Pau", "Nice", "Dax"])
+PRESENT = numpy.array([True, False, True])
+EXPECTED_PRESENT_ARRIVALS = ["Pau", "Dax"]
+SHORT_PRESENT = numpy.array([True, True])
+PARIS_ZONE = TimeZone("Europe/Paris")
+TEXT_RULE = Contains("a")
+VALUE_RULE = Equal("Pau")
+
+
+def test_keep_present_reference_keeps_the_rows_holding_a_value() -> None:
+	"""
+	Check that the Array of the rule keeps the rows where the column holds a value.
+
+	.. versionadded:: 0.2.0
+	"""
+	present_rule = keep_present_reference(Equal(ARRIVALS), PRESENT, None)
+
+	assert isinstance(present_rule, Equal)
+	assert isinstance(present_rule.value, Array)
+	present_arrivals = present_rule.value.to_list()
+	assert present_arrivals == EXPECTED_PRESENT_ARRIVALS
+
+
+def test_keep_present_reference_keeps_a_rule_without_array() -> None:
+	"""
+	Check that a rule comparing with a single value, or a rule without value, is returned as it is.
+
+	.. versionadded:: 0.2.0
+	"""
+	value_rule = keep_present_reference(VALUE_RULE, PRESENT, None)
+	text_rule = keep_present_reference(TEXT_RULE, PRESENT, None)
+
+	assert value_rule is VALUE_RULE
+	assert text_rule is TEXT_RULE
+
+
+def test_keep_present_reference_rejects_an_array_of_another_length() -> None:
+	"""
+	Check that an Array without one value per row raises ShapeMismatchError.
+
+	.. versionadded:: 0.2.0
+	"""
+	with pytest.raises(ShapeMismatchError):
+		keep_present_reference(Equal(ARRIVALS), SHORT_PRESENT, None)
+
+
+def test_keep_present_reference_rejects_a_column_with_a_time_zone() -> None:
+	"""
+	Check that a column of datetimes with a time zone raises TimeZoneMismatchError.
+
+	.. versionadded:: 0.2.0
+	"""
+	with pytest.raises(TimeZoneMismatchError):
+		keep_present_reference(Equal(ARRIVALS), PRESENT, PARIS_ZONE)

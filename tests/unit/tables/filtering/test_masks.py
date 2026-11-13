@@ -11,6 +11,7 @@ import pandas
 import pytest
 from numpy.typing import NDArray
 
+from numdaplot.arrays.array import Array
 from numdaplot.errors.column_not_found_error import ColumnNotFoundError
 from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
 from numdaplot.rules.contains import Contains
@@ -33,6 +34,8 @@ EXPECTED_DIFFERENT_PRICES = [True, False, True]
 CITIES = pandas.Series(["Paris", "Lyon"], dtype="category")
 EXPECTED_PARIS = [True, False]
 FRAME = pandas.DataFrame({"low": [1.0, 5.0, 20.0], "high": [2.0, 30.0, 40.0]})
+LIMITS = Array.from_list([4.0, 1.0, 20.0])
+EXPECTED_ABOVE_LIMITS = [True, False, False]
 EXPECTED_ANY_ABOVE_TEN = [False, True, True]
 EXPECTED_ALL_ABOVE_TEN = [False, False, True]
 EXPECTED_LOW_ABOVE_TEN = [False, False, True]
@@ -256,3 +259,15 @@ def test_combine_masks_handles_no_mask(requires_all: bool, expected_mask: list[b
 
 	mask_list = read_mask(mask)
 	assert mask_list == expected_mask
+
+
+def test_build_column_mask_compares_each_row_with_an_array() -> None:
+	"""
+	Check that an Array as reference is followed row by row, the missing value of the column matching nothing.
+
+	.. versionadded:: 0.2.0
+	"""
+	mask = build_column_mask(PRICES, Greater(LIMITS))
+
+	mask_list = mask.tolist()
+	assert mask_list == EXPECTED_ABOVE_LIMITS

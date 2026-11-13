@@ -9,7 +9,9 @@ from typing import Any
 import numpy
 from numpy.typing import NDArray
 
+from numdaplot.arrays.array_data import ArrayData
 from numdaplot.arrays.operations.type_requirements import require_comparable
+from numdaplot.arrays.selection.array_reference import compare_with_array
 from numdaplot.arrays.selection.missing_mask import find_missing
 from numdaplot.arrays.selection.time_reference import compare_with_reference
 from numdaplot.rules.between import Between
@@ -37,12 +39,15 @@ BETWEEN_NAME = "Between"
 
 def build_comparison_mask(values: NDArray[Any], rule: ValueRule[Any]) -> NDArray[numpy.bool_]:
 	"""
-	Return which values satisfy a rule comparing them with a single reference value.
+	Return which values satisfy a rule comparing them with a single reference value, or with an Array of them.
 
 	A missing value never satisfies the rule, not even ``NotEqual``. A date, a datetime or a duration that nanoseconds
 	cannot hold lies beyond every datetime or duration: ``Less`` accepts them all for a reference in the year 3000.
+	An Array as reference compares each value with the value at its position, a missing one matching nothing.
 
 	.. versionadded:: 0.1.0
+	.. versionchanged:: 0.2.0
+		Accepts an Array as reference value.
 
 	Parameters
 	----------
@@ -60,6 +65,8 @@ def build_comparison_mask(values: NDArray[Any], rule: ValueRule[Any]) -> NDArray
 	------
 	IncompatibleTypesError
 		When the reference value cannot be compared with the values.
+	ShapeMismatchError
+		When an Array as reference does not have the shape of the values.
 
 	Examples
 	--------
@@ -70,10 +77,15 @@ def build_comparison_mask(values: NDArray[Any], rule: ValueRule[Any]) -> NDArray
 	array([False,  True,  True])
 	"""
 	rule_class = type(rule)
-	require_comparable(values, rule.value, rule_class.__name__)
-
+	rule_name = rule_class.__name__
 	compare = COMPARISON_FUNCTIONS[rule_class]
-	matches = compare_with_reference(values, rule.value, compare)
+	reference = rule.value
+	if isinstance(reference, ArrayData):
+		matches = compare_with_array(values, reference, compare, rule_name)
+	else:
+		require_comparable(values, reference, rule_name)
+		matches = compare_with_reference(values, reference, compare)
+
 	missing = find_missing(values)
 	present = ~missing
 	mask = matches & present

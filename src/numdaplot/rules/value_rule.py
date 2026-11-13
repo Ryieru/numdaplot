@@ -17,17 +17,19 @@ MISSING_VALUE_OPERATION = "{rule_name}(None)"
 @dataclass(frozen=True)
 class ValueRule[ReferenceValue](Rule):
 	"""
-	Base class of the rules that compare each value to a single reference value.
+	Base class of the rules comparing each value to a reference value, or to the value at its position in an Array.
 
 	Two rules are equal only when they have the same class and the same reference value,
 	so ``Greater(1)`` and ``Less(1)`` are different.
 
 	.. versionadded:: 0.1.0
+	.. versionchanged:: 0.2.0
+		The rules comparing values accept an Array as reference value.
 
 	Parameters
 	----------
 	value
-		The reference value each tested value is compared to.
+		The reference value each tested value is compared to, or an Array of them, one per tested value.
 
 	Raises
 	------

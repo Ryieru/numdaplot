@@ -5,10 +5,11 @@ Unit tests of ValueRule, the base of the single-value rules.
 """
 
 from dataclasses import FrozenInstanceError
-from typing import Any, cast, get_type_hints
+from typing import Any, cast
 
 import pytest
 
+from numdaplot.arrays.array import Array
 from numdaplot.errors.invalid_type_error import InvalidTypeError
 from numdaplot.errors.refused_operation_error import RefusedOperationError
 from numdaplot.rules.equal import Equal
@@ -19,6 +20,7 @@ from numdaplot.rules.less_or_equal import LessOrEqual
 from numdaplot.rules.not_equal import NotEqual
 from numdaplot.rules.rule_values import OrderedValue, ScalarValue
 from numdaplot.rules.value_rule import ValueRule, refuse_missing_value
+from numdaplot.settings.annotation_kinds import read_annotations
 
 REFERENCE_VALUE = 100
 OTHER_VALUE = 200
@@ -88,13 +90,14 @@ def test_value_rules_of_the_same_class_and_value_are_equal() -> None:
 )
 def test_rule_declares_the_type_of_its_reference_value(rule_class: type, value_type: object) -> None:
 	"""
-	Check that each rule shows its own value type rather than the type parameter of its base.
+	Check that each rule shows its own value type, or an Array, rather than the type parameter of its base.
 
 	.. versionadded:: 0.1.0
 	"""
-	field_types = get_type_hints(rule_class)
+	field_types = read_annotations(rule_class)
 
-	assert field_types["value"] is value_type
+	expected_type = value_type | Array
+	assert field_types[VALUE_FIELD] == expected_type
 
 
 @pytest.mark.parametrize(

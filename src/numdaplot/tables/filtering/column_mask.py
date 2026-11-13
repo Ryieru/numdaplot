@@ -11,6 +11,7 @@ from numdaplot.arrays.selection.rule_mask import build_rule_mask
 from numdaplot.rules.is_missing import IsMissing
 from numdaplot.rules.is_present import IsPresent
 from numdaplot.rules.rule import Rule
+from numdaplot.tables.filtering.array_references import keep_present_reference
 from numdaplot.tables.filtering.rule_moments import match_rule_time_zone
 from numdaplot.tables.frames.column import Column
 from numdaplot.tables.frames.column_values import find_column_missing, read_present_values
@@ -23,13 +24,16 @@ def build_column_mask(column: Column, rule: Rule) -> NDArray[numpy.bool_]:
 	Return which values of a Table column satisfy a rule.
 
 	.. versionadded:: 0.1.0
+	.. versionchanged:: 0.2.0
+		Accepts a rule comparing with an Array, which holds one value per row of the column.
 
 	Parameters
 	----------
 	column
 		A Table column.
 	rule
-		Any rule of numdaplot. A missing value only satisfies ``IsMissing``.
+		Any rule of numdaplot. A missing value only satisfies ``IsMissing``. A rule comparing with an Array compares
+		each row with the value of the Array at the same position.
 
 	Returns
 	-------
@@ -41,7 +45,10 @@ def build_column_mask(column: Column, rule: Rule) -> NDArray[numpy.bool_]:
 	IncompatibleTypesError
 		When the rule does not apply to the type of the column.
 	TimeZoneMismatchError
-		When a datetime of the rule has a time zone and the column has none, or the reverse.
+		When a datetime of the rule has a time zone and the column has none, or the reverse, or the column has a
+		time zone and the rule compares with an Array.
+	ShapeMismatchError
+		When the Array of the rule does not hold one value per row.
 
 	Examples
 	--------
@@ -60,7 +67,8 @@ def build_column_mask(column: Column, rule: Rule) -> NDArray[numpy.bool_]:
 		return present
 
 	time_zone = find_column_time_zone(column)
-	matched_rule = match_rule_time_zone(rule, time_zone)
+	present_rule = keep_present_reference(rule, present, time_zone)
+	matched_rule = match_rule_time_zone(present_rule, time_zone)
 	present_values = read_present_values(column)
 	with NamedColumnErrors(column):
 		present_mask = build_rule_mask(present_values, matched_rule)

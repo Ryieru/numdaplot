@@ -9,6 +9,8 @@ from datetime import date
 import numpy
 import pytest
 
+from numdaplot.arrays.array import Array
+from numdaplot.arrays.array_data import read_stored_values
 from numdaplot.arrays.selection.comparison_masks import build_between_mask, build_comparison_mask
 from numdaplot.errors.incompatible_types_error import IncompatibleTypesError
 from numdaplot.rules.between import Between
@@ -21,6 +23,9 @@ from numdaplot.rules.less_or_equal import LessOrEqual
 from numdaplot.rules.not_equal import NotEqual
 from numdaplot.rules.value_rule import ValueRule
 
+ARRAY_PRICES = Array.from_list([10.0, 5.0, None])
+ARRAY_COSTS = Array.from_list([8.0, 7.0, 1.0])
+EXPECTED_ABOVE_COSTS = [True, False, False]
 VALUES = [1.0, 5.0, 9.0, numpy.nan]
 COMPARISONS = [
 	(Equal(5.0), [False, True, False, False]),
@@ -121,3 +126,17 @@ def test_build_between_mask_rejects_incomparable_bounds() -> None:
 
 	with pytest.raises(IncompatibleTypesError):
 		build_between_mask(values, TEXT_INTERVAL)
+
+
+def test_build_comparison_mask_compares_each_value_with_an_array() -> None:
+	"""
+	Check that an Array as reference compares each value with the value at its position.
+
+	.. versionadded:: 0.2.0
+	"""
+	price_values = read_stored_values(ARRAY_PRICES)
+
+	mask = build_comparison_mask(price_values, Greater(ARRAY_COSTS))
+
+	mask_list = mask.tolist()
+	assert mask_list == EXPECTED_ABOVE_COSTS

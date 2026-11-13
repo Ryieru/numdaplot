@@ -14,6 +14,11 @@ import pytest
 import numdaplot as ndp
 
 PRICES = ndp.Array.from_list([12.0, 15.5])
+PRICE_LIST = [12.0, 15.5]
+EXPECTED_LIST_MESSAGE = (
+	"Greater value expects an int, a float, a str, a date, a datetime, a timedelta, a time or an Array, got "
+	"[12.0, 15.5]."
+)
 EXPECTED_REGION_MESSAGE = "Region rows expects an Index, a Range, a First, a Last or None, got 0."
 EXPECTED_PREVIEW_MESSAGE = "Preview side expects a Side, got 'end'."
 EXPECTED_EQUAL_NONE_MESSAGE = "Equal(None) is not available, use IsMissing instead."
@@ -141,14 +146,17 @@ def test_equal_none_points_to_is_missing() -> None:
 	assert message == EXPECTED_EQUAL_NONE_MESSAGE
 
 
-def test_a_rule_with_an_array_names_a_single_value() -> None:
+def test_a_rule_with_a_list_names_a_single_value_or_an_array() -> None:
 	"""
-	Check that an Array as the value of Greater names a single value.
+	Check that a list as the value of Greater raises InvalidTypeError, which names a single value or an Array.
 
 	.. versionadded:: 0.1.0
 	"""
-	with pytest.raises(ndp.InvalidTypeError):
-		ndp.Greater(PRICES)
+	with pytest.raises(ndp.InvalidTypeError) as error_info:
+		ndp.Greater(PRICE_LIST)  # pyright: ignore[reportArgumentType]
+
+	error_text = str(error_info.value)
+	assert error_text == EXPECTED_LIST_MESSAGE
 
 
 def test_an_excel_sheet_name_with_a_slash_is_refused() -> None:
