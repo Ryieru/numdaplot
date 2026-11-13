@@ -12,56 +12,13 @@ from typing import TYPE_CHECKING
 from numdaplot.errors.empty_list_error import EmptyListError
 from numdaplot.plots.style.color import Color
 from numdaplot.plots.style.custom_color import CustomColor
-from numdaplot.tables.columns.column_names import copy_column_names, require_optional_column_name
+from numdaplot.tables.columns.column_names import copy_optional_column_names, require_optional_column_name
 
 if TYPE_CHECKING:
 	from numdaplot.plots.charts.bar_chart import BarChart
 	from numdaplot.plots.charts.line_chart import LineChart
 
 COLOR_ITEM_NAME = "color"
-
-
-def copy_columns(columns: list[str] | None) -> list[str] | None:
-	"""
-	Check the names of the columns a chart draws and return a copy that only the chart holds.
-
-	.. versionadded:: 0.1.0
-
-	Parameters
-	----------
-	columns
-		The names of the columns, or None for an Array.
-
-	Returns
-	-------
-	list[str] or None
-		A copy of the names, or None.
-
-	Raises
-	------
-	EmptyListError
-		When the list is empty.
-	InvalidColumnNameError
-		When a column name is an empty text.
-	DuplicateColumnError
-		When a name appears twice.
-
-	Examples
-	--------
-	>>> import numdaplot as ndp
-	>>> from numdaplot.plots.charts.chart_settings import copy_columns
-	>>> try:
-	... 	copy_columns(["price", "price"])
-	... except ndp.DuplicateColumnError as error:
-	... 	print(error)
-	The column name 'price' appears more than once.
-	"""
-	if columns is None:
-		return None
-
-	columns_copy = copy_column_names(columns)
-
-	return columns_copy
 
 
 def copy_colors(colors: Sequence[Color | CustomColor] | None) -> list[Color | CustomColor] | None:
@@ -138,7 +95,7 @@ def copy_series_settings(chart: BarChart | LineChart) -> None:
 	['price']
 	"""
 	require_optional_column_name(chart.x)
-	columns_copy = copy_columns(chart.y)
+	columns_copy = copy_optional_column_names(chart.y)
 	colors_copy = copy_colors(chart.colors)
 	object.__setattr__(chart, "y", columns_copy)
 	object.__setattr__(chart, "colors", colors_copy)

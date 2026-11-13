@@ -18,7 +18,7 @@ from numdaplot.statistics.quantile import Quantile
 from numdaplot.statistics.standard_deviation import StandardDeviation
 from numdaplot.statistics.statistic import Statistic
 from numdaplot.tables.aggregation.statistic_name import name_statistic
-from numdaplot.tables.columns.column_names import copy_column_names
+from numdaplot.tables.columns.column_names import copy_optional_column_names
 
 LOWER_QUARTILE = 0.25
 UPPER_QUARTILE = 0.75
@@ -118,9 +118,8 @@ class Description:
 			functions_copy = list(self.functions)
 			object.__setattr__(self, "functions", functions_copy)
 
-		if self.columns is not None:
-			columns_copy = copy_column_names(self.columns)
-			object.__setattr__(self, "columns", columns_copy)
+		columns_copy = copy_optional_column_names(self.columns)
+		object.__setattr__(self, "columns", columns_copy)
 
 
 def require_distinct_statistics(functions: list[Statistic]) -> None:

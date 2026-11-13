@@ -7,7 +7,7 @@ Settings of the removal of duplicated rows of a Table.
 from dataclasses import dataclass
 
 from numdaplot.settings.field_types import require_field_types
-from numdaplot.tables.columns.column_names import copy_column_names
+from numdaplot.tables.columns.column_names import copy_optional_column_names
 from numdaplot.tables.duplicates.keep import Keep
 
 
@@ -74,8 +74,5 @@ class Deduplication:
 		"""
 		require_field_types(self)
 
-		if self.columns is None:
-			return
-
-		columns_copy = copy_column_names(self.columns)
+		columns_copy = copy_optional_column_names(self.columns)
 		object.__setattr__(self, "columns", columns_copy)

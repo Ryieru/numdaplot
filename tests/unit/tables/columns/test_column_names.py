@@ -12,6 +12,7 @@ from numdaplot.errors.empty_list_error import EmptyListError
 from numdaplot.errors.invalid_column_name_error import InvalidColumnNameError
 from numdaplot.tables.columns.column_names import (
 	copy_column_names,
+	copy_optional_column_names,
 	require_column_name,
 	require_column_names,
 	require_known_columns,
@@ -164,3 +165,26 @@ def test_copy_column_names_rejects_a_repeated_name() -> None:
 	"""
 	with pytest.raises(DuplicateColumnError):
 		copy_column_names(REPEATED_NAMES)
+
+
+def test_copy_optional_column_names_keeps_none() -> None:
+	"""
+	Check that an omitted list stays None.
+
+	.. versionadded:: 0.1.0
+	"""
+	names_copy = copy_optional_column_names(None)
+
+	assert names_copy is None
+
+
+def test_copy_optional_column_names_copies_a_given_list() -> None:
+	"""
+	Check that a given list is copied like any list of column names.
+
+	.. versionadded:: 0.1.0
+	"""
+	names_copy = copy_optional_column_names(GIVEN_NAMES)
+
+	assert names_copy == EXPECTED_NAMES
+	assert names_copy is not GIVEN_NAMES

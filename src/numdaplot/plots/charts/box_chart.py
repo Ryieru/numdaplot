@@ -8,12 +8,12 @@ from collections.abc import Sequence
 from dataclasses import dataclass
 
 from numdaplot.plots.charts.chart import Chart
-from numdaplot.plots.charts.chart_settings import copy_colors, copy_columns
+from numdaplot.plots.charts.chart_settings import copy_colors
 from numdaplot.plots.charts.outliers import Outliers
 from numdaplot.plots.style.color import Color
 from numdaplot.plots.style.custom_color import CustomColor
 from numdaplot.settings.field_types import require_field_types
-from numdaplot.tables.columns.column_names import require_optional_column_name
+from numdaplot.tables.columns.column_names import copy_optional_column_names, require_optional_column_name
 
 
 @dataclass(frozen=True)
@@ -91,7 +91,7 @@ class BoxChart(Chart):
 
 		require_optional_column_name(self.group_by)
 
-		columns_copy = copy_columns(self.columns)
+		columns_copy = copy_optional_column_names(self.columns)
 		colors_copy = copy_colors(self.colors)
 		object.__setattr__(self, "columns", columns_copy)
 		object.__setattr__(self, "colors", colors_copy)

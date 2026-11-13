@@ -202,6 +202,51 @@ def copy_column_names(column_names: list[str]) -> list[str]:
 	return names_copy
 
 
+def copy_optional_column_names(column_names: list[str] | None) -> list[str] | None:
+	"""
+	Return a copy of a list of column names given to a setting, after checking it, or None when it is omitted.
+
+	.. versionadded:: 0.1.0
+
+	Parameters
+	----------
+	column_names
+		The names given, at least one, or None when the setting is omitted.
+
+	Returns
+	-------
+	list[str] or None
+		A new list holding the same names, or None.
+
+	Raises
+	------
+	EmptyListError
+		When the list is empty.
+	InvalidColumnNameError
+		At the first name that is not a non-empty text.
+	DuplicateColumnError
+		At the first name that appears a second time.
+
+	Examples
+	--------
+	>>> import numdaplot as ndp
+	>>> from numdaplot.tables.columns.column_names import copy_optional_column_names
+	>>> copy_optional_column_names(None) is None
+	True
+	>>> try:
+	... 	copy_optional_column_names(["price", "price"])
+	... except ndp.DuplicateColumnError as error:
+	... 	print(error)
+	The column name 'price' appears more than once.
+	"""
+	if column_names is None:
+		return None
+
+	names_copy = copy_column_names(column_names)
+
+	return names_copy
+
+
 def require_known_columns(requested_names: Sequence[str], column_names: Sequence[str]) -> None:
 	"""
 	Check that every requested column exists.

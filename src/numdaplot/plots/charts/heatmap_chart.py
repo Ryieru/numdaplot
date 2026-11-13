@@ -8,10 +8,9 @@ from dataclasses import dataclass
 
 from numdaplot.plots.charts.cell_values import CellValues
 from numdaplot.plots.charts.chart import Chart
-from numdaplot.plots.charts.chart_settings import copy_columns
 from numdaplot.plots.charts.color_scale import ColorScale
 from numdaplot.settings.field_types import require_field_types
-from numdaplot.tables.columns.column_names import require_optional_column_name
+from numdaplot.tables.columns.column_names import copy_optional_column_names, require_optional_column_name
 
 
 @dataclass(frozen=True)
@@ -88,5 +87,5 @@ class HeatmapChart(Chart):
 
 		require_optional_column_name(self.labels)
 
-		columns_copy = copy_columns(self.columns)
+		columns_copy = copy_optional_column_names(self.columns)
 		object.__setattr__(self, "columns", columns_copy)
