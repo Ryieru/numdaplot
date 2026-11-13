@@ -168,7 +168,9 @@ from numdaplot.plots.style.plot_style import PlotStyle
 from numdaplot.plots.style.size import Size
 from numdaplot.plots.style.size_unit import SizeUnit
 from numdaplot.positions.axis import Axis
+from numdaplot.positions.first import First
 from numdaplot.positions.index import Index
+from numdaplot.positions.last import Last
 from numdaplot.positions.range import Range
 from numdaplot.positions.region import Region
 from numdaplot.ratios.measure import Measure
@@ -333,6 +335,7 @@ __all__ = [
 	"FileNotFoundError",
 	"Filter",
 	"FilterMode",
+	"First",
 	"Greater",
 	"GreaterOrEqual",
 	"GridLines",
@@ -384,6 +387,7 @@ __all__ = [
 	"JsonWriteOptions",
 	"Keep",
 	"KeyTypes",
+	"Last",
 	"Layout",
 	"LegendPosition",
 	"Less",

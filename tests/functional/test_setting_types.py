@@ -14,7 +14,7 @@ import pytest
 import numdaplot as ndp
 
 PRICES = ndp.Array.from_list([12.0, 15.5])
-EXPECTED_REGION_MESSAGE = "Region rows expects an Index, a Range or None, got 0."
+EXPECTED_REGION_MESSAGE = "Region rows expects an Index, a Range, a First, a Last or None, got 0."
 EXPECTED_PREVIEW_MESSAGE = "Preview side expects a Side, got 'end'."
 EXPECTED_EQUAL_NONE_MESSAGE = "Equal(None) is not available, use IsMissing instead."
 REFUSED_SHEET_NAME = "Sales/2026"

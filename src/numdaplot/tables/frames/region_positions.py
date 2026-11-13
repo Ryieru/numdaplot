@@ -11,7 +11,9 @@ import pandas
 from numpy.typing import NDArray
 
 from numdaplot.arrays.selection.region_index import find_positions
+from numdaplot.positions.first import First
 from numdaplot.positions.index import Index
+from numdaplot.positions.last import Last
 from numdaplot.positions.range import Range
 from numdaplot.positions.region import Region
 from numdaplot.tables.columns.column_names import require_known_columns, require_unique_names
@@ -66,16 +68,21 @@ def take_region(frame: pandas.DataFrame, region: Region) -> pandas.DataFrame:
 	return numbered_frame
 
 
-def find_column_positions(columns: Index | Range | list[str] | None, column_names: list[str]) -> NDArray[Any]:
+def find_column_positions(
+	columns: Index | Range | First | Last | list[str] | None, column_names: list[str]
+) -> NDArray[Any]:
 	"""
 	Return the positions of the columns chosen by a Region.
 
 	.. versionadded:: 0.1.0
+	.. versionchanged:: 0.2.0
+		Accepts ``First`` and ``Last``.
 
 	Parameters
 	----------
 	columns
-		One position, a sequence of positions, a list of names, or ``None`` for every column.
+		One position, a sequence of positions, the first or the last positions, a list of names, or ``None`` for
+		every column.
 	column_names
 		The names of the columns of the Table.
 

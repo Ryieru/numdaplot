@@ -13,7 +13,9 @@ import pytest
 from numdaplot.errors.column_not_found_error import ColumnNotFoundError
 from numdaplot.errors.duplicate_column_error import DuplicateColumnError
 from numdaplot.errors.invalid_position_error import InvalidPositionError
+from numdaplot.positions.first import First
 from numdaplot.positions.index import Index
+from numdaplot.positions.last import Last
 from numdaplot.positions.range import Range
 from numdaplot.positions.region import Region
 from numdaplot.tables.frames.region_positions import find_column_positions, take_region
@@ -28,6 +30,7 @@ OUTSIDE_ROW = Region(rows=Index(3))
 EXPECTED_NAMED_POSITIONS = [1, 0]
 EXPECTED_ALL_POSITIONS = [0, 1]
 EXPECTED_SECOND_POSITION = [1]
+EXPECTED_FIRST_POSITION = [0]
 
 
 def read_positions(positions: numpy.ndarray[Any, Any]) -> list[int]:
@@ -143,3 +146,27 @@ def test_find_column_positions_rejects_a_repeated_name() -> None:
 	"""
 	with pytest.raises(DuplicateColumnError):
 		find_column_positions(["price", "price"], COLUMN_NAMES)
+
+
+def test_find_column_positions_takes_the_first_columns() -> None:
+	"""
+	Check that First chooses the columns from the start.
+
+	.. versionadded:: 0.2.0
+	"""
+	positions = find_column_positions(First(1), COLUMN_NAMES)
+
+	position_list = positions.tolist()
+	assert position_list == EXPECTED_FIRST_POSITION
+
+
+def test_find_column_positions_takes_the_last_columns() -> None:
+	"""
+	Check that Last chooses the columns of the end.
+
+	.. versionadded:: 0.2.0
+	"""
+	positions = find_column_positions(Last(1), COLUMN_NAMES)
+
+	position_list = positions.tolist()
+	assert position_list == EXPECTED_SECOND_POSITION

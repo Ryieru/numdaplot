@@ -13,7 +13,9 @@ from numdaplot.arrays.creation.range_values import compute_range_values
 from numdaplot.errors.dimension_error import DimensionError
 from numdaplot.errors.invalid_position_error import InvalidPositionError
 from numdaplot.errors.refused_operation_error import RefusedOperationError
+from numdaplot.positions.first import First
 from numdaplot.positions.index import Index
+from numdaplot.positions.last import Last
 from numdaplot.positions.range import Range
 from numdaplot.positions.region import Region
 
@@ -23,7 +25,7 @@ WHOLE_NUMBER_KINDS = frozenset({"i", "u"})
 REGION_OPERATION = "A Region"
 COLUMNS_OPERATION = "A Region with columns"
 COLUMN_NAMES_OPERATION = "Column names in a Region for an Array"
-COLUMN_NAMES_ALTERNATIVE = "Index or Range positions"
+COLUMN_NAMES_ALTERNATIVE = "Index, Range, First or Last positions"
 
 
 def build_region_index(region: Region, dimensions: tuple[int, ...]) -> tuple[NDArray[Any], ...]:
@@ -86,16 +88,18 @@ def build_region_index(region: Region, dimensions: tuple[int, ...]) -> tuple[NDA
 	return region_index
 
 
-def find_positions(selector: Index | Range | None, size: int) -> NDArray[Any]:
+def find_positions(selector: Index | Range | First | Last | None, size: int) -> NDArray[Any]:
 	"""
 	Return the positions chosen in one dimension.
 
 	.. versionadded:: 0.1.0
+	.. versionchanged:: 0.2.0
+		Accepts ``First`` and ``Last``, which give every position of a dimension shorter than their count.
 
 	Parameters
 	----------
 	selector
-		One position, a sequence of positions, or ``None`` for every position.
+		One position, a sequence of positions, the first or the last positions, or ``None`` for every position.
 	size
 		The size of the dimension.
 
@@ -115,6 +119,8 @@ def find_positions(selector: Index | Range | None, size: int) -> NDArray[Any]:
 	>>> from numdaplot.arrays.selection.region_index import find_positions
 	>>> find_positions(ndp.Range(start=0, stop=4, step=2), 5)
 	array([0, 2, 4])
+	>>> find_positions(ndp.Last(2), 5)
+	array([3, 4])
 	"""
 	match selector:
 		case None:
@@ -123,6 +129,13 @@ def find_positions(selector: Index | Range | None, size: int) -> NDArray[Any]:
 			positions = numpy.array([selector.position])
 		case Range():
 			positions = compute_range_values(selector)
+		case First():
+			first_count = min(selector.count, size)
+			positions = numpy.arange(first_count)
+		case Last():
+			last_count = min(selector.count, size)
+			first_position = size - last_count
+			positions = numpy.arange(first_position, size)
 
 	require_valid_positions(positions, size)
 

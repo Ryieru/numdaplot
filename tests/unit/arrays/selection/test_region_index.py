@@ -11,7 +11,9 @@ from numdaplot.arrays.selection.region_index import build_region_index, find_pos
 from numdaplot.errors.dimension_error import DimensionError
 from numdaplot.errors.invalid_position_error import InvalidPositionError
 from numdaplot.errors.refused_operation_error import RefusedOperationError
+from numdaplot.positions.first import First
 from numdaplot.positions.index import Index
+from numdaplot.positions.last import Last
 from numdaplot.positions.range import Range
 from numdaplot.positions.region import Region
 
@@ -33,6 +35,10 @@ NAMED_REGION = Region(columns=["total"])
 WHOLE_POSITIONS = [0, -5, 4]
 OUTSIDE_POSITIONS = [0, 5]
 DECIMAL_POSITIONS = [0.5]
+FIRST_COUNT = 2
+EXPECTED_FIRST_POSITIONS = [0, 1]
+EXPECTED_LAST_POSITIONS = [3, 4]
+LARGE_COUNT = 9
 
 
 def test_find_positions_takes_every_position_without_selector() -> None:
@@ -69,6 +75,45 @@ def test_find_positions_reads_a_range_with_its_stop() -> None:
 
 	position_list = positions.tolist()
 	assert position_list == EXPECTED_EVEN_POSITIONS
+
+
+def test_find_positions_takes_the_first_positions() -> None:
+	"""
+	Check that First gives the positions from the start.
+
+	.. versionadded:: 0.2.0
+	"""
+	positions = find_positions(First(FIRST_COUNT), SIZE)
+
+	position_list = positions.tolist()
+	assert position_list == EXPECTED_FIRST_POSITIONS
+
+
+def test_find_positions_takes_the_last_positions() -> None:
+	"""
+	Check that Last gives the positions of the end, in order.
+
+	.. versionadded:: 0.2.0
+	"""
+	positions = find_positions(Last(FIRST_COUNT), SIZE)
+
+	position_list = positions.tolist()
+	assert position_list == EXPECTED_LAST_POSITIONS
+
+
+def test_find_positions_takes_every_position_of_a_shorter_dimension() -> None:
+	"""
+	Check that First and Last larger than the dimension give every position, without error.
+
+	.. versionadded:: 0.2.0
+	"""
+	first_positions = find_positions(First(LARGE_COUNT), SIZE)
+	last_positions = find_positions(Last(LARGE_COUNT), SIZE)
+
+	first_list = first_positions.tolist()
+	last_list = last_positions.tolist()
+	assert first_list == EVERY_POSITION
+	assert last_list == EVERY_POSITION
 
 
 def test_require_valid_positions_accepts_positions_inside_the_dimension() -> None:

@@ -44,7 +44,7 @@ class InvalidTypeError(NumdaplotError):
 	... 	ndp.Region(rows=0)
 	... except ndp.InvalidTypeError as error:
 	... 	print(error)
-	Region rows expects an Index, a Range or None, got 0.
+	Region rows expects an Index, a Range, a First, a Last or None, got 0.
 	>>> try:
 	... 	ndp.Array.from_list([1, 2]).compute(ndp.Sum)
 	... except ndp.InvalidTypeError as error:

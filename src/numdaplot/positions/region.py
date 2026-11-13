@@ -8,7 +8,9 @@ from dataclasses import dataclass
 
 from numdaplot.errors.empty_list_error import EmptyListError
 from numdaplot.errors.empty_region_error import EmptyRegionError
+from numdaplot.positions.first import First
 from numdaplot.positions.index import Index
+from numdaplot.positions.last import Last
 from numdaplot.positions.range import Range
 from numdaplot.settings.field_types import require_field_types
 from numdaplot.tables.columns.column_names import require_column_names
@@ -22,15 +24,17 @@ class Region:
 	A rectangular part of an Array or a Table, chosen by position, used by ``take`` and ``replace``.
 
 	.. versionadded:: 0.1.0
+	.. versionchanged:: 0.2.0
+		Accepts ``First`` and ``Last`` for the rows and the columns.
 
 	Parameters
 	----------
 	rows
-		The rows to take: one ``Index`` or a ``Range``. Every row when omitted, but a Region needs rows,
-		columns or both.
+		The rows to take: one ``Index``, a ``Range``, or the ``First`` or ``Last`` rows. Every row when omitted, but a
+		Region needs rows, columns or both.
 	columns
-		The columns to take: one ``Index``, a ``Range``, or a list of column names for a Table.
-		Every column when omitted. The region keeps its own copy of a list of names.
+		The columns to take: one ``Index``, a ``Range``, the ``First`` or ``Last`` columns, or a list of column names
+		for a Table. Every column when omitted. The region keeps its own copy of a list of names.
 
 	Raises
 	------
@@ -53,8 +57,8 @@ class Region:
 	Array([[2, 3]], dtype=INT64)
 	"""
 
-	rows: Index | Range | None = None
-	columns: Index | Range | list[str] | None = None
+	rows: Index | Range | First | Last | None = None
+	columns: Index | Range | First | Last | list[str] | None = None
 
 	def __post_init__(self) -> None:
 		"""
